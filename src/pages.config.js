@@ -48,6 +48,7 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import AddHike from './pages/AddHike';
+import AdminReview from './pages/AdminReview';
 import Dashboard from './pages/Dashboard';
 import Dogs from './pages/Dogs';
 import EditHike from './pages/EditHike';
@@ -55,12 +56,12 @@ import HikeDetail from './pages/HikeDetail';
 import Hikes from './pages/Hikes';
 import MapView from './pages/MapView';
 import SubmitHike from './pages/SubmitHike';
-import AdminReview from './pages/AdminReview';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AddHike": AddHike,
+    "AdminReview": AdminReview,
     "Dashboard": Dashboard,
     "Dogs": Dogs,
     "EditHike": EditHike,
@@ -68,11 +69,10 @@ export const PAGES = {
     "Hikes": Hikes,
     "MapView": MapView,
     "SubmitHike": SubmitHike,
-    "AdminReview": AdminReview,
 }
 
 export const pagesConfig = {
-    mainPage: "MapView",
+    mainPage: "Dashboard",
     Pages: PAGES,
     Layout: __Layout,
 };
