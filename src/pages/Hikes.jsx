@@ -50,15 +50,9 @@ export default function Hikes() {
           className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8"
         >
           <div>
-            <h1 className="text-3xl font-light text-stone-800">All Hikes</h1>
-            <p className="text-stone-500 mt-1">{hikes.length} adventures logged</p>
+            <h1 className="text-3xl font-light text-stone-800">Alle Wanderungen</h1>
+            <p className="text-stone-500 mt-1">{hikes.length} hundefreundliche Touren</p>
           </div>
-          <Link to={createPageUrl("AddHike")}>
-            <Button className="bg-slate-800 hover:bg-slate-900">
-              <Plus className="w-4 h-4 mr-2" />
-              Add Hike
-            </Button>
-          </Link>
         </motion.div>
 
         {/* Filters */}
@@ -72,7 +66,7 @@ export default function Hikes() {
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
               <Input
-                placeholder="Search trails or locations..."
+                placeholder="Tour oder Ort suchen..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
@@ -80,25 +74,25 @@ export default function Hikes() {
             </div>
             <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
               <SelectTrigger className="w-full md:w-40">
-                <SelectValue placeholder="Difficulty" />
+                <SelectValue placeholder="Schwierigkeit" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Levels</SelectItem>
-                <SelectItem value="easy">Easy</SelectItem>
-                <SelectItem value="moderate">Moderate</SelectItem>
-                <SelectItem value="challenging">Challenging</SelectItem>
-                <SelectItem value="difficult">Difficult</SelectItem>
+                <SelectItem value="all">Alle Stufen</SelectItem>
+                <SelectItem value="easy">Leicht</SelectItem>
+                <SelectItem value="moderate">Mittel</SelectItem>
+                <SelectItem value="challenging">Anspruchsvoll</SelectItem>
+                <SelectItem value="difficult">Schwer</SelectItem>
               </SelectContent>
             </Select>
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-full md:w-40">
-                <SelectValue placeholder="Sort by" />
+                <SelectValue placeholder="Sortieren" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="-date">Newest First</SelectItem>
-                <SelectItem value="date">Oldest First</SelectItem>
-                <SelectItem value="-distance">Longest Distance</SelectItem>
-                <SelectItem value="-elevation">Most Elevation</SelectItem>
+                <SelectItem value="-date">Neueste zuerst</SelectItem>
+                <SelectItem value="date">Älteste zuerst</SelectItem>
+                <SelectItem value="-distance">Längste Strecke</SelectItem>
+                <SelectItem value="-elevation">Meiste Höhenmeter</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -117,7 +111,7 @@ export default function Hikes() {
             animate={{ opacity: 1 }}
             className="text-center py-20"
           >
-            <p className="text-stone-500">No hikes found matching your criteria</p>
+            <p className="text-stone-500">Keine Touren gefunden</p>
           </motion.div>
         )}
       </div>

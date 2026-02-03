@@ -31,6 +31,13 @@ const difficultyColors = {
   difficult: "bg-red-100 text-red-700"
 };
 
+const difficultyLabels = {
+  easy: "Leicht",
+  moderate: "Mittel",
+  challenging: "Anspruchsvoll",
+  difficult: "Schwer"
+};
+
 const weatherEmojis = {
   sunny: "☀️",
   cloudy: "☁️",
@@ -145,7 +152,7 @@ export default function HikeDetail() {
             <div className="flex items-center gap-3 mb-3">
               {hike.difficulty && (
                 <Badge className={difficultyColors[hike.difficulty]}>
-                  {hike.difficulty}
+                  {difficultyLabels[hike.difficulty]}
                 </Badge>
               )}
               {hike.weather && (
@@ -172,31 +179,31 @@ export default function HikeDetail() {
           <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
             <Calendar className="w-5 h-5 text-stone-400 mx-auto mb-2" />
             <p className="text-lg font-medium text-stone-800">
-              {hike.date && format(new Date(hike.date), "MMM d, yyyy")}
+              {hike.date && format(new Date(hike.date), "dd.MM.yyyy")}
             </p>
-            <p className="text-sm text-stone-500">Date</p>
+            <p className="text-sm text-stone-500">Datum</p>
           </div>
           {hike.distance_km && (
             <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
               <Route className="w-5 h-5 text-stone-400 mx-auto mb-2" />
               <p className="text-lg font-medium text-stone-800">{hike.distance_km} km</p>
-              <p className="text-sm text-stone-500">Distance</p>
+              <p className="text-sm text-stone-500">Strecke</p>
             </div>
           )}
           {hike.elevation_gain_m && (
             <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
               <Mountain className="w-5 h-5 text-stone-400 mx-auto mb-2" />
               <p className="text-lg font-medium text-stone-800">{hike.elevation_gain_m} m</p>
-              <p className="text-sm text-stone-500">Elevation</p>
+              <p className="text-sm text-stone-500">Höhenmeter</p>
             </div>
           )}
           {hike.duration_minutes && (
             <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
               <Clock className="w-5 h-5 text-stone-400 mx-auto mb-2" />
               <p className="text-lg font-medium text-stone-800">
-                {Math.floor(hike.duration_minutes / 60)}h {hike.duration_minutes % 60}m
+                {Math.floor(hike.duration_minutes / 60)}h {hike.duration_minutes % 60}min
               </p>
-              <p className="text-sm text-stone-500">Duration</p>
+              <p className="text-sm text-stone-500">Gehzeit</p>
             </div>
           )}
         </motion.div>
@@ -211,7 +218,7 @@ export default function HikeDetail() {
                 transition={{ delay: 0.2 }}
                 className="bg-white rounded-2xl p-6 border border-stone-200/50"
               >
-                <h2 className="text-lg font-medium text-stone-800 mb-4">Trail Companions</h2>
+                <h2 className="text-lg font-medium text-stone-800 mb-4">🐕 Mit dabei</h2>
                 <div className="flex flex-wrap gap-4">
                   {hikeDogs.map((dog) => (
                     <div key={dog.id} className="flex items-center gap-3 p-3 bg-stone-50 rounded-xl">
@@ -238,7 +245,7 @@ export default function HikeDetail() {
                 transition={{ delay: 0.3 }}
                 className="bg-white rounded-2xl p-6 border border-stone-200/50"
               >
-                <h2 className="text-lg font-medium text-stone-800 mb-4">Trail Notes</h2>
+                <h2 className="text-lg font-medium text-stone-800 mb-4">Beschreibung & Tipps</h2>
                 <p className="text-stone-600 leading-relaxed whitespace-pre-wrap">{hike.notes}</p>
               </motion.div>
             )}
@@ -251,7 +258,7 @@ export default function HikeDetail() {
                 transition={{ delay: 0.4 }}
                 className="bg-white rounded-2xl p-6 border border-stone-200/50"
               >
-                <h2 className="text-lg font-medium text-stone-800 mb-4">Photos</h2>
+                <h2 className="text-lg font-medium text-stone-800 mb-4">Fotos</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {photos.map((photo, index) => (
                     <div
@@ -284,7 +291,7 @@ export default function HikeDetail() {
                 transition={{ delay: 0.2 }}
                 className="bg-white rounded-2xl p-6 border border-stone-200/50 text-center"
               >
-                <h2 className="text-lg font-medium text-stone-800 mb-3">Rating</h2>
+                <h2 className="text-lg font-medium text-stone-800 mb-3">Bewertung</h2>
                 <div className="flex justify-center gap-1">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star
@@ -307,7 +314,7 @@ export default function HikeDetail() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <h2 className="text-lg font-medium text-stone-800 mb-3">Location</h2>
+                <h2 className="text-lg font-medium text-stone-800 mb-3">Ausgangspunkt</h2>
                 <HikeMap
                   hikes={[hike]}
                   center={[hike.latitude, hike.longitude]}

@@ -12,6 +12,13 @@ const difficultyColors = {
   difficult: "bg-red-100 text-red-700 border-red-200"
 };
 
+const difficultyLabels = {
+  easy: "Leicht",
+  moderate: "Mittel",
+  challenging: "Anspruchsvoll",
+  difficult: "Schwer"
+};
+
 const weatherIcons = {
   sunny: "☀️",
   cloudy: "☁️",
@@ -63,7 +70,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               </span>
               {hike.difficulty && (
                 <Badge className={`${difficultyColors[hike.difficulty]} border font-medium`}>
-                  {hike.difficulty}
+                  {difficultyLabels[hike.difficulty]}
                 </Badge>
               )}
             </div>
@@ -78,7 +85,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               {hike.elevation_gain_m && (
                 <div className="text-center p-2 bg-stone-50 rounded-xl">
                   <p className="text-lg font-semibold text-stone-800">{hike.elevation_gain_m}</p>
-                  <p className="text-xs text-stone-500">m elev.</p>
+                  <p className="text-xs text-stone-500">Hm</p>
                 </div>
               )}
               {hike.duration_minutes && (
@@ -86,7 +93,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                   <p className="text-lg font-semibold text-stone-800">
                     {Math.floor(hike.duration_minutes / 60)}:{String(hike.duration_minutes % 60).padStart(2, '0')}
                   </p>
-                  <p className="text-xs text-stone-500">hours</p>
+                  <p className="text-xs text-stone-500">Std</p>
                 </div>
               )}
             </div>

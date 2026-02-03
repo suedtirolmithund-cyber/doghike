@@ -49,10 +49,10 @@ export default function Dashboard() {
             className="text-center"
           >
             <h1 className="text-4xl md:text-6xl font-light text-white mb-4 tracking-tight">
-              Dolomites Trail Journal
+              Hundefreundliche Wanderungen
             </h1>
             <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">
-              Documenting adventures through the most beautiful mountains with my four-legged companions
+              Entdecke die schönsten Wanderungen in den Dolomiten – getestet mit unseren Vierbeinern 🐕
             </p>
             
             {/* Dogs Row */}
@@ -66,10 +66,10 @@ export default function Dashboard() {
               </div>
             )}
 
-            <Link to={createPageUrl("AddHike")}>
+            <Link to={createPageUrl("Hikes")}>
               <Button size="lg" className="bg-white text-slate-800 hover:bg-white/90 shadow-lg">
-                <Plus className="w-5 h-5 mr-2" />
-                Log New Hike
+                <Mountain className="w-5 h-5 mr-2" />
+                Alle Touren entdecken
               </Button>
             </Link>
           </motion.div>
@@ -81,29 +81,29 @@ export default function Dashboard() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
           <StatsCard
             icon={Route}
-            label="Total Hikes"
+            label="Wanderungen"
             value={hikes.length}
             delay={0}
           />
           <StatsCard
             icon={Mountain}
-            label="Distance"
+            label="Gesamtstrecke"
             value={totalDistance.toFixed(1)}
             unit="km"
             delay={0.1}
           />
           <StatsCard
             icon={TrendingUp}
-            label="Elevation"
+            label="Höhenmeter"
             value={Math.round(totalElevation).toLocaleString()}
             unit="m"
             delay={0.2}
           />
           <StatsCard
             icon={Clock}
-            label="Trail Time"
+            label="Gehzeit gesamt"
             value={Math.round(totalTime / 60)}
-            unit="hours"
+            unit="Std"
             delay={0.3}
           />
         </div>
@@ -117,11 +117,11 @@ export default function Dashboard() {
             className="mb-12"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-light text-stone-800">Trail Map</h2>
+              <h2 className="text-2xl font-light text-stone-800">Übersichtskarte</h2>
               <Link to={createPageUrl("MapView")}>
                 <Button variant="ghost" className="text-stone-600 hover:text-stone-800">
                   <Map className="w-4 h-4 mr-2" />
-                  Full Map
+                  Große Karte
                 </Button>
               </Link>
             </div>
@@ -132,10 +132,10 @@ export default function Dashboard() {
         {/* Recent Hikes */}
         <div className="mb-12">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-light text-stone-800">Recent Adventures</h2>
+            <h2 className="text-2xl font-light text-stone-800">Neueste Touren</h2>
             <Link to={createPageUrl("Hikes")}>
               <Button variant="ghost" className="text-stone-600 hover:text-stone-800">
-                View All
+                Alle anzeigen
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
@@ -154,14 +154,8 @@ export default function Dashboard() {
               className="text-center py-20 bg-white rounded-2xl border border-stone-200/50"
             >
               <Mountain className="w-16 h-16 text-stone-300 mx-auto mb-4" />
-              <h3 className="text-xl font-medium text-stone-700 mb-2">No hikes yet</h3>
-              <p className="text-stone-500 mb-6">Start documenting your mountain adventures</p>
-              <Link to={createPageUrl("AddHike")}>
-                <Button className="bg-slate-800 hover:bg-slate-900">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Your First Hike
-                </Button>
-              </Link>
+              <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Touren</h3>
+              <p className="text-stone-500 mb-6">Bald findest du hier tolle Wanderungen!</p>
             </motion.div>
           )}
         </div>

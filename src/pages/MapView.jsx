@@ -30,10 +30,10 @@ export default function MapView() {
                 Back
               </Button>
             </Link>
-            <h1 className="text-3xl font-light text-stone-800">Trail Map</h1>
+            <h1 className="text-3xl font-light text-stone-800">Übersichtskarte</h1>
             <p className="text-stone-500 mt-1 flex items-center gap-2">
               <MapPin className="w-4 h-4" />
-              {hikesWithCoords.length} locations mapped
+              {hikesWithCoords.length} Ausgangspunkte
             </p>
           </div>
         </motion.div>
@@ -48,8 +48,8 @@ export default function MapView() {
           ) : (
             <div className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
               <MapPin className="w-16 h-16 text-stone-300 mx-auto mb-4" />
-              <h3 className="text-xl font-medium text-stone-700 mb-2">No locations yet</h3>
-              <p className="text-stone-500">Add coordinates to your hikes to see them on the map</p>
+              <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Standorte</h3>
+              <p className="text-stone-500">Bald findest du hier alle Ausgangspunkte</p>
             </div>
           )}
         </motion.div>

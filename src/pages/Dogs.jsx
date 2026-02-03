@@ -106,13 +106,9 @@ export default function Dogs() {
           className="flex items-center justify-between mb-8"
         >
           <div>
-            <h1 className="text-3xl font-light text-stone-800">My Dogs</h1>
-            <p className="text-stone-500 mt-1">Trail companions</p>
+            <h1 className="text-3xl font-light text-stone-800">Unsere Hunde</h1>
+            <p className="text-stone-500 mt-1">Die Wanderbegleiter</p>
           </div>
-          <Button onClick={openAddDialog} className="bg-slate-800 hover:bg-slate-900">
-            <Plus className="w-4 h-4 mr-2" />
-            Add Dog
-          </Button>
         </motion.div>
 
         {/* Dogs Grid */}
@@ -199,7 +195,7 @@ export default function Dogs() {
                       <div className="grid grid-cols-3 gap-3 pt-4 border-t border-stone-100">
                         <div className="text-center">
                           <p className="text-xl font-semibold text-stone-800">{stats.hikeCount}</p>
-                          <p className="text-xs text-stone-500">Hikes</p>
+                          <p className="text-xs text-stone-500">Touren</p>
                         </div>
                         <div className="text-center">
                           <p className="text-xl font-semibold text-stone-800">{stats.totalDistance.toFixed(1)}</p>
@@ -207,7 +203,7 @@ export default function Dogs() {
                         </div>
                         <div className="text-center">
                           <p className="text-xl font-semibold text-stone-800">{Math.round(stats.totalElevation).toLocaleString()}</p>
-                          <p className="text-xs text-stone-500">m elev</p>
+                          <p className="text-xs text-stone-500">Hm</p>
                         </div>
                       </div>
                     </div>
@@ -223,12 +219,8 @@ export default function Dogs() {
             className="text-center py-20 bg-white rounded-2xl border border-stone-200/50"
           >
             <div className="text-6xl mb-4">🐕</div>
-            <h3 className="text-xl font-medium text-stone-700 mb-2">No dogs yet</h3>
-            <p className="text-stone-500 mb-6">Add your trail companions</p>
-            <Button onClick={openAddDialog} className="bg-slate-800 hover:bg-slate-900">
-              <Plus className="w-4 h-4 mr-2" />
-              Add Your First Dog
-            </Button>
+            <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Hunde</h3>
+            <p className="text-stone-500 mb-6">Bald findest du hier die Wanderbegleiter!</p>
           </motion.div>
         )}
       </div>

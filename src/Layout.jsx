@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Mountain, Map, PawPrint, Plus, Home } from "lucide-react";
+import { Mountain, Map, PawPrint, Home } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Layout({ children, currentPageName }) {
@@ -8,9 +8,9 @@ export default function Layout({ children, currentPageName }) {
 
   const navItems = [
     { name: "Dashboard", icon: Home, label: "Home" },
-    { name: "Hikes", icon: Mountain, label: "Hikes" },
-    { name: "MapView", icon: Map, label: "Map" },
-    { name: "Dogs", icon: PawPrint, label: "Dogs" },
+    { name: "Hikes", icon: Mountain, label: "Touren" },
+    { name: "MapView", icon: Map, label: "Karte" },
+    { name: "Dogs", icon: PawPrint, label: "Hunde" },
   ];
 
   const isActive = (pageName) => currentPageName === pageName;
@@ -44,14 +44,7 @@ export default function Layout({ children, currentPageName }) {
               </Link>
             );
           })}
-          <Link
-            to={createPageUrl("AddHike")}
-            className="flex flex-col items-center gap-1 px-3 py-2"
-          >
-            <div className="p-2 bg-slate-800 rounded-xl text-white">
-              <Plus className="w-5 h-5" />
-            </div>
-          </Link>
+
         </div>
       </nav>
 
@@ -61,7 +54,7 @@ export default function Layout({ children, currentPageName }) {
           <div className="flex items-center justify-between">
             <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2">
               <Mountain className="w-6 h-6 text-slate-800" />
-              <span className="text-lg font-medium text-stone-800">Dolomiti Trails</span>
+              <span className="text-lg font-medium text-stone-800">Südtirol mit Hund</span>
             </Link>
             
             <div className="flex items-center gap-2">
@@ -83,12 +76,7 @@ export default function Layout({ children, currentPageName }) {
                   </Link>
                 );
               })}
-              <Link to={createPageUrl("AddHike")}>
-                <button className="ml-2 flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-xl hover:bg-slate-900 transition-colors">
-                  <Plus className="w-4 h-4" />
-                  <span className="text-sm font-medium">New Hike</span>
-                </button>
-              </Link>
+
             </div>
           </div>
         </div>

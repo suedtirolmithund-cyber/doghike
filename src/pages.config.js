@@ -47,23 +47,23 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
-import Dashboard from './pages/Dashboard';
-import Hikes from './pages/Hikes';
-import HikeDetail from './pages/HikeDetail';
 import AddHike from './pages/AddHike';
-import EditHike from './pages/EditHike';
+import Dashboard from './pages/Dashboard';
 import Dogs from './pages/Dogs';
+import EditHike from './pages/EditHike';
+import HikeDetail from './pages/HikeDetail';
+import Hikes from './pages/Hikes';
 import MapView from './pages/MapView';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "Dashboard": Dashboard,
-    "Hikes": Hikes,
-    "HikeDetail": HikeDetail,
     "AddHike": AddHike,
-    "EditHike": EditHike,
+    "Dashboard": Dashboard,
     "Dogs": Dogs,
+    "EditHike": EditHike,
+    "HikeDetail": HikeDetail,
+    "Hikes": Hikes,
     "MapView": MapView,
 }
 
