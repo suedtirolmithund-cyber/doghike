@@ -22,6 +22,10 @@ export default function SubmitHike() {
     elevation_gain_m: "",
     duration_minutes: "",
     difficulty: "moderate",
+    dog_difficulty: "moderate",
+    season: "all_year",
+    water_availability: "moderate",
+    hazard_notes: "",
     photos: [],
     latitude: "",
     longitude: "",
@@ -197,7 +201,7 @@ export default function SubmitHike() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="difficulty">Schwierigkeit</Label>
+                <Label htmlFor="difficulty">Schwierigkeit (Mensch) 👤</Label>
                 <Select
                   value={formData.difficulty}
                   onValueChange={(value) => setFormData({ ...formData, difficulty: value })}
@@ -210,6 +214,61 @@ export default function SubmitHike() {
                     <SelectItem value="moderate">Mittel</SelectItem>
                     <SelectItem value="challenging">Anspruchsvoll</SelectItem>
                     <SelectItem value="difficult">Schwer</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="dog_difficulty">Schwierigkeit (Hund) 🐕</Label>
+                <Select
+                  value={formData.dog_difficulty}
+                  onValueChange={(value) => setFormData({ ...formData, dog_difficulty: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Wählen" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="easy">Leicht</SelectItem>
+                    <SelectItem value="moderate">Mittel</SelectItem>
+                    <SelectItem value="challenging">Anspruchsvoll</SelectItem>
+                    <SelectItem value="difficult">Schwer</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="season">Beste Jahreszeit</Label>
+                <Select
+                  value={formData.season}
+                  onValueChange={(value) => setFormData({ ...formData, season: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Wählen" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="spring">🌸 Frühling</SelectItem>
+                    <SelectItem value="summer">☀️ Sommer</SelectItem>
+                    <SelectItem value="autumn">🍂 Herbst</SelectItem>
+                    <SelectItem value="winter">❄️ Winter</SelectItem>
+                    <SelectItem value="all_year">🍃 Ganzjährig</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="water_availability">Wasser unterwegs 💧</Label>
+                <Select
+                  value={formData.water_availability}
+                  onValueChange={(value) => setFormData({ ...formData, water_availability: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Wählen" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">🚫 Kein Wasser</SelectItem>
+                    <SelectItem value="little">💧 Wenig Wasser</SelectItem>
+                    <SelectItem value="moderate">💧💧 Etwas Wasser</SelectItem>
+                    <SelectItem value="plenty">💧💧💧 Viel Wasser</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -357,12 +416,23 @@ export default function SubmitHike() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="notes">Beschreibung & Tipps für Hundebesitzer</Label>
+              <Label htmlFor="hazard_notes">⚠️ Gefahrenstellen / Worauf achten?</Label>
+              <Textarea
+                id="hazard_notes"
+                value={formData.hazard_notes}
+                onChange={(e) => setFormData({ ...formData, hazard_notes: e.target.value })}
+                placeholder="z.B. steile Passagen, Leitern, Seilsicherungen, Kühe auf der Alm..."
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="notes">Beschreibung & Tipps</Label>
               <Textarea
                 id="notes"
                 value={formData.notes}
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                placeholder="Wegbeschaffenheit, Wasserquellen für Hunde, besondere Hinweise..."
+                placeholder="Wegbeschaffenheit, Highlights, Einkehrmöglichkeiten..."
                 rows={5}
               />
             </div>

@@ -38,6 +38,21 @@ const difficultyLabels = {
   difficult: "Schwer"
 };
 
+const seasonConfig = {
+  spring: { emoji: "🌸", label: "Frühling", color: "bg-pink-100 text-pink-700" },
+  summer: { emoji: "☀️", label: "Sommer", color: "bg-yellow-100 text-yellow-700" },
+  autumn: { emoji: "🍂", label: "Herbst", color: "bg-orange-100 text-orange-700" },
+  winter: { emoji: "❄️", label: "Winter", color: "bg-blue-100 text-blue-700" },
+  all_year: { emoji: "🍃", label: "Ganzjährig", color: "bg-green-100 text-green-700" }
+};
+
+const waterConfig = {
+  none: { label: "Kein Wasser unterwegs", color: "bg-red-100 text-red-700", icon: "🚫" },
+  little: { label: "Wenig Wasser", color: "bg-orange-100 text-orange-700", icon: "💧" },
+  moderate: { label: "Etwas Wasser", color: "bg-blue-100 text-blue-600", icon: "💧💧" },
+  plenty: { label: "Viel Wasser", color: "bg-blue-100 text-blue-700", icon: "💧💧💧" }
+};
+
 const weatherEmojis = {
   sunny: "☀️",
   cloudy: "☁️",
@@ -149,14 +164,21 @@ export default function HikeDetail() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <div className="flex items-center gap-3 mb-3">
-              {hike.difficulty && (
-                <Badge className={difficultyColors[hike.difficulty]}>
-                  {difficultyLabels[hike.difficulty]}
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              {hike.season && (
+                <Badge className={seasonConfig[hike.season].color}>
+                  {seasonConfig[hike.season].emoji} {seasonConfig[hike.season].label}
                 </Badge>
               )}
-              {hike.weather && (
-                <span className="text-2xl">{weatherEmojis[hike.weather]}</span>
+              {hike.difficulty && (
+                <Badge className={difficultyColors[hike.difficulty]}>
+                  👤 {difficultyLabels[hike.difficulty]}
+                </Badge>
+              )}
+              {hike.dog_difficulty && (
+                <Badge className={difficultyColors[hike.dog_difficulty]}>
+                  🐕 {difficultyLabels[hike.dog_difficulty]}
+                </Badge>
               )}
             </div>
             <h1 className="text-4xl md:text-5xl font-light text-white mb-2">{hike.trail_name}</h1>
@@ -210,6 +232,35 @@ export default function HikeDetail() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
+            {/* Water & Hazards Info */}
+            {(hike.water_availability || hike.hazard_notes) && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                className="bg-white rounded-2xl p-6 border border-stone-200/50"
+              >
+                <h2 className="text-lg font-medium text-stone-800 mb-4">🐕 Infos für Hundebesitzer</h2>
+                <div className="space-y-4">
+                  {hike.water_availability && (
+                    <div className={`flex items-center gap-3 p-3 rounded-xl ${waterConfig[hike.water_availability].color}`}>
+                      <span className="text-lg">{waterConfig[hike.water_availability].icon}</span>
+                      <div>
+                        <p className="font-medium">Wasser unterwegs</p>
+                        <p className="text-sm opacity-80">{waterConfig[hike.water_availability].label}</p>
+                      </div>
+                    </div>
+                  )}
+                  {hike.hazard_notes && (
+                    <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                      <p className="font-medium text-amber-800 mb-1">⚠️ Achtung</p>
+                      <p className="text-sm text-amber-700">{hike.hazard_notes}</p>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+
             {/* Dogs */}
             {hikeDogs.length > 0 && (
               <motion.div

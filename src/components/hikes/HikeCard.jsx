@@ -19,6 +19,28 @@ const difficultyLabels = {
   difficult: "Schwer"
 };
 
+const seasonEmojis = {
+  spring: "🌸",
+  summer: "☀️",
+  autumn: "🍂",
+  winter: "❄️",
+  all_year: "🍃"
+};
+
+const waterLabels = {
+  none: "Kein Wasser",
+  little: "Wenig Wasser",
+  moderate: "Etwas Wasser",
+  plenty: "Viel Wasser"
+};
+
+const waterColors = {
+  none: "text-red-500",
+  little: "text-orange-500",
+  moderate: "text-blue-400",
+  plenty: "text-blue-600"
+};
+
 const weatherIcons = {
   sunny: "☀️",
   cloudy: "☁️",
@@ -48,9 +70,9 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
             
-            {hike.weather && (
-              <span className="absolute top-4 right-4 text-2xl">
-                {weatherIcons[hike.weather]}
+            {hike.season && (
+              <span className="absolute top-4 right-4 text-2xl bg-white/80 backdrop-blur-sm rounded-full w-10 h-10 flex items-center justify-center">
+                {seasonEmojis[hike.season]}
               </span>
             )}
             
@@ -64,16 +86,26 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
           </div>
           
           <div className="p-5">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-sm text-stone-500">
-                {hike.date && format(new Date(hike.date), "MMM d, yyyy")}
-              </span>
-              {hike.difficulty && (
-                <Badge className={`${difficultyColors[hike.difficulty]} border font-medium`}>
-                  {difficultyLabels[hike.difficulty]}
-                </Badge>
-              )}
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex gap-1.5">
+                {hike.difficulty && (
+                  <Badge className={`${difficultyColors[hike.difficulty]} border font-medium text-xs`}>
+                    👤 {difficultyLabels[hike.difficulty]}
+                  </Badge>
+                )}
+                {hike.dog_difficulty && (
+                  <Badge className={`${difficultyColors[hike.dog_difficulty]} border font-medium text-xs`}>
+                    🐕 {difficultyLabels[hike.dog_difficulty]}
+                  </Badge>
+                )}
+              </div>
             </div>
+            
+            {hike.water_availability && (
+              <div className={`text-xs mb-3 flex items-center gap-1 ${waterColors[hike.water_availability]}`}>
+                💧 {waterLabels[hike.water_availability]}
+              </div>
+            )}
             
             <div className="grid grid-cols-3 gap-3 mb-4">
               {hike.distance_km && (
