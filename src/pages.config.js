@@ -72,7 +72,7 @@ export const PAGES = {
 }
 
 export const pagesConfig = {
-    mainPage: "Hikes",
+    mainPage: "MapView",
     Pages: PAGES,
     Layout: __Layout,
 };
