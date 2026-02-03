@@ -14,7 +14,7 @@ import HikeMap from "@/components/map/HikeMap";
 export default function Dashboard() {
   const { data: hikes = [], isLoading: hikesLoading } = useQuery({
     queryKey: ["hikes"],
-    queryFn: () => base44.entities.Hike.list("-date", 50)
+    queryFn: () => base44.entities.Hike.filter({ status: "approved" }, "-date", 50)
   });
 
   const { data: dogs = [], isLoading: dogsLoading } = useQuery({
@@ -66,12 +66,19 @@ export default function Dashboard() {
               </div>
             )}
 
-            <Link to={createPageUrl("Hikes")}>
-              <Button size="lg" className="bg-white text-slate-800 hover:bg-white/90 shadow-lg">
-                <Mountain className="w-5 h-5 mr-2" />
-                Alle Touren entdecken
-              </Button>
-            </Link>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link to={createPageUrl("Hikes")}>
+                <Button size="lg" className="bg-white text-slate-800 hover:bg-white/90 shadow-lg">
+                  <Mountain className="w-5 h-5 mr-2" />
+                  Alle Touren entdecken
+                </Button>
+              </Link>
+              <Link to={createPageUrl("SubmitHike")}>
+                <Button size="lg" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
+                  Tour einreichen
+                </Button>
+              </Link>
+            </div>
           </motion.div>
         </div>
       </div>

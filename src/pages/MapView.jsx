@@ -10,7 +10,7 @@ import HikeMap from "@/components/map/HikeMap";
 export default function MapView() {
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["hikes"],
-    queryFn: () => base44.entities.Hike.list()
+    queryFn: () => base44.entities.Hike.filter({ status: "approved" })
   });
 
   const hikesWithCoords = hikes.filter(h => h.latitude && h.longitude);

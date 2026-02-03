@@ -17,7 +17,7 @@ export default function Hikes() {
 
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["hikes"],
-    queryFn: () => base44.entities.Hike.list("-date", 100)
+    queryFn: () => base44.entities.Hike.filter({ status: "approved" }, "-date", 100)
   });
 
   const { data: dogs = [] } = useQuery({
