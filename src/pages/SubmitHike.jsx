@@ -32,7 +32,6 @@ export default function SubmitHike() {
     latitude: "",
     longitude: "",
     notes: "",
-    weather: "sunny",
     rating: 5,
     submitted_by_name: "",
     submitted_by_email: "",
@@ -307,26 +306,6 @@ export default function SubmitHike() {
                   onChange={(e) => setFormData({ ...formData, duration_minutes: e.target.value })}
                   placeholder="240"
                 />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="weather">Wetter</Label>
-                <Select
-                  value={formData.weather}
-                  onValueChange={(value) => setFormData({ ...formData, weather: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Wählen" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="sunny">☀️ Sonnig</SelectItem>
-                    <SelectItem value="partly_cloudy">⛅ Teilweise bewölkt</SelectItem>
-                    <SelectItem value="cloudy">☁️ Bewölkt</SelectItem>
-                    <SelectItem value="rainy">🌧️ Regnerisch</SelectItem>
-                    <SelectItem value="snowy">❄️ Schnee</SelectItem>
-                    <SelectItem value="foggy">🌫️ Nebelig</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
 
               <div className="space-y-2">
