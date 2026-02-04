@@ -96,7 +96,7 @@ export default function HikeDetail() {
   if (isLoading || !hike) {
     return (
       <div className="min-h-screen bg-stone-50 flex items-center justify-center">
-        <div className="animate-pulse text-stone-400">Loading...</div>
+        <div className="animate-pulse text-stone-400">Lädt...</div>
       </div>
     );
   }
@@ -123,7 +123,7 @@ export default function HikeDetail() {
           <Link to={createPageUrl("Hikes")}>
             <Button variant="ghost" className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
+              Zurück
             </Button>
           </Link>
           <div className="flex gap-2">
@@ -140,18 +140,18 @@ export default function HikeDetail() {
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Delete this hike?</AlertDialogTitle>
+                  <AlertDialogTitle>Tour löschen?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This will permanently delete "{hike.trail_name}" from your journal.
+                    Dies wird "{hike.trail_name}" dauerhaft löschen. Diese Aktion kann nicht rückgängig gemacht werden.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel>Abbrechen</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={() => deleteMutation.mutate()}
                     className="bg-red-600 hover:bg-red-700"
                   >
-                    Delete
+                    Löschen
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
