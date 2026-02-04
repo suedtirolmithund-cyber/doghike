@@ -6,8 +6,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { base44 } from "@/api/base44Client";
-import { Upload, X, Loader2, Star } from "lucide-react";
+import { Upload, X, Loader2, Star, Map as MapIcon, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import RouteEditor from "@/components/map/RouteEditor";
 
 export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
   const [formData, setFormData] = useState(hike || {
@@ -28,11 +29,13 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
     photos: [],
     latitude: "",
     longitude: "",
+    route_coordinates: [],
     notes: "",
     rating: 5
   });
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [showRouteEditor, setShowRouteEditor] = useState(false);
 
   const handlePhotoUpload = async (e) => {
     const files = Array.from(e.target.files);
@@ -67,6 +70,40 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
         ? prev.dogs.filter(id => id !== dogId)
         : [...(prev.dogs || []), dogId]
     }));
+  };
+
+  const handleGPXUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const text = await file.text();
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(text, "text/xml");
+      
+      const trkpts = xmlDoc.getElementsByTagName("trkpt");
+      const coordinates = [];
+      
+      for (let i = 0; i < trkpts.length; i++) {
+        const lat = parseFloat(trkpts[i].getAttribute("lat"));
+        const lon = parseFloat(trkpts[i].getAttribute("lon"));
+        coordinates.push([lat, lon]);
+      }
+      
+      if (coordinates.length > 0) {
+        setFormData(prev => ({
+          ...prev,
+          route_coordinates: coordinates,
+          latitude: prev.latitude || coordinates[0][0],
+          longitude: prev.longitude || coordinates[0][1]
+        }));
+      }
+    } catch (error) {
+      console.error("Fehler beim Parsen der GPX-Datei:", error);
+      alert("Fehler beim Laden der GPX-Datei. Bitte überprüfen Sie das Format.");
+    }
+    setUploading(false);
   };
 
   const handleSubmit = async (e) => {
@@ -254,6 +291,100 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
             placeholder="12.3024"
           />
         </div>
+      </div>
+
+      {/* Route Section */}
+      <div className="space-y-4 p-6 bg-stone-50 rounded-2xl border border-stone-200">
+        <div className="flex items-center justify-between">
+          <div>
+            <Label className="text-lg">🗺️ Routenverlauf</Label>
+            <p className="text-sm text-stone-500 mt-1">
+              Zeigen Sie die gesamte Wanderroute auf der Karte
+            </p>
+          </div>
+          {formData.route_coordinates?.length > 0 && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setFormData({ ...formData, route_coordinates: [] })}
+              className="text-red-600 hover:text-red-700"
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Route löschen
+            </Button>
+          )}
+        </div>
+
+        {formData.route_coordinates?.length > 0 && (
+          <div className="p-3 bg-white rounded-lg border border-green-200">
+            <p className="text-sm text-green-700">
+              ✓ Route mit {formData.route_coordinates.length} Punkten geladen
+            </p>
+          </div>
+        )}
+
+        <div className="flex flex-col sm:flex-row gap-3">
+          <label className="flex-1">
+            <input
+              type="file"
+              accept=".gpx"
+              onChange={handleGPXUpload}
+              className="hidden"
+              disabled={uploading}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              disabled={uploading}
+              onClick={(e) => e.currentTarget.previousElementSibling.click()}
+            >
+              {uploading ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Lade GPX...
+                </>
+              ) : (
+                <>
+                  <Upload className="w-4 h-4 mr-2" />
+                  GPX-Datei importieren
+                </>
+              )}
+            </Button>
+          </label>
+
+          <Button
+            type="button"
+            variant="outline"
+            className="flex-1"
+            onClick={() => setShowRouteEditor(!showRouteEditor)}
+          >
+            <MapIcon className="w-4 h-4 mr-2" />
+            {showRouteEditor ? "Karte schließen" : "Auf Karte zeichnen"}
+          </Button>
+        </div>
+
+        {showRouteEditor && (
+          <RouteEditor
+            coordinates={formData.route_coordinates || []}
+            startPoint={
+              formData.latitude && formData.longitude
+                ? [Number(formData.latitude), Number(formData.longitude)]
+                : null
+            }
+            onChange={(coords) => {
+              setFormData({ ...formData, route_coordinates: coords });
+              if (coords.length > 0 && !formData.latitude) {
+                setFormData(prev => ({
+                  ...prev,
+                  latitude: coords[0][0],
+                  longitude: coords[0][1]
+                }));
+              }
+            }}
+          />
+        )}
       </div>
 
       <div className="space-y-2">
