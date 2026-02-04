@@ -42,7 +42,31 @@ const createPawIcon = (season) => {
   });
 };
 
-export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, height = "400px", showLegend = true }) {
+function FitBoundsToRoute({ hikes, fitBounds }) {
+  const map = useMap();
+  
+  useEffect(() => {
+    if (!fitBounds || hikes.length === 0) return;
+    
+    const allCoordinates = [];
+    hikes.forEach(hike => {
+      if (hike.route_coordinates && hike.route_coordinates.length > 0) {
+        allCoordinates.push(...hike.route_coordinates);
+      } else if (hike.latitude && hike.longitude) {
+        allCoordinates.push([hike.latitude, hike.longitude]);
+      }
+    });
+    
+    if (allCoordinates.length > 0) {
+      const bounds = L.latLngBounds(allCoordinates);
+      map.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }, [hikes, fitBounds, map]);
+  
+  return null;
+}
+
+export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, height = "400px", showLegend = true, fitBounds = false }) {
   const hikesWithCoords = hikes.filter(h => h.latitude && h.longitude);
 
   return (
