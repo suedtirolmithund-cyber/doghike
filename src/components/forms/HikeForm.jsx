@@ -17,8 +17,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
     distance_km: "",
     elevation_gain_m: "",
     duration_minutes: "",
-    difficulty: "moderate",
-    dog_difficulty: "moderate",
+    difficulty: "3",
+    dog_difficulty: "3",
     season: "all_year",
     water_availability: "moderate",
     hazard_notes: "",
@@ -132,10 +132,11 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
               <SelectValue placeholder="Wählen" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="easy">Leicht</SelectItem>
-              <SelectItem value="moderate">Mittel</SelectItem>
-              <SelectItem value="challenging">Anspruchsvoll</SelectItem>
-              <SelectItem value="difficult">Schwer</SelectItem>
+              <SelectItem value="1">Stufe 1</SelectItem>
+              <SelectItem value="2">Stufe 2</SelectItem>
+              <SelectItem value="3">Stufe 3</SelectItem>
+              <SelectItem value="4">Stufe 4</SelectItem>
+              <SelectItem value="5">Stufe 5</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -150,10 +151,11 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
               <SelectValue placeholder="Wählen" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="easy">Leicht</SelectItem>
-              <SelectItem value="moderate">Mittel</SelectItem>
-              <SelectItem value="challenging">Anspruchsvoll</SelectItem>
-              <SelectItem value="difficult">Schwer</SelectItem>
+              <SelectItem value="1">Stufe 1</SelectItem>
+              <SelectItem value="2">Stufe 2</SelectItem>
+              <SelectItem value="3">Stufe 3</SelectItem>
+              <SelectItem value="4">Stufe 4</SelectItem>
+              <SelectItem value="5">Stufe 5</SelectItem>
             </SelectContent>
           </Select>
         </div>

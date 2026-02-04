@@ -6,17 +6,11 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 
 const difficultyColors = {
-  easy: "bg-emerald-100 text-emerald-700 border-emerald-200",
-  moderate: "bg-amber-100 text-amber-700 border-amber-200",
-  challenging: "bg-orange-100 text-orange-700 border-orange-200",
-  difficult: "bg-red-100 text-red-700 border-red-200"
-};
-
-const difficultyLabels = {
-  easy: "Leicht",
-  moderate: "Mittel",
-  challenging: "Anspruchsvoll",
-  difficult: "Schwer"
+  "1": "bg-emerald-100 text-emerald-700 border-emerald-200",
+  "2": "bg-lime-100 text-lime-700 border-lime-200",
+  "3": "bg-amber-100 text-amber-700 border-amber-200",
+  "4": "bg-orange-100 text-orange-700 border-orange-200",
+  "5": "bg-red-100 text-red-700 border-red-200"
 };
 
 const seasonEmojis = {
@@ -90,12 +84,12 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               <div className="flex gap-1.5">
                 {hike.difficulty && (
                   <Badge className={`${difficultyColors[hike.difficulty]} border font-medium text-xs`}>
-                    👤 {difficultyLabels[hike.difficulty]}
+                    👤 Stufe {hike.difficulty}
                   </Badge>
                 )}
                 {hike.dog_difficulty && (
                   <Badge className={`${difficultyColors[hike.dog_difficulty]} border font-medium text-xs`}>
-                    🐕 {difficultyLabels[hike.dog_difficulty]}
+                    🐕 Stufe {hike.dog_difficulty}
                   </Badge>
                 )}
               </div>

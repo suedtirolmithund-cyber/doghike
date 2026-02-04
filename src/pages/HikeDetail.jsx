@@ -25,17 +25,11 @@ import {
 import HikeMap from "@/components/map/HikeMap";
 
 const difficultyColors = {
-  easy: "bg-emerald-100 text-emerald-700",
-  moderate: "bg-amber-100 text-amber-700",
-  challenging: "bg-orange-100 text-orange-700",
-  difficult: "bg-red-100 text-red-700"
-};
-
-const difficultyLabels = {
-  easy: "Leicht",
-  moderate: "Mittel",
-  challenging: "Anspruchsvoll",
-  difficult: "Schwer"
+  "1": "bg-emerald-100 text-emerald-700",
+  "2": "bg-lime-100 text-lime-700",
+  "3": "bg-amber-100 text-amber-700",
+  "4": "bg-orange-100 text-orange-700",
+  "5": "bg-red-100 text-red-700"
 };
 
 const seasonConfig = {
@@ -172,12 +166,12 @@ export default function HikeDetail() {
               )}
               {hike.difficulty && (
                 <Badge className={difficultyColors[hike.difficulty]}>
-                  👤 {difficultyLabels[hike.difficulty]}
+                  👤 Stufe {hike.difficulty}
                 </Badge>
               )}
               {hike.dog_difficulty && (
                 <Badge className={difficultyColors[hike.dog_difficulty]}>
-                  🐕 {difficultyLabels[hike.dog_difficulty]}
+                  🐕 Stufe {hike.dog_difficulty}
                 </Badge>
               )}
             </div>

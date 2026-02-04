@@ -78,10 +78,11 @@ export default function Hikes() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Alle Stufen</SelectItem>
-                <SelectItem value="easy">Leicht</SelectItem>
-                <SelectItem value="moderate">Mittel</SelectItem>
-                <SelectItem value="challenging">Anspruchsvoll</SelectItem>
-                <SelectItem value="difficult">Schwer</SelectItem>
+                <SelectItem value="1">Stufe 1</SelectItem>
+                <SelectItem value="2">Stufe 2</SelectItem>
+                <SelectItem value="3">Stufe 3</SelectItem>
+                <SelectItem value="4">Stufe 4</SelectItem>
+                <SelectItem value="5">Stufe 5</SelectItem>
               </SelectContent>
             </Select>
             <Select value={sortBy} onValueChange={setSortBy}>
