@@ -23,6 +23,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import HikeMap from "@/components/map/HikeMap";
+import RouteProfile from "@/components/hikes/RouteProfile";
 
 const difficultyColors = {
   "1": "bg-emerald-100 text-emerald-700",
@@ -223,6 +224,17 @@ export default function HikeDetail() {
             </div>
           )}
         </motion.div>
+
+        {/* Route Profile - Full Width */}
+        {hike.route_coordinates && hike.route_coordinates.length > 1 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.12 }}
+          >
+            <RouteProfile hike={hike} />
+          </motion.div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
