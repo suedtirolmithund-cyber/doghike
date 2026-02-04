@@ -223,7 +223,7 @@ export default function HikeDetail() {
             <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
               <Clock className="w-5 h-5 text-stone-400 mx-auto mb-2" />
               <p className="text-lg font-medium text-stone-800">
-                {Math.floor(hike.duration_minutes / 60)}h {hike.duration_minutes % 60}min
+                {(hike.duration_minutes / 60).toFixed(1)} Std
               </p>
               <p className="text-sm text-stone-500">Gehzeit</p>
             </div>

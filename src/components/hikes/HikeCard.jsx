@@ -123,7 +123,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               {hike.duration_minutes && (
                 <div className="text-center p-2 bg-stone-50 rounded-xl">
                   <p className="text-lg font-semibold text-stone-800">
-                    {Math.floor(hike.duration_minutes / 60)}:{String(hike.duration_minutes % 60).padStart(2, '0')}
+                    {(hike.duration_minutes / 60).toFixed(1)}
                   </p>
                   <p className="text-xs text-stone-500">Std</p>
                 </div>
