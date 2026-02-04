@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import HikeCard from "@/components/hikes/HikeCard";
+import HikeMap from "@/components/map/HikeMap";
 
 export default function Hikes() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -98,6 +99,24 @@ export default function Hikes() {
             </Select>
           </div>
         </motion.div>
+
+        {/* Map Overview */}
+        {filteredHikes.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mb-8"
+          >
+            <h2 className="text-xl font-light text-stone-800 mb-4">Kartenansicht</h2>
+            <HikeMap
+              hikes={filteredHikes}
+              height="500px"
+              fitBounds={true}
+              showLegend={true}
+            />
+          </motion.div>
+        )}
 
         {/* Hikes Grid */}
         {filteredHikes.length > 0 ? (
