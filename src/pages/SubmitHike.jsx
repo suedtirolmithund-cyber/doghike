@@ -26,6 +26,8 @@ export default function SubmitHike() {
     season: "all_year",
     water_availability: "moderate",
     hazard_notes: "",
+    parking_info: "",
+    restaurant_info: "",
     photos: [],
     latitude: "",
     longitude: "",
@@ -416,7 +418,29 @@ export default function SubmitHike() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="hazard_notes">⚠️ Gefahrenstellen / Worauf achten?</Label>
+              <Label htmlFor="parking_info">🅿️ Ausgangspunkt & Parken (optional)</Label>
+              <Textarea
+                id="parking_info"
+                value={formData.parking_info}
+                onChange={(e) => setFormData({ ...formData, parking_info: e.target.value })}
+                placeholder="z.B. Großer Parkplatz am Pragser Wildsee, Adresse: Via Prags 107..."
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="restaurant_info">🍽️ Einkehrmöglichkeiten (optional)</Label>
+              <Textarea
+                id="restaurant_info"
+                value={formData.restaurant_info}
+                onChange={(e) => setFormData({ ...formData, restaurant_info: e.target.value })}
+                placeholder="z.B. Seekofel Hütte (2324m), Auronzo-Hütte am Drei Zinnen Blick..."
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="hazard_notes">⚠️ Achtung - Gefahrenstellen (optional)</Label>
               <Textarea
                 id="hazard_notes"
                 value={formData.hazard_notes}
@@ -432,7 +456,7 @@ export default function SubmitHike() {
                 id="notes"
                 value={formData.notes}
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                placeholder="Wegbeschaffenheit, Highlights, Einkehrmöglichkeiten..."
+                placeholder="Wegbeschaffenheit, Highlights, besondere Ausblicke..."
                 rows={5}
               />
             </div>

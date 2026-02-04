@@ -232,12 +232,42 @@ export default function HikeDetail() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
+            {/* Parking & Starting Point */}
+            {hike.parking_info && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                className="bg-white rounded-2xl p-6 border border-stone-200/50"
+              >
+                <h2 className="text-lg font-medium text-stone-800 mb-3 flex items-center gap-2">
+                  🅿️ Ausgangspunkt & Parken
+                </h2>
+                <p className="text-stone-600 leading-relaxed whitespace-pre-wrap">{hike.parking_info}</p>
+              </motion.div>
+            )}
+
+            {/* Restaurants & Huts */}
+            {hike.restaurant_info && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.16 }}
+                className="bg-white rounded-2xl p-6 border border-stone-200/50"
+              >
+                <h2 className="text-lg font-medium text-stone-800 mb-3 flex items-center gap-2">
+                  🍽️ Einkehrmöglichkeiten
+                </h2>
+                <p className="text-stone-600 leading-relaxed whitespace-pre-wrap">{hike.restaurant_info}</p>
+              </motion.div>
+            )}
+
             {/* Water & Hazards Info */}
             {(hike.water_availability || hike.hazard_notes) && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
+                transition={{ delay: 0.17 }}
                 className="bg-white rounded-2xl p-6 border border-stone-200/50"
               >
                 <h2 className="text-lg font-medium text-stone-800 mb-4">🐕 Infos für Hundebesitzer</h2>
@@ -254,7 +284,7 @@ export default function HikeDetail() {
                   {hike.hazard_notes && (
                     <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl">
                       <p className="font-medium text-amber-800 mb-1">⚠️ Achtung</p>
-                      <p className="text-sm text-amber-700">{hike.hazard_notes}</p>
+                      <p className="text-sm text-amber-700 whitespace-pre-wrap">{hike.hazard_notes}</p>
                     </div>
                   )}
                 </div>

@@ -12,37 +12,30 @@ const seasonConfig = {
   all_year: { color: "#22c55e", emoji: "🍃", label: "Ganzjährig" }
 };
 
-// Create paw icon SVG for each season
+// Create paw emoji icon with colored background
 const createPawIcon = (season) => {
   const config = seasonConfig[season] || seasonConfig.all_year;
-  const svgIcon = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 56" width="36" height="42">
-      <defs>
-        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/>
-        </filter>
-      </defs>
-      <g filter="url(#shadow)">
-        <!-- Paw pad main -->
-        <ellipse cx="24" cy="32" rx="12" ry="10" fill="${config.color}"/>
-        <!-- Toe pads -->
-        <ellipse cx="14" cy="20" rx="6" ry="7" fill="${config.color}"/>
-        <ellipse cx="24" cy="16" rx="6" ry="7" fill="${config.color}"/>
-        <ellipse cx="34" cy="20" rx="6" ry="7" fill="${config.color}"/>
-        <!-- Season symbol background -->
-        <circle cx="24" cy="28" r="8" fill="white" opacity="0.9"/>
-      </g>
-      <!-- Season emoji placeholder - text -->
-      <text x="24" y="33" text-anchor="middle" font-size="12">${config.emoji}</text>
-    </svg>
+  const html = `
+    <div style="
+      background: ${config.color};
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      border: 3px solid white;
+    ">🐾</div>
   `;
   
   return L.divIcon({
-    html: svgIcon,
+    html: html,
     className: 'paw-marker',
-    iconSize: [36, 42],
-    iconAnchor: [18, 42],
-    popupAnchor: [0, -42]
+    iconSize: [36, 36],
+    iconAnchor: [18, 36],
+    popupAnchor: [0, -36]
   });
 };
 
