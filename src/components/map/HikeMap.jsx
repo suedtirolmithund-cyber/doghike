@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polyline } from "react-leaflet";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -57,50 +57,64 @@ export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, hei
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {hikesWithCoords.map((hike) => (
-          <Marker
-            key={hike.id}
-            position={[hike.latitude, hike.longitude]}
-            icon={createPawIcon(hike.season || "all_year")}
-          >
-            <Popup>
-              <div className="p-1 min-w-[200px]">
-                <h3 className="font-semibold text-stone-800 mb-2">{hike.trail_name}</h3>
+          <>
+            {/* Route Line */}
+            {hike.route_coordinates && hike.route_coordinates.length > 1 && (
+              <Polyline
+                key={`route-${hike.id}`}
+                positions={hike.route_coordinates}
+                color={seasonConfig[hike.season || "all_year"].color}
+                weight={4}
+                opacity={0.7}
+              />
+            )}
 
-                {hike.photos?.[0] && (
-                  <Link to={createPageUrl("HikeDetail") + `?id=${hike.id}`}>
-                    <img 
-                      src={hike.photos[0]} 
-                      alt={hike.trail_name}
-                      className="w-full h-24 object-cover rounded-lg mb-2 cursor-pointer hover:opacity-90 transition-opacity"
-                    />
-                  </Link>
-                )}
+            {/* Starting Point Marker */}
+            <Marker
+              key={hike.id}
+              position={[hike.latitude, hike.longitude]}
+              icon={createPawIcon(hike.season || "all_year")}
+            >
+              <Popup>
+                <div className="p-1 min-w-[200px]">
+                  <h3 className="font-semibold text-stone-800 mb-2">{hike.trail_name}</h3>
 
-                <p className="text-sm text-stone-500 mb-2">{hike.location}</p>
+                  {hike.photos?.[0] && (
+                    <Link to={createPageUrl("HikeDetail") + `?id=${hike.id}`}>
+                      <img 
+                        src={hike.photos[0]} 
+                        alt={hike.trail_name}
+                        className="w-full h-24 object-cover rounded-lg mb-2 cursor-pointer hover:opacity-90 transition-opacity"
+                      />
+                    </Link>
+                  )}
 
-                <div className="space-y-1 text-xs text-stone-600">
-                  {hike.distance_km && (
-                    <div className="flex items-center gap-1">
-                      <span className="font-medium">📏</span>
-                      <span>{hike.distance_km} km</span>
-                    </div>
-                  )}
-                  {hike.elevation_gain_m && (
-                    <div className="flex items-center gap-1">
-                      <span className="font-medium">⛰️</span>
-                      <span>{hike.elevation_gain_m} Hm</span>
-                    </div>
-                  )}
-                  {hike.duration_minutes && (
-                    <div className="flex items-center gap-1">
-                      <span className="font-medium">⏱️</span>
-                      <span>{(hike.duration_minutes / 60).toFixed(1)} Std</span>
-                    </div>
-                  )}
+                  <p className="text-sm text-stone-500 mb-2">{hike.location}</p>
+
+                  <div className="space-y-1 text-xs text-stone-600">
+                    {hike.distance_km && (
+                      <div className="flex items-center gap-1">
+                        <span className="font-medium">📏</span>
+                        <span>{hike.distance_km} km</span>
+                      </div>
+                    )}
+                    {hike.elevation_gain_m && (
+                      <div className="flex items-center gap-1">
+                        <span className="font-medium">⛰️</span>
+                        <span>{hike.elevation_gain_m} Hm</span>
+                      </div>
+                    )}
+                    {hike.duration_minutes && (
+                      <div className="flex items-center gap-1">
+                        <span className="font-medium">⏱️</span>
+                        <span>{(hike.duration_minutes / 60).toFixed(1)} Std</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </Popup>
-          </Marker>
+              </Popup>
+            </Marker>
+          </>
         ))}
       </MapContainer>
       
