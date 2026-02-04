@@ -4,14 +4,17 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { Mountain, Route, Clock, TrendingUp, Plus, Map, ArrowRight } from "lucide-react";
+import { Mountain, Route, Clock, TrendingUp, Plus, Map, ArrowRight, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import StatsCard from "@/components/stats/StatsCard";
 import HikeCard from "@/components/hikes/HikeCard";
 import DogAvatar from "@/components/dogs/DogAvatar";
 import HikeMap from "@/components/map/HikeMap";
 
 export default function Dashboard() {
+  const [searchQuery, setSearchQuery] = useState("");
+
   const { data: hikes = [], isLoading: hikesLoading } = useQuery({
     queryKey: ["hikes"],
     queryFn: () => base44.entities.Hike.filter({ status: "approved" }, "-date", 50)
@@ -22,12 +25,14 @@ export default function Dashboard() {
     queryFn: () => base44.entities.Dog.list()
   });
 
-  const totalDistance = hikes.reduce((sum, h) => sum + (h.distance_km || 0), 0);
-  const totalElevation = hikes.reduce((sum, h) => sum + (h.elevation_gain_m || 0), 0);
-  const totalTime = hikes.reduce((sum, h) => sum + (h.duration_minutes || 0), 0);
+  const filteredHikes = hikes.filter(hike => {
+    if (!searchQuery) return true;
+    return hike.trail_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+           hike.location?.toLowerCase().includes(searchQuery.toLowerCase());
+  });
 
-  const recentHikes = hikes.slice(0, 4);
-  const hikesWithCoords = hikes.filter(h => h.latitude && h.longitude);
+  const recentHikes = filteredHikes.slice(0, 4);
+  const hikesWithCoords = filteredHikes.filter(h => h.latitude && h.longitude);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50">
@@ -84,34 +89,30 @@ export default function Dashboard() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-10 pb-20">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+        {/* Search Bar */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8 max-w-2xl mx-auto"
+        >
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
+            <Input
+              placeholder="Tour oder Ort suchen..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-12 h-14 text-lg bg-white shadow-md border-stone-200"
+            />
+          </div>
+        </motion.div>
+
+        {/* Stats - Only Count */}
+        <div className="mb-12 text-center">
           <StatsCard
             icon={Route}
             label="Wanderungen"
-            value={hikes.length}
+            value={filteredHikes.length}
             delay={0}
-          />
-          <StatsCard
-            icon={Mountain}
-            label="Gesamtstrecke"
-            value={totalDistance.toFixed(1)}
-            unit="km"
-            delay={0.1}
-          />
-          <StatsCard
-            icon={TrendingUp}
-            label="Höhenmeter"
-            value={Math.round(totalElevation).toLocaleString()}
-            unit="m"
-            delay={0.2}
-          />
-          <StatsCard
-            icon={Clock}
-            label="Gehzeit gesamt"
-            value={Math.round(totalTime / 60)}
-            unit="Std"
-            delay={0.3}
           />
         </div>
 
@@ -132,7 +133,7 @@ export default function Dashboard() {
                 </Button>
               </Link>
             </div>
-            <HikeMap hikes={hikesWithCoords} height="350px" />
+            <HikeMap hikes={hikesWithCoords} height="350px" showLegend={true} />
           </motion.div>
         )}
 
