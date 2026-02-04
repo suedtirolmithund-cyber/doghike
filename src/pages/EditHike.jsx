@@ -40,7 +40,7 @@ export default function EditHike() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-stone-50 flex items-center justify-center">
-        <div className="animate-pulse text-stone-400">Loading...</div>
+        <div className="animate-pulse text-stone-400">Lädt...</div>
       </div>
     );
   }
@@ -56,11 +56,11 @@ export default function EditHike() {
           <Link to={createPageUrl("HikeDetail") + `?id=${hikeId}`}>
             <Button variant="ghost" className="mb-4 text-stone-600">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Hike
+              Zurück zur Tour
             </Button>
           </Link>
-          <h1 className="text-3xl font-light text-stone-800">Edit Hike</h1>
-          <p className="text-stone-500 mt-1">Update your adventure details</p>
+          <h1 className="text-3xl font-light text-stone-800">Tour bearbeiten</h1>
+          <p className="text-stone-500 mt-1">Wanderdetails aktualisieren</p>
         </motion.div>
 
         <motion.div

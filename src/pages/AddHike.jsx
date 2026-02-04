@@ -36,11 +36,11 @@ export default function AddHike() {
           <Link to={createPageUrl("Hikes")}>
             <Button variant="ghost" className="mb-4 text-stone-600">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Hikes
+              Zurück zu Touren
             </Button>
           </Link>
-          <h1 className="text-3xl font-light text-stone-800">Log New Hike</h1>
-          <p className="text-stone-500 mt-1">Record your mountain adventure</p>
+          <h1 className="text-3xl font-light text-stone-800">Neue Tour hinzufügen</h1>
+          <p className="text-stone-500 mt-1">Deine Wanderung dokumentieren</p>
         </motion.div>
 
         <motion.div

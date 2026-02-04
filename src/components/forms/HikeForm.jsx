@@ -18,12 +18,17 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
     elevation_gain_m: "",
     duration_minutes: "",
     difficulty: "moderate",
+    dog_difficulty: "moderate",
+    season: "all_year",
+    water_availability: "moderate",
+    hazard_notes: "",
+    parking_info: "",
+    restaurant_info: "",
     dogs: [],
     photos: [],
     latitude: "",
     longitude: "",
     notes: "",
-    weather: "sunny",
     rating: 5
   });
   const [uploading, setUploading] = useState(false);
@@ -86,28 +91,28 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <Label htmlFor="trail_name">Trail Name *</Label>
+          <Label htmlFor="trail_name">Name der Tour *</Label>
           <Input
             id="trail_name"
             value={formData.trail_name}
             onChange={(e) => setFormData({ ...formData, trail_name: e.target.value })}
-            placeholder="e.g., Tre Cime di Lavaredo"
+            placeholder="z.B. Drei Zinnen Umrundung"
             required
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="location">Location</Label>
+          <Label htmlFor="location">Ort / Region</Label>
           <Input
             id="location"
             value={formData.location}
             onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-            placeholder="e.g., South Tyrol"
+            placeholder="z.B. Sexten, Südtirol"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="date">Date *</Label>
+          <Label htmlFor="date">Datum *</Label>
           <Input
             id="date"
             type="date"
@@ -118,25 +123,80 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="difficulty">Difficulty</Label>
+          <Label htmlFor="difficulty">Schwierigkeit (Mensch) 👤</Label>
           <Select
             value={formData.difficulty}
             onValueChange={(value) => setFormData({ ...formData, difficulty: value })}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select difficulty" />
+              <SelectValue placeholder="Wählen" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="easy">Easy</SelectItem>
-              <SelectItem value="moderate">Moderate</SelectItem>
-              <SelectItem value="challenging">Challenging</SelectItem>
-              <SelectItem value="difficult">Difficult</SelectItem>
+              <SelectItem value="easy">Leicht</SelectItem>
+              <SelectItem value="moderate">Mittel</SelectItem>
+              <SelectItem value="challenging">Anspruchsvoll</SelectItem>
+              <SelectItem value="difficult">Schwer</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="distance">Distance (km)</Label>
+          <Label htmlFor="dog_difficulty">Schwierigkeit (Hund) 🐕</Label>
+          <Select
+            value={formData.dog_difficulty}
+            onValueChange={(value) => setFormData({ ...formData, dog_difficulty: value })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Wählen" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="easy">Leicht</SelectItem>
+              <SelectItem value="moderate">Mittel</SelectItem>
+              <SelectItem value="challenging">Anspruchsvoll</SelectItem>
+              <SelectItem value="difficult">Schwer</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="season">Beste Jahreszeit</Label>
+          <Select
+            value={formData.season}
+            onValueChange={(value) => setFormData({ ...formData, season: value })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Wählen" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="spring">🌸 Frühling</SelectItem>
+              <SelectItem value="summer">☀️ Sommer</SelectItem>
+              <SelectItem value="autumn">🍂 Herbst</SelectItem>
+              <SelectItem value="winter">❄️ Winter</SelectItem>
+              <SelectItem value="all_year">🍃 Ganzjährig</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="water_availability">Wasser unterwegs 💧</Label>
+          <Select
+            value={formData.water_availability}
+            onValueChange={(value) => setFormData({ ...formData, water_availability: value })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Wählen" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">🚫 Kein Wasser</SelectItem>
+              <SelectItem value="little">💧 Wenig Wasser</SelectItem>
+              <SelectItem value="moderate">💧💧 Etwas Wasser</SelectItem>
+              <SelectItem value="plenty">💧💧💧 Viel Wasser</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="distance">Strecke (km)</Label>
           <Input
             id="distance"
             type="number"
@@ -148,7 +208,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="elevation">Elevation Gain (m)</Label>
+          <Label htmlFor="elevation">Höhenmeter (m)</Label>
           <Input
             id="elevation"
             type="number"
@@ -159,7 +219,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="duration">Duration (minutes)</Label>
+          <Label htmlFor="duration">Gehzeit (Minuten)</Label>
           <Input
             id="duration"
             type="number"
@@ -170,27 +230,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="weather">Weather</Label>
-          <Select
-            value={formData.weather}
-            onValueChange={(value) => setFormData({ ...formData, weather: value })}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select weather" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="sunny">☀️ Sunny</SelectItem>
-              <SelectItem value="partly_cloudy">⛅ Partly Cloudy</SelectItem>
-              <SelectItem value="cloudy">☁️ Cloudy</SelectItem>
-              <SelectItem value="rainy">🌧️ Rainy</SelectItem>
-              <SelectItem value="snowy">❄️ Snowy</SelectItem>
-              <SelectItem value="foggy">🌫️ Foggy</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="latitude">Latitude</Label>
+          <Label htmlFor="latitude">Breitengrad (Ausgangspunkt)</Label>
           <Input
             id="latitude"
             type="number"
@@ -202,7 +242,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="longitude">Longitude</Label>
+          <Label htmlFor="longitude">Längengrad (Ausgangspunkt)</Label>
           <Input
             id="longitude"
             type="number"
@@ -215,7 +255,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
       </div>
 
       <div className="space-y-2">
-        <Label>Rating</Label>
+        <Label>Bewertung</Label>
         <div className="flex gap-2">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
@@ -238,7 +278,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
 
       {dogs.length > 0 && (
         <div className="space-y-3">
-          <Label>Dogs on this hike</Label>
+          <Label>Hunde auf dieser Tour</Label>
           <div className="flex flex-wrap gap-4">
             {dogs.map((dog) => (
               <label
@@ -266,7 +306,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
       )}
 
       <div className="space-y-3">
-        <Label>Photos</Label>
+        <Label>Fotos</Label>
         <div className="flex flex-wrap gap-4">
           <AnimatePresence>
             {formData.photos?.map((url, index) => (
@@ -279,7 +319,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
               >
                 <img
                   src={url}
-                  alt={`Photo ${index + 1}`}
+                  alt={`Foto ${index + 1}`}
                   className="w-24 h-24 object-cover rounded-xl"
                 />
                 <button
@@ -307,7 +347,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
             ) : (
               <>
                 <Upload className="w-6 h-6 text-stone-400" />
-                <span className="text-xs text-stone-400 mt-1">Add photos</span>
+                <span className="text-xs text-stone-400 mt-1">Fotos hinzufügen</span>
               </>
             )}
           </label>
@@ -315,12 +355,45 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="notes">Notes</Label>
+        <Label htmlFor="parking_info">🅿️ Ausgangspunkt & Parken (optional)</Label>
+        <Textarea
+          id="parking_info"
+          value={formData.parking_info}
+          onChange={(e) => setFormData({ ...formData, parking_info: e.target.value })}
+          placeholder="z.B. Großer Parkplatz am Pragser Wildsee, Adresse: Via Prags 107..."
+          rows={3}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="restaurant_info">🍽️ Einkehrmöglichkeiten (optional)</Label>
+        <Textarea
+          id="restaurant_info"
+          value={formData.restaurant_info}
+          onChange={(e) => setFormData({ ...formData, restaurant_info: e.target.value })}
+          placeholder="z.B. Seekofel Hütte (2324m), Auronzo-Hütte am Drei Zinnen Blick..."
+          rows={3}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="hazard_notes">⚠️ Achtung - Gefahrenstellen (optional)</Label>
+        <Textarea
+          id="hazard_notes"
+          value={formData.hazard_notes}
+          onChange={(e) => setFormData({ ...formData, hazard_notes: e.target.value })}
+          placeholder="z.B. steile Passagen, Leitern, Seilsicherungen, Kühe auf der Alm..."
+          rows={3}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="notes">Beschreibung & Tipps</Label>
         <Textarea
           id="notes"
           value={formData.notes}
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-          placeholder="Trail conditions, highlights, memorable moments..."
+          placeholder="Wegbeschaffenheit, Highlights, besondere Ausblicke..."
           rows={4}
         />
       </div>
@@ -328,7 +401,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
       <div className="flex gap-3 justify-end pt-4">
         {onCancel && (
           <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
+            Abbrechen
           </Button>
         )}
         <Button
@@ -339,10 +412,10 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
           {saving ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Saving...
+              Wird gespeichert...
             </>
           ) : (
-            hike ? "Update Hike" : "Add Hike"
+            hike ? "Tour aktualisieren" : "Tour hinzufügen"
           )}
         </Button>
       </div>
