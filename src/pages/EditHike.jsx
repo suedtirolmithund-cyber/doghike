@@ -47,7 +47,7 @@ export default function EditHike() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -67,7 +67,7 @@ export default function EditHike() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white rounded-2xl p-8 border border-stone-200/50 shadow-sm"
+          className="bg-white rounded-2xl p-10 border border-stone-200/50 shadow-sm"
         >
           <HikeForm
             hike={hike}
