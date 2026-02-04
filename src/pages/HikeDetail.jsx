@@ -389,12 +389,16 @@ export default function HikeDetail() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <h2 className="text-lg font-medium text-stone-800 mb-3">Ausgangspunkt</h2>
+                <h2 className="text-lg font-medium text-stone-800 mb-3">
+                  {hike.route_coordinates?.length > 0 ? "Routenverlauf" : "Ausgangspunkt"}
+                </h2>
                 <HikeMap
                   hikes={[hike]}
                   center={[hike.latitude, hike.longitude]}
                   zoom={12}
-                  height="250px"
+                  height="300px"
+                  fitBounds={hike.route_coordinates?.length > 1}
+                  showLegend={false}
                 />
               </motion.div>
             )}

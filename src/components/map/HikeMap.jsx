@@ -1,4 +1,5 @@
-import { MapContainer, TileLayer, Marker, Popup, Polyline } from "react-leaflet";
+import { useEffect, useRef } from "react";
+import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-leaflet";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -56,6 +57,7 @@ export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, hei
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <FitBoundsToRoute hikes={hikesWithCoords} fitBounds={fitBounds} />
         {hikesWithCoords.map((hike) => (
           <>
             {/* Route Line */}
