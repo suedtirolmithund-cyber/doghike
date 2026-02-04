@@ -59,17 +59,6 @@ export default function Dashboard() {
             <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">
               Entdecke die schönsten Wanderungen in den Dolomiten – getestet mit unseren Vierbeinern 🐕
             </p>
-            
-            {/* Dogs Row */}
-            {dogs.length > 0 && (
-              <div className="flex items-center justify-center gap-6 mb-8">
-                {dogs.map((dog) => (
-                  <Link key={dog.id} to={createPageUrl("Dogs")}>
-                    <DogAvatar dog={dog} size="lg" />
-                  </Link>
-                ))}
-              </div>
-            )}
 
             <div className="flex flex-wrap gap-4 justify-center">
               <Link to={createPageUrl("Hikes")}>
@@ -133,7 +122,7 @@ export default function Dashboard() {
                 </Button>
               </Link>
             </div>
-            <HikeMap hikes={hikesWithCoords} height="350px" showLegend={true} />
+            <HikeMap hikes={hikesWithCoords} height="350px" showLegend={true} center={[46.5, 11.9]} zoom={9} />
           </motion.div>
         )}
 
