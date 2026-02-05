@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, useMapEvents } from "react-leaflet";
 import { Button } from "@/components/ui/button";
-import { Undo, Trash2, Save } from "lucide-react";
+import { Undo, Trash2, Save, Loader2 } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -13,7 +13,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-function RouteDrawerMap({ waypoints, setWaypoints }) {
+function RouteDrawerMap({ waypoints, setWaypoints, routeCoordinates }) {
   useMapEvents({
     click: (e) => {
       setWaypoints([...waypoints, [e.latlng.lat, e.latlng.lng]]);
@@ -22,8 +22,8 @@ function RouteDrawerMap({ waypoints, setWaypoints }) {
 
   return (
     <>
-      {waypoints.length > 1 && (
-        <Polyline positions={waypoints} color="#1e293b" weight={4} />
+      {routeCoordinates.length > 1 && (
+        <Polyline positions={routeCoordinates} color="#1e293b" weight={4} />
       )}
       {waypoints.map((point, idx) => (
         <Marker key={idx} position={point} />
@@ -34,10 +34,53 @@ function RouteDrawerMap({ waypoints, setWaypoints }) {
 
 export default function RouteDrawer({ onSave, initialRoute = [] }) {
   const [waypoints, setWaypoints] = useState(initialRoute);
+  const [routeCoordinates, setRouteCoordinates] = useState([]);
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [routeDistance, setRouteDistance] = useState(0);
   const mapRef = useRef();
 
-  const calculateDistance = () => {
-    if (waypoints.length < 2) return 0;
+  // Fetch route from OSRM API
+  const fetchRoute = async (points) => {
+    if (points.length < 2) {
+      setRouteCoordinates(points);
+      setRouteDistance(0);
+      return;
+    }
+
+    setIsCalculating(true);
+    try {
+      const coords = points.map(p => `${p[1]},${p[0]}`).join(';');
+      const response = await fetch(
+        `https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`
+      );
+      const data = await response.json();
+      
+      if (data.code === 'Ok' && data.routes && data.routes[0]) {
+        const route = data.routes[0];
+        const coordinates = route.geometry.coordinates.map(c => [c[1], c[0]]);
+        setRouteCoordinates(coordinates);
+        setRouteDistance((route.distance / 1000).toFixed(2));
+      } else {
+        // Fallback to straight lines
+        setRouteCoordinates(points);
+        setRouteDistance(calculateDistance(points));
+      }
+    } catch (error) {
+      console.error('Routing error:', error);
+      // Fallback to straight lines
+      setRouteCoordinates(points);
+      setRouteDistance(calculateDistance(points));
+    } finally {
+      setIsCalculating(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRoute(waypoints);
+  }, [waypoints]);
+
+  const calculateDistance = (points) => {
+    if (points.length < 2) return 0;
     
     let totalDistance = 0;
     for (let i = 0; i < waypoints.length - 1; i++) {
@@ -69,10 +112,9 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
   };
 
   const handleSave = () => {
-    const distance = calculateDistance();
     onSave({
-      coordinates: waypoints,
-      distance_km: parseFloat(distance.toFixed(2)),
+      coordinates: routeCoordinates.length > 0 ? routeCoordinates : waypoints,
+      distance_km: parseFloat(routeDistance),
     });
   };
 
@@ -82,12 +124,18 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
         <p className="font-medium mb-2">📍 So funktioniert's:</p>
         <ol className="list-decimal pl-5 space-y-1">
           <li>Klicke auf die Karte, um Wegpunkte zu setzen</li>
-          <li>Die Route wird automatisch verbunden</li>
+          <li>Die Route folgt automatisch Wanderwegen</li>
           <li>Nutze die Buttons unten zum Bearbeiten</li>
         </ol>
-        {waypoints.length > 0 && (
+        {isCalculating && (
+          <div className="mt-3 flex items-center gap-2 text-blue-600">
+            <Loader2 className="w-4 h-4 animate-spin" />
+            <span>Route wird berechnet...</span>
+          </div>
+        )}
+        {waypoints.length > 0 && !isCalculating && (
           <p className="mt-3 font-semibold text-slate-800">
-            Wegpunkte: {waypoints.length} • Distanz: {calculateDistance().toFixed(2)} km
+            Wegpunkte: {waypoints.length} • Distanz: {routeDistance} km
           </p>
         )}
       </div>
@@ -103,7 +151,11 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           />
-          <RouteDrawerMap waypoints={waypoints} setWaypoints={setWaypoints} />
+          <RouteDrawerMap 
+            waypoints={waypoints} 
+            setWaypoints={setWaypoints}
+            routeCoordinates={routeCoordinates}
+          />
         </MapContainer>
       </div>
 
@@ -127,10 +179,14 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
         </Button>
         <Button
           onClick={handleSave}
-          disabled={waypoints.length < 2}
+          disabled={waypoints.length < 2 || isCalculating}
           className="bg-slate-800 hover:bg-slate-900 ml-auto"
         >
-          <Save className="w-4 h-4 mr-2" />
+          {isCalculating ? (
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+            <Save className="w-4 h-4 mr-2" />
+          )}
           Route speichern
         </Button>
       </div>
