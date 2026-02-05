@@ -2,13 +2,15 @@ import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Star, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function RatingSection({ hikeId }) {
-  const [selectedRating, setSelectedRating] = useState(0);
-  const [hoverRating, setHoverRating] = useState(0);
-  const queryClient = useQueryClient();
+   const [selectedRating, setSelectedRating] = useState(0);
+   const [hoverRating, setHoverRating] = useState(0);
+   const [consentPublic, setConsentPublic] = useState(false);
+   const queryClient = useQueryClient();
 
   const { data: user } = useQuery({
     queryKey: ["user"],
@@ -116,12 +118,28 @@ export default function RatingSection({ hikeId }) {
               </motion.button>
             ))}
           </div>
+
+          <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200 mb-4">
+            <Checkbox
+              id="rating-consent"
+              checked={consentPublic}
+              onCheckedChange={setConsentPublic}
+            />
+            <label
+              htmlFor="rating-consent"
+              className="text-sm text-stone-700 cursor-pointer flex-1"
+            >
+              Ich akzeptiere, dass meine Bewertung öffentlich sichtbar ist
+            </label>
+          </div>
+
           <Button
             onClick={handleRatingSubmit}
             disabled={
               selectedRating === 0 ||
               createRatingMutation.isPending ||
-              updateRatingMutation.isPending
+              updateRatingMutation.isPending ||
+              !consentPublic
             }
             className="w-full bg-slate-800 hover:bg-slate-900"
           >
@@ -130,8 +148,8 @@ export default function RatingSection({ hikeId }) {
             ) : null}
             {existingRating ? "Bewertung aktualisieren" : "Bewertung abgeben"}
           </Button>
-        </div>
-      )}
-    </div>
-  );
-}
+          </div>
+          )}
+          </div>
+          );
+          }
