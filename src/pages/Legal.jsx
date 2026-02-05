@@ -28,7 +28,7 @@ export default function Legal() {
                 <h2 className="text-lg md:text-xl font-semibold text-stone-800">Haftungsausschluss</h2>
               </div>
               
-              <div className="space-y-4 text-stone-600 leading-relaxed">
+              <div className="space-y-3 md:space-y-4 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
                   Die auf dieser Plattform bereitgestellten Informationen zu Wanderungen, Routen und 
                   hundefreundlichen Aktivitäten dienen ausschließlich zu Informationszwecken.
