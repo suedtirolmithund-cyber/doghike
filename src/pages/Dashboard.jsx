@@ -100,7 +100,7 @@ Getestet mit unseren Vierbeinern
         </motion.div>
 
         {/* Stats & Auth */}
-        <div className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+        <div className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-4 items-center max-w-4xl mx-auto">
           <StatsCard
             icon={Route}
             label="Wanderungen"
