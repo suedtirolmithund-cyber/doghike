@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Mountain, Map, PawPrint, Home } from "lucide-react";
+import { Mountain, Map, PawPrint, Home, ShoppingBag } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Layout({ children, currentPageName }) {
@@ -10,6 +10,7 @@ export default function Layout({ children, currentPageName }) {
     { name: "Dashboard", icon: Home, label: "Startseite" },
     { name: "Hikes", icon: Mountain, label: "Alle Touren" },
     { name: "MapView", icon: Map, label: "Kartenansicht" },
+    { name: "Shop", icon: ShoppingBag, label: "Shop" },
     { name: "Profile", icon: PawPrint, label: "Mein Profil" },
   ];
 
