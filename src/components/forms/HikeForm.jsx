@@ -6,9 +6,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { base44 } from "@/api/base44Client";
-import { Upload, X, Loader2, Star, Map as MapIcon, Trash2 } from "lucide-react";
+import { Upload, X, Loader2, Star, Map as MapIcon, Trash2, MapPin } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import RouteEditor from "@/components/map/RouteEditor";
+import StartPointPicker from "@/components/map/StartPointPicker";
 
 export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
   const [formData, setFormData] = useState(hike || {
@@ -36,6 +37,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [showRouteEditor, setShowRouteEditor] = useState(false);
+  const [showStartPointPicker, setShowStartPointPicker] = useState(false);
 
   const handlePhotoUpload = async (e) => {
     const files = Array.from(e.target.files);
@@ -108,6 +110,12 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!formData.latitude || !formData.longitude) {
+      alert("Bitte wähle einen Ausgangspunkt auf der Karte aus.");
+      return;
+    }
+    
     setSaving(true);
     
     const dataToSave = {
@@ -258,48 +266,89 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="duration">Gehzeit (Minuten)</Label>
+          <Label htmlFor="duration">Gehzeit (Stunden)</Label>
           <Input
             id="duration"
             type="number"
-            value={formData.duration_minutes}
-            onChange={(e) => setFormData({ ...formData, duration_minutes: e.target.value })}
-            placeholder="240"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="latitude">Breitengrad (Ausgangspunkt)</Label>
-          <Input
-            id="latitude"
-            type="number"
-            step="any"
-            value={formData.latitude}
-            onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
-            placeholder="46.6185"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="longitude">Längengrad (Ausgangspunkt)</Label>
-          <Input
-            id="longitude"
-            type="number"
-            step="any"
-            value={formData.longitude}
-            onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
-            placeholder="12.3024"
+            step="0.5"
+            value={formData.duration_minutes ? (formData.duration_minutes / 60).toFixed(1) : ""}
+            onChange={(e) => setFormData({ ...formData, duration_minutes: e.target.value ? Math.round(parseFloat(e.target.value) * 60) : "" })}
+            placeholder="4.0"
           />
         </div>
       </div>
 
-      {/* Route Section */}
-      <div className="space-y-4 p-6 bg-stone-50 rounded-2xl border border-stone-200">
+      {/* Start Point Section */}
+      <div className="space-y-4 p-6 bg-blue-50 rounded-2xl border border-blue-200">
         <div className="flex items-center justify-between">
           <div>
-            <Label className="text-lg">🗺️ Routenverlauf</Label>
+            <Label className="text-lg">📍 Ausgangspunkt *</Label>
             <p className="text-sm text-stone-500 mt-1">
-              Zeigen Sie die gesamte Wanderroute auf der Karte
+              Wähle den Startpunkt deiner Wanderung auf der Karte aus
+            </p>
+          </div>
+          {formData.latitude && formData.longitude && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setFormData({ ...formData, latitude: "", longitude: "", location: "" })}
+              className="text-red-600 hover:text-red-700"
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Zurücksetzen
+            </Button>
+          )}
+        </div>
+
+        {formData.latitude && formData.longitude && (
+          <div className="p-3 bg-white rounded-lg border border-green-200">
+            <p className="text-sm text-green-700 font-medium mb-1">
+              ✓ Ausgangspunkt gesetzt
+            </p>
+            <p className="text-xs text-stone-600">
+              {formData.location && `📌 ${formData.location} • `}
+              {formData.latitude.toFixed(5)}, {formData.longitude.toFixed(5)}
+            </p>
+          </div>
+        )}
+
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full"
+          onClick={() => setShowStartPointPicker(!showStartPointPicker)}
+        >
+          <MapPin className="w-4 h-4 mr-2" />
+          {showStartPointPicker ? "Karte schließen" : "Ausgangspunkt auf Karte wählen"}
+        </Button>
+
+        {showStartPointPicker && (
+          <StartPointPicker
+            latitude={formData.latitude ? Number(formData.latitude) : null}
+            longitude={formData.longitude ? Number(formData.longitude) : null}
+            onSelect={(data) => {
+              setFormData({
+                ...formData,
+                latitude: data.latitude,
+                longitude: data.longitude,
+                location: data.location || formData.location
+              });
+            }}
+          />
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      </div>
+
+      {/* Route Section */}
+      <div className="space-y-4 p-6 bg-purple-50 rounded-2xl border border-purple-200">
+        <div className="flex items-center justify-between">
+          <div>
+            <Label className="text-lg">🗺️ Routenverlauf (optional)</Label>
+            <p className="text-sm text-stone-500 mt-1">
+              Zeichne die komplette Wanderroute oder lade eine GPX-Datei hoch
             </p>
           </div>
           {formData.route_coordinates?.length > 0 && (
@@ -318,14 +367,14 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
 
         {formData.route_coordinates?.length > 0 && (
           <div className="p-3 bg-white rounded-lg border border-green-200">
-            <p className="text-sm text-green-700">
-              ✓ Route mit {formData.route_coordinates.length} Punkten geladen
+            <p className="text-sm text-green-700 font-medium">
+              ✓ Route mit {formData.route_coordinates.length} Wegpunkten
             </p>
           </div>
         )}
 
-        <div className="flex flex-col sm:flex-row gap-3">
-          <label className="flex-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <label>
             <input
               type="file"
               accept=".gpx"
@@ -348,7 +397,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
               ) : (
                 <>
                   <Upload className="w-4 h-4 mr-2" />
-                  GPX-Datei importieren
+                  GPX-Datei hochladen
                 </>
               )}
             </Button>
@@ -357,33 +406,39 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
           <Button
             type="button"
             variant="outline"
-            className="flex-1"
             onClick={() => setShowRouteEditor(!showRouteEditor)}
           >
             <MapIcon className="w-4 h-4 mr-2" />
-            {showRouteEditor ? "Karte schließen" : "Auf Karte zeichnen"}
+            {showRouteEditor ? "Fertig" : "Route zeichnen"}
           </Button>
         </div>
 
         {showRouteEditor && (
-          <RouteEditor
-            coordinates={formData.route_coordinates || []}
-            startPoint={
-              formData.latitude && formData.longitude
-                ? [Number(formData.latitude), Number(formData.longitude)]
-                : null
-            }
-            onChange={(coords) => {
-              setFormData({ ...formData, route_coordinates: coords });
-              if (coords.length > 0 && !formData.latitude) {
-                setFormData(prev => ({
-                  ...prev,
-                  latitude: coords[0][0],
-                  longitude: coords[0][1]
-                }));
+          <div className="space-y-2">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <p className="text-xs text-blue-700">
+                💡 Klicke auf die Karte, um Wegpunkte hinzuzufügen. Der erste Punkt wird automatisch als Ausgangspunkt verwendet.
+              </p>
+            </div>
+            <RouteEditor
+              coordinates={formData.route_coordinates || []}
+              startPoint={
+                formData.latitude && formData.longitude
+                  ? [Number(formData.latitude), Number(formData.longitude)]
+                  : null
               }
-            }}
-          />
+              onChange={(coords) => {
+                setFormData({ ...formData, route_coordinates: coords });
+                if (coords.length > 0 && !formData.latitude) {
+                  setFormData(prev => ({
+                    ...prev,
+                    latitude: coords[0][0],
+                    longitude: coords[0][1]
+                  }));
+                }
+              }}
+            />
+          </div>
         )}
       </div>
 
