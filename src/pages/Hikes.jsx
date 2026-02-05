@@ -14,6 +14,7 @@ import HikeMap from "@/components/map/HikeMap";
 export default function Hikes() {
   const [searchQuery, setSearchQuery] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState("all");
+  const [dogDifficultyFilter, setDogDifficultyFilter] = useState("all");
   const [sortBy, setSortBy] = useState("-date");
 
   const { data: hikes = [], isLoading } = useQuery({
@@ -31,7 +32,8 @@ export default function Hikes() {
       const matchesSearch = hike.trail_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            hike.location?.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesDifficulty = difficultyFilter === "all" || hike.difficulty === difficultyFilter;
-      return matchesSearch && matchesDifficulty;
+      const matchesDogDifficulty = dogDifficultyFilter === "all" || hike.dog_difficulty === dogDifficultyFilter;
+      return matchesSearch && matchesDifficulty && matchesDogDifficulty;
     })
     .sort((a, b) => {
       if (sortBy === "-date") return new Date(b.date) - new Date(a.date);
@@ -74,16 +76,29 @@ export default function Hikes() {
               />
             </div>
             <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
-              <SelectTrigger className="w-full md:w-40">
+              <SelectTrigger className="w-full md:w-48">
                 <SelectValue placeholder="Schwierigkeit" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Alle Stufen</SelectItem>
-                <SelectItem value="1">Stufe 1</SelectItem>
-                <SelectItem value="2">Stufe 2</SelectItem>
-                <SelectItem value="3">Stufe 3</SelectItem>
-                <SelectItem value="4">Stufe 4</SelectItem>
-                <SelectItem value="5">Stufe 5</SelectItem>
+                <SelectItem value="all">👤 Alle Stufen</SelectItem>
+                <SelectItem value="1">👤 Stufe 1</SelectItem>
+                <SelectItem value="2">👤 Stufe 2</SelectItem>
+                <SelectItem value="3">👤 Stufe 3</SelectItem>
+                <SelectItem value="4">👤 Stufe 4</SelectItem>
+                <SelectItem value="5">👤 Stufe 5</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={dogDifficultyFilter} onValueChange={setDogDifficultyFilter}>
+              <SelectTrigger className="w-full md:w-48">
+                <SelectValue placeholder="Hunde-Schwierigkeit" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">🐕 Alle Stufen</SelectItem>
+                <SelectItem value="1">🐕 Stufe 1</SelectItem>
+                <SelectItem value="2">🐕 Stufe 2</SelectItem>
+                <SelectItem value="3">🐕 Stufe 3</SelectItem>
+                <SelectItem value="4">🐕 Stufe 4</SelectItem>
+                <SelectItem value="5">🐕 Stufe 5</SelectItem>
               </SelectContent>
             </Select>
             <Select value={sortBy} onValueChange={setSortBy}>
