@@ -62,6 +62,8 @@ import Profile from './pages/Profile';
 import Shop from './pages/Shop';
 import SubmitHike from './pages/SubmitHike';
 import TopDogs from './pages/TopDogs';
+import RoutePlanner from './pages/RoutePlanner';
+import RouteDetail from './pages/RouteDetail';
 import __Layout from './Layout.jsx';
 
 
@@ -81,6 +83,8 @@ export const PAGES = {
     "Shop": Shop,
     "SubmitHike": SubmitHike,
     "TopDogs": TopDogs,
+    "RoutePlanner": RoutePlanner,
+    "RouteDetail": RouteDetail,
 }
 
 export const pagesConfig = {
