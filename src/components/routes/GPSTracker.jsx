@@ -283,6 +283,13 @@ export default function GPSTracker({ onSave }) {
           </ul>
         </div>
       )}
+
+      {/* Elevation Profile Preview */}
+      {routePoints.length >= 2 && (
+        <div className="mt-4">
+          <RouteElevationProfile coordinates={routePoints} distance={stats.distance} />
+        </div>
+      )}
     </div>
   );
 }
