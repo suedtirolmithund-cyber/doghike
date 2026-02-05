@@ -15,7 +15,7 @@ export default function Hikes() {
   const [searchQuery, setSearchQuery] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState("all");
   const [dogDifficultyFilter, setDogDifficultyFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("-date");
+  const [sortBy, setSortBy] = useState("season");
 
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["hikes"],
@@ -27,6 +27,16 @@ export default function Hikes() {
     queryFn: () => base44.entities.Dog.list()
   });
 
+  const getCurrentSeason = () => {
+    const month = new Date().getMonth() + 1;
+    if (month >= 12 || month <= 2) return "winter";
+    if (month >= 3 && month <= 5) return "spring";
+    if (month >= 6 && month <= 8) return "summer";
+    return "autumn";
+  };
+
+  const currentSeason = getCurrentSeason();
+
   const filteredHikes = hikes
     .filter(hike => {
       const matchesSearch = hike.trail_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -36,6 +46,14 @@ export default function Hikes() {
       return matchesSearch && matchesDifficulty && matchesDogDifficulty;
     })
     .sort((a, b) => {
+      if (sortBy === "season") {
+        const aMatchesSeason = a.season === currentSeason || a.season === "all_year";
+        const bMatchesSeason = b.season === currentSeason || b.season === "all_year";
+        
+        if (aMatchesSeason && !bMatchesSeason) return -1;
+        if (!aMatchesSeason && bMatchesSeason) return 1;
+        return new Date(b.date) - new Date(a.date);
+      }
       if (sortBy === "-date") return new Date(b.date) - new Date(a.date);
       if (sortBy === "date") return new Date(a.date) - new Date(b.date);
       if (sortBy === "-distance") return (b.distance_km || 0) - (a.distance_km || 0);
@@ -106,6 +124,7 @@ export default function Hikes() {
                 <SelectValue placeholder="Sortieren" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="season">🌍 Nach Jahreszeit</SelectItem>
                 <SelectItem value="-date">Neueste zuerst</SelectItem>
                 <SelectItem value="date">Älteste zuerst</SelectItem>
                 <SelectItem value="-distance">Längste Strecke</SelectItem>
