@@ -21,10 +21,11 @@ export default function AddHike() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) => base44.entities.Hike.create(data),
-    onSuccess: () => {
+    mutationFn: (data) => base44.entities.Hike.create({ ...data, status: "draft" }),
+    onSuccess: (newHike) => {
       queryClient.invalidateQueries({ queryKey: ["hikes"] });
-      navigate(createPageUrl("Hikes"));
+      queryClient.invalidateQueries({ queryKey: ["myHikes"] });
+      navigate(createPageUrl("HikeDetail") + `?id=${newHike.id}`);
     }
   });
 
