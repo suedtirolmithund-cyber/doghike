@@ -17,8 +17,21 @@ export default function Layout({ children, currentPageName }) {
   const isActive = (pageName) => currentPageName === pageName;
 
   return (
-    <div className="min-h-screen bg-stone-50">
-      {children}
+    <div className="min-h-screen bg-stone-50 flex flex-col">
+      <div className="flex-1">
+        {children}
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-stone-200 py-4 px-6 text-center mb-20 md:mb-0">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-4 text-sm text-stone-500">
+          <span>© 2026 Südtirol mit Hund</span>
+          <span className="hidden sm:inline">•</span>
+          <Link to={createPageUrl("Legal")} className="hover:text-stone-700 underline">
+            Rechtliche Hinweise & Haftungsausschluss
+          </Link>
+        </div>
+      </footer>
 
       {/* Bottom Navigation - Mobile */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 md:hidden z-50 shadow-lg">
