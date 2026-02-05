@@ -2,7 +2,7 @@ import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Edit, Trash2, Bookmark, MapPin, LogIn, UserPlus } from "lucide-react";
+import { Plus, Edit, Trash2, Bookmark, MapPin, LogIn, UserPlus, Trophy, Users, TrendingUp } from "lucide-react";
 import { format, differenceInYears, differenceInMonths } from "date-fns";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import DogForm from "@/components/forms/DogForm";
 import HikeCard from "@/components/hikes/HikeCard";
+import FollowSection from "@/components/community/FollowSection";
 
 export default function Profile() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -80,6 +81,24 @@ export default function Profile() {
       return hikes.filter(h => savedHikeIds.includes(h.id));
     },
     enabled: isAuthenticated && savedHikeIds.length > 0
+  });
+
+  const { data: myRatings = [] } = useQuery({
+    queryKey: ["myRatings"],
+    queryFn: async () => {
+      const currentUser = await base44.auth.me();
+      return base44.entities.Rating.filter({ user_email: currentUser.email });
+    },
+    enabled: isAuthenticated
+  });
+
+  const { data: myComments = [] } = useQuery({
+    queryKey: ["myComments"],
+    queryFn: async () => {
+      const currentUser = await base44.auth.me();
+      return base44.entities.Comment.filter({ user_email: currentUser.email });
+    },
+    enabled: isAuthenticated
   });
 
   const createMutation = useMutation({
@@ -184,6 +203,15 @@ export default function Profile() {
   const privateHikes = myHikes.filter(h => h.status === "draft");
   const submittedHikes = myHikes.filter(h => h.status !== "draft");
 
+  // Calculate total stats
+  const totalStats = {
+    totalHikes: myHikes.length,
+    totalDistance: myHikes.reduce((sum, h) => sum + (h.distance_km || 0), 0),
+    totalElevation: myHikes.reduce((sum, h) => sum + (h.elevation_gain_m || 0), 0),
+    totalRatings: myRatings.length,
+    totalComments: myComments.length
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -197,13 +225,48 @@ export default function Profile() {
           <p className="text-stone-500 mt-1">Deine Hunde, Touren und Erinnerungen</p>
         </motion.div>
 
+        {/* Stats Overview */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8"
+        >
+          <div className="bg-white rounded-xl p-4 border border-stone-200 text-center">
+            <TrendingUp className="w-5 h-5 text-stone-400 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-stone-800">{totalStats.totalHikes}</p>
+            <p className="text-xs text-stone-500">Touren</p>
+          </div>
+          <div className="bg-white rounded-xl p-4 border border-stone-200 text-center">
+            <p className="text-sm text-stone-400 mb-2">📏</p>
+            <p className="text-2xl font-bold text-stone-800">{totalStats.totalDistance.toFixed(0)}</p>
+            <p className="text-xs text-stone-500">km</p>
+          </div>
+          <div className="bg-white rounded-xl p-4 border border-stone-200 text-center">
+            <p className="text-sm text-stone-400 mb-2">⛰️</p>
+            <p className="text-2xl font-bold text-stone-800">{Math.round(totalStats.totalElevation).toLocaleString()}</p>
+            <p className="text-xs text-stone-500">Hm</p>
+          </div>
+          <div className="bg-white rounded-xl p-4 border border-stone-200 text-center">
+            <p className="text-sm text-stone-400 mb-2">⭐</p>
+            <p className="text-2xl font-bold text-stone-800">{totalStats.totalRatings}</p>
+            <p className="text-xs text-stone-500">Bewertungen</p>
+          </div>
+          <div className="bg-white rounded-xl p-4 border border-stone-200 text-center">
+            <p className="text-sm text-stone-400 mb-2">💬</p>
+            <p className="text-2xl font-bold text-stone-800">{totalStats.totalComments}</p>
+            <p className="text-xs text-stone-500">Kommentare</p>
+          </div>
+        </motion.div>
+
         {/* Tabs */}
         <Tabs defaultValue="dogs" className="space-y-6">
-          <TabsList className="bg-white border border-stone-200/50">
+          <TabsList className="bg-white border border-stone-200/50 flex-wrap h-auto">
             <TabsTrigger value="dogs">Meine Hunde</TabsTrigger>
+            <TabsTrigger value="community">Community</TabsTrigger>
             <TabsTrigger value="saved">Gespeicherte Touren</TabsTrigger>
-            <TabsTrigger value="private">Meine privaten Touren</TabsTrigger>
-            <TabsTrigger value="submitted">Veröffentlichte Touren</TabsTrigger>
+            <TabsTrigger value="private">Private Touren</TabsTrigger>
+            <TabsTrigger value="submitted">Veröffentlicht</TabsTrigger>
           </TabsList>
 
           {/* Dogs Tab */}
@@ -333,6 +396,11 @@ export default function Profile() {
                 </Button>
               </div>
             )}
+          </TabsContent>
+
+          {/* Community Tab */}
+          <TabsContent value="community">
+            <FollowSection />
           </TabsContent>
 
           {/* Saved Hikes Tab */}

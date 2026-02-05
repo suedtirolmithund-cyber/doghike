@@ -61,6 +61,7 @@ import Shop from './pages/Shop';
 import SubmitHike from './pages/SubmitHike';
 import Profile from './pages/Profile';
 import Legal from './pages/Legal';
+import TopDogs from './pages/TopDogs';
 import __Layout from './Layout.jsx';
 
 
@@ -79,6 +80,7 @@ export const PAGES = {
     "SubmitHike": SubmitHike,
     "Profile": Profile,
     "Legal": Legal,
+    "TopDogs": TopDogs,
 }
 
 export const pagesConfig = {
