@@ -117,7 +117,7 @@ export default function Feed() {
           className="mb-6 md:mb-8"
         >
           <div className="flex items-center gap-3 mb-2">
-            <TrendingUp className="w-8 h-8 text-slate-700" />
+            <span className="text-4xl">🐾🐾</span>
             <h1 className="text-2xl md:text-3xl font-light text-stone-800">Community Feed</h1>
           </div>
           <p className="text-stone-500 text-sm md:text-base">Aktivitäten von Nutzern, denen du folgst</p>
