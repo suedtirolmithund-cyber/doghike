@@ -14,42 +14,58 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 export default function RouteElevationProfile({ coordinates, distance }) {
-  const profileData = useMemo(() => {
-    if (!coordinates || coordinates.length < 2) {
-      return null;
-    }
+   const profileData = useMemo(() => {
+     if (!coordinates || coordinates.length < 2) {
+       return null;
+     }
 
-    let cumulativeDistance = 0;
-    const data = [];
+     let cumulativeDistance = 0;
+     let data = [];
 
-    coordinates.forEach((coord, index) => {
-      if (index > 0) {
-        const [lat1, lon1] = coordinates[index - 1];
-        const [lat2, lon2] = coord;
-        const segmentDistance = calculateDistance(lat1, lon1, lat2, lon2);
-        cumulativeDistance += segmentDistance;
-      }
+     coordinates.forEach((coord, index) => {
+       if (index > 0) {
+         const [lat1, lon1] = coordinates[index - 1];
+         const [lat2, lon2] = coord;
+         const segmentDistance = calculateDistance(lat1, lon1, lat2, lon2);
+         cumulativeDistance += segmentDistance;
+       }
 
-      // Simulate elevation with gentle variations
-      const progress = index / (coordinates.length - 1);
-      const baseElevation = 1000 + (progress * 200); // Base elevation 1000-1200m
-      const variation = Math.sin(progress * Math.PI * 4) * 50; // Gentle ups and downs
-      const elevation = baseElevation + variation;
+       // Simulate elevation with gentle variations
+       const progress = index / (coordinates.length - 1);
+       const baseElevation = 1000 + (progress * 200); // Base elevation 1000-1200m
+       const variation = Math.sin(progress * Math.PI * 4) * 50; // Gentle ups and downs
+       const elevation = baseElevation + variation;
 
-      data.push({
-        distance: cumulativeDistance,
-        elevation: Math.round(elevation),
-        distanceLabel: cumulativeDistance.toFixed(1)
-      });
-    });
+       data.push({
+         distance: cumulativeDistance,
+         elevation: Math.round(elevation),
+         distanceLabel: cumulativeDistance.toFixed(1)
+       });
+     });
 
-    return {
-      data,
-      totalDistance: cumulativeDistance,
-      maxElevation: Math.max(...data.map(d => d.elevation)),
-      minElevation: Math.min(...data.map(d => d.elevation))
-    };
-  }, [coordinates]);
+     // Reduce data points on mobile for readability - keep every nth point
+     const skipFactor = data.length > 50 ? Math.ceil(data.length / 15) : 1;
+     if (skipFactor > 1) {
+       data = data.filter((_, idx) => idx % skipFactor === 0 || idx === data.length - 1);
+     }
+
+     return {
+       data,
+       totalDistance: cumulativeDistance,
+       maxElevation: Math.max(...coordinates.map((_, idx) => {
+         const progress = idx / (coordinates.length - 1);
+         const baseElevation = 1000 + (progress * 200);
+         const variation = Math.sin(progress * Math.PI * 4) * 50;
+         return Math.round(baseElevation + variation);
+       })),
+       minElevation: Math.min(...coordinates.map((_, idx) => {
+         const progress = idx / (coordinates.length - 1);
+         const baseElevation = 1000 + (progress * 200);
+         const variation = Math.sin(progress * Math.PI * 4) * 50;
+         return Math.round(baseElevation + variation);
+       }))
+     };
+   }, [coordinates]);
 
   if (!profileData) {
     return null;
