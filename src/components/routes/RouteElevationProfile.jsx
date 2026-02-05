@@ -93,35 +93,37 @@ export default function RouteElevationProfile({ coordinates, distance }) {
       </div>
 
       {/* Elevation Chart */}
-      <div className="bg-white rounded-xl p-4 border border-stone-200/50">
+      <div className="bg-white rounded-xl p-3 md:p-4 border border-stone-200/50 overflow-x-auto">
         <h3 className="text-sm font-semibold text-stone-800 mb-3 flex items-center gap-2">
           <Mountain className="w-4 h-4" />
           Höhenprofil
         </h3>
-        <ResponsiveContainer width="100%" height={200}>
-          <AreaChart data={data}>
-            <defs>
-              <linearGradient id="elevGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#f97316" stopOpacity={0.8}/>
-                <stop offset="95%" stopColor="#f97316" stopOpacity={0.1}/>
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e7e5e4" />
-            <XAxis dataKey="distanceLabel" stroke="#78716c" style={{ fontSize: '11px' }} />
-            <YAxis stroke="#78716c" style={{ fontSize: '11px' }} />
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-                border: '1px solid #e7e5e4',
-                borderRadius: '8px',
-                fontSize: '12px'
-              }}
-              labelFormatter={(value) => `${value} km`}
-              formatter={(value) => [`${value} m`, 'Höhe']}
-            />
-            <Area type="monotone" dataKey="elevation" stroke="#f97316" strokeWidth={2} fill="url(#elevGradient)" />
-          </AreaChart>
-        </ResponsiveContainer>
+        <div className="w-full min-h-[200px] md:min-h-[250px]">
+          <ResponsiveContainer width="100%" height={200} minWidth={300}>
+            <AreaChart data={data}>
+              <defs>
+                <linearGradient id="elevGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#f97316" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#f97316" stopOpacity={0.1}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e7e5e4" />
+              <XAxis dataKey="distanceLabel" stroke="#78716c" tick={{ fontSize: 10 }} interval={Math.ceil(data.length / 5)} />
+              <YAxis stroke="#78716c" tick={{ fontSize: 10 }} width={35} />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+                  border: '1px solid #e7e5e4',
+                  borderRadius: '8px',
+                  fontSize: '12px'
+                }}
+                labelFormatter={(value) => `${value} km`}
+                formatter={(value) => [`${value} m`, 'Höhe']}
+              />
+              <Area type="monotone" dataKey="elevation" stroke="#f97316" strokeWidth={2} fill="url(#elevGradient)" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
