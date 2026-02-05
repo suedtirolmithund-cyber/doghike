@@ -27,6 +27,8 @@ import RouteProfile from "@/components/hikes/RouteProfile";
 import OfflineDownload from "@/components/hikes/OfflineDownload";
 import WeatherWidget from "@/components/weather/WeatherWidget";
 import SaveButton from "@/components/hikes/SaveButton";
+import CommentSection from "@/components/community/CommentSection";
+import RatingSection from "@/components/community/RatingSection";
 
 const difficultyColors = {
   "1": "bg-emerald-100 text-emerald-700",
@@ -371,6 +373,15 @@ export default function HikeDetail() {
                 </div>
               </motion.div>
             )}
+
+            {/* Community Section - Comments */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <CommentSection hikeId={hikeId} />
+            </motion.div>
           </div>
 
           {/* Sidebar */}
@@ -384,29 +395,14 @@ export default function HikeDetail() {
               />
             )}
 
-            {/* Rating */}
-            {hike.rating && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="bg-white rounded-2xl p-6 border border-stone-200/50 text-center"
-              >
-                <h2 className="text-lg font-medium text-stone-800 mb-3">Bewertung</h2>
-                <div className="flex justify-center gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      className={`w-8 h-8 ${
-                        star <= hike.rating
-                          ? "fill-amber-400 text-amber-400"
-                          : "text-stone-200"
-                      }`}
-                    />
-                  ))}
-                </div>
-              </motion.div>
-            )}
+            {/* Rating Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <RatingSection hikeId={hikeId} />
+            </motion.div>
 
             {/* Map */}
             {hike.latitude && hike.longitude && (
