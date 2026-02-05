@@ -195,6 +195,13 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
           <span className="sm:hidden ml-2">Speichern</span>
         </Button>
       </div>
+
+      {/* Elevation Profile Preview */}
+      {waypoints.length >= 2 && (
+        <div className="mt-4">
+          <RouteElevationProfile coordinates={routeCoordinates.length > 0 ? routeCoordinates : waypoints} distance={parseFloat(routeDistance)} />
+        </div>
+      )}
     </div>
   );
 }
