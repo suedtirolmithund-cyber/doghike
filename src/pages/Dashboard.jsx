@@ -30,6 +30,12 @@ export default function Dashboard() {
     queryFn: () => base44.entities.Dog.list()
   });
 
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => base44.auth.me(),
+    enabled: isAuthenticated
+  });
+
   const { data: following = [] } = useQuery({
     queryKey: ["following"],
     queryFn: () => base44.entities.UserFollow.filter({ follower_email: user?.email }),
@@ -245,7 +251,6 @@ Getestet mit unseren Vierbeinern
             </TabsContent>
           </Tabs>
         </div>
-
       </div>
     </div>);
 
