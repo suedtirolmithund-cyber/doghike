@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Camera, Send, Trash2, Loader2, X } from "lucide-react";
 import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,11 +19,12 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export default function CommentSection({ hikeId }) {
-  const [commentText, setCommentText] = useState("");
-  const [uploadedPhotos, setUploadedPhotos] = useState([]);
-  const [isUploading, setIsUploading] = useState(false);
-  const [deleteCommentId, setDeleteCommentId] = useState(null);
-  const queryClient = useQueryClient();
+   const [commentText, setCommentText] = useState("");
+   const [uploadedPhotos, setUploadedPhotos] = useState([]);
+   const [isUploading, setIsUploading] = useState(false);
+   const [deleteCommentId, setDeleteCommentId] = useState(null);
+   const [consentPublic, setConsentPublic] = useState(false);
+   const queryClient = useQueryClient();
 
   const { data: user } = useQuery({
     queryKey: ["user"],
@@ -113,44 +115,60 @@ export default function CommentSection({ hikeId }) {
             </div>
           )}
 
-          <div className="flex gap-2 flex-wrap">
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handlePhotoUpload}
-              className="hidden"
-              id="comment-photo-upload"
-            />
-            <label htmlFor="comment-photo-upload">
+          <div className="space-y-3">
+            <div className="flex gap-2 flex-wrap">
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handlePhotoUpload}
+                className="hidden"
+                id="comment-photo-upload"
+              />
+              <label htmlFor="comment-photo-upload">
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={isUploading}
+                  asChild
+                >
+                  <span>
+                    {isUploading ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <Camera className="w-4 h-4 mr-2" />
+                    )}
+                    Fotos
+                  </span>
+                </Button>
+              </label>
               <Button
-                type="button"
-                variant="outline"
-                disabled={isUploading}
-                asChild
+                onClick={handleSubmit}
+                disabled={!commentText.trim() || createCommentMutation.isPending || !consentPublic}
+                className="bg-slate-800 hover:bg-slate-900 flex-1 sm:flex-initial"
               >
-                <span>
-                  {isUploading ? (
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  ) : (
-                    <Camera className="w-4 h-4 mr-2" />
-                  )}
-                  Fotos
-                </span>
+                {createCommentMutation.isPending ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4 mr-2" />
+                )}
+                Senden
               </Button>
-            </label>
-            <Button
-              onClick={handleSubmit}
-              disabled={!commentText.trim() || createCommentMutation.isPending}
-              className="bg-slate-800 hover:bg-slate-900 flex-1 sm:flex-initial"
-            >
-              {createCommentMutation.isPending ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              ) : (
-                <Send className="w-4 h-4 mr-2" />
-              )}
-              Senden
-            </Button>
+            </div>
+
+            <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+              <Checkbox
+                id="comment-consent"
+                checked={consentPublic}
+                onCheckedChange={setConsentPublic}
+              />
+              <label
+                htmlFor="comment-consent"
+                className="text-sm text-stone-700 cursor-pointer flex-1"
+              >
+                Ich akzeptiere, dass mein Kommentar öffentlich sichtbar ist
+              </label>
+            </div>
           </div>
         </div>
       )}
