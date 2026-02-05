@@ -535,9 +535,16 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
               type="file"
               accept="image/*"
               multiple
-              onChange={handlePhotoUpload}
+              onChange={(e) => {
+                const files = Array.from(e.target.files);
+                if (files.length > 0) {
+                  const fileList = e.target.files;
+                  handlePhotoUploadConfirmed(fileList);
+                }
+              }}
               className="hidden"
               disabled={uploading}
+              id="photo-input"
             />
             {uploading ? (
               <Loader2 className="w-6 h-6 text-stone-400 animate-spin" />
@@ -548,8 +555,20 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
               </>
             )}
           </label>
-        </div>
-      </div>
+          </div>
+          </div>
+
+          <ConsentDialog
+          type="photo"
+          open={showPhotoConsent}
+          onAccept={() => {
+          const input = document.getElementById('photo-input');
+          if (input?.files) {
+            handlePhotoUploadConfirmed(input.files);
+          }
+          }}
+          onDecline={() => setShowPhotoConsent(false)}
+          />
 
       <div className="space-y-2">
         <Label htmlFor="parking_info">🅿️ Ausgangspunkt & Parken (optional)</Label>
