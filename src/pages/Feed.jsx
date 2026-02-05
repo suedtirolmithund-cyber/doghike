@@ -116,10 +116,7 @@ export default function Feed() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6 md:mb-8"
         >
-          <div className="flex items-center gap-3 mb-2">
-            <span className="text-4xl">🐾</span>
-            <h1 className="text-2xl md:text-3xl font-light text-stone-800">Community Feed</h1>
-          </div>
+          <h1 className="text-2xl md:text-3xl font-light text-stone-800 mb-1">Community Feed</h1>
           <p className="text-stone-500 text-sm md:text-base">Aktivitäten von Nutzern, denen du folgst</p>
         </motion.div>
 
