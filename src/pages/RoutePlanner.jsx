@@ -124,8 +124,19 @@ export default function RoutePlanner() {
             </TabsContent>
           </Tabs>
 
-          {/* Route Details Form */}
+          {/* Route Preview Map */}
           {routeGeometry && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-6 md:mt-8"
+            >
+              <RoutePreviewMap coordinates={routeGeometry.coordinates} />
+            </motion.div>
+          )}
+
+          {/* Route Details Form */}
+           {routeGeometry && (
             <motion.form
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
