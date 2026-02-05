@@ -56,6 +56,9 @@ import HikeDetail from './pages/HikeDetail';
 import Hikes from './pages/Hikes';
 import MapView from './pages/MapView';
 import SubmitHike from './pages/SubmitHike';
+import Shop from './pages/Shop';
+import ProductDetail from './pages/ProductDetail';
+import Checkout from './pages/Checkout';
 import __Layout from './Layout.jsx';
 
 
@@ -69,6 +72,9 @@ export const PAGES = {
     "Hikes": Hikes,
     "MapView": MapView,
     "SubmitHike": SubmitHike,
+    "Shop": Shop,
+    "ProductDetail": ProductDetail,
+    "Checkout": Checkout,
 }
 
 export const pagesConfig = {
