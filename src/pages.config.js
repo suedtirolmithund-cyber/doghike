@@ -59,6 +59,7 @@ import MapView from './pages/MapView';
 import ProductDetail from './pages/ProductDetail';
 import Shop from './pages/Shop';
 import SubmitHike from './pages/SubmitHike';
+import Profile from './pages/Profile';
 import __Layout from './Layout.jsx';
 
 
@@ -75,6 +76,7 @@ export const PAGES = {
     "ProductDetail": ProductDetail,
     "Shop": Shop,
     "SubmitHike": SubmitHike,
+    "Profile": Profile,
 }
 
 export const pagesConfig = {
