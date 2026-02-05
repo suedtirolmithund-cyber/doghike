@@ -25,6 +25,7 @@ import {
 import HikeMap from "@/components/map/HikeMap";
 import RouteProfile from "@/components/hikes/RouteProfile";
 import OfflineDownload from "@/components/hikes/OfflineDownload";
+import WeatherWidget from "@/components/weather/WeatherWidget";
 
 const difficultyColors = {
   "1": "bg-emerald-100 text-emerald-700",
@@ -372,6 +373,15 @@ export default function HikeDetail() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Weather Widget */}
+            {hike.latitude && hike.longitude && (
+              <WeatherWidget
+                location={hike.location}
+                latitude={hike.latitude}
+                longitude={hike.longitude}
+              />
+            )}
+
             {/* Rating */}
             {hike.rating && (
               <motion.div
