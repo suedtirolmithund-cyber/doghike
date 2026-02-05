@@ -55,12 +55,12 @@ import Dogs from './pages/Dogs';
 import EditHike from './pages/EditHike';
 import HikeDetail from './pages/HikeDetail';
 import Hikes from './pages/Hikes';
+import Legal from './pages/Legal';
 import MapView from './pages/MapView';
 import ProductDetail from './pages/ProductDetail';
+import Profile from './pages/Profile';
 import Shop from './pages/Shop';
 import SubmitHike from './pages/SubmitHike';
-import Profile from './pages/Profile';
-import Legal from './pages/Legal';
 import TopDogs from './pages/TopDogs';
 import __Layout from './Layout.jsx';
 
@@ -74,12 +74,12 @@ export const PAGES = {
     "EditHike": EditHike,
     "HikeDetail": HikeDetail,
     "Hikes": Hikes,
+    "Legal": Legal,
     "MapView": MapView,
     "ProductDetail": ProductDetail,
+    "Profile": Profile,
     "Shop": Shop,
     "SubmitHike": SubmitHike,
-    "Profile": Profile,
-    "Legal": Legal,
     "TopDogs": TopDogs,
 }
 
