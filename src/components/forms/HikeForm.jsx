@@ -10,6 +10,7 @@ import { Upload, X, Loader2, Star, Map as MapIcon, Trash2, MapPin } from "lucide
 import { motion, AnimatePresence } from "framer-motion";
 import RouteEditor from "@/components/map/RouteEditor";
 import StartPointPicker from "@/components/map/StartPointPicker";
+import ConsentDialog from "@/components/ConsentDialog";
 
 export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
   const [formData, setFormData] = useState(hike || {
@@ -35,14 +36,21 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
     rating: 5
   });
   const [uploading, setUploading] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [showRouteEditor, setShowRouteEditor] = useState(false);
-  const [showStartPointPicker, setShowStartPointPicker] = useState(false);
+   const [saving, setSaving] = useState(false);
+   const [showRouteEditor, setShowRouteEditor] = useState(false);
+   const [showStartPointPicker, setShowStartPointPicker] = useState(false);
+   const [showPhotoConsent, setShowPhotoConsent] = useState(false);
 
   const handlePhotoUpload = async (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
 
+    if (files.length > 0) {
+      setShowPhotoConsent(true);
+    }
+  };
+
+  const handlePhotoUploadConfirmed = async (files) => {
     setUploading(true);
     const uploadedUrls = [];
 
@@ -56,6 +64,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
       photos: [...(prev.photos || []), ...uploadedUrls]
     }));
     setUploading(false);
+    setShowPhotoConsent(false);
   };
 
   const removePhoto = (index) => {
