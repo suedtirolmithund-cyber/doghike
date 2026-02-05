@@ -81,17 +81,17 @@ export default function DogForm({ dog, onSave, onCancel }) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="breed">Breed</Label>
+          <Label htmlFor="breed">Rasse oder Mischling</Label>
           <Input
             id="breed"
             value={formData.breed}
             onChange={(e) => setFormData({ ...formData, breed: e.target.value })}
-            placeholder="e.g., Border Collie"
+            placeholder="z.B. Border Collie oder Mischling"
           />
         </div>
 
         <div className="space-y-2 md:col-span-2">
-          <Label htmlFor="birth_date">Birth Date</Label>
+          <Label htmlFor="birth_date">Geburtsdatum</Label>
           <Input
             id="birth_date"
             type="date"
@@ -102,12 +102,12 @@ export default function DogForm({ dog, onSave, onCancel }) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="notes">Notes</Label>
+        <Label htmlFor="notes">Beschreibung</Label>
         <Textarea
           id="notes"
           value={formData.notes}
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-          placeholder="Favorite trails, quirks, training notes..."
+          placeholder="Lieblingsrouten, Besonderheiten, Trainingsnotizen..."
           rows={3}
         />
       </div>
@@ -115,7 +115,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
       <div className="flex gap-3 justify-end pt-4">
         {onCancel && (
           <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
+            Abbrechen
           </Button>
         )}
         <Button
@@ -126,10 +126,10 @@ export default function DogForm({ dog, onSave, onCancel }) {
           {saving ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Saving...
+              Speichern...
             </>
           ) : (
-            dog ? "Update Dog" : "Add Dog"
+            dog ? "Hund aktualisieren" : "Hund hinzufügen"
           )}
         </Button>
       </div>
