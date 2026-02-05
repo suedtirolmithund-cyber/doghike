@@ -58,9 +58,6 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
       <Link to={createPageUrl("HikeDetail") + `?id=${hike.id}`}>
         <div className="group bg-white rounded-2xl overflow-hidden border border-stone-200/50 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer">
           <div className="relative h-52 overflow-hidden">
-            <div className="absolute top-4 right-4 z-10">
-              <SaveButton hikeId={hike.id} />
-            </div>
             <img
               src={coverPhoto}
               alt={hike.trail_name}
@@ -74,12 +71,16 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               </span>
             }
             
-            <div className="absolute bottom-4 left-4 right-4">
+            <div className="absolute bottom-4 left-4 right-16">
               <h3 className="text-xl font-semibold text-white mb-1">{hike.trail_name}</h3>
               <div className="flex items-center gap-1.5 text-white/80 text-sm">
                 <MapPin className="w-3.5 h-3.5" />
                 <span>{hike.location || "Dolomites"}</span>
               </div>
+            </div>
+            
+            <div className="absolute bottom-4 right-4 z-10">
+              <SaveButton hikeId={hike.id} />
             </div>
           </div>
           
