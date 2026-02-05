@@ -49,32 +49,32 @@
  */
 import AddHike from './pages/AddHike';
 import AdminReview from './pages/AdminReview';
+import Checkout from './pages/Checkout';
 import Dashboard from './pages/Dashboard';
 import Dogs from './pages/Dogs';
 import EditHike from './pages/EditHike';
 import HikeDetail from './pages/HikeDetail';
 import Hikes from './pages/Hikes';
 import MapView from './pages/MapView';
-import SubmitHike from './pages/SubmitHike';
-import Shop from './pages/Shop';
 import ProductDetail from './pages/ProductDetail';
-import Checkout from './pages/Checkout';
+import Shop from './pages/Shop';
+import SubmitHike from './pages/SubmitHike';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AddHike": AddHike,
     "AdminReview": AdminReview,
+    "Checkout": Checkout,
     "Dashboard": Dashboard,
     "Dogs": Dogs,
     "EditHike": EditHike,
     "HikeDetail": HikeDetail,
     "Hikes": Hikes,
     "MapView": MapView,
-    "SubmitHike": SubmitHike,
-    "Shop": Shop,
     "ProductDetail": ProductDetail,
-    "Checkout": Checkout,
+    "Shop": Shop,
+    "SubmitHike": SubmitHike,
 }
 
 export const pagesConfig = {
