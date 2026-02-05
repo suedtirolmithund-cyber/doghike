@@ -57,24 +57,23 @@ export default function Dashboard() {
             transition={{ duration: 0.6 }}
             className="text-center">
 
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 tracking-tight">
-              Wandern in Südtirol mit Hund
+            <h1 className="text-4xl md:text-6xl font-light text-white mb-4 tracking-tight">
+              Hundefreundliche Wanderungen
             </h1>
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              Entdecke hundefreundliche Wanderungen in den Dolomiten – getestet und bewertet von Hundebesitzern
+            <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">Entdecke die schönsten Wanderungen in Südtirol, den Dolomiten. 
+Getestet mit unseren Vierbeinern 
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="flex flex-wrap gap-4 justify-center">
               <Link to={createPageUrl("Hikes")}>
-                <Button size="lg" className="bg-slate-800 text-white hover:bg-slate-900 shadow-xl text-base px-8 py-6">
+                <Button size="lg" className="bg-white text-slate-800 hover:bg-white/90 shadow-lg">
                   <Mountain className="w-5 h-5 mr-2" />
-                  Touren durchsuchen
+                  Alle Touren entdecken
                 </Button>
               </Link>
-              <Link to={createPageUrl("MapView")}>
-                <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm border-2 border-white/40 text-white hover:bg-white/20 text-base px-8 py-6">
-                  <Map className="w-5 h-5 mr-2" />
-                  Zur Karte
+              <Link to={createPageUrl("SubmitHike")}>
+                <Button size="lg" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
+                  Tour einreichen
                 </Button>
               </Link>
             </div>
@@ -119,14 +118,11 @@ export default function Dashboard() {
           className="mb-12">
 
             <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-semibold text-stone-800">Alle Touren auf der Karte</h2>
-                <p className="text-sm text-stone-500 mt-1">Überblick über Wanderungen in der Region</p>
-              </div>
+              <h2 className="text-2xl font-light text-stone-800">Übersichtskarte</h2>
               <Link to={createPageUrl("MapView")}>
-                <Button className="bg-slate-800 hover:bg-slate-900 text-white">
+                <Button variant="ghost" className="text-stone-600 hover:text-stone-800">
                   <Map className="w-4 h-4 mr-2" />
-                  Vollbildkarte
+                  Große Karte
                 </Button>
               </Link>
             </div>
@@ -137,33 +133,11 @@ export default function Dashboard() {
         {/* Recent Hikes */}
         <div className="mb-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-            <div>
-              <h2 className="text-2xl font-semibold text-stone-800">Neueste Touren</h2>
-              <p className="text-sm text-stone-500 mt-1">Frisch hinzugefügte Wanderungen</p>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              {!isAuthenticated &&
-              <>
-                  <Button
-                  variant="outline"
-                  onClick={() => base44.auth.redirectToLogin(window.location.href)}
-                  className="text-stone-700 border-stone-300 hover:bg-stone-50">
-
-                    <LogIn className="w-4 h-4 mr-2" />
-                    Anmelden
-                  </Button>
-                  <Button
-                  onClick={() => base44.auth.redirectToLogin(window.location.href)}
-                  className="bg-slate-800 hover:bg-slate-900 text-white shadow-md">
-
-                    <UserPlus className="w-4 h-4 mr-2" />
-                    Registrieren
-                  </Button>
-                </>
-              }
+            <h2 className="text-2xl font-light text-stone-800">Neueste Touren</h2>
+            <div className="flex items-center gap-3">
               <Link to={createPageUrl("Hikes")}>
-                <Button className="bg-slate-800 hover:bg-slate-900 text-white">
-                  Alle Touren
+                <Button variant="ghost" className="text-stone-600 hover:text-stone-800">
+                  Alle anzeigen
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
