@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, useMapEvents } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Undo, Trash2, Save, Loader2 } from "lucide-react";
+import RouteElevationProfile from "./RouteElevationProfile";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
