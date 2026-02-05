@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { Mountain, Route, Clock, TrendingUp, Plus, Map, ArrowRight, Search } from "lucide-react";
+import { Mountain, Route, Clock, TrendingUp, Plus, Map, ArrowRight, Search, LogIn, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import StatsCard from "@/components/stats/StatsCard";
@@ -14,6 +14,10 @@ import HikeMap from "@/components/map/HikeMap";
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Check authentication status
+  base44.auth.isAuthenticated().then(setIsAuthenticated);
 
   const { data: hikes = [], isLoading: hikesLoading } = useQuery({
     queryKey: ["hikes"],
@@ -128,14 +132,35 @@ export default function Dashboard() {
 
         {/* Recent Hikes */}
         <div className="mb-12">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <h2 className="text-2xl font-light text-stone-800">Neueste Touren</h2>
-            <Link to={createPageUrl("Hikes")}>
-              <Button variant="ghost" className="text-stone-600 hover:text-stone-800">
-                Alle anzeigen
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
+            <div className="flex items-center gap-3">
+              {!isAuthenticated && (
+                <>
+                  <Button
+                    variant="outline"
+                    onClick={() => base44.auth.redirectToLogin(window.location.href)}
+                    className="text-stone-700 border-stone-300"
+                  >
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Anmelden
+                  </Button>
+                  <Button
+                    onClick={() => base44.auth.redirectToLogin(window.location.href)}
+                    className="bg-slate-800 hover:bg-slate-900"
+                  >
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Registrieren
+                  </Button>
+                </>
+              )}
+              <Link to={createPageUrl("Hikes")}>
+                <Button variant="ghost" className="text-stone-600 hover:text-stone-800">
+                  Alle anzeigen
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+            </div>
           </div>
           
           {recentHikes.length > 0 ? (
