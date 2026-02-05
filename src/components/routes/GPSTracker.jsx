@@ -167,39 +167,39 @@ export default function GPSTracker({ onSave }) {
   }, []);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 md:space-y-4">
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-2 md:gap-3">
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-white rounded-xl p-4 border border-stone-200 text-center"
+          className="bg-white rounded-xl p-2 md:p-4 border border-stone-200 text-center"
         >
-          <p className="text-2xl font-bold text-slate-800">{stats.distance}</p>
-          <p className="text-xs text-stone-500">Kilometer</p>
+          <p className="text-lg md:text-2xl font-bold text-slate-800">{stats.distance}</p>
+          <p className="text-[10px] md:text-xs text-stone-500">Kilometer</p>
         </motion.div>
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="bg-white rounded-xl p-4 border border-stone-200 text-center"
+          className="bg-white rounded-xl p-2 md:p-4 border border-stone-200 text-center"
         >
-          <p className="text-2xl font-bold text-slate-800">{stats.duration}</p>
-          <p className="text-xs text-stone-500">Minuten</p>
+          <p className="text-lg md:text-2xl font-bold text-slate-800">{stats.duration}</p>
+          <p className="text-[10px] md:text-xs text-stone-500">Minuten</p>
         </motion.div>
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-xl p-4 border border-stone-200 text-center"
+          className="bg-white rounded-xl p-2 md:p-4 border border-stone-200 text-center"
         >
-          <p className="text-2xl font-bold text-slate-800">{stats.avgSpeed}</p>
-          <p className="text-xs text-stone-500">km/h ⌀</p>
+          <p className="text-lg md:text-2xl font-bold text-slate-800">{stats.avgSpeed}</p>
+          <p className="text-[10px] md:text-xs text-stone-500">km/h ⌀</p>
         </motion.div>
       </div>
 
       {/* Map */}
-      <div className="relative h-96 md:h-[400px] rounded-xl overflow-hidden border-2 border-stone-200">
+      <div className="relative h-64 md:h-80 lg:h-[400px] rounded-xl overflow-hidden border-2 border-stone-200">
         <MapContainer
           center={currentPosition || [46.5, 11.9]}
           zoom={13}
@@ -221,21 +221,21 @@ export default function GPSTracker({ onSave }) {
         </MapContainer>
 
         {isTracking && (
-          <div className="absolute top-4 left-4 z-[1000] bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium animate-pulse">
+          <div className="absolute top-3 left-3 md:top-4 md:left-4 z-[1000] bg-red-500 text-white px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium animate-pulse">
             ● Aufzeichnung läuft
           </div>
         )}
       </div>
 
       {/* Controls */}
-      <div className="flex gap-2 justify-center">
+      <div className="flex gap-2 justify-center flex-wrap">
         {!isTracking ? (
           <Button
             onClick={startTracking}
-            className="bg-green-600 hover:bg-green-700 text-white"
-            size="lg"
+            className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
+            size="default"
           >
-            <Play className="w-5 h-5 mr-2" />
+            <Play className="w-4 h-4 md:w-5 md:h-5 mr-2" />
             Aufzeichnung starten
           </Button>
         ) : (
@@ -244,27 +244,28 @@ export default function GPSTracker({ onSave }) {
               <Button
                 onClick={pauseTracking}
                 variant="outline"
-                size="lg"
+                size="default"
+                className="flex-1 sm:flex-none"
               >
-                <Pause className="w-5 h-5 mr-2" />
+                <Pause className="w-4 h-4 md:w-5 md:h-5 mr-2" />
                 Pausieren
               </Button>
             ) : (
               <Button
                 onClick={resumeTracking}
-                className="bg-blue-600 hover:bg-blue-700"
-                size="lg"
+                className="bg-blue-600 hover:bg-blue-700 flex-1 sm:flex-none"
+                size="default"
               >
-                <Play className="w-5 h-5 mr-2" />
+                <Play className="w-4 h-4 md:w-5 md:h-5 mr-2" />
                 Fortsetzen
               </Button>
             )}
             <Button
               onClick={stopTracking}
-              className="bg-red-600 hover:bg-red-700"
-              size="lg"
+              className="bg-red-600 hover:bg-red-700 flex-1 sm:flex-none"
+              size="default"
             >
-              <Square className="w-5 h-5 mr-2" />
+              <Square className="w-4 h-4 md:w-5 md:h-5 mr-2" />
               Beenden
             </Button>
           </>
@@ -272,9 +273,9 @@ export default function GPSTracker({ onSave }) {
       </div>
 
       {!isTracking && routePoints.length === 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800">
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 md:p-4 text-xs md:text-sm text-blue-800">
           <p className="font-medium mb-2">📱 GPS-Aufzeichnung:</p>
-          <ul className="list-disc pl-5 space-y-1">
+          <ul className="list-disc pl-4 md:pl-5 space-y-1">
             <li>Aktiviere GPS auf deinem Gerät</li>
             <li>Erlaube dem Browser den Standortzugriff</li>
             <li>Starte die Aufzeichnung vor Beginn der Wanderung</li>

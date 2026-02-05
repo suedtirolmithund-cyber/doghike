@@ -119,28 +119,28 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="bg-slate-100 rounded-lg p-4 text-sm text-stone-700">
+    <div className="space-y-3 md:space-y-4">
+      <div className="bg-slate-100 rounded-lg p-3 md:p-4 text-xs md:text-sm text-stone-700">
         <p className="font-medium mb-2">📍 So funktioniert's:</p>
-        <ol className="list-decimal pl-5 space-y-1">
+        <ol className="list-decimal pl-4 md:pl-5 space-y-1">
           <li>Klicke auf die Karte, um Wegpunkte zu setzen</li>
           <li>Die Route folgt automatisch Wanderwegen</li>
           <li>Nutze die Buttons unten zum Bearbeiten</li>
         </ol>
         {isCalculating && (
-          <div className="mt-3 flex items-center gap-2 text-blue-600">
-            <Loader2 className="w-4 h-4 animate-spin" />
+          <div className="mt-3 flex items-center gap-2 text-blue-600 text-xs md:text-sm">
+            <Loader2 className="w-3 h-3 md:w-4 md:h-4 animate-spin" />
             <span>Route wird berechnet...</span>
           </div>
         )}
         {waypoints.length > 0 && !isCalculating && (
-          <p className="mt-3 font-semibold text-slate-800">
+          <p className="mt-3 font-semibold text-slate-800 text-xs md:text-sm">
             Wegpunkte: {waypoints.length} • Distanz: {routeDistance} km
           </p>
         )}
       </div>
 
-      <div className="relative h-96 md:h-[500px] rounded-xl overflow-hidden border-2 border-stone-200">
+      <div className="relative h-64 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-stone-200">
         <MapContainer
           center={[46.5, 11.9]}
           zoom={10}
@@ -164,30 +164,34 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
           variant="outline"
           onClick={handleUndo}
           disabled={waypoints.length === 0}
+          size="sm"
         >
-          <Undo className="w-4 h-4 mr-2" />
-          Rückgängig
+          <Undo className="w-3 h-3 md:w-4 md:h-4 md:mr-2" />
+          <span className="hidden md:inline ml-2">Rückgängig</span>
         </Button>
         <Button
           variant="outline"
           onClick={handleClear}
           disabled={waypoints.length === 0}
           className="text-red-600 hover:text-red-700"
+          size="sm"
         >
-          <Trash2 className="w-4 h-4 mr-2" />
-          Löschen
+          <Trash2 className="w-3 h-3 md:w-4 md:h-4 md:mr-2" />
+          <span className="hidden md:inline ml-2">Löschen</span>
         </Button>
         <Button
           onClick={handleSave}
           disabled={waypoints.length < 2 || isCalculating}
           className="bg-slate-800 hover:bg-slate-900 ml-auto"
+          size="sm"
         >
           {isCalculating ? (
-            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            <Loader2 className="w-3 h-3 md:w-4 md:h-4 md:mr-2 animate-spin" />
           ) : (
-            <Save className="w-4 h-4 mr-2" />
+            <Save className="w-3 h-3 md:w-4 md:h-4 md:mr-2" />
           )}
-          Route speichern
+          <span className="hidden sm:inline ml-2">Route speichern</span>
+          <span className="sm:hidden ml-2">Speichern</span>
         </Button>
       </div>
     </div>
