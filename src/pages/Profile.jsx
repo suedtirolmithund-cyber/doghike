@@ -277,15 +277,17 @@ export default function Profile() {
         </motion.div>
 
         {/* Tabs */}
-        <Tabs defaultValue="dogs" className="space-y-4 md:space-y-6">
-          <TabsList className="bg-white border border-stone-200/50 flex-wrap h-auto gap-1">
-            <TabsTrigger value="dogs" className="text-xs md:text-sm">Meine Hunde</TabsTrigger>
-            <TabsTrigger value="routes" className="text-xs md:text-sm">Meine Routen</TabsTrigger>
-            <TabsTrigger value="community" className="text-xs md:text-sm">Community</TabsTrigger>
-            <TabsTrigger value="saved" className="text-xs md:text-sm">Gespeichert</TabsTrigger>
-            <TabsTrigger value="private" className="text-xs md:text-sm">Privat</TabsTrigger>
-            <TabsTrigger value="submitted" className="text-xs md:text-sm">Veröffentlicht</TabsTrigger>
-          </TabsList>
+         <Tabs defaultValue="dogs" className="space-y-4 md:space-y-6">
+           <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+             <TabsList className="bg-white border border-stone-200/50 md:flex-wrap md:h-auto gap-1 inline-flex w-full md:w-auto">
+               <TabsTrigger value="dogs" className="text-xs md:text-sm whitespace-nowrap">🐕 Hunde</TabsTrigger>
+               <TabsTrigger value="routes" className="text-xs md:text-sm whitespace-nowrap">🗺️ Routen</TabsTrigger>
+               <TabsTrigger value="community" className="text-xs md:text-sm whitespace-nowrap">👥 Community</TabsTrigger>
+               <TabsTrigger value="saved" className="text-xs md:text-sm whitespace-nowrap">💾 Gespeichert</TabsTrigger>
+               <TabsTrigger value="private" className="text-xs md:text-sm whitespace-nowrap">🔒 Privat</TabsTrigger>
+               <TabsTrigger value="submitted" className="text-xs md:text-sm whitespace-nowrap">✓ Veröff.</TabsTrigger>
+             </TabsList>
+           </div>
 
           {/* Dogs Tab */}
           <TabsContent value="dogs">
