@@ -4,9 +4,6 @@ import { MapPin, Mountain, Clock, Star, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import FollowButton from "@/components/community/FollowButton";
-import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
 
 const difficultyColors = {
   "1": "bg-emerald-100 text-emerald-700 border-emerald-200",
@@ -48,19 +45,6 @@ const weatherIcons = {
 };
 
 export default function HikeCard({ hike, dogs = [], index = 0 }) {
-  const { data: currentUser } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => base44.auth.me().catch(() => null),
-  });
-
-  const { data: allUsers = [] } = useQuery({
-    queryKey: ["allUsers"],
-    queryFn: () => base44.entities.User.list()
-  });
-
-  const creator = allUsers.find(u => u.email === hike.created_by);
-  const isOwnHike = currentUser?.email === hike.created_by;
-
   const hikeDogs = dogs.filter((d) => hike.dogs?.includes(d.id));
   const coverPhoto = hike.photos?.[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80";
 
@@ -70,9 +54,9 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.5 }}>
 
-      <div className="group bg-white rounded-2xl overflow-hidden border border-stone-200/50 shadow-sm hover:shadow-xl transition-all duration-500">
-        <Link to={createPageUrl("HikeDetail") + `?id=${hike.id}`}>
-          <div className="relative h-52 overflow-hidden cursor-pointer">
+      <Link to={createPageUrl("HikeDetail") + `?id=${hike.id}`}>
+        <div className="group bg-white rounded-2xl overflow-hidden border border-stone-200/50 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer">
+          <div className="relative h-52 overflow-hidden">
             <img
               src={coverPhoto}
               alt={hike.trail_name}
@@ -94,98 +78,63 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               </div>
             </div>
           </div>
-        </Link>
-        
-        <div className="p-5">
-          {!isOwnHike && creator && (
-            <div className="flex items-center justify-between mb-3 pb-3 border-b border-stone-100">
-              <p className="text-xs text-stone-500">
-                von <span className="font-medium text-stone-700">{creator.full_name}</span>
-              </p>
-              <FollowButton 
-                targetEmail={hike.created_by} 
-                targetName={creator.full_name}
-                size="sm"
-                variant="outline"
-              />
-            </div>
-          )}
-
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex gap-1.5">
+          
+          <div className="p-4 space-y-4">
+            {/* Schwierigkeitsgrad */}
+            <div className="flex gap-2">
               {hike.difficulty &&
-              <Badge className="bg-blue-500 text-primary-foreground px-2.5 py-0.5 text-xs font-medium rounded-md inline-flex items-center transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent shadow hover:bg-primary/80 undefined border">
-                  👤 Stufe {hike.difficulty}
+              <Badge className="bg-blue-500 text-white px-2.5 py-0.5 text-xs font-medium">
+                  👤 {hike.difficulty}
                 </Badge>
               }
               {hike.dog_difficulty &&
               <Badge className={`${difficultyColors[hike.dog_difficulty]} border font-medium text-xs`}>
-                  🐕 Stufe {hike.dog_difficulty}
+                  🐕 {hike.dog_difficulty}
                 </Badge>
               }
             </div>
-          </div>
-          
-          {hike.water_availability &&
-          <div className={`text-xs mb-3 flex items-center gap-1 ${waterColors[hike.water_availability]}`}>
-              💧 {waterLabels[hike.water_availability]}
-            </div>
-          }
-          
-          <div className="grid grid-cols-3 gap-3 mb-4">
-            {hike.distance_km &&
-            <div className="text-center p-2 bg-stone-50 rounded-xl">
-                <p className="text-lg font-semibold text-stone-800">{hike.distance_km}</p>
-                <p className="text-xs text-stone-500">km</p>
-              </div>
-            }
-            {hike.elevation_gain_m &&
-            <div className="text-center p-2 bg-stone-50 rounded-xl">
-                <p className="text-lg font-semibold text-stone-800">{hike.elevation_gain_m}</p>
-                <p className="text-xs text-stone-500">Hm</p>
-              </div>
-            }
-            {hike.duration_minutes &&
-            <div className="text-center p-2 bg-stone-50 rounded-xl">
-                <p className="text-lg font-semibold text-stone-800">
-                  {(hike.duration_minutes / 60).toFixed(1)}
-                </p>
-                <p className="text-xs text-stone-500">Std</p>
-              </div>
-            }
-          </div>
-          
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              {hikeDogs.slice(0, 3).map((dog, i) =>
-              <div
-                key={dog.id}
-                className="w-8 h-8 rounded-full border-2 border-white shadow-sm overflow-hidden"
-                style={{ marginLeft: i > 0 ? "-8px" : 0 }}>
 
-                  <img
-                  src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
-                  alt={dog.name}
-                  className="w-full h-full object-cover" />
-
+            {/* Wichtige Stats */}
+            <div className="grid grid-cols-3 gap-2">
+              {hike.distance_km && (
+                <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-2 border border-slate-200/50">
+                  <p className="text-xs text-slate-600 font-medium">Distance</p>
+                  <p className="text-lg font-bold text-slate-800">{hike.distance_km}<span className="text-xs font-normal"> km</span></p>
                 </div>
               )}
-              {hikeDogs.length > 0 &&
-              <span className="text-sm text-stone-500 ml-1">
-                  {hikeDogs.map((d) => d.name).join(", ")}
-                </span>
-              }
+              {hike.elevation_gain_m && (
+                <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-2 border border-slate-200/50">
+                  <p className="text-xs text-slate-600 font-medium">Höhenmeter</p>
+                  <p className="text-lg font-bold text-slate-800">{hike.elevation_gain_m}<span className="text-xs font-normal"> m</span></p>
+                </div>
+              )}
+              {hike.duration_minutes && (
+                <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-2 border border-slate-200/50">
+                  <p className="text-xs text-slate-600 font-medium">Dauer</p>
+                  <p className="text-lg font-bold text-slate-800">{(hike.duration_minutes / 60).toFixed(1)}<span className="text-xs font-normal"> Std</span></p>
+                </div>
+              )}
             </div>
-            
-            {hike.rating &&
-            <div className="flex items-center gap-1">
-                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                <span className="text-sm font-medium text-stone-700">{hike.rating}</span>
+
+            {/* Wasser & Saisonalität */}
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2">
+                {hike.water_availability && (
+                  <span className={waterColors[hike.water_availability]}>
+                    💧 {waterLabels[hike.water_availability]}
+                  </span>
+                )}
               </div>
-            }
+              {hike.rating && (
+                <div className="flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                  <span className="font-medium text-slate-700">{hike.rating}</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      </Link>
     </motion.div>);
 
 }
