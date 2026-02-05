@@ -30,28 +30,29 @@ export default function AddHike() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
+      <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-6 md:py-12">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mb-4 md:mb-8"
         >
           <Link to={createPageUrl("Hikes")}>
-            <Button variant="ghost" className="mb-4 text-stone-600">
+            <Button variant="ghost" className="mb-3 md:mb-4 text-stone-600" size="sm">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Zurück zu Touren
+              <span className="hidden sm:inline">Zurück zu Touren</span>
+              <span className="sm:hidden">Zurück</span>
             </Button>
           </Link>
-          <h1 className="text-3xl font-light text-stone-800">Neue Tour hinzufügen</h1>
-          <p className="text-stone-500 mt-1">Deine Wanderung dokumentieren</p>
+          <h1 className="text-xl md:text-3xl font-light text-stone-800">Neue Tour hinzufügen</h1>
+          <p className="text-stone-500 mt-1 text-sm md:text-base">Deine Wanderung dokumentieren</p>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white rounded-2xl p-8 border border-stone-200/50 shadow-sm"
+          className="bg-white rounded-2xl p-4 md:p-8 border border-stone-200/50 shadow-sm"
         >
           <HikeForm
             dogs={dogs}

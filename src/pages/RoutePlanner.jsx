@@ -78,36 +78,39 @@ export default function RoutePlanner() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+      <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
         <Link to={createPageUrl("Profile")}>
-          <Button variant="ghost" className="mb-4">
+          <Button variant="ghost" className="mb-3 md:mb-4" size="sm">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück zum Profil
+            <span className="hidden sm:inline">Zurück zum Profil</span>
+            <span className="sm:hidden">Zurück</span>
           </Button>
         </Link>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl p-6 md:p-8 border border-stone-200/50 shadow-sm"
+          className="bg-white rounded-2xl p-4 md:p-8 border border-stone-200/50 shadow-sm"
         >
-          <div className="flex items-center gap-3 mb-6">
-            <Map className="w-8 h-8 text-slate-700" />
+          <div className="flex items-start gap-3 mb-4 md:mb-6">
+            <Map className="w-6 h-6 md:w-8 md:h-8 text-slate-700 flex-shrink-0 mt-1" />
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Routenplaner</h1>
-              <p className="text-sm text-stone-500">Plane oder zeichne deine eigene Wanderroute auf</p>
+              <h1 className="text-xl md:text-3xl font-bold text-stone-800">Routenplaner</h1>
+              <p className="text-xs md:text-sm text-stone-500 mt-1">Plane oder zeichne deine eigene Wanderroute auf</p>
             </div>
           </div>
 
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 md:space-y-6">
             <TabsList className="grid w-full grid-cols-2 bg-stone-100">
-              <TabsTrigger value="draw" className="flex items-center gap-2">
-                <Map className="w-4 h-4" />
-                Route planen
+              <TabsTrigger value="draw" className="flex items-center gap-1 md:gap-2 text-xs md:text-sm">
+                <Map className="w-3 h-3 md:w-4 md:h-4" />
+                <span className="hidden sm:inline">Route planen</span>
+                <span className="sm:hidden">Planen</span>
               </TabsTrigger>
-              <TabsTrigger value="track" className="flex items-center gap-2">
-                <Navigation className="w-4 h-4" />
-                GPS aufzeichnen
+              <TabsTrigger value="track" className="flex items-center gap-1 md:gap-2 text-xs md:text-sm">
+                <Navigation className="w-3 h-3 md:w-4 md:h-4" />
+                <span className="hidden sm:inline">GPS aufzeichnen</span>
+                <span className="sm:hidden">GPS</span>
               </TabsTrigger>
             </TabsList>
 
@@ -126,9 +129,9 @@ export default function RoutePlanner() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               onSubmit={handleSubmit}
-              className="mt-8 space-y-4 pt-6 border-t border-stone-200"
+              className="mt-6 md:mt-8 space-y-3 md:space-y-4 pt-4 md:pt-6 border-t border-stone-200"
             >
-              <h3 className="text-lg font-semibold text-stone-800">Routendetails</h3>
+              <h3 className="text-base md:text-lg font-semibold text-stone-800">Routendetails</h3>
               
               <div>
                 <Label htmlFor="name">Name der Route *</Label>
@@ -184,9 +187,9 @@ export default function RoutePlanner() {
                 </Label>
               </div>
 
-              <div className="bg-slate-50 rounded-lg p-4">
-                <h4 className="font-medium text-stone-800 mb-2">📊 Routenstatistik:</h4>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+              <div className="bg-slate-50 rounded-lg p-3 md:p-4">
+                <h4 className="text-sm md:text-base font-medium text-stone-800 mb-2">📊 Routenstatistik:</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 text-xs md:text-sm">
                   <div>
                     <p className="text-stone-500">Distanz</p>
                     <p className="font-bold text-slate-800">{routeGeometry.distance_km} km</p>
@@ -210,7 +213,7 @@ export default function RoutePlanner() {
                 </div>
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
                 <Button
                   type="button"
                   variant="outline"
@@ -224,6 +227,8 @@ export default function RoutePlanner() {
                       is_public: false,
                     });
                   }}
+                  className="w-full sm:w-auto"
+                  size="sm"
                 >
                   Abbrechen
                 </Button>
@@ -231,6 +236,7 @@ export default function RoutePlanner() {
                   type="submit"
                   disabled={createRouteMutation.isPending}
                   className="bg-slate-800 hover:bg-slate-900 flex-1"
+                  size="sm"
                 >
                   {createRouteMutation.isPending ? (
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />

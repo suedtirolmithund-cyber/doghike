@@ -157,28 +157,28 @@ export default function Feed() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
-                className="bg-white rounded-xl p-4 md:p-6 border border-stone-200 hover:shadow-md transition-shadow"
+                className="bg-white rounded-xl p-3 md:p-6 border border-stone-200 hover:shadow-md transition-shadow"
               >
-                <div className="flex items-start gap-4">
+                <div className="flex items-start gap-3">
                   <div className="flex-shrink-0">
                     {activity.type === 'hike' && (
-                      <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                        <Mountain className="w-5 h-5 text-green-600" />
+                      <div className="w-8 h-8 md:w-10 md:h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <Mountain className="w-4 h-4 md:w-5 md:h-5 text-green-600" />
                       </div>
                     )}
                     {activity.type === 'route' && (
-                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <Mountain className="w-5 h-5 text-blue-600" />
+                      <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <Mountain className="w-4 h-4 md:w-5 md:h-5 text-blue-600" />
                       </div>
                     )}
                     {activity.type === 'comment' && (
-                      <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                        <MessageCircle className="w-5 h-5 text-purple-600" />
+                      <div className="w-8 h-8 md:w-10 md:h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                        <MessageCircle className="w-4 h-4 md:w-5 md:h-5 text-purple-600" />
                       </div>
                     )}
                     {activity.type === 'rating' && (
-                      <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
-                        <Star className="w-5 h-5 text-yellow-600" />
+                      <div className="w-8 h-8 md:w-10 md:h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <Star className="w-4 h-4 md:w-5 md:h-5 text-yellow-600" />
                       </div>
                     )}
                   </div>
@@ -194,10 +194,10 @@ export default function Feed() {
 
                     {activity.type === 'hike' && (
                       <Link to={createPageUrl(`HikeDetail?id=${activity.data.id}`)}>
-                        <h3 className="text-lg font-semibold text-stone-800 hover:text-slate-700 mb-1">
+                        <h3 className="text-base md:text-lg font-semibold text-stone-800 hover:text-slate-700 mb-1">
                           {activity.data.trail_name}
                         </h3>
-                        <p className="text-sm text-stone-500">
+                        <p className="text-xs md:text-sm text-stone-500">
                           📍 {activity.data.location} • {activity.data.distance_km} km
                         </p>
                       </Link>
@@ -205,10 +205,10 @@ export default function Feed() {
 
                     {activity.type === 'route' && (
                       <Link to={createPageUrl(`RouteDetail?id=${activity.data.id}`)}>
-                        <h3 className="text-lg font-semibold text-stone-800 hover:text-slate-700 mb-1">
+                        <h3 className="text-base md:text-lg font-semibold text-stone-800 hover:text-slate-700 mb-1">
                           {activity.data.name}
                         </h3>
-                        <p className="text-sm text-stone-500">
+                        <p className="text-xs md:text-sm text-stone-500">
                           📏 {activity.data.distance_km} km
                         </p>
                       </Link>
