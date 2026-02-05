@@ -49,7 +49,6 @@
  */
 import AddHike from './pages/AddHike';
 import AdminReview from './pages/AdminReview';
-import Checkout from './pages/Checkout';
 import Dashboard from './pages/Dashboard';
 import Dogs from './pages/Dogs';
 import EditHike from './pages/EditHike';
@@ -58,11 +57,9 @@ import HikeDetail from './pages/HikeDetail';
 import Hikes from './pages/Hikes';
 import Legal from './pages/Legal';
 import MapView from './pages/MapView';
-import ProductDetail from './pages/ProductDetail';
 import Profile from './pages/Profile';
 import RouteDetail from './pages/RouteDetail';
 import RoutePlanner from './pages/RoutePlanner';
-import Shop from './pages/Shop';
 import SubmitHike from './pages/SubmitHike';
 import TopDogs from './pages/TopDogs';
 import __Layout from './Layout.jsx';
@@ -71,7 +68,6 @@ import __Layout from './Layout.jsx';
 export const PAGES = {
     "AddHike": AddHike,
     "AdminReview": AdminReview,
-    "Checkout": Checkout,
     "Dashboard": Dashboard,
     "Dogs": Dogs,
     "EditHike": EditHike,
@@ -80,11 +76,9 @@ export const PAGES = {
     "Hikes": Hikes,
     "Legal": Legal,
     "MapView": MapView,
-    "ProductDetail": ProductDetail,
     "Profile": Profile,
     "RouteDetail": RouteDetail,
     "RoutePlanner": RoutePlanner,
-    "Shop": Shop,
     "SubmitHike": SubmitHike,
     "TopDogs": TopDogs,
 }
