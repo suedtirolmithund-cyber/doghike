@@ -179,6 +179,19 @@ export default function HikeDetail() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
+            {!isOwnHike && creator && (
+              <div className="flex items-center gap-3 mb-3">
+                <p className="text-sm text-white/90">
+                  Erstellt von <span className="font-medium text-white">{creator.full_name}</span>
+                </p>
+                <FollowButton 
+                  targetEmail={hike.created_by} 
+                  targetName={creator.full_name}
+                  size="sm"
+                />
+              </div>
+            )}
+
             <div className="flex flex-wrap items-center gap-2 mb-3">
               {hike.season && (
                 <Badge className={seasonConfig[hike.season].color}>
