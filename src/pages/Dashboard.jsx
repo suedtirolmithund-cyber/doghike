@@ -4,13 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { Mountain, Route, Clock, TrendingUp, Plus, Map, ArrowRight, Search, LogIn, UserPlus } from "lucide-react";
+import { Mountain, Route, Clock, TrendingUp, Plus, Map, ArrowRight, Search, LogIn, UserPlus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import StatsCard from "@/components/stats/StatsCard";
 import HikeCard from "@/components/hikes/HikeCard";
 import DogAvatar from "@/components/dogs/DogAvatar";
 import HikeMap from "@/components/map/HikeMap";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,6 +28,23 @@ export default function Dashboard() {
   const { data: dogs = [], isLoading: dogsLoading } = useQuery({
     queryKey: ["dogs"],
     queryFn: () => base44.entities.Dog.list()
+  });
+
+  const { data: following = [] } = useQuery({
+    queryKey: ["following"],
+    queryFn: () => base44.entities.UserFollow.filter({ follower_email: user?.email }),
+    enabled: isAuthenticated && !!user?.email
+  });
+
+  const followingEmails = following.map(f => f.following_email);
+
+  const { data: followingHikes = [] } = useQuery({
+    queryKey: ["followingHikes", followingEmails],
+    queryFn: async () => {
+      if (followingEmails.length === 0) return [];
+      return hikes.filter(h => followingEmails.includes(h.created_by) && h.status === "approved");
+    },
+    enabled: followingEmails.length > 0
   });
 
   const filteredHikes = hikes.filter((hike) => {
@@ -130,38 +148,104 @@ Getestet mit unseren Vierbeinern
           </motion.div>
         }
 
-        {/* Recent Hikes */}
+        {/* Hikes Tabs */}
         <div className="mb-12">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-            <h2 className="text-2xl font-light text-stone-800">Neueste Touren</h2>
-            <div className="flex items-center gap-3">
-              <Link to={createPageUrl("Hikes")}>
-                <Button variant="ghost" className="text-stone-600 hover:text-stone-800">
-                  Alle anzeigen
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
+          <Tabs defaultValue="all" className="space-y-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <TabsList className="bg-white border border-stone-200">
+                <TabsTrigger value="all">Alle Touren</TabsTrigger>
+                <TabsTrigger value="following">
+                  Von Gefolgten
+                  {followingHikes.length > 0 && (
+                    <span className="ml-2 bg-slate-800 text-white text-xs rounded-full px-2 py-0.5">
+                      {followingHikes.length}
+                    </span>
+                  )}
+                </TabsTrigger>
+              </TabsList>
+              <div className="flex items-center gap-3">
+                {!isAuthenticated && (
+                  <>
+                    <Button
+                      variant="outline"
+                      onClick={() => base44.auth.redirectToLogin(window.location.href)}
+                      className="text-stone-700 border-stone-300"
+                    >
+                      <LogIn className="w-4 h-4 mr-2" />
+                      Anmelden
+                    </Button>
+                    <Button
+                      onClick={() => base44.auth.redirectToLogin(window.location.href)}
+                      className="bg-slate-800 hover:bg-slate-900"
+                    >
+                      <UserPlus className="w-4 h-4 mr-2" />
+                      Registrieren
+                    </Button>
+                  </>
+                )}
+                <Link to={createPageUrl("Hikes")}>
+                  <Button variant="ghost" className="text-stone-600 hover:text-stone-800">
+                    Alle anzeigen
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              </div>
             </div>
-          </div>
-          
-          {recentHikes.length > 0 ?
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {recentHikes.map((hike, index) =>
-            <HikeCard key={hike.id} hike={hike} dogs={dogs} index={index} />
-            )}
-            </div> :
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
+            <TabsContent value="all">
+              {recentHikes.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {recentHikes.map((hike, index) => (
+                    <HikeCard key={hike.id} hike={hike} dogs={dogs} index={index} />
+                  ))}
+                </div>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center py-20 bg-white rounded-2xl border border-stone-200/50"
+                >
+                  <Mountain className="w-16 h-16 text-stone-300 mx-auto mb-4" />
+                  <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Touren</h3>
+                  <p className="text-stone-500 mb-6">Bald findest du hier tolle Wanderungen!</p>
+                </motion.div>
+              )}
+            </TabsContent>
 
-              <Mountain className="w-16 h-16 text-stone-300 mx-auto mb-4" />
-              <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Touren</h3>
-              <p className="text-stone-500 mb-6">Bald findest du hier tolle Wanderungen!</p>
-            </motion.div>
-          }
+            <TabsContent value="following">
+              {followingHikes.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {followingHikes.slice(0, 6).map((hike, index) => (
+                    <HikeCard key={hike.id} hike={hike} dogs={dogs} index={index} />
+                  ))}
+                </div>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center py-20 bg-white rounded-2xl border border-stone-200/50"
+                >
+                  <Users className="w-16 h-16 text-stone-300 mx-auto mb-4" />
+                  <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Aktivitäten</h3>
+                  <p className="text-stone-500 mb-6">
+                    {following.length === 0
+                      ? "Folge anderen Nutzern, um ihre Touren hier zu sehen"
+                      : "Die Nutzer, denen du folgst, haben noch keine Touren erstellt"}
+                  </p>
+                  {following.length === 0 && (
+                    <Link to={createPageUrl("Profile")}>
+                      <Button className="bg-slate-800 hover:bg-slate-900">
+                        <UserPlus className="w-4 h-4 mr-2" />
+                        Nutzern folgen
+                      </Button>
+                    </Link>
+                  )}
+                </motion.div>
+              )}
+            </TabsContent>
+          </Tabs>
         </div>
+
       </div>
     </div>);
 

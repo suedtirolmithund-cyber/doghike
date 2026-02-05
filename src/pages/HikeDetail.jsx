@@ -85,6 +85,19 @@ export default function HikeDetail() {
     queryFn: () => base44.entities.Dog.list()
   });
 
+  const { data: currentUser } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => base44.auth.me().catch(() => null),
+  });
+
+  const { data: allUsers = [] } = useQuery({
+    queryKey: ["allUsers"],
+    queryFn: () => base44.entities.User.list()
+  });
+
+  const creator = allUsers.find(u => u.email === hike?.created_by);
+  const isOwnHike = currentUser?.email === hike?.created_by;
+
   const deleteMutation = useMutation({
     mutationFn: () => base44.entities.Hike.delete(hikeId),
     onSuccess: () => {

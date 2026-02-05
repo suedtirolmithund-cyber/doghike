@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Mountain, Map, PawPrint, Home, Trophy, Navigation } from "lucide-react";
+import { Mountain, Map, PawPrint, Home, Trophy, Navigation, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Layout({ children, currentPageName }) {
@@ -9,6 +9,7 @@ export default function Layout({ children, currentPageName }) {
   const navItems = [
     { name: "Dashboard", icon: Home, label: "Startseite" },
     { name: "Hikes", icon: Mountain, label: "Alle Touren" },
+    { name: "Feed", icon: TrendingUp, label: "Community Feed" },
     { name: "MapView", icon: Map, label: "Kartenansicht" },
     { name: "RoutePlanner", icon: Navigation, label: "Routenplaner" },
     { name: "TopDogs", icon: Trophy, label: "Top Dogs" },
