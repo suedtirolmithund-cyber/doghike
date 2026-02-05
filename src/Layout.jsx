@@ -7,12 +7,12 @@ export default function Layout({ children, currentPageName }) {
   const location = useLocation();
 
   const navItems = [
-    { name: "Dashboard", icon: Home, label: "Startseite" },
-    { name: "Hikes", icon: Mountain, label: "Alle Touren" },
+    { name: "Dashboard", icon: PawPrint, label: "Startseite" },
+    { name: "Hikes", icon: PawPrint, label: "Alle Touren" },
     { name: "Feed", icon: PawPrint, label: "Community Feed" },
-    { name: "MapView", icon: Map, label: "Kartenansicht" },
-    { name: "RoutePlanner", icon: Navigation, label: "Routenplaner" },
-    { name: "TopDogs", icon: Trophy, label: "Top Dogs" },
+    { name: "MapView", icon: PawPrint, label: "Kartenansicht" },
+    { name: "RoutePlanner", icon: PawPrint, label: "Routenplaner" },
+    { name: "TopDogs", icon: PawPrint, label: "Top Dogs" },
     { name: "Profile", icon: PawPrint, label: "Mein Profil" },
   ];
 
