@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Polyline, Marker, useMap } from "react-leaflet
 import { Button } from "@/components/ui/button";
 import { Play, Pause, Square, Navigation } from "lucide-react";
 import { motion } from "framer-motion";
+import RouteElevationProfile from "./RouteElevationProfile";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
