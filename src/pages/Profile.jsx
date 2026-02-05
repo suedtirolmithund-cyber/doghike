@@ -28,6 +28,7 @@ import {
 import DogForm from "@/components/forms/DogForm";
 import HikeCard from "@/components/hikes/HikeCard";
 import FollowSection from "@/components/community/FollowSection";
+import UserRouteCard from "@/components/routes/UserRouteCard";
 
 export default function Profile() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -101,6 +102,15 @@ export default function Profile() {
     enabled: isAuthenticated
   });
 
+  const { data: userRoutes = [] } = useQuery({
+    queryKey: ["userRoutes"],
+    queryFn: async () => {
+      const currentUser = await base44.auth.me();
+      return base44.entities.UserRoute.filter({ created_by: currentUser.email }, "-created_date");
+    },
+    enabled: isAuthenticated
+  });
+
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.Dog.create(data),
     onSuccess: () => {
@@ -122,6 +132,13 @@ export default function Profile() {
     mutationFn: (id) => base44.entities.Dog.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dogs"] });
+    }
+  });
+
+  const deleteRouteMutation = useMutation({
+    mutationFn: (id) => base44.entities.UserRoute.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userRoutes"] });
     }
   });
 
@@ -263,6 +280,7 @@ export default function Profile() {
         <Tabs defaultValue="dogs" className="space-y-4 md:space-y-6">
           <TabsList className="bg-white border border-stone-200/50 flex-wrap h-auto gap-1">
             <TabsTrigger value="dogs" className="text-xs md:text-sm">Meine Hunde</TabsTrigger>
+            <TabsTrigger value="routes" className="text-xs md:text-sm">Meine Routen</TabsTrigger>
             <TabsTrigger value="community" className="text-xs md:text-sm">Community</TabsTrigger>
             <TabsTrigger value="saved" className="text-xs md:text-sm">Gespeichert</TabsTrigger>
             <TabsTrigger value="private" className="text-xs md:text-sm">Privat</TabsTrigger>
@@ -395,6 +413,51 @@ export default function Profile() {
                   <Plus className="w-4 h-4 mr-2" />
                   Hund hinzufügen
                 </Button>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* Routes Tab */}
+          <TabsContent value="routes">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4 md:mb-6">
+              <div>
+                <h2 className="text-lg md:text-xl font-medium text-stone-800 mb-1 md:mb-2">Meine Routen</h2>
+                <p className="text-stone-500 text-xs md:text-sm">Geplante und aufgezeichnete Wanderrouten</p>
+              </div>
+              <Link to={createPageUrl("RoutePlanner")}>
+                <Button className="bg-slate-800 hover:bg-slate-700" size="sm">
+                  <Plus className="w-4 h-4 md:mr-2" />
+                  <span className="hidden md:inline ml-2">Neue Route</span>
+                </Button>
+              </Link>
+            </div>
+
+            {userRoutes.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {userRoutes.map((route, index) => (
+                  <UserRouteCard
+                    key={route.id}
+                    route={route}
+                    index={index}
+                    onDelete={(id) => {
+                      if (confirm("Route wirklich löschen?")) {
+                        deleteRouteMutation.mutate(id);
+                      }
+                    }}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
+                <div className="text-6xl mb-4">🗺️</div>
+                <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Routen</h3>
+                <p className="text-stone-500 mb-6">Plane deine erste Route oder zeichne eine Wanderung auf</p>
+                <Link to={createPageUrl("RoutePlanner")}>
+                  <Button className="bg-slate-800 hover:bg-slate-700">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Route erstellen
+                  </Button>
+                </Link>
               </div>
             )}
           </TabsContent>
