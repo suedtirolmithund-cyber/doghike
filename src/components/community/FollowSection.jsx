@@ -81,27 +81,31 @@ export default function FollowSection() {
       </div>
 
       {/* Follow someone */}
-      <div className="bg-white rounded-xl p-6 border border-stone-200">
-        <h3 className="font-semibold text-stone-800 mb-4 flex items-center gap-2">
-          <UserPlus className="w-5 h-5" />
+      <div className="bg-white rounded-xl p-4 md:p-6 border border-stone-200">
+        <h3 className="font-semibold text-stone-800 mb-3 md:mb-4 flex items-center gap-2 text-sm md:text-base">
+          <UserPlus className="w-4 h-4 md:w-5 md:h-5" />
           Nutzer folgen
         </h3>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-col sm:flex-row">
           <Input
             placeholder="E-Mail-Adresse eingeben"
             value={searchEmail}
             onChange={(e) => setSearchEmail(e.target.value)}
             type="email"
+            className="text-sm md:text-base"
           />
           <Button
             onClick={handleFollow}
             disabled={!searchEmail || followMutation.isPending}
-            className="bg-slate-800 hover:bg-slate-900"
+            className="bg-slate-800 hover:bg-slate-900 sm:w-auto w-full"
           >
             {followMutation.isPending ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
-              <UserPlus className="w-4 h-4" />
+              <>
+                <UserPlus className="w-4 h-4 sm:mr-0 mr-2" />
+                <span className="sm:hidden">Folgen</span>
+              </>
             )}
           </Button>
         </div>
@@ -109,9 +113,9 @@ export default function FollowSection() {
 
       {/* Following List */}
       {following.length > 0 && (
-        <div className="bg-white rounded-xl p-6 border border-stone-200">
-          <h3 className="font-semibold text-stone-800 mb-4 flex items-center gap-2">
-            <Users className="w-5 h-5" />
+        <div className="bg-white rounded-xl p-4 md:p-6 border border-stone-200">
+          <h3 className="font-semibold text-stone-800 mb-3 md:mb-4 flex items-center gap-2 text-sm md:text-base">
+            <Users className="w-4 h-4 md:w-5 md:h-5" />
             Ich folge ({following.length})
           </h3>
           <div className="space-y-2">
@@ -123,9 +127,9 @@ export default function FollowSection() {
                 transition={{ delay: index * 0.05 }}
                 className="flex items-center justify-between p-3 rounded-lg bg-stone-50"
               >
-                <div>
-                  <p className="font-medium text-stone-800">{follow.following_name}</p>
-                  <p className="text-sm text-stone-500">{follow.following_email}</p>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-stone-800 text-sm md:text-base truncate">{follow.following_name}</p>
+                  <p className="text-xs md:text-sm text-stone-500 truncate">{follow.following_email}</p>
                 </div>
                 <Button
                   variant="ghost"
@@ -148,9 +152,9 @@ export default function FollowSection() {
 
       {/* Followers List */}
       {followers.length > 0 && (
-        <div className="bg-white rounded-xl p-6 border border-stone-200">
-          <h3 className="font-semibold text-stone-800 mb-4 flex items-center gap-2">
-            <Users className="w-5 h-5" />
+        <div className="bg-white rounded-xl p-4 md:p-6 border border-stone-200">
+          <h3 className="font-semibold text-stone-800 mb-3 md:mb-4 flex items-center gap-2 text-sm md:text-base">
+            <Users className="w-4 h-4 md:w-5 md:h-5" />
             Meine Follower ({followers.length})
           </h3>
           <div className="space-y-2">
@@ -162,11 +166,11 @@ export default function FollowSection() {
                 transition={{ delay: index * 0.05 }}
                 className="flex items-center justify-between p-3 rounded-lg bg-stone-50"
               >
-                <div>
-                  <p className="font-medium text-stone-800">
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-stone-800 text-sm md:text-base truncate">
                     {allUsers.find(u => u.email === follower.follower_email)?.full_name || follower.follower_email}
                   </p>
-                  <p className="text-sm text-stone-500">{follower.follower_email}</p>
+                  <p className="text-xs md:text-sm text-stone-500 truncate">{follower.follower_email}</p>
                 </div>
                 {!isFollowing(follower.follower_email) && follower.follower_email !== user?.email && (
                   <Button

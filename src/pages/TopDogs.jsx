@@ -44,7 +44,7 @@ export default function TopDogs() {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.05 }}
-      className={`flex items-center gap-4 p-4 rounded-xl ${
+      className={`flex items-center gap-3 md:gap-4 p-3 md:p-4 rounded-xl ${
         index < 3 ? 'bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200' : 'bg-white border border-stone-200'
       }`}
     >
@@ -54,30 +54,30 @@ export default function TopDogs() {
       <img
         src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
         alt={dog.name}
-        className="w-12 h-12 rounded-full object-cover"
+        className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover"
       />
       <div className="flex-1 min-w-0">
-        <p className="font-semibold text-stone-800">{dog.name}</p>
-        {dog.breed && <p className="text-xs text-stone-500">{dog.breed}</p>}
+        <p className="font-semibold text-stone-800 text-sm md:text-base truncate">{dog.name}</p>
+        {dog.breed && <p className="text-xs text-stone-500 truncate">{dog.breed}</p>}
       </div>
-      <div className="text-right">
-        <p className="text-xl font-bold text-stone-800">
+      <div className="text-right flex-shrink-0">
+        <p className="text-lg md:text-xl font-bold text-stone-800">
           {metric === 'hikes' && dog.stats.hikeCount}
-          {metric === 'distance' && `${dog.stats.totalDistance.toFixed(1)} km`}
-          {metric === 'elevation' && `${Math.round(dog.stats.totalElevation).toLocaleString()} Hm`}
+          {metric === 'distance' && `${dog.stats.totalDistance.toFixed(1)}`}
+          {metric === 'elevation' && `${Math.round(dog.stats.totalElevation).toLocaleString()}`}
         </p>
         <p className="text-xs text-stone-500">
           {metric === 'hikes' && 'Touren'}
-          {metric === 'distance' && 'Kilometer'}
-          {metric === 'elevation' && 'Höhenmeter'}
+          {metric === 'distance' && 'km'}
+          {metric === 'elevation' && 'Hm'}
         </p>
       </div>
     </motion.div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -90,11 +90,20 @@ export default function TopDogs() {
           <p className="text-stone-600">Die fleißigsten Wanderhunde unserer Community</p>
         </motion.div>
 
-        <Tabs defaultValue="hikes" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 bg-white border border-stone-200">
-            <TabsTrigger value="hikes">🎯 Meiste Touren</TabsTrigger>
-            <TabsTrigger value="distance">📏 Längste Strecke</TabsTrigger>
-            <TabsTrigger value="elevation">⛰️ Meiste Höhenmeter</TabsTrigger>
+        <Tabs defaultValue="hikes" className="space-y-4 md:space-y-6">
+          <TabsList className="grid w-full grid-cols-3 bg-white border border-stone-200 h-auto">
+            <TabsTrigger value="hikes" className="text-xs md:text-sm py-2 md:py-2.5">
+              <span className="hidden md:inline">🎯 Meiste Touren</span>
+              <span className="md:hidden">🎯 Touren</span>
+            </TabsTrigger>
+            <TabsTrigger value="distance" className="text-xs md:text-sm py-2 md:py-2.5">
+              <span className="hidden md:inline">📏 Längste Strecke</span>
+              <span className="md:hidden">📏 km</span>
+            </TabsTrigger>
+            <TabsTrigger value="elevation" className="text-xs md:text-sm py-2 md:py-2.5">
+              <span className="hidden md:inline">⛰️ Meiste Höhenmeter</span>
+              <span className="md:hidden">⛰️ Hm</span>
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="hikes" className="space-y-3">

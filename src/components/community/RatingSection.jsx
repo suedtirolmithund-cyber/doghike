@@ -69,11 +69,11 @@ export default function RatingSection({ hikeId }) {
   };
 
   return (
-    <div className="bg-white rounded-xl p-6 border border-stone-200">
-      <div className="mb-6">
+    <div className="bg-white rounded-xl p-4 md:p-6 border border-stone-200">
+      <div className="mb-4 md:mb-6">
         <div className="flex items-baseline gap-2 mb-2">
-          <span className="text-4xl font-bold text-stone-800">{averageRating}</span>
-          <span className="text-stone-500">/ 5</span>
+          <span className="text-3xl md:text-4xl font-bold text-stone-800">{averageRating}</span>
+          <span className="text-stone-500 text-sm md:text-base">/ 5</span>
         </div>
         <div className="flex items-center gap-1 mb-1">
           {[1, 2, 3, 4, 5].map((star) => (
@@ -91,11 +91,11 @@ export default function RatingSection({ hikeId }) {
       </div>
 
       {user && (
-        <div className="border-t border-stone-200 pt-6">
-          <p className="font-semibold text-stone-800 mb-3">
+        <div className="border-t border-stone-200 pt-4 md:pt-6">
+          <p className="font-semibold text-stone-800 mb-3 text-sm md:text-base">
             {existingRating ? "Deine Bewertung ändern" : "Wanderung bewerten"}
           </p>
-          <div className="flex items-center gap-1 mb-4">
+          <div className="flex items-center justify-center gap-1 mb-4">
             {[1, 2, 3, 4, 5].map((star) => (
               <motion.button
                 key={star}
@@ -104,10 +104,10 @@ export default function RatingSection({ hikeId }) {
                 onClick={() => setSelectedRating(star)}
                 onMouseEnter={() => setHoverRating(star)}
                 onMouseLeave={() => setHoverRating(0)}
-                className="focus:outline-none"
+                className="focus:outline-none touch-manipulation"
               >
                 <Star
-                  className={`w-8 h-8 transition-colors ${
+                  className={`w-10 h-10 md:w-8 md:h-8 transition-colors ${
                     star <= (hoverRating || selectedRating || existingRating?.rating || 0)
                       ? "fill-yellow-400 text-yellow-400"
                       : "text-stone-300 hover:text-yellow-200"

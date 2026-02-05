@@ -23,12 +23,12 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-stone-200 py-4 px-6 text-center mb-20 md:mb-0">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-4 text-sm text-stone-500">
+      <footer className="bg-white border-t border-stone-200 py-3 md:py-4 px-4 md:px-6 text-center mb-20 md:mb-0">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 md:gap-4 text-xs md:text-sm text-stone-500">
           <span>© 2026 Südtirol mit Hund</span>
           <span className="hidden sm:inline">•</span>
           <Link to={createPageUrl("Legal")} className="hover:text-stone-700 underline">
-            Rechtliche Hinweise & Haftungsausschluss
+            Rechtliche Hinweise
           </Link>
         </div>
       </footer>

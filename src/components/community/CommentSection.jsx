@@ -86,13 +86,13 @@ export default function CommentSection({ hikeId }) {
     <div className="space-y-6">
       {/* Comment Form */}
       {user && (
-        <div className="bg-white rounded-xl p-6 border border-stone-200">
-          <h3 className="font-semibold text-stone-800 mb-4">Kommentar hinzufügen</h3>
+        <div className="bg-white rounded-xl p-4 md:p-6 border border-stone-200">
+          <h3 className="font-semibold text-stone-800 mb-3 md:mb-4 text-sm md:text-base">Kommentar hinzufügen</h3>
           <Textarea
             placeholder="Teile deine Erfahrungen mit dieser Wanderung..."
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
-            className="mb-3"
+            className="mb-3 text-sm md:text-base"
             rows={4}
           />
 
@@ -113,7 +113,7 @@ export default function CommentSection({ hikeId }) {
             </div>
           )}
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             <input
               type="file"
               accept="image/*"
@@ -142,7 +142,7 @@ export default function CommentSection({ hikeId }) {
             <Button
               onClick={handleSubmit}
               disabled={!commentText.trim() || createCommentMutation.isPending}
-              className="bg-slate-800 hover:bg-slate-900"
+              className="bg-slate-800 hover:bg-slate-900 flex-1 sm:flex-initial"
             >
               {createCommentMutation.isPending ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -156,8 +156,8 @@ export default function CommentSection({ hikeId }) {
       )}
 
       {/* Comments List */}
-      <div className="space-y-4">
-        <h3 className="font-semibold text-stone-800">
+      <div className="space-y-3 md:space-y-4">
+        <h3 className="font-semibold text-stone-800 text-sm md:text-base">
           Kommentare ({comments.length})
         </h3>
         
@@ -168,12 +168,12 @@ export default function CommentSection({ hikeId }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, x: -100 }}
-              className="bg-white rounded-xl p-6 border border-stone-200"
+              className="bg-white rounded-xl p-4 md:p-6 border border-stone-200"
             >
               <div className="flex items-start justify-between mb-3">
-                <div>
-                  <p className="font-semibold text-stone-800">{comment.user_name}</p>
-                  <p className="text-sm text-stone-500">
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-stone-800 text-sm md:text-base truncate">{comment.user_name}</p>
+                  <p className="text-xs md:text-sm text-stone-500">
                     {format(new Date(comment.created_date), "dd.MM.yyyy 'um' HH:mm")}
                   </p>
                 </div>
@@ -189,7 +189,7 @@ export default function CommentSection({ hikeId }) {
                 )}
               </div>
               
-              <p className="text-stone-700 mb-3">{comment.text}</p>
+              <p className="text-stone-700 mb-3 text-sm md:text-base">{comment.text}</p>
 
               {comment.photos?.length > 0 && (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">

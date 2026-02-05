@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 
 export default function Legal() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <Link to={createPageUrl("Dashboard")}>
           <Button variant="ghost" className="mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -14,18 +14,18 @@ export default function Legal() {
           </Button>
         </Link>
 
-        <div className="bg-white rounded-2xl p-8 border border-stone-200/50 shadow-sm">
+        <div className="bg-white rounded-2xl p-4 md:p-8 border border-stone-200/50 shadow-sm">
           <div className="flex items-center gap-3 mb-6">
-            <Shield className="w-8 h-8 text-slate-700" />
-            <h1 className="text-3xl font-bold text-stone-800">Rechtliche Hinweise</h1>
+            <Shield className="w-6 h-6 md:w-8 md:h-8 text-slate-700" />
+            <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Rechtliche Hinweise</h1>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-6 md:space-y-8">
             {/* Haftungsausschluss */}
             <section>
               <div className="flex items-center gap-2 mb-4">
-                <AlertTriangle className="w-6 h-6 text-amber-600" />
-                <h2 className="text-xl font-semibold text-stone-800">Haftungsausschluss</h2>
+                <AlertTriangle className="w-5 h-5 md:w-6 md:h-6 text-amber-600" />
+                <h2 className="text-lg md:text-xl font-semibold text-stone-800">Haftungsausschluss</h2>
               </div>
               
               <div className="space-y-4 text-stone-600 leading-relaxed">
@@ -86,11 +86,11 @@ export default function Legal() {
             </section>
 
             {/* Nutzergenerierte Inhalte */}
-            <section className="border-t border-stone-200 pt-8">
-              <h2 className="text-xl font-semibold text-stone-800 mb-4">
+            <section className="border-t border-stone-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4">
                 Nutzergenerierte Inhalte
               </h2>
-              <div className="space-y-4 text-stone-600 leading-relaxed">
+              <div className="space-y-3 md:space-y-4 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
                   Die auf dieser Plattform veröffentlichten Wanderungen, Kommentare, Fotos und 
                   Bewertungen werden von Nutzern erstellt. Der Betreiber prüft diese Inhalte nicht 
@@ -104,8 +104,8 @@ export default function Legal() {
             </section>
 
             {/* Notfall */}
-            <section className="border-t border-stone-200 pt-8">
-              <h2 className="text-xl font-semibold text-stone-800 mb-4">
+            <section className="border-t border-stone-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4">
                 Im Notfall
               </h2>
               <div className="bg-red-50 border border-red-200 rounded-xl p-4">
@@ -119,7 +119,7 @@ export default function Legal() {
             </section>
 
             {/* Änderungen */}
-            <section className="border-t border-stone-200 pt-8">
+            <section className="border-t border-stone-200 pt-6 md:pt-8">
               <p className="text-sm text-stone-500">
                 Der Betreiber behält sich das Recht vor, diese rechtlichen Hinweise jederzeit 
                 zu ändern oder zu ergänzen. Die Nutzung der Plattform erfolgt unter Anerkennung 

@@ -213,16 +213,16 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mb-6 md:mb-8"
         >
-          <h1 className="text-3xl font-light text-stone-800">Mein Profil</h1>
-          <p className="text-stone-500 mt-1">Deine Hunde, Touren und Erinnerungen</p>
+          <h1 className="text-2xl md:text-3xl font-light text-stone-800">Mein Profil</h1>
+          <p className="text-stone-500 mt-1 text-sm md:text-base">Deine Hunde, Touren und Erinnerungen</p>
         </motion.div>
 
         {/* Stats Overview */}
@@ -230,55 +230,56 @@ export default function Profile() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8"
+          className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-6 md:mb-8"
         >
-          <div className="bg-white rounded-xl p-4 border border-stone-200 text-center">
-            <TrendingUp className="w-5 h-5 text-stone-400 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-stone-800">{totalStats.totalHikes}</p>
+          <div className="bg-white rounded-xl p-3 md:p-4 border border-stone-200 text-center">
+            <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-stone-400 mx-auto mb-1 md:mb-2" />
+            <p className="text-xl md:text-2xl font-bold text-stone-800">{totalStats.totalHikes}</p>
             <p className="text-xs text-stone-500">Touren</p>
           </div>
-          <div className="bg-white rounded-xl p-4 border border-stone-200 text-center">
-            <p className="text-sm text-stone-400 mb-2">📏</p>
-            <p className="text-2xl font-bold text-stone-800">{totalStats.totalDistance.toFixed(0)}</p>
+          <div className="bg-white rounded-xl p-3 md:p-4 border border-stone-200 text-center">
+            <p className="text-sm text-stone-400 mb-1 md:mb-2">📏</p>
+            <p className="text-xl md:text-2xl font-bold text-stone-800">{totalStats.totalDistance.toFixed(0)}</p>
             <p className="text-xs text-stone-500">km</p>
           </div>
-          <div className="bg-white rounded-xl p-4 border border-stone-200 text-center">
-            <p className="text-sm text-stone-400 mb-2">⛰️</p>
-            <p className="text-2xl font-bold text-stone-800">{Math.round(totalStats.totalElevation).toLocaleString()}</p>
+          <div className="bg-white rounded-xl p-3 md:p-4 border border-stone-200 text-center">
+            <p className="text-sm text-stone-400 mb-1 md:mb-2">⛰️</p>
+            <p className="text-xl md:text-2xl font-bold text-stone-800">{Math.round(totalStats.totalElevation).toLocaleString()}</p>
             <p className="text-xs text-stone-500">Hm</p>
           </div>
-          <div className="bg-white rounded-xl p-4 border border-stone-200 text-center">
-            <p className="text-sm text-stone-400 mb-2">⭐</p>
-            <p className="text-2xl font-bold text-stone-800">{totalStats.totalRatings}</p>
+          <div className="bg-white rounded-xl p-3 md:p-4 border border-stone-200 text-center">
+            <p className="text-sm text-stone-400 mb-1 md:mb-2">⭐</p>
+            <p className="text-xl md:text-2xl font-bold text-stone-800">{totalStats.totalRatings}</p>
             <p className="text-xs text-stone-500">Bewertungen</p>
           </div>
-          <div className="bg-white rounded-xl p-4 border border-stone-200 text-center">
-            <p className="text-sm text-stone-400 mb-2">💬</p>
-            <p className="text-2xl font-bold text-stone-800">{totalStats.totalComments}</p>
+          <div className="bg-white rounded-xl p-3 md:p-4 border border-stone-200 text-center">
+            <p className="text-sm text-stone-400 mb-1 md:mb-2">💬</p>
+            <p className="text-xl md:text-2xl font-bold text-stone-800">{totalStats.totalComments}</p>
             <p className="text-xs text-stone-500">Kommentare</p>
           </div>
         </motion.div>
 
         {/* Tabs */}
-        <Tabs defaultValue="dogs" className="space-y-6">
-          <TabsList className="bg-white border border-stone-200/50 flex-wrap h-auto">
-            <TabsTrigger value="dogs">Meine Hunde</TabsTrigger>
-            <TabsTrigger value="community">Community</TabsTrigger>
-            <TabsTrigger value="saved">Gespeicherte Touren</TabsTrigger>
-            <TabsTrigger value="private">Private Touren</TabsTrigger>
-            <TabsTrigger value="submitted">Veröffentlicht</TabsTrigger>
+        <Tabs defaultValue="dogs" className="space-y-4 md:space-y-6">
+          <TabsList className="bg-white border border-stone-200/50 flex-wrap h-auto gap-1">
+            <TabsTrigger value="dogs" className="text-xs md:text-sm">Meine Hunde</TabsTrigger>
+            <TabsTrigger value="community" className="text-xs md:text-sm">Community</TabsTrigger>
+            <TabsTrigger value="saved" className="text-xs md:text-sm">Gespeichert</TabsTrigger>
+            <TabsTrigger value="private" className="text-xs md:text-sm">Privat</TabsTrigger>
+            <TabsTrigger value="submitted" className="text-xs md:text-sm">Veröffentlicht</TabsTrigger>
           </TabsList>
 
           {/* Dogs Tab */}
           <TabsContent value="dogs">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-medium text-stone-800">Meine Hunde</h2>
+            <div className="flex items-center justify-between mb-4 md:mb-6">
+              <h2 className="text-lg md:text-xl font-medium text-stone-800">Meine Hunde</h2>
               <Button
                 onClick={openAddDialog}
-                className="bg-slate-800 hover:bg-slate-700"
+                className="bg-slate-800 hover:bg-slate-700 text-sm md:text-base"
+                size="sm"
               >
-                <Plus className="w-4 h-4 mr-2" />
-                Hund hinzufügen
+                <Plus className="w-4 h-4 md:mr-2" />
+                <span className="hidden md:inline ml-2">Hund hinzufügen</span>
               </Button>
             </div>
 
@@ -405,8 +406,8 @@ export default function Profile() {
 
           {/* Saved Hikes Tab */}
           <TabsContent value="saved">
-            <div className="mb-6">
-              <h2 className="text-xl font-medium text-stone-800 mb-2">Gespeicherte Touren</h2>
+            <div className="mb-4 md:mb-6">
+              <h2 className="text-lg md:text-xl font-medium text-stone-800 mb-2">Gespeicherte Touren</h2>
               <p className="text-stone-500 text-sm">Touren, die du für später gespeichert hast</p>
             </div>
 
@@ -433,15 +434,15 @@ export default function Profile() {
 
           {/* Private Hikes Tab */}
           <TabsContent value="private">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4 md:mb-6">
               <div>
-                <h2 className="text-xl font-medium text-stone-800 mb-2">Meine privaten Touren</h2>
-                <p className="text-stone-500 text-sm">Dein persönliches Wandertagebuch - nur für dich</p>
+                <h2 className="text-lg md:text-xl font-medium text-stone-800 mb-1 md:mb-2">Meine privaten Touren</h2>
+                <p className="text-stone-500 text-xs md:text-sm">Dein persönliches Wandertagebuch - nur für dich</p>
               </div>
               <Link to={createPageUrl("AddHike")}>
-                <Button className="bg-slate-800 hover:bg-slate-700">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Neue Tour
+                <Button className="bg-slate-800 hover:bg-slate-700" size="sm">
+                  <Plus className="w-4 h-4 md:mr-2" />
+                  <span className="hidden md:inline ml-2">Neue Tour</span>
                 </Button>
               </Link>
             </div>
@@ -469,8 +470,8 @@ export default function Profile() {
 
           {/* Submitted Hikes Tab */}
           <TabsContent value="submitted">
-            <div className="mb-6">
-              <h2 className="text-xl font-medium text-stone-800 mb-2">Veröffentlichte Touren</h2>
+            <div className="mb-4 md:mb-6">
+              <h2 className="text-lg md:text-xl font-medium text-stone-800 mb-2">Veröffentlichte Touren</h2>
               <p className="text-stone-500 text-sm">Touren, die du mit der Community geteilt hast</p>
             </div>
 
