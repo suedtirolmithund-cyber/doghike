@@ -12,12 +12,40 @@ export default function AddHike() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { data: dogs = [] } = useQuery({
-    queryKey: ["dogs"],
+  const { data: currentUser } = useQuery({
+    queryKey: ["currentUser"],
+    queryFn: () => base44.auth.me()
+  });
+
+  const { data: followingData = [] } = useQuery({
+    queryKey: ["following"],
     queryFn: async () => {
-      const currentUser = await base44.auth.me();
-      return base44.entities.Dog.filter({ created_by: currentUser.email });
-    }
+      const user = await base44.auth.me();
+      return base44.entities.UserFollow.filter({ follower_email: user.email });
+    },
+    enabled: !!currentUser
+  });
+
+  const { data: dogs = [] } = useQuery({
+    queryKey: ["dogs", currentUser?.email, followingData],
+    queryFn: async () => {
+      if (!currentUser) return [];
+      
+      // Eigene Hunde
+      const ownDogs = await base44.entities.Dog.filter({ created_by: currentUser.email });
+      
+      // Hunde von Freunden (Nutzer, denen wir folgen)
+      const friendEmails = followingData.map(f => f.following_email);
+      let friendDogs = [];
+      
+      for (const email of friendEmails) {
+        const dogs = await base44.entities.Dog.filter({ created_by: email });
+        friendDogs.push(...dogs);
+      }
+      
+      return [...ownDogs, ...friendDogs];
+    },
+    enabled: !!currentUser && followingData.length >= 0
   });
 
   const createMutation = useMutation({

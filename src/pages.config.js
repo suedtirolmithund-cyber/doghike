@@ -53,18 +53,18 @@ import Checkout from './pages/Checkout';
 import Dashboard from './pages/Dashboard';
 import Dogs from './pages/Dogs';
 import EditHike from './pages/EditHike';
+import Feed from './pages/Feed';
 import HikeDetail from './pages/HikeDetail';
 import Hikes from './pages/Hikes';
 import Legal from './pages/Legal';
 import MapView from './pages/MapView';
 import ProductDetail from './pages/ProductDetail';
 import Profile from './pages/Profile';
+import RouteDetail from './pages/RouteDetail';
+import RoutePlanner from './pages/RoutePlanner';
 import Shop from './pages/Shop';
 import SubmitHike from './pages/SubmitHike';
 import TopDogs from './pages/TopDogs';
-import RoutePlanner from './pages/RoutePlanner';
-import RouteDetail from './pages/RouteDetail';
-import Feed from './pages/Feed';
 import __Layout from './Layout.jsx';
 
 
@@ -75,18 +75,18 @@ export const PAGES = {
     "Dashboard": Dashboard,
     "Dogs": Dogs,
     "EditHike": EditHike,
+    "Feed": Feed,
     "HikeDetail": HikeDetail,
     "Hikes": Hikes,
     "Legal": Legal,
     "MapView": MapView,
     "ProductDetail": ProductDetail,
     "Profile": Profile,
+    "RouteDetail": RouteDetail,
+    "RoutePlanner": RoutePlanner,
     "Shop": Shop,
     "SubmitHike": SubmitHike,
     "TopDogs": TopDogs,
-    "RoutePlanner": RoutePlanner,
-    "RouteDetail": RouteDetail,
-    "Feed": Feed,
 }
 
 export const pagesConfig = {
