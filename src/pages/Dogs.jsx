@@ -29,9 +29,17 @@ export default function Dogs() {
   const [editingDog, setEditingDog] = useState(null);
   const queryClient = useQueryClient();
 
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => base44.auth.me()
+  });
+
   const { data: dogs = [], isLoading } = useQuery({
     queryKey: ["dogs"],
-    queryFn: () => base44.entities.Dog.list()
+    queryFn: async () => {
+      const currentUser = await base44.auth.me();
+      return base44.entities.Dog.filter({ created_by: currentUser.email });
+    }
   });
 
   const { data: hikes = [] } = useQuery({
@@ -106,9 +114,16 @@ export default function Dogs() {
           className="flex items-center justify-between mb-8"
         >
           <div>
-            <h1 className="text-3xl font-light text-stone-800">Unsere Hunde</h1>
-            <p className="text-stone-500 mt-1">Die Wanderbegleiter</p>
+            <h1 className="text-3xl font-light text-stone-800">Meine Hunde</h1>
+            <p className="text-stone-500 mt-1">Deine Wanderbegleiter</p>
           </div>
+          <Button
+            onClick={openAddDialog}
+            className="bg-slate-800 hover:bg-slate-700"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Hund hinzufügen
+          </Button>
         </motion.div>
 
         {/* Dogs Grid */}
@@ -155,20 +170,20 @@ export default function Dogs() {
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                              <AlertDialogTitle>Remove {dog.name}?</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                This will remove {dog.name} from your dogs list.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => deleteMutation.mutate(dog.id)}
-                                className="bg-red-600 hover:bg-red-700"
-                              >
-                                Remove
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
+                               <AlertDialogTitle>{dog.name} entfernen?</AlertDialogTitle>
+                               <AlertDialogDescription>
+                                 Dies wird {dog.name} aus deiner Hundeliste entfernen.
+                               </AlertDialogDescription>
+                             </AlertDialogHeader>
+                             <AlertDialogFooter>
+                               <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                               <AlertDialogAction
+                                 onClick={() => deleteMutation.mutate(dog.id)}
+                                 className="bg-red-600 hover:bg-red-700"
+                               >
+                                 Entfernen
+                               </AlertDialogAction>
+                             </AlertDialogFooter>
                           </AlertDialogContent>
                         </AlertDialog>
                       </div>
@@ -220,7 +235,14 @@ export default function Dogs() {
           >
             <div className="text-6xl mb-4">🐕</div>
             <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Hunde</h3>
-            <p className="text-stone-500 mb-6">Bald findest du hier die Wanderbegleiter!</p>
+            <p className="text-stone-500 mb-6">Füge deinen ersten Wanderbegleiter hinzu!</p>
+            <Button
+              onClick={openAddDialog}
+              className="bg-slate-800 hover:bg-slate-700"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Hund hinzufügen
+            </Button>
           </motion.div>
         )}
       </div>
@@ -229,7 +251,7 @@ export default function Dogs() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>{editingDog ? "Edit Dog" : "Add New Dog"}</DialogTitle>
+            <DialogTitle>{editingDog ? "Hund bearbeiten" : "Hund hinzufügen"}</DialogTitle>
           </DialogHeader>
           <DogForm
             dog={editingDog}

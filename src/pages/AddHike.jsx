@@ -14,7 +14,10 @@ export default function AddHike() {
 
   const { data: dogs = [] } = useQuery({
     queryKey: ["dogs"],
-    queryFn: () => base44.entities.Dog.list()
+    queryFn: async () => {
+      const currentUser = await base44.auth.me();
+      return base44.entities.Dog.filter({ created_by: currentUser.email });
+    }
   });
 
   const createMutation = useMutation({

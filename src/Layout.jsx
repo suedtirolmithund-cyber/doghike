@@ -10,7 +10,7 @@ export default function Layout({ children, currentPageName }) {
     { name: "Dashboard", icon: Home, label: "Home" },
     { name: "Hikes", icon: Mountain, label: "Touren" },
     { name: "MapView", icon: Map, label: "Karte" },
-    { name: "Dogs", icon: PawPrint, label: "Hunde" },
+    { name: "Dogs", icon: PawPrint, label: "Meine Hunde" },
   ];
 
   const isActive = (pageName) => currentPageName === pageName;
