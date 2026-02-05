@@ -29,13 +29,32 @@ export default function Dashboard() {
     queryFn: () => base44.entities.Dog.list()
   });
 
+  const getCurrentSeason = () => {
+    const month = new Date().getMonth() + 1;
+    if (month >= 12 || month <= 2) return "winter";
+    if (month >= 3 && month <= 5) return "spring";
+    if (month >= 6 && month <= 8) return "summer";
+    return "autumn";
+  };
+
   const filteredHikes = hikes.filter((hike) => {
     if (!searchQuery) return true;
     return hike.trail_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     hike.location?.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
-  const recentHikes = filteredHikes.slice(0, 6);
+  const currentSeason = getCurrentSeason();
+
+  const sortedHikes = [...filteredHikes].sort((a, b) => {
+    const aMatchesSeason = a.season === currentSeason || a.season === "all_year";
+    const bMatchesSeason = b.season === currentSeason || b.season === "all_year";
+    
+    if (aMatchesSeason && !bMatchesSeason) return -1;
+    if (!aMatchesSeason && bMatchesSeason) return 1;
+    return new Date(b.date) - new Date(a.date);
+  });
+
+  const recentHikes = sortedHikes.slice(0, 6);
   const hikesWithCoords = filteredHikes.filter((h) => h.latitude && h.longitude);
 
   return (
@@ -99,42 +118,14 @@ Getestet mit unseren Vierbeinern
           </div>
         </motion.div>
 
-        {/* Stats & Auth */}
-        <div className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-4 items-center max-w-4xl mx-auto">
+        {/* Stats - Only Count */}
+        <div className="mb-12 text-center">
           <StatsCard
             icon={Route}
             label="Wanderungen"
             value={filteredHikes.length}
             delay={0} />
 
-          {!isAuthenticated && (
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-stone-200/50 shadow-sm"
-            >
-              <h3 className="text-lg font-medium text-stone-800 mb-2">Jetzt registrieren</h3>
-              <p className="text-sm text-stone-500 mb-4">Erstelle dein Wandertagebuch und teile deine Erlebnisse</p>
-              <div className="flex flex-col sm:flex-row gap-2">
-                <Button
-                  onClick={() => base44.auth.redirectToLogin(window.location.href)}
-                  className="bg-slate-800 hover:bg-slate-900 flex-1"
-                >
-                  <UserPlus className="w-4 h-4 mr-2" />
-                  Registrieren
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => base44.auth.redirectToLogin(window.location.href)}
-                  className="flex-1"
-                >
-                  <LogIn className="w-4 h-4 mr-2" />
-                  Anmelden
-                </Button>
-              </div>
-            </motion.div>
-          )}
         </div>
 
         {/* Map Section */}
@@ -162,12 +153,33 @@ Getestet mit unseren Vierbeinern
         <div className="mb-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <h2 className="text-2xl font-light text-stone-800">Neueste Touren</h2>
-            <Link to={createPageUrl("Hikes")}>
-              <Button variant="ghost" className="text-stone-600 hover:text-stone-800">
-                Alle anzeigen
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
+            <div className="flex items-center gap-3">
+              {!isAuthenticated &&
+              <>
+                  <Button
+                  variant="outline"
+                  onClick={() => base44.auth.redirectToLogin(window.location.href)}
+                  className="text-stone-700 border-stone-300">
+
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Anmelden
+                  </Button>
+                  <Button
+                  onClick={() => base44.auth.redirectToLogin(window.location.href)}
+                  className="bg-slate-800 hover:bg-slate-900">
+
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Registrieren
+                  </Button>
+                </>
+              }
+              <Link to={createPageUrl("Hikes")}>
+                <Button variant="ghost" className="text-stone-600 hover:text-stone-800">
+                  Alle anzeigen
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+            </div>
           </div>
           
           {recentHikes.length > 0 ?
