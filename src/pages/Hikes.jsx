@@ -80,12 +80,12 @@ export default function Hikes() {
                 <SelectValue placeholder="Schwierigkeit" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">👤 Alle Stufen</SelectItem>
-                <SelectItem value="1">👤 Stufe 1</SelectItem>
-                <SelectItem value="2">👤 Stufe 2</SelectItem>
-                <SelectItem value="3">👤 Stufe 3</SelectItem>
-                <SelectItem value="4">👤 Stufe 4</SelectItem>
-                <SelectItem value="5">👤 Stufe 5</SelectItem>
+                <SelectItem value="all">👤 Alle Schwierigkeiten</SelectItem>
+                <SelectItem value="1">👤 Schwierigkeit 1</SelectItem>
+                <SelectItem value="2">👤 Schwierigkeit 2</SelectItem>
+                <SelectItem value="3">👤 Schwierigkeit 3</SelectItem>
+                <SelectItem value="4">👤 Schwierigkeit 4</SelectItem>
+                <SelectItem value="5">👤 Schwierigkeit 5</SelectItem>
               </SelectContent>
             </Select>
             <Select value={dogDifficultyFilter} onValueChange={setDogDifficultyFilter}>
@@ -93,12 +93,12 @@ export default function Hikes() {
                 <SelectValue placeholder="Hunde-Schwierigkeit" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">🐕 Alle Stufen</SelectItem>
-                <SelectItem value="1">🐕 Stufe 1</SelectItem>
-                <SelectItem value="2">🐕 Stufe 2</SelectItem>
-                <SelectItem value="3">🐕 Stufe 3</SelectItem>
-                <SelectItem value="4">🐕 Stufe 4</SelectItem>
-                <SelectItem value="5">🐕 Stufe 5</SelectItem>
+                <SelectItem value="all">🐕 Alle Schwierigkeiten</SelectItem>
+                <SelectItem value="1">🐕 Schwierigkeit 1</SelectItem>
+                <SelectItem value="2">🐕 Schwierigkeit 2</SelectItem>
+                <SelectItem value="3">🐕 Schwierigkeit 3</SelectItem>
+                <SelectItem value="4">🐕 Schwierigkeit 4</SelectItem>
+                <SelectItem value="5">🐕 Schwierigkeit 5</SelectItem>
               </SelectContent>
             </Select>
             <Select value={sortBy} onValueChange={setSortBy}>
