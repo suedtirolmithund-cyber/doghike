@@ -43,8 +43,20 @@ export default function Layout({ children, currentPageName }) {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 md:gap-4 text-xs md:text-sm text-stone-500">
           <span>© 2026 Südtirol mit Hund</span>
           <span className="hidden sm:inline">•</span>
+          <Link to={createPageUrl("Impressum")} className="hover:text-stone-700 underline">
+            Impressum
+          </Link>
+          <span className="hidden sm:inline">•</span>
+          <Link to={createPageUrl("Datenschutz")} className="hover:text-stone-700 underline">
+            Datenschutz
+          </Link>
+          <span className="hidden sm:inline">•</span>
           <Link to={createPageUrl("Legal")} className="hover:text-stone-700 underline">
             Rechtliche Hinweise
+          </Link>
+          <span className="hidden sm:inline">•</span>
+          <Link to={createPageUrl("Support")} className="hover:text-stone-700 underline">
+            Hilfe & Support
           </Link>
         </div>
       </footer>
