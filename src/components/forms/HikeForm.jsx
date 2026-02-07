@@ -33,7 +33,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
     longitude: "",
     route_coordinates: [],
     notes: "",
-    rating: 5
+    rating: 5,
+    visibility: "private"
   });
   const [uploading, setUploading] = useState(false);
    const [saving, setSaving] = useState(false);
@@ -612,6 +613,28 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
           placeholder="Wegbeschaffenheit, Highlights, besondere Ausblicke..."
           rows={4}
         />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="visibility">Sichtbarkeit der Tour</Label>
+        <Select
+          value={formData.visibility}
+          onValueChange={(value) => setFormData({ ...formData, visibility: value })}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Wählen" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="private">🔒 Privat (nur für mich)</SelectItem>
+            <SelectItem value="friends">👥 Mit Freunden teilen</SelectItem>
+            <SelectItem value="public">🌍 Öffentlich (für alle sichtbar)</SelectItem>
+          </SelectContent>
+        </Select>
+        <p className="text-xs text-stone-500 mt-1">
+          {formData.visibility === "private" && "Nur du kannst diese Tour sehen"}
+          {formData.visibility === "friends" && "Nur Freunde, denen du folgst oder die dir folgen, können diese Tour sehen"}
+          {formData.visibility === "public" && "Alle Nutzer können diese Tour in der Übersicht sehen"}
+        </p>
       </div>
 
       <div className="flex gap-3 justify-end pt-4">
