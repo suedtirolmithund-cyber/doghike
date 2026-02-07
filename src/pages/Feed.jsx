@@ -20,46 +20,58 @@ export default function Feed() {
     enabled: !!user?.email
   });
 
+  const { data: followers = [] } = useQuery({
+    queryKey: ["followers"],
+    queryFn: () => base44.entities.UserFollow.filter({ following_email: user?.email }),
+    enabled: !!user?.email
+  });
+
+  // Get mutual friends (users who follow me AND I follow them)
   const followingEmails = following.map(f => f.following_email);
+  const followerEmails = followers.map(f => f.follower_email);
+  const mutualFriendEmails = followingEmails.filter(email => followerEmails.includes(email));
 
   const { data: followingHikes = [] } = useQuery({
-    queryKey: ["followingHikes", followingEmails],
+    queryKey: ["followingHikes", mutualFriendEmails],
     queryFn: async () => {
-      if (followingEmails.length === 0) return [];
+      if (mutualFriendEmails.length === 0) return [];
       const allHikes = await base44.entities.Hike.list("-created_date", 100);
-      return allHikes.filter(h => followingEmails.includes(h.created_by));
+      return allHikes.filter(h => 
+        mutualFriendEmails.includes(h.created_by) && 
+        (h.visibility === "friends" || h.visibility === "public")
+      );
     },
-    enabled: followingEmails.length > 0
+    enabled: mutualFriendEmails.length > 0
   });
 
   const { data: followingRoutes = [] } = useQuery({
-    queryKey: ["followingRoutes", followingEmails],
+    queryKey: ["followingRoutes", mutualFriendEmails],
     queryFn: async () => {
-      if (followingEmails.length === 0) return [];
+      if (mutualFriendEmails.length === 0) return [];
       const allRoutes = await base44.entities.UserRoute.filter({ is_public: true }, "-created_date", 100);
-      return allRoutes.filter(r => followingEmails.includes(r.created_by));
+      return allRoutes.filter(r => mutualFriendEmails.includes(r.created_by));
     },
-    enabled: followingEmails.length > 0
+    enabled: mutualFriendEmails.length > 0
   });
 
   const { data: followingComments = [] } = useQuery({
-    queryKey: ["followingComments", followingEmails],
+    queryKey: ["followingComments", mutualFriendEmails],
     queryFn: async () => {
-      if (followingEmails.length === 0) return [];
+      if (mutualFriendEmails.length === 0) return [];
       const allComments = await base44.entities.Comment.list("-created_date", 100);
-      return allComments.filter(c => followingEmails.includes(c.user_email));
+      return allComments.filter(c => mutualFriendEmails.includes(c.user_email));
     },
-    enabled: followingEmails.length > 0
+    enabled: mutualFriendEmails.length > 0
   });
 
   const { data: followingRatings = [] } = useQuery({
-    queryKey: ["followingRatings", followingEmails],
+    queryKey: ["followingRatings", mutualFriendEmails],
     queryFn: async () => {
-      if (followingEmails.length === 0) return [];
+      if (mutualFriendEmails.length === 0) return [];
       const allRatings = await base44.entities.Rating.list("-created_date", 100);
-      return allRatings.filter(r => followingEmails.includes(r.user_email));
+      return allRatings.filter(r => mutualFriendEmails.includes(r.user_email));
     },
-    enabled: followingEmails.length > 0
+    enabled: mutualFriendEmails.length > 0
   });
 
   const { data: allHikes = [] } = useQuery({
@@ -116,8 +128,8 @@ export default function Feed() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6 md:mb-8"
         >
-          <h1 className="text-2xl md:text-3xl font-light text-stone-800 mb-1">Community Feed</h1>
-          <p className="text-stone-500 text-sm md:text-base">Aktivitäten von Nutzern, denen du folgst</p>
+          <h1 className="text-2xl md:text-3xl font-light text-stone-800 mb-1">Freunde</h1>
+          <p className="text-stone-500 text-sm md:text-base">Aktivitäten deiner Freunde (gegenseitig folgen)</p>
         </motion.div>
 
         {following.length === 0 ? (
@@ -127,8 +139,8 @@ export default function Feed() {
             className="bg-white rounded-2xl p-8 md:p-12 border border-stone-200/50 text-center"
           >
             <Users className="w-16 h-16 text-stone-300 mx-auto mb-4" />
-            <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Follower</h3>
-            <p className="text-stone-500 mb-6">Folge anderen Nutzern, um ihre Aktivitäten hier zu sehen</p>
+            <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Freunde</h3>
+            <p className="text-stone-500 mb-6">Sende Freundschaftsanfragen, um Aktivitäten zu sehen</p>
             <Link to={createPageUrl("Profile")}>
               <Button className="bg-slate-800 hover:bg-slate-900">
                 <UserPlus className="w-4 h-4 mr-2" />
@@ -144,7 +156,7 @@ export default function Feed() {
           >
             <TrendingUp className="w-16 h-16 text-stone-300 mx-auto mb-4" />
             <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Aktivitäten</h3>
-            <p className="text-stone-500">Die Nutzer, denen du folgst, haben noch nichts gepostet</p>
+            <p className="text-stone-500">Deine Freunde haben noch nichts gepostet</p>
           </motion.div>
         ) : (
           <div className="space-y-4">
