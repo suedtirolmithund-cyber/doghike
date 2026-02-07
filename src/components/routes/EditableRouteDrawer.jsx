@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { MapContainer, TileLayer, Polyline, Marker, useMapEvents, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Polyline, Marker, useMapEvents, Popup, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
-import { Undo, Trash2, Save, Loader2, Edit2, Move, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Undo, Trash2, Save, Loader2, Edit2, Move, X, Search } from "lucide-react";
 import RouteElevationProfile from "./RouteElevationProfile";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -88,7 +89,19 @@ function DraggableMarker({ position, index, isEditing, onDrag, onDelete }) {
   );
 }
 
-function RouteDrawerMap({ waypoints, setWaypoints, routeCoordinates, isEditing }) {
+function MapCenterController({ center }) {
+  const map = useMap();
+  
+  useEffect(() => {
+    if (center) {
+      map.setView(center, 13);
+    }
+  }, [center, map]);
+  
+  return null;
+}
+
+function RouteDrawerMap({ waypoints, setWaypoints, routeCoordinates, isEditing, searchCenter }) {
   useMapEvents({
     click: (e) => {
       if (!isEditing) {
@@ -110,6 +123,7 @@ function RouteDrawerMap({ waypoints, setWaypoints, routeCoordinates, isEditing }
 
   return (
     <>
+      {searchCenter && <MapCenterController center={searchCenter} />}
       {routeCoordinates.length > 1 && (
         <Polyline positions={routeCoordinates} color="#1e293b" weight={4} opacity={0.7} />
       )}
@@ -133,6 +147,10 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
   const [isCalculating, setIsCalculating] = useState(false);
   const [routeDistance, setRouteDistance] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchCenter, setSearchCenter] = useState(null);
   const mapRef = useRef();
 
   // Fetch route from OSRM API
@@ -213,8 +231,72 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
     });
   };
 
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) return;
+    
+    setIsSearching(true);
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchQuery)}&format=json&limit=5&countrycodes=it,at,de`
+      );
+      const data = await response.json();
+      setSearchResults(data);
+    } catch (error) {
+      console.error('Suchfehler:', error);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleSelectLocation = (result) => {
+    const lat = parseFloat(result.lat);
+    const lon = parseFloat(result.lon);
+    setSearchCenter([lat, lon]);
+    setSearchResults([]);
+    setSearchQuery("");
+  };
+
   return (
     <div className="space-y-3 md:space-y-4">
+      {/* Ortssuche */}
+      <div className="bg-blue-50 rounded-lg p-3 md:p-4 border border-blue-200">
+        <p className="font-medium text-xs md:text-sm text-stone-800 mb-2">🔍 Ort suchen</p>
+        <div className="flex gap-2">
+          <Input
+            placeholder="z.B. Pragser Wildsee, Drei Zinnen..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+            className="flex-1"
+          />
+          <Button
+            onClick={handleSearch}
+            disabled={isSearching || !searchQuery.trim()}
+            size="sm"
+          >
+            {isSearching ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Search className="w-4 h-4" />
+            )}
+          </Button>
+        </div>
+        
+        {searchResults.length > 0 && (
+          <div className="mt-2 space-y-1 max-h-40 overflow-y-auto">
+            {searchResults.map((result, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleSelectLocation(result)}
+                className="w-full text-left p-2 text-xs md:text-sm bg-white rounded border border-blue-200 hover:bg-blue-50 transition-colors"
+              >
+                <p className="font-medium text-stone-800">{result.display_name}</p>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
       <div className="bg-slate-100 rounded-lg p-3 md:p-4">
         <div className="flex items-start justify-between mb-2">
           <div>
@@ -277,6 +359,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
             setWaypoints={setWaypoints}
             routeCoordinates={routeCoordinates}
             isEditing={isEditing}
+            searchCenter={searchCenter}
           />
         </MapContainer>
         
