@@ -1,10 +1,25 @@
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Mountain, Map, PawPrint, Home, Trophy, Navigation, Dog } from "lucide-react";
+import { Mountain, Map, PawPrint, Home, Trophy, Navigation, Dog, Bell } from "lucide-react";
 import { motion } from "framer-motion";
+import { base44 } from "@/api/base44Client";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
+
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => base44.auth.me(),
+  });
+
+  const { data: notifications = [] } = useQuery({
+    queryKey: ["notifications"],
+    queryFn: () => base44.entities.Notification.filter({ recipient_email: user?.email }, "-created_date", 100),
+    enabled: !!user?.email
+  });
+
+  const unreadCount = notifications.filter(n => !n.is_read).length;
 
   const navItems = [
     { name: "Dashboard", icon: Home, label: "Startseite" },
@@ -57,6 +72,24 @@ export default function Layout({ children, currentPageName }) {
               </Link>
             );
           })}
+          <Link
+            to={createPageUrl("Notifications")}
+            className={`flex flex-col items-center gap-1.5 px-3 py-2 rounded-xl transition-all relative ${
+              isActive("Notifications")
+                ? "text-slate-800 bg-slate-100" 
+                : "text-stone-500 hover:text-stone-700 hover:bg-stone-50"
+            }`}
+          >
+            <Bell className={`w-6 h-6 ${isActive("Notifications") ? "stroke-[2.5]" : "stroke-[2]"}`} />
+            <span className={`text-[10px] font-medium ${isActive("Notifications") ? "" : "opacity-80"}`}>
+              Neu
+            </span>
+            {unreadCount > 0 && (
+              <span className="absolute top-1 right-1 bg-red-600 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </span>
+            )}
+          </Link>
         </div>
       </nav>
 
@@ -96,6 +129,22 @@ export default function Layout({ children, currentPageName }) {
                   </Link>
                 );
               })}
+              <Link
+                to={createPageUrl("Notifications")}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all relative ${
+                  isActive("Notifications")
+                    ? "bg-slate-800 text-white shadow-md"
+                    : "text-stone-600 hover:text-stone-800 hover:bg-stone-100"
+                }`}
+              >
+                <Bell className={`w-4 h-4 ${isActive("Notifications") ? "stroke-[2.5]" : ""}`} />
+                <span className="text-sm font-medium">Benachrichtigungen</span>
+                {unreadCount > 0 && (
+                  <span className="bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </Link>
             </div>
           </div>
         </div>
