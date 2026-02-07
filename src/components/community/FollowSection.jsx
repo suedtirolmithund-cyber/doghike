@@ -58,7 +58,6 @@ export default function FollowSection() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["sentRequests"] });
-      setSearchEmail("");
     }
   });
 
@@ -110,6 +109,7 @@ export default function FollowSection() {
     const alreadySent = sentRequests.some(r => r.to_email === searchEmail && r.status === "pending");
     if (alreadyFollowing || alreadySent) return;
     sendRequestMutation.mutate(searchEmail);
+    setSearchEmail("");
   };
 
   const isFollowing = (email) => following.some(f => f.following_email === email);
