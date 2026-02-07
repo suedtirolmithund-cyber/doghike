@@ -22,7 +22,7 @@ export default function SubmitHike() {
     date: new Date().toISOString().split("T")[0],
     distance_km: "",
     elevation_gain_m: "",
-    duration_minutes: "",
+    duration_hours: "",
     difficulty: "moderate",
     dog_difficulty: "moderate",
     season: "all_year",
@@ -38,13 +38,57 @@ export default function SubmitHike() {
     dogs: [],
     submitted_by_name: "",
     submitted_by_email: "",
-    status: "pending"
+    status: "pending",
+    photo_consent: false
   });
 
-  const { data: allDogs = [] } = useQuery({
-    queryKey: ["allDogs"],
-    queryFn: () => base44.entities.Dog.list()
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => base44.auth.me()
   });
+
+  const { data: myDogs = [] } = useQuery({
+    queryKey: ["myDogs"],
+    queryFn: async () => {
+      if (!user?.email) return [];
+      return base44.entities.Dog.filter({ created_by: user.email });
+    },
+    enabled: !!user?.email
+  });
+
+  const { data: following = [] } = useQuery({
+    queryKey: ["following"],
+    queryFn: async () => {
+      if (!user?.email) return [];
+      return base44.entities.UserFollow.filter({ follower_email: user.email });
+    },
+    enabled: !!user?.email
+  });
+
+  const { data: followers = [] } = useQuery({
+    queryKey: ["followers"],
+    queryFn: async () => {
+      if (!user?.email) return [];
+      return base44.entities.UserFollow.filter({ following_email: user.email });
+    },
+    enabled: !!user?.email
+  });
+
+  const followingEmails = following.map(f => f.following_email);
+  const followerEmails = followers.map(f => f.follower_email);
+  const mutualFriendEmails = followingEmails.filter(email => followerEmails.includes(email));
+
+  const { data: friendsDogs = [] } = useQuery({
+    queryKey: ["friendsDogs", mutualFriendEmails],
+    queryFn: async () => {
+      if (mutualFriendEmails.length === 0) return [];
+      const allDogs = await base44.entities.Dog.list();
+      return allDogs.filter(dog => mutualFriendEmails.includes(dog.created_by));
+    },
+    enabled: mutualFriendEmails.length > 0
+  });
+
+  const availableDogs = [...myDogs, ...friendsDogs];
 
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.Hike.create(data),
@@ -320,30 +364,35 @@ export default function SubmitHike() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="duration">Gehzeit (Minuten)</Label>
+                <Label htmlFor="duration">Gehzeit (Stunden)</Label>
                 <Input
                   id="duration"
                   type="number"
-                  value={formData.duration_minutes}
-                  onChange={(e) => setFormData({ ...formData, duration_minutes: e.target.value })}
-                  placeholder="240"
+                  step="0.5"
+                  value={formData.duration_hours}
+                  onChange={(e) => setFormData({ ...formData, duration_hours: e.target.value })}
+                  placeholder="4"
                 />
               </div>
 
             </div>
 
             <div className="space-y-2">
-              <Label>📍 Ausgangspunkt auf der Karte wählen</Label>
-              <div className="border border-stone-200 rounded-xl overflow-hidden">
+              <Label>📍 Ausgangspunkt auf der Karte wählen *</Label>
+              <div className="border-2 border-stone-200 rounded-xl overflow-hidden">
                 <StartPointPicker
                   initialPosition={formData.latitude && formData.longitude ? [formData.latitude, formData.longitude] : null}
                   onLocationSelect={handleStartPointSelect}
                   height="300px"
                 />
               </div>
-              {formData.latitude && formData.longitude && (
-                <p className="text-xs text-stone-500">
-                  Startpunkt: {formData.latitude.toFixed(4)}, {formData.longitude.toFixed(4)}
+              {formData.latitude && formData.longitude ? (
+                <p className="text-xs text-green-600 flex items-center gap-1">
+                  ✓ Startpunkt: {formData.latitude.toFixed(4)}, {formData.longitude.toFixed(4)}
+                </p>
+              ) : (
+                <p className="text-xs text-amber-600">
+                  Bitte klicke auf die Karte, um den Ausgangspunkt zu markieren
                 </p>
               )}
             </div>
@@ -370,31 +419,41 @@ export default function SubmitHike() {
               </div>
             </div>
 
-            {allDogs.length > 0 && (
+            {availableDogs.length > 0 && (
               <div className="space-y-3">
                 <Label>🐕 Welche Hunde waren dabei?</Label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {allDogs.map((dog) => (
-                    <div
-                      key={dog.id}
-                      className="flex items-center gap-3 p-3 rounded-lg border border-stone-200 hover:bg-stone-50 cursor-pointer"
-                      onClick={() => toggleDog(dog.id)}
-                    >
-                      <Checkbox
-                        checked={formData.dogs.includes(dog.id)}
-                        onCheckedChange={() => toggleDog(dog.id)}
-                      />
-                      <img
-                        src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
-                        alt={dog.name}
-                        className="w-10 h-10 rounded-full object-cover"
-                      />
-                      <div className="flex-1">
-                        <p className="font-medium text-stone-800">{dog.name}</p>
-                        {dog.breed && <p className="text-xs text-stone-500">{dog.breed}</p>}
+                  {availableDogs.map((dog) => {
+                    const isMyDog = myDogs.some(d => d.id === dog.id);
+                    return (
+                      <div
+                        key={dog.id}
+                        className="flex items-center gap-3 p-3 rounded-lg border border-stone-200 hover:bg-stone-50 cursor-pointer"
+                        onClick={() => toggleDog(dog.id)}
+                      >
+                        <Checkbox
+                          checked={formData.dogs.includes(dog.id)}
+                          onCheckedChange={() => toggleDog(dog.id)}
+                        />
+                        <img
+                          src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
+                          alt={dog.name}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                        <div className="flex-1">
+                          <p className="font-medium text-stone-800">{dog.name}</p>
+                          <div className="flex items-center gap-2">
+                            {dog.breed && <p className="text-xs text-stone-500">{dog.breed}</p>}
+                            {!isMyDog && (
+                              <span className="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
+                                Freund
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -483,6 +542,24 @@ export default function SubmitHike() {
                 rows={5}
               />
             </div>
+
+            {formData.photos.length > 0 && (
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                <div className="flex items-start gap-3">
+                  <Checkbox
+                    id="photo_consent"
+                    checked={formData.photo_consent}
+                    onCheckedChange={(checked) => setFormData({ ...formData, photo_consent: checked })}
+                    className="mt-1"
+                  />
+                  <div className="flex-1">
+                    <Label htmlFor="photo_consent" className="cursor-pointer font-normal text-sm text-stone-700">
+                      Ich bestätige, dass ich die Rechte an den hochgeladenen Fotos besitze und mit der öffentlichen Veröffentlichung auf dieser Plattform einverstanden bin. Die Fotos können von anderen Nutzern eingesehen werden. *
+                    </Label>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="flex gap-3 justify-end pt-4">
               <Link to={createPageUrl("Dashboard")}>
