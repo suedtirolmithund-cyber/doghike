@@ -29,32 +29,13 @@ export default function Dashboard() {
     queryFn: () => base44.entities.Dog.list()
   });
 
-  const getCurrentSeason = () => {
-    const month = new Date().getMonth() + 1;
-    if (month >= 12 || month <= 2) return "winter";
-    if (month >= 3 && month <= 5) return "spring";
-    if (month >= 6 && month <= 8) return "summer";
-    return "autumn";
-  };
-
   const filteredHikes = hikes.filter((hike) => {
     if (!searchQuery) return true;
     return hike.trail_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     hike.location?.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
-  const currentSeason = getCurrentSeason();
-
-  const sortedHikes = [...filteredHikes].sort((a, b) => {
-    const aMatchesSeason = a.season === currentSeason || a.season === "all_year";
-    const bMatchesSeason = b.season === currentSeason || b.season === "all_year";
-    
-    if (aMatchesSeason && !bMatchesSeason) return -1;
-    if (!aMatchesSeason && bMatchesSeason) return 1;
-    return new Date(b.date) - new Date(a.date);
-  });
-
-  const recentHikes = sortedHikes.slice(0, 6);
+  const recentHikes = filteredHikes.slice(0, 6);
   const hikesWithCoords = filteredHikes.filter((h) => h.latitude && h.longitude);
 
   return (
@@ -145,7 +126,7 @@ Getestet mit unseren Vierbeinern
                 </Button>
               </Link>
             </div>
-            <HikeMap hikes={hikesWithCoords} height="350px" showLegend={true} center={[46.5, 11.9]} zoom={9} />
+            <HikeMap hikes={hikesWithCoords} height="350px" showLegend={true} useCluster={true} />
           </motion.div>
         }
 
