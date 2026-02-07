@@ -22,7 +22,7 @@ export default function SubmitHike() {
     date: new Date().toISOString().split("T")[0],
     distance_km: "",
     elevation_gain_m: "",
-    duration_hours: "",
+    duration_minutes: "",
     difficulty: "moderate",
     dog_difficulty: "moderate",
     season: "all_year",
@@ -155,10 +155,9 @@ export default function SubmitHike() {
       ...formData,
       distance_km: formData.distance_km ? Number(formData.distance_km) : null,
       elevation_gain_m: formData.elevation_gain_m ? Number(formData.elevation_gain_m) : null,
-      duration_minutes: formData.duration_hours ? Number(formData.duration_hours) * 60 : null,
+      duration_minutes: formData.duration_minutes ? Number(formData.duration_minutes) : null,
       rating: formData.rating ? Number(formData.rating) : null
     };
-    delete dataToSave.duration_hours;
     delete dataToSave.photo_consent;
 
     createMutation.mutate(dataToSave);
@@ -376,14 +375,13 @@ export default function SubmitHike() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="duration">Gehzeit (Stunden)</Label>
+                <Label htmlFor="duration">Gehzeit (Minuten)</Label>
                 <Input
                   id="duration"
                   type="number"
-                  step="0.5"
-                  value={formData.duration_hours}
-                  onChange={(e) => setFormData({ ...formData, duration_hours: e.target.value })}
-                  placeholder="4"
+                  value={formData.duration_minutes}
+                  onChange={(e) => setFormData({ ...formData, duration_minutes: e.target.value })}
+                  placeholder="240"
                 />
               </div>
 
