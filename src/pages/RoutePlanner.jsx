@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Map, Navigation, Loader2 } from "lucide-react";
-import RouteDrawer from "@/components/routes/RouteDrawer";
+import EditableRouteDrawer from "@/components/routes/EditableRouteDrawer";
 import GPSTracker from "@/components/routes/GPSTracker";
 import RoutePreviewMap from "@/components/routes/RoutePreviewMap";
 import { motion } from "framer-motion";
@@ -116,7 +116,7 @@ export default function RoutePlanner() {
             </TabsList>
 
             <TabsContent value="draw" className="space-y-6">
-              <RouteDrawer onSave={handleRouteSave} />
+              <EditableRouteDrawer onSave={handleRouteSave} initialRoute={routeGeometry?.coordinates || []} />
             </TabsContent>
 
             <TabsContent value="track" className="space-y-6">

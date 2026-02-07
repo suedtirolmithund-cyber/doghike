@@ -3,10 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { Users, Mountain, MessageCircle, Star, Calendar, TrendingUp, UserPlus } from "lucide-react";
+import { Users, Mountain, MessageCircle, Star, Calendar, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
+import FollowSection from "@/components/community/FollowSection";
 
 export default function Feed() {
   const { data: user } = useQuery({
@@ -129,26 +130,21 @@ export default function Feed() {
           className="mb-6 md:mb-8"
         >
           <h1 className="text-2xl md:text-3xl font-light text-stone-800 mb-1">Freunde</h1>
-          <p className="text-stone-500 text-sm md:text-base">Aktivitäten deiner Freunde (gegenseitig folgen)</p>
+          <p className="text-stone-500 text-sm md:text-base">Verwalte deine Freundschaften und sehe deren Aktivitäten</p>
         </motion.div>
 
-        {following.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-2xl p-8 md:p-12 border border-stone-200/50 text-center"
-          >
-            <Users className="w-16 h-16 text-stone-300 mx-auto mb-4" />
-            <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Freunde</h3>
-            <p className="text-stone-500 mb-6">Sende Freundschaftsanfragen, um Aktivitäten zu sehen</p>
-            <Link to={createPageUrl("Profile")}>
-              <Button className="bg-slate-800 hover:bg-slate-900">
-                <UserPlus className="w-4 h-4 mr-2" />
-                Nutzern folgen
-              </Button>
-            </Link>
-          </motion.div>
-        ) : activities.length === 0 ? (
+        <FollowSection />
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mt-8"
+        >
+          <h2 className="text-xl font-semibold text-stone-800 mb-4">Aktivitäten deiner Freunde</h2>
+        </motion.div>
+
+        {activities.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

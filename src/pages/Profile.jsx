@@ -2,7 +2,7 @@ import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Edit, Trash2, Bookmark, MapPin, LogIn, UserPlus, Trophy, Users, TrendingUp, LogOut } from "lucide-react";
+import { Plus, Edit, Trash2, Bookmark, MapPin, LogIn, UserPlus, Trophy, TrendingUp, LogOut } from "lucide-react";
 import { format, differenceInYears, differenceInMonths } from "date-fns";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import DogForm from "@/components/forms/DogForm";
 import HikeCard from "@/components/hikes/HikeCard";
-import FollowSection from "@/components/community/FollowSection";
 import UserRouteCard from "@/components/routes/UserRouteCard";
 
 export default function Profile() {
@@ -292,7 +291,6 @@ export default function Profile() {
              <TabsList className="bg-white border border-stone-200/50 gap-1 inline-flex min-w-full justify-start md:justify-center">
                <TabsTrigger value="dogs" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">🐕 Hunde</TabsTrigger>
                <TabsTrigger value="routes" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">🗺️ Routen</TabsTrigger>
-               <TabsTrigger value="community" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">👥 Community</TabsTrigger>
                <TabsTrigger value="saved" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">💾 Gespeichert</TabsTrigger>
                <TabsTrigger value="private" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">🔒 Privat</TabsTrigger>
                <TabsTrigger value="submitted" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">✓ Veröff.</TabsTrigger>
@@ -472,11 +470,6 @@ export default function Profile() {
                 </Link>
               </div>
             )}
-          </TabsContent>
-
-          {/* Community Tab */}
-          <TabsContent value="community">
-            <FollowSection />
           </TabsContent>
 
           {/* Saved Hikes Tab */}
