@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import StartPointPicker from "@/components/map/StartPointPicker";
 
 export default function SubmitHike() {
   const [submitted, setSubmitted] = useState(false);
@@ -29,13 +31,19 @@ export default function SubmitHike() {
     parking_info: "",
     restaurant_info: "",
     photos: [],
-    latitude: "",
-    longitude: "",
+    latitude: null,
+    longitude: null,
     notes: "",
     rating: 5,
+    dogs: [],
     submitted_by_name: "",
     submitted_by_email: "",
     status: "pending"
+  });
+
+  const { data: allDogs = [] } = useQuery({
+    queryKey: ["allDogs"],
+    queryFn: () => base44.entities.Dog.list()
   });
 
   const createMutation = useMutation({
@@ -69,6 +77,23 @@ export default function SubmitHike() {
     }));
   };
 
+  const handleStartPointSelect = (lat, lng) => {
+    setFormData(prev => ({
+      ...prev,
+      latitude: lat,
+      longitude: lng
+    }));
+  };
+
+  const toggleDog = (dogId) => {
+    setFormData(prev => ({
+      ...prev,
+      dogs: prev.dogs.includes(dogId)
+        ? prev.dogs.filter(id => id !== dogId)
+        : [...prev.dogs, dogId]
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -77,10 +102,7 @@ export default function SubmitHike() {
       distance_km: formData.distance_km ? Number(formData.distance_km) : null,
       elevation_gain_m: formData.elevation_gain_m ? Number(formData.elevation_gain_m) : null,
       duration_minutes: formData.duration_minutes ? Number(formData.duration_minutes) : null,
-      latitude: formData.latitude ? Number(formData.latitude) : null,
-      longitude: formData.longitude ? Number(formData.longitude) : null,
-      rating: formData.rating ? Number(formData.rating) : null,
-      dogs: []
+      rating: formData.rating ? Number(formData.rating) : null
     };
 
     createMutation.mutate(dataToSave);
@@ -308,29 +330,22 @@ export default function SubmitHike() {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="latitude">Breitengrad (Ausgangspunkt)</Label>
-                <Input
-                  id="latitude"
-                  type="number"
-                  step="any"
-                  value={formData.latitude}
-                  onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
-                  placeholder="46.6185"
-                />
-              </div>
+            </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="longitude">Längengrad (Ausgangspunkt)</Label>
-                <Input
-                  id="longitude"
-                  type="number"
-                  step="any"
-                  value={formData.longitude}
-                  onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
-                  placeholder="12.3024"
+            <div className="space-y-2">
+              <Label>📍 Ausgangspunkt auf der Karte wählen</Label>
+              <div className="border border-stone-200 rounded-xl overflow-hidden">
+                <StartPointPicker
+                  initialPosition={formData.latitude && formData.longitude ? [formData.latitude, formData.longitude] : null}
+                  onLocationSelect={handleStartPointSelect}
+                  height="300px"
                 />
               </div>
+              {formData.latitude && formData.longitude && (
+                <p className="text-xs text-stone-500">
+                  Startpunkt: {formData.latitude.toFixed(4)}, {formData.longitude.toFixed(4)}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -354,6 +369,35 @@ export default function SubmitHike() {
                 ))}
               </div>
             </div>
+
+            {allDogs.length > 0 && (
+              <div className="space-y-3">
+                <Label>🐕 Welche Hunde waren dabei?</Label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {allDogs.map((dog) => (
+                    <div
+                      key={dog.id}
+                      className="flex items-center gap-3 p-3 rounded-lg border border-stone-200 hover:bg-stone-50 cursor-pointer"
+                      onClick={() => toggleDog(dog.id)}
+                    >
+                      <Checkbox
+                        checked={formData.dogs.includes(dog.id)}
+                        onCheckedChange={() => toggleDog(dog.id)}
+                      />
+                      <img
+                        src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
+                        alt={dog.name}
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                      <div className="flex-1">
+                        <p className="font-medium text-stone-800">{dog.name}</p>
+                        {dog.breed && <p className="text-xs text-stone-500">{dog.breed}</p>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="space-y-3">
               <Label>Fotos</Label>
