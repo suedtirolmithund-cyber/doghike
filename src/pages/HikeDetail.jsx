@@ -25,6 +25,8 @@ import {
 import HikeMap from "@/components/map/HikeMap";
 import RouteProfile from "@/components/hikes/RouteProfile";
 import WeatherWidget from "@/components/weather/WeatherWidget";
+import HikeWeatherInfo from "@/components/weather/HikeWeatherInfo";
+import InteractiveHikeMap from "@/components/hikes/InteractiveHikeMap";
 import SaveButton from "@/components/hikes/SaveButton";
 import CommentSection from "@/components/community/CommentSection";
 import RatingSection from "@/components/community/RatingSection";
@@ -257,14 +259,53 @@ export default function HikeDetail() {
           )}
         </motion.div>
 
+        {/* Interactive Map - Full Width */}
+        {hike.latitude && hike.longitude && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.11 }}
+            className="mb-10"
+          >
+            <h2 className="text-2xl font-semibold text-stone-800 mb-4">
+              {hike.route_coordinates?.length > 0 ? "🗺️ Interaktive Karte & Routenverlauf" : "📍 Ausgangspunkt"}
+            </h2>
+            <InteractiveHikeMap
+              latitude={hike.latitude}
+              longitude={hike.longitude}
+              routeCoordinates={hike.route_coordinates}
+              trailName={hike.trail_name}
+              location={hike.location}
+            />
+          </motion.div>
+        )}
+
         {/* Route Profile - Full Width */}
         {hike.route_coordinates && hike.route_coordinates.length > 1 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12 }}
+            className="mb-10"
           >
             <RouteProfile hike={hike} />
+          </motion.div>
+        )}
+
+        {/* Weather Info - Full Width */}
+        {hike.latitude && hike.longitude && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.13 }}
+            className="mb-10"
+          >
+            <HikeWeatherInfo
+              location={hike.location}
+              date={hike.date}
+              latitude={hike.latitude}
+              longitude={hike.longitude}
+            />
           </motion.div>
         )}
 
@@ -411,15 +452,6 @@ export default function HikeDetail() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Weather Widget */}
-            {hike.latitude && hike.longitude && (
-              <WeatherWidget
-                location={hike.location}
-                latitude={hike.latitude}
-                longitude={hike.longitude}
-              />
-            )}
-
             {/* Rating Section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -428,27 +460,6 @@ export default function HikeDetail() {
             >
               <RatingSection hikeId={hikeId} />
             </motion.div>
-
-            {/* Map */}
-            {hike.latitude && hike.longitude && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                <h2 className="text-lg font-medium text-stone-800 mb-3">
-                  {hike.route_coordinates?.length > 0 ? "Routenverlauf" : "Ausgangspunkt"}
-                </h2>
-                <HikeMap
-                  hikes={[hike]}
-                  center={[hike.latitude, hike.longitude]}
-                  zoom={12}
-                  height="300px"
-                  fitBounds={hike.route_coordinates?.length > 1}
-                  showLegend={false}
-                />
-              </motion.div>
-            )}
           </div>
         </div>
       </div>
