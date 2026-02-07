@@ -141,13 +141,25 @@ export default function SubmitHike() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    if (!formData.latitude || !formData.longitude) {
+      alert("Bitte wähle den Ausgangspunkt auf der Karte aus!");
+      return;
+    }
+
+    if (!formData.photo_consent && formData.photos.length > 0) {
+      alert("Bitte bestätige, dass du mit der öffentlichen Veröffentlichung der Fotos einverstanden bist!");
+      return;
+    }
+    
     const dataToSave = {
       ...formData,
       distance_km: formData.distance_km ? Number(formData.distance_km) : null,
       elevation_gain_m: formData.elevation_gain_m ? Number(formData.elevation_gain_m) : null,
-      duration_minutes: formData.duration_minutes ? Number(formData.duration_minutes) : null,
+      duration_minutes: formData.duration_hours ? Number(formData.duration_hours) * 60 : null,
       rating: formData.rating ? Number(formData.rating) : null
     };
+    delete dataToSave.duration_hours;
+    delete dataToSave.photo_consent;
 
     createMutation.mutate(dataToSave);
   };
