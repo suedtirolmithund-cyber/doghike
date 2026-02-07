@@ -29,6 +29,7 @@ import WeatherWidget from "@/components/weather/WeatherWidget";
 import SaveButton from "@/components/hikes/SaveButton";
 import CommentSection from "@/components/community/CommentSection";
 import RatingSection from "@/components/community/RatingSection";
+import FollowButton from "@/components/community/FollowButton";
 
 const difficultyColors = {
   "1": "bg-emerald-100 text-emerald-700",
