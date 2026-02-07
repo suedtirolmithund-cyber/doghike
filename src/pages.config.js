@@ -57,12 +57,15 @@ import HikeDetail from './pages/HikeDetail';
 import Hikes from './pages/Hikes';
 import Legal from './pages/Legal';
 import MapView from './pages/MapView';
+import Notifications from './pages/Notifications';
 import Profile from './pages/Profile';
 import RouteDetail from './pages/RouteDetail';
 import RoutePlanner from './pages/RoutePlanner';
 import SubmitHike from './pages/SubmitHike';
 import TopDogs from './pages/TopDogs';
-import Notifications from './pages/Notifications';
+import Impressum from './pages/Impressum';
+import Datenschutz from './pages/Datenschutz';
+import Support from './pages/Support';
 import __Layout from './Layout.jsx';
 
 
@@ -77,12 +80,15 @@ export const PAGES = {
     "Hikes": Hikes,
     "Legal": Legal,
     "MapView": MapView,
+    "Notifications": Notifications,
     "Profile": Profile,
     "RouteDetail": RouteDetail,
     "RoutePlanner": RoutePlanner,
     "SubmitHike": SubmitHike,
     "TopDogs": TopDogs,
-    "Notifications": Notifications,
+    "Impressum": Impressum,
+    "Datenschutz": Datenschutz,
+    "Support": Support,
 }
 
 export const pagesConfig = {
