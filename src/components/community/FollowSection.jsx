@@ -63,7 +63,7 @@ export default function FollowSection() {
 
   const acceptRequestMutation = useMutation({
     mutationFn: async (request) => {
-      await base44.entities.FollowRequest.update(request.id, { status: "accepted" });
+      // Erstelle gegenseitige Freundschaft
       await base44.entities.UserFollow.create({
         follower_email: request.from_email,
         following_email: request.to_email,
@@ -74,9 +74,12 @@ export default function FollowSection() {
         following_email: request.from_email,
         following_name: request.from_name
       });
+      // Lösche die Anfrage komplett
+      await base44.entities.FollowRequest.delete(request.id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["receivedRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["sentRequests"] });
       queryClient.invalidateQueries({ queryKey: ["following"] });
       queryClient.invalidateQueries({ queryKey: ["followers"] });
     }
@@ -84,22 +87,34 @@ export default function FollowSection() {
 
   const rejectRequestMutation = useMutation({
     mutationFn: async (requestId) => {
-      return base44.entities.FollowRequest.update(requestId, { status: "rejected" });
+      // Lösche die Anfrage komplett statt sie nur abzulehnen
+      return base44.entities.FollowRequest.delete(requestId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["receivedRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["sentRequests"] });
     }
   });
 
   const unfollowMutation = useMutation({
     mutationFn: async (targetEmail) => {
-      const followRecord = following.find(f => f.following_email === targetEmail);
-      if (followRecord) {
-        return base44.entities.UserFollow.delete(followRecord.id);
+      // Lösche beide Richtungen der Freundschaft
+      const myFollowRecord = following.find(f => f.following_email === targetEmail);
+      const theirFollowRecords = await base44.entities.UserFollow.filter({ 
+        follower_email: targetEmail, 
+        following_email: user.email 
+      });
+      
+      if (myFollowRecord) {
+        await base44.entities.UserFollow.delete(myFollowRecord.id);
+      }
+      if (theirFollowRecords.length > 0) {
+        await base44.entities.UserFollow.delete(theirFollowRecords[0].id);
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["following"] });
+      queryClient.invalidateQueries({ queryKey: ["followers"] });
     }
   });
 
