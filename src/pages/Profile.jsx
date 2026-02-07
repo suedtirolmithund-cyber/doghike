@@ -288,14 +288,14 @@ export default function Profile() {
 
         {/* Tabs */}
          <Tabs defaultValue="dogs" className="space-y-4 md:space-y-6">
-           <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
-             <TabsList className="bg-white border border-stone-200/50 md:flex-wrap md:h-auto gap-1 inline-flex w-full md:w-auto">
-               <TabsTrigger value="dogs" className="text-xs md:text-sm whitespace-nowrap">🐕 Hunde</TabsTrigger>
-               <TabsTrigger value="routes" className="text-xs md:text-sm whitespace-nowrap">🗺️ Routen</TabsTrigger>
-               <TabsTrigger value="community" className="text-xs md:text-sm whitespace-nowrap">👥 Community</TabsTrigger>
-               <TabsTrigger value="saved" className="text-xs md:text-sm whitespace-nowrap">💾 Gespeichert</TabsTrigger>
-               <TabsTrigger value="private" className="text-xs md:text-sm whitespace-nowrap">🔒 Privat</TabsTrigger>
-               <TabsTrigger value="submitted" className="text-xs md:text-sm whitespace-nowrap">✓ Veröff.</TabsTrigger>
+           <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 scrollbar-hide">
+             <TabsList className="bg-white border border-stone-200/50 gap-1 inline-flex min-w-full justify-start md:justify-center">
+               <TabsTrigger value="dogs" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">🐕 Hunde</TabsTrigger>
+               <TabsTrigger value="routes" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">🗺️ Routen</TabsTrigger>
+               <TabsTrigger value="community" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">👥 Community</TabsTrigger>
+               <TabsTrigger value="saved" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">💾 Gespeichert</TabsTrigger>
+               <TabsTrigger value="private" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">🔒 Privat</TabsTrigger>
+               <TabsTrigger value="submitted" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">✓ Veröff.</TabsTrigger>
              </TabsList>
            </div>
 
