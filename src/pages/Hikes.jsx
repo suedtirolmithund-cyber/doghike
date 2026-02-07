@@ -149,6 +149,7 @@ export default function Hikes() {
               fitBounds={true}
               showLegend={true}
               zoom={searchQuery || difficultyFilter !== "all" || dogDifficultyFilter !== "all" ? 12 : 9}
+              useCluster={true}
             />
           </motion.div>
         )}
