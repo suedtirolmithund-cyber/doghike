@@ -1,20 +1,48 @@
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { Users, Mountain, MessageCircle, Star, Calendar, TrendingUp } from "lucide-react";
+import { Users, Mountain, MessageCircle, Star, Calendar, TrendingUp, Bell, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import FollowSection from "@/components/community/FollowSection";
 import HikeCard from "@/components/hikes/HikeCard";
 
 export default function Feed() {
+  const queryClient = useQueryClient();
+
   const { data: user } = useQuery({
     queryKey: ["user"],
     queryFn: () => base44.auth.me(),
   });
+
+  const { data: notifications = [] } = useQuery({
+    queryKey: ["notifications"],
+    queryFn: () => base44.entities.Notification.filter({ recipient_email: user?.email }, "-created_date", 100),
+    enabled: !!user?.email
+  });
+
+  const markAsReadMutation = useMutation({
+    mutationFn: (id) => base44.entities.Notification.update(id, { is_read: true }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    }
+  });
+
+  const markAllAsReadMutation = useMutation({
+    mutationFn: async () => {
+      const unread = notifications.filter(n => !n.is_read);
+      await Promise.all(unread.map(n => base44.entities.Notification.update(n.id, { is_read: true })));
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    }
+  });
+
+  const unreadCount = notifications.filter(n => !n.is_read).length;
 
   const { data: following = [] } = useQuery({
     queryKey: ["following"],
@@ -135,14 +163,32 @@ export default function Feed() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6 md:mb-8"
         >
-          <h1 className="text-2xl md:text-3xl font-light text-stone-800 mb-1">Freunde</h1>
-          <p className="text-stone-500 text-sm md:text-base">Verwalte deine Freundschaften und sehe deren Aktivitäten</p>
+          <h1 className="text-2xl md:text-3xl font-light text-stone-800 mb-1">Freunde & Benachrichtigungen</h1>
+          <p className="text-stone-500 text-sm md:text-base">Verwalte deine Freundschaften, Aktivitäten und Benachrichtigungen</p>
         </motion.div>
 
-        <FollowSection />
+        <Tabs defaultValue="friends" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="friends">
+              <Users className="w-4 h-4 mr-2" />
+              Freunde
+            </TabsTrigger>
+            <TabsTrigger value="notifications" className="relative">
+              <Bell className="w-4 h-4 mr-2" />
+              Benachrichtigungen
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </TabsTrigger>
+          </TabsList>
 
-        {/* Hikes Section */}
-        {followingHikes.length > 0 && (
+          <TabsContent value="friends">
+            <FollowSection />
+
+            {/* Hikes Section */}
+            {followingHikes.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -168,123 +214,210 @@ export default function Feed() {
         </motion.div>
 
         {activities.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-2xl p-8 border border-stone-200/50 text-center"
-          >
-            <TrendingUp className="w-16 h-16 text-stone-300 mx-auto mb-4" />
-            <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Aktivitäten</h3>
-            <p className="text-stone-500">Deine Freunde haben noch nichts gepostet</p>
-          </motion.div>
-        ) : (
-          <div className="space-y-4">
-            {activities.map((activity, index) => (
               <motion.div
-                key={`${activity.type}-${activity.data.id}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                className="bg-white rounded-xl p-3 md:p-6 border border-stone-200 hover:shadow-md transition-shadow"
+                className="bg-white rounded-2xl p-8 border border-stone-200/50 text-center"
               >
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0">
-                    {activity.type === 'hike' && (
-                      <div className="w-8 h-8 md:w-10 md:h-10 bg-green-100 rounded-full flex items-center justify-center">
-                        <Mountain className="w-4 h-4 md:w-5 md:h-5 text-green-600" />
-                      </div>
-                    )}
-                    {activity.type === 'route' && (
-                      <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <Mountain className="w-4 h-4 md:w-5 md:h-5 text-blue-600" />
-                      </div>
-                    )}
-                    {activity.type === 'comment' && (
-                      <div className="w-8 h-8 md:w-10 md:h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                        <MessageCircle className="w-4 h-4 md:w-5 md:h-5 text-purple-600" />
-                      </div>
-                    )}
-                    {activity.type === 'rating' && (
-                      <div className="w-8 h-8 md:w-10 md:h-10 bg-yellow-100 rounded-full flex items-center justify-center">
-                        <Star className="w-4 h-4 md:w-5 md:h-5 text-yellow-600" />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-stone-600 mb-1">
-                      <span className="font-semibold text-stone-800">{activity.user}</span>
-                      {activity.type === 'hike' && ' hat eine neue Tour erstellt'}
-                      {activity.type === 'route' && ' hat eine neue Route geplant'}
-                      {activity.type === 'comment' && ' hat kommentiert'}
-                      {activity.type === 'rating' && ' hat bewertet'}
-                    </p>
-
-                    {activity.type === 'hike' && (
-                      <Link to={createPageUrl(`HikeDetail?id=${activity.data.id}`)}>
-                        <h3 className="text-base md:text-lg font-semibold text-stone-800 hover:text-slate-700 mb-1">
-                          {activity.data.trail_name}
-                        </h3>
-                        <p className="text-xs md:text-sm text-stone-500">
-                          📍 {activity.data.location} • {activity.data.distance_km} km
-                        </p>
-                      </Link>
-                    )}
-
-                    {activity.type === 'route' && (
-                      <Link to={createPageUrl(`RouteDetail?id=${activity.data.id}`)}>
-                        <h3 className="text-base md:text-lg font-semibold text-stone-800 hover:text-slate-700 mb-1">
-                          {activity.data.name}
-                        </h3>
-                        <p className="text-xs md:text-sm text-stone-500">
-                          📏 {activity.data.distance_km} km
-                        </p>
-                      </Link>
-                    )}
-
-                    {activity.type === 'comment' && activity.hike && (
-                      <div>
-                        <Link to={createPageUrl(`HikeDetail?id=${activity.data.hike_id}`)}>
-                          <p className="text-sm text-stone-600 hover:text-slate-700 mb-1">
-                            zu <span className="font-medium">{activity.hike.trail_name}</span>
-                          </p>
-                        </Link>
-                        <p className="text-sm text-stone-700 bg-stone-50 rounded-lg p-3 mt-2 line-clamp-3">
-                          {activity.data.text}
-                        </p>
-                      </div>
-                    )}
-
-                    {activity.type === 'rating' && activity.hike && (
-                      <Link to={createPageUrl(`HikeDetail?id=${activity.data.hike_id}`)}>
-                        <p className="text-sm text-stone-600 hover:text-slate-700">
-                          <span className="font-medium">{activity.hike.trail_name}</span>
-                        </p>
-                        <div className="flex items-center gap-1 mt-1">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-4 h-4 ${
-                                i < activity.data.rating
-                                  ? "fill-yellow-400 text-yellow-400"
-                                  : "text-stone-300"
-                              }`}
-                            />
-                          ))}
-                        </div>
-                      </Link>
-                    )}
-
-                    <p className="text-xs text-stone-400 mt-2 flex items-center gap-1">
-                      <Calendar className="w-3 h-3" />
-                      {format(activity.date, "d. MMMM yyyy, HH:mm", { locale: de })}
-                    </p>
-                  </div>
-                </div>
+                <TrendingUp className="w-16 h-16 text-stone-300 mx-auto mb-4" />
+                <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Aktivitäten</h3>
+                <p className="text-stone-500">Deine Freunde haben noch nichts gepostet</p>
               </motion.div>
-            ))}
-          </div>
-        )}
+            ) : (
+              <div className="space-y-4">
+                {activities.map((activity, index) => (
+                  <motion.div
+                    key={`${activity.type}-${activity.data.id}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    className="bg-white rounded-xl p-3 md:p-6 border border-stone-200 hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0">
+                        {activity.type === 'hike' && (
+                          <div className="w-8 h-8 md:w-10 md:h-10 bg-green-100 rounded-full flex items-center justify-center">
+                            <Mountain className="w-4 h-4 md:w-5 md:h-5 text-green-600" />
+                          </div>
+                        )}
+                        {activity.type === 'route' && (
+                          <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                            <Mountain className="w-4 h-4 md:w-5 md:h-5 text-blue-600" />
+                          </div>
+                        )}
+                        {activity.type === 'comment' && (
+                          <div className="w-8 h-8 md:w-10 md:h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                            <MessageCircle className="w-4 h-4 md:w-5 md:h-5 text-purple-600" />
+                          </div>
+                        )}
+                        {activity.type === 'rating' && (
+                          <div className="w-8 h-8 md:w-10 md:h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                            <Star className="w-4 h-4 md:w-5 md:h-5 text-yellow-600" />
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-stone-600 mb-1">
+                          <span className="font-semibold text-stone-800">{activity.user}</span>
+                          {activity.type === 'hike' && ' hat eine neue Tour erstellt'}
+                          {activity.type === 'route' && ' hat eine neue Route geplant'}
+                          {activity.type === 'comment' && ' hat kommentiert'}
+                          {activity.type === 'rating' && ' hat bewertet'}
+                        </p>
+
+                        {activity.type === 'hike' && (
+                          <Link to={createPageUrl(`HikeDetail?id=${activity.data.id}`)}>
+                            <h3 className="text-base md:text-lg font-semibold text-stone-800 hover:text-slate-700 mb-1">
+                              {activity.data.trail_name}
+                            </h3>
+                            <p className="text-xs md:text-sm text-stone-500">
+                              📍 {activity.data.location} • {activity.data.distance_km} km
+                            </p>
+                          </Link>
+                        )}
+
+                        {activity.type === 'route' && (
+                          <Link to={createPageUrl(`RouteDetail?id=${activity.data.id}`)}>
+                            <h3 className="text-base md:text-lg font-semibold text-stone-800 hover:text-slate-700 mb-1">
+                              {activity.data.name}
+                            </h3>
+                            <p className="text-xs md:text-sm text-stone-500">
+                              📏 {activity.data.distance_km} km
+                            </p>
+                          </Link>
+                        )}
+
+                        {activity.type === 'comment' && activity.hike && (
+                          <div>
+                            <Link to={createPageUrl(`HikeDetail?id=${activity.data.hike_id}`)}>
+                              <p className="text-sm text-stone-600 hover:text-slate-700 mb-1">
+                                zu <span className="font-medium">{activity.hike.trail_name}</span>
+                              </p>
+                            </Link>
+                            <p className="text-sm text-stone-700 bg-stone-50 rounded-lg p-3 mt-2 line-clamp-3">
+                              {activity.data.text}
+                            </p>
+                          </div>
+                        )}
+
+                        {activity.type === 'rating' && activity.hike && (
+                          <Link to={createPageUrl(`HikeDetail?id=${activity.data.hike_id}`)}>
+                            <p className="text-sm text-stone-600 hover:text-slate-700">
+                              <span className="font-medium">{activity.hike.trail_name}</span>
+                            </p>
+                            <div className="flex items-center gap-1 mt-1">
+                              {[...Array(5)].map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`w-4 h-4 ${
+                                    i < activity.data.rating
+                                      ? "fill-yellow-400 text-yellow-400"
+                                      : "text-stone-300"
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                          </Link>
+                        )}
+
+                        <p className="text-xs text-stone-400 mt-2 flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          {format(activity.date, "d. MMMM yyyy, HH:mm", { locale: de })}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="notifications">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-stone-800">Deine Benachrichtigungen</h2>
+              {unreadCount > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => markAllAsReadMutation.mutate()}
+                >
+                  <Check className="w-4 h-4 mr-2" />
+                  Alle als gelesen
+                </Button>
+              )}
+            </div>
+
+            {notifications.length === 0 ? (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-2xl p-8 border border-stone-200/50 text-center"
+              >
+                <Bell className="w-16 h-16 text-stone-300 mx-auto mb-4" />
+                <h3 className="text-xl font-medium text-stone-700 mb-2">Keine Benachrichtigungen</h3>
+                <p className="text-stone-500">Du hast noch keine Benachrichtigungen erhalten</p>
+              </motion.div>
+            ) : (
+              <div className="space-y-3">
+                {notifications.map((notification, index) => (
+                  <motion.div
+                    key={notification.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    onClick={() => !notification.is_read && markAsReadMutation.mutate(notification.id)}
+                    className={`bg-white rounded-xl p-4 border transition-all cursor-pointer ${
+                      notification.is_read 
+                        ? "border-stone-200 hover:shadow-sm" 
+                        : "border-slate-300 shadow-sm hover:shadow-md bg-slate-50"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
+                        notification.type === 'follow_request' ? 'bg-blue-100' :
+                        notification.type === 'follow_accepted' ? 'bg-green-100' :
+                        notification.type === 'hike_comment' ? 'bg-purple-100' :
+                        notification.type === 'hike_rating' ? 'bg-yellow-100' :
+                        notification.type === 'route_comment' ? 'bg-purple-100' :
+                        notification.type === 'route_like' ? 'bg-pink-100' :
+                        'bg-stone-100'
+                      }`}>
+                        {notification.type === 'follow_request' && <Users className="w-5 h-5 text-blue-600" />}
+                        {notification.type === 'follow_accepted' && <Users className="w-5 h-5 text-green-600" />}
+                        {notification.type === 'hike_comment' && <MessageCircle className="w-5 h-5 text-purple-600" />}
+                        {notification.type === 'hike_rating' && <Star className="w-5 h-5 text-yellow-600" />}
+                        {notification.type === 'route_comment' && <MessageCircle className="w-5 h-5 text-purple-600" />}
+                        {notification.type === 'route_like' && <Star className="w-5 h-5 text-pink-600" />}
+                      </div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-stone-800 mb-1">
+                          {notification.sender_name && (
+                            <span className="font-semibold">{notification.sender_name} </span>
+                          )}
+                          {notification.message}
+                        </p>
+                        {notification.related_title && (
+                          <p className="text-sm text-stone-600 font-medium mt-1">
+                            {notification.related_title}
+                          </p>
+                        )}
+                        <p className="text-xs text-stone-400 mt-2">
+                          {format(new Date(notification.created_date), "d. MMM yyyy, HH:mm", { locale: de })}
+                        </p>
+                      </div>
+
+                      {!notification.is_read && (
+                        <div className="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-2" />
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
