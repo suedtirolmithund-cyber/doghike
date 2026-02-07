@@ -2,7 +2,7 @@ import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Edit, Trash2, Bookmark, MapPin, LogIn, UserPlus, Trophy, Users, TrendingUp } from "lucide-react";
+import { Plus, Edit, Trash2, Bookmark, MapPin, LogIn, UserPlus, Trophy, Users, TrendingUp, LogOut } from "lucide-react";
 import { format, differenceInYears, differenceInMonths } from "date-fns";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -236,10 +236,20 @@ export default function Profile() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 md:mb-8"
+          className="mb-6 md:mb-8 flex items-center justify-between"
         >
-          <h1 className="text-2xl md:text-3xl font-light text-stone-800">Mein Profil</h1>
-          <p className="text-stone-500 mt-1 text-sm md:text-base">Deine Hunde, Touren und Erinnerungen</p>
+          <div>
+            <h1 className="text-2xl md:text-3xl font-light text-stone-800">Mein Profil</h1>
+            <p className="text-stone-500 mt-1 text-sm md:text-base">Deine Hunde, Touren und Erinnerungen</p>
+          </div>
+          <Button
+            variant="outline"
+            onClick={() => base44.auth.logout()}
+            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+          >
+            <LogOut className="w-4 h-4 md:mr-2" />
+            <span className="hidden md:inline">Abmelden</span>
+          </Button>
         </motion.div>
 
         {/* Stats Overview */}
