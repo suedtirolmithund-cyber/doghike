@@ -9,7 +9,7 @@ export default function Layout({ children, currentPageName }) {
   const navItems = [
     { name: "Dashboard", icon: Home, label: "Startseite" },
     { name: "Hikes", icon: Mountain, label: "Alle Touren" },
-    { name: "Feed", icon: PawPrint, label: "Community Feed" },
+    { name: "Feed", icon: PawPrint, label: "Freunde" },
     { name: "MapView", icon: Map, label: "Kartenansicht" },
     { name: "RoutePlanner", icon: Navigation, label: "Routenplaner" },
     { name: "TopDogs", icon: Trophy, label: "Top Dogs" },

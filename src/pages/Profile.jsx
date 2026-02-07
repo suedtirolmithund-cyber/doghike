@@ -288,7 +288,7 @@ export default function Profile() {
 
         {/* Tabs */}
          <Tabs defaultValue="dogs" className="space-y-4 md:space-y-6">
-           <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 scrollbar-hide">
+           <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
              <TabsList className="bg-white border border-stone-200/50 gap-1 inline-flex min-w-full justify-start md:justify-center">
                <TabsTrigger value="dogs" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">🐕 Hunde</TabsTrigger>
                <TabsTrigger value="routes" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">🗺️ Routen</TabsTrigger>
