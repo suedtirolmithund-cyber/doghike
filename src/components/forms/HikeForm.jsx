@@ -276,14 +276,13 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="duration">Gehzeit (Stunden)</Label>
+          <Label htmlFor="duration">Gehzeit (Minuten)</Label>
           <Input
             id="duration"
             type="number"
-            step="0.5"
-            value={formData.duration_minutes ? (formData.duration_minutes / 60).toFixed(1) : ""}
-            onChange={(e) => setFormData({ ...formData, duration_minutes: e.target.value ? Math.round(parseFloat(e.target.value) * 60) : "" })}
-            placeholder="4.0"
+            value={formData.duration_minutes}
+            onChange={(e) => setFormData({ ...formData, duration_minutes: e.target.value })}
+            placeholder="240"
           />
         </div>
       </div>
