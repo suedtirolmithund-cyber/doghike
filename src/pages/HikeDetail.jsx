@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import HikeMap from "@/components/map/HikeMap";
 import RouteProfile from "@/components/hikes/RouteProfile";
-import OfflineDownload from "@/components/hikes/OfflineDownload";
 import WeatherWidget from "@/components/weather/WeatherWidget";
 import SaveButton from "@/components/hikes/SaveButton";
 import CommentSection from "@/components/community/CommentSection";
@@ -142,7 +141,6 @@ export default function HikeDetail() {
           </Link>
           <div className="flex gap-2 flex-wrap">
             <SaveButton hikeId={hikeId} />
-            <OfflineDownload hike={hike} dogs={hikeDogs} />
             <Link to={createPageUrl("EditHike") + `?id=${hikeId}`}>
               <Button variant="ghost" className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20">
                 <Edit className="w-4 h-4" />
