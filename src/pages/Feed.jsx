@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import FollowSection from "@/components/community/FollowSection";
+import HikeCard from "@/components/hikes/HikeCard";
 
 export default function Feed() {
   const { data: user } = useQuery({
@@ -80,6 +81,11 @@ export default function Feed() {
     queryFn: () => base44.entities.Hike.list()
   });
 
+  const { data: dogs = [] } = useQuery({
+    queryKey: ["dogs"],
+    queryFn: () => base44.entities.Dog.list()
+  });
+
   if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 flex items-center justify-center p-6">
@@ -135,10 +141,27 @@ export default function Feed() {
 
         <FollowSection />
 
+        {/* Hikes Section */}
+        {followingHikes.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mt-8 mb-8"
+          >
+            <h2 className="text-xl font-semibold text-stone-800 mb-4">Touren deiner Freunde</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {followingHikes.map((hike, index) => (
+                <HikeCard key={hike.id} hike={hike} dogs={dogs} index={index} />
+              ))}
+            </div>
+          </motion.div>
+        )}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.3 }}
           className="mt-8"
         >
           <h2 className="text-xl font-semibold text-stone-800 mb-4">Aktivitäten deiner Freunde</h2>

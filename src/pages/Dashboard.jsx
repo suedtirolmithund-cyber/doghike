@@ -21,7 +21,7 @@ export default function Dashboard() {
 
   const { data: hikes = [], isLoading: hikesLoading } = useQuery({
     queryKey: ["hikes"],
-    queryFn: () => base44.entities.Hike.filter({ status: "approved" }, "-date", 1000)
+    queryFn: () => base44.entities.Hike.filter({ visibility: "public" }, "-date", 1000)
   });
 
   const { data: dogs = [], isLoading: dogsLoading } = useQuery({
@@ -126,7 +126,7 @@ Getestet mit unseren Vierbeinern
                 </Button>
               </Link>
             </div>
-            <HikeMap hikes={hikesWithCoords} height="350px" showLegend={true} useCluster={true} />
+            <HikeMap hikes={hikesWithCoords} height="350px" showLegend={true} center={[46.5, 11.9]} zoom={9} />
           </motion.div>
         }
 
