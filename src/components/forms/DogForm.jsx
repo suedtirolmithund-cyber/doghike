@@ -12,7 +12,9 @@ export default function DogForm({ dog, onSave, onCancel }) {
     breed: "",
     photo_url: "",
     birth_date: "",
-    notes: ""
+    notes: "",
+    favorite_food: "",
+    character: ""
   });
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -102,14 +104,36 @@ export default function DogForm({ dog, onSave, onCancel }) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="notes">Beschreibung</Label>
+        <Label htmlFor="notes">Lieblingsroute</Label>
         <Textarea
           id="notes"
           value={formData.notes}
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-          placeholder="Lieblingsrouten, Besonderheiten, Trainingsnotizen..."
+          placeholder="z.B. Pragser Wildsee Rundweg, Drei Zinnen..."
           rows={3}
         />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <Label htmlFor="favorite_food">Lieblingsfutter</Label>
+          <Input
+            id="favorite_food"
+            value={formData.favorite_food}
+            onChange={(e) => setFormData({ ...formData, favorite_food: e.target.value })}
+            placeholder="z.B. Leberwurst, Käse..."
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="character">Charakter</Label>
+          <Input
+            id="character"
+            value={formData.character}
+            onChange={(e) => setFormData({ ...formData, character: e.target.value })}
+            placeholder="z.B. verspielt, ruhig, aktiv..."
+          />
+        </div>
       </div>
 
       <div className="flex gap-3 justify-end pt-4">
