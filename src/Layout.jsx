@@ -10,7 +10,6 @@ export default function Layout({ children, currentPageName }) {
     { name: "Dashboard", icon: Home, label: "Startseite" },
     { name: "Hikes", icon: Mountain, label: "Alle Touren" },
     { name: "Feed", icon: PawPrint, label: "Freunde" },
-    { name: "MapView", icon: Map, label: "Kartenansicht" },
     { name: "RoutePlanner", icon: Navigation, label: "Routenplaner" },
     { name: "TopDogs", icon: Trophy, label: "Top Dogs" },
     { name: "Profile", icon: Dog, label: "Mein Profil" },
