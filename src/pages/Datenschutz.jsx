@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { ArrowLeft, Shield, Lock, Eye, Database } from "lucide-react";
+import { ArrowLeft, Shield, Lock, Eye, Database, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Datenschutz() {
