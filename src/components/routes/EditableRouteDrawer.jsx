@@ -165,7 +165,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
     try {
       const coords = points.map(p => `${p[1]},${p[0]}`).join(';');
       const response = await fetch(
-        `https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`
+        `https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson&alternatives=true`
       );
       const data = await response.json();
       
@@ -303,6 +303,9 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
             <p className="font-medium text-xs md:text-sm text-stone-800 mb-1">📍 Routenplaner</p>
             <p className="text-xs text-stone-600">
               {isEditing ? 'Ziehe Wegpunkte um sie zu verschieben' : 'Klicke auf die Karte um Wegpunkte zu setzen'}
+            </p>
+            <p className="text-xs text-blue-600 mt-1">
+              🥾 Route nutzt Wanderwege wo möglich
             </p>
           </div>
           {waypoints.length >= 2 && (
