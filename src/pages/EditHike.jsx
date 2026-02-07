@@ -34,8 +34,12 @@ export default function EditHike() {
   const updateMutation = useMutation({
     mutationFn: (data) => base44.entities.Hike.update(hikeId, data),
     onSuccess: () => {
+      // Invalidiere alle relevanten Queries, damit Änderungen überall sichtbar werden
       queryClient.invalidateQueries({ queryKey: ["hikes"] });
       queryClient.invalidateQueries({ queryKey: ["hike", hikeId] });
+      queryClient.invalidateQueries({ queryKey: ["myHikes"] });
+      queryClient.invalidateQueries({ queryKey: ["followingHikes"] });
+      queryClient.invalidateQueries({ queryKey: ["savedHikesData"] });
       navigate(createPageUrl("HikeDetail") + `?id=${hikeId}`);
     }
   });

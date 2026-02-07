@@ -49,7 +49,11 @@ export default function AddHike() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) => base44.entities.Hike.create({ ...data, status: "draft" }),
+    mutationFn: (data) => {
+      // Setze Status basierend auf Sichtbarkeit
+      const status = data.visibility === "public" ? "draft" : "draft";
+      return base44.entities.Hike.create({ ...data, status });
+    },
     onSuccess: (newHike) => {
       queryClient.invalidateQueries({ queryKey: ["hikes"] });
       queryClient.invalidateQueries({ queryKey: ["myHikes"] });

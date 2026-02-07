@@ -614,11 +614,18 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
         />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="visibility">Sichtbarkeit der Tour</Label>
+      <div className="space-y-2 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+        <Label htmlFor="visibility" className="text-base font-semibold">Sichtbarkeit der Tour</Label>
         <Select
           value={formData.visibility}
-          onValueChange={(value) => setFormData({ ...formData, visibility: value })}
+          onValueChange={(value) => {
+            if (hike && hike.visibility === "public" && value !== "public") {
+              if (!confirm("⚠️ Diese Tour ist aktuell öffentlich. Wenn du sie auf privat oder nur für Freunde änderst, wird sie aus der öffentlichen Liste entfernt. Möchtest du fortfahren?")) {
+                return;
+              }
+            }
+            setFormData({ ...formData, visibility: value });
+          }}
         >
           <SelectTrigger>
             <SelectValue placeholder="Wählen" />
@@ -629,11 +636,16 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
             <SelectItem value="public">🌍 Öffentlich (für alle sichtbar)</SelectItem>
           </SelectContent>
         </Select>
-        <p className="text-xs text-stone-500 mt-1">
-          {formData.visibility === "private" && "Nur du kannst diese Tour sehen"}
-          {formData.visibility === "friends" && "Nur Freunde, denen du folgst oder die dir folgen, können diese Tour sehen"}
-          {formData.visibility === "public" && "Alle Nutzer können diese Tour in der Übersicht sehen"}
+        <p className="text-xs text-stone-600 mt-2 bg-white p-2 rounded border border-amber-300">
+          {formData.visibility === "private" && "🔒 Nur du kannst diese Tour sehen"}
+          {formData.visibility === "friends" && "👥 Nur Freunde (gegenseitiges Folgen) können diese Tour sehen"}
+          {formData.visibility === "public" && "🌍 Alle Nutzer können diese Tour in der öffentlichen Übersicht sehen"}
         </p>
+        {hike && hike.visibility === "public" && formData.visibility !== "public" && (
+          <p className="text-xs text-red-600 font-medium mt-2">
+            ⚠️ Achtung: Du änderst die Sichtbarkeit von öffentlich - die Tour wird dann aus der öffentlichen Liste entfernt!
+          </p>
+        )}
       </div>
 
       <div className="flex gap-3 justify-end pt-4">
