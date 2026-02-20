@@ -153,7 +153,8 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
   const [searchCenter, setSearchCenter] = useState(null);
   const mapRef = useRef();
 
-  // Fetch route from OSRM API
+  // Fetch route using GraphHopper public API with hiking profile
+  // Uses OSM data, prefers marked hiking trails (foot-hiking), allows side paths
   const fetchRoute = async (points) => {
     if (points.length < 2) {
       setRouteCoordinates(points);
@@ -163,12 +164,39 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
 
     setIsCalculating(true);
     try {
-      const coords = points.map(p => `${p[1]},${p[0]}`).join(';');
+      // Build GraphHopper request - foot_hiking prefers designated hiking trails
+      // but also uses footpaths and side trails
+      const pointsParam = points.map(p => `point=${p[0]},${p[1]}`).join('&');
       const response = await fetch(
-        `https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson&alternatives=true`
+        `https://graphhopper.com/api/1/route?${pointsParam}&profile=foot&locale=de&calc_points=true&instructions=false&points_encoded=false&details=road_class&details=track_type&key=LijBPDQGfu7Iiq80ebFCtWMuznIa7Ca3pbXHQnrCn1M8`
       );
       const data = await response.json();
-      
+
+      if (data.paths && data.paths[0]) {
+        const path = data.paths[0];
+        const coordinates = path.points.coordinates.map(c => [c[1], c[0]]);
+        setRouteCoordinates(coordinates);
+        setRouteDistance((path.distance / 1000).toFixed(2));
+      } else {
+        // Fallback: try OSRM
+        await fetchRouteOSRM(points);
+      }
+    } catch (error) {
+      console.error('GraphHopper routing error, falling back to OSRM:', error);
+      await fetchRouteOSRM(points);
+    } finally {
+      setIsCalculating(false);
+    }
+  };
+
+  // OSRM fallback
+  const fetchRouteOSRM = async (points) => {
+    try {
+      const coords = points.map(p => `${p[1]},${p[0]}`).join(';');
+      const response = await fetch(
+        `https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`
+      );
+      const data = await response.json();
       if (data.code === 'Ok' && data.routes && data.routes[0]) {
         const route = data.routes[0];
         const coordinates = route.geometry.coordinates.map(c => [c[1], c[0]]);
@@ -178,12 +206,9 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
         setRouteCoordinates(points);
         setRouteDistance(calculateDistance(points));
       }
-    } catch (error) {
-      console.error('Routing error:', error);
+    } catch {
       setRouteCoordinates(points);
       setRouteDistance(calculateDistance(points));
-    } finally {
-      setIsCalculating(false);
     }
   };
 
