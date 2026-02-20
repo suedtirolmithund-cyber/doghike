@@ -126,13 +126,7 @@ Getestet mit unseren Vierbeinern
                 </Button>
               </Link>
             </div>
-            <HikeMap 
-              hikes={hikesWithCoords} 
-              height={typeof window !== "undefined" && window.innerWidth < 768 ? "280px" : "380px"} 
-              showLegend={true} 
-              autoFit={true}
-              useCluster={true}
-            />
+            <HikeMap hikes={hikesWithCoords} height="350px" showLegend={true} center={[46.5, 11.9]} zoom={9} />
           </motion.div>
         }
 
