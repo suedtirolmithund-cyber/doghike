@@ -35,7 +35,6 @@ export default function Dashboard() {
     hike.location?.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
-  const recentHikes = filteredHikes.slice(0, 6);
   const hikesWithCoords = filteredHikes.filter((h) => h.latitude && h.longitude);
 
   return (
