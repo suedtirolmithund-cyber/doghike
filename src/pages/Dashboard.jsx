@@ -162,9 +162,9 @@ Getestet mit unseren Vierbeinern
             </div>
           </div>
           
-          {recentHikes.length > 0 ?
+          {filteredHikes.length > 0 ?
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {recentHikes.map((hike, index) =>
+              {filteredHikes.map((hike, index) =>
             <HikeCard key={hike.id} hike={hike} dogs={dogs} index={index} />
             )}
             </div> :
@@ -179,6 +179,17 @@ Getestet mit unseren Vierbeinern
               <p className="text-stone-500 mb-6">Bald findest du hier tolle Wanderungen!</p>
             </motion.div>
           }
+
+          {/* Bottom CTA */}
+          <div className="mt-10 text-center">
+            <Link to={createPageUrl("Hikes")}>
+              <Button size="lg" className="bg-slate-800 hover:bg-slate-900 text-white shadow-md">
+                <Mountain className="w-5 h-5 mr-2" />
+                Alle Touren entdecken
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>);
