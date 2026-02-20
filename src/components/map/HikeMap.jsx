@@ -221,8 +221,8 @@ export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, hei
               <span>🌸 Frühling</span>
             </div>
             <div className="flex items-center gap-2 text-xs">
-              <span className="w-4 h-4 rounded-full bg-green-500"></span>
-              <span>🍃 Ganzjährig</span>
+              <span className="w-4 h-4 rounded-full bg-red-500"></span>
+              <span>☀️ Sommer</span>
             </div>
             <div className="flex items-center gap-2 text-xs">
               <span className="w-4 h-4 rounded-full bg-orange-500"></span>
@@ -231,6 +231,10 @@ export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, hei
             <div className="flex items-center gap-2 text-xs">
               <span className="w-4 h-4 rounded-full bg-blue-500"></span>
               <span>❄️ Winter</span>
+            </div>
+            <div className="flex items-center gap-2 text-xs">
+              <span className="w-4 h-4 rounded-full bg-green-500"></span>
+              <span>🍃 Ganzjährig</span>
             </div>
           </div>
         </div>
