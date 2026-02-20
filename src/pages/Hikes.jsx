@@ -19,7 +19,7 @@ export default function Hikes() {
 
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["hikes"],
-    queryFn: () => base44.entities.Hike.filter({ visibility: "public" }, "-date", 1000)
+    queryFn: () => base44.entities.Hike.filter({ visibility: "public", status: "approved" }, "-date", 1000)
   });
 
   const { data: dogs = [] } = useQuery({
