@@ -295,6 +295,7 @@ export default function Profile() {
                <TabsTrigger value="saved" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">💾 Gespeichert</TabsTrigger>
                <TabsTrigger value="private" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">🔒 Privat</TabsTrigger>
                <TabsTrigger value="submitted" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">✓ Veröff.</TabsTrigger>
+               <TabsTrigger value="settings" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">⚙️ Konto</TabsTrigger>
              </TabsList>
            </div>
 
