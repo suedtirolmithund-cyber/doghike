@@ -168,7 +168,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
       // but also uses footpaths and side trails
       const pointsParam = points.map(p => `point=${p[0]},${p[1]}`).join('&');
       const response = await fetch(
-        `https://graphhopper.com/api/1/route?${pointsParam}&profile=foot&locale=de&calc_points=true&instructions=false&points_encoded=false&details=road_class&details=track_type&key=LijBPDQGfu7Iiq80ebFCtWMuznIa7Ca3pbXHQnrCn1M8`
+        `https://graphhopper.com/api/1/route?${pointsParam}&profile=hike&locale=de&calc_points=true&instructions=false&points_encoded=false&key=LijBPDQGfu7Iiq80ebFCtWMuznIa7Ca3pbXHQnrCn1M8`
       );
       const data = await response.json();
 
