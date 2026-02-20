@@ -194,7 +194,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
     try {
       const coords = points.map(p => `${p[1]},${p[0]}`).join(';');
       const response = await fetch(
-        `https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`
+        `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${coords}?overview=full&geometries=geojson`
       );
       const data = await response.json();
       if (data.code === 'Ok' && data.routes && data.routes[0]) {
