@@ -565,6 +565,16 @@ export default function Profile() {
               </div>
             )}
           </TabsContent>
+
+          {/* Account Settings Tab */}
+          <TabsContent value="settings">
+            <div className="mb-4 md:mb-6">
+              <h2 className="text-lg md:text-xl font-medium text-stone-800 mb-1">Kontoeinstellungen</h2>
+              <p className="text-stone-500 text-sm">Profildaten ändern, Datenschutz, Konto löschen</p>
+            </div>
+            <AccountSettings user={user} />
+          </TabsContent>
+
         </Tabs>
       </div>
 
