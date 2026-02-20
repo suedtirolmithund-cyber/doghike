@@ -12,7 +12,7 @@ import "leaflet.markercluster";
 // Season colors and icons
 const seasonConfig = {
   spring: { color: "#ec4899", emoji: "🌸", label: "Frühling" },
-  summer: { color: "#22c55e", emoji: "☀️", label: "Sommer" },
+  summer: { color: "#ef4444", emoji: "☀️", label: "Sommer" },
   autumn: { color: "#f97316", emoji: "🍂", label: "Herbst" },
   winter: { color: "#3b82f6", emoji: "❄️", label: "Winter" },
   all_year: { color: "#22c55e", emoji: "🍃", label: "Ganzjährig" }
