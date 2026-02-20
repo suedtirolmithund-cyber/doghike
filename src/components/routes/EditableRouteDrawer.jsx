@@ -125,7 +125,7 @@ function RouteDrawerMap({ waypoints, setWaypoints, routeCoordinates, isEditing, 
     <>
       {searchCenter && <MapCenterController center={searchCenter} />}
       {routeCoordinates.length > 1 && (
-        <Polyline positions={routeCoordinates} color="#1e293b" weight={4} opacity={0.7} />
+        <Polyline positions={routeCoordinates} color="#ef4444" weight={4} opacity={0.8} />
       )}
       {waypoints.map((point, idx) => (
         <DraggableMarker
