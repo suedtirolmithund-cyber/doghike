@@ -21,15 +21,39 @@ export default function Legal() {
           </div>
           <p className="text-xs text-stone-400 mb-8">Letzte Aktualisierung: Februar 2026</p>
 
-          {/* Wichtiger Hinweis oben */}
-          <div className="bg-amber-50 border border-amber-300 rounded-2xl p-4 mb-8 flex gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-            <div>
-              <p className="font-semibold text-amber-800 mb-1">Wichtiger Hinweis vor jeder Wanderung</p>
-              <p className="text-sm text-amber-700">
-                Diese App ersetzt <strong>keine</strong> alpine Erfahrung, keine professionelle Beratung und kein offizielles Kartenmaterial. Wandern in den Bergen birgt Risiken. Sei gut vorbereitet, beachte das Wetter und kehre im Zweifel um.
+          {/* Haupthinweis – prominent */}
+          <div className="bg-slate-800 text-white rounded-2xl p-5 mb-6">
+            <div className="flex gap-3 items-start">
+              <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+              <p className="text-sm md:text-base leading-relaxed">
+                <strong>Alle Touren erfolgen auf eigene Verantwortung.</strong> Wir übernehmen keine Haftung für Unfälle, Schäden oder falsche Angaben.
               </p>
             </div>
+          </div>
+
+          {/* Aktuelle Gefahren / Bedingungen */}
+          <div className="bg-amber-50 border border-amber-300 rounded-2xl p-4 mb-8">
+            <p className="font-semibold text-amber-800 mb-3 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4" /> Bedingungen können sich jederzeit ändern
+            </p>
+            <ul className="space-y-2 text-sm text-amber-800">
+              <li className="flex items-start gap-2">
+                <span className="mt-0.5">❄️</span>
+                <span><strong>Lawinengefahr:</strong> Immer den aktuellen Lawinenlagebericht prüfen, besonders im Winter und Frühling.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-0.5">🚧</span>
+                <span><strong>Sperrungen:</strong> Wege können gesperrt sein (Forstarbeiten, Erosion, Unwetterschäden). Hinweisschilder vor Ort beachten.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-0.5">⚠️</span>
+                <span><strong>Wege nicht gewartet:</strong> Nicht alle Wege werden regelmäßig instand gehalten. Markierungen können fehlen oder überwachsen sein.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-0.5">🌦️</span>
+                <span><strong>Wetterwechsel:</strong> Bergwetter kann sich innerhalb von Minuten ändern. Immer aktuelle Vorhersage prüfen.</span>
+              </li>
+            </ul>
           </div>
 
           <div className="space-y-6 md:space-y-8">
