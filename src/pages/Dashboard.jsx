@@ -65,9 +65,25 @@ export default function Dashboard() {
       <div className="relative overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80')"
-          }} />
+          style={{ backgroundImage: `url('${heroImage}')` }}
+        />
+
+        {/* Upload button - only for admins */}
+        {user?.role === "admin" && (
+          <div className="absolute top-20 right-4 z-20">
+            <input ref={heroInputRef} type="file" accept="image/*" className="hidden" onChange={handleHeroUpload} />
+            <Button
+              size="sm"
+              variant="outline"
+              className="bg-white/20 border-white/40 text-white hover:bg-white/30 backdrop-blur-sm"
+              onClick={() => heroInputRef.current.click()}
+              disabled={isUploadingHero}
+            >
+              {isUploadingHero ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <ImagePlus className="w-4 h-4 mr-2" />}
+              Bild ändern
+            </Button>
+          </div>
+        )}
 
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-stone-50" />
         
