@@ -93,9 +93,9 @@ export default function RouteEditor({ coordinates = [], startPoint = null, onCha
             <>
               <Polyline
                 positions={coordinates}
-                color="#3b82f6"
+                color="#ef4444"
                 weight={4}
-                opacity={0.7}
+                opacity={0.8}
               />
               {coordinates.map((coord, idx) => (
                 <Marker
