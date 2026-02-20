@@ -190,17 +190,52 @@ export default function Legal() {
               </div>
             </section>
 
-            {/* Nutzergenerierte Inhalte */}
+            {/* Moderation */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3">
-                Nutzergenerierte Inhalte
+              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+                <Shield className="w-5 h-5 text-slate-600" />
+                7. Moderation & Veröffentlichung
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
-                  Nutzer sind selbst dafür verantwortlich, dass ihre Beiträge (Fotos, Texte, Routen) keine Rechte Dritter verletzen, der Wahrheit entsprechen und keine anderen Personen gefährden.
+                  Der Betreiber behält sich das Recht vor, alle eingereichten Inhalte (Touren, Fotos, Kommentare, Routen) <strong>vor oder nach der Veröffentlichung zu prüfen und ohne Angabe von Gründen zu löschen</strong>, insbesondere wenn sie:
                 </p>
+                <ul className="list-disc pl-6 space-y-1">
+                  <li>unrichtige oder gefährliche Informationen enthalten,</li>
+                  <li>Rechte Dritter verletzen,</li>
+                  <li>gegen geltendes Recht oder die guten Sitten verstoßen,</li>
+                  <li>andere Nutzer oder Tiere gefährden könnten.</li>
+                </ul>
+                <div className="bg-stone-50 rounded-xl p-4 mt-2">
+                  <p className="text-stone-700 text-sm">
+                    <strong>Kein Anspruch auf Veröffentlichung:</strong> Das Einreichen einer Tour oder das Hochladen von Inhalten begründet keinen Anspruch auf Veröffentlichung. Die Entscheidung liegt allein beim Betreiber.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* Rechteübertragung */}
+            <section className="border-t border-stone-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+                <FileText className="w-5 h-5 text-slate-600" />
+                8. Urheberrecht & Rechteübertragung bei Fotos
+              </h2>
+              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
-                  Der Betreiber behält sich das Recht vor, Inhalte, die gegen diese Grundsätze verstoßen, zu entfernen.
+                  Mit dem Hochladen von Fotos und Bildern auf diese Plattform bestätigt der Nutzer ausdrücklich:
+                </p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Er ist der <strong>Urheber oder rechtmäßige Inhaber</strong> der hochgeladenen Bilder.</li>
+                  <li>Die Bilder verletzen <strong>keine Urheberrechte, Persönlichkeitsrechte oder sonstigen Rechte Dritter</strong>.</li>
+                  <li>Er räumt dem Betreiber das <strong>nicht-exklusive, kostenlose Recht</strong> ein, die Bilder im Rahmen der Plattform anzuzeigen, zu speichern und in der App darzustellen.</li>
+                </ul>
+                <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-2">
+                  <p className="text-red-800 text-sm">
+                    <strong>⚠️ Haftung bei Rechtsverletzungen:</strong> Wer Fotos hochlädt, die ihm nicht gehören oder die Rechte Dritter verletzen, haftet selbst für alle daraus entstehenden Schäden und Ansprüche. Der Betreiber übernimmt hierfür keine Haftung.
+                  </p>
+                </div>
+                <p className="text-sm text-stone-500 mt-2">
+                  Bitte lade keine Bilder hoch, auf denen erkennbare Personen ohne deren Einwilligung abgebildet sind.
                 </p>
               </div>
             </section>
