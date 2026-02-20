@@ -50,11 +50,13 @@
 import AddHike from './pages/AddHike';
 import AdminReview from './pages/AdminReview';
 import Dashboard from './pages/Dashboard';
+import Datenschutz from './pages/Datenschutz';
 import Dogs from './pages/Dogs';
 import EditHike from './pages/EditHike';
 import Feed from './pages/Feed';
 import HikeDetail from './pages/HikeDetail';
 import Hikes from './pages/Hikes';
+import Impressum from './pages/Impressum';
 import Legal from './pages/Legal';
 import MapView from './pages/MapView';
 import Notifications from './pages/Notifications';
@@ -62,10 +64,8 @@ import Profile from './pages/Profile';
 import RouteDetail from './pages/RouteDetail';
 import RoutePlanner from './pages/RoutePlanner';
 import SubmitHike from './pages/SubmitHike';
-import TopDogs from './pages/TopDogs';
-import Impressum from './pages/Impressum';
-import Datenschutz from './pages/Datenschutz';
 import Support from './pages/Support';
+import TopDogs from './pages/TopDogs';
 import __Layout from './Layout.jsx';
 
 
@@ -73,11 +73,13 @@ export const PAGES = {
     "AddHike": AddHike,
     "AdminReview": AdminReview,
     "Dashboard": Dashboard,
+    "Datenschutz": Datenschutz,
     "Dogs": Dogs,
     "EditHike": EditHike,
     "Feed": Feed,
     "HikeDetail": HikeDetail,
     "Hikes": Hikes,
+    "Impressum": Impressum,
     "Legal": Legal,
     "MapView": MapView,
     "Notifications": Notifications,
@@ -85,10 +87,8 @@ export const PAGES = {
     "RouteDetail": RouteDetail,
     "RoutePlanner": RoutePlanner,
     "SubmitHike": SubmitHike,
-    "TopDogs": TopDogs,
-    "Impressum": Impressum,
-    "Datenschutz": Datenschutz,
     "Support": Support,
+    "TopDogs": TopDogs,
 }
 
 export const pagesConfig = {
