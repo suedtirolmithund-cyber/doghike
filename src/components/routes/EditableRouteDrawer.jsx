@@ -330,7 +330,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
               {isEditing ? 'Ziehe Wegpunkte um sie zu verschieben' : 'Klicke auf die Karte um Wegpunkte zu setzen'}
             </p>
             <p className="text-xs text-blue-600 mt-1">
-              🥾 Route nutzt Wanderwege wo möglich
+              🥾 Bevorzugt Haupt­wanderwege, nutzt auch Seitenwege
             </p>
           </div>
           {waypoints.length >= 2 && (
