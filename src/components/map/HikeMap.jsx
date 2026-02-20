@@ -227,34 +227,7 @@ export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, hei
         )}
       </MapContainer>
       
-      {/* Legend */}
-      {showLegend && (
-        <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl p-3 shadow-lg z-[1000]">
-          <p className="text-xs font-medium text-stone-700 mb-2">Beste Jahreszeit:</p>
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2 text-xs">
-              <span className="w-4 h-4 rounded-full bg-pink-500"></span>
-              <span>🌸 Frühling</span>
-            </div>
-            <div className="flex items-center gap-2 text-xs">
-              <span className="w-4 h-4 rounded-full bg-red-500"></span>
-              <span>☀️ Sommer</span>
-            </div>
-            <div className="flex items-center gap-2 text-xs">
-              <span className="w-4 h-4 rounded-full bg-orange-500"></span>
-              <span>🍂 Herbst</span>
-            </div>
-            <div className="flex items-center gap-2 text-xs">
-              <span className="w-4 h-4 rounded-full bg-blue-500"></span>
-              <span>❄️ Winter</span>
-            </div>
-            <div className="flex items-center gap-2 text-xs">
-              <span className="w-4 h-4 rounded-full bg-green-500"></span>
-              <span>🍃 Ganzjährig</span>
-            </div>
-          </div>
-        </div>
-      )}
+
       
       <style>{`
         .paw-marker {
