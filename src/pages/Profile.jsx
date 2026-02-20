@@ -2,7 +2,7 @@ import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Edit, Trash2, Bookmark, MapPin, LogIn, UserPlus, Trophy, TrendingUp, LogOut } from "lucide-react";
+import { Plus, Edit, Trash2, Bookmark, MapPin, LogIn, UserPlus, Trophy, TrendingUp, LogOut, Settings } from "lucide-react";
 import { format, differenceInYears, differenceInMonths } from "date-fns";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
