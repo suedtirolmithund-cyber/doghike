@@ -126,7 +126,16 @@ Getestet mit unseren Vierbeinern
                 </Button>
               </Link>
             </div>
-            <HikeMap hikes={hikesWithCoords} height="350px" showLegend={true} center={[46.5, 11.9]} zoom={9} />
+            <HikeMap hikes={hikesWithCoords} height="350px" showLegend={false} center={[46.5, 11.9]} zoom={9} autoFit={true} useCluster={true} />
+            {/* Season Legend below map */}
+            <div className="mt-3 flex flex-wrap gap-3 text-xs text-stone-600">
+              <span className="font-medium text-stone-700">Beste Jahreszeit:</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-pink-500 inline-block"></span>🌸 Frühling</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-red-500 inline-block"></span>☀️ Sommer</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-orange-500 inline-block"></span>🍂 Herbst</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-blue-500 inline-block"></span>❄️ Winter</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-green-500 inline-block"></span>🍃 Ganzjährig</span>
+            </div>
           </motion.div>
         }
 
