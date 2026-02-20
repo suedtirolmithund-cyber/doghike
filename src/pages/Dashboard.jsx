@@ -21,7 +21,7 @@ export default function Dashboard() {
 
   const { data: hikes = [], isLoading: hikesLoading } = useQuery({
     queryKey: ["hikes"],
-    queryFn: () => base44.entities.Hike.filter({ status: "approved" }, "-date", 1000)
+    queryFn: () => base44.entities.Hike.filter({ status: "approved", visibility: "public" }, "-created_date", 6)
   });
 
   const { data: dogs = [], isLoading: dogsLoading } = useQuery({
