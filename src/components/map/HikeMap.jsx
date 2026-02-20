@@ -164,6 +164,7 @@ export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, hei
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         
+        {autoFit && !useCluster && <AutoFitBounds hikes={hikesWithCoords} />}
         {useCluster ? (
           <MarkerClusterGroup hikes={hikesWithCoords} />
         ) : (
