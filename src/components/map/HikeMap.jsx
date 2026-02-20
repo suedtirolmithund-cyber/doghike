@@ -133,7 +133,22 @@ function MarkerClusterGroup({ hikes }) {
   return null;
 }
 
-export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, height = "400px", showLegend = true, useCluster = false }) {
+function AutoFitBounds({ hikes }) {
+  const map = useMap();
+  useEffect(() => {
+    const coords = hikes.filter(h => h.latitude && h.longitude).map(h => [h.latitude, h.longitude]);
+    if (coords.length === 0) return;
+    const bounds = L.latLngBounds(coords);
+    const isMobile = window.innerWidth < 768;
+    map.fitBounds(bounds, {
+      padding: isMobile ? [24, 24] : [50, 50],
+      maxZoom: 12
+    });
+  }, [map, hikes]);
+  return null;
+}
+
+export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, height = "400px", showLegend = true, useCluster = false, autoFit = false }) {
   const hikesWithCoords = hikes.filter(h => h.latitude && h.longitude);
 
   return (
