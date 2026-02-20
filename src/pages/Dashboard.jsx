@@ -1,10 +1,10 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { Mountain, Route, Clock, TrendingUp, Plus, Map, ArrowRight, Search, LogIn, UserPlus, ImagePlus, Loader2 } from "lucide-react";
+import { Mountain, Route, Clock, TrendingUp, Plus, Map, ArrowRight, Search, LogIn, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import StatsCard from "@/components/stats/StatsCard";
@@ -12,33 +12,12 @@ import HikeCard from "@/components/hikes/HikeCard";
 import DogAvatar from "@/components/dogs/DogAvatar";
 import HikeMap from "@/components/map/HikeMap";
 
-const HERO_IMAGE_KEY = "dashboard_hero_image_url";
-const DEFAULT_HERO = "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80";
-
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [heroImage, setHeroImage] = useState(() => localStorage.getItem(HERO_IMAGE_KEY) || DEFAULT_HERO);
-  const [isUploadingHero, setIsUploadingHero] = useState(false);
-  const heroInputRef = useRef(null);
 
   // Check authentication status
   base44.auth.isAuthenticated().then(setIsAuthenticated);
-
-  const { data: user } = useQuery({
-    queryKey: ["current-user"],
-    queryFn: () => base44.auth.me(),
-  });
-
-  const handleHeroUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setIsUploadingHero(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    setHeroImage(file_url);
-    localStorage.setItem(HERO_IMAGE_KEY, file_url);
-    setIsUploadingHero(false);
-  };
 
   const { data: hikes = [], isLoading: hikesLoading } = useQuery({
     queryKey: ["hikes"],
@@ -65,25 +44,9 @@ export default function Dashboard() {
       <div className="relative overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('${heroImage}')` }}
-        />
-
-        {/* Upload button - only for admins */}
-        {user?.role === "admin" && (
-          <div className="absolute top-20 right-4 z-20">
-            <input ref={heroInputRef} type="file" accept="image/*" className="hidden" onChange={handleHeroUpload} />
-            <Button
-              size="sm"
-              variant="outline"
-              className="bg-white/20 border-white/40 text-white hover:bg-white/30 backdrop-blur-sm"
-              onClick={() => heroInputRef.current.click()}
-              disabled={isUploadingHero}
-            >
-              {isUploadingHero ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <ImagePlus className="w-4 h-4 mr-2" />}
-              Bild ändern
-            </Button>
-          </div>
-        )}
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80')"
+          }} />
 
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-stone-50" />
         
