@@ -28,6 +28,7 @@ import {
 import DogForm from "@/components/forms/DogForm";
 import HikeCard from "@/components/hikes/HikeCard";
 import UserRouteCard from "@/components/routes/UserRouteCard";
+import AccountSettings from "@/components/profile/AccountSettings";
 
 export default function Profile() {
   const [dialogOpen, setDialogOpen] = useState(false);
