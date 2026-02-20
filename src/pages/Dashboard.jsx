@@ -21,7 +21,7 @@ export default function Dashboard() {
 
   const { data: hikes = [], isLoading: hikesLoading } = useQuery({
     queryKey: ["hikes"],
-    queryFn: () => base44.entities.Hike.filter({ status: "approved", visibility: "public" }, "-created_date", 6)
+    queryFn: () => base44.entities.Hike.filter({ status: "approved" }, "-date", 1000)
   });
 
   const { data: dogs = [], isLoading: dogsLoading } = useQuery({
@@ -35,6 +35,7 @@ export default function Dashboard() {
     hike.location?.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
+  const recentHikes = filteredHikes.slice(0, 6);
   const hikesWithCoords = filteredHikes.filter((h) => h.latitude && h.longitude);
 
   return (
@@ -125,7 +126,13 @@ Getestet mit unseren Vierbeinern
                 </Button>
               </Link>
             </div>
-            <HikeMap hikes={hikesWithCoords} height="350px" showLegend={true} center={[46.5, 11.9]} zoom={9} />
+            <HikeMap 
+              hikes={hikesWithCoords} 
+              height={typeof window !== "undefined" && window.innerWidth < 768 ? "280px" : "380px"} 
+              showLegend={true} 
+              autoFit={true}
+              useCluster={true}
+            />
           </motion.div>
         }
 
@@ -162,9 +169,9 @@ Getestet mit unseren Vierbeinern
             </div>
           </div>
           
-          {filteredHikes.length > 0 ?
+          {recentHikes.length > 0 ?
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {filteredHikes.map((hike, index) =>
+              {recentHikes.map((hike, index) =>
             <HikeCard key={hike.id} hike={hike} dogs={dogs} index={index} />
             )}
             </div> :
@@ -179,17 +186,6 @@ Getestet mit unseren Vierbeinern
               <p className="text-stone-500 mb-6">Bald findest du hier tolle Wanderungen!</p>
             </motion.div>
           }
-
-          {/* Bottom CTA */}
-          <div className="mt-10 text-center">
-            <Link to={createPageUrl("Hikes")}>
-              <Button size="lg" className="bg-slate-800 hover:bg-slate-900 text-white shadow-md">
-                <Mountain className="w-5 h-5 mr-2" />
-                Alle Touren entdecken
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-          </div>
         </div>
       </div>
     </div>);
