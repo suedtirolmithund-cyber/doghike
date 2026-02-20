@@ -42,7 +42,7 @@ const difficultyColors = {
 
 const seasonConfig = {
   spring: { emoji: "🌸", label: "Frühling", color: "bg-pink-100 text-pink-700" },
-  summer: { emoji: "☀️", label: "Sommer", color: "bg-yellow-100 text-yellow-700" },
+  summer: { emoji: "☀️", label: "Sommer", color: "bg-red-100 text-red-700" },
   autumn: { emoji: "🍂", label: "Herbst", color: "bg-orange-100 text-orange-700" },
   winter: { emoji: "❄️", label: "Winter", color: "bg-blue-100 text-blue-700" },
   all_year: { emoji: "🍃", label: "Ganzjährig", color: "bg-green-100 text-green-700" }
