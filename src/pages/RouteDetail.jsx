@@ -321,14 +321,14 @@ export default function RouteDetail() {
             {route.description && (
               <div className="mb-4">
                 <h3 className="font-medium text-stone-800 mb-2">Beschreibung</h3>
-                <p className="text-stone-600">{route.description}</p>
+                <ExpandableText text={route.description} />
               </div>
             )}
 
             {route.notes && (
               <div>
                 <h3 className="font-medium text-stone-800 mb-2">Notizen</h3>
-                <p className="text-stone-600">{route.notes}</p>
+                <ExpandableText text={route.notes} />
               </div>
             )}
           </motion.div>
