@@ -170,7 +170,7 @@ export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, hei
         ) : (
           <>
             {hikesWithCoords.map((hike) => (
-              <>
+              <div key={hike.id} style={{ display: 'none' }}>
                 {hike.route_coordinates && hike.route_coordinates.length > 1 && (
                   <Polyline
                     key={`route-${hike.id}`}
