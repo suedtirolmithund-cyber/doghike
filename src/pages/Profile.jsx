@@ -237,7 +237,7 @@ export default function Profile() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-6 md:mb-8"
+          className="grid grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8"
         >
           <div className="bg-white rounded-xl p-3 md:p-4 border border-stone-200 text-center">
             <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-stone-400 mx-auto mb-1 md:mb-2" />
