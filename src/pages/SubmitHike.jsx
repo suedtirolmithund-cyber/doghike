@@ -568,6 +568,24 @@ export default function SubmitHike() {
               />
             </div>
 
+            {/* Publish consent - always shown */}
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  id="publish_consent"
+                  checked={formData.publish_consent}
+                  onCheckedChange={(checked) => setFormData({ ...formData, publish_consent: checked })}
+                  className="mt-1"
+                />
+                <div className="flex-1">
+                  <Label htmlFor="publish_consent" className="cursor-pointer font-normal text-sm text-stone-700">
+                    Ich bin damit einverstanden, dass diese Tour nach einer Prüfung öffentlich auf <strong>Südtirol mit Hund</strong> für alle Nutzer sichtbar veröffentlicht wird. *
+                  </Label>
+                </div>
+              </div>
+            </div>
+
+            {/* Photo consent - only when photos uploaded */}
             {formData.photos.length > 0 && (
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
                 <div className="flex items-start gap-3">
@@ -579,7 +597,7 @@ export default function SubmitHike() {
                   />
                   <div className="flex-1">
                     <Label htmlFor="photo_consent" className="cursor-pointer font-normal text-sm text-stone-700">
-                      Ich bestätige, dass ich die Rechte an den hochgeladenen Fotos besitze und mit der öffentlichen Veröffentlichung auf dieser Plattform einverstanden bin. Die Fotos können von anderen Nutzern eingesehen werden. *
+                      Ich bestätige, dass ich die Rechte an den hochgeladenen Fotos besitze und mit der öffentlichen Veröffentlichung auf dieser Plattform einverstanden bin. *
                     </Label>
                   </div>
                 </div>
