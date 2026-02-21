@@ -232,22 +232,26 @@ export default function RoutePlanner() {
                       </p>
                     </div>
                   )}
-                  {routeGeometry.elevation_gain_m && (
+                  {routeGeometry.elevation_gain_m && activeTab !== "draw" ? (
                     <div>
                       <p className="text-stone-500">Aufstieg</p>
                       <p className="font-bold text-slate-800">+{routeGeometry.elevation_gain_m} m</p>
                     </div>
-                  )}
-                  {routeGeometry.avg_speed_kmh && (
-                    <div>
-                      <p className="text-stone-500">⌀ Geschw.</p>
-                      <p className="font-bold text-slate-800">{routeGeometry.avg_speed_kmh} km/h</p>
-                    </div>
-                  )}
-                  {!routeGeometry.elevation_gain_m && (
+                  ) : activeTab === "draw" ? (
                     <div>
                       <p className="text-stone-500">Wegpunkte</p>
                       <p className="font-bold text-slate-800">{routeGeometry.coordinates.length}</p>
+                    </div>
+                  ) : (
+                    <div>
+                      <p className="text-stone-500">Wegpunkte</p>
+                      <p className="font-bold text-slate-800">{routeGeometry.coordinates.length}</p>
+                    </div>
+                  )}
+                  {routeGeometry.avg_speed_kmh && activeTab !== "draw" && (
+                    <div>
+                      <p className="text-stone-500">⌀ Geschw.</p>
+                      <p className="font-bold text-slate-800">{routeGeometry.avg_speed_kmh} km/h</p>
                     </div>
                   )}
                 </div>
