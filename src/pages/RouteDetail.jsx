@@ -59,6 +59,17 @@ export default function RouteDetail() {
     },
   });
 
+  const completeRouteMutation = useMutation({
+    mutationFn: (data) => base44.entities.UserRoute.update(routeId, {
+      completed: true,
+      ...data,
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["route", routeId] });
+      setShowCompleteForm(false);
+    },
+  });
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 flex items-center justify-center">
