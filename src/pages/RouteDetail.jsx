@@ -63,6 +63,39 @@ export default function RouteDetail() {
     queryFn: () => base44.auth.me(),
   });
 
+  const { data: myDogs = [] } = useQuery({
+    queryKey: ["myDogs"],
+    queryFn: async () => {
+      if (!user?.email) return [];
+      return base44.entities.Dog.filter({ created_by: user.email });
+    },
+    enabled: !!user?.email,
+  });
+
+  const handlePhotoUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+    setUploading(true);
+    const uploadedUrls = [];
+    for (const file of files) {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      uploadedUrls.push(file_url);
+    }
+    setCompleteData(prev => ({ ...prev, photos: [...(prev.photos || []), ...uploadedUrls] }));
+    setUploading(false);
+  };
+
+  const removePhoto = (index) => {
+    setCompleteData(prev => ({ ...prev, photos: prev.photos.filter((_, i) => i !== index) }));
+  };
+
+  const toggleDog = (dogId) => {
+    setCompleteData(prev => ({
+      ...prev,
+      dogs: prev.dogs.includes(dogId) ? prev.dogs.filter(id => id !== dogId) : [...prev.dogs, dogId],
+    }));
+  };
+
   const deleteRouteMutation = useMutation({
     mutationFn: () => base44.entities.UserRoute.delete(routeId),
     onSuccess: () => {
