@@ -537,7 +537,7 @@ export default function SubmitHike() {
                 />
                 <div className="flex-1">
                   <Label htmlFor="publish_consent" className="cursor-pointer font-normal text-sm text-stone-700">
-                    Ich bin damit einverstanden, dass diese Tour nach einer Prüfung öffentlich auf <strong>Südtirol mit Hund</strong> für alle Nutzer sichtbar veröffentlicht wird. *
+                    Ich bin damit einverstanden, dass diese Tour nach einer Prüfung öffentlich in dieser App für alle Nutzer sichtbar veröffentlicht wird. *
                   </Label>
                 </div>
               </div>
