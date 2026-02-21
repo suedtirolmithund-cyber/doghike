@@ -198,16 +198,22 @@ export default function RoutePlanner() {
                 />
               </div>
 
-              <div className="flex items-center space-x-2">
-                <Switch
-                  id="is_public"
-                  checked={routeData.is_public}
-                  onCheckedChange={(checked) => setRouteData({ ...routeData, is_public: checked })}
-                />
-                <Label htmlFor="is_public">
-                  Route öffentlich teilen (andere Nutzer können sie sehen)
-                </Label>
-              </div>
+              {activeTab !== "draw" ? (
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="is_public"
+                    checked={routeData.is_public}
+                    onCheckedChange={(checked) => setRouteData({ ...routeData, is_public: checked })}
+                  />
+                  <Label htmlFor="is_public">
+                    Route öffentlich teilen (andere Nutzer können sie sehen)
+                  </Label>
+                </div>
+              ) : (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-sm text-amber-800">
+                  🔒 Geplante Routen sind immer <strong>privat</strong> – nur du kannst sie sehen. Du kannst sie später mit Freunden teilen.
+                </div>
+              )}
 
               <div className="bg-slate-50 rounded-lg p-3 md:p-4">
                 <h4 className="text-sm md:text-base font-medium text-stone-800 mb-2">📊 Routenstatistik:</h4>
