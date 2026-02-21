@@ -267,12 +267,11 @@ export default function SubmitHike() {
                   value={formData.trail_name}
                   onChange={(e) => setFormData({ ...formData, trail_name: e.target.value })}
                   placeholder="z.B. Drei Zinnen Umrundung"
-                  required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="location">Ort / Region</Label>
+                <Label htmlFor="location">Ort / Region *</Label>
                 <Input
                   id="location"
                   value={formData.location}
