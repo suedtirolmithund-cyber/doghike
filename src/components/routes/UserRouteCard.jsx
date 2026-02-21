@@ -86,7 +86,12 @@ export default function UserRouteCard({ route, index, onDelete }) {
         <div className="flex gap-2">
           <Link to={createPageUrl(`RouteDetail?id=${route.id}`)} className="flex-1">
             <Button variant="outline" className="w-full" size="sm">
-              Details ansehen
+              Details
+            </Button>
+          </Link>
+          <Link to={createPageUrl(`EditRoute?id=${route.id}`)}>
+            <Button variant="ghost" size="icon" className="text-stone-600 hover:bg-stone-100">
+              <Edit className="w-4 h-4" />
             </Button>
           </Link>
           <Button
