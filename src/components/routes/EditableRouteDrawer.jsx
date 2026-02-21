@@ -268,6 +268,8 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
     onSave({
       coordinates: routeCoordinates.length > 0 ? routeCoordinates : waypoints,
       distance_km: parseFloat(routeDistance),
+      elevation_gain_m: routeElevationGain,
+      duration_minutes: routeDurationMin,
     });
   };
 
