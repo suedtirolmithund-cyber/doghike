@@ -21,21 +21,13 @@ export default function Dashboard() {
 
   const { data: hikes = [], isLoading: hikesLoading } = useQuery({
     queryKey: ["hikes"],
-    queryFn: () => base44.entities.Hike.filter({ status: "approved" }, "-date", 1000)
+    queryFn: () => base44.entities.Hike.filter({ visibility: "public", status: "approved" }, "-date", 1000)
   });
 
   const { data: dogs = [], isLoading: dogsLoading } = useQuery({
     queryKey: ["dogs"],
     queryFn: () => base44.entities.Dog.list()
   });
-
-  const { data: siteSettings = [] } = useQuery({
-    queryKey: ["siteSettings"],
-    queryFn: () => base44.entities.SiteSettings.list()
-  });
-
-  const subtitle = siteSettings.find(s => s.key === 'hero_subtitle')?.value || 
-    'Entdecke die schönsten Wanderungen in Südtirol, den Dolomiten. Getestet mit unseren Vierbeinern';
 
   const filteredHikes = hikes.filter((hike) => {
     if (!searchQuery) return true;
@@ -68,7 +60,9 @@ export default function Dashboard() {
             <h1 className="text-4xl md:text-6xl font-light text-white mb-4 tracking-tight">
               Hundefreundliche Wanderungen
             </h1>
-            <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">{subtitle}</p>
+            <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">Entdecke die schönsten Wanderungen in Südtirol, den Dolomiten. 
+Getestet mit unseren Vierbeinern 
+            </p>
 
             <div className="flex flex-wrap gap-4 justify-center">
               <Link to={createPageUrl("Hikes")}>
