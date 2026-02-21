@@ -29,10 +29,55 @@ export default function Dashboard() {
     queryFn: () => base44.entities.Hike.filter({ status: "approved" }, "-date", 1000)
   });
 
-  const { data: dogs = [], isLoading: dogsLoading } = useQuery({
+  const { data: dogs = [] } = useQuery({
     queryKey: ["dogs"],
     queryFn: () => base44.entities.Dog.list()
   });
+
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => base44.auth.me(),
+    enabled: isAuthenticated
+  });
+
+  const { data: siteSettings = [] } = useQuery({
+    queryKey: ["siteSettings"],
+    queryFn: () => base44.entities.SiteSettings.list()
+  });
+
+  const updateSettingMutation = useMutation({
+    mutationFn: async ({ key, value }) => {
+      const existing = siteSettings.find(s => s.key === key);
+      if (existing) {
+        return base44.entities.SiteSettings.update(existing.id, { value });
+      } else {
+        return base44.entities.SiteSettings.create({ key, value });
+      }
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["siteSettings"] })
+  });
+
+  const getSetting = (key, fallback) => siteSettings.find(s => s.key === key)?.value || fallback;
+
+  const heroTitle = getSetting("hero_title", "Hundefreundliche Wanderungen");
+  const heroSubtitle = getSetting("hero_subtitle", "Entdecke die schönsten Wanderungen in Südtirol, den Dolomiten. Getestet mit unseren Vierbeinern");
+  const heroImageUrl = getSetting("hero_image_url", "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80");
+
+  const startEditing = () => {
+    setEditTitle(heroTitle);
+    setEditSubtitle(heroSubtitle);
+    setEditImageUrl(heroImageUrl);
+    setEditingHero(true);
+  };
+
+  const saveHero = async () => {
+    await Promise.all([
+      updateSettingMutation.mutateAsync({ key: "hero_title", value: editTitle }),
+      updateSettingMutation.mutateAsync({ key: "hero_subtitle", value: editSubtitle }),
+      updateSettingMutation.mutateAsync({ key: "hero_image_url", value: editImageUrl }),
+    ]);
+    setEditingHero(false);
+  };
 
   const filteredHikes = hikes.filter((hike) => {
     if (!searchQuery) return true;
