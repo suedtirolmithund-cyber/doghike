@@ -103,7 +103,7 @@ export default function RoutePlanner() {
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 md:space-y-6">
-            <TabsList className="grid w-full grid-cols-2 bg-stone-100">
+            <TabsList className="grid w-full grid-cols-3 bg-stone-100">
               <TabsTrigger value="draw" className="flex items-center gap-1 md:gap-2 text-xs md:text-sm">
                 <Map className="w-3 h-3 md:w-4 md:h-4" />
                 <span className="hidden sm:inline">Route planen</span>
@@ -114,6 +114,11 @@ export default function RoutePlanner() {
                 <span className="hidden sm:inline">GPS aufzeichnen</span>
                 <span className="sm:hidden">GPS</span>
               </TabsTrigger>
+              <TabsTrigger value="gpx" className="flex items-center gap-1 md:gap-2 text-xs md:text-sm">
+                <Upload className="w-3 h-3 md:w-4 md:h-4" />
+                <span className="hidden sm:inline">GPX hochladen</span>
+                <span className="sm:hidden">GPX</span>
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="draw" className="space-y-6">
@@ -122,6 +127,10 @@ export default function RoutePlanner() {
 
             <TabsContent value="track" className="space-y-6">
               <GPSTracker onSave={handleRouteSave} />
+            </TabsContent>
+
+            <TabsContent value="gpx" className="space-y-6">
+              <GPXUploader onSave={handleRouteSave} />
             </TabsContent>
           </Tabs>
 
