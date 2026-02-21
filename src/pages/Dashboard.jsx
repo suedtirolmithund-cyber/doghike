@@ -45,7 +45,7 @@ export default function Dashboard() {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80')"
+            backgroundImage: "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80')"
           }} />
 
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-stone-50" />
@@ -60,8 +60,8 @@ export default function Dashboard() {
             <h1 className="text-4xl md:text-6xl font-light text-white mb-4 tracking-tight">
               Hundefreundliche Wanderungen
             </h1>
-            <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">Die schönsten Wanderungen mit Hund. Entdecke und teile Touren mit anderen Outdoorfreunden.
-
+            <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">Entdecke die schönsten Wanderungen in Südtirol, den Dolomiten. 
+Getestet mit unseren Vierbeinern 
             </p>
 
             <div className="flex flex-wrap gap-4 justify-center">
