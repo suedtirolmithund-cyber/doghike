@@ -31,6 +31,7 @@ import SaveButton from "@/components/hikes/SaveButton";
 import CommentSection from "@/components/community/CommentSection";
 import RatingSection from "@/components/community/RatingSection";
 import FollowButton from "@/components/community/FollowButton";
+import ExpandableText from "@/components/ExpandableText";
 
 const difficultyColors = {
   "1": "bg-emerald-100 text-emerald-700",
