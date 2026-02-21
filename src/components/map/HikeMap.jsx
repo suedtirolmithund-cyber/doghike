@@ -221,7 +221,7 @@ export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, hei
                     </div>
                   </Popup>
                 </Marker>
-              </>
+              </div>
             ))}
           </>
         )}
