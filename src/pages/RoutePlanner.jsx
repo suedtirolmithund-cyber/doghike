@@ -9,10 +9,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Map, Navigation, Loader2 } from "lucide-react";
+import { ArrowLeft, Map, Navigation, Loader2, Upload } from "lucide-react";
 import EditableRouteDrawer from "@/components/routes/EditableRouteDrawer";
 import GPSTracker from "@/components/routes/GPSTracker";
 import RoutePreviewMap from "@/components/routes/RoutePreviewMap";
+import GPXUploader from "@/components/routes/GPXUploader";
 import { motion } from "framer-motion";
 
 export default function RoutePlanner() {
