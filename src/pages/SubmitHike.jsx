@@ -416,37 +416,27 @@ export default function SubmitHike() {
               <div className="space-y-3">
                 <Label>🐕 Welche Hunde waren dabei?</Label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {availableDogs.map((dog) => {
-                    const isMyDog = myDogs.some(d => d.id === dog.id);
-                    return (
-                      <div
-                        key={dog.id}
-                        className="flex items-center gap-3 p-3 rounded-lg border border-stone-200 hover:bg-stone-50 cursor-pointer"
-                        onClick={() => toggleDog(dog.id)}
-                      >
-                        <Checkbox
-                          checked={formData.dogs.includes(dog.id)}
-                          onCheckedChange={() => toggleDog(dog.id)}
-                        />
-                        <img
-                          src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
-                          alt={dog.name}
-                          className="w-10 h-10 rounded-full object-cover"
-                        />
-                        <div className="flex-1">
-                          <p className="font-medium text-stone-800">{dog.name}</p>
-                          <div className="flex items-center gap-2">
-                            {dog.breed && <p className="text-xs text-stone-500">{dog.breed}</p>}
-                            {!isMyDog && (
-                              <span className="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
-                                Freund
-                              </span>
-                            )}
-                          </div>
-                        </div>
+                  {availableDogs.map((dog) => (
+                    <div
+                      key={dog.id}
+                      className="flex items-center gap-3 p-3 rounded-lg border border-stone-200 hover:bg-stone-50 cursor-pointer"
+                      onClick={() => toggleDog(dog.id)}
+                    >
+                      <Checkbox
+                        checked={formData.dogs.includes(dog.id)}
+                        onCheckedChange={() => toggleDog(dog.id)}
+                      />
+                      <img
+                        src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
+                        alt={dog.name}
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                      <div className="flex-1">
+                        <p className="font-medium text-stone-800">{dog.name}</p>
+                        {dog.breed && <p className="text-xs text-stone-500">{dog.breed}</p>}
                       </div>
-                    );
-                  })}
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
