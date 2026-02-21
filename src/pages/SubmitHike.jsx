@@ -22,11 +22,11 @@ export default function SubmitHike() {
     date: new Date().toISOString().split("T")[0],
     distance_km: "",
     elevation_gain_m: "",
-    duration_minutes: "",
-    difficulty: "moderate",
-    dog_difficulty: "moderate",
-    season: "all_year",
-    water_availability: "moderate",
+    duration_hours: "",
+    difficulty: "",
+    dog_difficulty: "",
+    season: "",
+    water_availability: "",
     hazard_notes: "",
     parking_info: "",
     restaurant_info: "",
@@ -39,7 +39,8 @@ export default function SubmitHike() {
     submitted_by_name: "",
     submitted_by_email: "",
     status: "pending",
-    photo_consent: false
+    photo_consent: false,
+    publish_consent: false
   });
 
   const { data: user } = useQuery({
