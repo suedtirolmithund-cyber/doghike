@@ -218,8 +218,18 @@ export default function RoutePlanner() {
                   </div>
                   {routeGeometry.duration_minutes && (
                     <div>
-                      <p className="text-stone-500">Dauer</p>
-                      <p className="font-bold text-slate-800">{routeGeometry.duration_minutes} min</p>
+                      <p className="text-stone-500">Gesch. Dauer</p>
+                      <p className="font-bold text-slate-800">
+                        {Math.floor(routeGeometry.duration_minutes / 60) > 0
+                          ? `${Math.floor(routeGeometry.duration_minutes / 60)}h ${routeGeometry.duration_minutes % 60}min`
+                          : `${routeGeometry.duration_minutes}min`}
+                      </p>
+                    </div>
+                  )}
+                  {routeGeometry.elevation_gain_m && (
+                    <div>
+                      <p className="text-stone-500">Aufstieg</p>
+                      <p className="font-bold text-slate-800">+{routeGeometry.elevation_gain_m} m</p>
                     </div>
                   )}
                   {routeGeometry.avg_speed_kmh && (
@@ -228,10 +238,12 @@ export default function RoutePlanner() {
                       <p className="font-bold text-slate-800">{routeGeometry.avg_speed_kmh} km/h</p>
                     </div>
                   )}
-                  <div>
-                    <p className="text-stone-500">Wegpunkte</p>
-                    <p className="font-bold text-slate-800">{routeGeometry.coordinates.length}</p>
-                  </div>
+                  {!routeGeometry.elevation_gain_m && (
+                    <div>
+                      <p className="text-stone-500">Wegpunkte</p>
+                      <p className="font-bold text-slate-800">{routeGeometry.coordinates.length}</p>
+                    </div>
+                  )}
                 </div>
               </div>
 
