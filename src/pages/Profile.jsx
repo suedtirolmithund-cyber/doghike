@@ -254,16 +254,7 @@ export default function Profile() {
             <p className="text-xl md:text-2xl font-bold text-stone-800">{Math.round(totalStats.totalElevation).toLocaleString()}</p>
             <p className="text-xs text-stone-500">Hm</p>
           </div>
-          <div className="bg-white rounded-xl p-3 md:p-4 border border-stone-200 text-center">
-            <p className="text-sm text-stone-400 mb-1 md:mb-2">⭐</p>
-            <p className="text-xl md:text-2xl font-bold text-stone-800">{totalStats.totalRatings}</p>
-            <p className="text-xs text-stone-500">Bewertungen</p>
-          </div>
-          <div className="bg-white rounded-xl p-3 md:p-4 border border-stone-200 text-center">
-            <p className="text-sm text-stone-400 mb-1 md:mb-2">💬</p>
-            <p className="text-xl md:text-2xl font-bold text-stone-800">{totalStats.totalComments}</p>
-            <p className="text-xs text-stone-500">Kommentare</p>
-          </div>
+
         </motion.div>
 
         {/* Tabs */}
