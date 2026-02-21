@@ -420,8 +420,19 @@ export default function RouteDetail() {
                 {route.duration_minutes && (
                   <div className="text-center p-4 bg-slate-50 rounded-lg">
                     <Clock className="w-5 h-5 mx-auto mb-2 text-slate-700" />
-                    <p className="text-2xl font-bold text-slate-800">{route.duration_minutes}</p>
-                    <p className="text-xs text-stone-500">Minuten</p>
+                    <p className="text-2xl font-bold text-slate-800">
+                      {Math.floor(route.duration_minutes / 60) > 0
+                        ? `${Math.floor(route.duration_minutes / 60)}h ${route.duration_minutes % 60}min`
+                        : `${route.duration_minutes}min`}
+                    </p>
+                    <p className="text-xs text-stone-500">Gehzeit</p>
+                  </div>
+                )}
+                {route.elevation_gain_m && (
+                  <div className="text-center p-4 bg-slate-50 rounded-lg">
+                    <TrendingUp className="w-5 h-5 mx-auto mb-2 text-slate-700" />
+                    <p className="text-2xl font-bold text-slate-800">+{route.elevation_gain_m}</p>
+                    <p className="text-xs text-stone-500">Höhenmeter</p>
                   </div>
                 )}
                 {route.avg_speed_kmh && (
