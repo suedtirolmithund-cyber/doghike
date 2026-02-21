@@ -13,6 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, Map, Route, Clock, Navigation, Eye, EyeOff, Trash2, TrendingUp, CheckCircle2, Star, Lock, Users, Upload, X, Loader2, Pencil } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
+import ExpandableText from "@/components/ExpandableText";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
