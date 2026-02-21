@@ -94,40 +94,70 @@ export default function Dashboard() {
       <div className="relative overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80')"
-          }} />
+          style={{ backgroundImage: `url('${heroImageUrl}')` }} />
 
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-stone-50" />
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center">
-
-            <h1 className="text-4xl md:text-6xl font-light text-white mb-4 tracking-tight">
-              Hundefreundliche Wanderungen
-            </h1>
-            <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">Entdecke die schönsten Wanderungen in Südtirol, den Dolomiten. 
-Getestet mit unseren Vierbeinern 
-            </p>
-
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Link to={createPageUrl("Hikes")}>
-                <Button size="lg" className="bg-white text-slate-800 hover:bg-white/90 shadow-lg">
-                  <Mountain className="w-5 h-5 mr-2" />
-                  Alle Touren entdecken
-                </Button>
-              </Link>
-              <Link to={createPageUrl("SubmitHike")}>
-                <Button size="lg" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
-                  Tour einreichen
-                </Button>
-              </Link>
+          {/* Admin edit button */}
+          {user?.role === "admin" && !editingHero && (
+            <div className="absolute top-4 right-4">
+              <Button size="sm" onClick={startEditing} className="bg-white/20 hover:bg-white/30 text-white border border-white/30">
+                <Pencil className="w-4 h-4 mr-2" />
+                Titelbild bearbeiten
+              </Button>
             </div>
-          </motion.div>
+          )}
+
+          {editingHero ? (
+            <div className="bg-white/10 backdrop-blur-sm border border-white/30 rounded-2xl p-6 max-w-2xl mx-auto text-white space-y-4">
+              <h2 className="text-xl font-semibold">Titelbild bearbeiten</h2>
+              <div>
+                <label className="text-sm text-white/70 mb-1 block">Titel</label>
+                <Input value={editTitle} onChange={e => setEditTitle(e.target.value)} className="bg-white/20 border-white/30 text-white placeholder:text-white/50" />
+              </div>
+              <div>
+                <label className="text-sm text-white/70 mb-1 block">Untertitel</label>
+                <Textarea value={editSubtitle} onChange={e => setEditSubtitle(e.target.value)} rows={3} className="bg-white/20 border-white/30 text-white placeholder:text-white/50" />
+              </div>
+              <div>
+                <label className="text-sm text-white/70 mb-1 block">Bild-URL</label>
+                <Input value={editImageUrl} onChange={e => setEditImageUrl(e.target.value)} className="bg-white/20 border-white/30 text-white placeholder:text-white/50" placeholder="https://..." />
+              </div>
+              <div className="flex gap-3">
+                <Button onClick={saveHero} className="bg-white text-slate-800 hover:bg-white/90">
+                  <Check className="w-4 h-4 mr-2" /> Speichern
+                </Button>
+                <Button variant="ghost" onClick={() => setEditingHero(false)} className="text-white hover:bg-white/20">
+                  <X className="w-4 h-4 mr-2" /> Abbrechen
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-center">
+              <h1 className="text-4xl md:text-6xl font-light text-white mb-4 tracking-tight">
+                {heroTitle}
+              </h1>
+              <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">{heroSubtitle}</p>
+              <div className="flex flex-wrap gap-4 justify-center">
+                <Link to={createPageUrl("Hikes")}>
+                  <Button size="lg" className="bg-white text-slate-800 hover:bg-white/90 shadow-lg">
+                    <Mountain className="w-5 h-5 mr-2" />
+                    Alle Touren entdecken
+                  </Button>
+                </Link>
+                <Link to={createPageUrl("SubmitHike")}>
+                  <Button size="lg" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
+                    Tour einreichen
+                  </Button>
+                </Link>
+              </div>
+            </motion.div>
+          )}
         </div>
       </div>
 
