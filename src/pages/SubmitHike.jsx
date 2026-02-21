@@ -516,7 +516,7 @@ export default function SubmitHike() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="notes">Beschreibung & Tipps</Label>
+              <Label htmlFor="notes">Beschreibung & Tipps *</Label>
               <Textarea
                 id="notes"
                 value={formData.notes}
