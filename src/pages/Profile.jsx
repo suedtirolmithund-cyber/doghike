@@ -207,8 +207,6 @@ export default function Profile() {
     totalHikes: myHikes.length,
     totalDistance: myHikes.reduce((sum, h) => sum + (h.distance_km || 0), 0),
     totalElevation: myHikes.reduce((sum, h) => sum + (h.elevation_gain_m || 0), 0),
-    totalRatings: myRatings.length,
-    totalComments: myComments.length
   };
 
   return (
