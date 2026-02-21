@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { MapContainer, TileLayer, Polyline, Marker } from "react-leaflet";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Map, Route, Clock, Navigation, Eye, EyeOff, Trash2, TrendingUp } from "lucide-react";
-import { motion } from "framer-motion";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { ArrowLeft, Map, Route, Clock, Navigation, Eye, EyeOff, Trash2, TrendingUp, CheckCircle2, Star, Lock, Users } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
