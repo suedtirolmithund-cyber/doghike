@@ -483,7 +483,7 @@ export default function SubmitHike() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="parking_info">🅿️ Ausgangspunkt & Parken (optional)</Label>
+              <Label htmlFor="parking_info">🅿️ Ausgangspunkt & Parken *</Label>
               <Textarea
                 id="parking_info"
                 value={formData.parking_info}
