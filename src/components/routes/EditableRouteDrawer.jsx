@@ -209,14 +209,21 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
         const route = data.routes[0];
         const coordinates = route.geometry.coordinates.map(c => [c[1], c[0]]);
         setRouteCoordinates(coordinates);
-        setRouteDistance((route.distance / 1000).toFixed(2));
+        const distKm = parseFloat((route.distance / 1000).toFixed(2));
+        setRouteDistance(distKm);
+        setRouteElevationGain(0);
+        setRouteDurationMin(Math.round((distKm / 5) * 60));
       } else {
+        const distKm = parseFloat(calculateDistance(points));
         setRouteCoordinates(points);
-        setRouteDistance(calculateDistance(points));
+        setRouteDistance(distKm);
+        setRouteDurationMin(Math.round((distKm / 5) * 60));
       }
     } catch {
+      const distKm = parseFloat(calculateDistance(points));
       setRouteCoordinates(points);
-      setRouteDistance(calculateDistance(points));
+      setRouteDistance(distKm);
+      setRouteDurationMin(Math.round((distKm / 5) * 60));
     }
   };
 
