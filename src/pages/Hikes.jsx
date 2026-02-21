@@ -83,8 +83,8 @@ export default function Hikes() {
           transition={{ delay: 0.1 }}
           className="bg-white rounded-2xl p-4 border border-stone-200/50 shadow-sm mb-8"
         >
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
+          <div className="flex flex-col gap-3">
+            <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
               <Input
                 placeholder="Tour oder Ort suchen..."
@@ -93,44 +93,46 @@ export default function Hikes() {
                 className="pl-10"
               />
             </div>
-            <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Schwierigkeit" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">👤 Alle Schwierigkeiten</SelectItem>
-                <SelectItem value="1">👤 Schwierigkeit 1</SelectItem>
-                <SelectItem value="2">👤 Schwierigkeit 2</SelectItem>
-                <SelectItem value="3">👤 Schwierigkeit 3</SelectItem>
-                <SelectItem value="4">👤 Schwierigkeit 4</SelectItem>
-                <SelectItem value="5">👤 Schwierigkeit 5</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={dogDifficultyFilter} onValueChange={setDogDifficultyFilter}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Hunde-Schwierigkeit" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">🐕 Alle Schwierigkeiten</SelectItem>
-                <SelectItem value="1">🐕 Schwierigkeit 1</SelectItem>
-                <SelectItem value="2">🐕 Schwierigkeit 2</SelectItem>
-                <SelectItem value="3">🐕 Schwierigkeit 3</SelectItem>
-                <SelectItem value="4">🐕 Schwierigkeit 4</SelectItem>
-                <SelectItem value="5">🐕 Schwierigkeit 5</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-full md:w-40">
-                <SelectValue placeholder="Sortieren" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="season">🌍 Nach Jahreszeit</SelectItem>
-                <SelectItem value="-date">Neueste zuerst</SelectItem>
-                <SelectItem value="date">Älteste zuerst</SelectItem>
-                <SelectItem value="-distance">Längste Strecke</SelectItem>
-                <SelectItem value="-elevation">Meiste Höhenmeter</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="flex gap-3 overflow-x-auto pb-1 scrollbar-hide">
+              <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
+                <SelectTrigger className="min-w-[170px] flex-shrink-0">
+                  <SelectValue placeholder="Schwierigkeit" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">👤 Alle Schwierigkeiten</SelectItem>
+                  <SelectItem value="1">👤 Schwierigkeit 1</SelectItem>
+                  <SelectItem value="2">👤 Schwierigkeit 2</SelectItem>
+                  <SelectItem value="3">👤 Schwierigkeit 3</SelectItem>
+                  <SelectItem value="4">👤 Schwierigkeit 4</SelectItem>
+                  <SelectItem value="5">👤 Schwierigkeit 5</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={dogDifficultyFilter} onValueChange={setDogDifficultyFilter}>
+                <SelectTrigger className="min-w-[185px] flex-shrink-0">
+                  <SelectValue placeholder="Hunde-Schwierigkeit" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">🐕 Alle Schwierigkeiten</SelectItem>
+                  <SelectItem value="1">🐕 Schwierigkeit 1</SelectItem>
+                  <SelectItem value="2">🐕 Schwierigkeit 2</SelectItem>
+                  <SelectItem value="3">🐕 Schwierigkeit 3</SelectItem>
+                  <SelectItem value="4">🐕 Schwierigkeit 4</SelectItem>
+                  <SelectItem value="5">🐕 Schwierigkeit 5</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="min-w-[170px] flex-shrink-0">
+                  <SelectValue placeholder="Sortieren" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="season">🌍 Nach Jahreszeit</SelectItem>
+                  <SelectItem value="-date">Neueste zuerst</SelectItem>
+                  <SelectItem value="date">Älteste zuerst</SelectItem>
+                  <SelectItem value="-distance">Längste Strecke</SelectItem>
+                  <SelectItem value="-elevation">Meiste Höhenmeter</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </motion.div>
 
