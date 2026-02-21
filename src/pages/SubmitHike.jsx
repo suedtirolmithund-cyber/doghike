@@ -291,7 +291,7 @@ export default function SubmitHike() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="difficulty">Schwierigkeit (Mensch) 👤</Label>
+                <Label htmlFor="difficulty">Schwierigkeit (Mensch) 👤 *</Label>
                 <Select
                   value={formData.difficulty}
                   onValueChange={(value) => setFormData({ ...formData, difficulty: value })}
@@ -300,16 +300,17 @@ export default function SubmitHike() {
                     <SelectValue placeholder="Wählen" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="easy">Leicht</SelectItem>
-                    <SelectItem value="moderate">Mittel</SelectItem>
-                    <SelectItem value="challenging">Anspruchsvoll</SelectItem>
-                    <SelectItem value="difficult">Schwer</SelectItem>
+                    <SelectItem value="1">1 – Leicht</SelectItem>
+                    <SelectItem value="2">2 – Mittel-leicht</SelectItem>
+                    <SelectItem value="3">3 – Mittel</SelectItem>
+                    <SelectItem value="4">4 – Anspruchsvoll</SelectItem>
+                    <SelectItem value="5">5 – Schwer</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="dog_difficulty">Schwierigkeit (Hund) 🐕</Label>
+                <Label htmlFor="dog_difficulty">Schwierigkeit (Hund) 🐕 *</Label>
                 <Select
                   value={formData.dog_difficulty}
                   onValueChange={(value) => setFormData({ ...formData, dog_difficulty: value })}
@@ -318,16 +319,17 @@ export default function SubmitHike() {
                     <SelectValue placeholder="Wählen" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="easy">Leicht</SelectItem>
-                    <SelectItem value="moderate">Mittel</SelectItem>
-                    <SelectItem value="challenging">Anspruchsvoll</SelectItem>
-                    <SelectItem value="difficult">Schwer</SelectItem>
+                    <SelectItem value="1">1 – Leicht</SelectItem>
+                    <SelectItem value="2">2 – Mittel-leicht</SelectItem>
+                    <SelectItem value="3">3 – Mittel</SelectItem>
+                    <SelectItem value="4">4 – Anspruchsvoll</SelectItem>
+                    <SelectItem value="5">5 – Schwer</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="season">Beste Jahreszeit</Label>
+                <Label htmlFor="season">Beste Jahreszeit *</Label>
                 <Select
                   value={formData.season}
                   onValueChange={(value) => setFormData({ ...formData, season: value })}
@@ -346,7 +348,7 @@ export default function SubmitHike() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="water_availability">Wasser unterwegs 💧</Label>
+                <Label htmlFor="water_availability">Wasser unterwegs 💧 *</Label>
                 <Select
                   value={formData.water_availability}
                   onValueChange={(value) => setFormData({ ...formData, water_availability: value })}
@@ -364,7 +366,7 @@ export default function SubmitHike() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="distance">Strecke (km)</Label>
+                <Label htmlFor="distance">Strecke (km) *</Label>
                 <Input
                   id="distance"
                   type="number"
@@ -376,7 +378,7 @@ export default function SubmitHike() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="elevation">Höhenmeter (m)</Label>
+                <Label htmlFor="elevation">Höhenmeter (m) *</Label>
                 <Input
                   id="elevation"
                   type="number"
@@ -387,13 +389,14 @@ export default function SubmitHike() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="duration">Gehzeit (Minuten)</Label>
+                <Label htmlFor="duration">Gehzeit (Stunden) *</Label>
                 <Input
                   id="duration"
                   type="number"
-                  value={formData.duration_minutes}
-                  onChange={(e) => setFormData({ ...formData, duration_minutes: e.target.value })}
-                  placeholder="240"
+                  step="0.5"
+                  value={formData.duration_hours}
+                  onChange={(e) => setFormData({ ...formData, duration_hours: e.target.value })}
+                  placeholder="4"
                 />
               </div>
 
