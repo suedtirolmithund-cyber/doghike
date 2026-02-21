@@ -40,24 +40,18 @@ export default function Hikes() {
     .filter(hike => {
       const matchesSearch = hike.trail_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            hike.location?.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesDifficulty = difficultyFilter === "all" || hike.difficulty === difficultyFilter;
-      const matchesDogDifficulty = dogDifficultyFilter === "all" || hike.dog_difficulty === dogDifficultyFilter;
-      return matchesSearch && matchesDifficulty && matchesDogDifficulty;
+      if (!matchesSearch) return false;
+      if (levelFilter === "all") return true;
+      if (sortBy === "difficulty") return hike.difficulty === levelFilter;
+      if (sortBy === "dog_difficulty") return hike.dog_difficulty === levelFilter;
+      return true;
     })
     .sort((a, b) => {
-      if (sortBy === "season") {
-        const aMatchesSeason = a.season === currentSeason || a.season === "all_year";
-        const bMatchesSeason = b.season === currentSeason || b.season === "all_year";
-        
-        if (aMatchesSeason && !bMatchesSeason) return -1;
-        if (!aMatchesSeason && bMatchesSeason) return 1;
-        return new Date(b.date) - new Date(a.date);
-      }
-      if (sortBy === "-date") return new Date(b.date) - new Date(a.date);
-      if (sortBy === "date") return new Date(a.date) - new Date(b.date);
-      if (sortBy === "-distance") return (b.distance_km || 0) - (a.distance_km || 0);
-      if (sortBy === "-elevation") return (b.elevation_gain_m || 0) - (a.elevation_gain_m || 0);
-      return 0;
+      if (sortBy === "difficulty") return (a.difficulty || "9").localeCompare(b.difficulty || "9");
+      if (sortBy === "dog_difficulty") return (a.dog_difficulty || "9").localeCompare(b.dog_difficulty || "9");
+      if (sortBy === "distance") return (b.distance_km || 0) - (a.distance_km || 0);
+      if (sortBy === "elevation") return (b.elevation_gain_m || 0) - (a.elevation_gain_m || 0);
+      return new Date(b.date) - new Date(a.date);
     });
 
   return (
