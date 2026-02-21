@@ -84,24 +84,6 @@ export default function Profile() {
     enabled: isAuthenticated && savedHikeIds.length > 0
   });
 
-  const { data: myRatings = [] } = useQuery({
-    queryKey: ["myRatings"],
-    queryFn: async () => {
-      const currentUser = await base44.auth.me();
-      return base44.entities.Rating.filter({ user_email: currentUser.email });
-    },
-    enabled: isAuthenticated
-  });
-
-  const { data: myComments = [] } = useQuery({
-    queryKey: ["myComments"],
-    queryFn: async () => {
-      const currentUser = await base44.auth.me();
-      return base44.entities.Comment.filter({ user_email: currentUser.email });
-    },
-    enabled: isAuthenticated
-  });
-
   const { data: userRoutes = [] } = useQuery({
     queryKey: ["userRoutes"],
     queryFn: async () => {
