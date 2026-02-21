@@ -49,6 +49,15 @@ export default function RouteDetail() {
   });
   const [hoverRating, setHoverRating] = useState(0);
   const [uploading, setUploading] = useState(false);
+  const [editingRoute, setEditingRoute] = useState(false);
+
+  const updateCoordinatesMutation = useMutation({
+    mutationFn: (data) => base44.entities.UserRoute.update(routeId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["route", routeId] });
+      setEditingRoute(false);
+    },
+  });
 
   const { data: route, isLoading } = useQuery({
     queryKey: ["route", routeId],
