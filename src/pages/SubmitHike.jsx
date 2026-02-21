@@ -57,39 +57,7 @@ export default function SubmitHike() {
     enabled: !!user?.email
   });
 
-  const { data: following = [] } = useQuery({
-    queryKey: ["following"],
-    queryFn: async () => {
-      if (!user?.email) return [];
-      return base44.entities.UserFollow.filter({ follower_email: user.email });
-    },
-    enabled: !!user?.email
-  });
-
-  const { data: followers = [] } = useQuery({
-    queryKey: ["followers"],
-    queryFn: async () => {
-      if (!user?.email) return [];
-      return base44.entities.UserFollow.filter({ following_email: user.email });
-    },
-    enabled: !!user?.email
-  });
-
-  const followingEmails = following.map(f => f.following_email);
-  const followerEmails = followers.map(f => f.follower_email);
-  const mutualFriendEmails = followingEmails.filter(email => followerEmails.includes(email));
-
-  const { data: friendsDogs = [] } = useQuery({
-    queryKey: ["friendsDogs", mutualFriendEmails],
-    queryFn: async () => {
-      if (mutualFriendEmails.length === 0) return [];
-      const allDogs = await base44.entities.Dog.list();
-      return allDogs.filter(dog => mutualFriendEmails.includes(dog.created_by));
-    },
-    enabled: mutualFriendEmails.length > 0
-  });
-
-  const availableDogs = [...myDogs, ...friendsDogs];
+  const availableDogs = myDogs;
 
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.Hike.create(data),
