@@ -1,25 +1,20 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { Mountain, Route, Map, ArrowRight, Search, LogIn, UserPlus, Pencil, X, Check } from "lucide-react";
+import { Mountain, Route, Clock, TrendingUp, Plus, Map, ArrowRight, Search, LogIn, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import StatsCard from "@/components/stats/StatsCard";
 import HikeCard from "@/components/hikes/HikeCard";
+import DogAvatar from "@/components/dogs/DogAvatar";
 import HikeMap from "@/components/map/HikeMap";
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [editingHero, setEditingHero] = useState(false);
-  const [editTitle, setEditTitle] = useState("");
-  const [editSubtitle, setEditSubtitle] = useState("");
-  const [editImageUrl, setEditImageUrl] = useState("");
-  const queryClient = useQueryClient();
 
   // Check authentication status
   base44.auth.isAuthenticated().then(setIsAuthenticated);
@@ -29,15 +24,9 @@ export default function Dashboard() {
     queryFn: () => base44.entities.Hike.filter({ status: "approved" }, "-date", 1000)
   });
 
-  const { data: dogs = [] } = useQuery({
+  const { data: dogs = [], isLoading: dogsLoading } = useQuery({
     queryKey: ["dogs"],
     queryFn: () => base44.entities.Dog.list()
-  });
-
-  const { data: user } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => base44.auth.me(),
-    enabled: isAuthenticated
   });
 
   const { data: siteSettings = [] } = useQuery({
@@ -45,39 +34,8 @@ export default function Dashboard() {
     queryFn: () => base44.entities.SiteSettings.list()
   });
 
-  const updateSettingMutation = useMutation({
-    mutationFn: async ({ key, value }) => {
-      const existing = siteSettings.find(s => s.key === key);
-      if (existing) {
-        return base44.entities.SiteSettings.update(existing.id, { value });
-      } else {
-        return base44.entities.SiteSettings.create({ key, value });
-      }
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["siteSettings"] })
-  });
-
-  const getSetting = (key, fallback) => siteSettings.find(s => s.key === key)?.value || fallback;
-
-  const heroTitle = getSetting("hero_title", "Hundefreundliche Wanderungen");
-  const heroSubtitle = getSetting("hero_subtitle", "Entdecke die schönsten Wanderungen in Südtirol, den Dolomiten. Getestet mit unseren Vierbeinern");
-  const heroImageUrl = getSetting("hero_image_url", "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80");
-
-  const startEditing = () => {
-    setEditTitle(heroTitle);
-    setEditSubtitle(heroSubtitle);
-    setEditImageUrl(heroImageUrl);
-    setEditingHero(true);
-  };
-
-  const saveHero = async () => {
-    await Promise.all([
-      updateSettingMutation.mutateAsync({ key: "hero_title", value: editTitle }),
-      updateSettingMutation.mutateAsync({ key: "hero_subtitle", value: editSubtitle }),
-      updateSettingMutation.mutateAsync({ key: "hero_image_url", value: editImageUrl }),
-    ]);
-    setEditingHero(false);
-  };
+  const subtitle = siteSettings.find(s => s.key === 'hero_subtitle')?.value || 
+    'Entdecke die schönsten Wanderungen in Südtirol, den Dolomiten. Getestet mit unseren Vierbeinern';
 
   const filteredHikes = hikes.filter((hike) => {
     if (!searchQuery) return true;
@@ -94,70 +52,40 @@ export default function Dashboard() {
       <div className="relative overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('${heroImageUrl}')` }} />
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80')"
+          }} />
 
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-stone-50" />
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
-          {/* Admin edit button */}
-          {user?.role === "admin" && !editingHero && (
-            <div className="absolute top-4 right-4">
-              <Button size="sm" onClick={startEditing} className="bg-white/20 hover:bg-white/30 text-white border border-white/30">
-                <Pencil className="w-4 h-4 mr-2" />
-                Titelbild bearbeiten
-              </Button>
-            </div>
-          )}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center">
 
-          {editingHero ? (
-            <div className="bg-white/10 backdrop-blur-sm border border-white/30 rounded-2xl p-6 max-w-2xl mx-auto text-white space-y-4">
-              <h2 className="text-xl font-semibold">Titelbild bearbeiten</h2>
-              <div>
-                <label className="text-sm text-white/70 mb-1 block">Titel</label>
-                <Input value={editTitle} onChange={e => setEditTitle(e.target.value)} className="bg-white/20 border-white/30 text-white placeholder:text-white/50" />
-              </div>
-              <div>
-                <label className="text-sm text-white/70 mb-1 block">Untertitel</label>
-                <Textarea value={editSubtitle} onChange={e => setEditSubtitle(e.target.value)} rows={3} className="bg-white/20 border-white/30 text-white placeholder:text-white/50" />
-              </div>
-              <div>
-                <label className="text-sm text-white/70 mb-1 block">Bild-URL</label>
-                <Input value={editImageUrl} onChange={e => setEditImageUrl(e.target.value)} className="bg-white/20 border-white/30 text-white placeholder:text-white/50" placeholder="https://..." />
-              </div>
-              <div className="flex gap-3">
-                <Button onClick={saveHero} className="bg-white text-slate-800 hover:bg-white/90">
-                  <Check className="w-4 h-4 mr-2" /> Speichern
+            <h1 className="text-4xl md:text-6xl font-light text-white mb-4 tracking-tight">
+              Hundefreundliche Wanderungen
+            </h1>
+            <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">Entdecke die schönsten Wanderungen in Südtirol, den Dolomiten. 
+Getestet mit unseren Vierbeinern 
+            </p>
+
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link to={createPageUrl("Hikes")}>
+                <Button size="lg" className="bg-white text-slate-800 hover:bg-white/90 shadow-lg">
+                  <Mountain className="w-5 h-5 mr-2" />
+                  Alle Touren entdecken
                 </Button>
-                <Button variant="ghost" onClick={() => setEditingHero(false)} className="text-white hover:bg-white/20">
-                  <X className="w-4 h-4 mr-2" /> Abbrechen
+              </Link>
+              <Link to={createPageUrl("SubmitHike")}>
+                <Button size="lg" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
+                  Tour einreichen
                 </Button>
-              </div>
+              </Link>
             </div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-center">
-              <h1 className="text-4xl md:text-6xl font-light text-white mb-4 tracking-tight">
-                {heroTitle}
-              </h1>
-              <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">{heroSubtitle}</p>
-              <div className="flex flex-wrap gap-4 justify-center">
-                <Link to={createPageUrl("Hikes")}>
-                  <Button size="lg" className="bg-white text-slate-800 hover:bg-white/90 shadow-lg">
-                    <Mountain className="w-5 h-5 mr-2" />
-                    Alle Touren entdecken
-                  </Button>
-                </Link>
-                <Link to={createPageUrl("SubmitHike")}>
-                  <Button size="lg" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
-                    Tour einreichen
-                  </Button>
-                </Link>
-              </div>
-            </motion.div>
-          )}
+          </motion.div>
         </div>
       </div>
 
