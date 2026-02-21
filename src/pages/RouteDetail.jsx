@@ -243,6 +243,7 @@ export default function RouteDetail() {
                       coordinates: routeData.coordinates,
                       distance_km: routeData.distance_km,
                       elevation_gain_m: routeData.elevation_gain_m,
+                      duration_minutes: routeData.duration_minutes,
                     });
                   }}
                 />
