@@ -163,6 +163,10 @@ export default function Feed() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6 md:mb-8"
         >
+          <div className="flex gap-3 mb-4">
+            <img src="https://images.unsplash.com/photo-1633722715463-d30628ccbf40?w=100&h=100&fit=crop" alt="Dog 1" className="w-16 h-16 rounded-full object-cover shadow-md" />
+            <img src="https://images.unsplash.com/photo-1587300411515-150e50846cbb?w=100&h=100&fit=crop" alt="Dog 2" className="w-16 h-16 rounded-full object-cover shadow-md" />
+          </div>
           <h1 className="text-2xl md:text-3xl font-light text-stone-800 mb-1">Freunde & Benachrichtigungen</h1>
           <p className="text-stone-500 text-sm md:text-base">Verwalte deine Freundschaften, Aktivitäten und Benachrichtigungen</p>
         </motion.div>
