@@ -323,7 +323,7 @@ export default function HikeDetail() {
                 <h2 className="text-lg font-medium text-stone-800 mb-3 flex items-center gap-2">
                   🅿️ Ausgangspunkt & Parken
                 </h2>
-                <p className="text-stone-600 leading-relaxed whitespace-pre-wrap">{hike.parking_info}</p>
+                <ExpandableText text={hike.parking_info} />
               </motion.div>
             )}
 
@@ -338,7 +338,7 @@ export default function HikeDetail() {
                 <h2 className="text-lg font-medium text-stone-800 mb-3 flex items-center gap-2">
                   🍽️ Einkehrmöglichkeiten
                 </h2>
-                <p className="text-stone-600 leading-relaxed whitespace-pre-wrap">{hike.restaurant_info}</p>
+                <ExpandableText text={hike.restaurant_info} />
               </motion.div>
             )}
 
