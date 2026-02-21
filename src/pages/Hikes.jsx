@@ -13,9 +13,8 @@ import HikeMap from "@/components/map/HikeMap";
 
 export default function Hikes() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [difficultyFilter, setDifficultyFilter] = useState("all");
-  const [dogDifficultyFilter, setDogDifficultyFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("season");
+  const [sortBy, setSortBy] = useState("none");
+  const [levelFilter, setLevelFilter] = useState("all");
 
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["hikes"],
