@@ -86,45 +86,35 @@ export default function Hikes() {
                 className="pl-10"
               />
             </div>
-            <div className="flex gap-3 overflow-x-auto pb-1 scrollbar-hide">
-              <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
-                <SelectTrigger className="min-w-[170px] flex-shrink-0">
-                  <SelectValue placeholder="Schwierigkeit" />
+            <div className="flex flex-wrap gap-3">
+              <Select value={sortBy} onValueChange={(v) => { setSortBy(v); setLevelFilter("all"); }}>
+                <SelectTrigger className="min-w-[180px] flex-shrink-0">
+                  <SelectValue placeholder="Sortieren nach..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">👤 Alle Schwierigkeiten</SelectItem>
-                  <SelectItem value="1">👤 Schwierigkeit 1</SelectItem>
-                  <SelectItem value="2">👤 Schwierigkeit 2</SelectItem>
-                  <SelectItem value="3">👤 Schwierigkeit 3</SelectItem>
-                  <SelectItem value="4">👤 Schwierigkeit 4</SelectItem>
-                  <SelectItem value="5">👤 Schwierigkeit 5</SelectItem>
+                  <SelectItem value="none">🕐 Neueste zuerst</SelectItem>
+                  <SelectItem value="difficulty">👤 Schwierigkeit Mensch</SelectItem>
+                  <SelectItem value="dog_difficulty">🐕 Schwierigkeit Hund</SelectItem>
+                  <SelectItem value="distance">📏 Kilometer</SelectItem>
+                  <SelectItem value="elevation">⛰️ Höhenmeter</SelectItem>
                 </SelectContent>
               </Select>
-              <Select value={dogDifficultyFilter} onValueChange={setDogDifficultyFilter}>
-                <SelectTrigger className="min-w-[185px] flex-shrink-0">
-                  <SelectValue placeholder="Hunde-Schwierigkeit" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">🐕 Alle Schwierigkeiten</SelectItem>
-                  <SelectItem value="1">🐕 Schwierigkeit 1</SelectItem>
-                  <SelectItem value="2">🐕 Schwierigkeit 2</SelectItem>
-                  <SelectItem value="3">🐕 Schwierigkeit 3</SelectItem>
-                  <SelectItem value="4">🐕 Schwierigkeit 4</SelectItem>
-                  <SelectItem value="5">🐕 Schwierigkeit 5</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="min-w-[170px] flex-shrink-0">
-                  <SelectValue placeholder="Sortieren" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="season">🌍 Nach Jahreszeit</SelectItem>
-                  <SelectItem value="-date">Neueste zuerst</SelectItem>
-                  <SelectItem value="date">Älteste zuerst</SelectItem>
-                  <SelectItem value="-distance">Längste Strecke</SelectItem>
-                  <SelectItem value="-elevation">Meiste Höhenmeter</SelectItem>
-                </SelectContent>
-              </Select>
+
+              {(sortBy === "difficulty" || sortBy === "dog_difficulty") && (
+                <Select value={levelFilter} onValueChange={setLevelFilter}>
+                  <SelectTrigger className="min-w-[150px] flex-shrink-0">
+                    <SelectValue placeholder="Stufe wählen" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Alle Stufen</SelectItem>
+                    <SelectItem value="1">Stufe 1 – Leicht</SelectItem>
+                    <SelectItem value="2">Stufe 2 – Mittel-leicht</SelectItem>
+                    <SelectItem value="3">Stufe 3 – Mittel</SelectItem>
+                    <SelectItem value="4">Stufe 4 – Anspruchsvoll</SelectItem>
+                    <SelectItem value="5">Stufe 5 – Schwer</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
             </div>
           </div>
         </motion.div>
