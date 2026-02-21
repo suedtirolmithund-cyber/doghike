@@ -387,6 +387,65 @@ export default function RouteDetail() {
                         />
                       </div>
 
+                      {/* Difficulty */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-sm font-medium text-stone-700 mb-1 block">Schwierigkeit (Mensch) 👤</label>
+                          <Select value={completeData.difficulty} onValueChange={(v) => setCompleteData({ ...completeData, difficulty: v })}>
+                            <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="1">1 – Leicht</SelectItem>
+                              <SelectItem value="2">2 – Mittel-leicht</SelectItem>
+                              <SelectItem value="3">3 – Mittel</SelectItem>
+                              <SelectItem value="4">4 – Anspruchsvoll</SelectItem>
+                              <SelectItem value="5">5 – Schwer</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-stone-700 mb-1 block">Schwierigkeit (Hund) 🐕</label>
+                          <Select value={completeData.dog_difficulty} onValueChange={(v) => setCompleteData({ ...completeData, dog_difficulty: v })}>
+                            <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="1">1 – Leicht</SelectItem>
+                              <SelectItem value="2">2 – Mittel-leicht</SelectItem>
+                              <SelectItem value="3">3 – Mittel</SelectItem>
+                              <SelectItem value="4">4 – Anspruchsvoll</SelectItem>
+                              <SelectItem value="5">5 – Schwer</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      {/* Season & Water */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-sm font-medium text-stone-700 mb-1 block">Beste Jahreszeit</label>
+                          <Select value={completeData.season} onValueChange={(v) => setCompleteData({ ...completeData, season: v })}>
+                            <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="spring">🌸 Frühling</SelectItem>
+                              <SelectItem value="summer">☀️ Sommer</SelectItem>
+                              <SelectItem value="autumn">🍂 Herbst</SelectItem>
+                              <SelectItem value="winter">❄️ Winter</SelectItem>
+                              <SelectItem value="all_year">🍃 Ganzjährig</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-stone-700 mb-1 block">Wasser unterwegs 💧</label>
+                          <Select value={completeData.water_availability} onValueChange={(v) => setCompleteData({ ...completeData, water_availability: v })}>
+                            <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="none">🚫 Kein Wasser</SelectItem>
+                              <SelectItem value="little">💧 Wenig Wasser</SelectItem>
+                              <SelectItem value="moderate">💧💧 Etwas Wasser</SelectItem>
+                              <SelectItem value="plenty">💧💧💧 Viel Wasser</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
                       {/* Rating */}
                       <div>
                         <label className="text-sm font-medium text-stone-700 mb-2 block">Bewertung</label>
@@ -405,11 +464,90 @@ export default function RouteDetail() {
                         </div>
                       </div>
 
+                      {/* Dogs */}
+                      {myDogs.length > 0 && (
+                        <div>
+                          <label className="text-sm font-medium text-stone-700 mb-2 block">🐕 Welche Hunde waren dabei?</label>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            {myDogs.map((dog) => (
+                              <div
+                                key={dog.id}
+                                className="flex items-center gap-3 p-3 rounded-lg border border-stone-200 hover:bg-stone-50 cursor-pointer"
+                                onClick={() => toggleDog(dog.id)}
+                              >
+                                <Checkbox checked={completeData.dogs.includes(dog.id)} onCheckedChange={() => toggleDog(dog.id)} />
+                                <img src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`} alt={dog.name} className="w-8 h-8 rounded-full object-cover" />
+                                <div>
+                                  <p className="text-sm font-medium text-stone-800">{dog.name}</p>
+                                  {dog.breed && <p className="text-xs text-stone-500">{dog.breed}</p>}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Photos */}
+                      <div>
+                        <label className="text-sm font-medium text-stone-700 mb-2 block">Fotos</label>
+                        <div className="flex flex-wrap gap-3">
+                          {completeData.photos?.map((url, index) => (
+                            <div key={url} className="relative group">
+                              <img src={url} alt={`Foto ${index + 1}`} className="w-20 h-20 object-cover rounded-xl" />
+                              <button
+                                type="button"
+                                onClick={() => removePhoto(index)}
+                                className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </div>
+                          ))}
+                          <label className="w-20 h-20 flex flex-col items-center justify-center border-2 border-dashed border-stone-300 rounded-xl cursor-pointer hover:border-slate-500 transition-colors">
+                            <input type="file" accept="image/*" multiple onChange={handlePhotoUpload} className="hidden" disabled={uploading} />
+                            {uploading ? <Loader2 className="w-5 h-5 text-stone-400 animate-spin" /> : <><Upload className="w-5 h-5 text-stone-400" /><span className="text-xs text-stone-400 mt-1">Fotos</span></>}
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Parking */}
+                      <div>
+                        <label className="text-sm font-medium text-stone-700 mb-1 block">🅿️ Ausgangspunkt & Parken</label>
+                        <Textarea
+                          placeholder="z.B. Großer Parkplatz am Pragser Wildsee..."
+                          value={completeData.parking_info}
+                          onChange={(e) => setCompleteData({ ...completeData, parking_info: e.target.value })}
+                          rows={2}
+                        />
+                      </div>
+
+                      {/* Restaurant */}
+                      <div>
+                        <label className="text-sm font-medium text-stone-700 mb-1 block">🍽️ Einkehrmöglichkeiten (optional)</label>
+                        <Textarea
+                          placeholder="z.B. Seekofel Hütte (2324m)..."
+                          value={completeData.restaurant_info}
+                          onChange={(e) => setCompleteData({ ...completeData, restaurant_info: e.target.value })}
+                          rows={2}
+                        />
+                      </div>
+
+                      {/* Hazard */}
+                      <div>
+                        <label className="text-sm font-medium text-stone-700 mb-1 block">⚠️ Gefahrenstellen (optional)</label>
+                        <Textarea
+                          placeholder="z.B. steile Passagen, Leitern, Kühe auf der Alm..."
+                          value={completeData.hazard_notes}
+                          onChange={(e) => setCompleteData({ ...completeData, hazard_notes: e.target.value })}
+                          rows={2}
+                        />
+                      </div>
+
                       {/* Notes */}
                       <div>
-                        <label className="text-sm font-medium text-stone-700 mb-1 block">Notizen zur Tour</label>
+                        <label className="text-sm font-medium text-stone-700 mb-1 block">Beschreibung & Notizen</label>
                         <Textarea
-                          placeholder="Wie war die Tour? Besondere Erlebnisse?"
+                          placeholder="Wie war die Tour? Besondere Erlebnisse, Highlights..."
                           value={completeData.completed_notes}
                           onChange={(e) => setCompleteData({ ...completeData, completed_notes: e.target.value })}
                           rows={3}
