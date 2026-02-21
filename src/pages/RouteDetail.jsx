@@ -6,7 +6,7 @@ import { createPageUrl } from "@/utils";
 import { MapContainer, TileLayer, Polyline, Marker } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Map, Route, Clock, Navigation, Eye, EyeOff, Trash2, Star } from "lucide-react";
+import { ArrowLeft, Map, Route, Clock, Navigation, Eye, EyeOff, Trash2, Star, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import RatingSection from "@/components/community/RatingSection";
