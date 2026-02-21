@@ -379,11 +379,23 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
           </div>
         )}
         {waypoints.length > 0 && !isCalculating && (
-          <div className="mt-2 pt-2 border-t border-stone-300">
+          <div className="mt-2 pt-2 border-t border-stone-300 space-y-1">
             <div className="flex items-center justify-between text-xs md:text-sm">
               <span className="text-stone-600">Wegpunkte: <strong className="text-slate-800">{waypoints.length}</strong></span>
               <span className="text-stone-600">Distanz: <strong className="text-slate-800">{routeDistance} km</strong></span>
             </div>
+            {waypoints.length >= 2 && (
+              <div className="flex items-center justify-between text-xs md:text-sm">
+                {routeElevationGain > 0 && (
+                  <span className="text-stone-600">⛰️ Höhenmeter: <strong className="text-slate-800">+{routeElevationGain} m</strong></span>
+                )}
+                {routeDurationMin > 0 && (
+                  <span className="text-stone-600">⏱️ ca. <strong className="text-slate-800">
+                    {Math.floor(routeDurationMin / 60) > 0 ? `${Math.floor(routeDurationMin / 60)}h ` : ""}{routeDurationMin % 60}min
+                  </strong></span>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
