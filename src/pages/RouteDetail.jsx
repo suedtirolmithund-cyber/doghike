@@ -36,8 +36,18 @@ export default function RouteDetail() {
     completed_notes: "",
     completed_rating: 0,
     completed_visibility: "private",
+    difficulty: "",
+    dog_difficulty: "",
+    season: "",
+    water_availability: "",
+    hazard_notes: "",
+    parking_info: "",
+    restaurant_info: "",
+    photos: [],
+    dogs: [],
   });
   const [hoverRating, setHoverRating] = useState(0);
+  const [uploading, setUploading] = useState(false);
 
   const { data: route, isLoading } = useQuery({
     queryKey: ["route", routeId],
