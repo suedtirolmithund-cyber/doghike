@@ -178,7 +178,13 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
         const path = data.paths[0];
         const coordinates = path.points.coordinates.map(c => [c[1], c[0]]);
         setRouteCoordinates(coordinates);
-        setRouteDistance((path.distance / 1000).toFixed(2));
+        const distKm = parseFloat((path.distance / 1000).toFixed(2));
+        setRouteDistance(distKm);
+        const elevGain = path.ascend ? Math.round(path.ascend) : 0;
+        setRouteElevationGain(elevGain);
+        // Naismith's rule: 1h per 5km + 1h per 600m ascent
+        const estimatedMin = Math.round((distKm / 5) * 60 + (elevGain / 600) * 60);
+        setRouteDurationMin(estimatedMin);
       } else {
         // Fallback: try OSRM
         await fetchRouteOSRM(points);
