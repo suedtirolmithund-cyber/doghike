@@ -281,7 +281,7 @@ export default function RouteDetail() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               <div className="text-center p-4 bg-slate-50 rounded-lg">
                 <Route className="w-5 h-5 mx-auto mb-2 text-slate-700" />
-                <p className="text-2xl font-bold text-slate-800">{route.distance_km}</p>
+                <p className="text-2xl font-bold text-slate-800">{route.distance_km ?? "–"}</p>
                 <p className="text-xs text-stone-500">Kilometer</p>
               </div>
               <div className="text-center p-4 bg-slate-50 rounded-lg">
