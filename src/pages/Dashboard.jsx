@@ -21,7 +21,7 @@ export default function Dashboard() {
 
   const { data: hikes = [], isLoading: hikesLoading } = useQuery({
     queryKey: ["hikes"],
-    queryFn: () => base44.entities.Hike.filter({ visibility: "public", status: "approved" }, "-date", 1000)
+    queryFn: () => base44.entities.Hike.filter({ status: "approved" }, "-date", 1000)
   });
 
   const { data: dogs = [], isLoading: dogsLoading } = useQuery({
@@ -29,13 +29,26 @@ export default function Dashboard() {
     queryFn: () => base44.entities.Dog.list()
   });
 
+  const getCurrentSeason = () => {
+    const month = new Date().getMonth() + 1;
+    if (month >= 12 || month <= 2) return "winter";
+    if (month >= 3 && month <= 5) return "spring";
+    if (month >= 6 && month <= 8) return "summer";
+    return "autumn";
+  };
+
+  const currentSeason = getCurrentSeason();
+
   const filteredHikes = hikes.filter((hike) => {
     if (!searchQuery) return true;
     return hike.trail_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     hike.location?.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
-  const recentHikes = filteredHikes.slice(0, 6);
+  const recommendedHikes = filteredHikes
+    .filter(hike => !hike.season || hike.season === "all_year" || hike.season === currentSeason)
+    .slice(0, 6);
+  
   const hikesWithCoords = filteredHikes.filter((h) => h.latitude && h.longitude);
 
   return (
