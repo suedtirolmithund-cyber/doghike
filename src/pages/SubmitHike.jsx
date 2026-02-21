@@ -110,8 +110,8 @@ export default function SubmitHike() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.trail_name || !formData.location || !formData.distance_km || !formData.elevation_gain_m || !formData.duration_hours || !formData.difficulty || !formData.dog_difficulty || !formData.season || !formData.water_availability) {
-      alert("Bitte fülle alle Pflichtfelder aus (Name, Ort, Strecke, Höhenmeter, Gehzeit, Schwierigkeit, Jahreszeit, Wasser)!");
+    if (!formData.trail_name || !formData.location || !formData.distance_km || !formData.elevation_gain_m || !formData.duration_hours || !formData.difficulty || !formData.dog_difficulty || !formData.season || !formData.water_availability || !formData.parking_info || !formData.notes) {
+      alert("Bitte fülle alle Pflichtfelder aus!");
       return;
     }
 
