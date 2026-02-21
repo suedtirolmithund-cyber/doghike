@@ -224,22 +224,49 @@ export default function RouteDetail() {
             transition={{ delay: 0.1 }}
             className="bg-white rounded-2xl p-6 border border-stone-200/50 shadow-sm"
           >
-            <h2 className="text-lg font-semibold text-stone-800 mb-4">Routenverlauf</h2>
-            <div className="h-96 md:h-[500px] rounded-xl overflow-hidden border border-stone-200">
-              <MapContainer
-                center={route.coordinates[0] || [46.5, 11.9]}
-                zoom={13}
-                style={{ height: "100%", width: "100%" }}
-              >
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution='&copy; OpenStreetMap'
-                />
-                <Polyline positions={route.coordinates} color="#1e293b" weight={4} />
-                <Marker position={route.coordinates[0]} />
-                <Marker position={route.coordinates[route.coordinates.length - 1]} />
-              </MapContainer>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-stone-800">Routenverlauf</h2>
+              {isOwner && route.route_type === "planned" && !editingRoute && (
+                <Button variant="outline" size="sm" onClick={() => setEditingRoute(true)}>
+                  <Pencil className="w-4 h-4 mr-2" />
+                  Punkte bearbeiten
+                </Button>
+              )}
             </div>
+
+            {editingRoute ? (
+              <div className="space-y-4">
+                <EditableRouteDrawer
+                  initialCoordinates={route.coordinates}
+                  onSave={(routeData) => {
+                    updateCoordinatesMutation.mutate({
+                      coordinates: routeData.coordinates,
+                      distance_km: routeData.distance_km,
+                      elevation_gain_m: routeData.elevation_gain_m,
+                    });
+                  }}
+                />
+                <Button variant="outline" onClick={() => setEditingRoute(false)} className="w-full">
+                  Abbrechen
+                </Button>
+              </div>
+            ) : (
+              <div className="h-96 md:h-[500px] rounded-xl overflow-hidden border border-stone-200">
+                <MapContainer
+                  center={route.coordinates[0] || [46.5, 11.9]}
+                  zoom={13}
+                  style={{ height: "100%", width: "100%" }}
+                >
+                  <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; OpenStreetMap'
+                  />
+                  <Polyline positions={route.coordinates} color="#1e293b" weight={4} />
+                  <Marker position={route.coordinates[0]} />
+                  <Marker position={route.coordinates[route.coordinates.length - 1]} />
+                </MapContainer>
+              </div>
+            )}
           </motion.div>
 
           {/* Details */}
