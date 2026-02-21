@@ -176,9 +176,9 @@ Getestet mit unseren Vierbeinern
             </div>
           </div>
           
-          {recentHikes.length > 0 ?
+          {recommendedHikes.length > 0 ?
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {recentHikes.map((hike, index) =>
+              {recommendedHikes.map((hike, index) =>
             <HikeCard key={hike.id} hike={hike} dogs={dogs} index={index} />
             )}
             </div> :
