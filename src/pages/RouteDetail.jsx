@@ -248,6 +248,175 @@ export default function RouteDetail() {
               </div>
             )}
           </motion.div>
+
+          {/* Complete Route Section */}
+          {isOwner && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-white rounded-2xl p-6 border border-stone-200/50 shadow-sm"
+            >
+              {route.completed ? (
+                <div className="flex items-center gap-3">
+                  <div className="bg-green-100 rounded-full p-2">
+                    <CheckCircle2 className="w-6 h-6 text-green-600" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-semibold text-green-700">Tour erledigt! 🎉</p>
+                    {route.completed_date && (
+                      <p className="text-sm text-stone-500">Am {format(new Date(route.completed_date), "dd.MM.yyyy")}</p>
+                    )}
+                    {route.completed_rating > 0 && (
+                      <div className="flex gap-0.5 mt-1">
+                        {[1,2,3,4,5].map(s => (
+                          <Star key={s} className={`w-4 h-4 ${s <= route.completed_rating ? "fill-yellow-400 text-yellow-400" : "text-stone-300"}`} />
+                        ))}
+                      </div>
+                    )}
+                    {route.completed_notes && (
+                      <p className="text-sm text-stone-600 mt-1">{route.completed_notes}</p>
+                    )}
+                    {route.completed_duration_minutes && (
+                      <p className="text-sm text-stone-500 mt-1">
+                        Dauer: {Math.floor(route.completed_duration_minutes / 60) > 0
+                          ? `${Math.floor(route.completed_duration_minutes / 60)}h ${route.completed_duration_minutes % 60}min`
+                          : `${route.completed_duration_minutes}min`}
+                      </p>
+                    )}
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowCompleteForm(true)}
+                    className="text-stone-500"
+                  >
+                    Bearbeiten
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <h3 className="font-semibold text-stone-800">Tour gemacht?</h3>
+                    <p className="text-sm text-stone-500">Markiere diese Route als erledigt</p>
+                  </div>
+                  <Button
+                    onClick={() => setShowCompleteForm(true)}
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    <CheckCircle2 className="w-4 h-4 mr-2" />
+                    Als erledigt markieren
+                  </Button>
+                </div>
+              )}
+
+              <AnimatePresence>
+                {showCompleteForm && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="border-t border-stone-200 mt-4 pt-4 space-y-4">
+                      <h4 className="font-medium text-stone-800">Tour-Details ergänzen</h4>
+
+                      {/* Date */}
+                      <div>
+                        <label className="text-sm font-medium text-stone-700 mb-1 block">Datum der Tour</label>
+                        <Input
+                          type="date"
+                          value={completeData.completed_date}
+                          onChange={(e) => setCompleteData({ ...completeData, completed_date: e.target.value })}
+                        />
+                      </div>
+
+                      {/* Duration */}
+                      <div>
+                        <label className="text-sm font-medium text-stone-700 mb-1 block">Tatsächliche Gehzeit (Minuten)</label>
+                        <Input
+                          type="number"
+                          placeholder="z.B. 150"
+                          value={completeData.completed_duration_minutes}
+                          onChange={(e) => setCompleteData({ ...completeData, completed_duration_minutes: Number(e.target.value) })}
+                        />
+                      </div>
+
+                      {/* Rating */}
+                      <div>
+                        <label className="text-sm font-medium text-stone-700 mb-2 block">Bewertung</label>
+                        <div className="flex gap-1">
+                          {[1,2,3,4,5].map(star => (
+                            <button
+                              key={star}
+                              type="button"
+                              onClick={() => setCompleteData({ ...completeData, completed_rating: star })}
+                              onMouseEnter={() => setHoverRating(star)}
+                              onMouseLeave={() => setHoverRating(0)}
+                            >
+                              <Star className={`w-8 h-8 transition-colors ${star <= (hoverRating || completeData.completed_rating) ? "fill-yellow-400 text-yellow-400" : "text-stone-300"}`} />
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Notes */}
+                      <div>
+                        <label className="text-sm font-medium text-stone-700 mb-1 block">Notizen zur Tour</label>
+                        <Textarea
+                          placeholder="Wie war die Tour? Besondere Erlebnisse?"
+                          value={completeData.completed_notes}
+                          onChange={(e) => setCompleteData({ ...completeData, completed_notes: e.target.value })}
+                          rows={3}
+                        />
+                      </div>
+
+                      {/* Visibility */}
+                      <div>
+                        <label className="text-sm font-medium text-stone-700 mb-2 block">Sichtbarkeit</label>
+                        <div className="flex gap-2">
+                          {[
+                            { value: "private", label: "Privat", icon: Lock },
+                            { value: "friends", label: "Freunde", icon: Users },
+                            { value: "public", label: "Öffentlich", icon: Eye },
+                          ].map(({ value, label, icon: Icon }) => (
+                            <button
+                              key={value}
+                              type="button"
+                              onClick={() => setCompleteData({ ...completeData, completed_visibility: value })}
+                              className={`flex-1 flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all text-sm font-medium ${
+                                completeData.completed_visibility === value
+                                  ? "border-slate-800 bg-slate-50 text-slate-800"
+                                  : "border-stone-200 text-stone-500 hover:border-stone-300"
+                              }`}
+                            >
+                              <Icon className="w-4 h-4" />
+                              {label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2 pt-2">
+                        <Button variant="outline" onClick={() => setShowCompleteForm(false)} className="flex-1">
+                          Abbrechen
+                        </Button>
+                        <Button
+                          onClick={() => completeRouteMutation.mutate(completeData)}
+                          disabled={completeRouteMutation.isPending}
+                          className="flex-1 bg-green-600 hover:bg-green-700"
+                        >
+                          <CheckCircle2 className="w-4 h-4 mr-2" />
+                          Speichern
+                        </Button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          )}
+
         </div>
       </div>
     </div>
