@@ -170,7 +170,7 @@ export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, hei
         ) : (
           <>
             {hikesWithCoords.map((hike) => (
-              <div key={hike.id} style={{ display: 'none' }}>
+              <div key={hike.id}>
                 {hike.route_coordinates && hike.route_coordinates.length > 1 && (
                   <Polyline
                     key={`route-${hike.id}`}
@@ -181,7 +181,7 @@ export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, hei
                   />
                 )}
                 <Marker
-                  key={hike.id}
+                  key={`marker-${hike.id}`}
                   position={[hike.latitude, hike.longitude]}
                   icon={createPawIcon(hike.season || "all_year")}
                 >
