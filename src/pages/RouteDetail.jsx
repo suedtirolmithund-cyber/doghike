@@ -195,25 +195,7 @@ function RouteCommentSection({ routeId }) {
 
   return (
     <div className="space-y-6">
-      {user && (
-        <div className="bg-white rounded-xl p-4 md:p-6 border border-stone-200">
-          <h3 className="font-semibold text-stone-800 mb-3 text-sm md:text-base">Kommentar hinzufügen</h3>
-          <textarea
-            placeholder="Teile deine Erfahrungen..."
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
-            className="w-full border border-stone-200 rounded-lg p-3 text-sm mb-3"
-            rows={3}
-          />
-          <Button
-            onClick={handleSubmit}
-            disabled={!commentText.trim() || createCommentMutation.isPending}
-            className="bg-slate-800 hover:bg-slate-900 w-full"
-          >
-            Senden
-          </Button>
-        </div>
-      )}
+
 
       <div className="space-y-3">
         <h3 className="font-semibold text-stone-800 text-sm md:text-base">

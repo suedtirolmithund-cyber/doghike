@@ -53,6 +53,7 @@ import Dashboard from './pages/Dashboard';
 import Datenschutz from './pages/Datenschutz';
 import Dogs from './pages/Dogs';
 import EditHike from './pages/EditHike';
+import EditRoute from './pages/EditRoute';
 import Feed from './pages/Feed';
 import HikeDetail from './pages/HikeDetail';
 import Hikes from './pages/Hikes';
@@ -66,7 +67,6 @@ import RoutePlanner from './pages/RoutePlanner';
 import SubmitHike from './pages/SubmitHike';
 import Support from './pages/Support';
 import TopDogs from './pages/TopDogs';
-import EditRoute from './pages/EditRoute';
 import __Layout from './Layout.jsx';
 
 
@@ -77,6 +77,7 @@ export const PAGES = {
     "Datenschutz": Datenschutz,
     "Dogs": Dogs,
     "EditHike": EditHike,
+    "EditRoute": EditRoute,
     "Feed": Feed,
     "HikeDetail": HikeDetail,
     "Hikes": Hikes,
@@ -90,7 +91,6 @@ export const PAGES = {
     "SubmitHike": SubmitHike,
     "Support": Support,
     "TopDogs": TopDogs,
-    "EditRoute": EditRoute,
 }
 
 export const pagesConfig = {
