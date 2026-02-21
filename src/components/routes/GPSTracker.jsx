@@ -15,6 +15,19 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
+const myLocationIcon = L.divIcon({
+  html: `<div style="
+    width: 20px; height: 20px;
+    background: #2563eb;
+    border: 3px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(37,99,235,0.3), 0 2px 8px rgba(0,0,0,0.3);
+  "></div>`,
+  className: '',
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
+});
+
 function MapUpdater({ center }) {
   const map = useMap();
   
