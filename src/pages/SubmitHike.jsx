@@ -505,7 +505,7 @@ export default function SubmitHike() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="hazard_notes">⚠️ Achtung - Gefahrenstellen (optional)</Label>
+              <Label htmlFor="hazard_notes">⚠️ Achtung - Gefahrenstellen (optional, kann leer bleiben)</Label>
               <Textarea
                 id="hazard_notes"
                 value={formData.hazard_notes}
