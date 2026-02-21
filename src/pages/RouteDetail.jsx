@@ -27,6 +27,16 @@ export default function RouteDetail() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const [showCompleteForm, setShowCompleteForm] = useState(false);
+  const [completeData, setCompleteData] = useState({
+    completed_date: format(new Date(), "yyyy-MM-dd"),
+    completed_duration_minutes: "",
+    completed_notes: "",
+    completed_rating: 0,
+    completed_visibility: "private",
+  });
+  const [hoverRating, setHoverRating] = useState(0);
+
   const { data: route, isLoading } = useQuery({
     queryKey: ["route", routeId],
     queryFn: async () => {
