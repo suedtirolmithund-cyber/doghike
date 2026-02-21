@@ -133,7 +133,7 @@ export default function RouteDetail() {
               )}
               <span className="text-stone-400">•</span>
               <span className="text-stone-500">
-                {format(new Date(route.created_date), "dd.MM.yyyy")}
+                {route.created_date ? format(new Date(route.created_date), "dd.MM.yyyy") : ""}
               </span>
             </div>
           </motion.div>
