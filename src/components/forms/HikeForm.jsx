@@ -126,6 +126,23 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       alert("Bitte wähle einen Ausgangspunkt auf der Karte aus.");
       return;
     }
+
+    // For friends/public visibility, all key fields must be filled
+    if (formData.visibility === "friends" || formData.visibility === "public") {
+      const missing = [];
+      if (!formData.location) missing.push("Ort / Region");
+      if (!formData.distance_km) missing.push("Strecke (km)");
+      if (!formData.elevation_gain_m) missing.push("Höhenmeter");
+      if (!formData.duration_minutes) missing.push("Gehzeit");
+      if (!formData.difficulty) missing.push("Schwierigkeit (Mensch)");
+      if (!formData.dog_difficulty) missing.push("Schwierigkeit (Hund)");
+      if (!formData.water_availability) missing.push("Wasser unterwegs");
+      if (!formData.season) missing.push("Beste Jahreszeit");
+      if (missing.length > 0) {
+        alert(`Für das Teilen mit Freunden oder öffentlich müssen alle Angaben vollständig sein.\n\nFehlende Felder:\n• ${missing.join("\n• ")}`);
+        return;
+      }
+    }
     
     setSaving(true);
     
