@@ -670,9 +670,9 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
           </SelectContent>
         </Select>
         <p className="text-xs text-stone-600 mt-2 bg-white p-2 rounded border border-amber-300">
-          {formData.visibility === "private" && "🔒 Nur du kannst diese Tour sehen"}
-          {formData.visibility === "friends" && "👥 Nur Freunde (gegenseitiges Folgen) können diese Tour sehen"}
-          {formData.visibility === "public" && "🌍 Alle Nutzer können diese Tour in der öffentlichen Übersicht sehen"}
+          {formData.visibility === "private" && "🔒 Nur du kannst diese Tour sehen – optionale Felder dürfen leer bleiben."}
+          {formData.visibility === "friends" && "👥 Nur Freunde können diese Tour sehen – alle Felder müssen ausgefüllt sein."}
+          {formData.visibility === "public" && "🌍 Alle Nutzer können diese Tour sehen – alle Felder müssen ausgefüllt sein."}
         </p>
         {hike && hike.visibility === "public" && formData.visibility !== "public" && (
           <p className="text-xs text-red-600 font-medium mt-2">
