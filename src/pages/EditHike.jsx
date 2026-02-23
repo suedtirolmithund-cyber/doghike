@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import HikeForm from "@/components/forms/HikeForm";
@@ -34,12 +34,22 @@ export default function EditHike() {
   const updateMutation = useMutation({
     mutationFn: (data) => base44.entities.Hike.update(hikeId, data),
     onSuccess: () => {
-      // Invalidiere alle relevanten Queries, damit Änderungen überall sichtbar werden
       queryClient.invalidateQueries({ queryKey: ["hikes"] });
       queryClient.invalidateQueries({ queryKey: ["hike", hikeId] });
       queryClient.invalidateQueries({ queryKey: ["myHikes"] });
-      queryClient.invalidateQueries({ queryKey: ["followingHikes"] });
-      queryClient.invalidateQueries({ queryKey: ["savedHikesData"] });
+      navigate(createPageUrl("HikeDetail") + `?id=${hikeId}`);
+    }
+  });
+
+  // For approved/public hikes: submit changes for admin review instead of direct update
+  const submitChangesMutation = useMutation({
+    mutationFn: (data) => base44.entities.Hike.update(hikeId, {
+      pending_changes: data,
+      pending_changes_status: "pending"
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["hike", hikeId] });
+      queryClient.invalidateQueries({ queryKey: ["myHikes"] });
       navigate(createPageUrl("HikeDetail") + `?id=${hikeId}`);
     }
   });
@@ -51,6 +61,19 @@ export default function EditHike() {
       </div>
     );
   }
+
+  const isPublished = hike?.status === "approved" || hike?.visibility === "friends";
+  const hasPendingChanges = hike?.pending_changes_status === "pending";
+
+  const handleSave = (data) => {
+    if (isPublished) {
+      // Submit for admin review
+      submitChangesMutation.mutate(data);
+    } else {
+      // Direct save for private/draft hikes
+      updateMutation.mutate(data);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50">
@@ -70,6 +93,32 @@ export default function EditHike() {
           <p className="text-stone-500 mt-1">Wanderdetails aktualisieren</p>
         </motion.div>
 
+        {hasPendingChanges && (
+          <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
+            <Info className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="font-medium text-amber-800">Änderung bereits eingereicht</p>
+              <p className="text-sm text-amber-700 mt-1">
+                Du hast bereits eine Änderung eingereicht, die noch auf Admin-Genehmigung wartet. 
+                Eine neue Einreichung ersetzt die ausstehende.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {isPublished && (
+          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3">
+            <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="font-medium text-blue-800">Änderungen benötigen Admin-Genehmigung</p>
+              <p className="text-sm text-blue-700 mt-1">
+                Da diese Tour {hike?.status === "approved" ? "öffentlich freigegeben" : "für Freunde sichtbar"} ist, 
+                werden deine Änderungen zur Prüfung eingereicht und erst nach Admin-Freigabe übernommen.
+              </p>
+            </div>
+          </div>
+        )}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -79,8 +128,9 @@ export default function EditHike() {
           <HikeForm
             hike={hike}
             dogs={dogs}
-            onSave={(data) => updateMutation.mutate(data)}
+            onSave={handleSave}
             onCancel={() => navigate(createPageUrl("HikeDetail") + `?id=${hikeId}`)}
+            submitLabel={isPublished ? "Änderung zur Prüfung einreichen" : undefined}
           />
         </motion.div>
       </div>
