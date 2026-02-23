@@ -161,6 +161,48 @@ Getestet mit unseren Vierbeinern
           </motion.div>
         }
 
+        {/* Seasonal Suggestions */}
+        {suggestedHikes.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="mb-12"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-light text-stone-800 flex items-center gap-2">
+                  <Sparkles className="w-6 h-6 text-amber-500" />
+                  Tourenvorschläge für den {seasonLabel} {seasonEmoji}
+                </h2>
+                <p className="text-stone-500 text-sm mt-1">Passend zur aktuellen Jahreszeit</p>
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => setSuggestionSeed(s => s + 1)}
+                className="text-stone-600"
+              >
+                <Shuffle className="w-4 h-4 mr-2" />
+                Neue Vorschläge
+              </Button>
+            </div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={suggestionSeed}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="grid grid-cols-1 md:grid-cols-3 gap-6"
+              >
+                {suggestedHikes.map((hike, index) => (
+                  <HikeCard key={hike.id} hike={hike} dogs={dogs} index={index} />
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
+        )}
+
         {/* Recent Hikes */}
         <div className="mb-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
