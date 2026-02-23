@@ -114,6 +114,28 @@ export default function Feed() {
     queryFn: () => base44.entities.Dog.list()
   });
 
+  const { data: bannerSetting, refetch: refetchBanner } = useQuery({
+    queryKey: ["feed_banner"],
+    queryFn: async () => {
+      const settings = await base44.entities.SiteSettings.filter({ key: "feed_banner_image" });
+      return settings[0] || null;
+    }
+  });
+
+  const [generatingBanner, setGeneratingBanner] = useState(false);
+
+  const generateAndSaveBanner = async () => {
+    setGeneratingBanner(true);
+    const { url } = await base44.integrations.Core.GenerateImage({
+      prompt: "Two happy Border Collie dogs hiking in the Dolomites mountains of South Tyrol, golden hour light, scenic alpine meadow, wide cinematic landscape photography"
+    });
+    if (bannerSetting?.id) {
+      await base44.entities.SiteSettings.update(bannerSetting.id, { value: url });
+    }
+    refetchBanner();
+    setGeneratingBanner(false);
+  };
+
   if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 flex items-center justify-center p-6">
