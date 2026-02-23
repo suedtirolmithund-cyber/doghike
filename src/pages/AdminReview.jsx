@@ -609,6 +609,37 @@ export default function AdminReview() {
         )}
       </div>
 
+      {/* Reject Changes Dialog */}
+      <AlertDialog open={rejectChangesDialog.open} onOpenChange={(open) => setRejectChangesDialog({ ...rejectChangesDialog, open })}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Änderung ablehnen</AlertDialogTitle>
+            <AlertDialogDescription>
+              Bitte gib optional einen Grund an, der dem Nutzer angezeigt wird.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <input
+            className="w-full border border-stone-200 rounded-lg px-3 py-2 text-sm mt-2"
+            placeholder="Grund (optional)"
+            value={rejectionReason}
+            onChange={(e) => setRejectionReason(e.target.value)}
+          />
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setRejectionReason("")}>Abbrechen</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                rejectPendingChangesMutation.mutate({ id: rejectChangesDialog.hike?.id, reason: rejectionReason });
+                setRejectChangesDialog({ open: false, hike: null });
+                setRejectionReason("");
+              }}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Ablehnen
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       {/* Confirmation Dialog */}
       <AlertDialog open={confirmDialog.open} onOpenChange={(open) => setConfirmDialog({ ...confirmDialog, open })}>
         <AlertDialogContent>
