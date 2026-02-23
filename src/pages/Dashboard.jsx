@@ -77,9 +77,22 @@ export default function Dashboard() {
       <div className="relative overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80')"
-          }} />
+          style={{ backgroundImage: `url('${heroImageUrl}')` }}
+        />
+        {user?.role === "admin" && (
+          <div className="absolute top-4 right-4 z-20">
+            <input ref={heroInputRef} type="file" accept="image/*" className="hidden" onChange={handleHeroUpload} />
+            <Button
+              size="sm"
+              onClick={() => heroInputRef.current?.click()}
+              disabled={uploadingHero}
+              className="bg-white/20 backdrop-blur-sm text-white border border-white/30 hover:bg-white/30"
+            >
+              <ImagePlus className="w-4 h-4 mr-2" />
+              {uploadingHero ? "Lädt..." : "Titelbild ändern"}
+            </Button>
+          </div>
+        )}
 
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-stone-50" />
         
