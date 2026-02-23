@@ -37,10 +37,10 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
     visibility: "private"
   });
   const [uploading, setUploading] = useState(false);
-   const [saving, setSaving] = useState(false);
-   const [showRouteEditor, setShowRouteEditor] = useState(false);
-   const [showStartPointPicker, setShowStartPointPicker] = useState(false);
-   const [showPhotoConsent, setShowPhotoConsent] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [showRouteEditor, setShowRouteEditor] = useState(false);
+  const [showStartPointPicker, setShowStartPointPicker] = useState(false);
+  const [showPhotoConsent, setShowPhotoConsent] = useState(false);
 
   const handlePhotoUpload = async (e) => {
     const files = Array.from(e.target.files);
@@ -60,7 +60,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       uploadedUrls.push(file_url);
     }
 
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       photos: [...(prev.photos || []), ...uploadedUrls]
     }));
@@ -69,18 +69,18 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
   };
 
   const removePhoto = (index) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       photos: prev.photos.filter((_, i) => i !== index)
     }));
   };
 
   const toggleDog = (dogId) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      dogs: prev.dogs?.includes(dogId)
-        ? prev.dogs.filter(id => id !== dogId)
-        : [...(prev.dogs || []), dogId]
+      dogs: prev.dogs?.includes(dogId) ?
+      prev.dogs.filter((id) => id !== dogId) :
+      [...(prev.dogs || []), dogId]
     }));
   };
 
@@ -93,18 +93,18 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       const text = await file.text();
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(text, "text/xml");
-      
+
       const trkpts = xmlDoc.getElementsByTagName("trkpt");
       const coordinates = [];
-      
+
       for (let i = 0; i < trkpts.length; i++) {
         const lat = parseFloat(trkpts[i].getAttribute("lat"));
         const lon = parseFloat(trkpts[i].getAttribute("lon"));
         coordinates.push([lat, lon]);
       }
-      
+
       if (coordinates.length > 0) {
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
           route_coordinates: coordinates,
           latitude: prev.latitude || coordinates[0][0],
@@ -120,14 +120,14 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.latitude || !formData.longitude) {
       alert("Bitte wähle einen Ausgangspunkt auf der Karte aus.");
       return;
     }
-    
+
     setSaving(true);
-    
+
     const dataToSave = {
       ...formData,
       distance_km: formData.distance_km ? Number(formData.distance_km) : null,
@@ -152,8 +152,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             value={formData.trail_name}
             onChange={(e) => setFormData({ ...formData, trail_name: e.target.value })}
             placeholder="z.B. Drei Zinnen Umrundung"
-            required
-          />
+            required />
+
         </div>
 
         <div className="space-y-2">
@@ -162,8 +162,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             id="location"
             value={formData.location}
             onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-            placeholder="z.B. Sexten, Südtirol"
-          />
+            placeholder="z.B. Sexten, Südtirol" />
+
         </div>
 
         <div className="space-y-2">
@@ -173,16 +173,16 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             type="date"
             value={formData.date}
             onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-            required
-          />
+            required />
+
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="difficulty">Schwierigkeit (Mensch) 👤</Label>
+          <Label htmlFor="difficulty" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Schwierigkeit Mensch 👤</Label>
           <Select
             value={formData.difficulty}
-            onValueChange={(value) => setFormData({ ...formData, difficulty: value })}
-          >
+            onValueChange={(value) => setFormData({ ...formData, difficulty: value })}>
+
             <SelectTrigger>
               <SelectValue placeholder="Wählen" />
             </SelectTrigger>
@@ -197,11 +197,11 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="dog_difficulty">Schwierigkeit (Hund) 🐕</Label>
+          <Label htmlFor="dog_difficulty" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Schwierigkeit Hund 🐕</Label>
           <Select
             value={formData.dog_difficulty}
-            onValueChange={(value) => setFormData({ ...formData, dog_difficulty: value })}
-          >
+            onValueChange={(value) => setFormData({ ...formData, dog_difficulty: value })}>
+
             <SelectTrigger>
               <SelectValue placeholder="Wählen" />
             </SelectTrigger>
@@ -219,8 +219,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
           <Label htmlFor="season">Beste Jahreszeit</Label>
           <Select
             value={formData.season}
-            onValueChange={(value) => setFormData({ ...formData, season: value })}
-          >
+            onValueChange={(value) => setFormData({ ...formData, season: value })}>
+
             <SelectTrigger>
               <SelectValue placeholder="Wählen" />
             </SelectTrigger>
@@ -238,8 +238,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
           <Label htmlFor="water_availability">Wasser unterwegs 💧</Label>
           <Select
             value={formData.water_availability}
-            onValueChange={(value) => setFormData({ ...formData, water_availability: value })}
-          >
+            onValueChange={(value) => setFormData({ ...formData, water_availability: value })}>
+
             <SelectTrigger>
               <SelectValue placeholder="Wählen" />
             </SelectTrigger>
@@ -260,8 +260,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             step="0.1"
             value={formData.distance_km}
             onChange={(e) => setFormData({ ...formData, distance_km: e.target.value })}
-            placeholder="12.5"
-          />
+            placeholder="12.5" />
+
         </div>
 
         <div className="space-y-2">
@@ -271,8 +271,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             type="number"
             value={formData.elevation_gain_m}
             onChange={(e) => setFormData({ ...formData, elevation_gain_m: e.target.value })}
-            placeholder="850"
-          />
+            placeholder="850" />
+
         </div>
 
         <div className="space-y-2">
@@ -282,8 +282,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             type="number"
             value={formData.duration_minutes}
             onChange={(e) => setFormData({ ...formData, duration_minutes: e.target.value })}
-            placeholder="240"
-          />
+            placeholder="240" />
+
         </div>
       </div>
 
@@ -296,22 +296,22 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               Wähle den Startpunkt deiner Wanderung auf der Karte aus
             </p>
           </div>
-          {formData.latitude && formData.longitude && (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => setFormData({ ...formData, latitude: "", longitude: "", location: "" })}
-              className="text-red-600 hover:text-red-700"
-            >
+          {formData.latitude && formData.longitude &&
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setFormData({ ...formData, latitude: "", longitude: "", location: "" })}
+            className="text-red-600 hover:text-red-700">
+
               <Trash2 className="w-4 h-4 mr-2" />
               Zurücksetzen
             </Button>
-          )}
+          }
         </div>
 
-        {formData.latitude && formData.longitude && (
-          <div className="p-3 bg-white rounded-lg border border-green-200">
+        {formData.latitude && formData.longitude &&
+        <div className="p-3 bg-white rounded-lg border border-green-200">
             <p className="text-sm text-green-700 font-medium mb-1">
               ✓ Ausgangspunkt gesetzt
             </p>
@@ -320,32 +320,32 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               {formData.latitude.toFixed(5)}, {formData.longitude.toFixed(5)}
             </p>
           </div>
-        )}
+        }
 
         <Button
           type="button"
           variant="outline"
           className="w-full"
-          onClick={() => setShowStartPointPicker(!showStartPointPicker)}
-        >
+          onClick={() => setShowStartPointPicker(!showStartPointPicker)}>
+
           <MapPin className="w-4 h-4 mr-2" />
           {showStartPointPicker ? "Karte schließen" : "Ausgangspunkt auf Karte wählen"}
         </Button>
 
-        {showStartPointPicker && (
-          <StartPointPicker
-            latitude={formData.latitude ? Number(formData.latitude) : null}
-            longitude={formData.longitude ? Number(formData.longitude) : null}
-            onSelect={(data) => {
-              setFormData({
-                ...formData,
-                latitude: data.latitude,
-                longitude: data.longitude,
-                location: data.location || formData.location
-              });
-            }}
-          />
-        )}
+        {showStartPointPicker &&
+        <StartPointPicker
+          latitude={formData.latitude ? Number(formData.latitude) : null}
+          longitude={formData.longitude ? Number(formData.longitude) : null}
+          onSelect={(data) => {
+            setFormData({
+              ...formData,
+              latitude: data.latitude,
+              longitude: data.longitude,
+              location: data.location || formData.location
+            });
+          }} />
+
+        }
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -360,27 +360,27 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               Zeichne die komplette Wanderroute oder lade eine GPX-Datei hoch
             </p>
           </div>
-          {formData.route_coordinates?.length > 0 && (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => setFormData({ ...formData, route_coordinates: [] })}
-              className="text-red-600 hover:text-red-700"
-            >
+          {formData.route_coordinates?.length > 0 &&
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setFormData({ ...formData, route_coordinates: [] })}
+            className="text-red-600 hover:text-red-700">
+
               <Trash2 className="w-4 h-4 mr-2" />
               Route löschen
             </Button>
-          )}
+          }
         </div>
 
-        {formData.route_coordinates?.length > 0 && (
-          <div className="p-3 bg-white rounded-lg border border-green-200">
+        {formData.route_coordinates?.length > 0 &&
+        <div className="p-3 bg-white rounded-lg border border-green-200">
             <p className="text-sm text-green-700 font-medium">
               ✓ Route mit {formData.route_coordinates.length} Wegpunkten
             </p>
           </div>
-        )}
+        }
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <label>
@@ -389,145 +389,145 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               accept=".gpx"
               onChange={handleGPXUpload}
               className="hidden"
-              disabled={uploading}
-            />
+              disabled={uploading} />
+
             <Button
               type="button"
               variant="outline"
               className="w-full"
               disabled={uploading}
-              onClick={(e) => e.currentTarget.previousElementSibling.click()}
-            >
-              {uploading ? (
-                <>
+              onClick={(e) => e.currentTarget.previousElementSibling.click()}>
+
+              {uploading ?
+              <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   Lade GPX...
-                </>
-              ) : (
-                <>
+                </> :
+
+              <>
                   <Upload className="w-4 h-4 mr-2" />
                   GPX-Datei hochladen
                 </>
-              )}
+              }
             </Button>
           </label>
 
           <Button
             type="button"
             variant="outline"
-            onClick={() => setShowRouteEditor(!showRouteEditor)}
-          >
+            onClick={() => setShowRouteEditor(!showRouteEditor)}>
+
             <MapIcon className="w-4 h-4 mr-2" />
             {showRouteEditor ? "Fertig" : "Route zeichnen"}
           </Button>
         </div>
 
-        {showRouteEditor && (
-          <div className="space-y-2">
+        {showRouteEditor &&
+        <div className="space-y-2">
             <div className="p-2 bg-blue-100 rounded-lg">
               <p className="text-xs text-blue-700">
                 💡 Klicke auf die Karte, um Wegpunkte hinzuzufügen. Der erste Punkt wird automatisch als Ausgangspunkt verwendet.
               </p>
             </div>
             <RouteEditor
-              coordinates={formData.route_coordinates || []}
-              startPoint={
-                formData.latitude && formData.longitude
-                  ? [Number(formData.latitude), Number(formData.longitude)]
-                  : null
+            coordinates={formData.route_coordinates || []}
+            startPoint={
+            formData.latitude && formData.longitude ?
+            [Number(formData.latitude), Number(formData.longitude)] :
+            null
+            }
+            onChange={(coords) => {
+              setFormData({ ...formData, route_coordinates: coords });
+              if (coords.length > 0 && !formData.latitude) {
+                setFormData((prev) => ({
+                  ...prev,
+                  latitude: coords[0][0],
+                  longitude: coords[0][1]
+                }));
               }
-              onChange={(coords) => {
-                setFormData({ ...formData, route_coordinates: coords });
-                if (coords.length > 0 && !formData.latitude) {
-                  setFormData(prev => ({
-                    ...prev,
-                    latitude: coords[0][0],
-                    longitude: coords[0][1]
-                  }));
-                }
-              }}
-            />
+            }} />
+
           </div>
-        )}
+        }
       </div>
 
       <div className="space-y-2">
         <Label>Bewertung</Label>
         <div className="flex gap-2">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <button
-              key={star}
-              type="button"
-              onClick={() => setFormData({ ...formData, rating: star })}
-              className="p-1 transition-transform hover:scale-110"
-            >
+          {[1, 2, 3, 4, 5].map((star) =>
+          <button
+            key={star}
+            type="button"
+            onClick={() => setFormData({ ...formData, rating: star })}
+            className="p-1 transition-transform hover:scale-110">
+
               <Star
-                className={`w-8 h-8 ${
-                  star <= (formData.rating || 0)
-                    ? "fill-amber-400 text-amber-400"
-                    : "text-stone-300"
-                }`}
-              />
+              className={`w-8 h-8 ${
+              star <= (formData.rating || 0) ?
+              "fill-amber-400 text-amber-400" :
+              "text-stone-300"}`
+              } />
+
             </button>
-          ))}
+          )}
         </div>
       </div>
 
-      {dogs.length > 0 && (
-        <div className="space-y-3">
+      {dogs.length > 0 &&
+      <div className="space-y-3">
           <Label>Hunde auf dieser Tour</Label>
           <div className="flex flex-wrap gap-4">
-            {dogs.map((dog) => (
-              <label
-                key={dog.id}
-                className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
-                  formData.dogs?.includes(dog.id)
-                    ? "border-slate-700 bg-slate-50"
-                    : "border-stone-200 hover:border-stone-300"
-                }`}
-              >
+            {dogs.map((dog) =>
+          <label
+            key={dog.id}
+            className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
+            formData.dogs?.includes(dog.id) ?
+            "border-slate-700 bg-slate-50" :
+            "border-stone-200 hover:border-stone-300"}`
+            }>
+
                 <Checkbox
-                  checked={formData.dogs?.includes(dog.id)}
-                  onCheckedChange={() => toggleDog(dog.id)}
-                />
+              checked={formData.dogs?.includes(dog.id)}
+              onCheckedChange={() => toggleDog(dog.id)} />
+
                 <img
-                  src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
-                  alt={dog.name}
-                  className="w-10 h-10 rounded-full object-cover"
-                />
+              src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
+              alt={dog.name}
+              className="w-10 h-10 rounded-full object-cover" />
+
                 <span className="font-medium text-stone-700">{dog.name}</span>
               </label>
-            ))}
+          )}
           </div>
         </div>
-      )}
+      }
 
       <div className="space-y-3">
         <Label>Fotos</Label>
         <div className="flex flex-wrap gap-4">
           <AnimatePresence>
-            {formData.photos?.map((url, index) => (
-              <motion.div
-                key={url}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                className="relative group"
-              >
+            {formData.photos?.map((url, index) =>
+            <motion.div
+              key={url}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="relative group">
+
                 <img
-                  src={url}
-                  alt={`Foto ${index + 1}`}
-                  className="w-24 h-24 object-cover rounded-xl"
-                />
+                src={url}
+                alt={`Foto ${index + 1}`}
+                className="w-24 h-24 object-cover rounded-xl" />
+
                 <button
-                  type="button"
-                  onClick={() => removePhoto(index)}
-                  className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                >
+                type="button"
+                onClick={() => removePhoto(index)}
+                className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+
                   <X className="w-4 h-4" />
                 </button>
               </motion.div>
-            ))}
+            )}
           </AnimatePresence>
           
           <label className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-stone-300 rounded-xl cursor-pointer hover:border-slate-500 transition-colors">
@@ -544,31 +544,31 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               }}
               className="hidden"
               disabled={uploading}
-              id="photo-input"
-            />
-            {uploading ? (
-              <Loader2 className="w-6 h-6 text-stone-400 animate-spin" />
-            ) : (
-              <>
+              id="photo-input" />
+
+            {uploading ?
+            <Loader2 className="w-6 h-6 text-stone-400 animate-spin" /> :
+
+            <>
                 <Upload className="w-6 h-6 text-stone-400" />
                 <span className="text-xs text-stone-400 mt-1">Fotos hinzufügen</span>
               </>
-            )}
+            }
           </label>
           </div>
           </div>
 
           <ConsentDialog
-          type="photo"
-          open={showPhotoConsent}
-          onAccept={() => {
+        type="photo"
+        open={showPhotoConsent}
+        onAccept={() => {
           const input = document.getElementById('photo-input');
           if (input?.files) {
             handlePhotoUploadConfirmed(input.files);
           }
-          }}
-          onDecline={() => setShowPhotoConsent(false)}
-          />
+        }}
+        onDecline={() => setShowPhotoConsent(false)} />
+
 
       <div className="space-y-2">
         <Label htmlFor="parking_info">🅿️ Ausgangspunkt & Parken (optional)</Label>
@@ -577,8 +577,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
           value={formData.parking_info}
           onChange={(e) => setFormData({ ...formData, parking_info: e.target.value })}
           placeholder="z.B. Großer Parkplatz am Pragser Wildsee, Adresse: Via Prags 107..."
-          rows={3}
-        />
+          rows={3} />
+
       </div>
 
       <div className="space-y-2">
@@ -588,8 +588,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
           value={formData.restaurant_info}
           onChange={(e) => setFormData({ ...formData, restaurant_info: e.target.value })}
           placeholder="z.B. Seekofel Hütte (2324m), Auronzo-Hütte am Drei Zinnen Blick..."
-          rows={3}
-        />
+          rows={3} />
+
       </div>
 
       <div className="space-y-2">
@@ -599,8 +599,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
           value={formData.hazard_notes}
           onChange={(e) => setFormData({ ...formData, hazard_notes: e.target.value })}
           placeholder="z.B. steile Passagen, Leitern, Seilsicherungen, Kühe auf der Alm..."
-          rows={3}
-        />
+          rows={3} />
+
       </div>
 
       <div className="space-y-2">
@@ -610,8 +610,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
           value={formData.notes}
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
           placeholder="Wegbeschaffenheit, Highlights, besondere Ausblicke..."
-          rows={4}
-        />
+          rows={4} />
+
       </div>
 
       <div className="space-y-2 p-4 bg-amber-50 border border-amber-200 rounded-xl">
@@ -625,8 +625,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               }
             }
             setFormData({ ...formData, visibility: value });
-          }}
-        >
+          }}>
+
           <SelectTrigger>
             <SelectValue placeholder="Wählen" />
           </SelectTrigger>
@@ -641,34 +641,34 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
           {formData.visibility === "friends" && "👥 Nur Freunde (gegenseitiges Folgen) können diese Tour sehen"}
           {formData.visibility === "public" && "🌍 Alle Nutzer können diese Tour in der öffentlichen Übersicht sehen"}
         </p>
-        {hike && hike.visibility === "public" && formData.visibility !== "public" && (
-          <p className="text-xs text-red-600 font-medium mt-2">
+        {hike && hike.visibility === "public" && formData.visibility !== "public" &&
+        <p className="text-xs text-red-600 font-medium mt-2">
             ⚠️ Achtung: Du änderst die Sichtbarkeit von öffentlich - die Tour wird dann aus der öffentlichen Liste entfernt!
           </p>
-        )}
+        }
       </div>
 
       <div className="flex gap-3 justify-end pt-4">
-        {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel}>
+        {onCancel &&
+        <Button type="button" variant="outline" onClick={onCancel}>
             Abbrechen
           </Button>
-        )}
+        }
         <Button
           type="submit"
           disabled={saving}
-          className="bg-slate-800 hover:bg-slate-900"
-        >
-          {saving ? (
-            <>
+          className="bg-slate-800 hover:bg-slate-900">
+
+          {saving ?
+          <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               Wird gespeichert...
-            </>
-          ) : (
-            submitLabel || (hike ? "Tour aktualisieren" : "Tour hinzufügen")
-          )}
+            </> :
+
+          submitLabel || (hike ? "Tour aktualisieren" : "Tour hinzufügen")
+          }
         </Button>
       </div>
-    </form>
-  );
+    </form>);
+
 }
