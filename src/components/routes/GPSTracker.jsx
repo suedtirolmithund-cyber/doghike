@@ -236,7 +236,7 @@ export default function GPSTracker({ onSave }) {
           {currentPosition && (
             <>
               <Marker position={currentPosition} icon={myLocationIcon} />
-              <MapUpdater center={currentPosition} />
+              <MapUpdater center={currentPosition} flyToRef={flyToRef} />
             </>
           )}
         </MapContainer>
