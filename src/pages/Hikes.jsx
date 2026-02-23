@@ -26,6 +26,11 @@ export default function Hikes() {
     queryFn: () => base44.entities.Dog.list()
   });
 
+  const { data: allUsers = [] } = useQuery({
+    queryKey: ["allUsers"],
+    queryFn: () => base44.entities.User.list()
+  });
+
   const getCurrentSeason = () => {
     const month = new Date().getMonth() + 1;
     if (month >= 12 || month <= 2) return "winter";
