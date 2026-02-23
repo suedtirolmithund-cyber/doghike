@@ -68,6 +68,7 @@ import SubmitHike from './pages/SubmitHike';
 import Support from './pages/Support';
 import TopDogs from './pages/TopDogs';
 import DifficultyHelp from './pages/DifficultyHelp';
+import WaterHelp from './pages/WaterHelp';
 import __Layout from './Layout.jsx';
 
 
@@ -93,6 +94,7 @@ export const PAGES = {
     "Support": Support,
     "TopDogs": TopDogs,
     "DifficultyHelp": DifficultyHelp,
+    "WaterHelp": WaterHelp,
 }
 
 export const pagesConfig = {
