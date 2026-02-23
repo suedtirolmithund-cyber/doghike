@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { Users, Mountain, MessageCircle, Star, Calendar, TrendingUp, Bell, Check } from "lucide-react";
+import { Users, Mountain, MessageCircle, Star, Calendar, TrendingUp, Bell, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { format } from "date-fns";
