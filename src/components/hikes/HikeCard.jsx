@@ -126,6 +126,12 @@ export default function HikeCard({ hike, dogs = [], index = 0, allUsers = [] }) 
               }
             </div>
             
+            {submitterName && (
+              <div className="flex items-center gap-1.5 mb-3 text-xs text-stone-500">
+                <span>📍 Empfohlen von <span className="font-medium text-stone-700">{submitterName}</span></span>
+              </div>
+            )}
+
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 {hikeDogs.slice(0, 3).map((dog, i) =>
