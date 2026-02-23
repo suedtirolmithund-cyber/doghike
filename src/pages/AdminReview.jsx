@@ -465,7 +465,7 @@ export default function AdminReview() {
                                   <div className="bg-stone-50 rounded-xl p-3 text-center">
                                     <Clock className="w-4 h-4 text-stone-400 mx-auto mb-1" />
                                     <p className="font-medium text-stone-800">
-                                      {Math.floor(hike.duration_minutes / 60)}h {hike.duration_minutes % 60}min
+                                     {(hike.duration_minutes / 60).toFixed(1)} Std
                                     </p>
                                   </div>
                                 )}
