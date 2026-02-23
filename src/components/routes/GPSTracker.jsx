@@ -62,6 +62,7 @@ export default function GPSTracker({ onSave }) {
   const pausedTimeRef = useRef(0);
   const lastPauseTimeRef = useRef(null);
   const intervalRef = useRef(null);
+  const flyToRef = useRef(null);
 
   const calculateDistance = (points) => {
     if (points.length < 2) return 0;
