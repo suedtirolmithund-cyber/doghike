@@ -186,7 +186,25 @@ export default function Feed() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6 md:mb-8"
         >
-          <img src="https://images.unsplash.com/photo-1633722715463-d30628ccbf40?w=800&h=200&fit=crop" alt="Dogs banner" className="w-full h-32 rounded-xl object-cover shadow-md mb-4" />
+          <div className="relative mb-4 group">
+            {bannerSetting?.value ? (
+              <img src={bannerSetting.value} alt="Dogs banner" className="w-full h-32 rounded-xl object-cover shadow-md" />
+            ) : (
+              <div className="w-full h-32 rounded-xl bg-stone-200 flex items-center justify-center shadow-md">
+                <p className="text-stone-400 text-sm">Kein Bannerbild gesetzt</p>
+              </div>
+            )}
+            {user?.role === "admin" && (
+              <button
+                onClick={generateAndSaveBanner}
+                disabled={generatingBanner}
+                className="absolute top-2 right-2 bg-white/90 hover:bg-white text-stone-700 text-xs px-3 py-1.5 rounded-lg shadow flex items-center gap-1.5 transition-all"
+              >
+                {generatingBanner ? <Loader2 className="w-3 h-3 animate-spin" /> : "✨"}
+                {generatingBanner ? "Generiere..." : "KI-Bild generieren"}
+              </button>
+            )}
+          </div>
           <h1 className="text-2xl md:text-3xl font-light text-stone-800 mb-1">Freunde & Benachrichtigungen</h1>
           <p className="text-stone-500 text-sm md:text-base">Verwalte deine Freundschaften, Aktivitäten und Benachrichtigungen</p>
         </motion.div>
