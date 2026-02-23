@@ -12,7 +12,7 @@ import RouteEditor from "@/components/map/RouteEditor";
 import StartPointPicker from "@/components/map/StartPointPicker";
 import ConsentDialog from "@/components/ConsentDialog";
 
-export default function HikeForm({ hike, dogs = [], onSave, onCancel }) {
+export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabel }) {
   const [formData, setFormData] = useState(hike || {
     trail_name: "",
     location: "",
