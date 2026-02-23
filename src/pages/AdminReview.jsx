@@ -137,13 +137,20 @@ export default function AdminReview() {
         </motion.div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6">
+        <div className="flex flex-wrap gap-2 mb-6">
           <Button
             variant={activeTab === "pending" ? "default" : "outline"}
             onClick={() => setActiveTab("pending")}
             className={activeTab === "pending" ? "bg-slate-800" : ""}
           >
-            Ausstehend ({pendingHikes.length})
+            Neue Touren ({pendingHikes.length})
+          </Button>
+          <Button
+            variant={activeTab === "changes" ? "default" : "outline"}
+            onClick={() => setActiveTab("changes")}
+            className={activeTab === "changes" ? "bg-amber-600" : pendingChangesHikes.length > 0 ? "border-amber-400 text-amber-700" : ""}
+          >
+            Änderungsanfragen ({pendingChangesHikes.length})
           </Button>
           <Button
             variant={activeTab === "approved" ? "default" : "outline"}
