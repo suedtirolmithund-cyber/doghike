@@ -243,6 +243,86 @@ export default function HikeDetail() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        {/* Owner controls: visibility + pending changes */}
+        {isOwnHike && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 space-y-3">
+            {/* Pending changes banner */}
+            {hike.pending_changes_status === "pending" && (
+              <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-start justify-between gap-3">
+                <div>
+                  <p className="font-medium text-amber-800">⏳ Änderung wartet auf Admin-Prüfung</p>
+                  <p className="text-sm text-amber-700 mt-0.5">Deine eingereichten Änderungen werden bald geprüft.</p>
+                </div>
+                <Button size="sm" variant="outline" className="border-amber-300 text-amber-700 shrink-0"
+                  onClick={() => cancelPendingChangesMutation.mutate()}>
+                  Zurückziehen
+                </Button>
+              </div>
+            )}
+            {hike.pending_changes_status === "rejected" && (
+              <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
+                <p className="font-medium text-red-800">❌ Änderung abgelehnt</p>
+                {hike.pending_changes_rejection_reason && (
+                  <p className="text-sm text-red-700 mt-1">{hike.pending_changes_rejection_reason}</p>
+                )}
+              </div>
+            )}
+
+            {/* Visibility switcher */}
+            <div className="p-4 bg-white border border-stone-200 rounded-xl">
+              <p className="text-sm font-medium text-stone-700 mb-3">Sichtbarkeit dieser Tour</p>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  size="sm"
+                  variant={hike.status === "draft" && hike.visibility === "private" ? "default" : "outline"}
+                  className={hike.status === "draft" && hike.visibility === "private" ? "bg-slate-800" : ""}
+                  onClick={() => changeVisibilityMutation.mutate({ visibility: "private", status: "draft" })}
+                >
+                  🔒 Privat
+                </Button>
+                <Button
+                  size="sm"
+                  variant={hike.visibility === "friends" ? "default" : "outline"}
+                  className={hike.visibility === "friends" ? "bg-slate-800" : ""}
+                  onClick={() => changeVisibilityMutation.mutate({ visibility: "friends", status: hike.status === "approved" ? "approved" : "draft" })}
+                >
+                  👥 Für Freunde
+                </Button>
+                <Button
+                  size="sm"
+                  variant={hike.status === "pending" || hike.status === "approved" ? "default" : "outline"}
+                  className={hike.status === "pending" ? "bg-amber-600" : hike.status === "approved" ? "bg-emerald-700" : ""}
+                  onClick={() => {
+                    if (hike.status !== "pending" && hike.status !== "approved") {
+                      changeVisibilityMutation.mutate({ visibility: "public", status: "pending" });
+                    }
+                  }}
+                  disabled={hike.status === "pending" || hike.status === "approved"}
+                >
+                  {hike.status === "pending" ? "⏳ Wartet auf Freigabe" : hike.status === "approved" ? "✅ Öffentlich freigegeben" : "🌍 Zur Freigabe einreichen"}
+                </Button>
+                {(hike.status === "pending" || hike.status === "approved") && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-red-200 text-red-600"
+                    onClick={() => changeVisibilityMutation.mutate({ visibility: "private", status: "draft" })}
+                  >
+                    ↩ Zurück zu Privat
+                  </Button>
+                )}
+              </div>
+              <p className="text-xs text-stone-500 mt-2">
+                {hike.visibility === "private" && hike.status === "draft" && "Nur du siehst diese Tour."}
+                {hike.visibility === "friends" && "Deine Freunde können diese Tour sehen."}
+                {hike.status === "pending" && "Diese Tour wartet auf Admin-Freigabe für die öffentliche Liste."}
+                {hike.status === "approved" && "Diese Tour ist öffentlich sichtbar und wurde vom Admin freigegeben."}
+              </p>
+            </div>
+          </motion.div>
+        )}
+
         {/* Interactive Map - Full Width */}
         {hike.latitude && hike.longitude && (
           <motion.div
