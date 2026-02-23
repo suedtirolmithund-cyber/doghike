@@ -11,12 +11,46 @@ import StatsCard from "@/components/stats/StatsCard";
 import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
 
+const DEFAULT_HERO = "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80";
+
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [uploadingHero, setUploadingHero] = useState(false);
+  const heroInputRef = useRef(null);
+  const queryClient = useQueryClient();
 
   // Check authentication status
   base44.auth.isAuthenticated().then(setIsAuthenticated);
+
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => base44.auth.me().catch(() => null),
+  });
+
+  const { data: heroSetting } = useQuery({
+    queryKey: ["siteSettings", "hero_image_url"],
+    queryFn: async () => {
+      const res = await base44.entities.SiteSettings.filter({ key: "hero_image_url" });
+      return res[0] || null;
+    }
+  });
+
+  const heroImageUrl = heroSetting?.value || DEFAULT_HERO;
+
+  const handleHeroUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploadingHero(true);
+    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    if (heroSetting) {
+      await base44.entities.SiteSettings.update(heroSetting.id, { value: file_url });
+    } else {
+      await base44.entities.SiteSettings.create({ key: "hero_image_url", value: file_url });
+    }
+    queryClient.invalidateQueries({ queryKey: ["siteSettings", "hero_image_url"] });
+    setUploadingHero(false);
+  };
 
   const { data: hikes = [], isLoading: hikesLoading } = useQuery({
     queryKey: ["hikes"],
