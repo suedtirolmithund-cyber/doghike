@@ -143,36 +143,42 @@ export default function HikeDetail() {
             </Button>
           </Link>
           <div className="flex gap-2 flex-wrap">
-            <SaveButton hikeId={hikeId} />
-            <Link to={createPageUrl("EditHike") + `?id=${hikeId}`}>
-              <Button variant="ghost" className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20">
-                <Edit className="w-4 h-4" />
-              </Button>
-            </Link>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="ghost" className="bg-red-500/20 backdrop-blur-sm text-white hover:bg-red-500/40">
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Tour löschen?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Dies wird "{hike.trail_name}" dauerhaft löschen. Diese Aktion kann nicht rückgängig gemacht werden.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Abbrechen</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => deleteMutation.mutate()}
-                    className="bg-red-600 hover:bg-red-700"
-                  >
-                    Löschen
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            {!isOwnHike && <SaveButton hikeId={hikeId} />}
+            {isOwnHike && (
+              <>
+                <Link to={createPageUrl("EditHike") + `?id=${hikeId}`}>
+                  <Button variant="ghost" className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20">
+                    <Edit className="w-4 h-4 mr-1" />
+                    Bearbeiten
+                  </Button>
+                </Link>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="ghost" className="bg-red-500/20 backdrop-blur-sm text-white hover:bg-red-500/40">
+                      <Trash2 className="w-4 h-4 mr-1" />
+                      Löschen
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Tour löschen?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Dies wird "{hike.trail_name}" dauerhaft löschen. Diese Aktion kann nicht rückgängig gemacht werden.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => deleteMutation.mutate()}
+                        className="bg-red-600 hover:bg-red-700"
+                      >
+                        Löschen
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </>
+            )}
           </div>
         </div>
 
