@@ -51,6 +51,7 @@ import AddHike from './pages/AddHike';
 import AdminReview from './pages/AdminReview';
 import Dashboard from './pages/Dashboard';
 import Datenschutz from './pages/Datenschutz';
+import DifficultyHelp from './pages/DifficultyHelp';
 import Dogs from './pages/Dogs';
 import EditHike from './pages/EditHike';
 import EditRoute from './pages/EditRoute';
@@ -67,7 +68,6 @@ import RoutePlanner from './pages/RoutePlanner';
 import SubmitHike from './pages/SubmitHike';
 import Support from './pages/Support';
 import TopDogs from './pages/TopDogs';
-import DifficultyHelp from './pages/DifficultyHelp';
 import WaterHelp from './pages/WaterHelp';
 import __Layout from './Layout.jsx';
 
@@ -77,6 +77,7 @@ export const PAGES = {
     "AdminReview": AdminReview,
     "Dashboard": Dashboard,
     "Datenschutz": Datenschutz,
+    "DifficultyHelp": DifficultyHelp,
     "Dogs": Dogs,
     "EditHike": EditHike,
     "EditRoute": EditRoute,
@@ -93,7 +94,6 @@ export const PAGES = {
     "SubmitHike": SubmitHike,
     "Support": Support,
     "TopDogs": TopDogs,
-    "DifficultyHelp": DifficultyHelp,
     "WaterHelp": WaterHelp,
 }
 

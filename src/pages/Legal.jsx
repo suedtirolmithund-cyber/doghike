@@ -53,6 +53,14 @@ export default function Legal() {
                 <span className="mt-0.5">🌦️</span>
                 <span><strong>Wetterwechsel:</strong> Bergwetter kann sich innerhalb von Minuten ändern. Immer aktuelle Vorhersage prüfen.</span>
               </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-0.5">🏠</span>
+                <span><strong>Hütten nicht immer geöffnet:</strong> Almhütten und Berghütten haben saisonale Öffnungszeiten und sind besonders im Winter und in der Nebensaison oft geschlossen. Immer vorab telefonisch oder online informieren.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-0.5">🚡</span>
+                <span><strong>Seilbahnen & Lifte:</strong> Betriebszeiten und Saisonen von Seilbahnen, Gondeln und Liften können sich jederzeit ändern (Wartung, Witterung, saisonale Schließung). Vor der Tour aktuellen Fahrplan prüfen.</span>
+              </li>
             </ul>
           </div>
 
