@@ -122,7 +122,7 @@ export default function RoutePlanner() {
             </TabsList>
 
             <TabsContent value="draw" className="space-y-6">
-              <EditableRouteDrawer onSave={handleRouteSave} initialRoute={routeGeometry?.coordinates || []} />
+              <EditableRouteDrawer onSave={handleRouteSave} initialRoute={[]} />
             </TabsContent>
 
             <TabsContent value="track" className="space-y-6">
