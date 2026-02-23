@@ -67,6 +67,7 @@ import RoutePlanner from './pages/RoutePlanner';
 import SubmitHike from './pages/SubmitHike';
 import Support from './pages/Support';
 import TopDogs from './pages/TopDogs';
+import DifficultyHelp from './pages/DifficultyHelp';
 import __Layout from './Layout.jsx';
 
 
@@ -91,6 +92,7 @@ export const PAGES = {
     "SubmitHike": SubmitHike,
     "Support": Support,
     "TopDogs": TopDogs,
+    "DifficultyHelp": DifficultyHelp,
 }
 
 export const pagesConfig = {
