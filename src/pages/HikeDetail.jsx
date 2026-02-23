@@ -101,6 +101,22 @@ export default function HikeDetail() {
   const creator = allUsers.find(u => u.email === hike?.created_by);
   const isOwnHike = currentUser?.email === hike?.created_by;
 
+  const changeVisibilityMutation = useMutation({
+    mutationFn: ({ visibility, status }) => base44.entities.Hike.update(hikeId, { visibility, status }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["hike", hikeId] });
+      queryClient.invalidateQueries({ queryKey: ["hikes"] });
+      queryClient.invalidateQueries({ queryKey: ["myHikes"] });
+    }
+  });
+
+  const cancelPendingChangesMutation = useMutation({
+    mutationFn: () => base44.entities.Hike.update(hikeId, { pending_changes: null, pending_changes_status: "none" }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["hike", hikeId] });
+    }
+  });
+
   const deleteMutation = useMutation({
     mutationFn: () => base44.entities.Hike.delete(hikeId),
     onSuccess: () => {
