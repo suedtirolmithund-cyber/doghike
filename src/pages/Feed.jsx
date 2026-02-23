@@ -132,6 +132,8 @@ export default function Feed() {
     });
     if (bannerSetting?.id) {
       await base44.entities.SiteSettings.update(bannerSetting.id, { value: url });
+    } else {
+      await base44.entities.SiteSettings.create({ key: "feed_banner_image", value: url });
     }
     refetchBanner();
     setGeneratingBanner(false);
