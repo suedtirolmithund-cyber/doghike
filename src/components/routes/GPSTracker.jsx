@@ -248,7 +248,7 @@ export default function GPSTracker({ onSave }) {
         )}
         {currentPosition && (
           <button
-            onClick={() => {}}
+            onClick={() => flyToRef.current && flyToRef.current()}
             title="Zum Standort"
             className="absolute bottom-3 right-3 z-[1000] bg-white rounded-lg shadow-md p-2 border border-stone-200 hover:bg-stone-50"
           >
