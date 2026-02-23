@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { Mountain, Route, Clock, TrendingUp, Plus, Map, ArrowRight, Search, LogIn, UserPlus } from "lucide-react";
+import { Mountain, Route, Clock, MapPin, Map, ArrowRight, Search, LogIn, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import StatsCard from "@/components/stats/StatsCard";
@@ -29,26 +29,13 @@ export default function Dashboard() {
     queryFn: () => base44.entities.Dog.list()
   });
 
-  const getCurrentSeason = () => {
-    const month = new Date().getMonth() + 1;
-    if (month >= 12 || month <= 2) return "winter";
-    if (month >= 3 && month <= 5) return "spring";
-    if (month >= 6 && month <= 8) return "summer";
-    return "autumn";
-  };
-
-  const currentSeason = getCurrentSeason();
-
   const filteredHikes = hikes.filter((hike) => {
     if (!searchQuery) return true;
     return hike.trail_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     hike.location?.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
-  const recommendedHikes = filteredHikes
-    .filter(hike => !hike.season || hike.season === "all_year" || hike.season === currentSeason)
-    .slice(0, 6);
-  
+  const recentHikes = filteredHikes.slice(0, 6);
   const hikesWithCoords = filteredHikes.filter((h) => h.latitude && h.longitude);
 
   return (
@@ -176,9 +163,9 @@ Getestet mit unseren Vierbeinern
             </div>
           </div>
           
-          {recommendedHikes.length > 0 ?
+          {recentHikes.length > 0 ?
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {recommendedHikes.map((hike, index) =>
+              {recentHikes.map((hike, index) =>
             <HikeCard key={hike.id} hike={hike} dogs={dogs} index={index} />
             )}
             </div> :
