@@ -28,7 +28,7 @@ const myLocationIcon = L.divIcon({
   iconAnchor: [10, 10],
 });
 
-function MapUpdater({ center }) {
+function MapUpdater({ center, flyToRef }) {
   const map = useMap();
   
   useEffect(() => {
@@ -36,6 +36,12 @@ function MapUpdater({ center }) {
       map.setView(center, map.getZoom());
     }
   }, [center, map]);
+
+  useEffect(() => {
+    if (flyToRef) {
+      flyToRef.current = () => map.flyTo(center, 15);
+    }
+  }, [map, center, flyToRef]);
   
   return null;
 }
