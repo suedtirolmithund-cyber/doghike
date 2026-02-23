@@ -14,6 +14,7 @@ import HikeMap from "@/components/map/HikeMap";
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [suggestionSeed, setSuggestionSeed] = useState(0);
 
   // Check authentication status
   base44.auth.isAuthenticated().then(setIsAuthenticated);
@@ -27,6 +28,37 @@ export default function Dashboard() {
     queryKey: ["dogs"],
     queryFn: () => base44.entities.Dog.list()
   });
+
+  // Determine current season
+  const currentSeason = useMemo(() => {
+    const month = new Date().getMonth() + 1; // 1-12
+    if (month >= 3 && month <= 5) return "spring";
+    if (month >= 6 && month <= 8) return "summer";
+    if (month >= 9 && month <= 11) return "autumn";
+    return "winter";
+  }, []);
+
+  const seasonLabel = { spring: "Frühling", summer: "Sommer", autumn: "Herbst", winter: "Winter" }[currentSeason];
+  const seasonEmoji = { spring: "🌸", summer: "☀️", autumn: "🍂", winter: "❄️" }[currentSeason];
+
+  // Seasonal suggestions: hikes matching current season or all_year, only public/approved
+  const seasonalHikes = useMemo(() => {
+    return hikes.filter(h =>
+      h.visibility === "public" &&
+      (h.season === currentSeason || h.season === "all_year")
+    );
+  }, [hikes, currentSeason]);
+
+  // Pick 3 random suggestions based on seed
+  const suggestedHikes = useMemo(() => {
+    if (seasonalHikes.length === 0) return [];
+    const shuffled = [...seasonalHikes].sort((a, b) => {
+      const hashA = (a.id.charCodeAt(0) + suggestionSeed) % 100;
+      const hashB = (b.id.charCodeAt(0) + suggestionSeed) % 100;
+      return hashA - hashB;
+    });
+    return shuffled.slice(0, 3);
+  }, [seasonalHikes, suggestionSeed]);
 
   const filteredHikes = hikes.filter((hike) => {
     if (!searchQuery) return true;
