@@ -1,10 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState, useRef } from "react";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { motion, AnimatePresence } from "framer-motion";
-import { Mountain, Route, MapPin, Map, ArrowRight, Search, LogIn, UserPlus, Shuffle, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
+import { Mountain, Route, Map, ArrowRight, Search, LogIn, UserPlus, ImagePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import StatsCard from "@/components/stats/StatsCard";
@@ -14,7 +14,6 @@ import HikeMap from "@/components/map/HikeMap";
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [suggestionSeed, setSuggestionSeed] = useState(0);
 
   // Check authentication status
   base44.auth.isAuthenticated().then(setIsAuthenticated);
@@ -28,37 +27,6 @@ export default function Dashboard() {
     queryKey: ["dogs"],
     queryFn: () => base44.entities.Dog.list()
   });
-
-  // Determine current season
-  const currentSeason = useMemo(() => {
-    const month = new Date().getMonth() + 1; // 1-12
-    if (month >= 3 && month <= 5) return "spring";
-    if (month >= 6 && month <= 8) return "summer";
-    if (month >= 9 && month <= 11) return "autumn";
-    return "winter";
-  }, []);
-
-  const seasonLabel = { spring: "Frühling", summer: "Sommer", autumn: "Herbst", winter: "Winter" }[currentSeason];
-  const seasonEmoji = { spring: "🌸", summer: "☀️", autumn: "🍂", winter: "❄️" }[currentSeason];
-
-  // Seasonal suggestions: hikes matching current season or all_year, only public/approved
-  const seasonalHikes = useMemo(() => {
-    return hikes.filter(h =>
-      h.visibility === "public" &&
-      (h.season === currentSeason || h.season === "all_year")
-    );
-  }, [hikes, currentSeason]);
-
-  // Pick 3 random suggestions based on seed
-  const suggestedHikes = useMemo(() => {
-    if (seasonalHikes.length === 0) return [];
-    const shuffled = [...seasonalHikes].sort((a, b) => {
-      const hashA = (a.id.charCodeAt(0) + suggestionSeed) % 100;
-      const hashB = (b.id.charCodeAt(0) + suggestionSeed) % 100;
-      return hashA - hashB;
-    });
-    return shuffled.slice(0, 3);
-  }, [seasonalHikes, suggestionSeed]);
 
   const filteredHikes = hikes.filter((hike) => {
     if (!searchQuery) return true;
@@ -160,48 +128,6 @@ Getestet mit unseren Vierbeinern
             <HikeMap hikes={hikesWithCoords} height="350px" showLegend={true} center={[46.5, 11.9]} zoom={9} />
           </motion.div>
         }
-
-        {/* Seasonal Suggestions */}
-        {suggestedHikes.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="mb-12"
-          >
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-light text-stone-800 flex items-center gap-2">
-                  <Sparkles className="w-6 h-6 text-amber-500" />
-                  Tourenvorschläge für den {seasonLabel} {seasonEmoji}
-                </h2>
-                <p className="text-stone-500 text-sm mt-1">Passend zur aktuellen Jahreszeit</p>
-              </div>
-              <Button
-                variant="outline"
-                onClick={() => setSuggestionSeed(s => s + 1)}
-                className="text-stone-600"
-              >
-                <Shuffle className="w-4 h-4 mr-2" />
-                Neue Vorschläge
-              </Button>
-            </div>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={suggestionSeed}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-6"
-              >
-                {suggestedHikes.map((hike, index) => (
-                  <HikeCard key={hike.id} hike={hike} dogs={dogs} index={index} />
-                ))}
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-        )}
 
         {/* Recent Hikes */}
         <div className="mb-12">
