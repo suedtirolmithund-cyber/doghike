@@ -85,9 +85,36 @@ export default function AdminReview() {
     updateMutation.mutate({ id, data: dataToSave });
   };
 
-  const [activeTab, setActiveTab] = useState("pending");
+  const approvePendingChangesMutation = useMutation({
+    mutationFn: ({ id, changes }) => base44.entities.Hike.update(id, {
+      ...changes,
+      pending_changes: null,
+      pending_changes_status: "approved",
+      pending_changes_rejection_reason: null
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["pending-changes-hikes"] });
+      queryClient.invalidateQueries({ queryKey: ["all-admin-hikes"] });
+      queryClient.invalidateQueries({ queryKey: ["hikes"] });
+    }
+  });
 
-  const hikesToShow = activeTab === "pending" ? pendingHikes : allHikes;
+  const rejectPendingChangesMutation = useMutation({
+    mutationFn: ({ id, reason }) => base44.entities.Hike.update(id, {
+      pending_changes: null,
+      pending_changes_status: "rejected",
+      pending_changes_rejection_reason: reason || "Änderung abgelehnt"
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["pending-changes-hikes"] });
+    }
+  });
+
+  const [activeTab, setActiveTab] = useState("pending");
+  const [rejectionReason, setRejectionReason] = useState("");
+  const [rejectChangesDialog, setRejectChangesDialog] = useState({ open: false, hike: null });
+
+  const hikesToShow = activeTab === "pending" ? pendingHikes : activeTab === "changes" ? pendingChangesHikes : allHikes;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50">
