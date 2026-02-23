@@ -280,12 +280,14 @@ export default function AdminReview() {
                                   />
                                 </div>
                                 <div className="space-y-1">
-                                  <Label>Gehzeit (Minuten)</Label>
+                                  <Label>Gehzeit (Stunden)</Label>
                                   <Input
                                     type="number"
-                                    value={editData.duration_minutes || ""}
-                                    onChange={(e) => setEditData({ ...editData, duration_minutes: e.target.value })}
+                                    step="0.1"
+                                    value={editData.duration_minutes ? (editData.duration_minutes / 60).toFixed(1) : ""}
+                                    onChange={(e) => setEditData({ ...editData, duration_minutes: e.target.value ? Math.round(parseFloat(e.target.value) * 60) : "" })}
                                     className="text-base h-11"
+                                    placeholder="z.B. 3.5"
                                   />
                                 </div>
                                 <div className="space-y-1">
