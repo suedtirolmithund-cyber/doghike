@@ -514,6 +514,53 @@ export default function AdminReview() {
                                 </div>
                               )}
 
+                              {/* Pending changes diff */}
+                              {hike.pending_changes && Object.keys(hike.pending_changes).length > 0 && (
+                                <div className="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                                  <h4 className="text-sm font-semibold text-amber-800 mb-3">📝 Eingereichte Änderungen</h4>
+                                  <div className="space-y-2">
+                                    {Object.entries(hike.pending_changes)
+                                      .filter(([key]) => !["photos","route_coordinates","dogs","latitude","longitude"].includes(key))
+                                      .map(([key, newVal]) => {
+                                        const oldVal = hike[key];
+                                        if (JSON.stringify(oldVal) === JSON.stringify(newVal)) return null;
+                                        const labels = {
+                                          trail_name:"Name", location:"Ort", distance_km:"km",
+                                          elevation_gain_m:"Höhenmeter", duration_minutes:"Gehzeit (min)",
+                                          difficulty:"Schwierigkeit Mensch", dog_difficulty:"Schwierigkeit Hund",
+                                          season:"Jahreszeit", water_availability:"Wasser", notes:"Beschreibung",
+                                          parking_info:"Parken", restaurant_info:"Gastronomie", hazard_notes:"Gefahren",
+                                          rating:"Bewertung", visibility:"Sichtbarkeit"
+                                        };
+                                        return (
+                                          <div key={key} className="text-xs grid grid-cols-3 gap-2 bg-white rounded-lg p-2 border border-amber-100">
+                                            <span className="font-medium text-stone-600">{labels[key] || key}</span>
+                                            <span className="text-red-600 line-through">{String(oldVal ?? "–")}</span>
+                                            <span className="text-emerald-700 font-medium">{String(newVal ?? "–")}</span>
+                                          </div>
+                                        );
+                                      })}
+                                  </div>
+                                  <div className="flex gap-2 mt-3">
+                                    <Button
+                                      size="sm"
+                                      className="bg-emerald-600 hover:bg-emerald-700"
+                                      onClick={() => approvePendingChangesMutation.mutate({ id: hike.id, changes: hike.pending_changes })}
+                                    >
+                                      <Check className="w-3 h-3 mr-1" /> Änderung übernehmen
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      className="border-red-200 text-red-600"
+                                      onClick={() => setRejectChangesDialog({ open: true, hike })}
+                                    >
+                                      <X className="w-3 h-3 mr-1" /> Ablehnen
+                                    </Button>
+                                  </div>
+                                </div>
+                              )}
+
                               {/* Actions */}
                               <div className="flex gap-2 pt-4 border-t border-stone-100 flex-wrap">
                                 <Button
