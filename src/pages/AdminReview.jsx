@@ -39,6 +39,11 @@ export default function AdminReview() {
     queryFn: () => base44.entities.Hike.filter({ status: "pending" }, "-created_date")
   });
 
+  const { data: pendingChangesHikes = [] } = useQuery({
+    queryKey: ["pending-changes-hikes"],
+    queryFn: () => base44.entities.Hike.filter({ pending_changes_status: "pending" }, "-updated_date")
+  });
+
   const { data: allHikes = [] } = useQuery({
     queryKey: ["all-admin-hikes"],
     queryFn: () => base44.entities.Hike.filter({ status: "approved" }, "-created_date", 200)
