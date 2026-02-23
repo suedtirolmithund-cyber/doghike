@@ -665,7 +665,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               Wird gespeichert...
             </>
           ) : (
-            hike ? "Tour aktualisieren" : "Tour hinzufügen"
+            submitLabel || (hike ? "Tour aktualisieren" : "Tour hinzufügen")
           )}
         </Button>
       </div>
