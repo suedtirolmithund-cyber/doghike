@@ -44,9 +44,11 @@ const weatherIcons = {
   foggy: "🌫️"
 };
 
-export default function HikeCard({ hike, dogs = [], index = 0 }) {
+export default function HikeCard({ hike, dogs = [], index = 0, allUsers = [] }) {
   const hikeDogs = dogs.filter((d) => hike.dogs?.includes(d.id));
   const coverPhoto = hike.photos?.[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80";
+  const creator = allUsers.find(u => u.email === hike.created_by);
+  const submitterName = hike.submitted_by_name || creator?.full_name;
 
   return (
     <motion.div
