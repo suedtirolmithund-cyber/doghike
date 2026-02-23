@@ -145,6 +145,7 @@ export default function Dogs() {
                   >
                     <div className="relative h-48 bg-gradient-to-br from-slate-100 to-stone-100">
                       <img
+                        key={dog.photo_url || dog.name}
                         src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}&backgroundColor=f5f5f4`}
                         alt={dog.name}
                         className="w-full h-full object-cover"
