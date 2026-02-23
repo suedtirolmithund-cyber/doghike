@@ -221,45 +221,6 @@ export default function HikeDetail() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Stats Row */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10"
-        >
-          <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
-            <Calendar className="w-5 h-5 text-stone-400 mx-auto mb-2" />
-            <p className="text-lg font-medium text-stone-800">
-              {hike.date && format(new Date(hike.date), "dd.MM.yyyy")}
-            </p>
-            <p className="text-sm text-stone-500">Datum</p>
-          </div>
-          {hike.distance_km && (
-            <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
-              <Route className="w-5 h-5 text-stone-400 mx-auto mb-2" />
-              <p className="text-lg font-medium text-stone-800">{hike.distance_km} km</p>
-              <p className="text-sm text-stone-500">Strecke</p>
-            </div>
-          )}
-          {hike.elevation_gain_m && (
-            <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
-              <Mountain className="w-5 h-5 text-stone-400 mx-auto mb-2" />
-              <p className="text-lg font-medium text-stone-800">{hike.elevation_gain_m} m</p>
-              <p className="text-sm text-stone-500">Höhenmeter</p>
-            </div>
-          )}
-          {hike.duration_minutes && (
-            <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
-              <Clock className="w-5 h-5 text-stone-400 mx-auto mb-2" />
-              <p className="text-lg font-medium text-stone-800">
-                {(hike.duration_minutes / 60).toFixed(1)} Std
-              </p>
-              <p className="text-sm text-stone-500">Gehzeit</p>
-            </div>
-          )}
-        </motion.div>
-
         {/* Interactive Map - Full Width */}
         {hike.latitude && hike.longitude && (
           <motion.div
