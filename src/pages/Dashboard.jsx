@@ -1,15 +1,14 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { motion } from "framer-motion";
-import { Mountain, Route, Clock, MapPin, Map, ArrowRight, Search, LogIn, UserPlus } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Mountain, Route, MapPin, Map, ArrowRight, Search, LogIn, UserPlus, Shuffle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import StatsCard from "@/components/stats/StatsCard";
 import HikeCard from "@/components/hikes/HikeCard";
-import DogAvatar from "@/components/dogs/DogAvatar";
 import HikeMap from "@/components/map/HikeMap";
 
 export default function Dashboard() {
@@ -99,29 +98,14 @@ Getestet mit unseren Vierbeinern
           </div>
         </motion.div>
 
-        {/* Stats */}
-        <div className="mb-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {/* Stats - Only Count */}
+        <div className="mb-12 text-center">
           <StatsCard
             icon={Route}
             label="Wanderungen"
             value={filteredHikes.length}
-            delay={0}
-          />
-          <StatsCard
-            icon={MapPin}
-            label="Regionen"
-            value={[...new Set(hikes.map(h => h.location).filter(Boolean))].length}
-            delay={0.1}
-          />
-          <StatsCard
-            icon={Mountain}
-            label="Ø Höhenmeter"
-            value={hikes.filter(h => h.elevation_gain_m).length > 0
-              ? Math.round(hikes.filter(h => h.elevation_gain_m).reduce((s, h) => s + h.elevation_gain_m, 0) / hikes.filter(h => h.elevation_gain_m).length)
-              : 0}
-            unit="Hm"
-            delay={0.2}
-          />
+            delay={0} />
+
         </div>
 
         {/* Map Section */}
