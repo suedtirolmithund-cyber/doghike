@@ -99,14 +99,29 @@ Getestet mit unseren Vierbeinern
           </div>
         </motion.div>
 
-        {/* Stats - Only Count */}
-        <div className="mb-12 text-center">
+        {/* Stats */}
+        <div className="mb-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
           <StatsCard
             icon={Route}
             label="Wanderungen"
             value={filteredHikes.length}
-            delay={0} />
-
+            delay={0}
+          />
+          <StatsCard
+            icon={MapPin}
+            label="Regionen"
+            value={[...new Set(hikes.map(h => h.location).filter(Boolean))].length}
+            delay={0.1}
+          />
+          <StatsCard
+            icon={Mountain}
+            label="Ø Höhenmeter"
+            value={hikes.filter(h => h.elevation_gain_m).length > 0
+              ? Math.round(hikes.filter(h => h.elevation_gain_m).reduce((s, h) => s + h.elevation_gain_m, 0) / hikes.filter(h => h.elevation_gain_m).length)
+              : 0}
+            unit="Hm"
+            delay={0.2}
+          />
         </div>
 
         {/* Map Section */}
