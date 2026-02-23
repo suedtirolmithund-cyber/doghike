@@ -246,7 +246,12 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="water_availability">Wasser unterwegs 💧</Label>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="water_availability">Wasser unterwegs 💧</Label>
+            <a href={createPageUrl("WaterHelp")} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline flex items-center gap-1">
+              <HelpCircle className="w-3 h-3" /> Was bedeutet das?
+            </a>
+          </div>
           <Select
             value={formData.water_availability}
             onValueChange={(value) => setFormData({ ...formData, water_availability: value })}
