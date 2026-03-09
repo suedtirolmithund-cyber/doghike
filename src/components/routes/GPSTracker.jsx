@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, Square, Crosshair, Mountain } from "lucide-react";
+import { Play, Pause, Square, Crosshair } from "lucide-react";
 import { motion } from "framer-motion";
 import RouteElevationProfile from "./RouteElevationProfile";
 import "leaflet/dist/leaflet.css";
