@@ -60,6 +60,7 @@ export default function RoutePlanner() {
       route_type: activeTab === "draw" ? "planned" : "recorded",
       coordinates: routeGeometry.coordinates,
       distance_km: routeGeometry.distance_km,
+      elevation_gain_m: routeGeometry.elevation_gain_m || null,
       duration_minutes: routeGeometry.duration_minutes || null,
       avg_speed_kmh: routeGeometry.avg_speed_kmh || null,
     });
