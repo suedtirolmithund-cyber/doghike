@@ -379,21 +379,32 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
           </div>
         )}
         {waypoints.length > 0 && !isCalculating && (
-          <div className="mt-2 pt-2 border-t border-stone-300 space-y-1">
+          <div className="mt-2 pt-2 border-t border-stone-300 space-y-2">
             <div className="flex items-center justify-between text-xs md:text-sm">
               <span className="text-stone-600">Wegpunkte: <strong className="text-slate-800">{waypoints.length}</strong></span>
               <span className="text-stone-600">Distanz: <strong className="text-slate-800">{routeDistance} km</strong></span>
             </div>
-            {waypoints.length >= 2 && (
-              <div className="flex items-center justify-between text-xs md:text-sm">
+            {waypoints.length >= 2 && routeDurationMin > 0 && (
+              <div className="bg-white rounded-lg px-3 py-2 border border-slate-300 flex flex-wrap gap-3 items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">⏱️</span>
+                  <div>
+                    <p className="text-xs text-stone-500 leading-none">Geschätzte Gehzeit</p>
+                    <p className="font-bold text-slate-800 text-sm md:text-base">
+                      {Math.floor(routeDurationMin / 60) > 0 ? `${Math.floor(routeDurationMin / 60)}h ` : ""}{routeDurationMin % 60}min
+                    </p>
+                  </div>
+                </div>
                 {routeElevationGain > 0 && (
-                  <span className="text-stone-600">⛰️ Höhenmeter: <strong className="text-slate-800">+{routeElevationGain} m</strong></span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">⛰️</span>
+                    <div>
+                      <p className="text-xs text-stone-500 leading-none">Höhenmeter</p>
+                      <p className="font-bold text-slate-800 text-sm md:text-base">+{routeElevationGain} m</p>
+                    </div>
+                  </div>
                 )}
-                {routeDurationMin > 0 && (
-                  <span className="text-stone-600">⏱️ ca. <strong className="text-slate-800">
-                    {Math.floor(routeDurationMin / 60) > 0 ? `${Math.floor(routeDurationMin / 60)}h ` : ""}{routeDurationMin % 60}min
-                  </strong></span>
-                )}
+                <p className="text-xs text-stone-400 w-full">Nach Naismith-Regel (5 km/h + 600 Hm/h)</p>
               </div>
             )}
           </div>
