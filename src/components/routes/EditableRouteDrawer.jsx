@@ -466,6 +466,15 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
           <span className="hidden md:inline ml-2">Löschen</span>
         </Button>
         <Button
+          variant="outline"
+          onClick={makeLoop}
+          disabled={waypoints.length < 2 || isEditing}
+          size="sm"
+          title="Startpunkt als letzten Wegpunkt hinzufügen (Rundtour)"
+        >
+          🔄 <span className="hidden md:inline ml-2">Rundtour</span>
+        </Button>
+        <Button
           onClick={handleSave}
           disabled={waypoints.length < 2 || isCalculating}
           className="bg-slate-800 hover:bg-slate-900 ml-auto"
