@@ -1,56 +1,24 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { Mountain, Route, Map, ArrowRight, Search, LogIn, UserPlus, ImagePlus } from "lucide-react";
+import { Mountain, Route, Clock, TrendingUp, Plus, Map, ArrowRight, Search, LogIn, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import StatsCard from "@/components/stats/StatsCard";
 import HikeCard from "@/components/hikes/HikeCard";
+import DogAvatar from "@/components/dogs/DogAvatar";
 import HikeMap from "@/components/map/HikeMap";
-
-const DEFAULT_HERO = "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80";
+import SmartRecommendations from "@/components/hikes/SmartRecommendations";
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [uploadingHero, setUploadingHero] = useState(false);
-  const heroInputRef = useRef(null);
-  const queryClient = useQueryClient();
 
   // Check authentication status
   base44.auth.isAuthenticated().then(setIsAuthenticated);
-
-  const { data: user } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => base44.auth.me().catch(() => null),
-  });
-
-  const { data: heroSetting } = useQuery({
-    queryKey: ["siteSettings", "hero_image_url"],
-    queryFn: async () => {
-      const res = await base44.entities.SiteSettings.filter({ key: "hero_image_url" });
-      return res[0] || null;
-    }
-  });
-
-  const heroImageUrl = heroSetting?.value || DEFAULT_HERO;
-
-  const handleHeroUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setUploadingHero(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    if (heroSetting) {
-      await base44.entities.SiteSettings.update(heroSetting.id, { value: file_url });
-    } else {
-      await base44.entities.SiteSettings.create({ key: "hero_image_url", value: file_url });
-    }
-    queryClient.invalidateQueries({ queryKey: ["siteSettings", "hero_image_url"] });
-    setUploadingHero(false);
-  };
 
   const { data: hikes = [], isLoading: hikesLoading } = useQuery({
     queryKey: ["hikes"],
@@ -77,22 +45,9 @@ export default function Dashboard() {
       <div className="relative overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('${heroImageUrl}')` }}
-        />
-        {user?.role === "admin" && (
-          <div className="absolute top-4 right-4 z-20">
-            <input ref={heroInputRef} type="file" accept="image/*" className="hidden" onChange={handleHeroUpload} />
-            <Button
-              size="sm"
-              onClick={() => heroInputRef.current?.click()}
-              disabled={uploadingHero}
-              className="bg-white/20 backdrop-blur-sm text-white border border-white/30 hover:bg-white/30"
-            >
-              <ImagePlus className="w-4 h-4 mr-2" />
-              {uploadingHero ? "Lädt..." : "Titelbild ändern"}
-            </Button>
-          </div>
-        )}
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80')"
+          }} />
 
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-stone-50" />
         
@@ -175,6 +130,9 @@ Getestet mit unseren Vierbeinern
             <HikeMap hikes={hikesWithCoords} height="350px" showLegend={true} center={[46.5, 11.9]} zoom={9} />
           </motion.div>
         }
+
+        {/* Smart Recommendations */}
+        <SmartRecommendations allHikes={hikes} dogs={dogs} />
 
         {/* Recent Hikes */}
         <div className="mb-12">
