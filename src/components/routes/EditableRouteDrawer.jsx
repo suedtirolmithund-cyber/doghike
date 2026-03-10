@@ -264,6 +264,12 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
     setIsEditing(false);
   };
 
+  const makeLoop = () => {
+    if (waypoints.length < 2) return;
+    const start = waypoints[0];
+    setWaypoints([...waypoints, start]);
+  };
+
   const handleSave = () => {
     onSave({
       coordinates: routeCoordinates.length > 0 ? routeCoordinates : waypoints,
