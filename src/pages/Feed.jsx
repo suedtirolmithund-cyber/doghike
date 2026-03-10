@@ -128,7 +128,7 @@ export default function Feed() {
   const generateAndSaveBanner = async () => {
     setGeneratingBanner(true);
     const { url } = await base44.integrations.Core.GenerateImage({
-      prompt: "Two happy Border Collie dogs hiking in the Dolomites mountains of South Tyrol, golden hour light, scenic alpine meadow, wide cinematic landscape photography"
+      prompt: "Two happy dogs hiking in alpine mountains, golden hour light, scenic meadow and peaks, wide cinematic landscape photography"
     });
     if (bannerSetting?.id) {
       await base44.entities.SiteSettings.update(bannerSetting.id, { value: url });

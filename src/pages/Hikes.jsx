@@ -70,7 +70,7 @@ export default function Hikes() {
         >
           <div>
             <h1 className="text-3xl font-bold text-stone-800">Alle Wanderungen</h1>
-            <p className="text-stone-600 mt-1">{hikes.length} hundefreundliche Touren in Südtirol</p>
+            <p className="text-stone-600 mt-1">{hikes.length} hundefreundliche Touren</p>
           </div>
         </motion.div>
 
