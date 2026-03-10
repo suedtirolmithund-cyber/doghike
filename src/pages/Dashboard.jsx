@@ -11,7 +11,6 @@ import StatsCard from "@/components/stats/StatsCard";
 import HikeCard from "@/components/hikes/HikeCard";
 import DogAvatar from "@/components/dogs/DogAvatar";
 import HikeMap from "@/components/map/HikeMap";
-import SmartRecommendations from "@/components/hikes/SmartRecommendations";
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -130,9 +129,6 @@ Getestet mit unseren Vierbeinern
             <HikeMap hikes={hikesWithCoords} height="350px" showLegend={true} center={[46.5, 11.9]} zoom={9} />
           </motion.div>
         }
-
-        {/* Smart Recommendations */}
-        <SmartRecommendations allHikes={hikes} dogs={dogs} />
 
         {/* Recent Hikes */}
         <div className="mb-12">
