@@ -15,6 +15,13 @@ export default function Hikes() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("none");
   const [levelFilter, setLevelFilter] = useState("all");
+  const [humanDifficultyFilter, setHumanDifficultyFilter] = useState("all");
+  const [dogDifficultyFilter, setDogDifficultyFilter] = useState("all");
+  const [distanceMin, setDistanceMin] = useState("");
+  const [distanceMax, setDistanceMax] = useState("");
+  const [elevationMin, setElevationMin] = useState("");
+  const [elevationMax, setElevationMax] = useState("");
+  const [seasonFilter, setSeasonFilter] = useState("all");
 
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["hikes"],
@@ -46,6 +53,24 @@ export default function Hikes() {
       const matchesSearch = hike.trail_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            hike.location?.toLowerCase().includes(searchQuery.toLowerCase());
       if (!matchesSearch) return false;
+      
+      // Human difficulty filter
+      if (humanDifficultyFilter !== "all" && hike.difficulty !== humanDifficultyFilter) return false;
+      
+      // Dog difficulty filter
+      if (dogDifficultyFilter !== "all" && hike.dog_difficulty !== dogDifficultyFilter) return false;
+      
+      // Distance filter
+      if (distanceMin && (hike.distance_km || 0) < parseFloat(distanceMin)) return false;
+      if (distanceMax && (hike.distance_km || 0) > parseFloat(distanceMax)) return false;
+      
+      // Elevation filter
+      if (elevationMin && (hike.elevation_gain_m || 0) < parseFloat(elevationMin)) return false;
+      if (elevationMax && (hike.elevation_gain_m || 0) > parseFloat(elevationMax)) return false;
+      
+      // Season filter
+      if (seasonFilter !== "all" && hike.season !== seasonFilter && hike.season !== "all_year") return false;
+      
       if (levelFilter === "all") return true;
       if (sortBy === "difficulty") return hike.difficulty === levelFilter;
       if (sortBy === "dog_difficulty") return hike.dog_difficulty === levelFilter;
@@ -79,9 +104,10 @@ export default function Hikes() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white rounded-2xl p-4 border border-stone-200/50 shadow-sm mb-8"
+          className="bg-white rounded-2xl p-6 border border-stone-200/50 shadow-sm mb-8"
         >
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
+            {/* Search */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
               <Input
@@ -91,27 +117,18 @@ export default function Hikes() {
                 className="pl-10"
               />
             </div>
-            <div className="flex flex-wrap gap-3">
-              <Select value={sortBy} onValueChange={(v) => { setSortBy(v); setLevelFilter("all"); }}>
-                <SelectTrigger className="min-w-[180px] flex-shrink-0">
-                  <SelectValue placeholder="Sortieren nach..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">🕐 Neueste zuerst</SelectItem>
-                  <SelectItem value="difficulty">👤 Schwierigkeit Mensch</SelectItem>
-                  <SelectItem value="dog_difficulty">🐕 Schwierigkeit Hund</SelectItem>
-                  <SelectItem value="distance">📏 Kilometer</SelectItem>
-                  <SelectItem value="elevation">⛰️ Höhenmeter</SelectItem>
-                </SelectContent>
-              </Select>
 
-              {(sortBy === "difficulty" || sortBy === "dog_difficulty") && (
-                <Select value={levelFilter} onValueChange={setLevelFilter}>
-                  <SelectTrigger className="min-w-[150px] flex-shrink-0">
-                    <SelectValue placeholder="Stufe wählen" />
+            {/* Filter Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Human Difficulty */}
+              <div>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">👤 Schwierigkeit Mensch</label>
+                <Select value={humanDifficultyFilter} onValueChange={setHumanDifficultyFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Alle" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Alle Stufen</SelectItem>
+                    <SelectItem value="all">Alle</SelectItem>
                     <SelectItem value="1">Stufe 1 – Leicht</SelectItem>
                     <SelectItem value="2">Stufe 2 – Mittel-leicht</SelectItem>
                     <SelectItem value="3">Stufe 3 – Mittel</SelectItem>
@@ -119,7 +136,102 @@ export default function Hikes() {
                     <SelectItem value="5">Stufe 5 – Schwer</SelectItem>
                   </SelectContent>
                 </Select>
-              )}
+              </div>
+
+              {/* Dog Difficulty */}
+              <div>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">🐕 Schwierigkeit Hund</label>
+                <Select value={dogDifficultyFilter} onValueChange={setDogDifficultyFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Alle" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Alle</SelectItem>
+                    <SelectItem value="1">Stufe 1 – Leicht</SelectItem>
+                    <SelectItem value="2">Stufe 2 – Mittel-leicht</SelectItem>
+                    <SelectItem value="3">Stufe 3 – Mittel</SelectItem>
+                    <SelectItem value="4">Stufe 4 – Anspruchsvoll</SelectItem>
+                    <SelectItem value="5">Stufe 5 – Schwer</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Season */}
+              <div>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">🌤️ Jahreszeit</label>
+                <Select value={seasonFilter} onValueChange={setSeasonFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Alle" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Alle</SelectItem>
+                    <SelectItem value="spring">🌸 Frühling</SelectItem>
+                    <SelectItem value="summer">☀️ Sommer</SelectItem>
+                    <SelectItem value="autumn">🍂 Herbst</SelectItem>
+                    <SelectItem value="winter">❄️ Winter</SelectItem>
+                    <SelectItem value="all_year">🔄 Ganzjährig</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Distance */}
+              <div>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">📏 Distanz (km)</label>
+                <div className="flex gap-2">
+                  <Input
+                    type="number"
+                    placeholder="Min"
+                    value={distanceMin}
+                    onChange={(e) => setDistanceMin(e.target.value)}
+                    className="w-full"
+                  />
+                  <Input
+                    type="number"
+                    placeholder="Max"
+                    value={distanceMax}
+                    onChange={(e) => setDistanceMax(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+
+              {/* Elevation */}
+              <div>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">⛰️ Höhenmeter (m)</label>
+                <div className="flex gap-2">
+                  <Input
+                    type="number"
+                    placeholder="Min"
+                    value={elevationMin}
+                    onChange={(e) => setElevationMin(e.target.value)}
+                    className="w-full"
+                  />
+                  <Input
+                    type="number"
+                    placeholder="Max"
+                    value={elevationMax}
+                    onChange={(e) => setElevationMax(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+
+              {/* Sort */}
+              <div>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">🔄 Sortieren</label>
+                <Select value={sortBy} onValueChange={(v) => { setSortBy(v); setLevelFilter("all"); }}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Neueste zuerst" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">🕐 Neueste zuerst</SelectItem>
+                    <SelectItem value="difficulty">👤 Schwierigkeit Mensch</SelectItem>
+                    <SelectItem value="dog_difficulty">🐕 Schwierigkeit Hund</SelectItem>
+                    <SelectItem value="distance">📏 Kilometer</SelectItem>
+                    <SelectItem value="elevation">⛰️ Höhenmeter</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
         </motion.div>
