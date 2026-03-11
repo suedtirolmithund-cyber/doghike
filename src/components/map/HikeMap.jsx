@@ -33,7 +33,7 @@ const createPawIcon = (season) => {
       font-size: 20px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       border: 3px solid white;
-    "><span style="filter: brightness(0) invert(1);">🐾</span></div>
+    "><span style="filter: brightness(0) invert(1); text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">🐾</span></div>
   `;
   
   return L.divIcon({
