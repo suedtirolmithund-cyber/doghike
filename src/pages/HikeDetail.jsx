@@ -7,7 +7,7 @@ import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, MapPin, Calendar, Clock, Mountain, Route,
-  Star, Edit, Trash2, ChevronLeft, ChevronRight, X
+  Star, Edit, Trash2, ChevronLeft, ChevronRight, X, Globe
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -136,6 +136,9 @@ export default function HikeDetail() {
   const hikeDogs = dogs.filter(d => hike.dogs?.includes(d.id));
   const photos = hike.photos || [];
   const coverPhoto = photos[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80";
+  
+  // Extract country from location
+  const country = hike.location ? hike.location.split(',').map(p => p.trim()).pop() : null;
 
   const nextPhoto = () => setCurrentPhotoIndex((prev) => (prev + 1) % photos.length);
   const prevPhoto = () => setCurrentPhotoIndex((prev) => (prev - 1 + photos.length) % photos.length);
@@ -351,6 +354,13 @@ export default function HikeDetail() {
           transition={{ delay: 0.15 }}
           className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10"
         >
+          {country && (
+            <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
+              <Globe className="w-5 h-5 text-stone-400 mx-auto mb-2" />
+              <p className="text-lg font-medium text-stone-800">{country}</p>
+              <p className="text-sm text-stone-500">Land</p>
+            </div>
+          )}
           <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
             <Calendar className="w-5 h-5 text-stone-400 mx-auto mb-2" />
             <p className="text-lg font-medium text-stone-800">
