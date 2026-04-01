@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { Mountain, Route, Clock, TrendingUp, Plus, Map, ArrowRight, Search, LogIn, UserPlus, Globe } from "lucide-react";
+import { Mountain, Route, Globe, Map, ArrowRight, Search, LogIn, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import StatsCard from "@/components/stats/StatsCard";
@@ -37,20 +37,7 @@ export default function Dashboard() {
 
   const recentHikes = filteredHikes.slice(0, 6);
   const hikesWithCoords = filteredHikes.filter((h) => h.latitude && h.longitude);
-
-  // Count unique countries from hike locations
-  const uniqueCountries = new Set();
-  filteredHikes.forEach(hike => {
-    if (hike.location) {
-      // Extract country from location (usually last part after comma)
-      const parts = hike.location.split(',').map(p => p.trim());
-      if (parts.length > 0) {
-        const country = parts[parts.length - 1];
-        if (country) uniqueCountries.add(country);
-      }
-    }
-  });
-  const countryCount = uniqueCountries.size;
+  const uniqueCountries = new Set(hikes.filter(h => h.country).map(h => h.country)).size;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50">
@@ -114,17 +101,19 @@ Getestet mit unseren Vierbeinern
         </motion.div>
 
         {/* Stats */}
-        <div className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+        <div className="mb-12 flex flex-wrap justify-center gap-4">
           <StatsCard
             icon={Route}
             label="Wanderungen"
             value={filteredHikes.length}
             delay={0} />
-          <StatsCard
-            icon={Globe}
-            label="Länder"
-            value={countryCount}
-            delay={0.1} />
+          {uniqueCountries > 0 && (
+            <StatsCard
+              icon={Globe}
+              label="Länder"
+              value={uniqueCountries}
+              delay={0.1} />
+          )}
         </div>
 
         {/* Map Section */}
