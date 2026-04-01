@@ -240,6 +240,15 @@ export default function HikeDetail() {
             <div className="flex items-center gap-2 text-white/80">
               <MapPin className="w-4 h-4" />
               <span>{hike.location || "Dolomites"}</span>
+              {hike.country && (
+                <span className="ml-2">
+                  {hike.country === "italy" && "🇮🇹 Italien"}
+                  {hike.country === "austria" && "🇦🇹 Österreich"}
+                  {hike.country === "germany" && "🇩🇪 Deutschland"}
+                  {hike.country === "switzerland" && "🇨🇭 Schweiz"}
+                  {hike.country === "other" && "🌍"}
+                </span>
+              )}
             </div>
           </motion.div>
         </div>

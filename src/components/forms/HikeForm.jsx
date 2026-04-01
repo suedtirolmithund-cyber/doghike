@@ -17,6 +17,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
   const [formData, setFormData] = useState(hike || {
     trail_name: "",
     location: "",
+    country: "italy",
     date: new Date().toISOString().split("T")[0],
     distance_km: "",
     elevation_gain_m: "",
@@ -182,6 +183,25 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             onChange={(e) => setFormData({ ...formData, location: e.target.value })}
             placeholder="z.B. Sexten, Südtirol"
           />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="country">Land 🌍</Label>
+          <Select
+            value={formData.country || "italy"}
+            onValueChange={(value) => setFormData({ ...formData, country: value })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Land wählen" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="italy">🇮🇹 Italien</SelectItem>
+              <SelectItem value="austria">🇦🇹 Österreich</SelectItem>
+              <SelectItem value="germany">🇩🇪 Deutschland</SelectItem>
+              <SelectItem value="switzerland">🇨🇭 Schweiz</SelectItem>
+              <SelectItem value="other">🌍 Anderes</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">
