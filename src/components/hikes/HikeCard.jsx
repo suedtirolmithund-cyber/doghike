@@ -60,7 +60,8 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
             <img
               src={coverPhoto}
               alt={hike.trail_name}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80"; }} />
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
             
@@ -129,26 +130,13 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                 {hikeDogs.slice(0, 3).map((dog, i) =>
                 <div
                   key={dog.id}
-                  className="w-8 h-8 rounded-full border-2 border-white shadow-sm overflow-hidden bg-stone-200 flex-shrink-0"
+                  className="w-8 h-8 rounded-full border-2 border-white shadow-sm overflow-hidden"
                   style={{ marginLeft: i > 0 ? "-8px" : 0 }}>
 
-                    {dog.photo_url ? (
-                      <img
-                        src={dog.photo_url}
-                        alt={dog.name}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                    ) : null}
-                    <div
-                      className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-300 to-orange-400 text-white text-xs font-bold"
-                      style={{ display: dog.photo_url ? 'none' : 'flex' }}
-                    >
-                      {dog.name.charAt(0).toUpperCase()}
-                    </div>
+                    <img
+                    src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
+                    alt={dog.name}
+                    className="w-full h-full object-cover" />
 
                   </div>
                 )}
