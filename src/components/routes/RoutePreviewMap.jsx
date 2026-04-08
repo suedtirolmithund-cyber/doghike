@@ -25,7 +25,7 @@ export default function RoutePreviewMap({ coordinates }) {
       <div className="h-64 md:h-80 w-full">
         <MapContainer center={center} zoom={11} style={{ height: "100%", width: "100%" }}>
           <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/voyager/{z}/{x}/{y}{r}.png"
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
           />
           <Polyline positions={coordinates} color="#1e293b" weight={4} />
