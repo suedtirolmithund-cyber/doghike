@@ -44,11 +44,9 @@ const weatherIcons = {
   foggy: "🌫️"
 };
 
-export default function HikeCard({ hike, dogs = [], index = 0, allUsers = [] }) {
+export default function HikeCard({ hike, dogs = [], index = 0 }) {
   const hikeDogs = dogs.filter((d) => hike.dogs?.includes(d.id));
   const coverPhoto = hike.photos?.[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80";
-  const creator = allUsers.find(u => u.email === hike.created_by);
-  const submitterName = hike.submitted_by_name || creator?.full_name;
 
   return (
     <motion.div
@@ -126,24 +124,31 @@ export default function HikeCard({ hike, dogs = [], index = 0, allUsers = [] }) 
               }
             </div>
             
-            {submitterName && (
-              <div className="flex items-center gap-1.5 mb-3 text-xs text-stone-500">
-                <span>📍 Empfohlen von <span className="font-medium text-stone-700">{submitterName}</span></span>
-              </div>
-            )}
-
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 {hikeDogs.slice(0, 3).map((dog, i) =>
                 <div
                   key={dog.id}
-                  className="w-8 h-8 rounded-full border-2 border-white shadow-sm overflow-hidden"
+                  className="w-8 h-8 rounded-full border-2 border-white shadow-sm overflow-hidden bg-stone-200 flex-shrink-0"
                   style={{ marginLeft: i > 0 ? "-8px" : 0 }}>
 
-                    <img
-                    src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
-                    alt={dog.name}
-                    className="w-full h-full object-cover" />
+                    {dog.photo_url ? (
+                      <img
+                        src={dog.photo_url}
+                        alt={dog.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                    ) : null}
+                    <div
+                      className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-300 to-orange-400 text-white text-xs font-bold"
+                      style={{ display: dog.photo_url ? 'none' : 'flex' }}
+                    >
+                      {dog.name.charAt(0).toUpperCase()}
+                    </div>
 
                   </div>
                 )}
