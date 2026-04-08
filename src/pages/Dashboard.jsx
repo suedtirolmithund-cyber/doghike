@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { Mountain, Route, Globe, Map, ArrowRight, Search, LogIn, UserPlus } from "lucide-react";
+import { Mountain, Route, Clock, TrendingUp, Plus, Map, ArrowRight, Search, LogIn, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import StatsCard from "@/components/stats/StatsCard";
@@ -37,7 +37,6 @@ export default function Dashboard() {
 
   const recentHikes = filteredHikes.slice(0, 6);
   const hikesWithCoords = filteredHikes.filter((h) => h.latitude && h.longitude);
-  const uniqueCountries = new Set(hikes.filter(h => h.country).map(h => h.country)).size;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50">
@@ -100,20 +99,14 @@ Getestet mit unseren Vierbeinern
           </div>
         </motion.div>
 
-        {/* Stats */}
-        <div className="mb-12 flex flex-wrap justify-center gap-4">
+        {/* Stats - Only Count */}
+        <div className="mb-12 text-center">
           <StatsCard
             icon={Route}
             label="Wanderungen"
             value={filteredHikes.length}
             delay={0} />
-          {uniqueCountries > 0 && (
-            <StatsCard
-              icon={Globe}
-              label="Länder"
-              value={uniqueCountries}
-              delay={0.1} />
-          )}
+
         </div>
 
         {/* Map Section */}
