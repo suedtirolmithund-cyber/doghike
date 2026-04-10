@@ -305,6 +305,7 @@ export default function Profile() {
                             src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}&backgroundColor=f5f5f4`}
                             alt={dog.name}
                             className="w-full h-full object-cover"
+                            onError={(e) => { e.target.onerror = null; e.target.src = `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}&backgroundColor=f5f5f4`; }}
                           />
                           <div className="absolute top-4 right-4 flex gap-2">
                             <Button
