@@ -60,8 +60,8 @@ export default function Dashboard() {
             <h1 className="text-4xl md:text-6xl font-light text-white mb-4 tracking-tight">
               Hundefreundliche Wanderungen
             </h1>
-            <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">Entdecke die schönsten Wanderungen in Südtirol, den Dolomiten. 
-Getestet mit unseren Vierbeinern 
+            <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">Entdecke die schönsten Wanderungen in den Bergen.
+
             </p>
 
             <div className="flex flex-wrap gap-4 justify-center">
