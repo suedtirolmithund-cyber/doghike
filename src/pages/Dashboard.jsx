@@ -46,7 +46,7 @@ export default function Dashboard() {
           className="absolute inset-0 bg-cover"
           style={{
             backgroundImage: "url('https://media.base44.com/images/public/69809fc1481e5be430f14562/be28d3a20__A734536.jpg')",
-            backgroundPosition: "15% 75%"
+            backgroundPosition: "60% 75%"
           }} />
 
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-stone-50" />
