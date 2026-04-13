@@ -32,6 +32,7 @@ import CommentSection from "@/components/community/CommentSection";
 import RatingSection from "@/components/community/RatingSection";
 import FollowButton from "@/components/community/FollowButton";
 import ExpandableText from "@/components/ExpandableText";
+import PremiumGate from "@/components/hikes/PremiumGate";
 
 const difficultyColors = {
   "1": "bg-emerald-100 text-emerald-700",
@@ -131,6 +132,14 @@ export default function HikeDetail() {
         <div className="animate-pulse text-stone-400">Lädt...</div>
       </div>
     );
+  }
+
+  // Premium gate: block non-premium users from admin-created premium hikes
+  const isPremiumHike = hike.is_premium && currentUser?.role !== "admin" && !isOwnHike;
+  const userHasPremium = currentUser?.is_premium;
+  if (isPremiumHike && !userHasPremium) {
+    const coverPhoto = hike.photos?.[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80";
+    return <PremiumGate hikeName={hike.trail_name} coverPhoto={coverPhoto} />;
   }
 
   const hikeDogs = dogs.filter(d => hike.dogs?.includes(d.id));

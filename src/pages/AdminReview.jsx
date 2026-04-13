@@ -196,7 +196,10 @@ export default function AdminReview() {
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2 flex-wrap">
                           <h3 className="text-lg font-medium text-stone-800">{hike.trail_name}</h3>
-                          <Badge className={
+                                          {hike.is_premium && (
+                                            <Badge className="bg-amber-100 text-amber-700">💎 Premium</Badge>
+                                          )}
+                                          <Badge className={
                             hike.status === "approved" ? "bg-emerald-100 text-emerald-700" :
                             hike.status === "pending" ? "bg-amber-100 text-amber-700" :
                             "bg-red-100 text-red-700"
@@ -362,6 +365,16 @@ export default function AdminReview() {
                                       <SelectItem value="private">🔒 Privat</SelectItem>
                                       <SelectItem value="friends">👥 Freunde</SelectItem>
                                       <SelectItem value="public">🌍 Öffentlich</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                <div className="space-y-1">
+                                  <Label>💎 Premium-Tour</Label>
+                                  <Select value={editData.is_premium ? "yes" : "no"} onValueChange={(v) => setEditData({ ...editData, is_premium: v === "yes" })}>
+                                    <SelectTrigger className="h-11 text-base"><SelectValue /></SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="no">🆓 Kostenlos</SelectItem>
+                                      <SelectItem value="yes">💎 Nur für Premium-Mitglieder</SelectItem>
                                     </SelectContent>
                                   </Select>
                                 </div>

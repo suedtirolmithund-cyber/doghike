@@ -18,25 +18,20 @@
         "germany",
         "switzerland",
         "other"
-      ],
-      "description": "Country where the hike takes place"
+      ]
     },
     "date": {
       "type": "string",
-      "format": "date",
-      "description": "Date of the hike"
+      "format": "date"
     },
     "distance_km": {
-      "type": "number",
-      "description": "Distance in kilometers"
+      "type": "number"
     },
     "elevation_gain_m": {
-      "type": "number",
-      "description": "Elevation gain in meters"
+      "type": "number"
     },
     "duration_minutes": {
-      "type": "number",
-      "description": "Duration in minutes"
+      "type": "number"
     },
     "difficulty": {
       "type": "string",
@@ -46,8 +41,7 @@
         "3",
         "4",
         "5"
-      ],
-      "description": "Difficulty level for humans"
+      ]
     },
     "dog_difficulty": {
       "type": "string",
@@ -57,8 +51,7 @@
         "3",
         "4",
         "5"
-      ],
-      "description": "Difficulty level for dogs"
+      ]
     },
     "season": {
       "type": "string",
@@ -131,8 +124,7 @@
         "friends",
         "public"
       ],
-      "default": "private",
-      "description": "Visibility: private (only me), friends, public (needs admin approval)"
+      "default": "private"
     },
     "status": {
       "type": "string",
@@ -142,8 +134,12 @@
         "approved",
         "rejected"
       ],
-      "default": "draft",
-      "description": "Publication status"
+      "default": "draft"
+    },
+    "is_premium": {
+      "type": "boolean",
+      "default": false,
+      "description": "Requires premium subscription to view full details"
     },
     "submitted_by_name": {
       "type": "string"
@@ -152,8 +148,7 @@
       "type": "string"
     },
     "pending_changes": {
-      "type": "object",
-      "description": "Pending changes submitted by user, waiting for admin approval"
+      "type": "object"
     },
     "pending_changes_status": {
       "type": "string",
@@ -163,12 +158,10 @@
         "approved",
         "rejected"
       ],
-      "default": "none",
-      "description": "Status of pending change request"
+      "default": "none"
     },
     "pending_changes_rejection_reason": {
-      "type": "string",
-      "description": "Reason for rejecting the pending changes"
+      "type": "string"
     }
   },
   "required": [
@@ -190,6 +183,20 @@
           "user_condition": {
             "role": "admin"
           }
+        },
+        {
+          "$and": [
+            {
+              "data.visibility": "friends"
+            },
+            {
+              "created_by": {
+                "$in": [
+                  "{{user.following_emails}}"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
