@@ -562,14 +562,6 @@ export default function HikeDetail() {
               </motion.div>
             )}
 
-            {/* Community Section - Comments */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <CommentSection hikeId={hikeId} />
-            </motion.div>
           </div>
 
           {/* Sidebar */}
@@ -581,6 +573,15 @@ export default function HikeDetail() {
               transition={{ delay: 0.2 }}
             >
               <RatingSection hikeId={hikeId} />
+            </motion.div>
+
+            {/* Community Section - Comments */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <CommentSection hikeId={hikeId} />
             </motion.div>
           </div>
         </div>
