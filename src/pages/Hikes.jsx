@@ -22,6 +22,7 @@ export default function Hikes() {
   const [elevationMin, setElevationMin] = useState("");
   const [elevationMax, setElevationMax] = useState("");
   const [seasonFilter, setSeasonFilter] = useState("all");
+  const [waterFilter, setWaterFilter] = useState("all");
 
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["hikes"],
@@ -70,6 +71,9 @@ export default function Hikes() {
       
       // Season filter
       if (seasonFilter !== "all" && hike.season !== seasonFilter && hike.season !== "all_year") return false;
+      
+      // Water filter
+      if (waterFilter !== "all" && hike.water_availability !== waterFilter) return false;
       
       if (levelFilter === "all") return true;
       if (sortBy === "difficulty") return hike.difficulty === levelFilter;
@@ -214,6 +218,23 @@ export default function Hikes() {
                     className="w-full"
                   />
                 </div>
+              </div>
+
+              {/* Water */}
+              <div>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">💧 Wasser unterwegs</label>
+                <Select value={waterFilter} onValueChange={setWaterFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Alle" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Alle</SelectItem>
+                    <SelectItem value="none">🚫 Kein Wasser</SelectItem>
+                    <SelectItem value="little">💧 Wenig Wasser</SelectItem>
+                    <SelectItem value="moderate">💧💧 Etwas Wasser</SelectItem>
+                    <SelectItem value="plenty">💧💧💧 Viel Wasser</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Sort */}
