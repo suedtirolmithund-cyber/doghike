@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
+import { getHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -26,7 +27,7 @@ export default function Hikes() {
 
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["hikes"],
-    queryFn: () => base44.entities.Hike.filter({ visibility: "public", status: "approved" }, "-date", 1000)
+    queryFn: getHikes
   });
 
   const { data: dogs = [] } = useQuery({

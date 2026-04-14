@@ -80,6 +80,8 @@ export default function HikeDetail() {
     queryKey: ["hike", hikeId],
     queryFn: async () => {
       const hikes = await getHikes();
+      console.log("hikeId from URL:", hikeId);
+      console.log("first 3 hike IDs from sheet:", hikes.slice(0, 3).map((h) => h.id));
       return hikes.find((h) => h.id === hikeId);
     },
     enabled: !!hikeId

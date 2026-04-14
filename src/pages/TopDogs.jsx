@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
+import { getHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Trophy, Medal, Award } from "lucide-react";
@@ -13,7 +14,7 @@ export default function TopDogs() {
 
   const { data: hikes = [] } = useQuery({
     queryKey: ["allHikes"],
-    queryFn: () => base44.entities.Hike.filter({ status: "approved" })
+    queryFn: getHikes
   });
 
   const getDogStats = (dogId) => {

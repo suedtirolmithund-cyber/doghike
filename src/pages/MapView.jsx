@@ -1,4 +1,5 @@
 import { base44 } from "@/api/base44Client";
+import { getHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -10,7 +11,7 @@ import HikeMap from "@/components/map/HikeMap";
 export default function MapView() {
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["hikes"],
-    queryFn: () => base44.entities.Hike.filter({ status: "approved" }, "-date", 1000)
+    queryFn: getHikes
   });
 
   const hikesWithCoords = hikes.filter(h => h.latitude && h.longitude);
