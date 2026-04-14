@@ -232,7 +232,7 @@ export default function HikeDetail() {
             )}
 
             <div className="flex flex-wrap items-center gap-2 mb-3">
-              {hike.season && (
+              {hike.season && seasonConfig[hike.season] && (
                 <Badge className={seasonConfig[hike.season].color}>
                   {seasonConfig[hike.season].emoji} {seasonConfig[hike.season].label}
                 </Badge>
@@ -485,7 +485,7 @@ export default function HikeDetail() {
               >
                 <h2 className="text-lg font-medium text-stone-800 mb-4">🐕 Infos für Hundebesitzer</h2>
                 <div className="space-y-4">
-                  {hike.water_availability && (
+                  {hike.water_availability && waterConfig[hike.water_availability] && (
                     <div className={`flex items-center gap-3 p-3 rounded-xl ${waterConfig[hike.water_availability].color}`}>
                       <span className="text-lg">{waterConfig[hike.water_availability].icon}</span>
                       <div>

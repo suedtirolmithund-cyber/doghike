@@ -95,7 +95,7 @@ function MarkerClusterGroup({ hikes }) {
         // Add route polyline if available
         if (hike.route_coordinates && hike.route_coordinates.length > 1) {
           const polyline = L.polyline(hike.route_coordinates, {
-            color: seasonConfig[hike.season || "all_year"].color,
+            color: (seasonConfig[hike.season || "all_year"] ?? seasonConfig["all_year"]).color,
             weight: 4,
             opacity: 0.7
           });
@@ -175,7 +175,7 @@ export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, hei
                   <Polyline
                     key={`route-${hike.id}`}
                     positions={hike.route_coordinates}
-                    color={seasonConfig[hike.season || "all_year"].color}
+                    color={(seasonConfig[hike.season || "all_year"] ?? seasonConfig["all_year"]).color}
                     weight={4}
                     opacity={0.7}
                   />
