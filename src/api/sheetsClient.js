@@ -72,11 +72,19 @@ function parseCsv(text) {
   return results;
 }
 
+function slugify(title) {
+  return title
+    .toLowerCase()
+    .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 /**
  * Converts a raw CSV row (column names from the Google Sheet) into a Hike
  * object shaped exactly like the base44 Hike entity used throughout the app.
  */
-function rowToHike(row) {
+function rowToHike(row, index) {
   const parsedLat = parseFloat(row.lat);
   const parsedLng = parseFloat(row.lng);
   const parsedDistance = parseFloat(row.distance_km);
@@ -91,8 +99,10 @@ function rowToHike(row) {
   // Wrap single image URL in an array so photos[0] works like base44 objects
   const photos = row.image ? [row.image] : [];
 
+  const id = row.id || (row.title ? slugify(row.title) : String(index));
+
   return {
-    id: row.id,
+    id,
     trail_name: row.title,
     location: row.location,
     country: row.country || null,
@@ -150,5 +160,5 @@ export async function getHikes() {
   const rows = parseCsv(text);
   return rows
     .filter((row) => row.status === "approved")
-    .map(rowToHike);
+    .map((row, index) => rowToHike(row, index));
 }
