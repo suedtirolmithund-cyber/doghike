@@ -152,13 +152,24 @@ function rowToHike(row, index) {
  * Returns an array of Hike objects compatible with the base44 Hike entity.
  */
 export async function getHikes() {
-  const response = await fetch(SHEETS_CSV_URL);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch hikes from Google Sheets: ${response.status}`);
+  try {
+    console.log("[sheetsClient] fetching CSV...");
+    const response = await fetch(SHEETS_CSV_URL);
+    if (!response.ok) {
+      console.error("[sheetsClient] fetch failed, status:", response.status);
+      return [];
+    }
+    const text = await response.text();
+    console.log("[sheetsClient] CSV loaded, length:", text.length);
+    const rows = parseCsv(text);
+    console.log("[sheetsClient] total rows parsed:", rows.length);
+    const hikes = rows
+      .filter((row) => row.status === "approved")
+      .map((row, index) => rowToHike(row, index));
+    console.log("[sheetsClient] approved hikes:", hikes.length, "first id:", hikes[0]?.id);
+    return hikes;
+  } catch (err) {
+    console.error("[sheetsClient] error:", err);
+    return [];
   }
-  const text = await response.text();
-  const rows = parseCsv(text);
-  return rows
-    .filter((row) => row.status === "approved")
-    .map((row, index) => rowToHike(row, index));
 }
