@@ -42,12 +42,11 @@ export default function Datenschutz() {
                 Verantwortlicher (Titolare del trattamento)
               </h2>
               <div className="space-y-2 text-sm md:text-base text-stone-600 bg-stone-50 rounded-xl p-4">
-                <p><strong>[Name des Betreibers]</strong></p>
-                <p>[Adresse, Südtirol, Italien]</p>
-                <p>E-Mail: <strong>[kontakt@beispiel.de]</strong></p>
-                <p className="text-xs text-stone-400 mt-2">
-                  Bitte ersetzen Sie diese Platzhalter mit Ihren tatsächlichen Kontaktdaten.
-                </p>
+                <p><strong>Julia Schwärzer</strong></p>
+                <p>Südtirol, Italien</p>
+                <p>E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-blue-600 underline"><strong>suedtirolmithund@gmail.com</strong></a></p>
+                <p>Website: <a href="https://www.mithundenunterwegsinsuedtirol.it" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">www.mithundenunterwegsinsuedtirol.it</a></p>
+                <p>App: <a href="https://doghike-suedtirol.vercel.app" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">doghike-suedtirol.vercel.app</a></p>
               </div>
             </section>
 
@@ -342,7 +341,7 @@ export default function Datenschutz() {
                 <div className="mt-4 bg-slate-800 text-white rounded-xl p-4">
                   <p className="font-semibold mb-1">Anfragen stellen:</p>
                   <p className="text-slate-300 text-sm">
-                    Schreiben Sie an <strong>[kontakt@beispiel.de]</strong> — wir antworten innerhalb von 30 Tagen.
+                    Schreiben Sie an <strong>suedtirolmithund@gmail.com</strong> — wir antworten innerhalb von 30 Tagen.
                     Für Kontolöschung: direkt in den Profileinstellungen oder per E-Mail.
                   </p>
                 </div>

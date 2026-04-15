@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { ArrowLeft, Building2, Mail, Phone } from "lucide-react";
+import { ArrowLeft, Building2, Mail, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Impressum() {
@@ -27,10 +27,19 @@ export default function Impressum() {
                 Angaben gemäß § 5 TMG
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600">
-                <p className="font-medium text-stone-800">[Betreibername]</p>
-                <p>[Straße und Hausnummer]</p>
-                <p>[PLZ und Ort]</p>
-                <p>[Land]</p>
+                <p className="font-medium text-stone-800">Julia Schwärzer</p>
+                <p>Südtirol, Italien</p>
+                <p>
+                  <a href="https://www.mithundenunterwegsinsuedtirol.it" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">
+                    www.mithundenunterwegsinsuedtirol.it
+                  </a>
+                </p>
+                <p>
+                  App:{" "}
+                  <a href="https://doghike-suedtirol.vercel.app" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">
+                    doghike-suedtirol.vercel.app
+                  </a>
+                </p>
               </div>
             </section>
 
@@ -42,11 +51,15 @@ export default function Impressum() {
               <div className="space-y-3 text-sm md:text-base text-stone-600">
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4" />
-                  <span>E-Mail: [kontakt@beispiel.de]</span>
+                  <a href="mailto:suedtirolmithund@gmail.com" className="text-blue-600 underline hover:text-blue-800">
+                    suedtirolmithund@gmail.com
+                  </a>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Phone className="w-4 h-4" />
-                  <span>Telefon: [+49 xxx xxxx]</span>
+                  <Globe className="w-4 h-4" />
+                  <a href="https://www.mithundenunterwegsinsuedtirol.it" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">
+                    www.mithundenunterwegsinsuedtirol.it
+                  </a>
                 </div>
               </div>
             </section>
@@ -57,8 +70,8 @@ export default function Impressum() {
                 Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV
               </h2>
               <div className="space-y-2 text-sm md:text-base text-stone-600">
-                <p>[Name]</p>
-                <p>[Adresse]</p>
+                <p>Julia Schwärzer</p>
+                <p>Südtirol, Italien</p>
               </div>
             </section>
 
@@ -177,7 +190,7 @@ export default function Impressum() {
             {/* Aktualisierung */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <p className="text-sm text-stone-500">
-                Letzte Aktualisierung: Februar 2026
+                Letzte Aktualisierung: April 2026
               </p>
             </section>
           </div>

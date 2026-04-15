@@ -36,7 +36,7 @@ export default function AccountSettings({ user }) {
         <h3 className="font-semibold text-stone-800">Löschanfrage registriert</h3>
         <p className="text-sm text-stone-500">
           Du wirst abgemeldet. Dein Konto und alle deine Daten werden innerhalb von 72 Stunden gelöscht.
-          Schreib uns an <strong>[kontakt@beispiel.de]</strong>, falls du Fragen hast.
+          Schreib uns an <strong>suedtirolmithund@gmail.com</strong>, falls du Fragen hast.
         </p>
       </div>
     );
@@ -56,7 +56,7 @@ export default function AccountSettings({ user }) {
           <p className="text-xs text-stone-400 mt-1">
             E-Mail-Änderungen können über{" "}
             <a
-              href="mailto:[kontakt@beispiel.de]?subject=E-Mail-Änderung"
+              href="mailto:suedtirolmithund@gmail.com?subject=E-Mail-Änderung"
               className="text-emerald-600 hover:underline"
             >
               Kontaktanfrage
@@ -81,7 +81,7 @@ export default function AccountSettings({ user }) {
                 Datenschutzerklärung
               </Button>
             </Link>
-            <a href="mailto:[kontakt@beispiel.de]?subject=DSGVO-Anfrage">
+            <a href="mailto:suedtirolmithund@gmail.com?subject=DSGVO-Anfrage">
               <Button variant="outline" size="sm" className="text-stone-700">
                 <Mail className="w-3 h-3 mr-2" />
                 Datenauskunft anfragen
