@@ -75,7 +75,8 @@ create table if not exists public.journal_entries (
   gpx_url           text,
   rating            smallint check (rating between 1 and 5),
   dog_suitable      boolean default true,
-  water_available   boolean default false,
+  water_available   smallint default 0 check (water_available between 0 and 3),
+  -- 0=kein Wasser, 1=wenig, 2=etwas, 3=viel
   dog_difficulty    smallint check (dog_difficulty between 1 and 5),
   hazard_notes      text,
   created_at        timestamptz default now()
@@ -98,6 +99,11 @@ create policy "Eigene Einträge bearbeiten"
 create policy "Eigene Einträge löschen"
   on public.journal_entries for delete
   using (auth.uid() = user_id);
+
+-- Falls die Tabelle bereits mit boolean angelegt wurde, einmalig ausführen:
+-- alter table public.journal_entries
+--   alter column water_available type smallint using (water_available::int),
+--   alter column water_available set default 0;
 
 -- ============================================================
 -- Storage Buckets (manuell im Supabase Dashboard anlegen):

@@ -5,35 +5,33 @@ import { motion } from "framer-motion";
 import { createPageUrl } from "@/utils";
 import {
   ArrowLeft, Upload, X, Loader2, Star, FileText,
-  Mountain, Clock, Ruler, TrendingUp, MapPin, AlertTriangle, Droplets, Dog
+  Mountain, Clock, Ruler, TrendingUp, MapPin, AlertTriangle, Dog
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/AuthContext";
 import { createJournalEntry, updateJournalEntry, getJournalEntry, uploadJournalFile } from "@/lib/journalApi";
 import { Link } from "react-router-dom";
 
-function StarPicker({ label, value, onChange, color = "text-yellow-400" }) {
+// ── Sterne-Picker (Gesamtbewertung) ──────────────────────────
+function StarPicker({ label, value, onChange }) {
   const [hover, setHover] = useState(0);
   return (
     <div>
       <Label className="text-sm text-stone-600 mb-1 block">{label}</Label>
       <div className="flex gap-1">
         {[1, 2, 3, 4, 5].map((s) => (
-          <button
-            key={s}
-            type="button"
+          <button key={s} type="button"
             onClick={() => onChange(s === value ? 0 : s)}
             onMouseEnter={() => setHover(s)}
             onMouseLeave={() => setHover(0)}
             className="focus:outline-none"
           >
             <Star className={`w-7 h-7 transition-colors ${
-              s <= (hover || value) ? `fill-yellow-400 ${color}` : "text-stone-300"
+              s <= (hover || value) ? "fill-yellow-400 text-yellow-400" : "text-stone-300"
             }`} />
           </button>
         ))}
@@ -42,6 +40,109 @@ function StarPicker({ label, value, onChange, color = "text-yellow-400" }) {
             <X className="w-4 h-4" />
           </button>
         )}
+      </div>
+    </div>
+  );
+}
+
+// ── Berg-Picker (Schwierigkeit Mensch) ───────────────────────
+function MountainPicker({ label, value, onChange }) {
+  const [hover, setHover] = useState(0);
+  const colors = ["", "text-emerald-500", "text-green-500", "text-yellow-500", "text-orange-500", "text-red-600"];
+  const labels = ["", "Sehr leicht", "Leicht", "Mittel", "Schwer", "Sehr schwer"];
+  const active = hover || value;
+  return (
+    <div>
+      <Label className="text-sm text-stone-600 mb-1 block">{label}</Label>
+      <div className="flex items-center gap-1">
+        {[1, 2, 3, 4, 5].map((s) => (
+          <button key={s} type="button"
+            onClick={() => onChange(s === value ? 0 : s)}
+            onMouseEnter={() => setHover(s)}
+            onMouseLeave={() => setHover(0)}
+            className="focus:outline-none"
+            title={labels[s]}
+          >
+            <Mountain className={`w-7 h-7 transition-colors ${
+              s <= active
+                ? `${colors[active]} fill-current`
+                : "text-stone-300"
+            }`} />
+          </button>
+        ))}
+        {value > 0 && (
+          <>
+            <button type="button" onClick={() => onChange(0)} className="ml-1 text-stone-400 hover:text-stone-600">
+              <X className="w-4 h-4" />
+            </button>
+            <span className={`text-xs font-medium ml-1 ${colors[value]}`}>{labels[value]}</span>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Knochen-Picker (Schwierigkeit Hund) ──────────────────────
+function BonePicker({ label, value, onChange }) {
+  const [hover, setHover] = useState(0);
+  const labels = ["", "Sehr leicht", "Leicht", "Mittel", "Schwer", "Sehr schwer"];
+  const active = hover || value;
+  return (
+    <div>
+      <Label className="text-sm text-stone-600 mb-1 block">{label}</Label>
+      <div className="flex items-center gap-1">
+        {[1, 2, 3, 4, 5].map((s) => (
+          <button key={s} type="button"
+            onClick={() => onChange(s === value ? 0 : s)}
+            onMouseEnter={() => setHover(s)}
+            onMouseLeave={() => setHover(0)}
+            className={`text-2xl leading-none transition-opacity focus:outline-none ${
+              s <= active ? "opacity-100" : "opacity-25"
+            }`}
+            title={labels[s]}
+          >
+            🦴
+          </button>
+        ))}
+        {value > 0 && (
+          <>
+            <button type="button" onClick={() => onChange(0)} className="ml-1 text-stone-400 hover:text-stone-600">
+              <X className="w-4 h-4" />
+            </button>
+            <span className="text-xs font-medium ml-1 text-stone-500">{labels[value]}</span>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Wasser-Picker (0=keins, 1=wenig, 2=mittel, 3=viel) ───────
+const WATER_LABELS = ["Kein Wasser", "Wenig Wasser", "Etwas Wasser", "Viel Wasser"];
+function WaterPicker({ label, value, onChange }) {
+  return (
+    <div>
+      <Label className="text-sm text-stone-600 mb-1 block">{label}</Label>
+      <div className="flex gap-2">
+        {[0, 1, 2, 3].map((level) => (
+          <button key={level} type="button"
+            onClick={() => onChange(level)}
+            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl border transition-all focus:outline-none ${
+              value === level
+                ? "border-blue-400 bg-blue-50 text-blue-700"
+                : "border-stone-200 bg-stone-50 text-stone-400 hover:border-blue-300 hover:bg-blue-50/50"
+            }`}
+            title={WATER_LABELS[level]}
+          >
+            <span className="text-lg leading-none">
+              {level === 0 ? "🚫" : "💧".repeat(level)}
+            </span>
+            <span className="text-[10px] font-medium whitespace-nowrap">
+              {WATER_LABELS[level]}
+            </span>
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -60,7 +161,7 @@ const EMPTY_FORM = {
   gpx_url: "",
   rating: 0,
   dog_suitable: true,
-  water_available: false,
+  water_available: 0,
   dog_difficulty: 0,
   hazard_notes: "",
 };
@@ -98,7 +199,7 @@ export default function AddJournalEntry() {
         gpx_url: existing.gpx_url ?? "",
         rating: existing.rating ?? 0,
         dog_suitable: existing.dog_suitable ?? true,
-        water_available: existing.water_available ?? false,
+        water_available: existing.water_available ?? 0,
         dog_difficulty: existing.dog_difficulty ?? 0,
         hazard_notes: existing.hazard_notes ?? "",
       });
@@ -269,7 +370,7 @@ export default function AddJournalEntry() {
               </div>
             </div>
 
-            <StarPicker label="Schwierigkeit (Mensch)" value={form.difficulty} onChange={(v) => set("difficulty", v)} />
+            <MountainPicker label="Schwierigkeit (Mensch)" value={form.difficulty} onChange={(v) => set("difficulty", v)} />
           </section>
 
           {/* ── Hund ────────────────────────────────────── */}
@@ -282,17 +383,18 @@ export default function AddJournalEntry() {
               <Label htmlFor="dog_suitable" className="cursor-pointer flex items-center gap-2">
                 🐕 Hundefreundlich
               </Label>
-              <Switch id="dog_suitable" checked={form.dog_suitable} onCheckedChange={(v) => set("dog_suitable", v)} />
+              <input
+                id="dog_suitable"
+                type="checkbox"
+                checked={form.dog_suitable}
+                onChange={(e) => set("dog_suitable", e.target.checked)}
+                className="w-5 h-5 rounded accent-emerald-600 cursor-pointer"
+              />
             </div>
 
-            <div className="flex items-center justify-between p-3 bg-stone-50 rounded-xl">
-              <Label htmlFor="water_available" className="cursor-pointer flex items-center gap-2">
-                <Droplets className="w-4 h-4 text-blue-500" /> Wasser verfügbar
-              </Label>
-              <Switch id="water_available" checked={form.water_available} onCheckedChange={(v) => set("water_available", v)} />
-            </div>
+            <WaterPicker label="💧 Wasserverfügbarkeit" value={form.water_available} onChange={(v) => set("water_available", v)} />
 
-            <StarPicker label="Schwierigkeit (Hund)" value={form.dog_difficulty} onChange={(v) => set("dog_difficulty", v)} />
+            <BonePicker label="Schwierigkeit (Hund)" value={form.dog_difficulty} onChange={(v) => set("dog_difficulty", v)} />
 
             <div>
               <Label htmlFor="hazard_notes" className="flex items-center gap-1">
