@@ -28,7 +28,7 @@ export default function Dashboard() {
 
   const { data: dogs = [], isLoading: dogsLoading } = useQuery({
     queryKey: ["dogs"],
-    queryFn: () => base44.entities.Dog.list()
+    queryFn: async () => { const r = await base44.entities.Dog.list(); return Array.isArray(r) ? r : []; }
   });
 
   const filteredHikes = hikes.filter((hike) => {

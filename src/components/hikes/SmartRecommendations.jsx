@@ -14,7 +14,8 @@ export default function SmartRecommendations({ allHikes = [], dogs = [] }) {
     queryKey: ["myHikes"],
     queryFn: async () => {
       const u = await base44.auth.me();
-      return base44.entities.Hike.filter({ created_by: u.email }, "-date");
+      const r = await base44.entities.Hike.filter({ created_by: u.email }, "-date");
+      return Array.isArray(r) ? r : [];
     },
     enabled: !!user
   });

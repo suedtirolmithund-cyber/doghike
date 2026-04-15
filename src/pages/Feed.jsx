@@ -67,10 +67,10 @@ export default function Feed() {
     queryFn: async () => {
       if (mutualFriendEmails.length === 0) return [];
       const allHikes = await base44.entities.Hike.list("-created_date", 100);
-      return allHikes.filter(h => 
-        mutualFriendEmails.includes(h.created_by) && 
+      return Array.isArray(allHikes) ? allHikes.filter(h =>
+        mutualFriendEmails.includes(h.created_by) &&
         (h.visibility === "friends" || h.visibility === "public")
-      );
+      ) : [];
     },
     enabled: mutualFriendEmails.length > 0
   });
@@ -80,7 +80,7 @@ export default function Feed() {
     queryFn: async () => {
       if (mutualFriendEmails.length === 0) return [];
       const allRoutes = await base44.entities.UserRoute.filter({ is_public: true }, "-created_date", 100);
-      return allRoutes.filter(r => mutualFriendEmails.includes(r.created_by));
+      return Array.isArray(allRoutes) ? allRoutes.filter(r => mutualFriendEmails.includes(r.created_by)) : [];
     },
     enabled: mutualFriendEmails.length > 0
   });
@@ -90,7 +90,7 @@ export default function Feed() {
     queryFn: async () => {
       if (mutualFriendEmails.length === 0) return [];
       const allComments = await base44.entities.Comment.list("-created_date", 100);
-      return allComments.filter(c => mutualFriendEmails.includes(c.user_email));
+      return Array.isArray(allComments) ? allComments.filter(c => mutualFriendEmails.includes(c.user_email)) : [];
     },
     enabled: mutualFriendEmails.length > 0
   });
@@ -100,14 +100,14 @@ export default function Feed() {
     queryFn: async () => {
       if (mutualFriendEmails.length === 0) return [];
       const allRatings = await base44.entities.Rating.list("-created_date", 100);
-      return allRatings.filter(r => mutualFriendEmails.includes(r.user_email));
+      return Array.isArray(allRatings) ? allRatings.filter(r => mutualFriendEmails.includes(r.user_email)) : [];
     },
     enabled: mutualFriendEmails.length > 0
   });
 
   const { data: allHikes = [] } = useQuery({
     queryKey: ["hikes"],
-    queryFn: () => base44.entities.Hike.list()
+    queryFn: async () => { const r = await base44.entities.Hike.list(); return Array.isArray(r) ? r : []; }
   });
 
   const { data: dogs = [] } = useQuery({

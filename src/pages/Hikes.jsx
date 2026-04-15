@@ -32,12 +32,12 @@ export default function Hikes() {
 
   const { data: dogs = [] } = useQuery({
     queryKey: ["dogs"],
-    queryFn: () => base44.entities.Dog.list()
+    queryFn: async () => { const r = await base44.entities.Dog.list(); return Array.isArray(r) ? r : []; }
   });
 
   const { data: allUsers = [] } = useQuery({
     queryKey: ["allUsers"],
-    queryFn: () => base44.entities.User.list()
+    queryFn: async () => { const r = await base44.entities.User.list(); return Array.isArray(r) ? r : []; }
   });
 
   const getCurrentSeason = () => {

@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export default function TopDogs() {
   const { data: dogs = [] } = useQuery({
     queryKey: ["allDogs"],
-    queryFn: () => base44.entities.Dog.list()
+    queryFn: async () => { const r = await base44.entities.Dog.list(); return Array.isArray(r) ? r : []; }
   });
 
   const { data: hikes = [] } = useQuery({

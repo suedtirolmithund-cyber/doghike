@@ -38,13 +38,14 @@ export default function Dogs() {
     queryKey: ["dogs"],
     queryFn: async () => {
       const currentUser = await base44.auth.me();
-      return base44.entities.Dog.filter({ created_by: currentUser.email });
+      const r = await base44.entities.Dog.filter({ created_by: currentUser.email });
+      return Array.isArray(r) ? r : [];
     }
   });
 
   const { data: hikes = [] } = useQuery({
     queryKey: ["hikes"],
-    queryFn: () => base44.entities.Hike.list()
+    queryFn: async () => { const r = await base44.entities.Hike.list(); return Array.isArray(r) ? r : []; }
   });
 
   const createMutation = useMutation({

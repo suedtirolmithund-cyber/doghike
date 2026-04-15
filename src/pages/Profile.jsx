@@ -50,7 +50,8 @@ export default function Profile() {
     queryKey: ["dogs"],
     queryFn: async () => {
       const currentUser = await base44.auth.me();
-      return base44.entities.Dog.filter({ created_by: currentUser.email });
+      const r = await base44.entities.Dog.filter({ created_by: currentUser.email });
+      return Array.isArray(r) ? r : [];
     },
     enabled: isAuthenticated
   });
@@ -59,7 +60,8 @@ export default function Profile() {
     queryKey: ["myHikes"],
     queryFn: async () => {
       const currentUser = await base44.auth.me();
-      return base44.entities.Hike.filter({ created_by: currentUser.email }, "-date");
+      const r = await base44.entities.Hike.filter({ created_by: currentUser.email }, "-date");
+      return Array.isArray(r) ? r : [];
     },
     enabled: isAuthenticated
   });
@@ -69,7 +71,7 @@ export default function Profile() {
     queryFn: async () => {
       const currentUser = await base44.auth.me();
       const saved = await base44.entities.SavedHike.filter({ user_email: currentUser.email });
-      return saved.map(s => s.hike_id);
+      return Array.isArray(saved) ? saved.map(s => s.hike_id) : [];
     },
     enabled: isAuthenticated
   });
@@ -79,7 +81,7 @@ export default function Profile() {
     queryFn: async () => {
       if (savedHikeIds.length === 0) return [];
       const hikes = await base44.entities.Hike.list();
-      return hikes.filter(h => savedHikeIds.includes(h.id));
+      return Array.isArray(hikes) ? hikes.filter(h => savedHikeIds.includes(h.id)) : [];
     },
     enabled: isAuthenticated && savedHikeIds.length > 0
   });
@@ -88,7 +90,8 @@ export default function Profile() {
     queryKey: ["userRoutes"],
     queryFn: async () => {
       const currentUser = await base44.auth.me();
-      return base44.entities.UserRoute.filter({ created_by: currentUser.email }, "-created_date");
+      const r = await base44.entities.UserRoute.filter({ created_by: currentUser.email }, "-created_date");
+      return Array.isArray(r) ? r : [];
     },
     enabled: isAuthenticated
   });
