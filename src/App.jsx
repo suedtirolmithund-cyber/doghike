@@ -98,9 +98,9 @@ function App() {
           <Router>
             <NavigationTracker />
             <AuthenticatedApp />
+            <Toaster />
+            <CookieBanner />
           </Router>
-          <Toaster />
-          <CookieBanner />
         </QueryClientProvider>
       </AuthProvider>
     </ErrorBoundary>
