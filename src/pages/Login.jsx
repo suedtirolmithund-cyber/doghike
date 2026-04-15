@@ -71,7 +71,7 @@ export default function Login() {
     if (err) {
       setLocalError(err.message);
     } else {
-      navigate(createPageUrl("Dashboard"));
+      navigate("/");
     }
   };
 
