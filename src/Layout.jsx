@@ -1,30 +1,23 @@
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Mountain, Map, PawPrint, Home, Trophy, Navigation, Dog, Bell } from "lucide-react";
+import { Mountain, Map, PawPrint, Home, Trophy, Navigation, Dog, LogIn, LogOut, User } from "lucide-react";
 import { motion } from "framer-motion";
-import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/lib/AuthContext";
+import { Button } from "@/components/ui/button";
 
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
+  const { user, isAuthenticated, logout } = useAuth();
 
-  const { data: user } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => base44.auth.me(),
-  });
-
-  const { data: notifications = [] } = useQuery({
-    queryKey: ["notifications"],
-    queryFn: async () => { const r = await base44.entities.Notification.filter({ recipient_email: user?.email }, "-created_date", 100); return Array.isArray(r) ? r : []; },
-    enabled: !!user?.email
-  });
-
-  const unreadCount = notifications.filter(n => !n.is_read).length;
+  // Display name: Google full_name → email prefix → "Profil"
+  const displayName = user?.user_metadata?.full_name
+    || user?.user_metadata?.name
+    || (user?.email ? user.email.split("@")[0] : null);
 
   const navItems = [
     { name: "Dashboard", icon: Home, label: "Startseite" },
     { name: "Hikes", icon: Mountain, label: "Alle Touren" },
-    { name: "Feed", icon: PawPrint, label: "Freunde", badge: unreadCount },
+    { name: "Feed", icon: PawPrint, label: "Freunde" },
     { name: "RoutePlanner", icon: Navigation, label: "Routenplaner" },
     { name: "TopDogs", icon: Trophy, label: "Top Dogs" },
     { name: "Profile", icon: Dog, label: "Mein Profil" },
@@ -43,21 +36,13 @@ export default function Layout({ children, currentPageName }) {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 md:gap-4 text-xs md:text-sm text-stone-500">
           <span>© 2026 Südtirol mit Hund</span>
           <span className="hidden sm:inline">•</span>
-          <Link to={createPageUrl("Impressum")} className="hover:text-stone-700 underline">
-            Impressum
-          </Link>
+          <Link to={createPageUrl("Impressum")} className="hover:text-stone-700 underline">Impressum</Link>
           <span className="hidden sm:inline">•</span>
-          <Link to={createPageUrl("Datenschutz")} className="hover:text-stone-700 underline">
-            Datenschutz
-          </Link>
+          <Link to={createPageUrl("Datenschutz")} className="hover:text-stone-700 underline">Datenschutz</Link>
           <span className="hidden sm:inline">•</span>
-          <Link to={createPageUrl("Legal")} className="hover:text-stone-700 underline">
-            Rechtliche Hinweise
-          </Link>
+          <Link to={createPageUrl("Legal")} className="hover:text-stone-700 underline">Rechtliche Hinweise</Link>
           <span className="hidden sm:inline">•</span>
-          <Link to={createPageUrl("Support")} className="hover:text-stone-700 underline">
-            Hilfe & Support
-          </Link>
+          <Link to={createPageUrl("Support")} className="hover:text-stone-700 underline">Hilfe & Support</Link>
         </div>
       </footer>
 
@@ -72,8 +57,8 @@ export default function Layout({ children, currentPageName }) {
                 key={item.name}
                 to={createPageUrl(item.name)}
                 className={`flex flex-col items-center gap-1.5 px-3 py-2 rounded-xl transition-all relative ${
-                  active 
-                    ? "text-slate-800 bg-slate-100" 
+                  active
+                    ? "text-slate-800 bg-slate-100"
                     : "text-stone-500 hover:text-stone-700 hover:bg-stone-50"
                 }`}
               >
@@ -81,11 +66,6 @@ export default function Layout({ children, currentPageName }) {
                 <span className={`text-[10px] font-medium ${active ? "" : "opacity-80"}`}>
                   {item.label.split(" ")[item.label.split(" ").length - 1]}
                 </span>
-                {item.badge > 0 && (
-                  <span className="absolute top-1 right-1 bg-red-600 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
-                    {item.badge > 9 ? '9+' : item.badge}
-                  </span>
-                )}
               </Link>
             );
           })}
@@ -96,9 +76,10 @@ export default function Layout({ children, currentPageName }) {
       <nav className="fixed top-0 left-0 right-0 bg-white border-b border-stone-200 hidden md:block z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-3">
           <div className="flex items-center justify-between">
-            <Link 
-              to={createPageUrl("Dashboard")} 
-              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            {/* Logo */}
+            <Link
+              to={createPageUrl("Dashboard")}
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity shrink-0"
             >
               <div className="bg-slate-800 rounded-lg p-2">
                 <Mountain className="w-5 h-5 text-white" />
@@ -108,7 +89,8 @@ export default function Layout({ children, currentPageName }) {
                 <span className="text-xs text-stone-500">Hundefreundliche Wanderungen</span>
               </div>
             </Link>
-            
+
+            {/* Nav links */}
             <div className="flex items-center gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -117,7 +99,7 @@ export default function Layout({ children, currentPageName }) {
                   <Link
                     key={item.name}
                     to={createPageUrl(item.name)}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all relative ${
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all ${
                       active
                         ? "bg-slate-800 text-white shadow-md"
                         : "text-stone-600 hover:text-stone-800 hover:bg-stone-100"
@@ -125,14 +107,42 @@ export default function Layout({ children, currentPageName }) {
                   >
                     <Icon className={`w-4 h-4 ${active ? "stroke-[2.5]" : ""}`} />
                     <span className="text-sm font-medium">{item.label}</span>
-                    {item.badge > 0 && (
-                      <span className="bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                        {item.badge > 9 ? '9+' : item.badge}
-                      </span>
-                    )}
                   </Link>
                 );
               })}
+            </div>
+
+            {/* Auth section */}
+            <div className="flex items-center gap-2 shrink-0 ml-2">
+              {isAuthenticated && user ? (
+                <>
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-100 rounded-lg">
+                    <User className="w-4 h-4 text-stone-500 shrink-0" />
+                    <span className="text-sm text-stone-700 font-medium max-w-[140px] truncate">
+                      {displayName}
+                    </span>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={logout}
+                    className="flex items-center gap-1.5 border-stone-200 text-stone-600 hover:text-red-600 hover:border-red-300 hover:bg-red-50"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Abmelden
+                  </Button>
+                </>
+              ) : (
+                <Link to={createPageUrl("Login")}>
+                  <Button
+                    size="sm"
+                    className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white"
+                  >
+                    <LogIn className="w-4 h-4" />
+                    Anmelden
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
         </div>

@@ -78,8 +78,12 @@ export default function Login() {
   const handleGoogle = async () => {
     setLocalError(null);
     setGoogleLoading(true);
-    await loginWithGoogle();
-    setGoogleLoading(false);
+    const result = await loginWithGoogle();
+    // If there's an error (no redirect happened), reset loading
+    if (result?.error) {
+      setGoogleLoading(false);
+    }
+    // Otherwise the browser redirects to Google — no need to reset
   };
 
   const switchMode = (newMode) => {
