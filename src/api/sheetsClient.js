@@ -107,8 +107,8 @@ function rowToHike(row, index) {
     location: row.location,
     country: row.country || null,
 
-    lat: isNaN(parsedLat) ? null : parsedLat,
-    lng: isNaN(parsedLng) ? null : parsedLng,
+    latitude: isNaN(parsedLat) ? null : parsedLat,
+    longitude: isNaN(parsedLng) ? null : parsedLng,
 
     photos,
     link: row.link || null,
