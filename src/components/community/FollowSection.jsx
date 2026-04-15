@@ -18,30 +18,30 @@ export default function FollowSection() {
 
   const { data: following = [] } = useQuery({
     queryKey: ["following"],
-    queryFn: () => base44.entities.UserFollow.filter({ follower_email: user?.email }),
+    queryFn: async () => { const r = await base44.entities.UserFollow.filter({ follower_email: user?.email }); return Array.isArray(r) ? r : []; },
     enabled: !!user?.email
   });
 
   const { data: followers = [] } = useQuery({
     queryKey: ["followers"],
-    queryFn: () => base44.entities.UserFollow.filter({ following_email: user?.email }),
+    queryFn: async () => { const r = await base44.entities.UserFollow.filter({ following_email: user?.email }); return Array.isArray(r) ? r : []; },
     enabled: !!user?.email
   });
 
   const { data: allUsers = [] } = useQuery({
     queryKey: ["allUsers"],
-    queryFn: () => base44.entities.User.list()
+    queryFn: async () => { const r = await base44.entities.User.list(); return Array.isArray(r) ? r : []; }
   });
 
   const { data: sentRequests = [] } = useQuery({
     queryKey: ["sentRequests"],
-    queryFn: () => base44.entities.FollowRequest.filter({ from_email: user?.email }),
+    queryFn: async () => { const r = await base44.entities.FollowRequest.filter({ from_email: user?.email }); return Array.isArray(r) ? r : []; },
     enabled: !!user?.email
   });
 
   const { data: receivedRequests = [] } = useQuery({
     queryKey: ["receivedRequests"],
-    queryFn: () => base44.entities.FollowRequest.filter({ to_email: user?.email, status: "pending" }),
+    queryFn: async () => { const r = await base44.entities.FollowRequest.filter({ to_email: user?.email, status: "pending" }); return Array.isArray(r) ? r : []; },
     enabled: !!user?.email
   });
 

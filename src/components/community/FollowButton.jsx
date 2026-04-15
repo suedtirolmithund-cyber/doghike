@@ -14,7 +14,7 @@ export default function FollowButton({ targetEmail, targetName, variant = "defau
 
   const { data: following = [] } = useQuery({
     queryKey: ["following"],
-    queryFn: () => base44.entities.UserFollow.filter({ follower_email: user?.email }),
+    queryFn: async () => { const r = await base44.entities.UserFollow.filter({ follower_email: user?.email }); return Array.isArray(r) ? r : []; },
     enabled: !!user?.email
   });
 

@@ -52,7 +52,8 @@ export default function SubmitHike() {
     queryKey: ["myDogs"],
     queryFn: async () => {
       if (!user?.email) return [];
-      return base44.entities.Dog.filter({ created_by: user.email });
+      const r = await base44.entities.Dog.filter({ created_by: user.email });
+      return Array.isArray(r) ? r : [];
     },
     enabled: !!user?.email
   });

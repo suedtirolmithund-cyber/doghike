@@ -22,7 +22,7 @@ export default function Feed() {
 
   const { data: notifications = [] } = useQuery({
     queryKey: ["notifications"],
-    queryFn: () => base44.entities.Notification.filter({ recipient_email: user?.email }, "-created_date", 100),
+    queryFn: async () => { const r = await base44.entities.Notification.filter({ recipient_email: user?.email }, "-created_date", 100); return Array.isArray(r) ? r : []; },
     enabled: !!user?.email
   });
 
@@ -47,13 +47,13 @@ export default function Feed() {
 
   const { data: following = [] } = useQuery({
     queryKey: ["following"],
-    queryFn: () => base44.entities.UserFollow.filter({ follower_email: user?.email }),
+    queryFn: async () => { const r = await base44.entities.UserFollow.filter({ follower_email: user?.email }); return Array.isArray(r) ? r : []; },
     enabled: !!user?.email
   });
 
   const { data: followers = [] } = useQuery({
     queryKey: ["followers"],
-    queryFn: () => base44.entities.UserFollow.filter({ following_email: user?.email }),
+    queryFn: async () => { const r = await base44.entities.UserFollow.filter({ following_email: user?.email }); return Array.isArray(r) ? r : []; },
     enabled: !!user?.email
   });
 
@@ -112,7 +112,7 @@ export default function Feed() {
 
   const { data: dogs = [] } = useQuery({
     queryKey: ["dogs"],
-    queryFn: () => base44.entities.Dog.list()
+    queryFn: async () => { const r = await base44.entities.Dog.list(); return Array.isArray(r) ? r : []; }
   });
 
   const { data: bannerSetting, refetch: refetchBanner } = useQuery({

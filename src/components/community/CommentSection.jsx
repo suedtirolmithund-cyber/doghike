@@ -33,7 +33,7 @@ export default function CommentSection({ hikeId }) {
 
   const { data: comments = [], isLoading } = useQuery({
     queryKey: ["comments", hikeId],
-    queryFn: () => base44.entities.Comment.filter({ hike_id: hikeId }, "-created_date", 100),
+    queryFn: async () => { const r = await base44.entities.Comment.filter({ hike_id: hikeId }, "-created_date", 100); return Array.isArray(r) ? r : []; },
   });
 
   const createCommentMutation = useMutation({

@@ -64,7 +64,7 @@ export default function RouteDetail() {
     queryKey: ["route", routeId],
     queryFn: async () => {
       const routes = await base44.entities.UserRoute.filter({ id: routeId });
-      return routes[0];
+      return Array.isArray(routes) ? routes[0] : undefined;
     },
     enabled: !!routeId,
   });
@@ -78,7 +78,7 @@ export default function RouteDetail() {
     queryKey: ["myDogs"],
     queryFn: async () => {
       if (!user?.email) return [];
-      return base44.entities.Dog.filter({ created_by: user.email });
+      const r = await base44.entities.Dog.filter({ created_by: user.email }); return Array.isArray(r) ? r : [];
     },
     enabled: !!user?.email,
   });

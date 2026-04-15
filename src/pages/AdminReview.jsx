@@ -36,17 +36,17 @@ export default function AdminReview() {
 
   const { data: pendingHikes = [], isLoading } = useQuery({
     queryKey: ["pending-hikes"],
-    queryFn: () => base44.entities.Hike.filter({ status: "pending" }, "-created_date")
+    queryFn: async () => { const r = await base44.entities.Hike.filter({ status: "pending" }, "-created_date"); return Array.isArray(r) ? r : []; }
   });
 
   const { data: pendingChangesHikes = [] } = useQuery({
     queryKey: ["pending-changes-hikes"],
-    queryFn: () => base44.entities.Hike.filter({ pending_changes_status: "pending" }, "-updated_date")
+    queryFn: async () => { const r = await base44.entities.Hike.filter({ pending_changes_status: "pending" }, "-updated_date"); return Array.isArray(r) ? r : []; }
   });
 
   const { data: allHikes = [] } = useQuery({
     queryKey: ["all-admin-hikes"],
-    queryFn: () => base44.entities.Hike.filter({ status: "approved" }, "-created_date", 200)
+    queryFn: async () => { const r = await base44.entities.Hike.filter({ status: "approved" }, "-created_date", 200); return Array.isArray(r) ? r : []; }
   });
 
   const updateMutation = useMutation({

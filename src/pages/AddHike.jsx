@@ -21,7 +21,7 @@ export default function AddHike() {
     queryKey: ["following"],
     queryFn: async () => {
       const user = await base44.auth.me();
-      return base44.entities.UserFollow.filter({ follower_email: user.email });
+      const r = await base44.entities.UserFollow.filter({ follower_email: user.email }); return Array.isArray(r) ? r : [];
     },
     enabled: !!currentUser
   });
@@ -32,17 +32,18 @@ export default function AddHike() {
       if (!currentUser) return [];
       
       // Eigene Hunde
-      const ownDogs = await base44.entities.Dog.filter({ created_by: currentUser.email });
-      
+      const ownDogsRaw = await base44.entities.Dog.filter({ created_by: currentUser.email });
+      const ownDogs = Array.isArray(ownDogsRaw) ? ownDogsRaw : [];
+
       // Hunde von Freunden (Nutzer, denen wir folgen)
       const friendEmails = followingData.map(f => f.following_email);
       let friendDogs = [];
-      
+
       for (const email of friendEmails) {
         const dogs = await base44.entities.Dog.filter({ created_by: email });
-        friendDogs.push(...dogs);
+        if (Array.isArray(dogs)) friendDogs.push(...dogs);
       }
-      
+
       return [...ownDogs, ...friendDogs];
     },
     enabled: !!currentUser && followingData.length >= 0
