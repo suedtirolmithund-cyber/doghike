@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { getHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
@@ -17,8 +17,9 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Check authentication status
-  base44.auth.isAuthenticated().then(setIsAuthenticated);
+  useEffect(() => {
+    base44.auth.isAuthenticated().then(setIsAuthenticated).catch(() => {});
+  }, []);
 
   const { data: hikes = [], isLoading: hikesLoading } = useQuery({
     queryKey: ["hikes"],
