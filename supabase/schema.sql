@@ -1,0 +1,66 @@
+-- ============================================================
+-- DogHike Südtirol – Supabase Schema
+-- In Supabase Dashboard → SQL Editor ausführen
+-- ============================================================
+
+-- PROFILES
+create table if not exists public.profiles (
+  id           uuid default gen_random_uuid() primary key,
+  user_id      uuid references auth.users(id) on delete cascade unique not null,
+  username     text,
+  full_name    text,
+  avatar_url   text,
+  created_at   timestamptz default now()
+);
+
+alter table public.profiles enable row level security;
+
+create policy "Eigenes Profil lesen"
+  on public.profiles for select
+  using (auth.uid() = user_id);
+
+create policy "Eigenes Profil anlegen"
+  on public.profiles for insert
+  with check (auth.uid() = user_id);
+
+create policy "Eigenes Profil bearbeiten"
+  on public.profiles for update
+  using (auth.uid() = user_id);
+
+-- DOGS
+create table if not exists public.dogs (
+  id           uuid default gen_random_uuid() primary key,
+  user_id      uuid references auth.users(id) on delete cascade not null,
+  name         text not null,
+  breed        text,
+  birth_date   date,
+  character    text,
+  notes        text,
+  favorite_food text,
+  photo_url    text,
+  created_at   timestamptz default now()
+);
+
+alter table public.dogs enable row level security;
+
+create policy "Eigene Hunde lesen"
+  on public.dogs for select
+  using (auth.uid() = user_id);
+
+create policy "Eigene Hunde anlegen"
+  on public.dogs for insert
+  with check (auth.uid() = user_id);
+
+create policy "Eigene Hunde bearbeiten"
+  on public.dogs for update
+  using (auth.uid() = user_id);
+
+create policy "Eigene Hunde löschen"
+  on public.dogs for delete
+  using (auth.uid() = user_id);
+
+-- ============================================================
+-- Storage Buckets (manuell im Supabase Dashboard anlegen):
+-- 1. "avatars"    – Public bucket für Profilbilder
+-- 2. "dog-photos" – Public bucket für Hundefotos
+-- ============================================================
