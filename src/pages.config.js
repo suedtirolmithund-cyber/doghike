@@ -60,6 +60,7 @@ import HikeDetail from './pages/HikeDetail';
 import Hikes from './pages/Hikes';
 import Impressum from './pages/Impressum';
 import Legal from './pages/Legal';
+import Login from './pages/Login';
 import MapView from './pages/MapView';
 import Notifications from './pages/Notifications';
 import Profile from './pages/Profile';
@@ -86,6 +87,7 @@ export const PAGES = {
     "Hikes": Hikes,
     "Impressum": Impressum,
     "Legal": Legal,
+    "Login": Login,
     "MapView": MapView,
     "Notifications": Notifications,
     "Profile": Profile,
