@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-leaflet";
-import { format } from "date-fns";
+import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import "leaflet/dist/leaflet.css";
@@ -9,21 +8,28 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import L from "leaflet";
 import "leaflet.markercluster";
 
-// Season colors and icons
-const seasonConfig = {
-  spring:   { color: "#ec4899", emoji: "🌸", label: "Frühling" },  // pink
-  summer:   { color: "#f59e0b", emoji: "☀️", label: "Sommer" },    // gelb/orange
-  autumn:   { color: "#b45309", emoji: "🍂", label: "Herbst" },    // braun/orange
-  winter:   { color: "#3b82f6", emoji: "❄️", label: "Winter" },    // blau
-  all_year: { color: "#22c55e", emoji: "🍃", label: "Ganzjährig" } // grün
+// Availability → color mapping
+const availabilityConfig = {
+  SommerOnly:        { color: "#d64545", label: "Nur Sommer" },
+  HerbstEmpfohlen:   { color: "#f19a4b", label: "Herbst empfohlen" },
+  WinterEmpfohlen:   { color: "#5b83f0", label: "Winter empfohlen" },
+  FruehlingEmpfohlen:{ color: "#ec9cf4", label: "Frühling empfohlen" },
+  YearRound:         { color: "#38a062", label: "Ganzjährig" },
 };
 
-// Create paw emoji icon with colored background
-const createPawIcon = (season) => {
-  const config = seasonConfig[season] || seasonConfig.all_year;
+const DEFAULT_COLOR = "#38a062";
+
+function getColor(hike) {
+  if (hike.availability && availabilityConfig[hike.availability]) {
+    return availabilityConfig[hike.availability].color;
+  }
+  return DEFAULT_COLOR;
+}
+
+function createPawIcon(color) {
   const html = `
     <div style="
-      background: ${config.color};
+      background: ${color};
       width: 36px;
       height: 36px;
       border-radius: 50%;
@@ -31,101 +37,102 @@ const createPawIcon = (season) => {
       align-items: center;
       justify-content: center;
       font-size: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
       border: 3px solid white;
     ">🐾</div>
   `;
-  
   return L.divIcon({
-    html: html,
-    className: 'paw-marker',
+    html,
+    className: "paw-marker",
     iconSize: [36, 36],
     iconAnchor: [18, 36],
-    popupAnchor: [0, -36]
+    popupAnchor: [0, -40],
   });
-};
+}
 
-function MarkerClusterGroup({ hikes }) {
+function MarkersLayer({ hikes }) {
   const map = useMap();
-  const markerClusterGroupRef = useRef(null);
+  const clusterRef = useRef(null);
 
   useEffect(() => {
     if (!map) return;
 
-    // Create marker cluster group
-    const markerClusterGroup = L.markerClusterGroup({
+    const cluster = L.markerClusterGroup({
       maxClusterRadius: 60,
       spiderfyOnMaxZoom: true,
       showCoverageOnHover: false,
       zoomToBoundsOnClick: true,
-      iconCreateFunction: function(cluster) {
-        const count = cluster.getChildCount();
-        const size = count < 10 ? 'small' : count < 50 ? 'medium' : 'large';
+      iconCreateFunction(c) {
+        const count = c.getChildCount();
+        const size = count < 10 ? "small" : count < 50 ? "medium" : "large";
         return L.divIcon({
           html: `<div class="cluster-icon cluster-${size}"><span>${count}</span></div>`,
-          className: 'custom-cluster-icon',
-          iconSize: L.point(40, 40)
+          className: "custom-cluster-icon",
+          iconSize: L.point(40, 40),
         });
-      }
+      },
     });
 
-    // Add markers to cluster group
-    hikes.forEach(hike => {
-      if (hike.latitude && hike.longitude) {
-        const marker = L.marker([hike.latitude, hike.longitude], {
-          icon: createPawIcon(hike.season || "all_year")
-        });
+    hikes.forEach((hike) => {
+      if (!hike.latitude || !hike.longitude) return;
 
-        const popupContent = `
-          <div class="p-1 min-w-[200px]">
-            <h3 class="font-semibold text-stone-800 mb-2">${hike.trail_name}</h3>
-            ${hike.photos?.[0] ? `<a href="${createPageUrl("HikeDetail")}?id=${hike.id}"><img src="${hike.photos[0]}" alt="${hike.trail_name}" class="w-full h-24 object-cover rounded-lg mb-2 cursor-pointer hover:opacity-90 transition-opacity"/></a>` : ''}
-            <p class="text-sm text-stone-500 mb-2">${hike.location || ''}</p>
-            <div class="space-y-1 text-xs text-stone-600">
-              ${hike.distance_km ? `<div class="flex items-center gap-1"><span class="font-medium">📏</span><span>${hike.distance_km} km</span></div>` : ''}
-              ${hike.elevation_gain_m ? `<div class="flex items-center gap-1"><span class="font-medium">⛰️</span><span>${hike.elevation_gain_m} Hm</span></div>` : ''}
-              ${hike.duration_minutes ? `<div class="flex items-center gap-1"><span class="font-medium">⏱️</span><span>${(hike.duration_minutes / 60).toFixed(1)} Std</span></div>` : ''}
-            </div>
+      const color = getColor(hike);
+      const marker = L.marker([hike.latitude, hike.longitude], {
+        icon: createPawIcon(color),
+      });
+
+      const imgHtml = hike.photos?.[0]
+        ? `<a href="${createPageUrl("HikeDetail")}?id=${hike.id}">
+             <img src="${hike.photos[0]}" alt="${hike.trail_name}"
+               style="width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:6px;display:block;cursor:pointer"/>
+           </a>`
+        : "";
+
+      const distHtml = hike.distance_km
+        ? `<div style="display:flex;align-items:center;gap:4px"><span>📏</span><span>${hike.distance_km} km</span></div>`
+        : "";
+      const ascentHtml = hike.elevation_gain_m
+        ? `<div style="display:flex;align-items:center;gap:4px"><span>⛰️</span><span>${hike.elevation_gain_m} Hm</span></div>`
+        : "";
+      const durHtml = hike.duration_minutes
+        ? `<div style="display:flex;align-items:center;gap:4px"><span>⏱️</span><span>${(hike.duration_minutes / 60).toFixed(1)} Std</span></div>`
+        : "";
+
+      const popup = `
+        <div style="min-width:200px;padding:4px">
+          <h3 style="font-weight:600;color:#1c1917;margin:0 0 8px">${hike.trail_name}</h3>
+          ${imgHtml}
+          <p style="font-size:13px;color:#78716c;margin:0 0 6px">${hike.location || ""}</p>
+          <div style="font-size:12px;color:#57534e;display:flex;flex-direction:column;gap:3px">
+            ${distHtml}${ascentHtml}${durHtml}
           </div>
-        `;
-        
-        marker.bindPopup(popupContent);
-        markerClusterGroup.addLayer(marker);
+        </div>
+      `;
 
-        // Add route polyline if available
-        if (hike.route_coordinates && hike.route_coordinates.length > 1) {
-          const polyline = L.polyline(hike.route_coordinates, {
-            color: (seasonConfig[hike.season || "all_year"] ?? seasonConfig["all_year"]).color,
-            weight: 4,
-            opacity: 0.7
-          });
-          polyline.addTo(map);
-        }
-      }
+      marker.bindPopup(popup);
+      cluster.addLayer(marker);
     });
 
-    map.addLayer(markerClusterGroup);
-    markerClusterGroupRef.current = markerClusterGroup;
+    map.addLayer(cluster);
+    clusterRef.current = cluster;
 
-    // Auto-fit bounds to show all markers
-    if (hikes.length > 0) {
-      const allCoordinates = hikes
-        .filter(h => h.latitude && h.longitude)
-        .map(h => [h.latitude, h.longitude]);
-      
-      if (allCoordinates.length > 0) {
-        const bounds = L.latLngBounds(allCoordinates);
-        const isMobile = window.innerWidth < 768;
-        map.fitBounds(bounds, { 
-          padding: isMobile ? [30, 30] : [50, 50],
-          maxZoom: 12
-        });
-      }
+    // Fit bounds to all markers
+    const coords = hikes
+      .filter((h) => h.latitude && h.longitude)
+      .map((h) => [h.latitude, h.longitude]);
+
+    if (coords.length > 0) {
+      const bounds = L.latLngBounds(coords);
+      const isMobile = window.innerWidth < 768;
+      map.fitBounds(bounds, {
+        padding: isMobile ? [30, 30] : [50, 50],
+        maxZoom: 12,
+      });
     }
 
     return () => {
-      if (markerClusterGroupRef.current) {
-        map.removeLayer(markerClusterGroupRef.current);
+      if (clusterRef.current) {
+        map.removeLayer(clusterRef.current);
       }
     };
   }, [map, hikes]);
@@ -133,26 +140,20 @@ function MarkerClusterGroup({ hikes }) {
   return null;
 }
 
-function AutoFitBounds({ hikes }) {
-  const map = useMap();
-  useEffect(() => {
-    const coords = hikes.filter(h => h.latitude && h.longitude).map(h => [h.latitude, h.longitude]);
-    if (coords.length === 0) return;
-    const bounds = L.latLngBounds(coords);
-    const isMobile = window.innerWidth < 768;
-    map.fitBounds(bounds, {
-      padding: isMobile ? [24, 24] : [50, 50],
-      maxZoom: 12
-    });
-  }, [map, hikes]);
-  return null;
-}
-
-export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, height = "400px", showLegend = true, useCluster = false, autoFit = false }) {
-  const hikesWithCoords = hikes.filter(h => h.latitude && h.longitude);
+export default function HikeMap({
+  hikes,
+  center = [46.41, 11.84],
+  zoom = 10,
+  height = "400px",
+  showLegend = true,
+}) {
+  const hikesWithCoords = hikes.filter((h) => h.latitude && h.longitude);
 
   return (
-    <div className="relative rounded-2xl overflow-hidden border border-stone-200/50 shadow-sm" style={{ height }}>
+    <div
+      className="relative rounded-2xl overflow-hidden border border-stone-200/50 shadow-sm"
+      style={{ height }}
+    >
       <MapContainer
         center={center}
         zoom={zoom}
@@ -163,83 +164,39 @@ export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, hei
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
           url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
         />
-        
-        {autoFit && !useCluster && <AutoFitBounds hikes={hikesWithCoords} />}
-        {useCluster ? (
-          <MarkerClusterGroup hikes={hikesWithCoords} />
-        ) : (
-          <>
-            {hikesWithCoords.map((hike) => (
-              <div key={hike.id}>
-                {hike.route_coordinates && hike.route_coordinates.length > 1 && (
-                  <Polyline
-                    key={`route-${hike.id}`}
-                    positions={hike.route_coordinates}
-                    color={(seasonConfig[hike.season || "all_year"] ?? seasonConfig["all_year"]).color}
-                    weight={4}
-                    opacity={0.7}
-                  />
-                )}
-                <Marker
-                  key={`marker-${hike.id}`}
-                  position={[hike.latitude, hike.longitude]}
-                  icon={createPawIcon(hike.season || "all_year")}
-                >
-                  <Popup>
-                    <div className="p-1 min-w-[200px]">
-                      <h3 className="font-semibold text-stone-800 mb-2">{hike.trail_name}</h3>
-                      {hike.photos?.[0] && (
-                        <Link to={createPageUrl("HikeDetail") + `?id=${hike.id}`}>
-                          <img 
-                            src={hike.photos[0]} 
-                            alt={hike.trail_name}
-                            className="w-full h-24 object-cover rounded-lg mb-2 cursor-pointer hover:opacity-90 transition-opacity"
-                          />
-                        </Link>
-                      )}
-                      <p className="text-sm text-stone-500 mb-2">{hike.location}</p>
-                      <div className="space-y-1 text-xs text-stone-600">
-                        {hike.distance_km && (
-                          <div className="flex items-center gap-1">
-                            <span className="font-medium">📏</span>
-                            <span>{hike.distance_km} km</span>
-                          </div>
-                        )}
-                        {hike.elevation_gain_m && (
-                          <div className="flex items-center gap-1">
-                            <span className="font-medium">⛰️</span>
-                            <span>{hike.elevation_gain_m} Hm</span>
-                          </div>
-                        )}
-                        {hike.duration_minutes && (
-                          <div className="flex items-center gap-1">
-                            <span className="font-medium">⏱️</span>
-                            <span>{(hike.duration_minutes / 60).toFixed(1)} Std</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </Popup>
-                </Marker>
-              </div>
-            ))}
-          </>
-        )}
+        <MarkersLayer hikes={hikesWithCoords} />
       </MapContainer>
-      
 
-      
+      {showLegend && (
+        <div className="absolute bottom-3 left-3 z-[1000] bg-white/90 backdrop-blur-sm rounded-xl px-3 py-2 shadow border border-stone-200/60 flex flex-col gap-1 text-xs text-stone-700">
+          {Object.entries(availabilityConfig).map(([key, { color, label }]) => (
+            <div key={key} className="flex items-center gap-2">
+              <span
+                style={{
+                  background: color,
+                  width: 12,
+                  height: 12,
+                  borderRadius: "50%",
+                  display: "inline-block",
+                  border: "2px solid white",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                }}
+              />
+              {label}
+            </div>
+          ))}
+        </div>
+      )}
+
       <style>{`
         .paw-marker {
           background: transparent !important;
           border: none !important;
         }
-        
         .custom-cluster-icon {
           background: transparent !important;
           border: none !important;
         }
-        
         .cluster-icon {
           display: flex;
           align-items: center;
@@ -250,27 +207,9 @@ export default function HikeMap({ hikes, center = [46.41, 11.84], zoom = 10, hei
           box-shadow: 0 2px 8px rgba(0,0,0,0.3);
           border: 3px solid white;
         }
-        
-        .cluster-small {
-          width: 40px;
-          height: 40px;
-          background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-          font-size: 14px;
-        }
-        
-        .cluster-medium {
-          width: 50px;
-          height: 50px;
-          background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-          font-size: 16px;
-        }
-        
-        .cluster-large {
-          width: 60px;
-          height: 60px;
-          background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-          font-size: 18px;
-        }
+        .cluster-small  { width:40px; height:40px; background:linear-gradient(135deg,#3b82f6,#2563eb); font-size:14px; }
+        .cluster-medium { width:50px; height:50px; background:linear-gradient(135deg,#f59e0b,#d97706); font-size:16px; }
+        .cluster-large  { width:60px; height:60px; background:linear-gradient(135deg,#ef4444,#dc2626); font-size:18px; }
       `}</style>
     </div>
   );
