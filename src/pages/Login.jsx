@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Mail, Lock, Eye, EyeOff, PawPrint, AlertCircle, CheckCircle2 } from "lucide-react";
 
 export default function Login() {
@@ -16,6 +17,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [localError, setLocalError] = useState(null);
@@ -40,6 +42,10 @@ export default function Login() {
       }
       if (password !== confirmPassword) {
         setLocalError("Die Passwörter stimmen nicht überein.");
+        return;
+      }
+      if (!privacyAccepted) {
+        setLocalError("Bitte akzeptiere die Datenschutzerklärung.");
         return;
       }
       setLoading(true);
@@ -83,6 +89,7 @@ export default function Login() {
     setEmail("");
     setPassword("");
     setConfirmPassword("");
+    setPrivacyAccepted(false);
   };
 
   return (
@@ -225,6 +232,40 @@ export default function Login() {
                     className="pl-10 h-11 border-stone-200 focus:border-emerald-400 focus:ring-emerald-400/20"
                     autoComplete="new-password"
                   />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Privacy consent (register only) */}
+            <AnimatePresence>
+              {mode === "register" && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden"
+                >
+                  <div className="flex items-start gap-3 p-3 bg-stone-50 border border-stone-200 rounded-lg">
+                    <Checkbox
+                      id="privacy-consent"
+                      checked={privacyAccepted}
+                      onCheckedChange={setPrivacyAccepted}
+                      className="mt-0.5"
+                    />
+                    <label htmlFor="privacy-consent" className="text-xs text-stone-600 cursor-pointer leading-relaxed">
+                      Ich habe die{" "}
+                      <Link
+                        to={createPageUrl("Datenschutz")}
+                        className="text-emerald-600 hover:underline font-medium"
+                        target="_blank"
+                      >
+                        Datenschutzerklärung
+                      </Link>{" "}
+                      gelesen und akzeptiere die Verarbeitung meiner Daten gemäß DSGVO.{" "}
+                      <span className="text-red-500">*</span>
+                    </label>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

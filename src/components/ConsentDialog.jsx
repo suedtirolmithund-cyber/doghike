@@ -22,11 +22,11 @@ export default function ConsentDialog({ type, onAccept, onDecline, open = true }
         "Ich akzeptiere die Datenschutzerklärung und Nutzungsbedingungen",
     },
     photo: {
-      title: "Foto-Freigabe bestätigen",
+      title: "Foto-Freigabe & Urheberrecht",
       description:
-        "Diese Fotos werden öffentlich geteilt und können von anderen Nutzern gesehen werden.",
+        "Bitte bestätige, dass du die Nutzungsrechte an diesen Fotos besitzt und der Veröffentlichung zustimmst.",
       checkbox:
-        "Ich akzeptiere, dass diese Fotos öffentlich sichtbar sind",
+        "Ich bestätige, dass ich der Urheber oder Rechteinhaber dieser Fotos bin, und stimme der öffentlichen Veröffentlichung zu (Art. 6 Abs. 1 lit. a DSGVO).",
     },
     community: {
       title: "Öffentlicher Beitrag",
