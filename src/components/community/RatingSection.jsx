@@ -19,13 +19,13 @@ export default function RatingSection({ hikeId }) {
 
   const { data: ratings = [] } = useQuery({
     queryKey: ["ratings", hikeId],
-    queryFn: () => base44.entities.Rating.filter({ hike_id: hikeId }),
+    queryFn: async () => { const r = await base44.entities.Rating.filter({ hike_id: hikeId }); return Array.isArray(r) ? r : []; },
   });
 
   const { data: userRating } = useQuery({
     queryKey: ["userRating", hikeId, user?.email],
     queryFn: () =>
-      base44.entities.Rating.filter({ hike_id: hikeId, user_email: user?.email }),
+      base44.entities.Rating.filter({ hike_id: hikeId, user_email: user?.email }).then(r => Array.isArray(r) ? r : []),
     enabled: !!user?.email,
   });
 
@@ -47,8 +47,9 @@ export default function RatingSection({ hikeId }) {
     },
   });
 
-  const averageRating = ratings.length > 0
-    ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1)
+  const safeRatings = Array.isArray(ratings) ? ratings : [];
+  const averageRating = safeRatings.length > 0
+    ? (safeRatings.reduce((sum, r) => sum + r.rating, 0) / safeRatings.length).toFixed(1)
     : 0;
 
   const existingRating = userRating?.[0];
