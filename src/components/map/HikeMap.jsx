@@ -11,11 +11,11 @@ import "leaflet.markercluster";
 
 // Season colors and icons
 const seasonConfig = {
-  spring: { color: "#ec4899", emoji: "🌸", label: "Frühling" },
-  summer: { color: "#ef4444", emoji: "☀️", label: "Sommer" },
-  autumn: { color: "#f97316", emoji: "🍂", label: "Herbst" },
-  winter: { color: "#3b82f6", emoji: "❄️", label: "Winter" },
-  all_year: { color: "#22c55e", emoji: "🍃", label: "Ganzjährig" }
+  spring:   { color: "#ec4899", emoji: "🌸", label: "Frühling" },  // pink
+  summer:   { color: "#f59e0b", emoji: "☀️", label: "Sommer" },    // gelb/orange
+  autumn:   { color: "#b45309", emoji: "🍂", label: "Herbst" },    // braun/orange
+  winter:   { color: "#3b82f6", emoji: "❄️", label: "Winter" },    // blau
+  all_year: { color: "#22c55e", emoji: "🍃", label: "Ganzjährig" } // grün
 };
 
 // Create paw emoji icon with colored background
