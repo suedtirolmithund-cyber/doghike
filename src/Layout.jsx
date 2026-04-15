@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Mountain, Map, PawPrint, Home, Trophy, Navigation, Dog, LogIn, LogOut, User } from "lucide-react";
+import { Mountain, PawPrint, Home, Trophy, Navigation, Dog, LogIn, LogOut, User, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,7 @@ export default function Layout({ children, currentPageName }) {
   const navItems = [
     { name: "Dashboard", icon: Home, label: "Startseite" },
     { name: "Hikes", icon: Mountain, label: "Alle Touren" },
-    { name: "Feed", icon: PawPrint, label: "Freunde" },
+    { name: "Journal", icon: BookOpen, label: "Tagebuch" },
     { name: "RoutePlanner", icon: Navigation, label: "Routenplaner" },
     { name: "TopDogs", icon: Trophy, label: "Top Dogs" },
     { name: "Profile", icon: Dog, label: "Mein Profil" },

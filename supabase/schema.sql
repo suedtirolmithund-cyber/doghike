@@ -59,8 +59,49 @@ create policy "Eigene Hunde löschen"
   on public.dogs for delete
   using (auth.uid() = user_id);
 
+-- JOURNAL ENTRIES
+create table if not exists public.journal_entries (
+  id                uuid default gen_random_uuid() primary key,
+  user_id           uuid references auth.users(id) on delete cascade not null,
+  title             text not null,
+  date              date not null,
+  location          text,
+  distance_km       numeric(6,2),
+  elevation_m       integer,
+  duration_minutes  integer,
+  difficulty        smallint check (difficulty between 1 and 5),
+  description       text,
+  photos            text[] default '{}',
+  gpx_url           text,
+  rating            smallint check (rating between 1 and 5),
+  dog_suitable      boolean default true,
+  water_available   boolean default false,
+  dog_difficulty    smallint check (dog_difficulty between 1 and 5),
+  hazard_notes      text,
+  created_at        timestamptz default now()
+);
+
+alter table public.journal_entries enable row level security;
+
+create policy "Eigene Einträge lesen"
+  on public.journal_entries for select
+  using (auth.uid() = user_id);
+
+create policy "Eigene Einträge anlegen"
+  on public.journal_entries for insert
+  with check (auth.uid() = user_id);
+
+create policy "Eigene Einträge bearbeiten"
+  on public.journal_entries for update
+  using (auth.uid() = user_id);
+
+create policy "Eigene Einträge löschen"
+  on public.journal_entries for delete
+  using (auth.uid() = user_id);
+
 -- ============================================================
 -- Storage Buckets (manuell im Supabase Dashboard anlegen):
--- 1. "avatars"    – Public bucket für Profilbilder
--- 2. "dog-photos" – Public bucket für Hundefotos
+-- 1. "avatars"      – Public bucket für Profilbilder
+-- 2. "dog-photos"   – Public bucket für Hundefotos
+-- 3. "journal"      – Public bucket für Journal-Fotos & GPX-Dateien
 -- ============================================================

@@ -48,6 +48,7 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import AddHike from './pages/AddHike';
+import AddJournalEntry from './pages/AddJournalEntry';
 import AdminReview from './pages/AdminReview';
 import Dashboard from './pages/Dashboard';
 import Datenschutz from './pages/Datenschutz';
@@ -58,6 +59,7 @@ import EditRoute from './pages/EditRoute';
 import Feed from './pages/Feed';
 import HikeDetail from './pages/HikeDetail';
 import Hikes from './pages/Hikes';
+import Journal from './pages/Journal';
 import Impressum from './pages/Impressum';
 import Legal from './pages/Legal';
 import Login from './pages/Login';
@@ -75,6 +77,7 @@ import __Layout from './Layout.jsx';
 
 export const PAGES = {
     "AddHike": AddHike,
+    "AddJournalEntry": AddJournalEntry,
     "AdminReview": AdminReview,
     "Dashboard": Dashboard,
     "Datenschutz": Datenschutz,
@@ -85,6 +88,7 @@ export const PAGES = {
     "Feed": Feed,
     "HikeDetail": HikeDetail,
     "Hikes": Hikes,
+    "Journal": Journal,
     "Impressum": Impressum,
     "Legal": Legal,
     "Login": Login,
