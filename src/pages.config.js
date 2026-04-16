@@ -49,6 +49,7 @@
  */
 import AddHike from './pages/AddHike';
 import AddJournalEntry from './pages/AddJournalEntry';
+import AdminDashboard from './pages/AdminDashboard';
 import AdminReview from './pages/AdminReview';
 import Dashboard from './pages/Dashboard';
 import Datenschutz from './pages/Datenschutz';
@@ -78,6 +79,7 @@ import __Layout from './Layout.jsx';
 export const PAGES = {
     "AddHike": AddHike,
     "AddJournalEntry": AddJournalEntry,
+    "AdminDashboard": AdminDashboard,
     "AdminReview": AdminReview,
     "Dashboard": Dashboard,
     "Datenschutz": Datenschutz,

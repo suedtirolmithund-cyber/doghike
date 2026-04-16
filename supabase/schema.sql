@@ -10,8 +10,13 @@ create table if not exists public.profiles (
   username     text,
   full_name    text,
   avatar_url   text,
+  role         text default 'user' check (role in ('user', 'admin')),
   created_at   timestamptz default now()
 );
+
+-- Falls die Tabelle bereits existiert:
+-- alter table public.profiles
+--   add column if not exists role text default 'user' check (role in ('user','admin'));
 
 alter table public.profiles enable row level security;
 
@@ -81,6 +86,7 @@ create table if not exists public.journal_entries (
   hazard_notes      text,
   visibility        text default 'private' check (visibility in ('private', 'friends', 'public')),
   status            text default 'draft' check (status in ('draft', 'pending', 'approved', 'rejected')),
+  rejection_reason  text,
   created_at        timestamptz default now()
 );
 
@@ -91,21 +97,32 @@ create table if not exists public.journal_entries (
 
 alter table public.journal_entries enable row level security;
 
+-- Helper: Prüft ob der aktuelle Nutzer Admin ist
+create or replace function public.is_admin()
+returns boolean
+language sql security definer
+as $$
+  select exists (
+    select 1 from public.profiles
+    where user_id = auth.uid() and role = 'admin'
+  );
+$$;
+
 create policy "Eigene Einträge lesen"
   on public.journal_entries for select
-  using (auth.uid() = user_id);
+  using (auth.uid() = user_id OR public.is_admin());
 
 create policy "Eigene Einträge anlegen"
   on public.journal_entries for insert
   with check (auth.uid() = user_id);
 
-create policy "Eigene Einträge bearbeiten"
+create policy "Eigene Einträge oder Admin bearbeiten"
   on public.journal_entries for update
-  using (auth.uid() = user_id);
+  using (auth.uid() = user_id OR public.is_admin());
 
 create policy "Eigene Einträge löschen"
   on public.journal_entries for delete
-  using (auth.uid() = user_id);
+  using (auth.uid() = user_id OR public.is_admin());
 
 -- Falls die Tabelle bereits mit boolean angelegt wurde, einmalig ausführen:
 -- alter table public.journal_entries

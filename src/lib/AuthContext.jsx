@@ -6,23 +6,35 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [isLoadingPublicSettings] = useState(false);
   const [authError, setAuthError] = useState(null);
   const [appPublicSettings] = useState(null);
 
+  // Fetch admin role from profiles table
+  const fetchRole = async (userId) => {
+    if (!userId) { setIsAdmin(false); return; }
+    const { data } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("user_id", userId)
+      .single();
+    setIsAdmin(data?.role === "admin");
+  };
+
   useEffect(() => {
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       setIsAuthenticated(!!session?.user);
       setIsLoadingAuth(false);
+      fetchRole(session?.user?.id);
     });
 
-    // Listen for auth state changes (login, logout, token refresh)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       setIsAuthenticated(!!session?.user);
+      fetchRole(session?.user?.id);
     });
 
     return () => subscription.unsubscribe();
@@ -32,68 +44,43 @@ export const AuthProvider = ({ children }) => {
     await supabase.auth.signOut();
     setUser(null);
     setIsAuthenticated(false);
+    setIsAdmin(false);
   };
 
-  // Sign in with email + password
   const loginWithEmail = async (email, password) => {
     setAuthError(null);
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      setAuthError(error.message);
-      return { error };
-    }
+    if (error) { setAuthError(error.message); return { error }; }
     return { data };
   };
 
-  // Register with email + password
   const signUpWithEmail = async (email, password) => {
     setAuthError(null);
     const { data, error } = await supabase.auth.signUp({ email, password });
-    if (error) {
-      setAuthError(error.message);
-      return { error };
-    }
+    if (error) { setAuthError(error.message); return { error }; }
     return { data };
   };
 
-  // Sign in with Google OAuth
   const loginWithGoogle = async () => {
     setAuthError(null);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: {
-        redirectTo: window.location.origin + "/",
-      },
+      options: { redirectTo: window.location.origin + "/" },
     });
-    if (error) {
-      setAuthError(error.message);
-      return { error };
-    }
+    if (error) { setAuthError(error.message); return { error }; }
   };
 
-  const navigateToLogin = () => {
-    window.location.href = "/login";
-  };
-
+  const navigateToLogin = () => { window.location.href = "/login"; };
   const checkAppState = () => {};
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isAuthenticated,
-        isLoadingAuth,
-        isLoadingPublicSettings,
-        authError,
-        appPublicSettings,
-        logout,
-        loginWithEmail,
-        signUpWithEmail,
-        loginWithGoogle,
-        navigateToLogin,
-        checkAppState,
-      }}
-    >
+    <AuthContext.Provider value={{
+      user, isAuthenticated, isAdmin,
+      isLoadingAuth, isLoadingPublicSettings,
+      authError, appPublicSettings,
+      logout, loginWithEmail, signUpWithEmail, loginWithGoogle,
+      navigateToLogin, checkAppState,
+    }}>
       {children}
     </AuthContext.Provider>
   );
@@ -101,8 +88,6 @@ export const AuthProvider = ({ children }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
+  if (!context) throw new Error("useAuth must be used within an AuthProvider");
   return context;
 };

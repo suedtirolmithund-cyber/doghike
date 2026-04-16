@@ -1,13 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Mountain, PawPrint, Home, Trophy, Navigation, Dog, LogIn, LogOut, User, BookOpen } from "lucide-react";
+import { Mountain, PawPrint, Home, Trophy, Navigation, Dog, LogIn, LogOut, User, BookOpen, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
 
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, isAdmin, logout } = useAuth();
 
   // Display name: Google full_name → email prefix → "Profil"
   const displayName = user?.user_metadata?.full_name
@@ -110,6 +110,19 @@ export default function Layout({ children, currentPageName }) {
                   </Link>
                 );
               })}
+              {isAdmin && (
+                <Link
+                  to={createPageUrl("AdminDashboard")}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all ${
+                    isActive("AdminDashboard")
+                      ? "bg-slate-800 text-white shadow-md"
+                      : "text-amber-700 hover:text-amber-900 hover:bg-amber-50"
+                  }`}
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  <span className="text-sm font-medium">Admin</span>
+                </Link>
+              )}
             </div>
 
             {/* Auth section */}
