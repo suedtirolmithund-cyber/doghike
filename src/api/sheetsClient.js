@@ -183,8 +183,8 @@ function journalEntryToHike(entry) {
     location: entry.location || null,
     country: null,
 
-    latitude: null,
-    longitude: null,
+    latitude: entry.latitude ? Number(entry.latitude) : null,
+    longitude: entry.longitude ? Number(entry.longitude) : null,
 
     photos: Array.isArray(entry.photos) ? entry.photos : [],
     link: null,

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { getHikes } from "@/api/sheetsClient";
+import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -79,7 +79,7 @@ export default function HikeDetail() {
   const { data: hike, isLoading } = useQuery({
     queryKey: ["hike", hikeId],
     queryFn: async () => {
-      const hikes = await getHikes();
+      const hikes = await getAllHikes();
       console.log("hikeId from URL:", hikeId);
       console.log("first 3 hike IDs from sheet:", hikes.slice(0, 3).map((h) => h.id));
       return hikes.find((h) => h.id === hikeId);

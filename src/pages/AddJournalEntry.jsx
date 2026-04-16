@@ -204,6 +204,8 @@ const EMPTY_FORM = {
   title: "",
   date: new Date().toISOString().split("T")[0],
   location: "",
+  latitude: "",
+  longitude: "",
   distance_km: "",
   elevation_m: "",
   duration_minutes: "",
@@ -243,6 +245,8 @@ export default function AddJournalEntry() {
         title: existing.title ?? "",
         date: existing.date ?? EMPTY_FORM.date,
         location: existing.location ?? "",
+        latitude: existing.latitude ?? "",
+        longitude: existing.longitude ?? "",
         distance_km: existing.distance_km ?? "",
         elevation_m: existing.elevation_m ?? "",
         duration_minutes: existing.duration_minutes ?? "",
@@ -317,6 +321,8 @@ export default function AddJournalEntry() {
       difficulty: form.difficulty || null,
       rating: form.rating || null,
       dog_difficulty: form.dog_difficulty || null,
+      latitude: form.latitude !== "" ? Number(form.latitude) : null,
+      longitude: form.longitude !== "" ? Number(form.longitude) : null,
       // public → pending review; private/friends → draft
       status: form.visibility === "public" ? "pending" : "draft",
     });
@@ -390,6 +396,28 @@ export default function AddJournalEntry() {
                   placeholder="z.B. Prags, Südtirol" className="mt-1" />
               </div>
             </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="latitude" className="flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5" /> Breitengrad (Lat)
+                </Label>
+                <Input id="latitude" type="number" step="0.0000001" value={form.latitude}
+                  onChange={(e) => set("latitude", e.target.value)}
+                  placeholder="z.B. 46.7749" className="mt-1" />
+              </div>
+              <div>
+                <Label htmlFor="longitude" className="flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5" /> Längengrad (Lng)
+                </Label>
+                <Input id="longitude" type="number" step="0.0000001" value={form.longitude}
+                  onChange={(e) => set("longitude", e.target.value)}
+                  placeholder="z.B. 11.9154" className="mt-1" />
+              </div>
+            </div>
+            <p className="text-xs text-stone-400 -mt-2">
+              Optional: Koordinaten für die Kartenansicht. Findbar auf maps.google.com (Rechtsklick → Koordinaten kopieren).
+            </p>
 
             <div>
               <Label htmlFor="description">Beschreibung / Notizen</Label>
