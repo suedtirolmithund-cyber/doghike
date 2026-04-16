@@ -71,7 +71,7 @@ const GH_API_KEY = "LijBPDQGfu7Imiq1X1Jw83a5787IYJB2mEQhHe8A7";
 async function calcGraphHopperRoute(waypoints) {
   const points = waypoints.map((w) => [w.lng, w.lat]);
   const res = await fetch(
-    `https://graphhopper.com/api/1/route?key=${GH_API_KEY}&profile=hike&points_encoded=false`,
+    `https://graphhopper.com/api/1/route?key=${GH_API_KEY}&profile=hike&points_encoded=false&elevation=true`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -82,11 +82,27 @@ async function calcGraphHopperRoute(waypoints) {
   const data = await res.json();
   if (!data.paths?.length) throw new Error("Keine Route gefunden");
   const path = data.paths[0];
-  const positions = path.points.coordinates.map(([lng, lat]) => [lat, lng]);
+  const coords = path.points.coordinates; // [[lng, lat, ele], ...]
+  const positions = coords.map(([lng, lat]) => [lat, lng]);
+
+  // Build sampled elevation profile directly from GH coords — no external API needed
+  const step = Math.max(1, Math.floor(coords.length / 60));
+  const sampled = coords.filter((_, i) => i % step === 0 || i === coords.length - 1);
+  let cumDist = 0;
+  const elevationProfile = sampled.map((c, i) => {
+    if (i > 0) {
+      const p = sampled[i - 1];
+      cumDist += haversine([p[1], p[0]], [c[1], c[0]]) * 1000;
+    }
+    return { dist: +(cumDist / 1000).toFixed(3), ele: Math.round(c[2] ?? 0) };
+  });
+
   return {
     positions,
     distance_km: +(path.distance / 1000).toFixed(2),
     duration_minutes: Math.round(path.time / 60000),
+    elevationProfile,
+    elevation_gain_m: path.ascend ? Math.round(path.ascend) : null,
   };
 }
 
@@ -118,31 +134,6 @@ async function calcRoute(waypoints) {
   }
 }
 
-// ── Elevation from OpenTopoData ───────────────────────────────
-async function fetchElevation(positions) {
-  // Sample up to 40 evenly-spaced points
-  const step = Math.max(1, Math.floor(positions.length / 40));
-  const sampled = positions.filter((_, i) => i % step === 0);
-  if (sampled.length < 2) return [];
-
-  const locStr = sampled.map(([lat, lng]) => `${lat.toFixed(5)},${lng.toFixed(5)}`).join("|");
-  try {
-    const res = await fetch(`https://api.opentopodata.org/v1/srtm30m?locations=${locStr}`);
-    if (!res.ok) return [];
-    const data = await res.json();
-    if (data.status !== "OK") return [];
-
-    let cumDist = 0;
-    return data.results.map((r, i) => {
-      if (i > 0) {
-        cumDist += haversine(sampled[i - 1], sampled[i]) * 1000; // metres
-      }
-      return { dist: +(cumDist / 1000).toFixed(3), ele: r.elevation ?? 0 };
-    });
-  } catch {
-    return [];
-  }
-}
 
 function calcElevationGain(profile) {
   let gain = 0, loss = 0;
@@ -211,7 +202,6 @@ function SmartRoutePlanner({ onRouteReady }) {
   const [route, setRoute] = useState(null);        // {positions, distance_km, duration_minutes}
   const [elevation, setElevation] = useState([]);
   const [calculating, setCalculating] = useState(false);
-  const [elevLoading, setElevLoading] = useState(false);
   const [mapType, setMapType] = useState("standard");
   const [flyTarget, setFlyTarget] = useState(null);
   const [searchText, setSearchText] = useState("");
@@ -232,26 +222,14 @@ function SmartRoutePlanner({ onRouteReady }) {
     let cancelled = false;
     setCalculating(true);
     calcRoute(waypoints)
-      .then(async (r) => {
+      .then((r) => {
         if (cancelled) return;
         setRoute(r);
         routeRef.current = r;
+        if (r.elevationProfile?.length > 1) {
+          setElevation(r.elevationProfile);
+        }
         onRouteReady(r);
-
-        // Elevation (non-blocking)
-        setElevLoading(true);
-        fetchElevation(r.positions).then((prof) => {
-          if (!cancelled) {
-            setElevation(prof);
-            if (prof.length > 1) {
-              const { gain } = calcElevationGain(prof);
-              const updated = { ...r, elevation_gain_m: gain };
-              routeRef.current = updated;
-              onRouteReady(updated);
-            }
-          }
-          setElevLoading(false);
-        });
       })
       .catch((err) => {
         if (!cancelled) toast.error("Route konnte nicht berechnet werden: " + err.message);
@@ -437,8 +415,7 @@ function SmartRoutePlanner({ onRouteReady }) {
           <div className="bg-emerald-50 rounded-xl p-3 text-center border border-emerald-100">
             <TrendingUp className="w-4 h-4 text-emerald-600 mx-auto mb-1" />
             <p className="text-lg font-bold text-emerald-800">
-              {elevLoading ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> :
-               elevation.length ? `+${calcElevationGain(elevation).gain} m` : "–"}
+              {elevation.length ? `+${calcElevationGain(elevation).gain} m` : "–"}
             </p>
             <p className="text-xs text-emerald-600">Aufstieg</p>
           </div>
@@ -490,10 +467,12 @@ export default function RoutePlanner() {
       return;
     }
     await createRouteMutation.mutateAsync({
-      ...routeData,
+      name: routeData.name,
+      description: routeData.description,
+      start_location: routeData.start_location,
       route_type: activeTab === "track" ? "recorded" : activeTab === "gpx" ? "gpx" : "planned",
       waypoints: routeGeometry.positions,
-      is_public: routeData.is_shared, // friends-shared = is_public true, strictly private = false
+      is_public: routeData.is_shared,
       distance_km: routeGeometry.distance_km,
       elevation_gain_m: routeGeometry.elevation_gain_m || null,
       duration_minutes: routeGeometry.duration_minutes || null,
