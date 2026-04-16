@@ -34,10 +34,11 @@ export default function RoutePlanner() {
 
   const createRouteMutation = useMutation({
     mutationFn: (data) => createRoute(user.id, data),
-    onSuccess: () => {
+    onSuccess: (savedRoute) => {
       queryClient.invalidateQueries({ queryKey: ["userRoutes", user?.id] });
-      navigate(createPageUrl("Profile"));
+      navigate(createPageUrl("RouteDetail") + `?id=${savedRoute.id}`);
     },
+    onError: (e) => alert("Fehler beim Speichern: " + e.message),
   });
 
   const handleRouteSave = (geometry) => {

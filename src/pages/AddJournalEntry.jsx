@@ -396,9 +396,30 @@ export default function AddJournalEntry() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const editId = searchParams.get("id");
+
+  // Pre-fill from route if navigated from RouteDetail
+  const prefill = {
+    title: searchParams.get("prefill_title") || "",
+    location: searchParams.get("prefill_location") || "",
+    distance_km: searchParams.get("prefill_distance") || "",
+    elevation_m: searchParams.get("prefill_elevation") || "",
+    duration_minutes: searchParams.get("prefill_duration") || "",
+    description: searchParams.get("prefill_description") || "",
+  };
   const queryClient = useQueryClient();
 
-  const [form, setForm] = useState(EMPTY_FORM);
+  const [form, setForm] = useState({
+    ...EMPTY_FORM,
+    // Apply prefill from route params (only when not editing existing entry)
+    ...(editId ? {} : {
+      title: prefill.title || EMPTY_FORM.title,
+      location: prefill.location || EMPTY_FORM.location,
+      distance_km: prefill.distance_km || EMPTY_FORM.distance_km,
+      elevation_m: prefill.elevation_m || EMPTY_FORM.elevation_m,
+      duration_minutes: prefill.duration_minutes || EMPTY_FORM.duration_minutes,
+      description: prefill.description || EMPTY_FORM.description,
+    }),
+  });
   const [photoUploading, setPhotoUploading] = useState(false);
   const [gpxUploading, setGpxUploading] = useState(false);
 

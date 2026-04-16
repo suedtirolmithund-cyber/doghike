@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, Map, Route, Clock, Navigation, Eye, EyeOff, Trash2, TrendingUp, CheckCircle2, Star, Lock, Users, Upload, X, Loader2, Pencil } from "lucide-react";
+import { ArrowLeft, Map, Route, Clock, Navigation, Eye, EyeOff, Trash2, TrendingUp, CheckCircle2, Star, Lock, Users, Upload, X, Loader2, Pencil, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import ExpandableText from "@/components/ExpandableText";
@@ -139,8 +139,19 @@ export default function RouteDetail() {
     );
   }
 
-  const isOwner = user?.email === route.created_by;
+  const isOwner = user?.id === route.user_id;
   const RouteIcon = route.route_type === "recorded" ? Navigation : Map;
+
+  // Build URL to pre-fill AddJournalEntry from route data
+  const journalParams = new URLSearchParams({
+    prefill_title: route.name || "",
+    prefill_location: route.start_location || "",
+    prefill_distance: route.distance_km ?? "",
+    prefill_elevation: route.elevation_gain_m ?? "",
+    prefill_duration: route.duration_minutes ?? "",
+    prefill_description: [route.description, route.notes].filter(Boolean).join("\n\n"),
+  });
+  const journalUrl = createPageUrl("AddJournalEntry") + "?" + journalParams.toString();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
@@ -176,18 +187,26 @@ export default function RouteDetail() {
               </div>
 
               {isOwner && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => {
-                    if (confirm("Route wirklich löschen?")) {
-                      deleteRouteMutation.mutate();
-                    }
-                  }}
-                  className="text-red-600 hover:text-red-700"
-                >
-                  <Trash2 className="w-5 h-5" />
-                </Button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <Link to={journalUrl}>
+                    <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                      <BookOpen className="w-4 h-4 mr-1.5" />
+                      Als Wanderung eintragen
+                    </Button>
+                  </Link>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      if (confirm("Route wirklich löschen?")) {
+                        deleteRouteMutation.mutate();
+                      }
+                    }}
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </Button>
+                </div>
               )}
             </div>
 
@@ -205,7 +224,7 @@ export default function RouteDetail() {
               )}
               <span className="text-stone-400">•</span>
               <span className="text-stone-500">
-                {route.created_date ? format(new Date(route.created_date), "dd.MM.yyyy") : ""}
+                {route.created_at ? format(new Date(route.created_at), "dd.MM.yyyy") : ""}
               </span>
             </div>
           </motion.div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Edit, Trash2, Heart, MapPin, LogIn, UserPlus, LogOut, Loader2, Camera, Check, X, Mountain } from "lucide-react";
+import { Plus, Edit, Trash2, Heart, MapPin, LogIn, UserPlus, LogOut, Loader2, Camera, Check, X, Mountain, Navigation, BookOpen, Route } from "lucide-react";
 import { differenceInYears, differenceInMonths } from "date-fns";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -19,6 +19,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { getProfile, upsertProfile, getDogs, createDog, updateDog, deleteDog, uploadFile } from "@/lib/profilesApi";
 import { getSavedHikes } from "@/lib/communityApi";
 import { getAllHikes } from "@/api/sheetsClient";
+import { getUserRoutes } from "@/lib/routesApi";
 import DogForm from "@/components/forms/DogForm";
 import HikeCard from "@/components/hikes/HikeCard";
 import AccountSettings from "@/components/profile/AccountSettings";
@@ -57,6 +58,12 @@ export default function Profile() {
     queryFn: getAllHikes,
     enabled: savedHikes.length > 0,
     staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: userRoutes = [], isLoading: routesLoading } = useQuery({
+    queryKey: ["userRoutes", user?.id],
+    queryFn: () => getUserRoutes(user.id),
+    enabled: !!user?.id,
   });
 
   // Match saved hike IDs to full hike objects
@@ -269,6 +276,15 @@ export default function Profile() {
           <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
             <TabsList className="bg-white border border-stone-200/50 gap-1 inline-flex min-w-full justify-start md:justify-center">
               <TabsTrigger value="dogs" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">🐕 Hunde</TabsTrigger>
+              <TabsTrigger value="routes" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0 flex items-center gap-1">
+                <Navigation className="w-3.5 h-3.5" />
+                Routen
+                {userRoutes.length > 0 && (
+                  <span className="bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full px-1.5 py-0.5 leading-none">
+                    {userRoutes.length}
+                  </span>
+                )}
+              </TabsTrigger>
               <TabsTrigger value="saved" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0 flex items-center gap-1">
                 <Heart className="w-3.5 h-3.5" />
                 Gespeichert
@@ -380,6 +396,93 @@ export default function Profile() {
                   <Plus className="w-4 h-4 mr-2" />
                   Hund hinzufügen
                 </Button>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* Routes Tab */}
+          <TabsContent value="routes">
+            <div className="flex items-center justify-between mb-4 md:mb-6">
+              <div>
+                <h2 className="text-lg md:text-xl font-medium text-stone-800 mb-1 flex items-center gap-2">
+                  <Navigation className="w-5 h-5 text-blue-600" />
+                  Meine Routen
+                </h2>
+                <p className="text-stone-500 text-sm">Geplante und aufgezeichnete Wanderrouten</p>
+              </div>
+              <Link to={createPageUrl("RoutePlanner")}>
+                <Button className="bg-slate-800 hover:bg-slate-700" size="sm">
+                  <Plus className="w-4 h-4 mr-1" />
+                  <span className="hidden md:inline">Neue Route</span>
+                </Button>
+              </Link>
+            </div>
+
+            {routesLoading ? (
+              <div className="flex justify-center py-16">
+                <Loader2 className="w-8 h-8 text-stone-400 animate-spin" />
+              </div>
+            ) : userRoutes.length > 0 ? (
+              <div className="space-y-3">
+                {userRoutes.map((route) => {
+                  const journalParams = new URLSearchParams({
+                    prefill_title: route.name || "",
+                    prefill_location: route.start_location || "",
+                    prefill_distance: route.distance_km ?? "",
+                    prefill_elevation: route.elevation_gain_m ?? "",
+                    prefill_duration: route.duration_minutes ?? "",
+                    prefill_description: [route.description, route.notes].filter(Boolean).join("\n\n"),
+                  });
+                  return (
+                    <div key={route.id} className="bg-white rounded-xl border border-stone-200/60 shadow-sm p-4 flex items-center gap-4">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${route.completed ? "bg-emerald-100" : "bg-blue-100"}`}>
+                        {route.completed
+                          ? <Route className="w-5 h-5 text-emerald-600" />
+                          : <Navigation className="w-5 h-5 text-blue-600" />}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <p className="font-semibold text-stone-800 truncate">{route.name}</p>
+                          <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${
+                            route.completed
+                              ? "bg-emerald-100 text-emerald-700"
+                              : "bg-blue-100 text-blue-700"
+                          }`}>
+                            {route.completed ? "✅ Erledigt" : "📋 Geplant"}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3 mt-0.5 text-xs text-stone-400 flex-wrap">
+                          {route.distance_km && <span>{route.distance_km} km</span>}
+                          {route.elevation_gain_m && <span>+{route.elevation_gain_m} Hm</span>}
+                          {route.start_location && <span>📍 {route.start_location}</span>}
+                        </div>
+                      </div>
+                      <div className="flex gap-2 shrink-0">
+                        <Link to={createPageUrl("RouteDetail") + `?id=${route.id}`}>
+                          <Button size="sm" variant="outline" className="h-8 text-xs">Details</Button>
+                        </Link>
+                        <Link to={createPageUrl("AddJournalEntry") + "?" + journalParams.toString()}>
+                          <Button size="sm" className="h-8 text-xs bg-emerald-600 hover:bg-emerald-700">
+                            <BookOpen className="w-3.5 h-3.5 mr-1" />
+                            Eintragen
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
+                <Navigation className="w-14 h-14 text-stone-200 mx-auto mb-4" />
+                <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Routen</h3>
+                <p className="text-stone-500 text-sm mb-6">Plane deine erste Tour oder zeichne eine Wanderung auf</p>
+                <Link to={createPageUrl("RoutePlanner")}>
+                  <Button className="bg-slate-800 hover:bg-slate-700">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Route erstellen
+                  </Button>
+                </Link>
               </div>
             )}
           </TabsContent>
