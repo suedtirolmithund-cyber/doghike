@@ -86,26 +86,23 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
           </div>
           
           <div className="p-5">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex gap-1.5">
-                {hike.difficulty &&
-                <Badge className="bg-blue-500 text-primary-foreground px-2.5 py-0.5 text-xs font-medium rounded-md inline-flex items-center transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent shadow hover:bg-primary/80 undefined border">
-                    👤 Stufe {hike.difficulty}
-                  </Badge>
-                }
-                {hike.dog_difficulty &&
+            <div className="flex items-center gap-1.5 flex-wrap mb-3">
+              {hike.difficulty && (
+                <Badge className="bg-blue-500 text-white px-2.5 py-0.5 text-xs font-medium rounded-md border-transparent shadow">
+                  👤 Stufe {hike.difficulty}
+                </Badge>
+              )}
+              {hike.dog_difficulty && (
                 <Badge className={`${difficultyColors[hike.dog_difficulty]} border font-medium text-xs`}>
-                    🐕 Stufe {hike.dog_difficulty}
-                  </Badge>
-                }
-              </div>
+                  🐕 Stufe {hike.dog_difficulty}
+                </Badge>
+              )}
+              {hike.water_availability && (
+                <span className={`text-xs font-medium flex items-center gap-0.5 ${waterColors[hike.water_availability]}`}>
+                  💧 {waterLabels[hike.water_availability]}
+                </span>
+              )}
             </div>
-            
-            {hike.water_availability &&
-            <div className={`text-xs mb-3 flex items-center gap-1 ${waterColors[hike.water_availability]}`}>
-                💧 {waterLabels[hike.water_availability]}
-              </div>
-            }
             
             <div className="grid grid-cols-3 gap-3 mb-4">
               {hike.distance_km &&

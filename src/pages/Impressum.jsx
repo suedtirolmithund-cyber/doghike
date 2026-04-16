@@ -174,15 +174,19 @@ export default function Impressum() {
                   © OpenStreetMap-Mitwirkende.
                 </p>
                 <p>
-                  Routing-Dienste werden bereitgestellt von{" "}
-                  <a 
-                    href="https://project-osrm.org/" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-blue-600 underline hover:text-blue-800"
-                  >
-                    OSRM
-                  </a>.
+                  Routing und Höhenprofile werden bereitgestellt von{" "}
+                  <a href="https://www.graphhopper.com" target="_blank" rel="noopener noreferrer"
+                    className="text-blue-600 underline hover:text-blue-800">GraphHopper</a>{" "}
+                  (primär, Wanderwege) und{" "}
+                  <a href="https://project-osrm.org/" target="_blank" rel="noopener noreferrer"
+                    className="text-blue-600 underline hover:text-blue-800">OSRM</a>{" "}
+                  (Fallback).
+                </p>
+                <p>
+                  Wetterdaten von{" "}
+                  <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer"
+                    className="text-blue-600 underline hover:text-blue-800">Open-Meteo</a>{" "}
+                  (kostenlos, keine Tracking-Cookies).
                 </p>
               </div>
             </section>
