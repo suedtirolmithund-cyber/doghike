@@ -176,7 +176,8 @@ export async function getHikes() {
  * Converts an approved journal_entry (from Supabase) into the same
  * Hike shape used throughout the app so both sources are interchangeable.
  */
-function journalEntryToHike(entry) {
+// dog and profile are pre-fetched objects passed in from getApprovedJournalEntries
+function journalEntryToHike(entry, dog = null, profile = null) {
   return {
     id: `journal-${entry.id}`,
     trail_name: entry.title,
@@ -216,6 +217,12 @@ function journalEntryToHike(entry) {
     dog_suitable: entry.dog_suitable,
     date: entry.date || null,
 
+    // Dog & author info for display
+    dog_photo_url: dog?.photo_url || null,
+    dog_name: dog?.name || null,
+    author_username: profile?.username || profile?.full_name || null,
+    author_avatar: profile?.avatar_url || null,
+
     _source: "journal",
     _journal_id: entry.id,
   };
@@ -228,17 +235,48 @@ function journalEntryToHike(entry) {
 async function getApprovedJournalEntries() {
   try {
     const { supabase } = await import("@/lib/supabaseClient");
-    const { data, error } = await supabase
+
+    // 1. Fetch approved public entries
+    const { data: entries, error } = await supabase
       .from("journal_entries")
       .select("*")
       .eq("status", "approved")
       .eq("visibility", "public");
+
     if (error) {
       console.error("[sheetsClient] Supabase journal fetch error:", error.message);
       return [];
     }
-    console.log("[sheetsClient] approved journal entries from Supabase:", data?.length ?? 0);
-    return (data ?? []).map(journalEntryToHike);
+    if (!entries?.length) return [];
+
+    // 2. Fetch dogs for entries that have a dog_id
+    const dogIds = [...new Set(entries.filter((e) => e.dog_id).map((e) => e.dog_id))];
+    const dogMap = {};
+    if (dogIds.length > 0) {
+      const { data: dogs } = await supabase
+        .from("dogs")
+        .select("id, name, photo_url")
+        .in("id", dogIds);
+      (dogs ?? []).forEach((d) => { dogMap[d.id] = d; });
+    }
+
+    // 3. Fetch author profiles (separate query — no direct FK to public.profiles)
+    const userIds = [...new Set(entries.map((e) => e.user_id))];
+    const profileMap = {};
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("user_id, username, full_name, avatar_url")
+      .in("user_id", userIds);
+    (profiles ?? []).forEach((p) => { profileMap[p.user_id] = p; });
+
+    console.log("[sheetsClient] approved journal entries:", entries.length);
+    return entries.map((entry) =>
+      journalEntryToHike(
+        entry,
+        dogMap[entry.dog_id] ?? null,
+        profileMap[entry.user_id] ?? null,
+      )
+    );
   } catch (err) {
     console.error("[sheetsClient] getApprovedJournalEntries failed:", err);
     return [];

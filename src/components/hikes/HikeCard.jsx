@@ -131,24 +131,47 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
             
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                {hikeDogs.slice(0, 3).map((dog, i) =>
-                <div
-                  key={dog.id}
-                  className="w-8 h-8 rounded-full border-2 border-white shadow-sm overflow-hidden"
-                  style={{ marginLeft: i > 0 ? "-8px" : 0 }}>
-
-                    <img
-                    src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
-                    alt={dog.name}
-                    className="w-full h-full object-cover" />
-
+                {/* Journal-Tour: Hundebild + Username des Erstellers */}
+                {hike._source === "journal" ? (
+                  <div className="flex items-center gap-2">
+                    {(hike.dog_photo_url || hike.author_avatar) && (
+                      <div className="w-8 h-8 rounded-full border-2 border-white shadow-sm overflow-hidden bg-stone-100">
+                        <img
+                          src={hike.dog_photo_url || hike.author_avatar}
+                          alt={hike.dog_name || hike.author_username || ""}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    {(hike.dog_name || hike.author_username) && (
+                      <span className="text-xs text-stone-500">
+                        {hike.dog_name && <span>🐾 {hike.dog_name}</span>}
+                        {hike.dog_name && hike.author_username && " · "}
+                        {hike.author_username && <span>@{hike.author_username}</span>}
+                      </span>
+                    )}
                   </div>
+                ) : (
+                  /* Normale Tour: Hunde aus dogs[] prop */
+                  <>
+                    {hikeDogs.slice(0, 3).map((dog, i) =>
+                    <div
+                      key={dog.id}
+                      className="w-8 h-8 rounded-full border-2 border-white shadow-sm overflow-hidden"
+                      style={{ marginLeft: i > 0 ? "-8px" : 0 }}>
+                        <img
+                          src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
+                          alt={dog.name}
+                          className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                    {hikeDogs.length > 0 &&
+                      <span className="text-sm text-stone-500 ml-1">
+                        {hikeDogs.map((d) => d.name).join(", ")}
+                      </span>
+                    }
+                  </>
                 )}
-                {hikeDogs.length > 0 &&
-                <span className="text-sm text-stone-500 ml-1">
-                    {hikeDogs.map((d) => d.name).join(", ")}
-                  </span>
-                }
               </div>
               
               {hike.rating &&

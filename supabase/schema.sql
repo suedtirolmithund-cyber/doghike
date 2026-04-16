@@ -85,6 +85,7 @@ create table if not exists public.journal_entries (
   dog_difficulty    smallint check (dog_difficulty between 1 and 5),
   latitude          numeric(10,7),
   longitude         numeric(10,7),
+  dog_id            uuid references public.dogs(id) on delete set null,
   hazard_notes      text,
   seasons           text[] default '{}',
   visibility        text default 'private' check (visibility in ('private', 'friends', 'public')),
@@ -97,6 +98,7 @@ create table if not exists public.journal_entries (
 -- alter table public.journal_entries
 --   add column if not exists latitude numeric(10,7),
 --   add column if not exists longitude numeric(10,7),
+--   add column if not exists dog_id uuid references public.dogs(id) on delete set null,
 --   add column if not exists seasons text[] default '{}',
 --   add column if not exists visibility text default 'private' check (visibility in ('private','friends','public')),
 --   add column if not exists status text default 'draft' check (status in ('draft','pending','approved','rejected'));

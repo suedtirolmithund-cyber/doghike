@@ -50,6 +50,34 @@ function createPawIcon(color) {
   });
 }
 
+// Photo marker for journal hikes: shows dog photo, user avatar, or falls back to paw
+function createPhotoIcon(photoUrl) {
+  const html = `
+    <div style="
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      background: #e7e5e4;
+    ">
+      <img
+        src="${photoUrl}"
+        style="width:100%;height:100%;object-fit:cover;"
+        onerror="this.parentElement.innerHTML='🐕'"
+      />
+    </div>
+  `;
+  return L.divIcon({
+    html,
+    className: "photo-marker",
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -44],
+  });
+}
+
 function MarkersLayer({ hikes }) {
   const map = useMap();
   const clusterRef = useRef(null);
@@ -77,8 +105,12 @@ function MarkersLayer({ hikes }) {
       if (!hike.latitude || !hike.longitude) return;
 
       const color = getColor(hike);
+      // Journal hikes: show dog photo → user avatar → paw fallback
+      const photoUrl = hike._source === "journal"
+        ? (hike.dog_photo_url || hike.author_avatar)
+        : null;
       const marker = L.marker([hike.latitude, hike.longitude], {
-        icon: createPawIcon(color),
+        icon: photoUrl ? createPhotoIcon(photoUrl) : createPawIcon(color),
       });
 
       const imgHtml = hike.photos?.[0]
@@ -189,7 +221,7 @@ export default function HikeMap({
       )}
 
       <style>{`
-        .paw-marker {
+        .paw-marker, .photo-marker {
           background: transparent !important;
           border: none !important;
         }

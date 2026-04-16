@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/AuthContext";
 import { createJournalEntry, updateJournalEntry, getJournalEntry, uploadJournalFile } from "@/lib/journalApi";
+import { getDogs } from "@/lib/profilesApi";
 import { Link } from "react-router-dom";
 
 // ── Sterne-Picker (Gesamtbewertung) ──────────────────────────
@@ -387,6 +388,7 @@ const EMPTY_FORM = {
   hazard_notes: "",
   visibility: "private",
   seasons: [],
+  dog_id: null,
 };
 
 export default function AddJournalEntry() {
@@ -399,6 +401,12 @@ export default function AddJournalEntry() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [photoUploading, setPhotoUploading] = useState(false);
   const [gpxUploading, setGpxUploading] = useState(false);
+
+  const { data: userDogs = [] } = useQuery({
+    queryKey: ["dogs", user?.id],
+    queryFn: () => getDogs(user.id),
+    enabled: !!user?.id,
+  });
 
   // Load existing entry for editing
   const { data: existing, isLoading: loadingEntry } = useQuery({
@@ -429,6 +437,7 @@ export default function AddJournalEntry() {
         hazard_notes: existing.hazard_notes ?? "",
         visibility: existing.visibility ?? "private",
         seasons: existing.seasons ?? [],
+        dog_id: existing.dog_id ?? null,
       });
     }
   }, [existing]);
@@ -640,6 +649,47 @@ export default function AddJournalEntry() {
             <WaterPicker label="💧 Wasserverfügbarkeit" value={form.water_available} onChange={(v) => set("water_available", v)} />
 
             <BonePicker label="Schwierigkeit (Hund)" value={form.dog_difficulty} onChange={(v) => set("dog_difficulty", v)} />
+
+            {/* Dog picker */}
+            {userDogs.length > 0 && (
+              <div>
+                <Label className="text-sm text-stone-600 mb-2 block">🐕 Welcher Hund war dabei?</Label>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => set("dog_id", null)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 text-sm transition-all focus:outline-none ${
+                      form.dog_id === null
+                        ? "border-stone-400 bg-stone-100 text-stone-700 font-medium"
+                        : "border-stone-200 text-stone-400 hover:border-stone-300"
+                    }`}
+                  >
+                    Kein / unbekannt
+                  </button>
+                  {userDogs.map((dog) => (
+                    <button
+                      key={dog.id}
+                      type="button"
+                      onClick={() => set("dog_id", dog.id)}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 text-sm transition-all focus:outline-none ${
+                        form.dog_id === dog.id
+                          ? "border-emerald-400 bg-emerald-50 text-emerald-800 font-medium"
+                          : "border-stone-200 text-stone-600 hover:border-emerald-300"
+                      }`}
+                    >
+                      <div className="w-6 h-6 rounded-full overflow-hidden bg-stone-100 shrink-0">
+                        <img
+                          src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
+                          alt={dog.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      {dog.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div>
               <Label htmlFor="hazard_notes" className="flex items-center gap-1">
