@@ -1,12 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { createPageUrl } from "@/utils";
 import {
   ArrowLeft, Upload, X, Loader2, Star, FileText,
-  Mountain, Clock, Ruler, TrendingUp, MapPin, AlertTriangle, Dog
+  Mountain, Clock, Ruler, TrendingUp, MapPin, AlertTriangle, Dog, Search
 } from "lucide-react";
+import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -114,6 +117,119 @@ function BonePicker({ label, value, onChange }) {
           </>
         )}
       </div>
+    </div>
+  );
+}
+
+// ── Karten-Marker Icon ───────────────────────────────────────
+const markerIcon = L.divIcon({
+  html: `<div style="background:#16a34a;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,0.25);border:3px solid white;">📍</div>`,
+  className: "",
+  iconSize: [28, 28],
+  iconAnchor: [14, 28],
+  popupAnchor: [0, -30],
+});
+
+// Fliegt zur neuen Position wenn sich center ändert
+function MapFlyTo({ center, zoom }) {
+  const map = useMap();
+  useEffect(() => {
+    if (center) map.flyTo(center, zoom, { duration: 1 });
+  }, [center, zoom]);
+  return null;
+}
+
+// Setzt Marker beim Klick auf die Karte
+function MapClickHandler({ onMapClick }) {
+  useMapEvents({ click: (e) => onMapClick(e.latlng) });
+  return null;
+}
+
+// ── Location Picker Komponente ────────────────────────────────
+function LocationPicker({ lat, lng, onChange }) {
+  const [markerPos, setMarkerPos] = useState(
+    lat && lng ? [Number(lat), Number(lng)] : null
+  );
+  const [flyTarget, setFlyTarget] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [searching, setSearching] = useState(false);
+  const [searchError, setSearchError] = useState(null);
+
+  const handleMapClick = ({ lat: clickLat, lng: clickLng }) => {
+    setMarkerPos([clickLat, clickLng]);
+    onChange(clickLat, clickLng);
+  };
+
+  const handleSearch = async (e) => {
+    e?.preventDefault();
+    if (!searchText.trim()) return;
+    setSearching(true);
+    setSearchError(null);
+    try {
+      const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchText)}&format=json&limit=1&accept-language=de`;
+      const resp = await fetch(url, { headers: { "Accept-Language": "de" } });
+      const results = await resp.json();
+      if (results.length > 0) {
+        const { lat: rLat, lon: rLon } = results[0];
+        const pos = [parseFloat(rLat), parseFloat(rLon)];
+        setMarkerPos(pos);
+        setFlyTarget({ center: pos, zoom: 13 });
+        onChange(pos[0], pos[1]);
+      } else {
+        setSearchError("Ort nicht gefunden. Bitte genauere Suche eingeben.");
+      }
+    } catch {
+      setSearchError("Suche fehlgeschlagen. Bitte Karte manuell tippen.");
+    } finally {
+      setSearching(false);
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      {/* Search bar */}
+      <form onSubmit={handleSearch} className="flex gap-2">
+        <Input
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          placeholder="Ort suchen, z.B. Pragser Wildsee..."
+          className="flex-1 h-9 text-sm"
+        />
+        <Button type="submit" size="sm" variant="outline" disabled={searching} className="h-9 px-3">
+          {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+        </Button>
+      </form>
+
+      {searchError && (
+        <p className="text-xs text-red-500">{searchError}</p>
+      )}
+
+      {/* Map */}
+      <div className="rounded-xl overflow-hidden border border-stone-200 shadow-sm" style={{ height: 260 }}>
+        <MapContainer
+          center={[46.5, 11.3]}
+          zoom={9}
+          style={{ height: "100%", width: "100%" }}
+          scrollWheelZoom={false}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
+          />
+          <MapClickHandler onMapClick={handleMapClick} />
+          {flyTarget && <MapFlyTo center={flyTarget.center} zoom={flyTarget.zoom} />}
+          {markerPos && <Marker position={markerPos} icon={markerIcon} />}
+        </MapContainer>
+      </div>
+
+      <p className="text-xs text-stone-400">
+        Tippe auf die Karte um den Startpunkt der Tour zu markieren
+        {markerPos && (
+          <span className="ml-2 text-emerald-600 font-medium">
+            ✓ Punkt gesetzt
+          </span>
+        )}
+      </p>
     </div>
   );
 }
@@ -397,27 +513,19 @@ export default function AddJournalEntry() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="latitude" className="flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5" /> Breitengrad (Lat)
-                </Label>
-                <Input id="latitude" type="number" step="0.0000001" value={form.latitude}
-                  onChange={(e) => set("latitude", e.target.value)}
-                  placeholder="z.B. 46.7749" className="mt-1" />
-              </div>
-              <div>
-                <Label htmlFor="longitude" className="flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5" /> Längengrad (Lng)
-                </Label>
-                <Input id="longitude" type="number" step="0.0000001" value={form.longitude}
-                  onChange={(e) => set("longitude", e.target.value)}
-                  placeholder="z.B. 11.9154" className="mt-1" />
-              </div>
+            <div>
+              <Label className="flex items-center gap-1 mb-2">
+                <MapPin className="w-3.5 h-3.5" /> Startpunkt auf Karte
+              </Label>
+              <LocationPicker
+                lat={form.latitude}
+                lng={form.longitude}
+                onChange={(lat, lng) => {
+                  set("latitude", lat);
+                  set("longitude", lng);
+                }}
+              />
             </div>
-            <p className="text-xs text-stone-400 -mt-2">
-              Optional: Koordinaten für die Kartenansicht. Findbar auf maps.google.com (Rechtsklick → Koordinaten kopieren).
-            </p>
 
             <div>
               <Label htmlFor="description">Beschreibung / Notizen</Label>
