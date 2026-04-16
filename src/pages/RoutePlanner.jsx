@@ -1,24 +1,425 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { createRoute } from "@/lib/routesApi";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { MapContainer, TileLayer, Polyline, Marker, useMapEvents, useMap, Popup } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Map, Navigation, Loader2, Upload } from "lucide-react";
-import EditableRouteDrawer from "@/components/routes/EditableRouteDrawer";
+import { Switch } from "@/components/ui/switch";
+import {
+  ArrowLeft, Map, Navigation, Loader2, Upload, Search,
+  Trash2, RotateCcw, Layers, Mountain, Clock, Ruler, TrendingUp, X, Plus
+} from "lucide-react";
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import { motion, AnimatePresence } from "framer-motion";
 import GPSTracker from "@/components/routes/GPSTracker";
-import RoutePreviewMap from "@/components/routes/RoutePreviewMap";
 import GPXUploader from "@/components/routes/GPXUploader";
-import { motion } from "framer-motion";
+import { toast } from "sonner";
 
+// ── Leaflet fix ───────────────────────────────────────────────
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+  iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+});
+
+const waypointIcon = (label, isStart, isEnd) => L.divIcon({
+  html: `<div style="
+    background: ${isStart ? '#16a34a' : isEnd ? '#dc2626' : '#1e293b'};
+    color: white; width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: bold; border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+    ${isStart ? 'S' : isEnd ? 'Z' : label}
+  </div>`,
+  className: "", iconSize: [28, 28], iconAnchor: [14, 14],
+});
+
+// ── Tile layers ───────────────────────────────────────────────
+const TILES = {
+  standard: {
+    url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+    label: "Standard",
+  },
+  topo: {
+    url: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+    attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, SRTM | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)',
+    label: "Topo",
+  },
+};
+
+// ── Haversine distance ────────────────────────────────────────
+function haversine(a, b) {
+  const R = 6371;
+  const dLat = ((b[0] - a[0]) * Math.PI) / 180;
+  const dLon = ((b[1] - a[1]) * Math.PI) / 180;
+  const s = Math.sin(dLat / 2) ** 2 +
+    Math.cos((a[0] * Math.PI) / 180) * Math.cos((b[0] * Math.PI) / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(s), Math.sqrt(1 - s));
+}
+
+// ── OSRM route calculation ────────────────────────────────────
+async function calcOsrmRoute(waypoints) {
+  // OSRM expects lng,lat
+  const coords = waypoints.map((w) => `${w.lng},${w.lat}`).join(";");
+  const url = `https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("OSRM Fehler");
+  const data = await res.json();
+  if (!data.routes?.length) throw new Error("Keine Route gefunden");
+  const route = data.routes[0];
+  // Geometry: [[lng,lat]] → convert to [[lat,lng]] for Leaflet
+  const positions = route.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+  return {
+    positions,
+    distance_km: +(route.distance / 1000).toFixed(2),
+    duration_minutes: Math.round((route.distance / 1000 / 4) * 60), // 4 km/h walking
+  };
+}
+
+// ── Elevation from OpenTopoData ───────────────────────────────
+async function fetchElevation(positions) {
+  // Sample up to 40 evenly-spaced points
+  const step = Math.max(1, Math.floor(positions.length / 40));
+  const sampled = positions.filter((_, i) => i % step === 0);
+  if (sampled.length < 2) return [];
+
+  const locStr = sampled.map(([lat, lng]) => `${lat.toFixed(5)},${lng.toFixed(5)}`).join("|");
+  try {
+    const res = await fetch(`https://api.opentopodata.org/v1/srtm30m?locations=${locStr}`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    if (data.status !== "OK") return [];
+
+    let cumDist = 0;
+    return data.results.map((r, i) => {
+      if (i > 0) {
+        cumDist += haversine(sampled[i - 1], sampled[i]) * 1000; // metres
+      }
+      return { dist: +(cumDist / 1000).toFixed(3), ele: r.elevation ?? 0 };
+    });
+  } catch {
+    return [];
+  }
+}
+
+function calcElevationGain(profile) {
+  let gain = 0, loss = 0;
+  for (let i = 1; i < profile.length; i++) {
+    const diff = profile[i].ele - profile[i - 1].ele;
+    if (diff > 0) gain += diff;
+    else loss += Math.abs(diff);
+  }
+  return { gain: Math.round(gain), loss: Math.round(loss) };
+}
+
+// ── Map click handler ─────────────────────────────────────────
+function MapClickHandler({ onMapClick, cursor }) {
+  useMapEvents({ click: (e) => onMapClick(e.latlng) });
+  return null;
+}
+
+function MapFlyTo({ center, zoom }) {
+  const map = useMap();
+  useEffect(() => { if (center) map.flyTo(center, zoom, { duration: 0.8 }); }, [center, zoom]);
+  return null;
+}
+
+// ── Elevation Chart ───────────────────────────────────────────
+function ElevationChart({ profile }) {
+  if (!profile.length) return null;
+  const { gain, loss } = calcElevationGain(profile);
+  const minEle = Math.min(...profile.map((p) => p.ele));
+  const maxEle = Math.max(...profile.map((p) => p.ele));
+
+  return (
+    <div className="mt-4 bg-slate-50 rounded-xl p-3 border border-slate-200">
+      <div className="flex items-center justify-between mb-2">
+        <h4 className="text-xs font-semibold text-stone-600 uppercase tracking-wide flex items-center gap-1">
+          <Mountain className="w-3.5 h-3.5" /> Höhenprofil
+        </h4>
+        <div className="flex gap-3 text-xs text-stone-500">
+          <span className="text-emerald-600 font-medium">↑ {gain} m</span>
+          <span className="text-red-500 font-medium">↓ {loss} m</span>
+          <span>{minEle}–{maxEle} m</span>
+        </div>
+      </div>
+      <ResponsiveContainer width="100%" height={120}>
+        <AreaChart data={profile} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+          <defs>
+            <linearGradient id="eleGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#1e293b" stopOpacity={0.3} />
+              <stop offset="95%" stopColor="#1e293b" stopOpacity={0.05} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+          <XAxis dataKey="dist" tickFormatter={(v) => `${v} km`} tick={{ fontSize: 9 }} />
+          <YAxis domain={[minEle - 20, maxEle + 20]} tick={{ fontSize: 9 }} unit=" m" />
+          <Tooltip formatter={(v) => [`${Math.round(v)} m`, "Höhe"]} labelFormatter={(v) => `${v} km`} />
+          <Area type="monotone" dataKey="ele" stroke="#1e293b" strokeWidth={2}
+            fill="url(#eleGrad)" dot={false} />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+// ── Main smart planner tab ────────────────────────────────────
+function SmartRoutePlanner({ onRouteReady }) {
+  const [waypoints, setWaypoints] = useState([]); // [{lat, lng, label}]
+  const [route, setRoute] = useState(null);        // {positions, distance_km, duration_minutes}
+  const [elevation, setElevation] = useState([]);
+  const [calculating, setCalculating] = useState(false);
+  const [elevLoading, setElevLoading] = useState(false);
+  const [mapType, setMapType] = useState("standard");
+  const [flyTarget, setFlyTarget] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [searching, setSearching] = useState(false);
+  const [searchError, setSearchError] = useState(null);
+  const routeRef = useRef(null);
+
+  const tile = TILES[mapType];
+
+  // Calculate route whenever waypoints change (2+)
+  useEffect(() => {
+    if (waypoints.length < 2) {
+      setRoute(null);
+      setElevation([]);
+      onRouteReady(null);
+      return;
+    }
+    let cancelled = false;
+    setCalculating(true);
+    calcOsrmRoute(waypoints)
+      .then(async (r) => {
+        if (cancelled) return;
+        setRoute(r);
+        routeRef.current = r;
+        onRouteReady(r);
+
+        // Elevation (non-blocking)
+        setElevLoading(true);
+        fetchElevation(r.positions).then((prof) => {
+          if (!cancelled) {
+            setElevation(prof);
+            if (prof.length > 1) {
+              const { gain } = calcElevationGain(prof);
+              const updated = { ...r, elevation_gain_m: gain };
+              routeRef.current = updated;
+              onRouteReady(updated);
+            }
+          }
+          setElevLoading(false);
+        });
+      })
+      .catch((err) => {
+        if (!cancelled) toast.error("Route konnte nicht berechnet werden: " + err.message);
+      })
+      .finally(() => { if (!cancelled) setCalculating(false); });
+
+    return () => { cancelled = true; };
+  }, [waypoints]);
+
+  const handleMapClick = useCallback(({ lat, lng }) => {
+    setWaypoints((prev) => [
+      ...prev,
+      { lat, lng, label: String(prev.length + 1) },
+    ]);
+  }, []);
+
+  const removeWaypoint = (index) => {
+    setWaypoints((prev) => prev.filter((_, i) => i !== index).map((w, i) => ({ ...w, label: String(i + 1) })));
+  };
+
+  const handleSearch = async (e) => {
+    e?.preventDefault();
+    if (!searchText.trim()) return;
+    setSearching(true);
+    setSearchError(null);
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchText)}&format=json&limit=1&accept-language=de`
+      );
+      const results = await res.json();
+      if (results.length > 0) {
+        const { lat, lon, display_name } = results[0];
+        const pos = { lat: parseFloat(lat), lng: parseFloat(lon), label: String(waypoints.length + 1) };
+        setWaypoints((prev) => [...prev, pos]);
+        setFlyTarget({ center: [pos.lat, pos.lng], zoom: 13 });
+        setSearchText("");
+      } else {
+        setSearchError("Ort nicht gefunden");
+      }
+    } catch {
+      setSearchError("Suche fehlgeschlagen");
+    } finally {
+      setSearching(false);
+    }
+  };
+
+  const reset = () => {
+    setWaypoints([]);
+    setRoute(null);
+    setElevation([]);
+    onRouteReady(null);
+  };
+
+  return (
+    <div className="space-y-3">
+      {/* Toolbar */}
+      <div className="flex gap-2 flex-wrap items-center">
+        {/* Location search */}
+        <form onSubmit={handleSearch} className="flex gap-1.5 flex-1 min-w-0">
+          <Input value={searchText} onChange={(e) => setSearchText(e.target.value)}
+            placeholder="Ort als Wegpunkt suchen..." className="flex-1 h-9 text-sm" />
+          <Button type="submit" size="sm" variant="outline" disabled={searching} className="h-9 px-3 shrink-0">
+            {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+          </Button>
+        </form>
+
+        {/* Map type toggle */}
+        <button
+          onClick={() => setMapType((t) => t === "standard" ? "topo" : "standard")}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-stone-200 text-xs font-medium text-stone-600 hover:bg-stone-50 bg-white shrink-0 h-9"
+        >
+          <Layers className="w-3.5 h-3.5" />
+          {mapType === "standard" ? "Topo" : "Standard"}
+        </button>
+
+        {waypoints.length > 0 && (
+          <Button size="sm" variant="outline" onClick={reset} className="h-9 text-red-500 hover:text-red-600 shrink-0">
+            <RotateCcw className="w-3.5 h-3.5 mr-1" /> Reset
+          </Button>
+        )}
+      </div>
+
+      {searchError && <p className="text-xs text-red-500">{searchError}</p>}
+
+      {/* Map */}
+      <div className="relative rounded-xl overflow-hidden border border-stone-200 shadow-sm" style={{ height: 420 }}>
+        <MapContainer center={[46.5, 11.3]} zoom={10} style={{ height: "100%", width: "100%" }} scrollWheelZoom>
+          <TileLayer url={tile.url} attribution={tile.attribution} />
+          <MapClickHandler onMapClick={handleMapClick} />
+          {flyTarget && <MapFlyTo center={flyTarget.center} zoom={flyTarget.zoom} />}
+
+          {/* Calculated route */}
+          {route && (
+            <Polyline positions={route.positions} color="#1e3a8a" weight={5} opacity={0.85} />
+          )}
+
+          {/* Waypoint markers */}
+          {waypoints.map((wp, i) => (
+            <Marker
+              key={i}
+              position={[wp.lat, wp.lng]}
+              icon={waypointIcon(wp.label, i === 0, i === waypoints.length - 1 && waypoints.length > 1)}
+            >
+              <Popup>
+                <div className="text-xs">
+                  <p className="font-semibold">{i === 0 ? "Start" : i === waypoints.length - 1 ? "Ziel" : `Wegpunkt ${wp.label}`}</p>
+                  <p className="text-stone-400">{wp.lat.toFixed(5)}, {wp.lng.toFixed(5)}</p>
+                  <button
+                    onClick={() => removeWaypoint(i)}
+                    className="mt-1 text-red-500 hover:underline text-xs flex items-center gap-1"
+                  >
+                    <X className="w-3 h-3" /> Entfernen
+                  </button>
+                </div>
+              </Popup>
+            </Marker>
+          ))}
+        </MapContainer>
+
+        {/* Map overlay hint */}
+        {waypoints.length === 0 && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 text-xs text-stone-600 shadow pointer-events-none">
+            Klicke auf die Karte um Wegpunkte zu setzen
+          </div>
+        )}
+
+        {calculating && (
+          <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs text-stone-600 flex items-center gap-1.5 shadow">
+            <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" /> Route wird berechnet...
+          </div>
+        )}
+
+        {/* Map type badge */}
+        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 text-[10px] font-medium text-stone-500 shadow">
+          {tile.label}
+        </div>
+      </div>
+
+      {/* Waypoints list */}
+      {waypoints.length > 0 && (
+        <div className="space-y-1">
+          {waypoints.map((wp, i) => (
+            <div key={i} className="flex items-center gap-2 text-xs bg-stone-50 rounded-lg px-3 py-1.5">
+              <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-white text-[10px] shrink-0 ${
+                i === 0 ? "bg-emerald-600" : i === waypoints.length - 1 ? "bg-red-600" : "bg-slate-700"
+              }`}>
+                {i === 0 ? "S" : i === waypoints.length - 1 && waypoints.length > 1 ? "Z" : wp.label}
+              </span>
+              <span className="text-stone-500 flex-1">{wp.lat.toFixed(5)}, {wp.lng.toFixed(5)}</span>
+              <button onClick={() => removeWaypoint(i)} className="text-stone-300 hover:text-red-500 ml-auto">
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Stats */}
+      {route && (
+        <div className="grid grid-cols-3 gap-3">
+          <div className="bg-blue-50 rounded-xl p-3 text-center border border-blue-100">
+            <Ruler className="w-4 h-4 text-blue-600 mx-auto mb-1" />
+            <p className="text-lg font-bold text-blue-800">{route.distance_km}</p>
+            <p className="text-xs text-blue-600">km</p>
+          </div>
+          <div className="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
+            <Clock className="w-4 h-4 text-slate-600 mx-auto mb-1" />
+            <p className="text-lg font-bold text-slate-800">
+              {Math.floor(route.duration_minutes / 60) > 0
+                ? `${Math.floor(route.duration_minutes / 60)}h ${route.duration_minutes % 60}m`
+                : `${route.duration_minutes}m`}
+            </p>
+            <p className="text-xs text-slate-500">ca. Zeit (4 km/h)</p>
+          </div>
+          <div className="bg-emerald-50 rounded-xl p-3 text-center border border-emerald-100">
+            <TrendingUp className="w-4 h-4 text-emerald-600 mx-auto mb-1" />
+            <p className="text-lg font-bold text-emerald-800">
+              {elevLoading ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> :
+               elevation.length ? `+${calcElevationGain(elevation).gain} m` : "–"}
+            </p>
+            <p className="text-xs text-emerald-600">Aufstieg</p>
+          </div>
+        </div>
+      )}
+
+      {/* Elevation profile */}
+      <AnimatePresence>
+        {elevation.length > 0 && (
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
+            <ElevationChart profile={elevation} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+// ── Main page ─────────────────────────────────────────────────
 export default function RoutePlanner() {
-  const [activeTab, setActiveTab] = useState("draw");
+  const [activeTab, setActiveTab] = useState("plan");
+  const [routeGeometry, setRouteGeometry] = useState(null);
   const [routeData, setRouteData] = useState({
     name: "",
     description: "",
@@ -26,8 +427,7 @@ export default function RoutePlanner() {
     notes: "",
     is_public: false,
   });
-  const [routeGeometry, setRouteGeometry] = useState(null);
-  
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user, isAuthenticated } = useAuth();
@@ -36,31 +436,25 @@ export default function RoutePlanner() {
     mutationFn: (data) => createRoute(user.id, data),
     onSuccess: (savedRoute) => {
       queryClient.invalidateQueries({ queryKey: ["userRoutes", user?.id] });
+      toast.success("Route gespeichert!");
       navigate(createPageUrl("RouteDetail") + `?id=${savedRoute.id}`);
     },
-    onError: (e) => alert("Fehler beim Speichern: " + e.message),
+    onError: (e) => toast.error("Fehler beim Speichern: " + e.message),
   });
-
-  const handleRouteSave = (geometry) => {
-    setRouteGeometry(geometry);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (!routeGeometry || !routeData.name) {
-      alert("Bitte gib einen Namen ein und erstelle eine Route");
+      toast.error("Bitte Namen eingeben und eine Route zeichnen");
       return;
     }
-
     await createRouteMutation.mutateAsync({
       ...routeData,
-      route_type: activeTab === "draw" ? "planned" : "recorded",
-      waypoints: routeGeometry.coordinates,
+      route_type: activeTab === "track" ? "recorded" : activeTab === "gpx" ? "gpx" : "planned",
+      waypoints: routeGeometry.positions,
       distance_km: routeGeometry.distance_km,
       elevation_gain_m: routeGeometry.elevation_gain_m || null,
       duration_minutes: routeGeometry.duration_minutes || null,
-      avg_speed_kmh: routeGeometry.avg_speed_kmh || null,
     });
   };
 
@@ -79,7 +473,7 @@ export default function RoutePlanner() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
-      <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
+      <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
         <Link to={createPageUrl("Profile")}>
           <Button variant="ghost" className="mb-3 md:mb-4" size="sm">
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -88,208 +482,96 @@ export default function RoutePlanner() {
           </Button>
         </Link>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl p-4 md:p-8 border border-stone-200/50 shadow-sm"
-        >
-          <div className="flex items-start gap-3 mb-4 md:mb-6">
-            <Map className="w-6 h-6 md:w-8 md:h-8 text-slate-700 flex-shrink-0 mt-1" />
-            <div>
-              <h1 className="text-xl md:text-3xl font-bold text-stone-800">Routenplaner</h1>
-              <p className="text-xs md:text-sm text-stone-500 mt-1">Plane oder zeichne deine eigene Wanderroute auf</p>
-            </div>
+        <div className="flex items-center gap-3 mb-5">
+          <div className="bg-slate-800 rounded-xl p-2 shrink-0">
+            <Map className="w-5 h-5 text-white" />
           </div>
+          <div>
+            <h1 className="text-xl md:text-2xl font-bold text-stone-800">Routenplaner</h1>
+            <p className="text-xs text-stone-500">Setze Wegpunkte, die Route wird automatisch berechnet</p>
+          </div>
+        </div>
 
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 md:space-y-6">
-            <TabsList className="grid w-full grid-cols-3 bg-stone-100">
-              <TabsTrigger value="draw" className="flex items-center gap-1 md:gap-2 text-xs md:text-sm">
-                <Map className="w-3 h-3 md:w-4 md:h-4" />
-                <span className="hidden sm:inline">Route planen</span>
-                <span className="sm:hidden">Planen</span>
-              </TabsTrigger>
-              <TabsTrigger value="track" className="flex items-center gap-1 md:gap-2 text-xs md:text-sm">
-                <Navigation className="w-3 h-3 md:w-4 md:h-4" />
-                <span className="hidden sm:inline">GPS aufzeichnen</span>
-                <span className="sm:hidden">GPS</span>
-              </TabsTrigger>
-              <TabsTrigger value="gpx" className="flex items-center gap-1 md:gap-2 text-xs md:text-sm">
-                <Upload className="w-3 h-3 md:w-4 md:h-4" />
-                <span className="hidden sm:inline">GPX hochladen</span>
-                <span className="sm:hidden">GPX</span>
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="draw" className="space-y-6">
-              <EditableRouteDrawer onSave={handleRouteSave} initialRoute={[]} />
-            </TabsContent>
-
-            <TabsContent value="track" className="space-y-6">
-              <GPSTracker onSave={handleRouteSave} />
-            </TabsContent>
-
-            <TabsContent value="gpx" className="space-y-6">
-              <GPXUploader onSave={handleRouteSave} />
-            </TabsContent>
-          </Tabs>
-
-          {/* Route Preview Map */}
-          {routeGeometry && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-6 md:mt-8"
+        {/* Mode tabs */}
+        <div className="flex gap-2 mb-5 bg-stone-100 p-1 rounded-xl">
+          {[
+            { id: "plan", icon: Map, label: "Planen" },
+            { id: "track", icon: Navigation, label: "GPS" },
+            { id: "gpx", icon: Upload, label: "GPX" },
+          ].map(({ id, icon: Icon, label }) => (
+            <button key={id} onClick={() => { setActiveTab(id); setRouteGeometry(null); }}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium transition-all ${
+                activeTab === id ? "bg-white text-stone-800 shadow-sm" : "text-stone-500 hover:text-stone-700"
+              }`}
             >
-              <RoutePreviewMap coordinates={routeGeometry.coordinates} />
-            </motion.div>
-          )}
+              <Icon className="w-4 h-4" />
+              {label}
+            </button>
+          ))}
+        </div>
 
-          {/* Route Details Form */}
-           {routeGeometry && (
+        {/* Tab content */}
+        {activeTab === "plan" && (
+          <SmartRoutePlanner onRouteReady={setRouteGeometry} />
+        )}
+        {activeTab === "track" && (
+          <GPSTracker onSave={(g) => setRouteGeometry(g)} />
+        )}
+        {activeTab === "gpx" && (
+          <GPXUploader onSave={(g) => setRouteGeometry(g)} />
+        )}
+
+        {/* Save form */}
+        <AnimatePresence>
+          {routeGeometry && (
             <motion.form
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
               onSubmit={handleSubmit}
-              className="mt-6 md:mt-8 space-y-3 md:space-y-4 pt-4 md:pt-6 border-t border-stone-200"
+              className="mt-6 space-y-4 bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5"
             >
-              <h3 className="text-base md:text-lg font-semibold text-stone-800">Routendetails</h3>
-              
-              <div>
-                <Label htmlFor="name">Name der Route *</Label>
-                <Input
-                  id="name"
-                  placeholder="z.B. Meine Lieblingstour zum Pragser Wildsee"
-                  value={routeData.name}
-                  onChange={(e) => setRouteData({ ...routeData, name: e.target.value })}
-                  required
-                />
-              </div>
+              <h3 className="text-base font-semibold text-stone-800">Route speichern</h3>
 
+              <div>
+                <Label htmlFor="name">Name *</Label>
+                <Input id="name" placeholder="z.B. Pragser Wildsee Rundweg"
+                  value={routeData.name} onChange={(e) => setRouteData({ ...routeData, name: e.target.value })}
+                  required className="mt-1" />
+              </div>
               <div>
                 <Label htmlFor="start_location">Startpunkt</Label>
-                <Input
-                  id="start_location"
-                  placeholder="z.B. Parkplatz Pragser Wildsee"
-                  value={routeData.start_location}
-                  onChange={(e) => setRouteData({ ...routeData, start_location: e.target.value })}
-                />
+                <Input id="start_location" placeholder="z.B. Parkplatz Pragser Wildsee"
+                  value={routeData.start_location} onChange={(e) => setRouteData({ ...routeData, start_location: e.target.value })}
+                  className="mt-1" />
               </div>
-
               <div>
                 <Label htmlFor="description">Beschreibung</Label>
-                <Textarea
-                  id="description"
-                  placeholder="Beschreibe deine Route..."
-                  value={routeData.description}
-                  onChange={(e) => setRouteData({ ...routeData, description: e.target.value })}
-                  rows={3}
-                />
+                <Textarea id="description" placeholder="Beschreibe deine Route..."
+                  value={routeData.description} onChange={(e) => setRouteData({ ...routeData, description: e.target.value })}
+                  rows={2} className="mt-1" />
               </div>
 
-              <div>
-                <Label htmlFor="notes">Notizen</Label>
-                <Textarea
-                  id="notes"
-                  placeholder="Besondere Hinweise, Schwierigkeiten, Sehenswürdigkeiten..."
-                  value={routeData.notes}
-                  onChange={(e) => setRouteData({ ...routeData, notes: e.target.value })}
-                  rows={3}
-                />
+              <div className="flex items-center gap-3 p-3 bg-stone-50 rounded-xl">
+                <Switch id="is_public" checked={routeData.is_public}
+                  onCheckedChange={(v) => setRouteData({ ...routeData, is_public: v })} />
+                <Label htmlFor="is_public" className="cursor-pointer text-sm">
+                  Route öffentlich teilen
+                </Label>
               </div>
 
-              {activeTab !== "draw" ? (
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="is_public"
-                    checked={routeData.is_public}
-                    onCheckedChange={(checked) => setRouteData({ ...routeData, is_public: checked })}
-                  />
-                  <Label htmlFor="is_public">
-                    Route öffentlich teilen (andere Nutzer können sie sehen)
-                  </Label>
-                </div>
-              ) : (
-                <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-sm text-amber-800">
-                  🔒 Geplante Routen sind immer <strong>privat</strong> – nur du kannst sie sehen. Du kannst sie später mit Freunden teilen.
-                </div>
-              )}
-
-              <div className="bg-slate-50 rounded-lg p-3 md:p-4">
-                <h4 className="text-sm md:text-base font-medium text-stone-800 mb-2">📊 Routenstatistik:</h4>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 text-xs md:text-sm">
-                  <div>
-                    <p className="text-stone-500">Distanz</p>
-                    <p className="font-bold text-slate-800">{routeGeometry.distance_km} km</p>
-                  </div>
-                  {routeGeometry.duration_minutes && (
-                    <div>
-                      <p className="text-stone-500">Gesch. Dauer</p>
-                      <p className="font-bold text-slate-800">
-                        {Math.floor(routeGeometry.duration_minutes / 60) > 0
-                          ? `${Math.floor(routeGeometry.duration_minutes / 60)}h ${routeGeometry.duration_minutes % 60}min`
-                          : `${routeGeometry.duration_minutes}min`}
-                      </p>
-                    </div>
-                  )}
-                  {routeGeometry.elevation_gain_m && activeTab !== "draw" ? (
-                    <div>
-                      <p className="text-stone-500">Aufstieg</p>
-                      <p className="font-bold text-slate-800">+{routeGeometry.elevation_gain_m} m</p>
-                    </div>
-                  ) : activeTab === "draw" ? (
-                    <div>
-                      <p className="text-stone-500">Wegpunkte</p>
-                      <p className="font-bold text-slate-800">{routeGeometry.coordinates.length}</p>
-                    </div>
-                  ) : (
-                    <div>
-                      <p className="text-stone-500">Wegpunkte</p>
-                      <p className="font-bold text-slate-800">{routeGeometry.coordinates.length}</p>
-                    </div>
-                  )}
-                  {routeGeometry.avg_speed_kmh && activeTab !== "draw" && (
-                    <div>
-                      <p className="text-stone-500">⌀ Geschw.</p>
-                      <p className="font-bold text-slate-800">{routeGeometry.avg_speed_kmh} km/h</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => {
-                    setRouteGeometry(null);
-                    setRouteData({
-                      name: "",
-                      description: "",
-                      start_location: "",
-                      notes: "",
-                      is_public: false,
-                    });
-                  }}
-                  className="w-full sm:w-auto"
-                  size="sm"
-                >
+              <div className="flex gap-2 justify-end">
+                <Button type="button" variant="outline" onClick={() => setRouteGeometry(null)}>
                   Abbrechen
                 </Button>
-                <Button
-                  type="submit"
-                  disabled={createRouteMutation.isPending}
-                  className="bg-slate-800 hover:bg-slate-900 flex-1"
-                  size="sm"
-                >
-                  {createRouteMutation.isPending ? (
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  ) : null}
+                <Button type="submit" disabled={createRouteMutation.isPending} className="bg-slate-800 hover:bg-slate-900">
+                  {createRouteMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                   Route speichern
                 </Button>
               </div>
             </motion.form>
           )}
-        </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );
