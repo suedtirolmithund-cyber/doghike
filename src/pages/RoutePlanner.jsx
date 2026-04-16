@@ -65,23 +65,57 @@ function haversine(a, b) {
   return R * 2 * Math.atan2(Math.sqrt(s), Math.sqrt(1 - s));
 }
 
-// ── OSRM route calculation ────────────────────────────────────
+const GH_API_KEY = "LijBPDQGfu7Imiq1X1Jw83a5787IYJB2mEQhHe8A7";
+
+// ── GraphHopper hiking route (primary) ───────────────────────
+async function calcGraphHopperRoute(waypoints) {
+  const points = waypoints.map((w) => [w.lng, w.lat]);
+  const res = await fetch(
+    `https://graphhopper.com/api/1/route?key=${GH_API_KEY}&profile=hike&points_encoded=false`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ points }),
+    }
+  );
+  if (!res.ok) throw new Error(`GraphHopper ${res.status}`);
+  const data = await res.json();
+  if (!data.paths?.length) throw new Error("Keine Route gefunden");
+  const path = data.paths[0];
+  const positions = path.points.coordinates.map(([lng, lat]) => [lat, lng]);
+  return {
+    positions,
+    distance_km: +(path.distance / 1000).toFixed(2),
+    duration_minutes: Math.round(path.time / 60000),
+  };
+}
+
+// ── OSRM foot route (fallback) ────────────────────────────────
 async function calcOsrmRoute(waypoints) {
-  // OSRM expects lng,lat
   const coords = waypoints.map((w) => `${w.lng},${w.lat}`).join(";");
-  const url = `https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`;
-  const res = await fetch(url);
+  const res = await fetch(
+    `https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`
+  );
   if (!res.ok) throw new Error("OSRM Fehler");
   const data = await res.json();
   if (!data.routes?.length) throw new Error("Keine Route gefunden");
   const route = data.routes[0];
-  // Geometry: [[lng,lat]] → convert to [[lat,lng]] for Leaflet
   const positions = route.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
   return {
     positions,
     distance_km: +(route.distance / 1000).toFixed(2),
-    duration_minutes: Math.round((route.distance / 1000 / 4) * 60), // 4 km/h walking
+    duration_minutes: Math.round((route.distance / 1000 / 4) * 60),
   };
+}
+
+// ── Route calculation: GraphHopper first, OSRM as fallback ───
+async function calcRoute(waypoints) {
+  try {
+    return await calcGraphHopperRoute(waypoints);
+  } catch (err) {
+    console.warn("GraphHopper fehlgeschlagen, fallback auf OSRM:", err.message);
+    return await calcOsrmRoute(waypoints);
+  }
 }
 
 // ── Elevation from OpenTopoData ───────────────────────────────
@@ -197,7 +231,7 @@ function SmartRoutePlanner({ onRouteReady }) {
     }
     let cancelled = false;
     setCalculating(true);
-    calcOsrmRoute(waypoints)
+    calcRoute(waypoints)
       .then(async (r) => {
         if (cancelled) return;
         setRoute(r);
