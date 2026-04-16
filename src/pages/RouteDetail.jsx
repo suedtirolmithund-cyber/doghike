@@ -34,6 +34,7 @@ export default function RouteDetail() {
   const queryClient = useQueryClient();
 
   const [showCompleteForm, setShowCompleteForm] = useState(false);
+  const [showJournalDialog, setShowJournalDialog] = useState(false);
   const [completeData, setCompleteData] = useState({
     completed_date: format(new Date(), "yyyy-MM-dd"),
     completed_duration_minutes: "",
@@ -115,6 +116,7 @@ export default function RouteDetail() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["route", routeId] });
       setShowCompleteForm(false);
+      setShowJournalDialog(true); // Prompt to create journal entry
     },
   });
 
@@ -148,8 +150,12 @@ export default function RouteDetail() {
     prefill_location: route.start_location || "",
     prefill_distance: route.distance_km ?? "",
     prefill_elevation: route.elevation_gain_m ?? "",
-    prefill_duration: route.duration_minutes ?? "",
-    prefill_description: [route.description, route.notes].filter(Boolean).join("\n\n"),
+    prefill_duration: route.completed_duration_minutes || route.duration_minutes || "",
+    prefill_description: [
+      route.completed_notes,
+      route.description,
+      route.notes,
+    ].filter(Boolean).join("\n\n"),
   });
   const journalUrl = createPageUrl("AddJournalEntry") + "?" + journalParams.toString();
 
@@ -652,6 +658,44 @@ export default function RouteDetail() {
 
         </div>
       </div>
+
+      {/* Journal creation dialog */}
+      <AnimatePresence>
+        {showJournalDialog && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full"
+            >
+              <div className="text-center mb-5">
+                <div className="text-4xl mb-3">🎉</div>
+                <h3 className="text-lg font-semibold text-stone-800">Tour erledigt!</h3>
+                <p className="text-stone-500 text-sm mt-2">
+                  Möchtest du einen Tagebucheintrag für diese Wanderung erstellen?
+                </p>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Link to={journalUrl} onClick={() => setShowJournalDialog(false)}>
+                  <Button className="w-full bg-emerald-600 hover:bg-emerald-700">
+                    <CheckCircle2 className="w-4 h-4 mr-2" />
+                    Ja, Tagebucheintrag erstellen
+                  </Button>
+                </Link>
+                <Button variant="outline" onClick={() => setShowJournalDialog(false)} className="w-full">
+                  Nein, später vielleicht
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

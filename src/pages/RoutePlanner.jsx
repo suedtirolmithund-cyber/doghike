@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import {
   ArrowLeft, Map, Navigation, Loader2, Upload, Search,
   Trash2, RotateCcw, Layers, Mountain, Clock, Ruler, TrendingUp, X, Plus
@@ -315,17 +314,25 @@ function SmartRoutePlanner({ onRouteReady }) {
             <Polyline positions={route.positions} color="#1e3a8a" weight={5} opacity={0.85} />
           )}
 
-          {/* Waypoint markers */}
+          {/* Waypoint markers — draggable */}
           {waypoints.map((wp, i) => (
             <Marker
               key={i}
               position={[wp.lat, wp.lng]}
               icon={waypointIcon(wp.label, i === 0, i === waypoints.length - 1 && waypoints.length > 1)}
+              draggable={true}
+              eventHandlers={{
+                dragend: (e) => {
+                  const { lat, lng } = e.target.getLatLng();
+                  setWaypoints((prev) => prev.map((w, j) => j === i ? { ...w, lat, lng } : w));
+                },
+              }}
             >
               <Popup>
                 <div className="text-xs">
                   <p className="font-semibold">{i === 0 ? "Start" : i === waypoints.length - 1 ? "Ziel" : `Wegpunkt ${wp.label}`}</p>
                   <p className="text-stone-400">{wp.lat.toFixed(5)}, {wp.lng.toFixed(5)}</p>
+                  <p className="text-stone-400 italic">Ziehen zum Verschieben</p>
                   <button
                     onClick={() => removeWaypoint(i)}
                     className="mt-1 text-red-500 hover:underline text-xs flex items-center gap-1"
@@ -425,7 +432,7 @@ export default function RoutePlanner() {
     description: "",
     start_location: "",
     notes: "",
-    is_public: false,
+    is_shared: false, // shared with friends (never truly public)
   });
 
   const navigate = useNavigate();
@@ -452,6 +459,7 @@ export default function RoutePlanner() {
       ...routeData,
       route_type: activeTab === "track" ? "recorded" : activeTab === "gpx" ? "gpx" : "planned",
       waypoints: routeGeometry.positions,
+      is_public: routeData.is_shared, // friends-shared = is_public true, strictly private = false
       distance_km: routeGeometry.distance_km,
       elevation_gain_m: routeGeometry.elevation_gain_m || null,
       duration_minutes: routeGeometry.duration_minutes || null,
@@ -552,12 +560,24 @@ export default function RoutePlanner() {
                   rows={2} className="mt-1" />
               </div>
 
-              <div className="flex items-center gap-3 p-3 bg-stone-50 rounded-xl">
-                <Switch id="is_public" checked={routeData.is_public}
-                  onCheckedChange={(v) => setRouteData({ ...routeData, is_public: v })} />
-                <Label htmlFor="is_public" className="cursor-pointer text-sm">
-                  Route öffentlich teilen
-                </Label>
+              {/* Visibility: always private or shared with friends only */}
+              <div className="flex gap-2">
+                {[
+                  { value: false, label: "🔒 Privat", desc: "Nur ich" },
+                  { value: true,  label: "👥 Freunde", desc: "Mit Freunden teilen" },
+                ].map(({ value, label, desc }) => (
+                  <button key={String(value)} type="button"
+                    onClick={() => setRouteData({ ...routeData, is_shared: value })}
+                    className={`flex-1 p-3 rounded-xl border-2 text-sm font-medium transition-all text-center ${
+                      routeData.is_shared === value
+                        ? "border-slate-700 bg-slate-50 text-slate-800"
+                        : "border-stone-200 text-stone-500 hover:border-stone-300"
+                    }`}
+                  >
+                    <div>{label}</div>
+                    <div className="text-xs font-normal text-stone-400 mt-0.5">{desc}</div>
+                  </button>
+                ))}
               </div>
 
               <div className="flex gap-2 justify-end">

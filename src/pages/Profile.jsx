@@ -461,12 +461,14 @@ export default function Profile() {
                         <Link to={createPageUrl("RouteDetail") + `?id=${route.id}`}>
                           <Button size="sm" variant="outline" className="h-8 text-xs">Details</Button>
                         </Link>
-                        <Link to={createPageUrl("AddJournalEntry") + "?" + journalParams.toString()}>
-                          <Button size="sm" className="h-8 text-xs bg-emerald-600 hover:bg-emerald-700">
-                            <BookOpen className="w-3.5 h-3.5 mr-1" />
-                            Eintragen
-                          </Button>
-                        </Link>
+                        {route.completed && (
+                          <Link to={createPageUrl("AddJournalEntry") + "?" + journalParams.toString()}>
+                            <Button size="sm" className="h-8 text-xs bg-emerald-600 hover:bg-emerald-700">
+                              <BookOpen className="w-3.5 h-3.5 mr-1" />
+                              Eintragen
+                            </Button>
+                          </Link>
+                        )}
                       </div>
                     </div>
                   );
