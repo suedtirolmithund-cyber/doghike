@@ -2,17 +2,18 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 /**
- * Displays text truncated to `lines` lines.
+ * Displays text clamped to `lines` lines.
  * Shows "Mehr lesen / Weniger anzeigen" when text exceeds `minChars` characters.
  *
- * Uses inline -webkit-line-clamp (not dynamic Tailwind classes, which are
- * stripped by JIT unless statically listed).
+ * NOTE: whitespace-pre-wrap must NOT be applied together with -webkit-line-clamp /
+ * display:-webkit-box — it prevents the browser from reflowing lines and causes
+ * only the first newline-segment to appear. We apply it only when expanded.
  */
 export default function ExpandableText({
   text,
   lines = 3,
-  minChars = 300,
-  className = "text-stone-600 text-sm leading-relaxed whitespace-pre-wrap",
+  minChars = 150,
+  baseClassName = "text-stone-600 text-sm leading-relaxed",
 }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -20,18 +21,26 @@ export default function ExpandableText({
 
   const needsButton = text.length > minChars;
 
-  const clampStyle = !expanded && needsButton
-    ? {
-        display: "-webkit-box",
-        WebkitLineClamp: lines,
-        WebkitBoxOrient: "vertical",
-        overflow: "hidden",
-      }
-    : {};
+  // When clamped: use -webkit-box display. whitespace-pre-wrap must be absent.
+  // When expanded: show everything with pre-wrap so newlines render correctly.
+  const clampedStyle = {
+    display: "-webkit-box",
+    WebkitLineClamp: lines,
+    WebkitBoxOrient: "vertical",
+    overflow: "hidden",
+    whiteSpace: "normal", // override any inherited pre-wrap
+  };
+
+  const expandedStyle = {
+    whiteSpace: "pre-wrap",
+  };
 
   return (
     <div>
-      <p className={className} style={clampStyle}>
+      <p
+        className={baseClassName}
+        style={needsButton && !expanded ? clampedStyle : expandedStyle}
+      >
         {text}
       </p>
 
