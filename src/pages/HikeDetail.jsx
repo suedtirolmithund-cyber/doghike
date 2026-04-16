@@ -115,12 +115,12 @@ export default function HikeDetail() {
   const isOwnHike = false;
 
   // Journal hikes created by the current user can be edited/deleted via Supabase
-  const isOwnJournalHike = hike._source === "journal" && !!currentUser?.id && currentUser.id === hike._user_id;
+  const isOwnJournalHike = hike?._source === "journal" && !!currentUser?.id && currentUser.id === hike?._user_id;
 
   const deleteJournalEntryMutation = useMutation({
     mutationFn: async () => {
       const { deleteJournalEntry } = await import("@/lib/journalApi");
-      return deleteJournalEntry(hike._journal_id);
+      return deleteJournalEntry(hike?._journal_id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["journal", currentUser?.id] });
@@ -175,7 +175,7 @@ export default function HikeDetail() {
           <div className="flex gap-2 flex-wrap">
             {isOwnJournalHike && (
               <>
-                <Link to={createPageUrl("AddJournalEntry") + `?id=${hike._journal_id}`}>
+                <Link to={createPageUrl("AddJournalEntry") + `?id=${hike?._journal_id}`}>
                   <Button variant="ghost" className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20">
                     <Edit className="w-4 h-4 mr-1" />
                     Bearbeiten
@@ -251,7 +251,7 @@ export default function HikeDetail() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            {hike._source === "journal" && (hike.author_username || hike.dog_name) && (
+            {hike?._source === "journal" && (hike.author_username || hike.dog_name) && (
               <div className="flex items-center gap-2 mb-3">
                 {hike.author_avatar && (
                   <img src={hike.author_avatar} alt="" className="w-7 h-7 rounded-full object-cover border-2 border-white/50" />
