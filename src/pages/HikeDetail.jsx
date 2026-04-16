@@ -31,7 +31,6 @@ import InteractiveHikeMap from "@/components/hikes/InteractiveHikeMap";
 import SaveButton from "@/components/hikes/SaveButton";
 import CommentSection from "@/components/community/CommentSection";
 import RatingSection from "@/components/community/RatingSection";
-import FollowButton from "@/components/community/FollowButton";
 import ExpandableText from "@/components/ExpandableText";
 import PremiumGate from "@/components/hikes/PremiumGate";
 
@@ -196,16 +195,15 @@ export default function HikeDetail() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            {!isOwnHike && creator && (
-              <div className="flex items-center gap-3 mb-3">
+            {hike._source === "journal" && (hike.author_username || hike.dog_name) && (
+              <div className="flex items-center gap-2 mb-3">
+                {hike.author_avatar && (
+                  <img src={hike.author_avatar} alt="" className="w-7 h-7 rounded-full object-cover border-2 border-white/50" />
+                )}
                 <p className="text-sm text-white/90">
-                  Erstellt von <span className="font-medium text-white">{creator.full_name}</span>
+                  {hike.dog_name && <span>🐾 {hike.dog_name} · </span>}
+                  {hike.author_username && <span>@{hike.author_username}</span>}
                 </p>
-                <FollowButton 
-                  targetEmail={hike.created_by} 
-                  targetName={creator.full_name}
-                  size="sm"
-                />
               </div>
             )}
 
