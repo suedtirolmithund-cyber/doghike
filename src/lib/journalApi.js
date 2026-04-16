@@ -16,8 +16,9 @@ export async function getJournalEntry(id) {
     .select("*")
     .eq("id", id)
     .single();
-  if (error) throw error;
-  return data;
+  // PGRST116 = row not found — return null instead of throwing
+  if (error && error.code !== "PGRST116") throw error;
+  return data ?? null;
 }
 
 export async function createJournalEntry(userId, entry) {

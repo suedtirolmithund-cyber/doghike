@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { getRoute, updateRoute, deleteRoute } from "@/lib/routesApi";
 import { uploadJournalFile } from "@/lib/journalApi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { MapContainer, TileLayer, Polyline, Marker } from "react-leaflet";
 import EditableRouteDrawer from "@/components/routes/EditableRouteDrawer";
@@ -28,8 +28,8 @@ L.Icon.Default.mergeOptions({
 });
 
 export default function RouteDetail() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const routeId = urlParams.get("id");
+  const [searchParams] = useSearchParams();
+  const routeId = searchParams.get("id");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 

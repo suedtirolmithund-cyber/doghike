@@ -65,7 +65,7 @@ function haversine(a, b) {
   return R * 2 * Math.atan2(Math.sqrt(s), Math.sqrt(1 - s));
 }
 
-const GH_API_KEY = "LijBPDQGfu7Imiq1X1Jw83a5787IYJB2mEQhHe8A7";
+const GH_API_KEY = import.meta.env.VITE_GRAPHHOPPER_KEY || "LijBPDQGfu7Imiq1X1Jw83a5787IYJB2mEQhHe8A7";
 
 // ── GraphHopper hiking route (primary) ───────────────────────
 async function calcGraphHopperRoute(waypoints) {
