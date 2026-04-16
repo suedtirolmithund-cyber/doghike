@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
 import { getAllHikes } from "@/api/sheetsClient";
+import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -87,47 +87,22 @@ export default function HikeDetail() {
     enabled: !!hikeId
   });
 
+  const { user: currentUser } = useAuth();
+
   const { data: dogs = [] } = useQuery({
-    queryKey: ["dogs"],
-    queryFn: async () => { const r = await base44.entities.Dog.list(); return Array.isArray(r) ? r : []; }
+    queryKey: ["dogs", currentUser?.id],
+    queryFn: async () => {
+      if (!currentUser?.id) return [];
+      const { getDogs } = await import("@/lib/profilesApi");
+      return getDogs(currentUser.id);
+    },
+    enabled: !!currentUser?.id,
   });
 
-  const { data: currentUser } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => base44.auth.me().catch(() => null),
-  });
+  // Sheets hikes belong to nobody; journal hike editing happens in Journal page
+  const isOwnHike = false;
 
-  const { data: allUsers = [] } = useQuery({
-    queryKey: ["allUsers"],
-    queryFn: async () => { const r = await base44.entities.User.list(); return Array.isArray(r) ? r : []; }
-  });
-
-  const creator = allUsers.find(u => u.email === hike?.created_by);
-  const isOwnHike = currentUser?.email === hike?.created_by;
-
-  const changeVisibilityMutation = useMutation({
-    mutationFn: ({ visibility, status }) => base44.entities.Hike.update(hikeId, { visibility, status }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["hike", hikeId] });
-      queryClient.invalidateQueries({ queryKey: ["hikes"] });
-      queryClient.invalidateQueries({ queryKey: ["myHikes"] });
-    }
-  });
-
-  const cancelPendingChangesMutation = useMutation({
-    mutationFn: () => base44.entities.Hike.update(hikeId, { pending_changes: null, pending_changes_status: "none" }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["hike", hikeId] });
-    }
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: () => base44.entities.Hike.delete(hikeId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["hikes"] });
-      navigate(createPageUrl("Hikes"));
-    }
-  });
+  // base44 mutations removed — Sheets hikes are read-only, Journal hikes edited via Journal page
 
   if (isLoading || !hike) {
     return (
@@ -174,7 +149,10 @@ export default function HikeDetail() {
             </Button>
           </Link>
           <div className="flex gap-2 flex-wrap">
-            {!isOwnHike && <SaveButton hikeId={hikeId} />}
+            <SaveButton
+              hikeId={hikeId}
+              hikeSource={hike?._source === "journal" ? "journal" : "sheets"}
+            />
             {isOwnHike && (
               <>
                 <Link to={createPageUrl("EditHike") + `?id=${hikeId}`}>
