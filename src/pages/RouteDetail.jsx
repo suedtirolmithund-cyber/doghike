@@ -249,10 +249,10 @@ export default function RouteDetail() {
             {editingRoute ? (
               <div className="space-y-4">
                 <EditableRouteDrawer
-                  initialCoordinates={route.coordinates}
+                  initialCoordinates={route.waypoints}
                   onSave={(routeData) => {
                     updateCoordinatesMutation.mutate({
-                      coordinates: routeData.coordinates,
+                      waypoints: routeData.coordinates,
                       distance_km: routeData.distance_km,
                       elevation_gain_m: routeData.elevation_gain_m,
                       duration_minutes: routeData.duration_minutes,
@@ -266,7 +266,7 @@ export default function RouteDetail() {
             ) : (
               <div className="h-96 md:h-[500px] rounded-xl overflow-hidden border border-stone-200">
                 <MapContainer
-                  center={route.coordinates[0] || [46.5, 11.9]}
+                  center={route.waypoints[0] || [46.5, 11.9]}
                   zoom={13}
                   style={{ height: "100%", width: "100%" }}
                 >
@@ -274,9 +274,9 @@ export default function RouteDetail() {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; OpenStreetMap'
                   />
-                  <Polyline positions={route.coordinates} color="#1e293b" weight={4} />
-                  <Marker position={route.coordinates[0]} />
-                  <Marker position={route.coordinates[route.coordinates.length - 1]} />
+                  <Polyline positions={route.waypoints} color="#1e293b" weight={4} />
+                  <Marker position={route.waypoints[0]} />
+                  <Marker position={route.waypoints[route.waypoints.length - 1]} />
                 </MapContainer>
               </div>
             )}
@@ -324,7 +324,7 @@ export default function RouteDetail() {
               )}
               <div className="text-center p-4 bg-slate-50 rounded-lg">
                 <Map className="w-5 h-5 mx-auto mb-2 text-slate-700" />
-                <p className="text-2xl font-bold text-slate-800">{route.coordinates.length}</p>
+                <p className="text-2xl font-bold text-slate-800">{route.waypoints.length}</p>
                 <p className="text-xs text-stone-500">Wegpunkte</p>
               </div>
             </div>

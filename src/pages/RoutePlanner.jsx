@@ -56,7 +56,7 @@ export default function RoutePlanner() {
     await createRouteMutation.mutateAsync({
       ...routeData,
       route_type: activeTab === "draw" ? "planned" : "recorded",
-      coordinates: routeGeometry.coordinates,
+      waypoints: routeGeometry.coordinates,
       distance_km: routeGeometry.distance_km,
       elevation_gain_m: routeGeometry.elevation_gain_m || null,
       duration_minutes: routeGeometry.duration_minutes || null,
