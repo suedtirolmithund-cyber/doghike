@@ -2,73 +2,90 @@ const SHEETS_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vS6YeL4WqJZWHAQ8HBuodH98vwfIeaUV4p89bAvnM3TDavLKtnsmGUOfcSyAN0ID0rcVYd-OCQUkbiv/pub?gid=624993458&single=true&output=csv";
 
 /**
- * Parses a CSV string into an array of objects using the first row as keys.
- * Handles quoted fields containing commas or newlines.
+ * RFC-4180-compliant CSV parser.
+ *
+ * Single-pass, character-by-character — no row-then-field two-step that can
+ * desynchronise quote state for cells containing embedded newlines or commas.
+ *
+ * Handles:
+ *  - Quoted fields:  "hello, world"  →  hello, world
+ *  - Embedded newlines inside quotes: "line1\nline2"  →  line1\nline2
+ *  - Escaped quotes: "say ""hi"""  →  say "hi"
+ *  - Unquoted fields with any length
  */
 function parseCsv(text) {
-  const rows = [];
-  let current = "";
-  let inQuotes = false;
+  const str = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  const records = []; // array of string[]
+  let i = 0;
 
-  // Normalise line endings
-  const normalised = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  while (i <= str.length) {
+    const record = [];
 
-  for (let i = 0; i < normalised.length; i++) {
-    const ch = normalised[i];
-    if (ch === '"') {
-      if (inQuotes && normalised[i + 1] === '"') {
-        current += '"';
-        i++;
-      } else {
-        inQuotes = !inQuotes;
-      }
-    } else if (ch === "\n" && !inQuotes) {
-      rows.push(current);
-      current = "";
-    } else {
-      current += ch;
-    }
-  }
-  if (current) rows.push(current);
+    // Parse one full row of fields
+    while (true) {
+      let field = "";
 
-  const splitRow = (row) => {
-    const fields = [];
-    let field = "";
-    let quoted = false;
-    for (let i = 0; i < row.length; i++) {
-      const ch = row[i];
-      if (ch === '"') {
-        if (quoted && row[i + 1] === '"') {
-          field += '"';
-          i++;
-        } else {
-          quoted = !quoted;
+      if (str[i] === '"') {
+        // ── Quoted field ──────────────────────────────────────
+        i++; // skip opening quote
+        while (i < str.length) {
+          if (str[i] === '"') {
+            if (str[i + 1] === '"') {
+              // Escaped quote → literal "
+              field += '"';
+              i += 2;
+            } else {
+              // Closing quote
+              i++;
+              break;
+            }
+          } else {
+            field += str[i];
+            i++;
+          }
         }
-      } else if (ch === "," && !quoted) {
-        fields.push(field);
-        field = "";
       } else {
-        field += ch;
+        // ── Unquoted field ────────────────────────────────────
+        while (i < str.length && str[i] !== "," && str[i] !== "\n") {
+          field += str[i];
+          i++;
+        }
       }
-    }
-    fields.push(field);
-    return fields;
-  };
 
-  if (rows.length === 0) return [];
-  const headers = splitRow(rows[0]);
+      record.push(field);
+
+      if (i >= str.length || str[i] === "\n") {
+        // End of row
+        break;
+      }
+      // Must be a comma — advance and parse next field
+      i++;
+    }
+
+    // Skip the newline (or we've reached EOF)
+    if (i < str.length && str[i] === "\n") i++;
+
+    records.push(record);
+
+    if (i >= str.length) break;
+  }
+
+  if (records.length === 0) return [];
+
+  const headers = records[0].map((h) => h.trim());
   const results = [];
 
-  for (let r = 1; r < rows.length; r++) {
-    const row = rows[r].trim();
-    if (!row) continue;
-    const values = splitRow(row);
+  for (let r = 1; r < records.length; r++) {
+    const fields = records[r];
+    // Skip entirely blank rows
+    if (fields.every((f) => f === "")) continue;
     const obj = {};
-    headers.forEach((h, i) => {
-      obj[h.trim()] = (values[i] ?? "").trim();
+    headers.forEach((h, idx) => {
+      obj[h] = (fields[idx] ?? "").trim();
     });
     results.push(obj);
   }
+
   return results;
 }
 
