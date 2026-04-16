@@ -497,7 +497,12 @@ export default function HikeDetail() {
                   {hike.hazard_notes && (
                     <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl">
                       <p className="font-medium text-amber-800 mb-1">⚠️ Achtung</p>
-                      <p className="text-sm text-amber-700 whitespace-pre-wrap">{hike.hazard_notes}</p>
+                      <ExpandableText
+                        text={hike.hazard_notes}
+                        lines={3}
+                        minChars={200}
+                        className="text-sm text-amber-700 whitespace-pre-wrap"
+                      />
                     </div>
                   )}
                 </div>

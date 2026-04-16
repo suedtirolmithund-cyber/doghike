@@ -1,45 +1,45 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 /**
- * Shows text clamped to `lines` lines (default 3).
- * A "Mehr lesen" / "Weniger anzeigen" button toggles the full text.
- * Uses CSS line-clamp for pixel-perfect line counting.
+ * Displays text truncated to `lines` lines.
+ * Shows "Mehr lesen / Weniger anzeigen" when text exceeds `minChars` characters.
+ *
+ * Uses inline -webkit-line-clamp (not dynamic Tailwind classes, which are
+ * stripped by JIT unless statically listed).
  */
 export default function ExpandableText({
   text,
   lines = 3,
-  className = "text-stone-600 text-sm leading-relaxed",
+  minChars = 300,
+  className = "text-stone-600 text-sm leading-relaxed whitespace-pre-wrap",
 }) {
   const [expanded, setExpanded] = useState(false);
-  const [clamped, setClamped] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    // scrollHeight > clientHeight means text is being cut off
-    setClamped(el.scrollHeight > el.clientHeight + 2);
-  }, [text, lines]);
 
   if (!text) return null;
 
+  const needsButton = text.length > minChars;
+
+  const clampStyle = !expanded && needsButton
+    ? {
+        display: "-webkit-box",
+        WebkitLineClamp: lines,
+        WebkitBoxOrient: "vertical",
+        overflow: "hidden",
+      }
+    : {};
+
   return (
     <div>
-      <p
-        ref={ref}
-        className={`${className} whitespace-pre-wrap transition-all duration-300 ${
-          !expanded ? `line-clamp-${lines}` : ""
-        }`}
-      >
+      <p className={className} style={clampStyle}>
         {text}
       </p>
 
-      {(clamped || expanded) && (
+      {needsButton && (
         <button
           type="button"
           onClick={() => setExpanded((v) => !v)}
-          className="mt-1.5 flex items-center gap-1 text-xs font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
+          className="mt-2 flex items-center gap-1 text-xs font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
         >
           {expanded ? (
             <>
