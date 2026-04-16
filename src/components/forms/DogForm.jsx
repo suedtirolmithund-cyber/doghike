@@ -9,14 +9,14 @@ import { Upload, Loader2 } from "lucide-react";
 
 export default function DogForm({ dog, onSave, onCancel }) {
   const { user } = useAuth();
-  const [formData, setFormData] = useState(dog || {
-    name: "",
-    breed: "",
-    photo_url: "",
-    birth_date: "",
-    notes: "",
-    favorite_food: "",
-    character: "",
+  const [formData, setFormData] = useState({
+    name: dog?.name || "",
+    breed: dog?.breed || "",
+    photo_url: dog?.photo_url || "",
+    birth_date: dog?.birth_date || "",
+    notes: dog?.notes || "",
+    favorite_food: dog?.favorite_food || "",
+    character: dog?.character || "",
   });
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
