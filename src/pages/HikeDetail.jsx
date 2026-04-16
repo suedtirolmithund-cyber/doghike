@@ -111,10 +111,22 @@ export default function HikeDetail() {
     enabled: !!currentUser?.id,
   });
 
-  // Sheets hikes belong to nobody; journal hike editing happens in Journal page
+  // Sheets hikes are read-only; base44 mutations removed
   const isOwnHike = false;
 
-  // base44 mutations removed — Sheets hikes are read-only, Journal hikes edited via Journal page
+  // Journal hikes created by the current user can be edited/deleted via Supabase
+  const isOwnJournalHike = hike._source === "journal" && !!currentUser?.id && currentUser.id === hike._user_id;
+
+  const deleteJournalEntryMutation = useMutation({
+    mutationFn: async () => {
+      const { deleteJournalEntry } = await import("@/lib/journalApi");
+      return deleteJournalEntry(hike._journal_id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["journal", currentUser?.id] });
+      navigate(createPageUrl("Hikes"));
+    },
+  });
 
   if (isLoading || !hike) {
     return (
@@ -161,6 +173,41 @@ export default function HikeDetail() {
             </Button>
           </Link>
           <div className="flex gap-2 flex-wrap">
+            {isOwnJournalHike && (
+              <>
+                <Link to={createPageUrl("AddJournalEntry") + `?id=${hike._journal_id}`}>
+                  <Button variant="ghost" className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20">
+                    <Edit className="w-4 h-4 mr-1" />
+                    Bearbeiten
+                  </Button>
+                </Link>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="ghost" className="bg-red-500/20 backdrop-blur-sm text-white hover:bg-red-500/40">
+                      <Trash2 className="w-4 h-4 mr-1" />
+                      Löschen
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Tour löschen?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Dies wird "{hike.trail_name}" dauerhaft löschen. Diese Aktion kann nicht rückgängig gemacht werden.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => deleteJournalEntryMutation.mutate()}
+                        className="bg-red-600 hover:bg-red-700"
+                      >
+                        Löschen
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </>
+            )}
             {isOwnHike && (
               <>
                 <Link to={createPageUrl("EditHike") + `?id=${hikeId}`}>

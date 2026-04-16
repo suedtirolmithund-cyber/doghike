@@ -137,11 +137,11 @@ export default function Profile() {
     setEditingProfile(true);
   };
 
-  const handleSaveDog = (data) => {
+  const handleSaveDog = async (data) => {
     if (editingDog) {
-      updateDogMutation.mutate({ id: editingDog.id, data });
+      await updateDogMutation.mutateAsync({ id: editingDog.id, data });
     } else {
-      createDogMutation.mutate(data);
+      await createDogMutation.mutateAsync(data);
     }
   };
 

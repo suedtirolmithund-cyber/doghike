@@ -242,6 +242,7 @@ function journalEntryToHike(entry, dog = null, profile = null) {
 
     _source: "journal",
     _journal_id: entry.id,
+    _user_id: entry.user_id,
   };
 }
 
