@@ -264,6 +264,57 @@ function WaterPicker({ label, value, onChange }) {
   );
 }
 
+// ── Jahreszeiten-Picker (Mehrfachauswahl) ────────────────────
+const SEASON_OPTIONS = [
+  { value: "spring", emoji: "🌸", label: "Frühling", color: "#ec9cf4" },
+  { value: "summer", emoji: "☀️", label: "Sommer",   color: "#d64545" },
+  { value: "autumn", emoji: "🍂", label: "Herbst",   color: "#f19a4b" },
+  { value: "winter", emoji: "❄️", label: "Winter",   color: "#5b83f0" },
+  { value: "all_year", emoji: "🍃", label: "Ganzjährig", color: "#38a062" },
+];
+
+function SeasonPicker({ value = [], onChange }) {
+  const toggle = (season) => {
+    const next = value.includes(season)
+      ? value.filter((s) => s !== season)
+      : [...value, season];
+    onChange(next);
+  };
+  return (
+    <div>
+      <Label className="text-sm text-stone-600 mb-2 block">Empfohlene Jahreszeit</Label>
+      <div className="flex flex-wrap gap-2">
+        {SEASON_OPTIONS.map((opt) => {
+          const active = value.includes(opt.value);
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => toggle(opt.value)}
+              style={active ? {
+                borderColor: opt.color,
+                backgroundColor: opt.color + "22",
+                color: opt.color,
+              } : {}}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 text-sm font-medium transition-all focus:outline-none ${
+                active
+                  ? "shadow-sm"
+                  : "border-stone-200 bg-white text-stone-500 hover:border-stone-300"
+              }`}
+            >
+              <span>{opt.emoji}</span>
+              <span>{opt.label}</span>
+            </button>
+          );
+        })}
+      </div>
+      {value.length === 0 && (
+        <p className="text-xs text-stone-400 mt-1">Keine Auswahl = wird nicht angezeigt</p>
+      )}
+    </div>
+  );
+}
+
 // ── Sichtbarkeits-Picker ─────────────────────────────────────
 const VISIBILITY_OPTIONS = [
   {
@@ -335,6 +386,7 @@ const EMPTY_FORM = {
   dog_difficulty: 0,
   hazard_notes: "",
   visibility: "private",
+  seasons: [],
 };
 
 export default function AddJournalEntry() {
@@ -376,6 +428,7 @@ export default function AddJournalEntry() {
         dog_difficulty: existing.dog_difficulty ?? 0,
         hazard_notes: existing.hazard_notes ?? "",
         visibility: existing.visibility ?? "private",
+        seasons: existing.seasons ?? [],
       });
     }
   }, [existing]);
@@ -662,6 +715,19 @@ export default function AddJournalEntry() {
               </label>
             )}
           </section>
+
+          {/* ── Jahreszeit (nur bei friends/public) ─────── */}
+          {(form.visibility === "friends" || form.visibility === "public") && (
+            <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5">
+              <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
+                🌸 Jahreszeit
+              </h2>
+              <SeasonPicker
+                value={form.seasons}
+                onChange={(v) => set("seasons", v)}
+              />
+            </section>
+          )}
 
           {/* ── Sichtbarkeit ────────────────────────────── */}
           <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5">

@@ -86,6 +86,7 @@ create table if not exists public.journal_entries (
   latitude          numeric(10,7),
   longitude         numeric(10,7),
   hazard_notes      text,
+  seasons           text[] default '{}',
   visibility        text default 'private' check (visibility in ('private', 'friends', 'public')),
   status            text default 'draft' check (status in ('draft', 'pending', 'approved', 'rejected')),
   rejection_reason  text,
@@ -96,6 +97,7 @@ create table if not exists public.journal_entries (
 -- alter table public.journal_entries
 --   add column if not exists latitude numeric(10,7),
 --   add column if not exists longitude numeric(10,7),
+--   add column if not exists seasons text[] default '{}',
 --   add column if not exists visibility text default 'private' check (visibility in ('private','friends','public')),
 --   add column if not exists status text default 'draft' check (status in ('draft','pending','approved','rejected'));
 
