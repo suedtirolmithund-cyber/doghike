@@ -23,6 +23,45 @@ import { getJournalEntries, deleteJournalEntry } from "@/lib/journalApi";
 const DIFFICULTY_LABEL = ["", "Sehr leicht", "Leicht", "Mittel", "Schwer", "Sehr schwer"];
 const DIFFICULTY_COLOR = ["", "text-emerald-600", "text-green-600", "text-yellow-600", "text-orange-600", "text-red-600"];
 
+function VisibilityStatusBadge({ visibility, status }) {
+  // Public entries: show review status
+  if (visibility === "public") {
+    if (status === "approved") {
+      return (
+        <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200">
+          ✅ Öffentlich
+        </span>
+      );
+    }
+    if (status === "rejected") {
+      return (
+        <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-700 border border-red-200">
+          ❌ Abgelehnt
+        </span>
+      );
+    }
+    // pending or draft with public visibility
+    return (
+      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-200">
+        ⏳ Wartet auf Prüfung
+      </span>
+    );
+  }
+  if (visibility === "friends") {
+    return (
+      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">
+        👥 Freunde
+      </span>
+    );
+  }
+  // private (default)
+  return (
+    <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-stone-100 text-stone-500 border border-stone-200">
+      🔒 Privat
+    </span>
+  );
+}
+
 function StarRating({ rating }) {
   return (
     <div className="flex gap-0.5">
@@ -189,7 +228,7 @@ export default function Journal() {
                     {/* Content */}
                     <div className="flex-1 p-4 md:p-5 min-w-0">
                       <div className="flex items-start justify-between gap-2 mb-1">
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <h3 className="font-semibold text-stone-800 text-base md:text-lg truncate">{entry.title}</h3>
                           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                             <span className="text-xs text-stone-400">
@@ -198,6 +237,10 @@ export default function Journal() {
                             {entry.location && (
                               <span className="text-xs text-stone-500 truncate">📍 {entry.location}</span>
                             )}
+                            <VisibilityStatusBadge
+                              visibility={entry.visibility ?? "private"}
+                              status={entry.status ?? "draft"}
+                            />
                           </div>
                         </div>
                         {entry.rating && <StarRating rating={entry.rating} />}
@@ -222,9 +265,9 @@ export default function Journal() {
                             🐕 Hundefreundlich
                           </Badge>
                         )}
-                        {entry.water_available && (
+                        {entry.water_available > 0 && (
                           <Badge variant="secondary" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
-                            💧 Wasser
+                            {"💧".repeat(entry.water_available)} Wasser
                           </Badge>
                         )}
                         {entry.gpx_url && (

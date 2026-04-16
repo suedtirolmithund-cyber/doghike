@@ -79,8 +79,15 @@ create table if not exists public.journal_entries (
   -- 0=kein Wasser, 1=wenig, 2=etwas, 3=viel
   dog_difficulty    smallint check (dog_difficulty between 1 and 5),
   hazard_notes      text,
+  visibility        text default 'private' check (visibility in ('private', 'friends', 'public')),
+  status            text default 'draft' check (status in ('draft', 'pending', 'approved', 'rejected')),
   created_at        timestamptz default now()
 );
+
+-- Falls die Tabelle bereits existiert, einmalig ausführen:
+-- alter table public.journal_entries
+--   add column if not exists visibility text default 'private' check (visibility in ('private','friends','public')),
+--   add column if not exists status text default 'draft' check (status in ('draft','pending','approved','rejected'));
 
 alter table public.journal_entries enable row level security;
 

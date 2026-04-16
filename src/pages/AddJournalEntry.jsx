@@ -148,6 +148,58 @@ function WaterPicker({ label, value, onChange }) {
   );
 }
 
+// ── Sichtbarkeits-Picker ─────────────────────────────────────
+const VISIBILITY_OPTIONS = [
+  {
+    value: "private",
+    emoji: "🔒",
+    label: "Privat",
+    desc: "Nur ich sehe diesen Eintrag",
+    active: "border-stone-400 bg-stone-100 text-stone-800",
+    idle: "border-stone-200 hover:border-stone-300",
+  },
+  {
+    value: "friends",
+    emoji: "👥",
+    label: "Freunde",
+    desc: "Nur bestätigte Freunde",
+    active: "border-blue-400 bg-blue-50 text-blue-800",
+    idle: "border-stone-200 hover:border-blue-300",
+  },
+  {
+    value: "public",
+    emoji: "🌍",
+    label: "Öffentlich",
+    desc: "Wird an Admin zur Prüfung geschickt",
+    active: "border-emerald-400 bg-emerald-50 text-emerald-800",
+    idle: "border-stone-200 hover:border-emerald-300",
+  },
+];
+
+function VisibilityPicker({ value, onChange }) {
+  return (
+    <div>
+      <Label className="text-sm text-stone-600 mb-2 block">Sichtbarkeit</Label>
+      <div className="grid grid-cols-3 gap-2">
+        {VISIBILITY_OPTIONS.map((opt) => (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => onChange(opt.value)}
+            className={`flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition-all focus:outline-none text-center ${
+              value === opt.value ? opt.active : `border-stone-200 bg-white text-stone-500 ${opt.idle}`
+            }`}
+          >
+            <span className="text-xl">{opt.emoji}</span>
+            <span className="text-xs font-semibold leading-tight">{opt.label}</span>
+            <span className="text-[10px] leading-tight opacity-70">{opt.desc}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 const EMPTY_FORM = {
   title: "",
   date: new Date().toISOString().split("T")[0],
@@ -164,6 +216,7 @@ const EMPTY_FORM = {
   water_available: 0,
   dog_difficulty: 0,
   hazard_notes: "",
+  visibility: "private",
 };
 
 export default function AddJournalEntry() {
@@ -202,6 +255,7 @@ export default function AddJournalEntry() {
         water_available: existing.water_available ?? 0,
         dog_difficulty: existing.dog_difficulty ?? 0,
         hazard_notes: existing.hazard_notes ?? "",
+        visibility: existing.visibility ?? "private",
       });
     }
   }, [existing]);
@@ -263,6 +317,8 @@ export default function AddJournalEntry() {
       difficulty: form.difficulty || null,
       rating: form.rating || null,
       dog_difficulty: form.dog_difficulty || null,
+      // public → pending review; private/friends → draft
+      status: form.visibility === "public" ? "pending" : "draft",
     });
   };
 
@@ -468,6 +524,19 @@ export default function AddJournalEntry() {
                   <><Upload className="w-5 h-5 text-stone-400" /><span className="text-sm text-stone-500">.gpx Datei hochladen</span></>
                 )}
               </label>
+            )}
+          </section>
+
+          {/* ── Sichtbarkeit ────────────────────────────── */}
+          <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5">
+            <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
+              🔒 Sichtbarkeit
+            </h2>
+            <VisibilityPicker value={form.visibility} onChange={(v) => set("visibility", v)} />
+            {form.visibility === "public" && (
+              <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-3">
+                ⏳ Nach dem Speichern wird dieser Eintrag an einen Admin zur Prüfung geschickt und erst danach öffentlich sichtbar.
+              </p>
             )}
           </section>
 
