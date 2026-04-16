@@ -27,12 +27,17 @@ export async function getProfile(userId) {
 }
 
 export async function upsertProfile(userId, updates) {
+  console.log("[upsertProfile] userId:", userId, "updates:", updates);
   const { data, error } = await supabase
     .from("profiles")
     .upsert({ user_id: userId, ...updates }, { onConflict: "user_id" })
     .select()
     .single();
-  if (error) throw error;
+  if (error) {
+    console.error("[upsertProfile] Supabase error:", error.code, error.message, error.details);
+    throw error;
+  }
+  console.log("[upsertProfile] success:", data);
   return data;
 }
 
@@ -58,13 +63,24 @@ export async function createDog(userId, dogData) {
 }
 
 export async function updateDog(dogId, dogData) {
+  // Strip system fields that must not appear in an UPDATE payload
+  const { id, user_id, created_at, updated_at, ...safeData } = dogData;
+
+  console.log("[updateDog] dogId:", dogId, "payload:", safeData);
+
   const { data, error } = await supabase
     .from("dogs")
-    .update(dogData)
+    .update(safeData)
     .eq("id", dogId)
     .select()
     .single();
-  if (error) throw error;
+
+  if (error) {
+    console.error("[updateDog] Supabase error:", error.code, error.message, error.details);
+    throw error;
+  }
+
+  console.log("[updateDog] success:", data);
   return data;
 }
 
