@@ -4,6 +4,7 @@ import { MapPin, Mountain, Clock, Star, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import ExpandableText from "@/components/ExpandableText";
 
 const difficultyColors = {
   "1": "bg-emerald-100 text-emerald-700 border-emerald-200",
@@ -129,6 +130,16 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               }
             </div>
             
+            {hike.notes && (
+              <div className="mb-3">
+                <ExpandableText
+                  text={hike.notes}
+                  lines={3}
+                  className="text-stone-500 text-sm leading-relaxed"
+                />
+              </div>
+            )}
+
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 {/* Journal-Tour: Hundebild + Username des Erstellers */}

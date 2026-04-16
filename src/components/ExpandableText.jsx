@@ -1,44 +1,55 @@
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
-const MAX_HEIGHT = 150;
-
-export default function ExpandableText({ text }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [needsExpand, setNeedsExpand] = useState(false);
+/**
+ * Shows text clamped to `lines` lines (default 3).
+ * A "Mehr lesen" / "Weniger anzeigen" button toggles the full text.
+ * Uses CSS line-clamp for pixel-perfect line counting.
+ */
+export default function ExpandableText({
+  text,
+  lines = 3,
+  className = "text-stone-600 text-sm leading-relaxed",
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const [clamped, setClamped] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
-    if (ref.current) {
-      setNeedsExpand(ref.current.scrollHeight > MAX_HEIGHT);
-    }
-  }, [text]);
+    const el = ref.current;
+    if (!el) return;
+    // scrollHeight > clientHeight means text is being cut off
+    setClamped(el.scrollHeight > el.clientHeight + 2);
+  }, [text, lines]);
 
   if (!text) return null;
 
   return (
     <div>
-      <div
+      <p
         ref={ref}
-        className="overflow-hidden transition-all duration-300"
-        style={{ maxHeight: isExpanded || !needsExpand ? "none" : MAX_HEIGHT }}
+        className={`${className} whitespace-pre-wrap transition-all duration-300 ${
+          !expanded ? `line-clamp-${lines}` : ""
+        }`}
       >
-        <p className="text-stone-600 whitespace-pre-wrap">{text}</p>
-      </div>
-      {needsExpand && (
+        {text}
+      </p>
+
+      {(clamped || expanded) && (
         <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="mt-2 text-sm font-medium text-slate-700 hover:text-slate-900 flex items-center gap-1 transition-colors"
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          className="mt-1.5 flex items-center gap-1 text-xs font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
         >
-          {isExpanded ? (
+          {expanded ? (
             <>
-              <ChevronUp className="w-4 h-4" />
+              <ChevronUp className="w-3.5 h-3.5" />
               Weniger anzeigen
             </>
           ) : (
             <>
-              <ChevronDown className="w-4 h-4" />
-              Alles lesen
+              <ChevronDown className="w-3.5 h-3.5" />
+              Mehr lesen
             </>
           )}
         </button>
