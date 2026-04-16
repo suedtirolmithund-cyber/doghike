@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Mountain, PawPrint, Home, Trophy, Navigation, Dog, LogIn, LogOut, User, BookOpen, ShieldCheck } from "lucide-react";
+import { Mountain, Home, Trophy, Navigation, Dog, LogIn, LogOut, User, BookOpen, ShieldCheck, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ export default function Layout({ children, currentPageName }) {
     { name: "Dashboard", icon: Home, label: "Startseite" },
     { name: "Hikes", icon: Mountain, label: "Alle Touren" },
     { name: "Journal", icon: BookOpen, label: "Tagebuch" },
+    { name: "Feed", icon: Users, label: "Freunde" },
     { name: "RoutePlanner", icon: Navigation, label: "Routenplaner" },
     { name: "TopDogs", icon: Trophy, label: "Top Dogs" },
     { name: "Profile", icon: Dog, label: "Mein Profil" },
@@ -110,6 +111,17 @@ export default function Layout({ children, currentPageName }) {
                   </Link>
                 );
               })}
+              <Link
+                to={createPageUrl("Friends")}
+                className={`flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all ${
+                  isActive("Friends")
+                    ? "bg-slate-800 text-white shadow-md"
+                    : "text-stone-600 hover:text-stone-800 hover:bg-stone-100"
+                }`}
+              >
+                <Users className="w-4 h-4" />
+                <span className="text-sm font-medium">Freunde</span>
+              </Link>
               {isAdmin && (
                 <Link
                   to={createPageUrl("AdminDashboard")}

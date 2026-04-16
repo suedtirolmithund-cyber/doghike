@@ -8,7 +8,7 @@ import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, MapPin, Calendar, Clock, Mountain, Route,
-  Star, Edit, Trash2, ChevronLeft, ChevronRight, X, Globe
+  Star, Edit, Trash2, ChevronLeft, ChevronRight, X, Globe, Share2, Check
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -74,6 +74,19 @@ export default function HikeDetail() {
   
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      navigator.share({ title: hike?.trail_name, url });
+    } else {
+      navigator.clipboard.writeText(url).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      });
+    }
+  };
 
   const { data: hike, isLoading } = useQuery({
     queryKey: ["hike", hikeId],
@@ -230,6 +243,15 @@ export default function HikeDetail() {
                 hikeId={hikeId}
                 hikeSource={hike?._source === "journal" ? "journal" : "sheets"}
               />
+              <button
+                onClick={handleShare}
+                title="Tour teilen"
+                className="flex items-center gap-1 px-2 py-1 rounded-full text-white/70 hover:text-white transition-all"
+              >
+                {copied
+                  ? <Check className="w-5 h-5 text-emerald-400" />
+                  : <Share2 className="w-5 h-5" />}
+              </button>
               {hike.country && (
                 <span className="ml-2">
                   {hike.country === "italy" && "🇮🇹 Italien"}

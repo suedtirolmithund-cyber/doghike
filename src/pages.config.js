@@ -58,6 +58,7 @@ import Dogs from './pages/Dogs';
 import EditHike from './pages/EditHike';
 import EditRoute from './pages/EditRoute';
 import Feed from './pages/Feed';
+import Friends from './pages/Friends';
 import HikeDetail from './pages/HikeDetail';
 import Hikes from './pages/Hikes';
 import Journal from './pages/Journal';
@@ -88,6 +89,7 @@ export const PAGES = {
     "EditHike": EditHike,
     "EditRoute": EditRoute,
     "Feed": Feed,
+    "Friends": Friends,
     "HikeDetail": HikeDetail,
     "Hikes": Hikes,
     "Journal": Journal,

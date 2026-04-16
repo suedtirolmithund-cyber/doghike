@@ -137,6 +137,28 @@ create policy "Eigene Einträge löschen"
 --   alter column water_available type smallint using (water_available::int),
 --   alter column water_available set default 0;
 
+-- FRIENDSHIPS
+create table if not exists public.friendships (
+  id           uuid default gen_random_uuid() primary key,
+  requester_id uuid references auth.users(id) on delete cascade not null,
+  receiver_id  uuid references auth.users(id) on delete cascade not null,
+  status       text default 'pending' check (status in ('pending','accepted','rejected')),
+  created_at   timestamptz default now(),
+  unique (requester_id, receiver_id)
+);
+alter table public.friendships enable row level security;
+-- Anyone in the friendship can read it
+create policy "Freundschaften lesen" on public.friendships for select
+  using (auth.uid() = requester_id or auth.uid() = receiver_id);
+-- Only requester can create
+create policy "Freundschaftsanfrage senden" on public.friendships for insert
+  with check (auth.uid() = requester_id);
+-- Only receiver can accept/reject; requester can delete (unfriend)
+create policy "Freundschaft verwalten" on public.friendships for update
+  using (auth.uid() = receiver_id);
+create policy "Freundschaft löschen" on public.friendships for delete
+  using (auth.uid() = requester_id or auth.uid() = receiver_id);
+
 -- SAVED HIKES
 create table if not exists public.saved_hikes (
   id          uuid default gen_random_uuid() primary key,
