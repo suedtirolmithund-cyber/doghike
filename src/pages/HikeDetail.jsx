@@ -148,10 +148,6 @@ export default function HikeDetail() {
             </Button>
           </Link>
           <div className="flex gap-2 flex-wrap">
-            <SaveButton
-              hikeId={hikeId}
-              hikeSource={hike?._source === "journal" ? "journal" : "sheets"}
-            />
             {isOwnHike && (
               <>
                 <Link to={createPageUrl("EditHike") + `?id=${hikeId}`}>
@@ -225,9 +221,15 @@ export default function HikeDetail() {
               )}
             </div>
             <h1 className="text-4xl md:text-5xl font-light text-white mb-2">{hike.trail_name}</h1>
-            <div className="flex items-center gap-2 text-white/80">
-              <MapPin className="w-4 h-4" />
-              <span>{hike.location || "Dolomites"}</span>
+            <div className="flex items-center gap-3 text-white/80">
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4" />
+                <span>{hike.location || "Dolomites"}</span>
+              </div>
+              <SaveButton
+                hikeId={hikeId}
+                hikeSource={hike?._source === "journal" ? "journal" : "sheets"}
+              />
               {hike.country && (
                 <span className="ml-2">
                   {hike.country === "italy" && "🇮🇹 Italien"}

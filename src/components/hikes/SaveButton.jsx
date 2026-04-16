@@ -1,6 +1,6 @@
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Bookmark } from "lucide-react";
+import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getSavedHikes, saveHike, unsaveHike } from "@/lib/communityApi";
@@ -56,20 +56,25 @@ export default function SaveButton({ hikeId, hikeSource = "sheets", className })
   const isPending = saveMutation.isPending || unsaveMutation.isPending;
 
   return (
-    <Button
-      size="icon"
-      variant="ghost"
+    <button
       onClick={handleClick}
       disabled={isPending}
+      title={isSaved ? "Aus Merkliste entfernen" : "Tour speichern"}
       className={cn(
-        "bg-white/80 backdrop-blur-sm hover:bg-white",
-        isSaved && "text-amber-500",
+        "flex items-center gap-1.5 px-2 py-1 rounded-full transition-all",
+        isSaved
+          ? "text-emerald-400 hover:text-emerald-300"
+          : "text-white/70 hover:text-white",
+        isPending && "opacity-50 cursor-not-allowed",
         className
       )}
     >
-      <Bookmark
-        className={cn("w-4 h-4 transition-all", isSaved && "fill-amber-500")}
+      <Heart
+        className={cn(
+          "w-5 h-5 transition-all",
+          isSaved && "fill-emerald-400 text-emerald-400"
+        )}
       />
-    </Button>
+    </button>
   );
 }
