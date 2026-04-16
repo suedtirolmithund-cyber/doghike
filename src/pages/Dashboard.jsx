@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { getHikes } from "@/api/sheetsClient";
+import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -22,8 +22,9 @@ export default function Dashboard() {
   }, []);
 
   const { data: hikes = [], isLoading: hikesLoading } = useQuery({
-    queryKey: ["hikes"],
-    queryFn: getHikes
+    queryKey: ["allHikes"],
+    queryFn: getAllHikes,
+    staleTime: 5 * 60 * 1000,
   });
 
   const { data: dogs = [], isLoading: dogsLoading } = useQuery({

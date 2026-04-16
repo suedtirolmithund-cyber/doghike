@@ -160,16 +160,112 @@ export async function getHikes() {
       return [];
     }
     const text = await response.text();
-    console.log("[sheetsClient] CSV loaded, length:", text.length);
     const rows = parseCsv(text);
-    console.log("[sheetsClient] total rows parsed:", rows.length);
     const hikes = rows
       .filter((row) => row.status === "approved")
       .map((row, index) => rowToHike(row, index));
-    console.log("[sheetsClient] approved hikes:", hikes.length, "first id:", hikes[0]?.id);
+    console.log("[sheetsClient] approved hikes from Sheets:", hikes.length);
     return hikes;
   } catch (err) {
     console.error("[sheetsClient] error:", err);
     return [];
   }
+}
+
+/**
+ * Converts an approved journal_entry (from Supabase) into the same
+ * Hike shape used throughout the app so both sources are interchangeable.
+ */
+function journalEntryToHike(entry) {
+  return {
+    id: `journal-${entry.id}`,
+    trail_name: entry.title,
+    location: entry.location || null,
+    country: null,
+
+    latitude: null,
+    longitude: null,
+
+    photos: Array.isArray(entry.photos) ? entry.photos : [],
+    link: null,
+    tags: [],
+
+    distance_km: entry.distance_km ? Number(entry.distance_km) : null,
+    elevation_gain_m: entry.elevation_m || null,
+    duration_minutes: entry.duration_minutes || null,
+
+    difficulty: entry.difficulty ? String(entry.difficulty) : null,
+    dog_difficulty: entry.dog_difficulty ? String(entry.dog_difficulty) : null,
+
+    water_availability: entry.water_available > 0 ? "available" : null,
+
+    is_premium: false,
+    status: "approved",
+    visibility: "public",
+
+    season: null,
+    availability: null,
+
+    hazard_notes: entry.hazard_notes || null,
+    parking_info: null,
+    restaurant_info: null,
+    notes: entry.description || null,
+
+    // Journal metadata
+    rating: entry.rating || null,
+    dog_suitable: entry.dog_suitable,
+    date: entry.date || null,
+
+    _source: "journal",
+    _journal_id: entry.id,
+  };
+}
+
+/**
+ * Fetches approved journal entries from Supabase.
+ * Returns [] gracefully if Supabase is unavailable.
+ */
+async function getApprovedJournalEntries() {
+  try {
+    const { supabase } = await import("@/lib/supabaseClient");
+    const { data, error } = await supabase
+      .from("journal_entries")
+      .select("*")
+      .eq("status", "approved")
+      .eq("visibility", "public");
+    if (error) {
+      console.error("[sheetsClient] Supabase journal fetch error:", error.message);
+      return [];
+    }
+    console.log("[sheetsClient] approved journal entries from Supabase:", data?.length ?? 0);
+    return (data ?? []).map(journalEntryToHike);
+  } catch (err) {
+    console.error("[sheetsClient] getApprovedJournalEntries failed:", err);
+    return [];
+  }
+}
+
+/**
+ * Combines Google Sheets hikes + approved Supabase journal entries.
+ * Deduplicates by id. Sheets hikes take priority on conflict.
+ * Use this as the single source of truth for all public hike lists.
+ */
+export async function getAllHikes() {
+  const [sheetsHikes, journalHikes] = await Promise.all([
+    getHikes(),
+    getApprovedJournalEntries(),
+  ]);
+
+  // Merge: Sheets first, then journal entries whose id doesn't collide
+  const seenIds = new Set(sheetsHikes.map((h) => h.id));
+  const merged = [
+    ...sheetsHikes,
+    ...journalHikes.filter((h) => !seenIds.has(h.id)),
+  ];
+
+  console.log(
+    `[sheetsClient] getAllHikes: ${sheetsHikes.length} from Sheets + ` +
+    `${journalHikes.length} from Journal = ${merged.length} total`
+  );
+  return merged;
 }
