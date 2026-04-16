@@ -78,6 +78,31 @@ export async function deleteComment(id) {
   if (error) throw error;
 }
 
+// ── Trigger-Wörter Filter ─────────────────────────────────────
+const TRIGGER_WORDS = [
+  // Spam
+  "spam", "klick hier", "click here", "gratis", "gewinn", "casino", "werbung",
+  "http://", "https://bit.ly", "t.me/", "whatsapp.com",
+  // Hate / Beleidigung (DE/IT/EN)
+  "scheiß", "scheiss", "hurensohn", "wichser", "arschloch", "idiot", "dummkopf",
+  "nazi", "heil", "fotze", "nutte", "fick", "kacke", "bastard", "asshole",
+  "fuck", "shit", "bitch", "cunt", "nigger", "retard",
+  "cazzo", "vaffanculo", "stronzo", "puttana", "merda",
+];
+
+export function containsTriggerWord(text) {
+  const lower = text.toLowerCase();
+  return TRIGGER_WORDS.some((w) => lower.includes(w));
+}
+
+export async function reportComment(commentId, reason = "") {
+  const { error } = await supabase
+    .from("comments")
+    .update({ reported: true, reported_reason: reason || null })
+    .eq("id", commentId);
+  if (error) throw error;
+}
+
 export async function uploadCommentPhoto(userId, file) {
   const ext = file.name.split(".").pop();
   const path = `${userId}/${Date.now()}.${ext}`;

@@ -166,19 +166,28 @@ create policy "Eigene Ratings verwalten" on public.ratings
 
 -- COMMENTS
 create table if not exists public.comments (
-  id        uuid default gen_random_uuid() primary key,
-  user_id   uuid references auth.users(id) on delete cascade not null,
-  hike_id   text not null,
-  text      text not null,
-  photo_url text,
-  created_at timestamptz default now()
+  id              uuid default gen_random_uuid() primary key,
+  user_id         uuid references auth.users(id) on delete cascade not null,
+  hike_id         text not null,
+  text            text not null,
+  photo_url       text,
+  reported        boolean default false,
+  reported_reason text,
+  created_at      timestamptz default now()
 );
 alter table public.comments enable row level security;
 create policy "Kommentare lesen" on public.comments for select using (true);
 create policy "Eigene Kommentare erstellen" on public.comments
   for insert with check (auth.uid() = user_id);
-create policy "Eigene Kommentare löschen" on public.comments
-  for delete using (auth.uid() = user_id);
+create policy "Kommentare melden" on public.comments
+  for update using (true) with check (true); -- anyone can set reported=true
+create policy "Eigene oder Admin Kommentare löschen" on public.comments
+  for delete using (auth.uid() = user_id OR public.is_admin());
+
+-- Falls Tabelle bereits existiert:
+-- alter table public.comments
+--   add column if not exists reported boolean default false,
+--   add column if not exists reported_reason text;
 
 -- USER ROUTES
 create table if not exists public.user_routes (

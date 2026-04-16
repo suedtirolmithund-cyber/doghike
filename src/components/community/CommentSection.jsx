@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Camera, Send, Trash2, Loader2, X } from "lucide-react";
+import { Camera, Send, Trash2, Loader2, X, Flag } from "lucide-react";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,7 +13,7 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { getComments, createComment, deleteComment, uploadCommentPhoto } from "@/lib/communityApi";
+import { getComments, createComment, deleteComment, uploadCommentPhoto, reportComment, containsTriggerWord } from "@/lib/communityApi";
 
 export default function CommentSection({ hikeId }) {
   const { user, isAuthenticated } = useAuth();
@@ -22,6 +22,7 @@ export default function CommentSection({ hikeId }) {
   const [uploading, setUploading] = useState(false);
   const [consentPublic, setConsentPublic] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [reportingId, setReportingId] = useState(null);
   const queryClient = useQueryClient();
 
   const { data: comments = [], isLoading } = useQuery({
@@ -30,13 +31,29 @@ export default function CommentSection({ hikeId }) {
   });
 
   const createMutation = useMutation({
-    mutationFn: () => createComment(user.id, hikeId, text, photoUrl),
+    mutationFn: async () => {
+      const comment = await createComment(user.id, hikeId, text, photoUrl);
+      // Auto-flag if text contains trigger words
+      if (containsTriggerWord(text)) {
+        await reportComment(comment.id, "auto: Trigger-Wort erkannt");
+      }
+      return comment;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", hikeId] });
       setText("");
       setPhotoUrl(null);
       setConsentPublic(false);
       toast.success("Kommentar veröffentlicht");
+    },
+    onError: (e) => toast.error("Fehler: " + e.message),
+  });
+
+  const reportMutation = useMutation({
+    mutationFn: (id) => reportComment(id, "Nutzer-Meldung"),
+    onSuccess: () => {
+      setReportingId(null);
+      toast.success("Kommentar gemeldet. Ein Admin wird ihn prüfen.");
     },
     onError: (e) => toast.error("Fehler: " + e.message),
   });
@@ -183,16 +200,35 @@ export default function CommentSection({ hikeId }) {
                     </p>
                   </div>
                 </div>
-                {user?.id === comment.user_id && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setDeleteId(comment.id)}
-                    className="text-stone-400 hover:text-red-600"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                )}
+                <div className="flex items-center gap-1">
+                  {comment.reported && (
+                    <span className="text-xs text-red-500 font-medium px-1.5 py-0.5 bg-red-50 rounded">
+                      🚩 gemeldet
+                    </span>
+                  )}
+                  {user?.id !== comment.user_id && isAuthenticated && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => reportMutation.mutate(comment.id)}
+                      disabled={reportMutation.isPending && reportingId === comment.id || comment.reported}
+                      className="text-stone-300 hover:text-orange-500 w-7 h-7"
+                      title="Kommentar melden"
+                    >
+                      <Flag className="w-3.5 h-3.5" />
+                    </Button>
+                  )}
+                  {user?.id === comment.user_id && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setDeleteId(comment.id)}
+                      className="text-stone-400 hover:text-red-600 w-7 h-7"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </Button>
+                  )}
+                </div>
               </div>
 
               <p className="text-stone-700 mb-3 text-sm md:text-base">{comment.text}</p>
