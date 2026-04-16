@@ -1,73 +1,51 @@
-import { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { getSavedHikes, saveHike, unsaveHike } from "@/lib/communityApi";
+import { useNavigate } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+import { toast } from "sonner";
 
-export default function SaveButton({ hikeId, className }) {
+export default function SaveButton({ hikeId, hikeSource = "sheets", className }) {
+  const { user, isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  const { data: isAuthenticated } = useQuery({
-    queryKey: ["isAuthenticated"],
-    queryFn: () => base44.auth.isAuthenticated()
-  });
-
-  const { data: user } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => base44.auth.me(),
-    enabled: isAuthenticated
-  });
+  const navigate = useNavigate();
 
   const { data: savedHikes = [] } = useQuery({
-    queryKey: ["savedHikes"],
-    queryFn: async () => {
-      const currentUser = await base44.auth.me();
-      return base44.entities.SavedHike.filter({ user_email: currentUser.email });
-    },
-    enabled: isAuthenticated
+    queryKey: ["savedHikes", user?.id],
+    queryFn: () => getSavedHikes(user.id),
+    enabled: !!user?.id,
   });
 
-  const isSaved = savedHikes.some(s => s.hike_id === hikeId);
+  const isSaved = savedHikes.some((s) => s.hike_id === hikeId);
 
   const saveMutation = useMutation({
-    mutationFn: async () => {
-      const currentUser = await base44.auth.me();
-      return base44.entities.SavedHike.create({
-        hike_id: hikeId,
-        user_email: currentUser.email
-      });
-    },
+    mutationFn: () => saveHike(user.id, hikeId, hikeSource),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["savedHikes"] });
-      setIsProcessing(false);
-    }
+      queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] });
+      toast.success("Tour gespeichert");
+    },
+    onError: (e) => toast.error("Fehler: " + e.message),
   });
 
   const unsaveMutation = useMutation({
-    mutationFn: async () => {
-      const saved = savedHikes.find(s => s.hike_id === hikeId);
-      if (saved) {
-        return base44.entities.SavedHike.delete(saved.id);
-      }
-    },
+    mutationFn: () => unsaveHike(user.id, hikeId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["savedHikes"] });
-      setIsProcessing(false);
-    }
+      queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] });
+      toast.success("Tour entfernt");
+    },
+    onError: (e) => toast.error("Fehler: " + e.message),
   });
 
-  const handleClick = async (e) => {
+  const handleClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
     if (!isAuthenticated) {
-      base44.auth.redirectToLogin(window.location.pathname);
+      navigate(createPageUrl("Login"));
       return;
     }
-
-    setIsProcessing(true);
     if (isSaved) {
       unsaveMutation.mutate();
     } else {
@@ -75,12 +53,14 @@ export default function SaveButton({ hikeId, className }) {
     }
   };
 
+  const isPending = saveMutation.isPending || unsaveMutation.isPending;
+
   return (
     <Button
       size="icon"
       variant="ghost"
       onClick={handleClick}
-      disabled={isProcessing}
+      disabled={isPending}
       className={cn(
         "bg-white/80 backdrop-blur-sm hover:bg-white",
         isSaved && "text-amber-500",
@@ -88,10 +68,7 @@ export default function SaveButton({ hikeId, className }) {
       )}
     >
       <Bookmark
-        className={cn(
-          "w-4 h-4 transition-all",
-          isSaved && "fill-amber-500"
-        )}
+        className={cn("w-4 h-4 transition-all", isSaved && "fill-amber-500")}
       />
     </Button>
   );

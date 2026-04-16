@@ -137,9 +137,81 @@ create policy "Eigene Einträge löschen"
 --   alter column water_available type smallint using (water_available::int),
 --   alter column water_available set default 0;
 
+-- SAVED HIKES
+create table if not exists public.saved_hikes (
+  id          uuid default gen_random_uuid() primary key,
+  user_id     uuid references auth.users(id) on delete cascade not null,
+  hike_id     text not null,
+  hike_source text default 'sheets' check (hike_source in ('sheets','journal')),
+  created_at  timestamptz default now(),
+  unique (user_id, hike_id)
+);
+alter table public.saved_hikes enable row level security;
+create policy "Eigene gespeicherte Touren" on public.saved_hikes
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- RATINGS
+create table if not exists public.ratings (
+  id         uuid default gen_random_uuid() primary key,
+  user_id    uuid references auth.users(id) on delete cascade not null,
+  hike_id    text not null,
+  rating     smallint not null check (rating between 1 and 5),
+  created_at timestamptz default now(),
+  unique (user_id, hike_id)
+);
+alter table public.ratings enable row level security;
+create policy "Ratings lesen" on public.ratings for select using (true);
+create policy "Eigene Ratings verwalten" on public.ratings
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- COMMENTS
+create table if not exists public.comments (
+  id        uuid default gen_random_uuid() primary key,
+  user_id   uuid references auth.users(id) on delete cascade not null,
+  hike_id   text not null,
+  text      text not null,
+  photo_url text,
+  created_at timestamptz default now()
+);
+alter table public.comments enable row level security;
+create policy "Kommentare lesen" on public.comments for select using (true);
+create policy "Eigene Kommentare erstellen" on public.comments
+  for insert with check (auth.uid() = user_id);
+create policy "Eigene Kommentare löschen" on public.comments
+  for delete using (auth.uid() = user_id);
+
+-- USER ROUTES
+create table if not exists public.user_routes (
+  id          uuid default gen_random_uuid() primary key,
+  user_id     uuid references auth.users(id) on delete cascade not null,
+  name        text not null,
+  description text,
+  start_location text,
+  notes       text,
+  waypoints   jsonb default '[]',
+  distance_km numeric(6,2),
+  elevation_gain_m integer,
+  duration_minutes integer,
+  avg_speed_kmh numeric(5,2),
+  gpx_url     text,
+  route_type  text default 'planned' check (route_type in ('planned','recorded','gpx')),
+  is_public   boolean default false,
+  completed   boolean default false,
+  completed_date date,
+  completed_notes text,
+  completed_rating smallint check (completed_rating between 1 and 5),
+  created_at  timestamptz default now()
+);
+alter table public.user_routes enable row level security;
+create policy "Eigene Routen lesen" on public.user_routes
+  for select using (auth.uid() = user_id or is_public = true);
+create policy "Eigene Routen verwalten" on public.user_routes
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
 -- ============================================================
 -- Storage Buckets (manuell im Supabase Dashboard anlegen):
 -- 1. "avatars"      – Public bucket für Profilbilder
 -- 2. "dog-photos"   – Public bucket für Hundefotos
 -- 3. "journal"      – Public bucket für Journal-Fotos & GPX-Dateien
+-- 4. "comments"     – Public bucket für Kommentar-Fotos
 -- ============================================================

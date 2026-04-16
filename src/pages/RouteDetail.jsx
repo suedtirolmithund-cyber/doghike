@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/lib/AuthContext";
+import { getRoute, updateRoute, deleteRoute } from "@/lib/routesApi";
+import { uploadJournalFile } from "@/lib/journalApi";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { MapContainer, TileLayer, Polyline, Marker } from "react-leaflet";
@@ -52,8 +54,10 @@ export default function RouteDetail() {
   const [uploading, setUploading] = useState(false);
   const [editingRoute, setEditingRoute] = useState(false);
 
+  const { user } = useAuth();
+
   const updateCoordinatesMutation = useMutation({
-    mutationFn: (data) => base44.entities.UserRoute.update(routeId, data),
+    mutationFn: (data) => updateRoute(routeId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["route", routeId] });
       setEditingRoute(false);
@@ -62,38 +66,29 @@ export default function RouteDetail() {
 
   const { data: route, isLoading } = useQuery({
     queryKey: ["route", routeId],
-    queryFn: async () => {
-      const routes = await base44.entities.UserRoute.filter({ id: routeId });
-      return Array.isArray(routes) ? routes[0] : undefined;
-    },
+    queryFn: () => getRoute(routeId),
     enabled: !!routeId,
   });
 
-  const { data: user } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => base44.auth.me(),
-  });
-
   const { data: myDogs = [] } = useQuery({
-    queryKey: ["myDogs"],
+    queryKey: ["dogs", user?.id],
     queryFn: async () => {
-      if (!user?.email) return [];
-      const r = await base44.entities.Dog.filter({ created_by: user.email }); return Array.isArray(r) ? r : [];
+      const { getDogs } = await import("@/lib/profilesApi");
+      return getDogs(user.id);
     },
-    enabled: !!user?.email,
+    enabled: !!user?.id,
   });
 
   const handlePhotoUpload = async (e) => {
     const files = Array.from(e.target.files);
-    if (files.length === 0) return;
+    if (files.length === 0 || !user) return;
     setUploading(true);
-    const uploadedUrls = [];
-    for (const file of files) {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      uploadedUrls.push(file_url);
+    try {
+      const urls = await Promise.all(files.map((f) => uploadJournalFile(user.id, f)));
+      setCompleteData((prev) => ({ ...prev, photos: [...(prev.photos || []), ...urls] }));
+    } finally {
+      setUploading(false);
     }
-    setCompleteData(prev => ({ ...prev, photos: [...(prev.photos || []), ...uploadedUrls] }));
-    setUploading(false);
   };
 
   const removePhoto = (index) => {
@@ -108,18 +103,15 @@ export default function RouteDetail() {
   };
 
   const deleteRouteMutation = useMutation({
-    mutationFn: () => base44.entities.UserRoute.delete(routeId),
+    mutationFn: () => deleteRoute(routeId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userRoutes"] });
+      queryClient.invalidateQueries({ queryKey: ["userRoutes", user?.id] });
       navigate(createPageUrl("Profile"));
     },
   });
 
   const completeRouteMutation = useMutation({
-    mutationFn: (data) => base44.entities.UserRoute.update(routeId, {
-      completed: true,
-      ...data,
-    }),
+    mutationFn: (data) => updateRoute(routeId, { completed: true, ...data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["route", routeId] });
       setShowCompleteForm(false);

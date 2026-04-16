@@ -1,75 +1,41 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Star, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { getRatings, upsertRating } from "@/lib/communityApi";
+import { toast } from "sonner";
 
 export default function RatingSection({ hikeId }) {
-   const [selectedRating, setSelectedRating] = useState(0);
-   const [hoverRating, setHoverRating] = useState(0);
-   const [consentPublic, setConsentPublic] = useState(false);
-   const queryClient = useQueryClient();
-
-  const { data: user } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => base44.auth.me(),
-  });
+  const { user, isAuthenticated } = useAuth();
+  const [selectedRating, setSelectedRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [consentPublic, setConsentPublic] = useState(false);
+  const queryClient = useQueryClient();
 
   const { data: ratings = [] } = useQuery({
     queryKey: ["ratings", hikeId],
-    queryFn: async () => { const r = await base44.entities.Rating.filter({ hike_id: hikeId }); return Array.isArray(r) ? r : []; },
+    queryFn: () => getRatings(hikeId),
   });
 
-  const { data: userRating } = useQuery({
-    queryKey: ["userRating", hikeId, user?.email],
-    queryFn: () =>
-      base44.entities.Rating.filter({ hike_id: hikeId, user_email: user?.email }).then(r => Array.isArray(r) ? r : []),
-    enabled: !!user?.email,
-  });
-
-  const createRatingMutation = useMutation({
-    mutationFn: (data) => base44.entities.Rating.create(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["ratings", hikeId] });
-      queryClient.invalidateQueries({ queryKey: ["userRating", hikeId] });
-      setSelectedRating(0);
-    },
-  });
-
-  const updateRatingMutation = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.Rating.update(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["ratings", hikeId] });
-      queryClient.invalidateQueries({ queryKey: ["userRating", hikeId] });
-      setSelectedRating(0);
-    },
-  });
-
-  const safeRatings = Array.isArray(ratings) ? ratings : [];
-  const averageRating = safeRatings.length > 0
-    ? (safeRatings.reduce((sum, r) => sum + r.rating, 0) / safeRatings.length).toFixed(1)
+  const averageRating = ratings.length > 0
+    ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1)
     : 0;
 
-  const existingRating = userRating?.[0];
+  const userRating = user ? ratings.find((r) => r.user_id === user.id) : null;
 
-  const handleRatingSubmit = async () => {
-    if (selectedRating === 0) return;
-
-    if (existingRating) {
-      await updateRatingMutation.mutateAsync({
-        id: existingRating.id,
-        data: { rating: selectedRating },
-      });
-    } else {
-      await createRatingMutation.mutateAsync({
-        hike_id: hikeId,
-        user_email: user?.email,
-        rating: selectedRating,
-      });
-    }
-  };
+  const ratingMutation = useMutation({
+    mutationFn: () => upsertRating(user.id, hikeId, selectedRating),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["ratings", hikeId] });
+      setSelectedRating(0);
+      setConsentPublic(false);
+      toast.success("Bewertung gespeichert");
+    },
+    onError: (e) => toast.error("Fehler: " + e.message),
+  });
 
   return (
     <div className="bg-white rounded-xl p-4 md:p-6 border border-stone-200">
@@ -80,23 +46,20 @@ export default function RatingSection({ hikeId }) {
         </div>
         <div className="flex items-center gap-1 mb-1">
           {[1, 2, 3, 4, 5].map((star) => (
-            <Star
-              key={star}
-              className={`w-5 h-5 ${
-                star <= Math.round(averageRating)
-                  ? "fill-yellow-400 text-yellow-400"
-                  : "text-stone-300"
-              }`}
-            />
+            <Star key={star} className={`w-5 h-5 ${
+              star <= Math.round(averageRating)
+                ? "fill-yellow-400 text-yellow-400"
+                : "text-stone-300"
+            }`} />
           ))}
         </div>
-        <p className="text-sm text-stone-500">{ratings.length} Bewertungen</p>
+        <p className="text-sm text-stone-500">{ratings.length} Bewertung{ratings.length !== 1 ? "en" : ""}</p>
       </div>
 
-      {user && (
+      {isAuthenticated && (
         <div className="border-t border-stone-200 pt-4 md:pt-6">
           <p className="font-semibold text-stone-800 mb-3 text-sm md:text-base">
-            {existingRating ? "Deine Bewertung ändern" : "Wanderung bewerten"}
+            {userRating ? "Deine Bewertung ändern" : "Wanderung bewerten"}
           </p>
           <div className="flex items-center justify-center gap-1 mb-4">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -109,13 +72,11 @@ export default function RatingSection({ hikeId }) {
                 onMouseLeave={() => setHoverRating(0)}
                 className="focus:outline-none touch-manipulation"
               >
-                <Star
-                  className={`w-10 h-10 md:w-8 md:h-8 transition-colors ${
-                    star <= (hoverRating || selectedRating || existingRating?.rating || 0)
-                      ? "fill-yellow-400 text-yellow-400"
-                      : "text-stone-300 hover:text-yellow-200"
-                  }`}
-                />
+                <Star className={`w-10 h-10 md:w-8 md:h-8 transition-colors ${
+                  star <= (hoverRating || selectedRating || userRating?.rating || 0)
+                    ? "fill-yellow-400 text-yellow-400"
+                    : "text-stone-300 hover:text-yellow-200"
+                }`} />
               </motion.button>
             ))}
           </div>
@@ -126,31 +87,21 @@ export default function RatingSection({ hikeId }) {
               checked={consentPublic}
               onCheckedChange={setConsentPublic}
             />
-            <label
-              htmlFor="rating-consent"
-              className="text-sm text-stone-700 cursor-pointer flex-1"
-            >
+            <label htmlFor="rating-consent" className="text-sm text-stone-700 cursor-pointer flex-1">
               Ich akzeptiere, dass meine Bewertung öffentlich sichtbar ist
             </label>
           </div>
 
           <Button
-            onClick={handleRatingSubmit}
-            disabled={
-              selectedRating === 0 ||
-              createRatingMutation.isPending ||
-              updateRatingMutation.isPending ||
-              !consentPublic
-            }
+            onClick={() => ratingMutation.mutate()}
+            disabled={selectedRating === 0 || ratingMutation.isPending || !consentPublic}
             className="w-full bg-slate-800 hover:bg-slate-900"
           >
-            {createRatingMutation.isPending || updateRatingMutation.isPending ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            ) : null}
-            {existingRating ? "Bewertung aktualisieren" : "Bewertung abgeben"}
+            {ratingMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+            {userRating ? "Bewertung aktualisieren" : "Bewertung abgeben"}
           </Button>
-          </div>
-          )}
-          </div>
-          );
-          }
+        </div>
+      )}
+    </div>
+  );
+}

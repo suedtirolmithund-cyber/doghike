@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/lib/AuthContext";
+import { createRoute } from "@/lib/routesApi";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
@@ -29,16 +30,12 @@ export default function RoutePlanner() {
   
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  const { data: user } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => base44.auth.me(),
-  });
+  const { user, isAuthenticated } = useAuth();
 
   const createRouteMutation = useMutation({
-    mutationFn: (data) => base44.entities.UserRoute.create(data),
+    mutationFn: (data) => createRoute(user.id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userRoutes"] });
+      queryClient.invalidateQueries({ queryKey: ["userRoutes", user?.id] });
       navigate(createPageUrl("Profile"));
     },
   });
@@ -66,14 +63,14 @@ export default function RoutePlanner() {
     });
   };
 
-  if (!user) {
+  if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 flex items-center justify-center p-6">
         <div className="text-center">
           <p className="text-xl text-stone-700 mb-4">Bitte melde dich an, um Routen zu planen</p>
-          <Button onClick={() => base44.auth.redirectToLogin()}>
-            Anmelden
-          </Button>
+          <Link to={createPageUrl("Login")}>
+            <Button className="bg-emerald-600 hover:bg-emerald-700">Anmelden</Button>
+          </Link>
         </div>
       </div>
     );
