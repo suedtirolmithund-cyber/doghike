@@ -9,10 +9,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Mail, Lock, Eye, EyeOff, PawPrint, AlertCircle, CheckCircle2 } from "lucide-react";
 
 export default function Login() {
-  const { loginWithEmail, signUpWithEmail, loginWithGoogle, authError } = useAuth();
+  const { loginWithEmail, signUpWithEmail, loginWithGoogle, resetPasswordForEmail, authError } = useAuth();
   const navigate = useNavigate();
 
-  const [mode, setMode] = useState("login"); // "login" | "register"
+  const [mode, setMode] = useState("login"); // "login" | "register" | "reset"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -96,6 +96,21 @@ export default function Login() {
     setPrivacyAccepted(false);
   };
 
+  const handleReset = async (e) => {
+    e.preventDefault();
+    setLocalError(null);
+    setSuccessMsg(null);
+    if (!email) { setLocalError("Bitte E-Mail-Adresse eingeben."); return; }
+    setLoading(true);
+    const { error: err } = await resetPasswordForEmail(email);
+    setLoading(false);
+    if (err) {
+      setLocalError(err.message);
+    } else {
+      setSuccessMsg("E-Mail gesendet! Prüfe dein Postfach und klicke auf den Link zum Zurücksetzen.");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-green-50/30 to-emerald-50/20 flex items-center justify-center px-4 py-12">
       <motion.div
@@ -116,30 +131,60 @@ export default function Login() {
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-sm border border-stone-200/70 p-8">
           {/* Tab switcher */}
-          <div className="flex rounded-xl bg-stone-100 p-1 mb-6">
-            <button
-              onClick={() => switchMode("login")}
-              className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200 ${
-                mode === "login"
-                  ? "bg-white text-stone-800 shadow-sm"
-                  : "text-stone-500 hover:text-stone-700"
-              }`}
-            >
-              Anmelden
-            </button>
-            <button
-              onClick={() => switchMode("register")}
-              className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200 ${
-                mode === "register"
-                  ? "bg-white text-stone-800 shadow-sm"
-                  : "text-stone-500 hover:text-stone-700"
-              }`}
-            >
-              Registrieren
-            </button>
-          </div>
+          {mode !== "reset" ? (
+            <div className="flex rounded-xl bg-stone-100 p-1 mb-6">
+              <button onClick={() => switchMode("login")}
+                className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200 ${mode === "login" ? "bg-white text-stone-800 shadow-sm" : "text-stone-500 hover:text-stone-700"}`}>
+                Anmelden
+              </button>
+              <button onClick={() => switchMode("register")}
+                className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200 ${mode === "register" ? "bg-white text-stone-800 shadow-sm" : "text-stone-500 hover:text-stone-700"}`}>
+                Registrieren
+              </button>
+            </div>
+          ) : (
+            <h2 className="text-base font-semibold text-stone-800 mb-6">Passwort zurücksetzen</h2>
+          )}
 
-          {/* Google Button */}
+          {/* ── Passwort-Reset-Formular ── */}
+          {mode === "reset" && (
+            <form onSubmit={handleReset} className="space-y-4">
+              <p className="text-sm text-stone-500 mb-2">
+                Gib deine E-Mail-Adresse ein. Wir senden dir einen Link zum Zurücksetzen.
+              </p>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
+                <Input type="email" placeholder="E-Mail Adresse" value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="pl-10 h-11 border-stone-200" autoComplete="email" required />
+              </div>
+              <AnimatePresence>
+                {error && (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                    className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                    <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /><span>{error}</span>
+                  </motion.div>
+                )}
+                {successMsg && (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                    className="flex items-start gap-2 p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-700">
+                    <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" /><span>{successMsg}</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              <Button type="submit" disabled={loading}
+                className="w-full h-11 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl">
+                {loading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                Link senden
+              </Button>
+              <button type="button" onClick={() => switchMode("login")}
+                className="w-full text-center text-xs text-stone-400 hover:text-stone-600 mt-1">
+                ← Zurück zur Anmeldung
+              </button>
+            </form>
+          )}
+
+          {mode !== "reset" && <>
           <Button
             type="button"
             variant="outline"
@@ -310,21 +355,26 @@ export default function Login() {
               disabled={loading || googleLoading}
               className="w-full h-11 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl transition-colors"
             >
-              {loading ? (
-                <Loader2 className="w-4 h-4 animate-spin mr-2" />
-              ) : null}
+              {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
               {mode === "login" ? "Anmelden" : "Konto erstellen"}
             </Button>
+
+            {/* Passwort vergessen — nur bei Login */}
+            {mode === "login" && (
+              <button type="button" onClick={() => switchMode("reset")}
+                className="w-full text-center text-xs text-stone-400 hover:text-emerald-600 transition-colors mt-1">
+                Passwort vergessen?
+              </button>
+            )}
           </form>
+          </>}
 
           {/* Footer hint */}
           {mode === "login" && (
             <p className="text-center text-xs text-stone-400 mt-5">
               Noch kein Konto?{" "}
-              <button
-                onClick={() => switchMode("register")}
-                className="text-emerald-600 hover:text-emerald-700 font-medium underline-offset-2 hover:underline"
-              >
+              <button onClick={() => switchMode("register")}
+                className="text-emerald-600 hover:text-emerald-700 font-medium underline-offset-2 hover:underline">
                 Jetzt registrieren
               </button>
             </p>
@@ -332,10 +382,8 @@ export default function Login() {
           {mode === "register" && (
             <p className="text-center text-xs text-stone-400 mt-5">
               Bereits registriert?{" "}
-              <button
-                onClick={() => switchMode("login")}
-                className="text-emerald-600 hover:text-emerald-700 font-medium underline-offset-2 hover:underline"
-              >
+              <button onClick={() => switchMode("login")}
+                className="text-emerald-600 hover:text-emerald-700 font-medium underline-offset-2 hover:underline">
                 Jetzt anmelden
               </button>
             </p>

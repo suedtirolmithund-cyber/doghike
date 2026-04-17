@@ -61,6 +61,15 @@ export const AuthProvider = ({ children }) => {
     return { data };
   };
 
+  const resetPasswordForEmail = async (email) => {
+    setAuthError(null);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + "/Login",
+    });
+    if (error) { setAuthError(error.message); return { error }; }
+    return {};
+  };
+
   const loginWithGoogle = async () => {
     setAuthError(null);
     const { error } = await supabase.auth.signInWithOAuth({
@@ -78,7 +87,7 @@ export const AuthProvider = ({ children }) => {
       user, isAuthenticated, isAdmin,
       isLoadingAuth, isLoadingPublicSettings,
       authError, appPublicSettings,
-      logout, loginWithEmail, signUpWithEmail, loginWithGoogle,
+      logout, loginWithEmail, signUpWithEmail, loginWithGoogle, resetPasswordForEmail,
       navigateToLogin, checkAppState,
     }}>
       {children}

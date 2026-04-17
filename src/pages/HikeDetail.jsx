@@ -25,7 +25,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import HikeMap from "@/components/map/HikeMap";
 import RouteProfile from "@/components/hikes/RouteProfile";
-import WeatherWidget from "@/components/weather/WeatherWidget";
 import HikeWeatherInfo from "@/components/weather/HikeWeatherInfo";
 import InteractiveHikeMap from "@/components/hikes/InteractiveHikeMap";
 import SaveButton from "@/components/hikes/SaveButton";
