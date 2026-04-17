@@ -422,6 +422,7 @@ export default function AddJournalEntry() {
   });
   const [photoUploading, setPhotoUploading] = useState(false);
   const [gpxUploading, setGpxUploading] = useState(false);
+  const [photoConsent, setPhotoConsent] = useState(false);
 
   const { data: userDogs = [] } = useQuery({
     queryKey: ["dogs", user?.id],
@@ -510,6 +511,11 @@ export default function AddJournalEntry() {
     e.preventDefault();
     if (!form.title || !form.date) {
       toast.error("Titel und Datum sind Pflichtfelder.");
+      return;
+    }
+    const needsConsent = form.photos.length > 0 && form.visibility !== "private";
+    if (needsConsent && !photoConsent) {
+      toast.error("Bitte bestätige das Einverständnis zu den Fotos.");
       return;
     }
     saveMutation.mutate({
@@ -813,6 +819,27 @@ export default function AddJournalEntry() {
             )}
           </section>
 
+          {/* ── Foto-Einverständnis (nur wenn Fotos + nicht privat) ── */}
+          {form.photos.length > 0 && form.visibility !== "private" && (
+            <section className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={photoConsent}
+                  onChange={(e) => setPhotoConsent(e.target.checked)}
+                  className="mt-1 w-4 h-4 rounded accent-emerald-600 shrink-0 cursor-pointer"
+                />
+                <span className="text-sm text-amber-800 leading-relaxed">
+                  <strong>Einverständnis Fotos:</strong> Ich bestätige, dass ich die Nutzungsrechte
+                  an den hochgeladenen Fotos besitze und dass abgebildete Personen der
+                  Veröffentlichung zugestimmt haben. Mir ist bewusst, dass diese Fotos für{" "}
+                  {form.visibility === "public" ? "alle Nutzer weltweit" : "meine Freunde"}{" "}
+                  sichtbar und über eine URL abrufbar sind.
+                </span>
+              </label>
+            </section>
+          )}
+
           {/* ── Submit ──────────────────────────────────── */}
           <div className="flex gap-3 justify-end pb-4">
             <Link to={createPageUrl("Journal")}>
@@ -820,7 +847,10 @@ export default function AddJournalEntry() {
             </Link>
             <Button
               type="submit"
-              disabled={saveMutation.isPending}
+              disabled={
+                saveMutation.isPending ||
+                (form.photos.length > 0 && form.visibility !== "private" && !photoConsent)
+              }
               className="bg-emerald-600 hover:bg-emerald-700 px-8"
             >
               {saveMutation.isPending ? (
