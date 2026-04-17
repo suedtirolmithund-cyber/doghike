@@ -155,7 +155,7 @@ export default function HikeDetail() {
   const prevPhoto = () => setCurrentPhotoIndex((prev) => (prev - 1 + photos.length) % photos.length);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
       {/* Hero Image */}
       <div className="relative h-[50vh] overflow-hidden">
         <img
@@ -444,25 +444,33 @@ export default function HikeDetail() {
               </motion.div>
             )}
 
-            {/* Water & Hazards Info */}
-            {(hike.water_availability || hike.hazard_notes) && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.17 }}
-                className="bg-white rounded-2xl p-6 border border-stone-200/50"
-              >
-                <h2 className="text-lg font-medium text-stone-800 mb-4">🐕 Infos für Hundebesitzer</h2>
-                <div className="space-y-4">
-                  {hike.water_availability && waterConfig[hike.water_availability] && (
-                    <div className={`flex items-center gap-3 p-3 rounded-xl ${waterConfig[hike.water_availability].color}`}>
-                      <span className="text-lg">{waterConfig[hike.water_availability].icon}</span>
-                      <div>
-                        <p className="font-medium">Wasser unterwegs</p>
-                        <p className="text-sm opacity-80">{waterConfig[hike.water_availability].label}</p>
-                      </div>
+            {/* Water & Hazards Info — always shown */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.17 }}
+              className="bg-white rounded-2xl p-6 border border-stone-200/50"
+            >
+              <h2 className="text-lg font-medium text-stone-800 mb-4">🐕 Infos für Hundebesitzer</h2>
+              <div className="space-y-4">
+                {/* Wasser: immer anzeigen */}
+                {hike.water_availability && waterConfig[hike.water_availability] ? (
+                  <div className={`flex items-center gap-3 p-3 rounded-xl ${waterConfig[hike.water_availability].color}`}>
+                    <span className="text-lg">{waterConfig[hike.water_availability].icon}</span>
+                    <div>
+                      <p className="font-medium">Wasser unterwegs</p>
+                      <p className="text-sm opacity-80">{waterConfig[hike.water_availability].label}</p>
                     </div>
-                  )}
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-stone-50 border border-stone-200">
+                    <span className="text-lg">💧</span>
+                    <div>
+                      <p className="font-medium text-stone-700">Wasser unterwegs</p>
+                      <p className="text-sm text-stone-400">Keine Angabe – Wasser mitnehmen empfohlen</p>
+                    </div>
+                  </div>
+                )}
                   {hike.hazard_notes && (
                     <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl">
                       <p className="font-medium text-amber-800 mb-1">⚠️ Achtung</p>
@@ -475,8 +483,7 @@ export default function HikeDetail() {
                     </div>
                   )}
                 </div>
-              </motion.div>
-            )}
+            </motion.div>
 
             {/* Dogs */}
             {hikeDogs.length > 0 && (

@@ -61,7 +61,7 @@ export default function Dashboard() {
   const seasonLabel = { spring: "Frühling", summer: "Sommer", autumn: "Herbst", winter: "Winter" }[season];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
       {/* Hero */}
       <div className="relative overflow-hidden">
         <div
