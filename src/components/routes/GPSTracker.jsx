@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, Square, Crosshair } from "lucide-react";
+import { Play, Pause, Square, Crosshair, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { motion } from "framer-motion";
 import RouteElevationProfile from "./RouteElevationProfile";
 import "leaflet/dist/leaflet.css";
@@ -33,8 +34,17 @@ function MapUpdater({ center, flyToRef }) {
     if (center) map.setView(center, map.getZoom());
   }, [center, map]);
   useEffect(() => {
-    if (flyToRef) flyToRef.current = () => map.flyTo(center, 16);
+    if (flyToRef) flyToRef.current = (pos) => map.flyTo(pos ?? center, 16, { duration: 1 });
   }, [map, center, flyToRef]);
+  return null;
+}
+
+// Fly to a position without requiring an active track
+function MapFlyController({ flyRef }) {
+  const map = useMap();
+  useEffect(() => {
+    flyRef.current = (pos, zoom = 15) => map.flyTo(pos, zoom, { duration: 1.2 });
+  }, [map, flyRef]);
   return null;
 }
 
@@ -65,6 +75,9 @@ export default function GPSTracker({ onSave }) {
   const [stats, setStats] = useState({ distance: 0, duration: 0, avgSpeed: 0, elevationGain: 0 });
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
 
+  const [myLocation, setMyLocation] = useState(null);
+  const [locating, setLocating] = useState(false);
+
   const watchIdRef = useRef(null);
   const isPausedRef = useRef(false);
   const routePointsRef = useRef([]);
@@ -74,8 +87,31 @@ export default function GPSTracker({ onSave }) {
   const lastPauseTimeRef = useRef(null);
   const intervalRef = useRef(null);
   const flyToRef = useRef(null);
+  const flyControllerRef = useRef(null);
   const distanceRef = useRef(0);
   const elevationGainRef = useRef(0);
+
+  const findMyLocation = () => {
+    if (!navigator.geolocation) {
+      toast.error("GPS wird von deinem Browser nicht unterstützt.");
+      return;
+    }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const loc = [pos.coords.latitude, pos.coords.longitude];
+        setMyLocation(loc);
+        setLocating(false);
+        const fly = flyControllerRef.current || flyToRef.current;
+        if (fly) fly(loc, 15);
+      },
+      () => {
+        setLocating(false);
+        toast.error("Standort nicht verfügbar – GPS aktiviert und Berechtigung erteilt?");
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
 
   const computeStats = useCallback(() => {
     const now = Date.now();
@@ -243,8 +279,8 @@ export default function GPSTracker({ onSave }) {
       {/* Map */}
       <div className="relative h-[50vw] min-h-64 max-h-72 md:h-80 lg:h-[400px] rounded-xl overflow-hidden border-2 border-stone-200">
         <MapContainer
-          center={currentPosition || [46.5, 11.9]}
-          zoom={14}
+          center={currentPosition || myLocation || [46.5, 11.9]}
+          zoom={currentPosition || myLocation ? 14 : 10}
           style={{ height: "100%", width: "100%" }}
           scrollWheelZoom={false}
         >
@@ -252,6 +288,7 @@ export default function GPSTracker({ onSave }) {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; OpenStreetMap'
           />
+          <MapFlyController flyRef={flyControllerRef} />
           {routePoints.length > 1 && (
             <Polyline positions={routePoints} color="#1e293b" weight={5} opacity={0.85} />
           )}
@@ -260,6 +297,10 @@ export default function GPSTracker({ onSave }) {
               <Marker position={currentPosition} icon={myLocationIcon} />
               <MapUpdater center={currentPosition} flyToRef={flyToRef} />
             </>
+          )}
+          {/* Standort-Marker vor Aufzeichnungsstart */}
+          {!currentPosition && myLocation && (
+            <Marker position={myLocation} icon={myLocationIcon} />
           )}
         </MapContainer>
 
@@ -275,14 +316,20 @@ export default function GPSTracker({ onSave }) {
             {routePoints.length} Punkte
           </div>
         )}
-        {currentPosition && (
-          <button
-            onClick={() => flyToRef.current && flyToRef.current()}
-            className="absolute bottom-3 right-3 z-[1000] bg-white rounded-xl shadow-md p-3 border border-stone-200 hover:bg-stone-50 min-w-[44px] min-h-[44px] flex items-center justify-center"
-          >
-            <Crosshair className="w-5 h-5 text-blue-600" />
-          </button>
-        )}
+        <button
+          onClick={() => {
+            if (currentPosition && flyToRef.current) flyToRef.current(currentPosition);
+            else findMyLocation();
+          }}
+          disabled={locating}
+          title="Meinen Standort finden"
+          className="absolute bottom-3 right-3 z-[1000] bg-white rounded-xl shadow-md p-3 border border-stone-200 hover:bg-stone-50 min-w-[44px] min-h-[44px] flex items-center justify-center"
+        >
+          {locating
+            ? <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
+            : <Crosshair className="w-5 h-5 text-blue-600" />
+          }
+        </button>
       </div>
 
       {/* Controls */}
