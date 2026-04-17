@@ -97,10 +97,13 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                   🐕 Stufe {hike.dog_difficulty}
                 </Badge>
               )}
-              {hike.water_availability && (
+              {hike.water_availability && hike.water_availability !== "none" && (
                 <span className={`text-xs font-medium flex items-center gap-0.5 ${waterColors[hike.water_availability]}`}>
                   💧 {waterLabels[hike.water_availability]}
                 </span>
+              )}
+              {hike.water_availability === "none" && (
+                <span className="text-xs font-medium text-red-500">🚫 Kein Wasser</span>
               )}
             </div>
             

@@ -215,7 +215,7 @@ function journalEntryToHike(entry, dog = null, profile = null) {
     difficulty: entry.difficulty ? String(entry.difficulty) : null,
     dog_difficulty: entry.dog_difficulty ? String(entry.dog_difficulty) : null,
 
-    water_availability: entry.water_available > 0 ? "available" : null,
+    water_availability: (["little","moderate","plenty"])[entry.water_available - 1] ?? null,
 
     is_premium: false,
     status: "approved",
