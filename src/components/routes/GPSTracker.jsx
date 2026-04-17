@@ -241,11 +241,12 @@ export default function GPSTracker({ onSave }) {
       </div>
 
       {/* Map */}
-      <div className="relative h-64 md:h-80 lg:h-[400px] rounded-xl overflow-hidden border-2 border-stone-200">
+      <div className="relative h-[50vw] min-h-64 max-h-72 md:h-80 lg:h-[400px] rounded-xl overflow-hidden border-2 border-stone-200">
         <MapContainer
           center={currentPosition || [46.5, 11.9]}
           zoom={14}
           style={{ height: "100%", width: "100%" }}
+          scrollWheelZoom={false}
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -277,7 +278,7 @@ export default function GPSTracker({ onSave }) {
         {currentPosition && (
           <button
             onClick={() => flyToRef.current && flyToRef.current()}
-            className="absolute bottom-3 right-3 z-[1000] bg-white rounded-lg shadow-md p-2 border border-stone-200 hover:bg-stone-50"
+            className="absolute bottom-3 right-3 z-[1000] bg-white rounded-xl shadow-md p-3 border border-stone-200 hover:bg-stone-50 min-w-[44px] min-h-[44px] flex items-center justify-center"
           >
             <Crosshair className="w-5 h-5 text-blue-600" />
           </button>

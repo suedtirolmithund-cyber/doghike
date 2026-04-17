@@ -190,7 +190,7 @@ export default function HikeMap({
         center={center}
         zoom={zoom}
         style={{ height: "100%", width: "100%" }}
-        scrollWheelZoom={true}
+        scrollWheelZoom={false}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
@@ -200,7 +200,7 @@ export default function HikeMap({
       </MapContainer>
 
       {showLegend && (
-        <div className="absolute bottom-3 left-3 z-[1000] bg-white/90 backdrop-blur-sm rounded-xl px-3 py-2 shadow border border-stone-200/60 flex flex-col gap-1 text-xs text-stone-700">
+        <div className="absolute bottom-3 left-3 z-[1000] bg-white/90 backdrop-blur-sm rounded-xl px-3 py-2 shadow border border-stone-200/60 hidden md:flex flex-col gap-1 text-xs text-stone-700">
           {Object.entries(availabilityConfig).map(([key, { color, label }]) => (
             <div key={key} className="flex items-center gap-2">
               <span

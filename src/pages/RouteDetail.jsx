@@ -275,6 +275,7 @@ export default function RouteDetail() {
                   center={route.waypoints[0] || [46.5, 11.9]}
                   zoom={13}
                   style={{ height: "100%", width: "100%" }}
+                  scrollWheelZoom={false}
                 >
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

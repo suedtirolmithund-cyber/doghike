@@ -27,8 +27,7 @@ export default function MapView() {
             <Link to={createPageUrl("Dashboard")}>
               <Button variant="ghost" className="mb-2 text-stone-600" size="sm">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                <span className="hidden sm:inline">Zurück</span>
-                <span className="sm:hidden">Back</span>
+                Zurück
               </Button>
             </Link>
             <h1 className="text-2xl md:text-3xl font-light text-stone-800">Übersichtskarte</h1>
@@ -45,7 +44,7 @@ export default function MapView() {
           transition={{ delay: 0.1 }}
         >
           {hikesWithCoords.length > 0 ? (
-            <HikeMap hikes={hikesWithCoords} height="calc(100vh - 220px)" zoom={9} />
+            <HikeMap hikes={hikesWithCoords} height="calc(100svh - 200px)" zoom={9} />
           ) : (
             <div className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
               <MapPin className="w-16 h-16 text-stone-300 mx-auto mb-4" />

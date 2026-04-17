@@ -315,8 +315,8 @@ function SmartRoutePlanner({ onRouteReady }) {
       {searchError && <p className="text-xs text-red-500">{searchError}</p>}
 
       {/* Map */}
-      <div className="relative rounded-xl overflow-hidden border border-stone-200 shadow-sm" style={{ height: 420 }}>
-        <MapContainer center={[46.5, 11.3]} zoom={10} style={{ height: "100%", width: "100%" }} scrollWheelZoom>
+      <div className="relative rounded-xl overflow-hidden border border-stone-200 shadow-sm h-[60vw] min-h-[260px] max-h-[450px] md:h-[420px] md:max-h-none">
+        <MapContainer center={[46.5, 11.3]} zoom={10} style={{ height: "100%", width: "100%" }} scrollWheelZoom={false}>
           <TileLayer url={tile.url} attribution={tile.attribution} />
           <MapClickHandler onMapClick={handleMapClick} />
           {flyTarget && <MapFlyTo center={flyTarget.center} zoom={flyTarget.zoom} />}
@@ -344,7 +344,7 @@ function SmartRoutePlanner({ onRouteReady }) {
                 <div className="text-xs">
                   <p className="font-semibold">{i === 0 ? "Start" : i === waypoints.length - 1 ? "Ziel" : `Wegpunkt ${wp.label}`}</p>
                   <p className="text-stone-400">{wp.lat.toFixed(5)}, {wp.lng.toFixed(5)}</p>
-                  <p className="text-stone-400 italic">Ziehen zum Verschieben</p>
+                  <p className="text-stone-400 italic">Ziehen/Halten zum Verschieben</p>
                   <button
                     onClick={() => removeWaypoint(i)}
                     className="mt-1 text-red-500 hover:underline text-xs flex items-center gap-1"
@@ -360,7 +360,7 @@ function SmartRoutePlanner({ onRouteReady }) {
         {/* Map overlay hint */}
         {waypoints.length === 0 && (
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 text-xs text-stone-600 shadow pointer-events-none">
-            Klicke auf die Karte um Wegpunkte zu setzen
+            Tippe / klicke auf die Karte um Wegpunkte zu setzen
           </div>
         )}
 

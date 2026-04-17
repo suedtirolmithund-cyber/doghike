@@ -417,11 +417,12 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
         )}
       </div>
 
-      <div className="relative h-64 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-stone-200">
+      <div className="relative h-[60vw] min-h-64 max-h-72 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-stone-200">
         <MapContainer
           center={waypoints.length > 0 ? waypoints[0] : [46.5, 11.9]}
           zoom={waypoints.length > 0 ? 12 : 10}
           style={{ height: "100%", width: "100%" }}
+          scrollWheelZoom={false}
           ref={mapRef}
         >
           <TileLayer
