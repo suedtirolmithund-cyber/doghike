@@ -5,7 +5,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { base44 } from "@/api/base44Client";
+import { uploadJournalFile } from "@/lib/journalApi";
+import { useAuth } from "@/lib/AuthContext";
 import { Upload, X, Loader2, Star, Map as MapIcon, Trash2, MapPin, HelpCircle } from "lucide-react";
 import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,6 +15,7 @@ import StartPointPicker from "@/components/map/StartPointPicker";
 import ConsentDialog from "@/components/ConsentDialog";
 
 export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabel }) {
+  const { user } = useAuth();
   const [formData, setFormData] = useState(hike || {
     trail_name: "",
     location: "",
@@ -58,7 +60,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
     const uploadedUrls = [];
 
     for (const file of files) {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const file_url = await uploadJournalFile(user?.id ?? "admin", file);
       uploadedUrls.push(file_url);
     }
 

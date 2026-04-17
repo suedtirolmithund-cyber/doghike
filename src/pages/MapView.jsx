@@ -1,4 +1,3 @@
-import { base44 } from "@/api/base44Client";
 import { getHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
