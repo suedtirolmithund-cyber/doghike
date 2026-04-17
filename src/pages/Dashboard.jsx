@@ -143,11 +143,11 @@ export default function Dashboard() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <div>
               <h2 className="text-2xl font-light text-stone-800">
-                {searchQuery ? "Suchergebnisse" : `Touren – ${seasonLabel} & Ganzjährig zuerst`}
+                {searchQuery ? "Suchergebnisse" : "Unsere Wandertipps für dich"}
               </h2>
               {!searchQuery && (
                 <p className="text-sm text-stone-400 mt-0.5">
-                  Passend zur aktuellen Jahreszeit sortiert
+                  Passend zur aktuellen Jahreszeit – {seasonLabel} & Ganzjährig
                 </p>
               )}
             </div>
