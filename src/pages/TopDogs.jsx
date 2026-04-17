@@ -12,11 +12,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 // ── Badge-Definitionen ────────────────────────────────────────
 const BADGE_DEFS = {
   champion:    { emoji: "🏆", label: "Champion",        desc: "Platz 1 im Ranking" },
-  veteran:     { emoji: "🎖️", label: "Veteran",          desc: "50+ Touren" },
-  explorer:    { emoji: "🗺️", label: "Entdecker",        desc: "10+ Touren" },
+  veteran:     { emoji: "🏅", label: "Veteran",          desc: "50+ Touren" },
+  explorer:    { emoji: "🧭", label: "Entdecker",        desc: "10+ Touren" },
   ultra:       { emoji: "⚡", label: "Ultra-Läufer",     desc: "500+ km" },
   marathoner:  { emoji: "🏃", label: "Kilometerfresser", desc: "100+ km" },
-  mountaineer: { emoji: "🏔️", label: "Gipfelstürmer",    desc: "1.000+ Höhenmeter" },
+  mountaineer: { emoji: "⛰️", label: "Gipfelstürmer",    desc: "1.000+ Höhenmeter" },
   popular:     { emoji: "⭐", label: "Liebling",         desc: "⌀ 4,5 Sterne (3+ Bewertungen)" },
 };
 

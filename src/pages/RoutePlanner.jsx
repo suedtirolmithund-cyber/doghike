@@ -471,7 +471,7 @@ export default function RoutePlanner() {
       description: routeData.description,
       start_location: routeData.start_location,
       route_type: activeTab === "track" ? "recorded" : activeTab === "gpx" ? "gpx" : "planned",
-      waypoints: routeGeometry.positions,
+      waypoints: routeGeometry.positions ?? routeGeometry.coordinates ?? [],
       is_public: routeData.is_shared,
       distance_km: routeGeometry.distance_km,
       elevation_gain_m: routeGeometry.elevation_gain_m || null,

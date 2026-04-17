@@ -143,7 +143,7 @@ function rowToHike(row, index) {
     dog_difficulty: row.difficulty_hund || null,
 
     // water → water_availability (none | little | moderate | plenty)
-    water_availability: row.water || null,
+    water_availability: (() => { const w = row.water?.trim(); if (!w) return null; if (w === "0") return "none"; return w; })(),
 
     is_premium: row.is_premium === "true" || row.is_premium === "1",
 
