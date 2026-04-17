@@ -1,44 +1,38 @@
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
-import { Cloud, Droplets, Wind, Thermometer, Loader2, CloudRain, Sun, CloudSnow } from "lucide-react";
+import { Cloud, Droplets, Wind, Sun, CloudRain, CloudSnow, CloudDrizzle, CloudLightning, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function HikeWeatherInfo({ location, date, latitude, longitude }) {
-  const { data: weatherData, isLoading } = useQuery({
-    queryKey: ["weather", latitude, longitude],
+function wmoToWeather(code) {
+  if (code === 0)   return { label: "Sonnig",       Icon: Sun };
+  if (code <= 3)    return { label: "Teils bewölkt", Icon: Cloud };
+  if (code <= 48)   return { label: "Nebel",         Icon: Cloud };
+  if (code <= 57)   return { label: "Nieselregen",   Icon: CloudDrizzle };
+  if (code <= 67)   return { label: "Regen",         Icon: CloudRain };
+  if (code <= 77)   return { label: "Schnee",        Icon: CloudSnow };
+  if (code <= 82)   return { label: "Regenschauer",  Icon: CloudRain };
+  if (code <= 86)   return { label: "Schneeschauer", Icon: CloudSnow };
+  if (code >= 95)   return { label: "Gewitter",      Icon: CloudLightning };
+  return { label: "Bewölkt", Icon: Cloud };
+}
+
+export default function HikeWeatherInfo({ location, latitude, longitude }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["hikeWeather", latitude, longitude],
     queryFn: async () => {
-      if (!latitude || !longitude) return null;
-      
-      // Nutze OpenWeatherMap API über LLM-Integration
-      const response = await base44.integrations.Core.InvokeLLM({
-        prompt: `Gib mir das aktuelle Wetter für diese Koordinaten: ${latitude}, ${longitude}. 
-        Antworte nur mit einem JSON-Objekt mit diesen Feldern:
-        - temperature (Zahl in Celsius)
-        - description (kurze Beschreibung auf Deutsch)
-        - humidity (Luftfeuchtigkeit in Prozent)
-        - wind_speed (Windgeschwindigkeit in km/h)
-        - condition (eines von: sunny, cloudy, rainy, snowy)`,
-        response_json_schema: {
-          type: "object",
-          properties: {
-            temperature: { type: "number" },
-            description: { type: "string" },
-            humidity: { type: "number" },
-            wind_speed: { type: "number" },
-            condition: { type: "string" }
-          }
-        }
-      });
-      
-      return response;
+      const res = await fetch(
+        `https://api.open-meteo.com/v1/forecast` +
+        `?latitude=${latitude}&longitude=${longitude}` +
+        `&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m` +
+        `&forecast_days=1&timezone=auto`
+      );
+      if (!res.ok) throw new Error("Wetter nicht verfügbar");
+      return res.json();
     },
     enabled: !!latitude && !!longitude,
-    staleTime: 1000 * 60 * 30 // 30 Minuten
+    staleTime: 30 * 60 * 1000,
   });
 
-  if (!latitude || !longitude) {
-    return null;
-  }
+  if (!latitude || !longitude) return null;
 
   if (isLoading) {
     return (
@@ -51,65 +45,53 @@ export default function HikeWeatherInfo({ location, date, latitude, longitude })
     );
   }
 
-  if (!weatherData) {
-    return null;
-  }
+  if (!data?.current) return null;
 
-  const getWeatherIcon = (condition) => {
-    switch (condition?.toLowerCase()) {
-      case "sunny":
-        return <Sun className="w-12 h-12 text-yellow-500" />;
-      case "rainy":
-        return <CloudRain className="w-12 h-12 text-blue-500" />;
-      case "snowy":
-        return <CloudSnow className="w-12 h-12 text-slate-400" />;
-      default:
-        return <Cloud className="w-12 h-12 text-slate-500" />;
-    }
-  };
+  const cur = data.current;
+  const { label, Icon: WeatherIcon } = wmoToWeather(cur.weather_code);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-br from-blue-50 to-sky-50 rounded-2xl p-6 border border-blue-200"
-    >
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+      className="bg-gradient-to-br from-blue-50 to-sky-50 rounded-2xl p-6 border border-blue-200">
+
       <h3 className="text-lg font-semibold text-stone-800 mb-4 flex items-center gap-2">
         <Cloud className="w-5 h-5" />
-        Aktuelle Wetterbedingungen
+        Aktuelles Wetter{location ? ` in ${location}` : ""}
       </h3>
-      
+
       <div className="flex items-start gap-6">
         <div className="flex flex-col items-center">
-          {getWeatherIcon(weatherData.condition)}
-          <p className="text-3xl font-bold text-stone-800 mt-2">
-            {Math.round(weatherData.temperature)}°C
-          </p>
-          <p className="text-sm text-stone-600 mt-1">{weatherData.description}</p>
+          <WeatherIcon className="w-12 h-12 text-blue-600" />
+          <p className="text-3xl font-bold text-stone-800 mt-2">{Math.round(cur.temperature_2m)}°C</p>
+          <p className="text-sm text-stone-600 mt-1">{label}</p>
         </div>
-        
+
         <div className="flex-1 grid grid-cols-2 gap-4">
-          <div className="flex items-center gap-2">
-            <Droplets className="w-5 h-5 text-blue-600" />
-            <div>
-              <p className="text-xs text-stone-500">Luftfeuchtigkeit</p>
-              <p className="font-semibold text-stone-800">{weatherData.humidity}%</p>
+          {cur.relative_humidity_2m != null && (
+            <div className="flex items-center gap-2">
+              <Droplets className="w-5 h-5 text-blue-600" />
+              <div>
+                <p className="text-xs text-stone-500">Luftfeuchtigkeit</p>
+                <p className="font-semibold text-stone-800">{Math.round(cur.relative_humidity_2m)}%</p>
+              </div>
             </div>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Wind className="w-5 h-5 text-slate-600" />
-            <div>
-              <p className="text-xs text-stone-500">Wind</p>
-              <p className="font-semibold text-stone-800">{Math.round(weatherData.wind_speed)} km/h</p>
+          )}
+          {cur.wind_speed_10m != null && (
+            <div className="flex items-center gap-2">
+              <Wind className="w-5 h-5 text-slate-600" />
+              <div>
+                <p className="text-xs text-stone-500">Wind</p>
+                <p className="font-semibold text-stone-800">{Math.round(cur.wind_speed_10m)} km/h</p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
-      
+
       <div className="mt-4 p-3 bg-white/50 rounded-lg">
-        <p className="text-xs text-stone-600">
-          ⚠️ Hinweis: Wetterbedingungen können sich schnell ändern. Prüfe die aktuellen Vorhersagen vor deiner Wanderung!
+        <p className="text-xs text-stone-500">
+          ⚠️ Wetterbedingungen können sich schnell ändern. Prüfe die Vorhersagen vor deiner Wanderung! ·{" "}
+          <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer" className="underline">Open-Meteo</a>
         </p>
       </div>
     </motion.div>

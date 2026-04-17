@@ -1,226 +1,216 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/lib/AuthContext";
+import { getDogs, createDog, updateDog, deleteDog } from "@/lib/profilesApi";
+import { supabase } from "@/lib/supabaseClient";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Edit, Trash2, Mountain, X } from "lucide-react";
-import { format, differenceInYears, differenceInMonths } from "date-fns";
+import { Plus, Edit, Trash2, Loader2, LogIn } from "lucide-react";
+import { differenceInYears, differenceInMonths } from "date-fns";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 import DogForm from "@/components/forms/DogForm";
 
+function getAge(birthDate) {
+  if (!birthDate) return null;
+  const years = differenceInYears(new Date(), new Date(birthDate));
+  if (years > 0) return `${years} Jahr${years !== 1 ? "e" : ""}`;
+  const months = differenceInMonths(new Date(), new Date(birthDate));
+  return `${months} Monat${months !== 1 ? "e" : ""}`;
+}
+
 export default function Dogs() {
+  const { user, isAuthenticated } = useAuth();
+  const queryClient = useQueryClient();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingDog, setEditingDog] = useState(null);
-  const queryClient = useQueryClient();
-
-  const { data: user } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => base44.auth.me()
-  });
 
   const { data: dogs = [], isLoading } = useQuery({
-    queryKey: ["dogs"],
-    queryFn: async () => {
-      const currentUser = await base44.auth.me();
-      const r = await base44.entities.Dog.filter({ created_by: currentUser.email });
-      return Array.isArray(r) ? r : [];
-    }
+    queryKey: ["dogs", user?.id],
+    queryFn: () => getDogs(user.id),
+    enabled: !!user?.id,
   });
 
-  const { data: hikes = [] } = useQuery({
-    queryKey: ["hikes"],
-    queryFn: async () => { const r = await base44.entities.Hike.list(); return Array.isArray(r) ? r : []; }
+  // Aggregate stats per dog from journal_entries
+  const { data: statsMap = {} } = useQuery({
+    queryKey: ["dogStats", user?.id],
+    queryFn: async () => {
+      if (!dogs.length) return {};
+      const dogIds = dogs.map((d) => d.id);
+      const { data, error } = await supabase
+        .from("journal_entries")
+        .select("dog_id, distance_km, elevation_m")
+        .eq("user_id", user.id)
+        .in("dog_id", dogIds);
+      if (error) return {};
+      const map = {};
+      for (const e of data ?? []) {
+        if (!map[e.dog_id]) map[e.dog_id] = { tourCount: 0, totalDistance: 0, totalElevation: 0 };
+        map[e.dog_id].tourCount      += 1;
+        map[e.dog_id].totalDistance  += e.distance_km  ?? 0;
+        map[e.dog_id].totalElevation += e.elevation_m  ?? 0;
+      }
+      return map;
+    },
+    enabled: !!user?.id && dogs.length > 0,
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) => base44.entities.Dog.create(data),
+    mutationFn: (data) => createDog(user.id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["dogs"] });
+      queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
       setDialogOpen(false);
-    }
+      toast.success("Hund hinzugefügt");
+    },
+    onError: (e) => toast.error("Fehler: " + e.message),
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.Dog.update(id, data),
+    mutationFn: ({ id, data }) => updateDog(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["dogs"] });
+      queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
       setDialogOpen(false);
       setEditingDog(null);
-    }
+      toast.success("Hund aktualisiert");
+    },
+    onError: (e) => toast.error("Fehler: " + e.message),
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => base44.entities.Dog.delete(id),
+    mutationFn: (id) => deleteDog(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["dogs"] });
-    }
+      queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
+      toast.success("Hund entfernt");
+    },
+    onError: (e) => toast.error("Fehler: " + e.message),
   });
 
-  const getDogStats = (dogId) => {
-    const dogHikes = hikes.filter(h => h.dogs?.includes(dogId));
-    const totalDistance = dogHikes.reduce((sum, h) => sum + (h.distance_km || 0), 0);
-    const totalElevation = dogHikes.reduce((sum, h) => sum + (h.elevation_gain_m || 0), 0);
-    return { hikeCount: dogHikes.length, totalDistance, totalElevation };
-  };
-
-  const getAge = (birthDate) => {
-    if (!birthDate) return null;
-    const years = differenceInYears(new Date(), new Date(birthDate));
-    if (years > 0) return `${years} year${years > 1 ? 's' : ''} old`;
-    const months = differenceInMonths(new Date(), new Date(birthDate));
-    return `${months} month${months > 1 ? 's' : ''} old`;
-  };
-
-  const handleSave = (data) => {
+  const handleSave = async (data) => {
     if (editingDog) {
-      updateMutation.mutate({ id: editingDog.id, data });
+      await updateMutation.mutateAsync({ id: editingDog.id, data });
     } else {
-      createMutation.mutate(data);
+      await createMutation.mutateAsync(data);
     }
   };
 
-  const openEditDialog = (dog) => {
-    setEditingDog(dog);
-    setDialogOpen(true);
-  };
-
-  const openAddDialog = () => {
-    setEditingDog(null);
-    setDialogOpen(true);
-  };
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 flex items-center justify-center px-4">
+        <div className="text-center">
+          <div className="text-6xl mb-4">🐕</div>
+          <p className="text-stone-600 mb-4">Bitte melde dich an, um deine Hunde zu verwalten.</p>
+          <Link to={createPageUrl("Login")}>
+            <Button className="bg-emerald-600 hover:bg-emerald-700">
+              <LogIn className="w-4 h-4 mr-2" /> Anmelden
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between mb-8"
-        >
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
+
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-light text-stone-800">Meine Hunde</h1>
-            <p className="text-stone-500 mt-1">Deine Wanderbegleiter</p>
+            <h1 className="text-2xl md:text-3xl font-light text-stone-800">Meine Hunde</h1>
+            <p className="text-stone-500 mt-1 text-sm">Deine Wanderbegleiter</p>
           </div>
-          <Button
-            onClick={openAddDialog}
-            className="bg-slate-800 hover:bg-slate-700"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Hund hinzufügen
+          <Button onClick={() => { setEditingDog(null); setDialogOpen(true); }}
+            className="bg-slate-800 hover:bg-slate-700">
+            <Plus className="w-4 h-4 mr-2" /> Hund hinzufügen
           </Button>
         </motion.div>
 
-        {/* Dogs Grid */}
-        {dogs.length > 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center py-20">
+            <Loader2 className="w-8 h-8 text-stone-400 animate-spin" />
+          </div>
+        ) : dogs.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <AnimatePresence>
               {dogs.map((dog, index) => {
-                const stats = getDogStats(dog.id);
-                const age = getAge(dog.birth_date);
-                
+                const s = statsMap[dog.id] ?? { tourCount: 0, totalDistance: 0, totalElevation: 0 };
                 return (
-                  <motion.div
-                    key={dog.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="bg-white rounded-2xl overflow-hidden border border-stone-200/50 shadow-sm hover:shadow-md transition-shadow"
-                  >
+                  <motion.div key={dog.id}
+                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9 }} transition={{ delay: index * 0.06 }}
+                    className="bg-white rounded-2xl overflow-hidden border border-stone-200/50 shadow-sm hover:shadow-md transition-shadow">
+
                     <div className="relative h-48 bg-gradient-to-br from-slate-100 to-stone-100">
                       <img
-                        key={dog.photo_url || dog.name}
                         src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}&backgroundColor=f5f5f4`}
-                        alt={dog.name}
-                        className="w-full h-full object-cover"
+                        alt={dog.name} className="w-full h-full object-cover"
+                        onError={(e) => { e.target.src = `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}&backgroundColor=f5f5f4`; }}
                       />
-                      <div className="absolute top-4 right-4 flex gap-2">
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => openEditDialog(dog)}
-                          className="bg-white/80 backdrop-blur-sm hover:bg-white"
-                        >
-                          <Edit className="w-4 h-4 text-stone-600" />
+                      <div className="absolute top-3 right-3 flex gap-2">
+                        <Button size="icon" variant="ghost"
+                          onClick={() => { setEditingDog(dog); setDialogOpen(true); }}
+                          className="bg-white/80 backdrop-blur-sm hover:bg-white w-8 h-8">
+                          <Edit className="w-3.5 h-3.5 text-stone-600" />
                         </Button>
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
-                            <Button
-                              size="icon"
-                              variant="ghost"
-                              className="bg-white/80 backdrop-blur-sm hover:bg-red-50"
-                            >
-                              <Trash2 className="w-4 h-4 text-red-500" />
+                            <Button size="icon" variant="ghost"
+                              className="bg-white/80 backdrop-blur-sm hover:bg-red-50 w-8 h-8">
+                              <Trash2 className="w-3.5 h-3.5 text-red-500" />
                             </Button>
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                               <AlertDialogTitle>{dog.name} entfernen?</AlertDialogTitle>
-                               <AlertDialogDescription>
-                                 Dies wird {dog.name} aus deiner Hundeliste entfernen.
-                               </AlertDialogDescription>
-                             </AlertDialogHeader>
-                             <AlertDialogFooter>
-                               <AlertDialogCancel>Abbrechen</AlertDialogCancel>
-                               <AlertDialogAction
-                                 onClick={() => deleteMutation.mutate(dog.id)}
-                                 className="bg-red-600 hover:bg-red-700"
-                               >
-                                 Entfernen
-                               </AlertDialogAction>
-                             </AlertDialogFooter>
+                              <AlertDialogTitle>{dog.name} entfernen?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Entfernt {dog.name} dauerhaft aus deiner Hundeliste.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => deleteMutation.mutate(dog.id)}
+                                className="bg-red-600 hover:bg-red-700">Entfernen</AlertDialogAction>
+                            </AlertDialogFooter>
                           </AlertDialogContent>
                         </AlertDialog>
                       </div>
                     </div>
-                    
-                    <div className="p-6">
-                      <div className="flex items-center justify-between mb-3">
-                        <h2 className="text-2xl font-medium text-stone-800">{dog.name}</h2>
+
+                    <div className="p-5">
+                      <div className="flex items-center justify-between mb-2">
+                        <h2 className="text-xl font-semibold text-stone-800">{dog.name}</h2>
                         {dog.breed && (
-                          <span className="text-sm text-stone-500 bg-stone-100 px-3 py-1 rounded-full">
-                            {dog.breed}
-                          </span>
+                          <span className="text-xs text-stone-500 bg-stone-100 px-2.5 py-1 rounded-full">{dog.breed}</span>
                         )}
                       </div>
-                      
-                      {age && (
-                        <p className="text-stone-500 text-sm mb-4">{age}</p>
+                      {getAge(dog.birth_date) && (
+                        <p className="text-stone-500 text-sm mb-1">{getAge(dog.birth_date)}</p>
                       )}
-                      
+                      {dog.character && (
+                        <p className="text-stone-500 text-sm mb-3">🐾 {dog.character}</p>
+                      )}
                       {dog.notes && (
-                        <p className="text-stone-600 text-sm mb-4 line-clamp-2">{dog.notes}</p>
+                        <p className="text-stone-400 text-xs mb-3 line-clamp-2">{dog.notes}</p>
                       )}
-                      
-                      <div className="grid grid-cols-3 gap-3 pt-4 border-t border-stone-100">
+
+                      <div className="grid grid-cols-3 gap-2 pt-3 border-t border-stone-100">
                         <div className="text-center">
-                          <p className="text-xl font-semibold text-stone-800">{stats.hikeCount}</p>
-                          <p className="text-xs text-stone-500">Touren</p>
+                          <p className="text-lg font-bold text-stone-800">{s.tourCount}</p>
+                          <p className="text-xs text-stone-400">Touren</p>
                         </div>
                         <div className="text-center">
-                          <p className="text-xl font-semibold text-stone-800">{stats.totalDistance.toFixed(1)}</p>
-                          <p className="text-xs text-stone-500">km</p>
+                          <p className="text-lg font-bold text-stone-800">{s.totalDistance.toFixed(1)}</p>
+                          <p className="text-xs text-stone-400">km</p>
                         </div>
                         <div className="text-center">
-                          <p className="text-xl font-semibold text-stone-800">{Math.round(stats.totalElevation).toLocaleString()}</p>
-                          <p className="text-xs text-stone-500">Hm</p>
+                          <p className="text-lg font-bold text-stone-800">{Math.round(s.totalElevation).toLocaleString()}</p>
+                          <p className="text-xs text-stone-400">Hm</p>
                         </div>
                       </div>
                     </div>
@@ -230,39 +220,26 @@ export default function Dogs() {
             </AnimatePresence>
           </div>
         ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-20 bg-white rounded-2xl border border-stone-200/50"
-          >
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
             <div className="text-6xl mb-4">🐕</div>
             <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Hunde</h3>
-            <p className="text-stone-500 mb-6">Füge deinen ersten Wanderbegleiter hinzu!</p>
-            <Button
-              onClick={openAddDialog}
-              className="bg-slate-800 hover:bg-slate-700"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Hund hinzufügen
+            <p className="text-stone-500 mb-6 text-sm">Füge deinen ersten Wanderbegleiter hinzu!</p>
+            <Button onClick={() => { setEditingDog(null); setDialogOpen(true); }}
+              className="bg-slate-800 hover:bg-slate-700">
+              <Plus className="w-4 h-4 mr-2" /> Hund hinzufügen
             </Button>
           </motion.div>
         )}
       </div>
 
-      {/* Add/Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editingDog ? "Hund bearbeiten" : "Hund hinzufügen"}</DialogTitle>
           </DialogHeader>
-          <DogForm
-            dog={editingDog}
-            onSave={handleSave}
-            onCancel={() => {
-              setDialogOpen(false);
-              setEditingDog(null);
-            }}
-          />
+          <DogForm dog={editingDog} onSave={handleSave}
+            onCancel={() => { setDialogOpen(false); setEditingDog(null); }} />
         </DialogContent>
       </Dialog>
     </div>

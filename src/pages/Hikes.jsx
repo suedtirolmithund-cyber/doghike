@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
 import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -29,16 +28,6 @@ export default function Hikes() {
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
     staleTime: 5 * 60 * 1000, // 5 min
-  });
-
-  const { data: dogs = [] } = useQuery({
-    queryKey: ["dogs"],
-    queryFn: async () => { const r = await base44.entities.Dog.list(); return Array.isArray(r) ? r : []; }
-  });
-
-  const { data: allUsers = [] } = useQuery({
-    queryKey: ["allUsers"],
-    queryFn: async () => { const r = await base44.entities.User.list(); return Array.isArray(r) ? r : []; }
   });
 
   const getCurrentSeason = () => {
@@ -283,7 +272,7 @@ export default function Hikes() {
         {filteredHikes.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredHikes.map((hike, index) => (
-              <HikeCard key={hike.id} hike={hike} dogs={dogs} index={index} allUsers={allUsers} />
+              <HikeCard key={hike.id} hike={hike} index={index} />
             ))}
           </div>
         ) : (
