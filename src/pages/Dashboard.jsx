@@ -79,7 +79,7 @@ export default function Dashboard() {
               Hundefreundliche Wanderungen
             </h1>
             <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">
-              Entdecke die schönsten Wanderungen in Südtirol und den Dolomiten – getestet mit unseren Vierbeinern.
+              Entdecke die schönsten Wanderungen in den Bergen zusammen mit deinem Vierbeinern.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Link to={createPageUrl("Hikes")}>
