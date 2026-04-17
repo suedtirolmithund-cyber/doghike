@@ -5,7 +5,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { Mountain, Route, Map, ArrowRight, Search, LogIn, UserPlus, ChevronDown } from "lucide-react";
+import { Mountain, Route, Map, ArrowRight, Search, LogIn, UserPlus, ChevronDown, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import StatsCard from "@/components/stats/StatsCard";
@@ -85,6 +85,11 @@ export default function Dashboard() {
               <Link to={createPageUrl("Hikes")}>
                 <Button size="lg" className="bg-white text-slate-800 hover:bg-white/90 shadow-lg">
                   <Mountain className="w-5 h-5 mr-2" /> Alle Touren entdecken
+                </Button>
+              </Link>
+              <Link to={createPageUrl("AddJournalEntry")}>
+                <Button size="lg" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
+                  <Plus className="w-5 h-5 mr-2" /> Tour einreichen
                 </Button>
               </Link>
               {!isAuthenticated && (
