@@ -41,6 +41,8 @@ export default function Layout({ children, currentPageName }) {
           <span className="hidden sm:inline">•</span>
           <Link to={createPageUrl("Datenschutz")} className="hover:text-stone-700 underline">Datenschutz</Link>
           <span className="hidden sm:inline">•</span>
+          <Link to={createPageUrl("AGB")} className="hover:text-stone-700 underline">AGB</Link>
+          <span className="hidden sm:inline">•</span>
           <Link to={createPageUrl("Legal")} className="hover:text-stone-700 underline">Rechtliche Hinweise</Link>
           <span className="hidden sm:inline">•</span>
           <Link to={createPageUrl("Support")} className="hover:text-stone-700 underline">Hilfe & Support</Link>

@@ -157,7 +157,7 @@ export default function Datenschutz() {
                   <li><strong>Kontodaten (E-Mail):</strong> Bis zur Kontolöschung; danach Löschung innerhalb von 30 Tagen.</li>
                   <li><strong>Wanderungen, Fotos, GPS-Daten:</strong> Bis zur manuellen Löschung durch Sie oder nach Kontolöschung.</li>
                   <li><strong>Kommentare & Bewertungen:</strong> Bis zur Löschung durch Sie oder nach Kontolöschung.</li>
-                  <li><strong>Technische Logs:</strong> Netlify speichert Zugriffslogs typischerweise bis zu 30 Tage; Supabase Auth-Logs bis zu 90 Tage.</li>
+                  <li><strong>Technische Logs:</strong> Vercel speichert Zugriffslogs typischerweise bis zu 30 Tage; Supabase Auth-Logs bis zu 90 Tage.</li>
                   <li><strong>Einwilligungsnachweis:</strong> Datum der Zustimmung zur Datenschutzerklärung wird gespeichert (gesetzliche Nachweispflicht).</li>
                 </ul>
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mt-4">
@@ -206,31 +206,53 @@ export default function Datenschutz() {
                   </div>
 
                   <div className="border border-stone-200 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">🌐 Netlify Inc. (Hosting & CDN)</p>
-                    <p>Hostet die Web-App. Protokolliert IP-Adressen bei Zugriffen (bis 30 Tage). Netlify verwendet EU-Rechenzentren und hat ein DPA (Data Processing Agreement).</p>
-                    <p className="mt-1 text-stone-500">Datenschutz: <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">netlify.com/privacy</a></p>
+                    <p className="font-semibold text-stone-800 mb-1">🌐 Vercel Inc. (Hosting & CDN)</p>
+                    <p>Hostet die Web-App (doghike-suedtirol.vercel.app). Vercel protokolliert IP-Adressen und HTTP-Logs bei Zugriffen (bis 30 Tage). Vercel hat ein DPA und nutzt EU-Edge-Nodes.</p>
+                    <p className="mt-1 text-stone-500">Datenschutz: <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">vercel.com/legal/privacy-policy</a></p>
                   </div>
 
                   <div className="border border-stone-200 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">🗺️ OpenStreetMap / CARTO (Karten)</p>
-                    <p>Lädt Kartenkacheln für die Wanderkarte. Dabei wird Ihre IP-Adresse kurzzeitig übertragen.
-                      Ihre GPS-Koordinaten werden <strong>nicht</strong> an OpenStreetMap übermittelt — sie werden nur lokal dargestellt.</p>
+                    <p className="font-semibold text-stone-800 mb-1">🔑 Google LLC (Sign-in mit Google / OAuth)</p>
+                    <p>Wenn Sie sich über „Mit Google anmelden" registrieren oder einloggen, überträgt Google Ihre E-Mail-Adresse, Ihren Namen und Ihr Profilbild an Supabase Auth. Google erfährt dabei den Zeitpunkt des Logins. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung). Google LLC sitzt in den USA; Datenübertragung erfolgt auf Basis von EU-Standardvertragsklauseln (SCCs).</p>
+                    <p className="mt-1 text-stone-500">Datenschutz: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">policies.google.com/privacy</a></p>
+                  </div>
+
+                  <div className="border border-stone-200 rounded-xl p-4">
+                    <p className="font-semibold text-stone-800 mb-1">🗺️ OpenStreetMap / CARTO (Kartenkacheln)</p>
+                    <p>Lädt Kartenkacheln. Dabei wird Ihre IP-Adresse kurzzeitig übertragen. Ihre eigenen GPS-Koordinaten werden <strong>nicht</strong> an diese Dienste gesendet — die Karte wird lokal im Browser gerendert.</p>
                     <p className="mt-1 text-stone-500"><a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">OSM Datenschutzrichtlinie</a></p>
                   </div>
 
                   <div className="border border-stone-200 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">💳 Stripe Inc. (Zahlungen, falls Premium)</p>
-                    <p>Wird nur für Premium-Zahlungen genutzt. Stripe verarbeitet Zahlungsdaten (Kreditkarteninfos) direkt — wir speichern keine Zahlungsdaten.
-                      Stripe ist PCI DSS Level 1 zertifiziert und DSGVO-konform.</p>
+                    <p className="font-semibold text-stone-800 mb-1">🔍 Nominatim / OpenStreetMap (Ortssuche)</p>
+                    <p>Wenn Sie im Routenplaner oder im Tagebuch einen Ort suchen, wird Ihr Suchtext und Ihre IP-Adresse kurzzeitig an den Nominatim-Dienst von OpenStreetMap übertragen. Es werden keine persönlichen Daten dauerhaft gespeichert.</p>
+                    <p className="mt-1 text-stone-500"><a href="https://nominatim.org/privacy.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">nominatim.org/privacy.html</a></p>
+                  </div>
+
+                  <div className="border border-stone-200 rounded-xl p-4">
+                    <p className="font-semibold text-stone-800 mb-1">🧭 GraphHopper GmbH (Routenberechnung)</p>
+                    <p>Beim Planen einer Route werden die von Ihnen gesetzten Wegpunkt-Koordinaten (Breitengrad, Längengrad) an die GraphHopper API gesendet, um die Wanderroute zu berechnen. GraphHopper ist ein deutsches Unternehmen (DSGVO-konform). Es werden keine Nutzerdaten dauerhaft gespeichert.</p>
+                    <p className="mt-1 text-stone-500"><a href="https://www.graphhopper.com/privacy/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">graphhopper.com/privacy</a></p>
+                  </div>
+
+                  <div className="border border-stone-200 rounded-xl p-4">
+                    <p className="font-semibold text-stone-800 mb-1">🌤️ Open-Meteo (Wetterdaten)</p>
+                    <p>Wenn Sie eine Tourendetailseite aufrufen, die einen Startpunkt hat, werden die GPS-Koordinaten des Startpunkts an Open-Meteo gesendet, um die aktuelle Wettervorhersage zu laden. Open-Meteo ist ein Open-Source-Dienst mit EU-Servern. Es werden keine personenbezogenen Daten gespeichert.</p>
+                    <p className="mt-1 text-stone-500"><a href="https://open-meteo.com/en/terms" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">open-meteo.com/en/terms</a></p>
+                  </div>
+
+                  <div className="border border-stone-200 rounded-xl p-4">
+                    <p className="font-semibold text-stone-800 mb-1">💳 Stripe Inc. (Zahlungen, nur bei Premium)</p>
+                    <p>Wird nur für Premium-Zahlungen genutzt. Stripe verarbeitet Zahlungsdaten direkt — wir speichern keine Kreditkartendaten. Stripe ist PCI DSS Level 1 zertifiziert und DSGVO-konform (SCCs für US-Transfer).</p>
                     <p className="mt-1 text-stone-500"><a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">stripe.com/privacy</a></p>
                   </div>
 
                   <div className="border border-emerald-200 rounded-xl p-4 bg-emerald-50">
-                    <p className="font-semibold text-emerald-800 mb-1">✅ Nicht verwendet</p>
+                    <p className="font-semibold text-emerald-800 mb-1">✅ Ausdrücklich nicht verwendet</p>
                     <p className="text-emerald-700">
-                      Diese App verwendet <strong>kein Google Analytics, kein Facebook Pixel, keine
-                      Werbe-Cookies und keine Tracking-Dienste</strong>. Es gibt keine Datenweitergabe
-                      an Werbenetzwerke oder andere Dritte.
+                      <strong>Kein Google Analytics, kein Facebook Pixel, keine Werbe-Cookies,
+                      kein Tracking, keine Datenweitergabe an Werbenetzwerke.</strong> Google wird
+                      ausschließlich für den optionalen OAuth-Login verwendet (nicht für Tracking).
                     </p>
                   </div>
                 </div>
