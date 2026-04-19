@@ -513,6 +513,28 @@ export default function AddJournalEntry() {
       toast.error("Titel und Datum sind Pflichtfelder.");
       return;
     }
+
+    // Öffentliche Einträge: alle Felder außer GPX sind Pflicht
+    if (form.visibility === "public") {
+      const missing = [];
+      if (!form.location?.trim())         missing.push("Ort");
+      if (!form.latitude || !form.longitude) missing.push("Startpunkt auf Karte");
+      if (!form.distance_km)              missing.push("Distanz (km)");
+      if (!form.elevation_m)              missing.push("Höhenmeter");
+      if (!form.duration_minutes)         missing.push("Dauer (Minuten)");
+      if (!form.difficulty)               missing.push("Schwierigkeit (Mensch)");
+      if (!form.dog_difficulty)           missing.push("Schwierigkeit (Hund)");
+      if (!form.description?.trim())      missing.push("Beschreibung");
+      if (form.photos.length === 0)       missing.push("Mindestens 1 Foto");
+      if (form.seasons.length === 0)      missing.push("Empfohlene Jahreszeit");
+      if (missing.length > 0) {
+        toast.error(`Fehlende Pflichtfelder für öffentliche Touren:\n${missing.join(", ")}`, {
+          duration: 6000,
+        });
+        return;
+      }
+    }
+
     const needsConsent = form.photos.length > 0 && form.visibility !== "private";
     if (needsConsent && !photoConsent) {
       toast.error("Bitte bestätige das Einverständnis zu den Fotos.");
@@ -811,11 +833,18 @@ export default function AddJournalEntry() {
             <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
               🔒 Sichtbarkeit
             </h2>
-            <VisibilityPicker value={form.visibility} onChange={(v) => set("visibility", v)} />
+            <VisibilityPicker value={form.visibility} onChange={(v) => { set("visibility", v); }} />
             {form.visibility === "public" && (
-              <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-3">
-                ⏳ Nach dem Speichern wird dieser Eintrag an einen Admin zur Prüfung geschickt und erst danach öffentlich sichtbar.
-              </p>
+              <div className="mt-3 space-y-2">
+                <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                  ⏳ Nach dem Speichern wird dieser Eintrag an einen Admin zur Prüfung geschickt und erst danach öffentlich sichtbar.
+                </p>
+                <div className="text-xs bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 text-blue-800">
+                  <p className="font-semibold mb-1">📋 Pflichtfelder für öffentliche Touren:</p>
+                  <p>Ort · Startpunkt (Karte) · Distanz · Höhenmeter · Dauer · Schwierigkeit (Mensch & Hund) · Beschreibung · mind. 1 Foto · Jahreszeit</p>
+                  <p className="mt-1 text-blue-600">GPX-Datei ist optional.</p>
+                </div>
+              </div>
             )}
           </section>
 
