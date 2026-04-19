@@ -76,7 +76,10 @@ export default function Hikes() {
       if (sortBy === "dog_difficulty") return (a.dog_difficulty || "9").localeCompare(b.dog_difficulty || "9");
       if (sortBy === "distance") return (b.distance_km || 0) - (a.distance_km || 0);
       if (sortBy === "elevation") return (b.elevation_gain_m || 0) - (a.elevation_gain_m || 0);
-      return new Date(b.date) - new Date(a.date);
+      // Sheets hikes have no date field — fall back to trail_name alphabetically
+      const bTime = b.date ? new Date(b.date).getTime() : 0;
+      const aTime = a.date ? new Date(a.date).getTime() : 0;
+      return bTime - aTime || (a.trail_name || "").localeCompare(b.trail_name || "");
     });
 
   return (

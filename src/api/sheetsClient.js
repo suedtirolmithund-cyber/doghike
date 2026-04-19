@@ -102,11 +102,11 @@ function slugify(title) {
  * object shaped exactly like the base44 Hike entity used throughout the app.
  */
 function rowToHike(row, index) {
-  const parsedLat = parseFloat(row.lat);
-  const parsedLng = parseFloat(row.lng);
-  const parsedDistance = parseFloat(row.distance_km);
-  const parsedAscent = parseFloat(row.ascent_m);
-  const parsedDurationH = parseFloat(row.duration_h);
+  const parsedLat = parseFloat(row.lat || row.latitude);
+  const parsedLng = parseFloat(row.lng || row.longitude);
+  const parsedDistance = parseFloat(row.distance_km || row.distance || row.distanz_km);
+  const parsedAscent = parseFloat(row.ascent_m || row.elevation_gain_m || row.hm || row.hoehenmeter);
+  const parsedDurationH = parseFloat(row.duration_h || row.dauer_h || row.duration_hours);
 
   // Split comma-separated tags into an array, ignore empty strings
   const tags = row.tags
@@ -137,10 +137,10 @@ function rowToHike(row, index) {
     // Sheet stores hours; the app expects minutes
     duration_minutes: isNaN(parsedDurationH) ? null : Math.round(parsedDurationH * 60),
 
-    // difficulty_mensch → difficulty (1-5 scale, stored as string)
-    difficulty: row.difficulty_mensch || null,
-    // difficulty_hund  → dog_difficulty (1-5 scale, stored as string)
-    dog_difficulty: row.difficulty_hund || null,
+    // difficulty_mensch / difficulty / schwierigkeit_mensch → difficulty (1-5)
+    difficulty: row.difficulty_mensch || row.difficulty || row.schwierigkeit_mensch || row.schwierigkeit || null,
+    // difficulty_hund / dog_difficulty / schwierigkeit_hund → dog_difficulty (1-5)
+    dog_difficulty: row.difficulty_hund || row.dog_difficulty || row.schwierigkeit_hund || null,
 
     // water → water_availability (none | little | moderate | plenty)
     water_availability: (() => { const w = row.water?.trim(); if (!w) return null; if (w === "0") return "none"; return w; })(),

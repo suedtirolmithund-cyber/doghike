@@ -271,20 +271,28 @@ export default function RouteDetail() {
               </div>
             ) : (
               <div className="h-96 md:h-[500px] rounded-xl overflow-hidden border border-stone-200">
-                <MapContainer
-                  center={route.waypoints[0] || [46.5, 11.9]}
-                  zoom={13}
-                  style={{ height: "100%", width: "100%" }}
-                  scrollWheelZoom={false}
-                >
-                  <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; OpenStreetMap'
-                  />
-                  <Polyline positions={route.waypoints} color="#1e293b" weight={4} />
-                  <Marker position={route.waypoints[0]} />
-                  <Marker position={route.waypoints[route.waypoints.length - 1]} />
-                </MapContainer>
+                {route.waypoints?.length > 0 ? (
+                  <MapContainer
+                    center={route.waypoints[0]}
+                    zoom={13}
+                    style={{ height: "100%", width: "100%" }}
+                    scrollWheelZoom={false}
+                  >
+                    <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      attribution='&copy; OpenStreetMap'
+                    />
+                    <Polyline positions={route.waypoints} color="#1e293b" weight={4} />
+                    <Marker position={route.waypoints[0]} />
+                    {route.waypoints.length > 1 && (
+                      <Marker position={route.waypoints[route.waypoints.length - 1]} />
+                    )}
+                  </MapContainer>
+                ) : (
+                  <div className="h-full flex items-center justify-center bg-stone-50 text-stone-400 text-sm">
+                    Keine Wegpunkte vorhanden
+                  </div>
+                )}
               </div>
             )}
           </motion.div>
@@ -331,7 +339,7 @@ export default function RouteDetail() {
               )}
               <div className="text-center p-4 bg-slate-50 rounded-lg">
                 <Map className="w-5 h-5 mx-auto mb-2 text-slate-700" />
-                <p className="text-2xl font-bold text-slate-800">{route.waypoints.length}</p>
+                <p className="text-2xl font-bold text-slate-800">{route.waypoints?.length ?? 0}</p>
                 <p className="text-xs text-stone-500">Wegpunkte</p>
               </div>
             </div>
