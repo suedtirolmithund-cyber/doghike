@@ -1,36 +1,61 @@
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Mountain, Home, Trophy, Navigation, Dog, LogIn, LogOut, User, BookOpen, ShieldCheck, Users } from "lucide-react";
-import { motion } from "framer-motion";
+import {
+  Mountain, Home, Navigation, Dog, LogIn, LogOut,
+  User, BookOpen, ShieldCheck, Users, Trophy, Grid,
+  X, Map, Star
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
+
+// ── Bottom-Nav: nur 5 Haupt-Einträge ────────────────────────
+const MAIN_NAV = [
+  { name: "Dashboard",    icon: Home,       label: "Home" },
+  { name: "Hikes",        icon: Mountain,   label: "Touren" },
+  { name: "Journal",      icon: BookOpen,   label: "Tagebuch" },
+  { name: "RoutePlanner", icon: Navigation, label: "Planen" },
+  { name: "Profile",      icon: Dog,        label: "Profil" },
+];
+
+// ── Desktop-Nav: alle Seiten ──────────────────────────────────
+const ALL_NAV = [
+  { name: "Dashboard",    icon: Home,       label: "Startseite" },
+  { name: "Hikes",        icon: Mountain,   label: "Alle Touren" },
+  { name: "Journal",      icon: BookOpen,   label: "Tagebuch" },
+  { name: "Friends",      icon: Users,      label: "Freunde" },
+  { name: "RoutePlanner", icon: Navigation, label: "Routenplaner" },
+  { name: "TopDogs",      icon: Trophy,     label: "Top Dogs" },
+  { name: "Profile",      icon: Dog,        label: "Mein Profil" },
+];
+
+// ── "Mehr"-Menü: die restlichen Seiten ──────────────────────
+const MORE_ITEMS = [
+  { name: "Friends",      icon: Users,      label: "Freunde" },
+  { name: "TopDogs",      icon: Trophy,     label: "Top Dogs" },
+  { name: "MapView",      icon: Map,        label: "Karte" },
+  { name: "Feed",         icon: Star,       label: "Feed" },
+];
 
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
+  const [moreOpen, setMoreOpen] = useState(false);
 
-  // Display name: Google full_name → email prefix → "Profil"
-  const displayName = user?.user_metadata?.full_name
-    || user?.user_metadata?.name
-    || (user?.email ? user.email.split("@")[0] : null);
+  // Close "Mehr" menu on route change
+  useEffect(() => { setMoreOpen(false); }, [location.pathname]);
 
-  const navItems = [
-    { name: "Dashboard", icon: Home, label: "Startseite" },
-    { name: "Hikes", icon: Mountain, label: "Alle Touren" },
-    { name: "Journal", icon: BookOpen, label: "Tagebuch" },
-    { name: "Friends", icon: Users, label: "Freunde" },
-    { name: "RoutePlanner", icon: Navigation, label: "Routenplaner" },
-    { name: "TopDogs", icon: Trophy, label: "Top Dogs" },
-    { name: "Profile", icon: Dog, label: "Mein Profil" },
-  ];
+  const displayName =
+    user?.user_metadata?.full_name ||
+    user?.user_metadata?.name ||
+    (user?.email ? user.email.split("@")[0] : null);
 
   const isActive = (pageName) => currentPageName === pageName;
 
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col">
-      <div className="flex-1">
-        {children}
-      </div>
+      <div className="flex-1">{children}</div>
 
       {/* Footer */}
       <footer className="bg-white border-t border-stone-200 py-3 md:py-4 px-4 md:px-6 text-center mb-20 md:mb-0">
@@ -49,39 +74,104 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </footer>
 
-      {/* Bottom Navigation - Mobile */}
+      {/* ── Bottom Navigation — Mobile ──────────────────────── */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 md:hidden z-50 shadow-lg">
-        <div className="flex items-center justify-around py-3 px-2 safe-area-pb">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const active = isActive(item.name);
+
+        {/* "Mehr"-Menü — klappt über der Navbar auf */}
+        <AnimatePresence>
+          {moreOpen && (
+            <>
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black/30 z-40"
+                onClick={() => setMoreOpen(false)}
+              />
+
+              {/* Panel */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                className="absolute bottom-full left-0 right-0 z-50 bg-white border-t border-stone-200 rounded-t-2xl shadow-xl px-4 pt-4 pb-3"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm font-semibold text-stone-700">Weitere Seiten</span>
+                  <button onClick={() => setMoreOpen(false)} className="p-1 text-stone-400 hover:text-stone-600">
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-4 gap-2">
+                  {MORE_ITEMS.map(({ name, icon: Icon, label }) => {
+                    const active = isActive(name);
+                    return (
+                      <Link key={name} to={createPageUrl(name)}
+                        className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all ${
+                          active ? "bg-slate-100 text-slate-800" : "text-stone-500 hover:bg-stone-50"
+                        }`}
+                      >
+                        <Icon className="w-5 h-5" />
+                        <span className="text-[10px] font-medium">{label}</span>
+                      </Link>
+                    );
+                  })}
+                  {isAdmin && (
+                    <Link to={createPageUrl("AdminDashboard")}
+                      className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all ${
+                        isActive("AdminDashboard") ? "bg-amber-100 text-amber-800" : "text-amber-600 hover:bg-amber-50"
+                      }`}
+                    >
+                      <ShieldCheck className="w-5 h-5" />
+                      <span className="text-[10px] font-medium">Admin</span>
+                    </Link>
+                  )}
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+
+        {/* Haupt-Icons */}
+        <div className="flex items-center justify-around py-2 px-1 safe-area-pb">
+          {MAIN_NAV.map(({ name, icon: Icon, label }) => {
+            const active = isActive(name);
             return (
-              <Link
-                key={item.name}
-                to={createPageUrl(item.name)}
-                className={`flex flex-col items-center gap-1.5 px-3 py-2 rounded-xl transition-all relative ${
-                  active
-                    ? "text-slate-800 bg-slate-100"
-                    : "text-stone-500 hover:text-stone-700 hover:bg-stone-50"
+              <Link key={name} to={createPageUrl(name)}
+                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all min-w-[52px] ${
+                  active ? "text-slate-800 bg-slate-100" : "text-stone-500 hover:text-stone-700"
                 }`}
               >
-                <Icon className={`w-6 h-6 ${active ? "stroke-[2.5]" : "stroke-[2]"}`} />
-                <span className={`text-[10px] font-medium ${active ? "" : "opacity-80"}`}>
-                  {item.label.split(" ")[item.label.split(" ").length - 1]}
+                <Icon className={`w-5 h-5 ${active ? "stroke-[2.5]" : "stroke-[2]"}`} />
+                <span className={`text-[10px] font-medium leading-none ${active ? "" : "opacity-80"}`}>
+                  {label}
                 </span>
               </Link>
             );
           })}
+
+          {/* Mehr-Button */}
+          <button
+            onClick={() => setMoreOpen((v) => !v)}
+            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all min-w-[52px] ${
+              moreOpen ? "text-slate-800 bg-slate-100" : "text-stone-500 hover:text-stone-700"
+            }`}
+          >
+            <Grid className={`w-5 h-5 ${moreOpen ? "stroke-[2.5]" : "stroke-[2]"}`} />
+            <span className="text-[10px] font-medium leading-none opacity-80">Mehr</span>
+          </button>
         </div>
       </nav>
 
-      {/* Top Navigation - Desktop */}
+      {/* ── Top Navigation — Desktop ─────────────────────────── */}
       <nav className="fixed top-0 left-0 right-0 bg-white border-b border-stone-200 hidden md:block z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-3">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link
-              to={createPageUrl("Dashboard")}
+            <Link to={createPageUrl("Dashboard")}
               className="flex items-center gap-2 hover:opacity-80 transition-opacity shrink-0"
             >
               <div className="bg-slate-800 rounded-lg p-2">
@@ -95,31 +185,23 @@ export default function Layout({ children, currentPageName }) {
 
             {/* Nav links */}
             <div className="flex items-center gap-1">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                const active = isActive(item.name);
+              {ALL_NAV.map(({ name, icon: Icon, label }) => {
+                const active = isActive(name);
                 return (
-                  <Link
-                    key={item.name}
-                    to={createPageUrl(item.name)}
+                  <Link key={name} to={createPageUrl(name)}
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all ${
-                      active
-                        ? "bg-slate-800 text-white shadow-md"
-                        : "text-stone-600 hover:text-stone-800 hover:bg-stone-100"
+                      active ? "bg-slate-800 text-white shadow-md" : "text-stone-600 hover:text-stone-800 hover:bg-stone-100"
                     }`}
                   >
                     <Icon className={`w-4 h-4 ${active ? "stroke-[2.5]" : ""}`} />
-                    <span className="text-sm font-medium">{item.label}</span>
+                    <span className="text-sm font-medium">{label}</span>
                   </Link>
                 );
               })}
               {isAdmin && (
-                <Link
-                  to={createPageUrl("AdminDashboard")}
+                <Link to={createPageUrl("AdminDashboard")}
                   className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all ${
-                    isActive("AdminDashboard")
-                      ? "bg-slate-800 text-white shadow-md"
-                      : "text-amber-700 hover:text-amber-900 hover:bg-amber-50"
+                    isActive("AdminDashboard") ? "bg-slate-800 text-white shadow-md" : "text-amber-700 hover:text-amber-900 hover:bg-amber-50"
                   }`}
                 >
                   <ShieldCheck className="w-4 h-4" />
@@ -128,7 +210,7 @@ export default function Layout({ children, currentPageName }) {
               )}
             </div>
 
-            {/* Auth section */}
+            {/* Auth */}
             <div className="flex items-center gap-2 shrink-0 ml-2">
               {isAuthenticated && user ? (
                 <>
@@ -138,10 +220,7 @@ export default function Layout({ children, currentPageName }) {
                       {displayName}
                     </span>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={logout}
+                  <Button variant="outline" size="sm" onClick={logout}
                     className="flex items-center gap-1.5 border-stone-200 text-stone-600 hover:text-red-600 hover:border-red-300 hover:bg-red-50"
                   >
                     <LogOut className="w-4 h-4" />
@@ -150,8 +229,7 @@ export default function Layout({ children, currentPageName }) {
                 </>
               ) : (
                 <Link to={createPageUrl("Login")}>
-                  <Button
-                    size="sm"
+                  <Button size="sm"
                     className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white"
                   >
                     <LogIn className="w-4 h-4" />
