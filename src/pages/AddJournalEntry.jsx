@@ -550,8 +550,10 @@ export default function AddJournalEntry() {
       dog_difficulty: form.dog_difficulty || null,
       latitude: form.latitude !== "" ? Number(form.latitude) : null,
       longitude: form.longitude !== "" ? Number(form.longitude) : null,
-      // public → pending review; private/friends → draft
-      status: form.visibility === "public" ? "pending" : "draft",
+      // public → pending admin review
+      // friends → approved immediately (no review needed, only friends see it)
+      // private → draft (only owner sees it)
+      status: form.visibility === "public" ? "pending" : form.visibility === "friends" ? "approved" : "draft",
     });
   };
 

@@ -12,6 +12,20 @@ export const AuthProvider = ({ children }) => {
   const [authError, setAuthError] = useState(null);
   const [appPublicSettings] = useState(null);
 
+  // Ensure a profile row exists for the user (important for Google OAuth users)
+  const ensureProfile = async (user) => {
+    if (!user) return;
+    // Insert only if no profile exists yet — ignoreDuplicates prevents overwriting
+    await supabase.from("profiles").insert(
+      {
+        user_id: user.id,
+        full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+        avatar_url: user.user_metadata?.avatar_url || null,
+      },
+      { onConflict: "user_id", ignoreDuplicates: true }
+    );
+  };
+
   // Fetch admin role from profiles table
   const fetchRole = async (userId) => {
     if (!userId) { setIsAdmin(false); return; }
@@ -28,13 +42,21 @@ export const AuthProvider = ({ children }) => {
       setUser(session?.user ?? null);
       setIsAuthenticated(!!session?.user);
       setIsLoadingAuth(false);
-      fetchRole(session?.user?.id);
+      if (session?.user) {
+        ensureProfile(session.user);
+        fetchRole(session.user.id);
+      }
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       setIsAuthenticated(!!session?.user);
-      fetchRole(session?.user?.id);
+      if (session?.user) {
+        ensureProfile(session.user);
+        fetchRole(session.user.id);
+      } else {
+        setIsAdmin(false);
+      }
     });
 
     return () => subscription.unsubscribe();
