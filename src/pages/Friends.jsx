@@ -294,7 +294,7 @@ export default function Friends() {
             {incoming.length > 0 ? (
               <div className="space-y-2">
                 {incoming.map((f) => {
-                  const profile = profileMap[f.requester_id];
+                  const profile = profileMap[f.requester_id] ?? { user_id: f.requester_id, full_name: "Nutzer", username: null, avatar_url: null };
                   return (
                     <motion.div key={f.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                       className="bg-white rounded-xl border border-amber-200 shadow-sm p-3 flex items-center gap-3"

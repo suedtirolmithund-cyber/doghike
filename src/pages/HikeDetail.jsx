@@ -91,8 +91,6 @@ export default function HikeDetail() {
     queryKey: ["hike", hikeId],
     queryFn: async () => {
       const hikes = await getAllHikes();
-      console.log("hikeId from URL:", hikeId);
-      console.log("first 3 hike IDs from sheet:", hikes.slice(0, 3).map((h) => h.id));
       return hikes.find((h) => h.id === hikeId);
     },
     enabled: !!hikeId
@@ -198,41 +196,6 @@ export default function HikeDetail() {
                       <AlertDialogCancel>Abbrechen</AlertDialogCancel>
                       <AlertDialogAction
                         onClick={() => deleteJournalEntryMutation.mutate()}
-                        className="bg-red-600 hover:bg-red-700"
-                      >
-                        Löschen
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </>
-            )}
-            {isOwnHike && (
-              <>
-                <Link to={createPageUrl("EditHike") + `?id=${hikeId}`}>
-                  <Button variant="ghost" className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20">
-                    <Edit className="w-4 h-4 mr-1" />
-                    Bearbeiten
-                  </Button>
-                </Link>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="ghost" className="bg-red-500/20 backdrop-blur-sm text-white hover:bg-red-500/40">
-                      <Trash2 className="w-4 h-4 mr-1" />
-                      Löschen
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Tour löschen?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Dies wird "{hike.trail_name}" dauerhaft löschen. Diese Aktion kann nicht rückgängig gemacht werden.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Abbrechen</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={() => deleteMutation.mutate()}
                         className="bg-red-600 hover:bg-red-700"
                       >
                         Löschen
@@ -380,6 +343,24 @@ export default function HikeDetail() {
               <p className="text-sm text-stone-500">Gehzeit</p>
             </div>
           )}
+          {hike.difficulty && (
+            <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
+              <Mountain className="w-5 h-5 text-stone-400 mx-auto mb-2" />
+              <p className="text-lg font-medium text-stone-800">
+                {"⬛".repeat(Number(hike.difficulty))}{"⬜".repeat(5 - Number(hike.difficulty))}
+              </p>
+              <p className="text-sm text-stone-500">Stufe {hike.difficulty} / Mensch</p>
+            </div>
+          )}
+          {hike.dog_difficulty && (
+            <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
+              <span className="text-xl block mb-1">🦴</span>
+              <p className="text-lg font-medium text-stone-800">
+                {"🦴".repeat(Number(hike.dog_difficulty))}
+              </p>
+              <p className="text-sm text-stone-500">Stufe {hike.dog_difficulty} / Hund</p>
+            </div>
+          )}
         </motion.div>
 
         {/* Route Profile - Full Width */}
@@ -520,7 +501,6 @@ export default function HikeDetail() {
                 className="bg-white rounded-2xl p-6 border border-stone-200/50"
               >
                 <h2 className="text-lg font-medium text-stone-800 mb-4">Beschreibung & Tipps</h2>
-                {console.log("[HikeDetail] hike.notes length:", hike.notes?.length, "| content:", hike.notes)}
                 <ExpandableText text={hike.notes} lines={3} minChars={150} />
               </motion.div>
             )}

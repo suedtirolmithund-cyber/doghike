@@ -15,20 +15,24 @@ export const AuthProvider = ({ children }) => {
   // Ensure a profile row exists — runs on every login, never overwrites existing data
   const ensureProfile = async (user) => {
     if (!user) return;
-    // Use upsert with ignoreDuplicates:true — inserts once, never updates
-    await supabase.from("profiles").upsert(
-      {
-        user_id: user.id,
-        // Fall back to email prefix so the user is always searchable
-        full_name:
-          user.user_metadata?.full_name ||
-          user.user_metadata?.name ||
-          user.email?.split("@")[0] ||
-          null,
-        avatar_url: user.user_metadata?.avatar_url || null,
-      },
-      { onConflict: "user_id", ignoreDuplicates: true }
-    );
+    try {
+      const { error } = await supabase.from("profiles").upsert(
+        {
+          user_id: user.id,
+          // Fall back to email prefix so the user is always searchable
+          full_name:
+            user.user_metadata?.full_name ||
+            user.user_metadata?.name ||
+            user.email?.split("@")[0] ||
+            null,
+          avatar_url: user.user_metadata?.avatar_url || null,
+        },
+        { onConflict: "user_id", ignoreDuplicates: true }
+      );
+      if (error) console.error("[ensureProfile] error:", error.message);
+    } catch (err) {
+      console.error("[ensureProfile] exception:", err);
+    }
   };
 
   // Fetch admin role from profiles table
@@ -48,8 +52,7 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(!!session?.user);
       setIsLoadingAuth(false);
       if (session?.user) {
-        ensureProfile(session.user);
-        fetchRole(session.user.id);
+        ensureProfile(session.user).then(() => fetchRole(session.user.id));
       }
     });
 
@@ -57,8 +60,7 @@ export const AuthProvider = ({ children }) => {
       setUser(session?.user ?? null);
       setIsAuthenticated(!!session?.user);
       if (session?.user) {
-        ensureProfile(session.user);
-        fetchRole(session.user.id);
+        ensureProfile(session.user).then(() => fetchRole(session.user.id));
       } else {
         setIsAdmin(false);
       }
