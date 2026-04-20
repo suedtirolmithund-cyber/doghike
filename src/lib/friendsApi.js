@@ -57,15 +57,16 @@ export async function removeFriend(friendshipId) {
   if (error) throw error;
 }
 
-// Search profiles by username (excludes self)
+// Search profiles by username or full_name (excludes self)
 export async function searchProfiles(query, currentUserId) {
-  if (!query.trim()) return [];
+  const q = query.trim();
+  if (!q) return [];
   const { data, error } = await supabase
     .from("profiles")
     .select("user_id, username, full_name, avatar_url")
-    .or(`username.ilike.%${query}%,full_name.ilike.%${query}%`)
+    .or(`username.ilike.%${q}%,full_name.ilike.%${q}%`)
     .neq("user_id", currentUserId)
-    .limit(10);
+    .limit(15);
   if (error) throw error;
   return data ?? [];
 }

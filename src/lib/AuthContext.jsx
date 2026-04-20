@@ -12,14 +12,19 @@ export const AuthProvider = ({ children }) => {
   const [authError, setAuthError] = useState(null);
   const [appPublicSettings] = useState(null);
 
-  // Ensure a profile row exists for the user (important for Google OAuth users)
+  // Ensure a profile row exists — runs on every login, never overwrites existing data
   const ensureProfile = async (user) => {
     if (!user) return;
-    // Insert only if no profile exists yet — ignoreDuplicates prevents overwriting
-    await supabase.from("profiles").insert(
+    // Use upsert with ignoreDuplicates:true — inserts once, never updates
+    await supabase.from("profiles").upsert(
       {
         user_id: user.id,
-        full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+        // Fall back to email prefix so the user is always searchable
+        full_name:
+          user.user_metadata?.full_name ||
+          user.user_metadata?.name ||
+          user.email?.split("@")[0] ||
+          null,
         avatar_url: user.user_metadata?.avatar_url || null,
       },
       { onConflict: "user_id", ignoreDuplicates: true }

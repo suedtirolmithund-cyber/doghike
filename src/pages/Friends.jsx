@@ -124,8 +124,12 @@ export default function Friends() {
     try {
       const results = await searchProfiles(searchQuery, user.id);
       setSearchResults(results);
+      if (results.length === 0) {
+        toast.info("Keine Nutzer gefunden. Falls die Person neu registriert ist, muss sie sich einmal ab- und wieder anmelden.");
+      }
     } catch (err) {
-      toast.error("Suche fehlgeschlagen");
+      console.error("[searchProfiles] error:", err);
+      toast.error("Suche fehlgeschlagen: " + err.message);
     } finally {
       setSearching(false);
     }
