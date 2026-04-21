@@ -5,9 +5,14 @@ import { supabase } from "@/lib/supabaseClient";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bell, UserPlus, CheckCircle2, XCircle, BookOpen, Users, Loader2 } from "lucide-react";
+import { Bell, UserPlus, CheckCircle2, XCircle, BookOpen, Users, Loader2, BellOff } from "lucide-react";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
+import { Button } from "@/components/ui/button";
+import {
+  notificationsSupported, notificationPermission,
+  requestNotificationPermission,
+} from "@/lib/browserNotifications";
 
 async function loadNotifications(userId) {
   const results = [];
@@ -109,7 +114,7 @@ async function loadNotifications(userId) {
           color: "text-stone-600 bg-stone-50 border-stone-200",
           title: `${p?.full_name || p?.username || "Freund"} hat "${e.title}" geteilt`,
           time: e.created_at,
-          link: createPageUrl("Feed"),
+          link: createPageUrl("Friends"),
         });
       });
     }
@@ -121,6 +126,12 @@ async function loadNotifications(userId) {
 
 export default function Notifications() {
   const { user, isAuthenticated } = useAuth();
+  const [permission, setPermission] = useState(() => notificationPermission());
+
+  const handleActivate = async () => {
+    const granted = await requestNotificationPermission();
+    setPermission(granted ? 'granted' : 'denied');
+  };
 
   const { data: notifications = [], isLoading } = useQuery({
     queryKey: ["notifications", user?.id],
@@ -155,6 +166,32 @@ export default function Notifications() {
             <p className="text-stone-500 text-sm mt-1">{notifications.length} Benachrichtigung{notifications.length !== 1 ? "en" : ""}</p>
           )}
         </motion.div>
+
+        {/* Push-Notification Banner */}
+        {notificationsSupported() && permission !== 'granted' && permission !== 'denied' && (
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+            className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-5 flex items-center gap-3"
+          >
+            <Bell className="w-5 h-5 text-emerald-600 shrink-0" />
+            <div className="flex-1">
+              <p className="text-sm font-medium text-emerald-800">Push-Benachrichtigungen aktivieren</p>
+              <p className="text-xs text-emerald-600">Erhalte Benachrichtigungen bei neuen Freundschaftsanfragen.</p>
+            </div>
+            <Button size="sm" onClick={handleActivate}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white shrink-0"
+            >
+              Aktivieren
+            </Button>
+          </motion.div>
+        )}
+        {notificationsSupported() && permission === 'denied' && (
+          <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 mb-5 flex items-center gap-3">
+            <BellOff className="w-5 h-5 text-stone-400 shrink-0" />
+            <p className="text-xs text-stone-500">
+              Benachrichtigungen sind blockiert. Bitte in den Browser-Einstellungen erlauben.
+            </p>
+          </div>
+        )}
 
         {isLoading ? (
           <div className="flex justify-center py-20">

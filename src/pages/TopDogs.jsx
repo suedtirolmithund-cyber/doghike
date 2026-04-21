@@ -112,13 +112,14 @@ function dogPhoto(dog) {
 // ── Podium (Top 3) ────────────────────────────────────────────
 function Podium({ top3, metric }) {
   if (!top3.length) return null;
-  const order = [top3[1], top3[0], top3[2]].filter(Boolean); // 2-1-3 Reihenfolge
+  const order = [top3[1], top3[0], top3[2]]; // 2-1-3 Reihenfolge
   const heights = ["h-24", "h-32", "h-20"];
   const origIdx = [1, 0, 2];
 
   return (
     <div className="flex items-end justify-center gap-3 mb-6 px-4">
       {order.map((entry, i) => {
+        if (!entry) return null;
         const style  = RANK_STYLE[origIdx[i]];
         const isFirst = origIdx[i] === 0;
         return (

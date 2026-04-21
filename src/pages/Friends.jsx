@@ -5,17 +5,64 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
   Users, Search, UserPlus, UserMinus, Check, X,
-  Loader2, LogIn, Clock
+  Loader2, LogIn, Clock, Mountain, Ruler, TrendingUp, Star, BookOpen
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { format } from "date-fns";
+import { de } from "date-fns/locale";
 import { useAuth } from "@/lib/AuthContext";
 import {
-  getFriendships, sendFriendRequest, acceptFriendRequest,
+  getFriendships, getFriendIds, getFriendFeedEntries,
+  sendFriendRequest, acceptFriendRequest,
   rejectFriendRequest, removeFriend, searchProfiles,
 } from "@/lib/friendsApi";
+
+function FeedCard({ entry }) {
+  const profile = entry.profile;
+  const authorName = profile?.full_name || profile?.username || "Jemand";
+  return (
+    <Link to={createPageUrl("JournalDetail") + `?id=${entry.id}`}>
+    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+      className="bg-white rounded-2xl border border-stone-200/60 shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+    >
+      {entry.photos?.[0] && (
+        <img src={entry.photos[0]} alt={entry.title} className="w-full h-44 object-cover" />
+      )}
+      <div className="p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-7 h-7 rounded-full overflow-hidden bg-stone-100 shrink-0">
+            <img src={profile?.avatar_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${entry.user_id}`}
+              alt="" className="w-full h-full object-cover" />
+          </div>
+          <span className="text-sm text-stone-600">
+            <span className="font-medium text-stone-800">{authorName}</span>{" "}war wandern
+          </span>
+          <span className="ml-auto text-xs text-stone-400">
+            {format(new Date(entry.date || entry.created_at), "d. MMM", { locale: de })}
+          </span>
+        </div>
+        <h3 className="font-semibold text-stone-800 mb-1">{entry.title}</h3>
+        {entry.location && <p className="text-xs text-stone-500 mb-2">📍 {entry.location}</p>}
+        <div className="flex flex-wrap gap-3 text-xs text-stone-500 mb-2">
+          {entry.distance_km && <span className="flex items-center gap-1"><Ruler className="w-3 h-3" />{entry.distance_km} km</span>}
+          {entry.elevation_m && <span className="flex items-center gap-1"><TrendingUp className="w-3 h-3" />{entry.elevation_m} Hm</span>}
+          {entry.rating > 0 && <span className="flex items-center gap-1 text-yellow-500"><Star className="w-3 h-3 fill-yellow-400" />{entry.rating}/5</span>}
+        </div>
+        {entry.description && <p className="text-sm text-stone-500 line-clamp-2">{entry.description}</p>}
+        {entry.dog_suitable && (
+          <Badge variant="secondary" className="mt-2 text-xs bg-emerald-50 text-emerald-700 border-emerald-200">
+            🐕 Hundefreundlich
+          </Badge>
+        )}
+      </div>
+    </motion.div>
+    </Link>
+  );
+}
 
 function Avatar({ profile, size = "md" }) {
   const s = size === "sm" ? "w-8 h-8" : "w-11 h-11";
@@ -48,11 +95,26 @@ export default function Friends() {
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
 
+  const [feedVisible, setFeedVisible] = useState(10);
+
   const { data: friendships = [], isLoading } = useQuery({
     queryKey: ["friendships", user?.id],
     queryFn: () => getFriendships(user.id),
     enabled: !!user?.id,
     refetchInterval: 30_000,
+  });
+
+  const { data: friendIds = [] } = useQuery({
+    queryKey: ["friendIds", user?.id],
+    queryFn: () => getFriendIds(user.id),
+    enabled: !!user?.id,
+  });
+
+  const { data: feedEntries = [], isLoading: feedLoading } = useQuery({
+    queryKey: ["friendFeed", friendIds.join(",")],
+    queryFn: () => getFriendFeedEntries(friendIds),
+    enabled: friendIds.length > 0,
+    refetchInterval: 5 * 60_000,
   });
 
   // Categorise
@@ -253,6 +315,9 @@ export default function Friends() {
             <TabsTrigger value="sent" className="flex-1">
               Gesendet ({outgoing.length})
             </TabsTrigger>
+            <TabsTrigger value="feed" className="flex-1">
+              Feed
+            </TabsTrigger>
           </TabsList>
 
           {/* Friends list */}
@@ -360,6 +425,39 @@ export default function Friends() {
             ) : (
               <div className="text-center py-16 bg-white rounded-2xl border border-stone-200/50">
                 <p className="text-stone-500 text-sm">Keine gesendeten Anfragen</p>
+              </div>
+            )}
+          </TabsContent>
+          {/* Feed */}
+          <TabsContent value="feed">
+            {feedLoading ? (
+              <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 text-stone-400 animate-spin" /></div>
+            ) : friendIds.length === 0 ? (
+              <div className="text-center py-16 bg-white rounded-2xl border border-stone-200/50">
+                <Users className="w-12 h-12 text-stone-200 mx-auto mb-3" />
+                <p className="text-stone-600 font-medium mb-1">Noch keine Freunde</p>
+                <p className="text-stone-400 text-sm">Füge Freunde hinzu um ihre Wanderungen zu sehen.</p>
+              </div>
+            ) : feedEntries.length === 0 ? (
+              <div className="text-center py-16 bg-white rounded-2xl border border-stone-200/50">
+                <BookOpen className="w-12 h-12 text-stone-200 mx-auto mb-3" />
+                <p className="text-stone-600 font-medium mb-1">Noch nichts im Feed</p>
+                <p className="text-stone-400 text-sm">Deine Freunde haben noch keine Wanderungen geteilt.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {feedEntries.slice(0, feedVisible).map((entry) => (
+                  <FeedCard key={entry.id} entry={entry} />
+                ))}
+                {feedVisible < feedEntries.length && (
+                  <div className="text-center pt-2">
+                    <button onClick={() => setFeedVisible((v) => v + 10)}
+                      className="text-sm text-emerald-600 hover:text-emerald-700 font-medium px-4 py-2 rounded-xl hover:bg-emerald-50 transition-colors"
+                    >
+                      {feedEntries.length - feedVisible} weitere laden ↓
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </TabsContent>

@@ -24,6 +24,10 @@ create policy "Eigenes Profil lesen"
   on public.profiles for select
   using (auth.uid() = user_id);
 
+create policy "Alle Profile lesen"
+  on public.profiles for select
+  using (auth.uid() is not null);
+
 create policy "Eigenes Profil anlegen"
   on public.profiles for insert
   with check (auth.uid() = user_id);

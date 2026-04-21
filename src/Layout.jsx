@@ -4,11 +4,13 @@ import { createPageUrl } from "@/utils";
 import {
   Mountain, Home, Navigation, Dog, LogIn, LogOut,
   User, BookOpen, ShieldCheck, Users, Trophy, Grid,
-  X, Map, Star
+  X, Map
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
+import { registerServiceWorker } from "@/lib/browserNotifications";
+import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 
 // ── Bottom-Nav: nur 5 Haupt-Einträge ────────────────────────
 const MAIN_NAV = [
@@ -35,7 +37,6 @@ const MORE_ITEMS = [
   { name: "Friends",      icon: Users,      label: "Freunde" },
   { name: "TopDogs",      icon: Trophy,     label: "Top Dogs" },
   { name: "MapView",      icon: Map,        label: "Karte" },
-  { name: "Feed",         icon: Star,       label: "Feed" },
 ];
 
 export default function Layout({ children, currentPageName }) {
@@ -43,8 +44,11 @@ export default function Layout({ children, currentPageName }) {
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const [moreOpen, setMoreOpen] = useState(false);
 
-  // Close "Mehr" menu on route change
   useEffect(() => { setMoreOpen(false); }, [location.pathname]);
+
+  useEffect(() => { registerServiceWorker(); }, []);
+
+  useRealtimeNotifications(user?.id);
 
   const displayName =
     user?.user_metadata?.full_name ||
@@ -55,6 +59,8 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col">
+      {/* Abstand für die fixierte Desktop-Nav (oben) */}
+      <div className="hidden md:block h-16 shrink-0" />
       <div className="flex-1">{children}</div>
 
       {/* Footer */}
@@ -242,8 +248,7 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </nav>
 
-      {/* Spacer for fixed navs */}
-      <div className="hidden md:block h-16" />
+      {/* Abstand für die fixierte Mobile-Nav (unten) */}
       <div className="md:hidden h-20" />
     </div>
   );

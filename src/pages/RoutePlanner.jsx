@@ -65,30 +65,37 @@ function haversine(a, b) {
   return R * 2 * Math.atan2(Math.sqrt(s), Math.sqrt(1 - s));
 }
 
-const GH_API_KEY = import.meta.env.VITE_GRAPHHOPPER_KEY || "LijBPDQGfu7Imiq1X1Jw83a5787IYJB2mEQhHe8A7";
-
-// ── GraphHopper hiking route (primary) ───────────────────────
-async function calcGraphHopperRoute(waypoints) {
-  const points = waypoints.map((w) => [w.lng, w.lat]);
+// ── BRouter routing (hiking-mountain | trekking) ──────────────
+async function calcBrouterRoute(waypoints, profile = "hiking-mountain") {
+  const lonlats = waypoints.map((w) => `${w.lng},${w.lat}`).join("|");
   const res = await fetch(
-    `https://graphhopper.com/api/1/route?key=${GH_API_KEY}&profile=hike&points_encoded=false&elevation=true`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ points }),
-    }
+    `https://brouter.de/brouter?lonlats=${lonlats}&profile=${profile}&alternativeidx=0&format=geojson`,
+    { signal: AbortSignal.timeout(15000) }
   );
-  if (!res.ok) throw new Error(`GraphHopper ${res.status}`);
+  if (!res.ok) throw new Error(`BRouter ${res.status}`);
   const data = await res.json();
-  if (!data.paths?.length) throw new Error("Keine Route gefunden");
-  const path = data.paths[0];
-  const coords = path.points.coordinates; // [[lng, lat, ele], ...]
+  if (data.type === "FeatureCollection" && data.features?.length === 0)
+    throw new Error("Keine Route gefunden");
+  const feature = data.features?.[0];
+  if (!feature) throw new Error("Keine Route gefunden");
+
+  const coords = feature.geometry.coordinates; // [lon, lat, ele]
   const positions = coords.map(([lng, lat]) => [lat, lng]);
 
-  // Build sampled elevation profile directly from GH coords — no external API needed
-  const step = Math.max(1, Math.floor(coords.length / 60));
-  const sampled = coords.filter((_, i) => i % step === 0 || i === coords.length - 1);
+  const props = feature.properties || {};
+  const distKm = props["track-length"]
+    ? +(props["track-length"] / 1000).toFixed(2)
+    : +coords.reduce((sum, c, i) => {
+        if (i === 0) return 0;
+        return sum + haversine([coords[i - 1][1], coords[i - 1][0]], [c[1], c[0]]);
+      }, 0).toFixed(2);
+
+  const ascend = props["filtered ascend"] != null ? Math.round(props["filtered ascend"]) : null;
+  const duration = Math.round((distKm / 3.5) * 60 + (ascend || 0) / 400 * 60);
+
+  const step = Math.max(1, Math.floor(coords.length / 80));
   let cumDist = 0;
+  const sampled = coords.filter((_, i) => i % step === 0 || i === coords.length - 1);
   const elevationProfile = sampled.map((c, i) => {
     if (i > 0) {
       const p = sampled[i - 1];
@@ -97,6 +104,30 @@ async function calcGraphHopperRoute(waypoints) {
     return { dist: +(cumDist / 1000).toFixed(3), ele: Math.round(c[2] ?? 0) };
   });
 
+  return { positions, distance_km: distKm, duration_minutes: duration, elevationProfile, elevation_gain_m: ascend };
+}
+
+// ── GraphHopper fallback ───────────────────────────────────────
+const GH_API_KEY = import.meta.env.VITE_GRAPHHOPPER_KEY || "LijBPDQGfu7Imiq1X1Jw83a5787IYJB2mEQhHe8A7";
+async function calcGraphHopperRoute(waypoints, profile = "hike") {
+  const points = waypoints.map((w) => [w.lng, w.lat]);
+  const res = await fetch(
+    `https://graphhopper.com/api/1/route?key=${GH_API_KEY}&profile=${profile}&points_encoded=false&elevation=true`,
+    { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ points }) }
+  );
+  if (!res.ok) throw new Error(`GraphHopper ${res.status}`);
+  const data = await res.json();
+  if (!data.paths?.length) throw new Error("Keine Route gefunden");
+  const path = data.paths[0];
+  const coords = path.points.coordinates;
+  const positions = coords.map(([lng, lat]) => [lat, lng]);
+  const step = Math.max(1, Math.floor(coords.length / 60));
+  let cumDist = 0;
+  const sampled = coords.filter((_, i) => i % step === 0 || i === coords.length - 1);
+  const elevationProfile = sampled.map((c, i) => {
+    if (i > 0) { const p = sampled[i - 1]; cumDist += haversine([p[1], p[0]], [c[1], c[0]]) * 1000; }
+    return { dist: +(cumDist / 1000).toFixed(3), ele: Math.round(c[2] ?? 0) };
+  });
   return {
     positions,
     distance_km: +(path.distance / 1000).toFixed(2),
@@ -106,31 +137,34 @@ async function calcGraphHopperRoute(waypoints) {
   };
 }
 
-// ── OSRM foot route (fallback) ────────────────────────────────
-async function calcOsrmRoute(waypoints) {
-  const coords = waypoints.map((w) => `${w.lng},${w.lat}`).join(";");
-  const res = await fetch(
-    `https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson`
-  );
-  if (!res.ok) throw new Error("OSRM Fehler");
-  const data = await res.json();
-  if (!data.routes?.length) throw new Error("Keine Route gefunden");
-  const route = data.routes[0];
-  const positions = route.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+// ── Freihand: direkte Verbindung ohne Routing ─────────────────
+function calcFreeRoute(waypoints) {
+  const positions = waypoints.map((w) => [w.lat, w.lng]);
+  let totalDist = 0;
+  for (let i = 1; i < positions.length; i++) totalDist += haversine(positions[i - 1], positions[i]);
   return {
     positions,
-    distance_km: +(route.distance / 1000).toFixed(2),
-    duration_minutes: Math.round((route.distance / 1000 / 4) * 60),
+    distance_km: +totalDist.toFixed(2),
+    duration_minutes: Math.round((totalDist / 3.5) * 60),
+    elevationProfile: [],
+    elevation_gain_m: null,
   };
 }
 
-// ── Route calculation: GraphHopper first, OSRM as fallback ───
-async function calcRoute(waypoints) {
+// ── Route berechnen: BRouter primary, GH fallback ─────────────
+async function calcRoute(waypoints, mode = "hike") {
+  if (mode === "free") return calcFreeRoute(waypoints);
+  const brouterProfile = mode === "foot" ? "trekking" : "hiking-mountain";
   try {
-    return await calcGraphHopperRoute(waypoints);
+    return await calcBrouterRoute(waypoints, brouterProfile);
   } catch (err) {
-    console.warn("GraphHopper fehlgeschlagen, fallback auf OSRM:", err.message);
-    return await calcOsrmRoute(waypoints);
+    console.warn("BRouter fehlgeschlagen, fallback auf GraphHopper:", err.message);
+    try {
+      return await calcGraphHopperRoute(waypoints, mode === "foot" ? "foot" : "hike");
+    } catch (err2) {
+      console.warn("GraphHopper fehlgeschlagen:", err2.message);
+      throw err2;
+    }
   }
 }
 
@@ -196,10 +230,33 @@ function ElevationChart({ profile }) {
   );
 }
 
+// ── Find nearest segment index for route-click insertion ──────
+function nearestSegmentIndex(waypoints, lat, lng) {
+  let minDist = Infinity;
+  let insertAt = waypoints.length;
+  for (let i = 0; i < waypoints.length - 1; i++) {
+    const midLat = (waypoints[i].lat + waypoints[i + 1].lat) / 2;
+    const midLng = (waypoints[i].lng + waypoints[i + 1].lng) / 2;
+    const d = haversine([lat, lng], [midLat, midLng]);
+    if (d < minDist) { minDist = d; insertAt = i + 1; }
+  }
+  return insertAt;
+}
+
+function relabelWaypoints(wps) {
+  return wps.map((w, i) => ({ ...w, label: String(i + 1) }));
+}
+
+const ROUTING_MODES = [
+  { id: "hike", label: "Wanderpfade", desc: "Markierte Wege" },
+  { id: "foot", label: "Alle Wege", desc: "Auch Nebenwege" },
+  { id: "free", label: "Freihand", desc: "Direkte Linie" },
+];
+
 // ── Main smart planner tab ────────────────────────────────────
 function SmartRoutePlanner({ onRouteReady }) {
-  const [waypoints, setWaypoints] = useState([]); // [{lat, lng, label}]
-  const [route, setRoute] = useState(null);        // {positions, distance_km, duration_minutes}
+  const [waypoints, setWaypoints] = useState([]);
+  const [route, setRoute] = useState(null);
   const [elevation, setElevation] = useState([]);
   const [calculating, setCalculating] = useState(false);
   const [mapType, setMapType] = useState("standard");
@@ -207,11 +264,11 @@ function SmartRoutePlanner({ onRouteReady }) {
   const [searchText, setSearchText] = useState("");
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState(null);
+  const [routingMode, setRoutingMode] = useState("hike");
   const routeRef = useRef(null);
 
   const tile = TILES[mapType];
 
-  // Calculate route whenever waypoints change (2+)
   useEffect(() => {
     if (waypoints.length < 2) {
       setRoute(null);
@@ -221,14 +278,12 @@ function SmartRoutePlanner({ onRouteReady }) {
     }
     let cancelled = false;
     setCalculating(true);
-    calcRoute(waypoints)
+    calcRoute(waypoints, routingMode)
       .then((r) => {
         if (cancelled) return;
         setRoute(r);
         routeRef.current = r;
-        if (r.elevationProfile?.length > 1) {
-          setElevation(r.elevationProfile);
-        }
+        if (r.elevationProfile?.length > 1) setElevation(r.elevationProfile);
         onRouteReady(r);
       })
       .catch((err) => {
@@ -237,17 +292,35 @@ function SmartRoutePlanner({ onRouteReady }) {
       .finally(() => { if (!cancelled) setCalculating(false); });
 
     return () => { cancelled = true; };
-  }, [waypoints]);
+  }, [waypoints, routingMode]);
 
   const handleMapClick = useCallback(({ lat, lng }) => {
-    setWaypoints((prev) => [
-      ...prev,
-      { lat, lng, label: String(prev.length + 1) },
-    ]);
+    setWaypoints((prev) => relabelWaypoints([...prev, { lat, lng, label: "" }]));
+  }, []);
+
+  const handleRouteClick = useCallback((e) => {
+    L.DomEvent.stopPropagation(e);
+    const { lat, lng } = e.latlng;
+    setWaypoints((prev) => {
+      const idx = nearestSegmentIndex(prev, lat, lng);
+      const next = [...prev];
+      next.splice(idx, 0, { lat, lng, label: "" });
+      return relabelWaypoints(next);
+    });
   }, []);
 
   const removeWaypoint = (index) => {
-    setWaypoints((prev) => prev.filter((_, i) => i !== index).map((w, i) => ({ ...w, label: String(i + 1) })));
+    setWaypoints((prev) => relabelWaypoints(prev.filter((_, i) => i !== index)));
+  };
+
+  const moveWaypoint = (index, dir) => {
+    setWaypoints((prev) => {
+      const next = [...prev];
+      const target = index + dir;
+      if (target < 0 || target >= next.length) return prev;
+      [next[index], next[target]] = [next[target], next[index]];
+      return relabelWaypoints(next);
+    });
   };
 
   const handleSearch = async (e) => {
@@ -261,10 +334,10 @@ function SmartRoutePlanner({ onRouteReady }) {
       );
       const results = await res.json();
       if (results.length > 0) {
-        const { lat, lon, display_name } = results[0];
-        const pos = { lat: parseFloat(lat), lng: parseFloat(lon), label: String(waypoints.length + 1) };
-        setWaypoints((prev) => [...prev, pos]);
-        setFlyTarget({ center: [pos.lat, pos.lng], zoom: 13 });
+        const { lat, lon } = results[0];
+        const pos = { lat: parseFloat(lat), lng: parseFloat(lon), label: "" };
+        setWaypoints((prev) => relabelWaypoints([...prev, pos]));
+        setFlyTarget({ center: [parseFloat(lat), parseFloat(lon)], zoom: 13 });
         setSearchText("");
       } else {
         setSearchError("Ort nicht gefunden");
@@ -285,9 +358,22 @@ function SmartRoutePlanner({ onRouteReady }) {
 
   return (
     <div className="space-y-3">
+      {/* Routing mode selector */}
+      <div className="bg-stone-100 p-1 rounded-xl flex gap-1">
+        {ROUTING_MODES.map((m) => (
+          <button key={m.id} onClick={() => setRoutingMode(m.id)}
+            className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-medium transition-all text-center ${
+              routingMode === m.id ? "bg-white shadow-sm text-stone-800" : "text-stone-500 hover:text-stone-700"
+            }`}
+          >
+            <div>{m.label}</div>
+            <div className="text-[10px] font-normal text-stone-400 mt-0.5 hidden sm:block">{m.desc}</div>
+          </button>
+        ))}
+      </div>
+
       {/* Toolbar */}
       <div className="flex gap-2 flex-wrap items-center">
-        {/* Location search */}
         <form onSubmit={handleSearch} className="flex gap-1.5 flex-1 min-w-0">
           <Input value={searchText} onChange={(e) => setSearchText(e.target.value)}
             placeholder="Ort als Wegpunkt suchen..." className="flex-1 h-9 text-sm" />
@@ -296,7 +382,6 @@ function SmartRoutePlanner({ onRouteReady }) {
           </Button>
         </form>
 
-        {/* Map type toggle */}
         <button
           onClick={() => setMapType((t) => t === "standard" ? "topo" : "standard")}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-stone-200 text-xs font-medium text-stone-600 hover:bg-stone-50 bg-white shrink-0 h-9"
@@ -315,15 +400,21 @@ function SmartRoutePlanner({ onRouteReady }) {
       {searchError && <p className="text-xs text-red-500">{searchError}</p>}
 
       {/* Map */}
-      <div className="relative rounded-xl overflow-hidden border border-stone-200 shadow-sm h-[60vw] min-h-[260px] max-h-[450px] md:h-[420px] md:max-h-none">
+      <div className="relative rounded-xl overflow-hidden border border-stone-200 shadow-sm h-[60vw] min-h-[260px] max-h-[450px] md:h-[440px] md:max-h-none">
         <MapContainer center={[46.5, 11.3]} zoom={10} style={{ height: "100%", width: "100%" }} scrollWheelZoom={false}>
           <TileLayer url={tile.url} attribution={tile.attribution} />
           <MapClickHandler onMapClick={handleMapClick} />
           {flyTarget && <MapFlyTo center={flyTarget.center} zoom={flyTarget.zoom} />}
 
-          {/* Calculated route */}
+          {/* Calculated route — clickable to insert waypoints */}
           {route && (
-            <Polyline positions={route.positions} color="#1e3a8a" weight={5} opacity={0.85} />
+            <Polyline
+              positions={route.positions}
+              color="#1e3a8a"
+              weight={6}
+              opacity={0.85}
+              eventHandlers={{ click: handleRouteClick }}
+            />
           )}
 
           {/* Waypoint markers — draggable */}
@@ -344,7 +435,7 @@ function SmartRoutePlanner({ onRouteReady }) {
                 <div className="text-xs">
                   <p className="font-semibold">{i === 0 ? "Start" : i === waypoints.length - 1 ? "Ziel" : `Wegpunkt ${wp.label}`}</p>
                   <p className="text-stone-400">{wp.lat.toFixed(5)}, {wp.lng.toFixed(5)}</p>
-                  <p className="text-stone-400 italic">Ziehen/Halten zum Verschieben</p>
+                  <p className="text-stone-400 italic">Ziehen zum Verschieben</p>
                   <button
                     onClick={() => removeWaypoint(i)}
                     className="mt-1 text-red-500 hover:underline text-xs flex items-center gap-1"
@@ -357,10 +448,19 @@ function SmartRoutePlanner({ onRouteReady }) {
           ))}
         </MapContainer>
 
-        {/* Map overlay hint */}
         {waypoints.length === 0 && (
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 text-xs text-stone-600 shadow pointer-events-none">
-            Tippe / klicke auf die Karte um Wegpunkte zu setzen
+            Tippe auf die Karte um Wegpunkte zu setzen
+          </div>
+        )}
+        {waypoints.length === 1 && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 text-xs text-stone-600 shadow pointer-events-none">
+            Setze einen weiteren Punkt für die Route
+          </div>
+        )}
+        {route && waypoints.length >= 2 && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-xl px-3 py-1.5 text-[10px] text-stone-500 shadow pointer-events-none">
+            Route anklicken → Wegpunkt einfügen · Marker ziehen → verschieben
           </div>
         )}
 
@@ -370,24 +470,34 @@ function SmartRoutePlanner({ onRouteReady }) {
           </div>
         )}
 
-        {/* Map type badge */}
         <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 text-[10px] font-medium text-stone-500 shadow">
           {tile.label}
         </div>
       </div>
 
-      {/* Waypoints list */}
+      {/* Waypoints list with reorder */}
       {waypoints.length > 0 && (
         <div className="space-y-1">
           {waypoints.map((wp, i) => (
-            <div key={i} className="flex items-center gap-2 text-xs bg-stone-50 rounded-lg px-3 py-1.5">
+            <div key={i} className="flex items-center gap-2 text-xs bg-stone-50 rounded-lg px-2 py-1.5 group">
               <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-white text-[10px] shrink-0 ${
-                i === 0 ? "bg-emerald-600" : i === waypoints.length - 1 ? "bg-red-600" : "bg-slate-700"
+                i === 0 ? "bg-emerald-600" : i === waypoints.length - 1 && waypoints.length > 1 ? "bg-red-600" : "bg-slate-700"
               }`}>
                 {i === 0 ? "S" : i === waypoints.length - 1 && waypoints.length > 1 ? "Z" : wp.label}
               </span>
-              <span className="text-stone-500 flex-1">{wp.lat.toFixed(5)}, {wp.lng.toFixed(5)}</span>
-              <button onClick={() => removeWaypoint(i)} className="text-stone-300 hover:text-red-500 ml-auto">
+              <span className="text-stone-500 flex-1 truncate">{wp.lat.toFixed(5)}, {wp.lng.toFixed(5)}</span>
+              {/* Reorder buttons */}
+              <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onClick={() => moveWaypoint(i, -1)} disabled={i === 0}
+                  className="text-stone-400 hover:text-stone-700 disabled:opacity-20 p-0.5">
+                  ↑
+                </button>
+                <button onClick={() => moveWaypoint(i, 1)} disabled={i === waypoints.length - 1}
+                  className="text-stone-400 hover:text-stone-700 disabled:opacity-20 p-0.5">
+                  ↓
+                </button>
+              </div>
+              <button onClick={() => removeWaypoint(i)} className="text-stone-300 hover:text-red-500">
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -410,7 +520,7 @@ function SmartRoutePlanner({ onRouteReady }) {
                 ? `${Math.floor(route.duration_minutes / 60)}h ${route.duration_minutes % 60}m`
                 : `${route.duration_minutes}m`}
             </p>
-            <p className="text-xs text-slate-500">ca. Zeit (4 km/h)</p>
+            <p className="text-xs text-slate-500">ca. Zeit</p>
           </div>
           <div className="bg-emerald-50 rounded-xl p-3 text-center border border-emerald-100">
             <TrendingUp className="w-4 h-4 text-emerald-600 mx-auto mb-1" />
@@ -517,7 +627,7 @@ export default function RoutePlanner() {
         <div className="flex gap-2 mb-5 bg-stone-100 p-1 rounded-xl">
           {[
             { id: "plan", icon: Map, label: "Planen" },
-            { id: "track", icon: Navigation, label: "GPS" },
+            { id: "track", icon: Navigation, label: "Aufzeichnen" },
             { id: "gpx", icon: Upload, label: "GPX" },
           ].map(({ id, icon: Icon, label }) => (
             <button key={id} onClick={() => { setActiveTab(id); setRouteGeometry(null); }}

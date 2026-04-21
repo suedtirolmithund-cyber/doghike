@@ -150,7 +150,7 @@ export default function RouteDetail() {
     prefill_location: route.start_location || "",
     prefill_distance: route.distance_km ?? "",
     prefill_elevation: route.elevation_gain_m ?? "",
-    prefill_duration: route.completed_duration_minutes || route.duration_minutes || "",
+    prefill_duration: route.duration_minutes || "",
     prefill_description: [
       route.completed_notes,
       route.description,
@@ -193,11 +193,17 @@ export default function RouteDetail() {
               </div>
 
               {isOwner && (
-                <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
                   <Link to={journalUrl}>
                     <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white">
                       <BookOpen className="w-4 h-4 mr-1.5" />
                       Als Wanderung eintragen
+                    </Button>
+                  </Link>
+                  <Link to={createPageUrl("EditRoute") + `?id=${routeId}`}>
+                    <Button size="sm" variant="outline">
+                      <Pencil className="w-4 h-4 mr-1.5" />
+                      Bearbeiten
                     </Button>
                   </Link>
                   <Button
@@ -650,7 +656,19 @@ export default function RouteDetail() {
                           Abbrechen
                         </Button>
                         <Button
-                          onClick={() => completeRouteMutation.mutate(completeData)}
+                          onClick={() => completeRouteMutation.mutate({
+                            completed_date: completeData.completed_date || null,
+                            completed_notes: [
+                              completeData.completed_notes,
+                              completeData.parking_info ? `🅿️ ${completeData.parking_info}` : null,
+                              completeData.restaurant_info ? `🍽️ ${completeData.restaurant_info}` : null,
+                              completeData.hazard_notes ? `⚠️ ${completeData.hazard_notes}` : null,
+                            ].filter(Boolean).join("\n\n") || null,
+                            completed_rating: completeData.completed_rating || null,
+                            duration_minutes: completeData.completed_duration_minutes
+                              ? Number(completeData.completed_duration_minutes)
+                              : undefined,
+                          })}
                           disabled={completeRouteMutation.isPending}
                           className="flex-1 bg-green-600 hover:bg-green-700"
                         >

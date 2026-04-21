@@ -215,6 +215,7 @@ export default function Journal() {
                   transition={{ delay: index * 0.04 }}
                   className="bg-white rounded-2xl border border-stone-200/60 shadow-sm hover:shadow-md transition-shadow overflow-hidden"
                 >
+                  <Link to={createPageUrl("JournalDetail") + `?id=${entry.id}`} className="block">
                   <div className="flex gap-0 md:gap-0">
                     {/* Photo */}
                     {entry.photos?.[0] && (
@@ -285,7 +286,7 @@ export default function Journal() {
                       )}
 
                       {/* Actions */}
-                      <div className="flex gap-2 mt-3">
+                      <div className="flex gap-2 mt-3" onClick={(e) => e.stopPropagation()}>
                         <Link to={`${createPageUrl("AddJournalEntry")}?id=${entry.id}`}>
                           <Button size="sm" variant="outline" className="h-7 text-xs">
                             Bearbeiten
@@ -318,6 +319,7 @@ export default function Journal() {
                       </div>
                     </div>
                   </div>
+                  </Link>
                 </motion.div>
               ))}
             </AnimatePresence>
