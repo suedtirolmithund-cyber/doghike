@@ -61,12 +61,25 @@ export async function removeFriend(friendshipId) {
 export async function searchProfiles(query, currentUserId) {
   const q = query.trim();
   if (!q) return [];
+
+  // Step 1: try to count how many profiles exist at all
+  const { count } = await supabase
+    .from("profiles")
+    .select("*", { count: "exact", head: true });
+  console.log("[searchProfiles] total profiles in table:", count);
+
+  // Step 2: actual search
   const { data, error } = await supabase
     .from("profiles")
     .select("user_id, username, full_name, avatar_url")
     .or(`username.ilike.%${q}%,full_name.ilike.%${q}%`)
     .neq("user_id", currentUserId)
     .limit(15);
+
+  console.log("[searchProfiles] query:", q);
+  console.log("[searchProfiles] error:", error);
+  console.log("[searchProfiles] results:", data?.length ?? 0, data);
+
   if (error) throw error;
   return data ?? [];
 }
