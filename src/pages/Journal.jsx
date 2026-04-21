@@ -83,10 +83,13 @@ function StatsChip({ icon: Icon, value, unit, color = "text-stone-600" }) {
   );
 }
 
+const PAGE_SIZE = 20;
+
 export default function Journal() {
   const { user, isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
+  const [visible, setVisible] = useState(PAGE_SIZE);
 
   const { data: entries = [], isLoading } = useQuery({
     queryKey: ["journal", user?.id],
@@ -203,7 +206,7 @@ export default function Journal() {
         ) : filtered.length > 0 ? (
           <div className="space-y-4">
             <AnimatePresence>
-              {filtered.map((entry, index) => (
+              {filtered.slice(0, visible).map((entry, index) => (
                 <motion.div
                   key={entry.id}
                   initial={{ opacity: 0, y: 16 }}
@@ -318,6 +321,17 @@ export default function Journal() {
                 </motion.div>
               ))}
             </AnimatePresence>
+
+            {visible < filtered.length && (
+              <div className="text-center pt-2">
+                <button
+                  onClick={() => setVisible((v) => v + PAGE_SIZE)}
+                  className="text-sm text-emerald-600 hover:text-emerald-700 font-medium px-4 py-2 rounded-xl hover:bg-emerald-50 transition-colors"
+                >
+                  {filtered.length - visible} weitere Einträge laden ↓
+                </button>
+              </div>
+            )}
           </div>
         ) : entries.length === 0 ? (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}

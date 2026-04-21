@@ -1,11 +1,12 @@
 import { supabase } from "./supabaseClient";
 
-export async function getJournalEntries(userId) {
+export async function getJournalEntries(userId, { limit = 100 } = {}) {
   const { data, error } = await supabase
     .from("journal_entries")
     .select("*")
     .eq("user_id", userId)
-    .order("date", { ascending: false });
+    .order("date", { ascending: false })
+    .limit(limit);
   if (error) throw error;
   return data ?? [];
 }

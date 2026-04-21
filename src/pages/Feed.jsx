@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -85,8 +86,11 @@ function FeedCard({ entry }) {
   );
 }
 
+const FEED_PAGE = 10;
+
 export default function Feed() {
   const { user, isAuthenticated } = useAuth();
+  const [visible, setVisible] = useState(FEED_PAGE);
 
   const { data: friendIds = [] } = useQuery({
     queryKey: ["friendIds", user?.id],
@@ -158,9 +162,19 @@ export default function Feed() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4">
-            {feedEntries.map((entry, i) => (
+            {feedEntries.slice(0, visible).map((entry) => (
               <FeedCard key={entry.id} entry={entry} />
             ))}
+            {visible < feedEntries.length && (
+              <div className="text-center pt-2">
+                <button
+                  onClick={() => setVisible((v) => v + FEED_PAGE)}
+                  className="text-sm text-emerald-600 hover:text-emerald-700 font-medium px-4 py-2 rounded-xl hover:bg-emerald-50 transition-colors"
+                >
+                  {feedEntries.length - visible} weitere Einträge laden ↓
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
