@@ -49,7 +49,7 @@ const AuthenticatedApp = () => {
   React.useEffect(() => {
     const timer = window.setTimeout(() => {
       setMinimumSplashElapsed(true);
-    }, 1600);
+    }, 2600);
 
     return () => window.clearTimeout(timer);
   }, []);
