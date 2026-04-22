@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/AuthContext";
-import { getProfile, upsertProfile, getDogs, createDog, updateDog, deleteDog, uploadFile } from "@/lib/profilesApi";
+import { getProfile, upsertProfile, getDogs, createDog, updateDog, deleteDog, uploadFile, deleteStoredFile } from "@/lib/profilesApi";
 import { getSavedHikes } from "@/lib/communityApi";
 import { getAllHikes } from "@/api/sheetsClient";
 import { getUserRoutes } from "@/lib/routesApi";
@@ -118,8 +118,16 @@ export default function Profile() {
     if (!file || !user) return;
     setAvatarUploading(true);
     try {
+      const previousAvatarUrl = profile?.avatar_url || null;
       const url = await uploadFile("avatars", user.id, file);
       await upsertProfile(user.id, { avatar_url: url });
+      if (previousAvatarUrl && previousAvatarUrl !== url) {
+        try {
+          await deleteStoredFile(previousAvatarUrl, "avatars");
+        } catch (cleanupError) {
+          console.error("Avatar cleanup failed:", cleanupError);
+        }
+      }
       queryClient.invalidateQueries({ queryKey: ["profile", user?.id] });
       toast.success("Profilbild aktualisiert");
     } catch (err) {

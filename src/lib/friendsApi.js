@@ -1,4 +1,5 @@
 import { supabase } from "./supabaseClient";
+import { hydrateJournalEntriesMedia } from "./journalApi";
 
 // Returns all friendships involving the current user (pending + accepted)
 export async function getFriendships(userId) {
@@ -106,5 +107,6 @@ export async function getFriendFeedEntries(friendIds) {
     .in("user_id", friendIds);
   const profileMap = Object.fromEntries((profiles ?? []).map((p) => [p.user_id, p]));
 
-  return data.map((e) => ({ ...e, profile: profileMap[e.user_id] ?? null }));
+  const hydratedEntries = await hydrateJournalEntriesMedia(data);
+  return hydratedEntries.map((entry) => ({ ...entry, profile: profileMap[entry.user_id] ?? null }));
 }

@@ -137,23 +137,8 @@ async function calcGraphHopperRoute(waypoints, profile = "hike") {
   };
 }
 
-// ── Freihand: direkte Verbindung ohne Routing ─────────────────
-function calcFreeRoute(waypoints) {
-  const positions = waypoints.map((w) => [w.lat, w.lng]);
-  let totalDist = 0;
-  for (let i = 1; i < positions.length; i++) totalDist += haversine(positions[i - 1], positions[i]);
-  return {
-    positions,
-    distance_km: +totalDist.toFixed(2),
-    duration_minutes: Math.round((totalDist / 3.5) * 60),
-    elevationProfile: [],
-    elevation_gain_m: null,
-  };
-}
-
 // ── Route berechnen: BRouter primary, GH fallback ─────────────
 async function calcRoute(waypoints, mode = "hike") {
-  if (mode === "free") return calcFreeRoute(waypoints);
   const brouterProfile = mode === "foot" ? "trekking" : "hiking-mountain";
   try {
     return await calcBrouterRoute(waypoints, brouterProfile);
@@ -250,7 +235,6 @@ function relabelWaypoints(wps) {
 const ROUTING_MODES = [
   { id: "hike", label: "Wanderpfade", desc: "Markierte Wege" },
   { id: "foot", label: "Alle Wege", desc: "Auch Nebenwege" },
-  { id: "free", label: "Freihand", desc: "Direkte Linie" },
 ];
 
 // ── Main smart planner tab ────────────────────────────────────

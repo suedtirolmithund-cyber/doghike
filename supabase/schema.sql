@@ -202,11 +202,12 @@ create table if not exists public.comments (
   created_at      timestamptz default now()
 );
 alter table public.comments enable row level security;
-create policy "Kommentare lesen" on public.comments for select using (true);
+create policy "Kommentare lesen" on public.comments
+  for select using (reported = false OR auth.uid() = user_id OR public.is_admin());
 create policy "Eigene Kommentare erstellen" on public.comments
   for insert with check (auth.uid() = user_id);
-create policy "Kommentare melden" on public.comments
-  for update using (true) with check (true); -- anyone can set reported=true
+create policy "Admin Kommentare moderieren" on public.comments
+  for update using (public.is_admin()) with check (public.is_admin());
 create policy "Eigene oder Admin Kommentare löschen" on public.comments
   for delete using (auth.uid() = user_id OR public.is_admin());
 
@@ -250,3 +251,56 @@ create policy "Eigene Routen verwalten" on public.user_routes
 -- 3. "journal"      – Public bucket für Journal-Fotos & GPX-Dateien
 -- 4. "comments"     – Public bucket für Kommentar-Fotos
 -- ============================================================
+
+-- Zusaetzliche Admin-Policies
+create policy "Admin Profile verwalten" on public.profiles
+  for all using (public.is_admin()) with check (public.is_admin());
+
+create policy "Admin Hunde verwalten" on public.dogs
+  for all using (public.is_admin()) with check (public.is_admin());
+
+create policy "Admin Freundschaften verwalten" on public.friendships
+  for all using (public.is_admin()) with check (public.is_admin());
+
+create policy "Admin gespeicherte Touren verwalten" on public.saved_hikes
+  for all using (public.is_admin()) with check (public.is_admin());
+
+create policy "Admin Ratings verwalten" on public.ratings
+  for all using (public.is_admin()) with check (public.is_admin());
+
+create policy "Admin Routen verwalten" on public.user_routes
+  for all using (public.is_admin()) with check (public.is_admin());
+
+create or replace function public.can_read_shared_journal_file(object_name text)
+returns boolean
+language sql
+security definer
+as $$
+  select exists (
+    select 1
+    from public.journal_entries je
+    where
+      (
+        object_name = any(coalesce(je.photos, '{}'::text[]))
+        or object_name = je.gpx_url
+      )
+      and (
+        (je.visibility = 'public' and je.status = 'approved')
+        or (
+          auth.uid() is not null
+          and je.visibility = 'friends'
+          and je.status = 'approved'
+          and exists (
+            select 1
+            from public.friendships f
+            where
+              f.status = 'accepted'
+              and (
+                (f.requester_id = auth.uid() and f.receiver_id = je.user_id)
+                or (f.receiver_id = auth.uid() and f.requester_id = je.user_id)
+              )
+          )
+        )
+      )
+  );
+$$;

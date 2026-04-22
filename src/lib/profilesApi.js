@@ -1,5 +1,17 @@
 import { supabase } from "./supabaseClient";
 
+function getStorageDescriptor(fileUrl, bucket) {
+  if (!fileUrl || typeof fileUrl !== "string") return null;
+  const marker = `/storage/v1/object/public/${bucket}/`;
+  const index = fileUrl.indexOf(marker);
+  if (index === -1) return null;
+
+  return {
+    bucket,
+    path: decodeURIComponent(fileUrl.slice(index + marker.length)),
+  };
+}
+
 // ── File upload ──────────────────────────────────────────────
 export async function uploadFile(bucket, userId, file) {
   const ext = file.name.split(".").pop();
@@ -73,9 +85,36 @@ export async function updateDog(dogId, dogData) {
 }
 
 export async function deleteDog(dogId) {
+  const { data: existingDog, error: fetchError } = await supabase
+    .from("dogs")
+    .select("photo_url")
+    .eq("id", dogId)
+    .single();
+
+  if (fetchError && fetchError.code !== "PGRST116") throw fetchError;
+
   const { error } = await supabase
     .from("dogs")
     .delete()
     .eq("id", dogId);
+  if (error) throw error;
+
+  if (existingDog?.photo_url) {
+    try {
+      await deleteStoredFile(existingDog.photo_url, "dog-photos");
+    } catch (cleanupError) {
+      console.error("Dog delete cleanup failed:", cleanupError);
+    }
+  }
+}
+
+export async function deleteStoredFile(fileUrl, bucket) {
+  const storageDescriptor = getStorageDescriptor(fileUrl, bucket);
+  if (!storageDescriptor) return;
+
+  const { error } = await supabase.storage
+    .from(storageDescriptor.bucket)
+    .remove([storageDescriptor.path]);
+
   if (error) throw error;
 }

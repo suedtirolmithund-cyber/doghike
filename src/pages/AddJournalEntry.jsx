@@ -16,7 +16,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/AuthContext";
-import { createJournalEntry, updateJournalEntry, getJournalEntry, uploadJournalFile } from "@/lib/journalApi";
+import {
+  createJournalEntry,
+  updateJournalEntry,
+  getJournalEntry,
+  getSignedJournalUrls,
+  uploadJournalFile,
+  getMissingPublicJournalFields,
+} from "@/lib/journalApi";
 import { getDogs } from "@/lib/profilesApi";
 import { Link } from "react-router-dom";
 
@@ -392,7 +399,7 @@ const EMPTY_FORM = {
 };
 
 export default function AddJournalEntry() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isAdmin } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const editId = searchParams.get("id");
@@ -423,6 +430,7 @@ export default function AddJournalEntry() {
   const [photoUploading, setPhotoUploading] = useState(false);
   const [gpxUploading, setGpxUploading] = useState(false);
   const [photoConsent, setPhotoConsent] = useState(false);
+  const [photoPreviewUrls, setPhotoPreviewUrls] = useState([]);
 
   const { data: userDogs = [] } = useQuery({
     queryKey: ["dogs", user?.id],
@@ -463,6 +471,23 @@ export default function AddJournalEntry() {
       });
     }
   }, [existing]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadPhotoPreviews() {
+      const previewUrls = await getSignedJournalUrls(form.photos ?? []);
+      if (!cancelled) {
+        setPhotoPreviewUrls(previewUrls);
+      }
+    }
+
+    loadPhotoPreviews();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [form.photos]);
 
   const saveMutation = useMutation({
     mutationFn: (data) =>
@@ -514,21 +539,10 @@ export default function AddJournalEntry() {
       return;
     }
 
-    // Öffentliche Einträge: alle Felder außer GPX sind Pflicht
     if (form.visibility === "public") {
-      const missing = [];
-      if (!form.location?.trim())         missing.push("Ort");
-      if (!form.latitude || !form.longitude) missing.push("Startpunkt auf Karte");
-      if (!form.distance_km)              missing.push("Distanz (km)");
-      if (!form.elevation_m)              missing.push("Höhenmeter");
-      if (!form.duration_minutes)         missing.push("Dauer (Minuten)");
-      if (!form.difficulty)               missing.push("Schwierigkeit (Mensch)");
-      if (!form.dog_difficulty)           missing.push("Schwierigkeit (Hund)");
-      if (!form.description?.trim())      missing.push("Beschreibung");
-      if (form.photos.length === 0)       missing.push("Mindestens 1 Foto");
-      if (form.seasons.length === 0)      missing.push("Empfohlene Jahreszeit");
+      const missing = getMissingPublicJournalFields(form);
       if (missing.length > 0) {
-        toast.error(`Fehlende Pflichtfelder für öffentliche Touren:\n${missing.join(", ")}`, {
+        toast.error(`Fehlende Pflichtfelder fuer oeffentliche Touren:\n${missing.join(", ")}`, {
           duration: 6000,
         });
         return;
@@ -537,9 +551,17 @@ export default function AddJournalEntry() {
 
     const needsConsent = form.photos.length > 0 && form.visibility !== "private";
     if (needsConsent && !photoConsent) {
-      toast.error("Bitte bestätige das Einverständnis zu den Fotos.");
+      toast.error("Bitte bestaetige das Einverstaendnis zu den Fotos.");
       return;
     }
+
+    const nextStatus =
+      form.visibility === "public"
+        ? (isAdmin ? "approved" : "pending")
+        : form.visibility === "friends"
+          ? "approved"
+          : "draft";
+
     saveMutation.mutate({
       ...form,
       distance_km: form.distance_km !== "" ? Number(form.distance_km) : null,
@@ -550,10 +572,10 @@ export default function AddJournalEntry() {
       dog_difficulty: form.dog_difficulty || null,
       latitude: form.latitude !== "" ? Number(form.latitude) : null,
       longitude: form.longitude !== "" ? Number(form.longitude) : null,
-      // public → pending admin review
-      // friends → approved immediately (no review needed, only friends see it)
-      // private → draft (only owner sees it)
-      status: form.visibility === "public" ? "pending" : form.visibility === "friends" ? "approved" : "draft",
+      // public -> pending admin review (admins can keep approved entries approved)
+      // friends -> approved immediately (no review needed, only friends see it)
+      // private -> draft (only owner sees it)
+      status: nextStatus,
     });
   };
 
@@ -767,7 +789,7 @@ export default function AddJournalEntry() {
 
             {form.photos.length > 0 && (
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                {form.photos.map((url, i) => (
+                {photoPreviewUrls.map((url, i) => (
                   <div key={i} className="relative group aspect-square">
                     <img src={url} alt="" className="w-full h-full object-cover rounded-lg" />
                     <button type="button"
@@ -896,3 +918,4 @@ export default function AddJournalEntry() {
     </div>
   );
 }
+

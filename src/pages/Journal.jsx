@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/AuthContext";
-import { getJournalEntries, deleteJournalEntry } from "@/lib/journalApi";
+import { getJournalEntriesForDisplay, deleteJournalEntry } from "@/lib/journalApi";
 
 const DIFFICULTY_LABEL = ["", "Sehr leicht", "Leicht", "Mittel", "Schwer", "Sehr schwer"];
 const DIFFICULTY_COLOR = ["", "text-emerald-600", "text-green-600", "text-yellow-600", "text-orange-600", "text-red-600"];
@@ -93,7 +93,7 @@ export default function Journal() {
 
   const { data: entries = [], isLoading } = useQuery({
     queryKey: ["journal", user?.id],
-    queryFn: () => getJournalEntries(user.id),
+    queryFn: () => getJournalEntriesForDisplay(user.id),
     enabled: !!user?.id,
   });
 

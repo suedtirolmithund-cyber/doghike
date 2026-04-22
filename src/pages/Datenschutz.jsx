@@ -164,7 +164,7 @@ export default function Datenschutz() {
                   <p className="text-amber-800 text-sm">
                     <strong>Recht auf Vergessenwerden:</strong> Sie können Ihr Konto und alle Ihre Daten jederzeit
                     in den Profileinstellungen unter „Konto löschen" beantragen.
-                    Ihre Daten werden innerhalb von 72 Stunden gelöscht.
+                    Die Anfrage wird per E-Mail vorbereitet und danach manuell bearbeitet.
                   </p>
                 </div>
               </div>

@@ -4,25 +4,37 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Camera, Send, Trash2, Loader2, X, Flag } from "lucide-react";
+import { Camera, Send, Trash2, Loader2, X } from "lucide-react";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { getComments, createComment, deleteComment, uploadCommentPhoto, reportComment, containsTriggerWord } from "@/lib/communityApi";
+import {
+  getComments,
+  createComment,
+  deleteComment,
+  uploadCommentPhoto,
+  commentNeedsReview,
+  deleteUploadedCommentPhoto,
+} from "@/lib/communityApi";
 
-export default function CommentSection({ hikeId }) {
+export default function CommentSection({ hikeId, canComment = true }) {
   const { user, isAuthenticated } = useAuth();
   const [text, setText] = useState("");
-  const [photoUrl, setPhotoUrl] = useState(null);
-  const [uploading, setUploading] = useState(false);
+  const [photoPreviewUrl, setPhotoPreviewUrl] = useState(null);
+  const [photoFile, setPhotoFile] = useState(null);
   const [consentPublic, setConsentPublic] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [reportingId, setReportingId] = useState(null);
   const queryClient = useQueryClient();
 
   const { data: comments = [], isLoading } = useQuery({
@@ -32,30 +44,41 @@ export default function CommentSection({ hikeId }) {
 
   const createMutation = useMutation({
     mutationFn: async () => {
-      const comment = await createComment(user.id, hikeId, text, photoUrl);
-      // Auto-flag if text contains trigger words
-      if (containsTriggerWord(text)) {
-        await reportComment(comment.id, "auto: Trigger-Wort erkannt");
+      const needsReview = commentNeedsReview(text);
+      let uploadedPhotoReference = null;
+
+      try {
+        if (photoFile) {
+          uploadedPhotoReference = await uploadCommentPhoto(user.id, photoFile, { needsReview });
+        }
+
+        return await createComment(user.id, hikeId, text, uploadedPhotoReference, needsReview);
+      } catch (error) {
+        if (uploadedPhotoReference) {
+          await deleteUploadedCommentPhoto(uploadedPhotoReference);
+        }
+        throw error;
       }
-      return comment;
     },
     onSuccess: () => {
+      const needsReview = commentNeedsReview(text);
       queryClient.invalidateQueries({ queryKey: ["comments", hikeId] });
       setText("");
-      setPhotoUrl(null);
+      if (photoPreviewUrl) {
+        URL.revokeObjectURL(photoPreviewUrl);
+      }
+      setPhotoPreviewUrl(null);
+      setPhotoFile(null);
       setConsentPublic(false);
-      toast.success("Kommentar veröffentlicht");
+      toast.success(
+        needsReview
+          ? "Kommentar gespeichert und zur Freigabe an den Admin gesendet."
+          : "Kommentar veroeffentlicht."
+      );
     },
-    onError: (e) => toast.error("Fehler: " + e.message),
-  });
-
-  const reportMutation = useMutation({
-    mutationFn: (id) => reportComment(id, "Nutzer-Meldung"),
-    onSuccess: () => {
-      setReportingId(null);
-      toast.success("Kommentar gemeldet. Ein Admin wird ihn prüfen.");
+    onError: (error) => {
+      toast.error(error.message || "Kommentar konnte nicht gespeichert werden.");
     },
-    onError: (e) => toast.error("Fehler: " + e.message),
   });
 
   const deleteMutation = useMutation({
@@ -63,52 +86,56 @@ export default function CommentSection({ hikeId }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", hikeId] });
       setDeleteId(null);
-      toast.success("Kommentar gelöscht");
+      toast.success("Kommentar geloescht.");
     },
-    onError: (e) => toast.error("Fehler: " + e.message),
+    onError: (error) => {
+      toast.error(error.message || "Kommentar konnte nicht geloescht werden.");
+    },
   });
 
-  const handlePhotoUpload = async (e) => {
-    const file = e.target.files[0];
+  const handlePhotoUpload = (event) => {
+    const file = event.target.files[0];
     if (!file || !user) return;
-    setUploading(true);
-    try {
-      const url = await uploadCommentPhoto(user.id, file);
-      setPhotoUrl(url);
-    } catch {
-      toast.error("Foto-Upload fehlgeschlagen. Bitte 'comments' Bucket in Supabase anlegen.");
-    } finally {
-      setUploading(false);
+
+    if (photoPreviewUrl) {
+      URL.revokeObjectURL(photoPreviewUrl);
     }
+
+    setPhotoFile(file);
+    setPhotoPreviewUrl(URL.createObjectURL(file));
+  };
+
+  const clearSelectedPhoto = () => {
+    if (photoPreviewUrl) {
+      URL.revokeObjectURL(photoPreviewUrl);
+    }
+    setPhotoPreviewUrl(null);
+    setPhotoFile(null);
   };
 
   const authorName = (comment) =>
-    comment.profiles?.full_name ||
-    comment.profiles?.username ||
-    "Anonym";
+    comment.profiles?.full_name || comment.profiles?.username || "Anonym";
 
   return (
     <div className="space-y-6">
-      {/* Comment Form */}
-      {isAuthenticated && (
+      {isAuthenticated && canComment && (
         <div className="bg-white rounded-xl p-4 md:p-6 border border-stone-200">
           <h3 className="font-semibold text-stone-800 mb-3 md:mb-4 text-sm md:text-base">
-            Kommentar hinzufügen
+            Kommentar hinzufuegen
           </h3>
           <Textarea
             placeholder="Teile deine Erfahrungen mit dieser Wanderung..."
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(event) => setText(event.target.value)}
             className="mb-3 text-sm md:text-base"
             rows={4}
           />
 
-          {/* Photo preview */}
-          {photoUrl && (
+          {photoPreviewUrl && (
             <div className="relative w-24 mb-3">
-              <img src={photoUrl} alt="" className="w-24 h-24 object-cover rounded-lg" />
+              <img src={photoPreviewUrl} alt="" className="w-24 h-24 object-cover rounded-lg" />
               <button
-                onClick={() => setPhotoUrl(null)}
+                onClick={clearSelectedPhoto}
                 className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
               >
                 <X className="w-3 h-3" />
@@ -124,13 +151,15 @@ export default function CommentSection({ hikeId }) {
                   accept="image/*"
                   onChange={handlePhotoUpload}
                   className="hidden"
-                  disabled={uploading}
+                  disabled={createMutation.isPending}
                 />
-                <Button type="button" variant="outline" disabled={uploading} asChild>
+                <Button type="button" variant="outline" disabled={createMutation.isPending} asChild>
                   <span className="cursor-pointer">
-                    {uploading
-                      ? <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      : <Camera className="w-4 h-4 mr-2" />}
+                    {createMutation.isPending ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <Camera className="w-4 h-4 mr-2" />
+                    )}
                     Foto
                   </span>
                 </Button>
@@ -140,9 +169,11 @@ export default function CommentSection({ hikeId }) {
                 disabled={!text.trim() || createMutation.isPending || !consentPublic}
                 className="bg-slate-800 hover:bg-slate-900 flex-1 sm:flex-initial"
               >
-                {createMutation.isPending
-                  ? <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  : <Send className="w-4 h-4 mr-2" />}
+                {createMutation.isPending ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4 mr-2" />
+                )}
                 Senden
               </Button>
             </div>
@@ -154,14 +185,19 @@ export default function CommentSection({ hikeId }) {
                 onCheckedChange={setConsentPublic}
               />
               <label htmlFor="comment-consent" className="text-sm text-stone-700 cursor-pointer flex-1">
-                Ich akzeptiere, dass mein Kommentar öffentlich sichtbar ist
+                Ich akzeptiere, dass mein Kommentar und meine Fotos oeffentlich sichtbar sein koennen.
               </label>
             </div>
           </div>
         </div>
       )}
 
-      {/* Comments List */}
+      {isAuthenticated && !canComment && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
+          Kommentare sind nur bei oeffentlichen Wanderungen moeglich.
+        </div>
+      )}
+
       <div className="space-y-3 md:space-y-4">
         <h3 className="font-semibold text-stone-800 text-sm md:text-base">
           Kommentare ({comments.length})
@@ -198,42 +234,28 @@ export default function CommentSection({ hikeId }) {
                     <p className="text-xs md:text-sm text-stone-500">
                       {format(new Date(comment.created_at), "dd.MM.yyyy 'um' HH:mm", { locale: de })}
                     </p>
+                    {comment.reported && user?.id === comment.user_id && (
+                      <p className="text-xs text-amber-600 mt-1">
+                        Wartet auf Freigabe durch den Admin.
+                      </p>
+                    )}
                   </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  {comment.reported && (
-                    <span className="text-xs text-red-500 font-medium px-1.5 py-0.5 bg-red-50 rounded">
-                      🚩 gemeldet
-                    </span>
-                  )}
-                  {user?.id !== comment.user_id && isAuthenticated && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => reportMutation.mutate(comment.id)}
-                      disabled={reportMutation.isPending && reportingId === comment.id || comment.reported}
-                      className="text-stone-300 hover:text-orange-500 w-7 h-7"
-                      title="Kommentar melden"
-                    >
-                      <Flag className="w-3.5 h-3.5" />
-                    </Button>
-                  )}
-                  {user?.id === comment.user_id && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setDeleteId(comment.id)}
-                      className="text-stone-400 hover:text-red-600 w-7 h-7"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </Button>
-                  )}
-                </div>
+                {user?.id === comment.user_id && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setDeleteId(comment.id)}
+                    className="text-stone-400 hover:text-red-600 w-7 h-7"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </Button>
+                )}
               </div>
 
               <p className="text-stone-700 mb-3 text-sm md:text-base">{comment.text}</p>
 
-              {comment.photo_url && (
+              {comment.photo_url && !comment.photo_url.startsWith("pending://") && (
                 <img
                   src={comment.photo_url}
                   alt=""
@@ -251,13 +273,12 @@ export default function CommentSection({ hikeId }) {
         )}
       </div>
 
-      {/* Delete confirmation */}
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Kommentar löschen?</AlertDialogTitle>
+            <AlertDialogTitle>Kommentar loeschen?</AlertDialogTitle>
             <AlertDialogDescription>
-              Diese Aktion kann nicht rückgängig gemacht werden.
+              Diese Aktion kann nicht rueckgaengig gemacht werden.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -266,7 +287,7 @@ export default function CommentSection({ hikeId }) {
               onClick={() => deleteMutation.mutate(deleteId)}
               className="bg-red-600 hover:bg-red-700"
             >
-              Löschen
+              Loeschen
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

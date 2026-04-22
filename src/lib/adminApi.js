@@ -1,4 +1,23 @@
 import { supabase } from "./supabaseClient";
+import { publishPendingCommentPhoto } from "./communityApi";
+import { hydrateJournalEntriesMedia, validatePublicJournalEntry } from "./journalApi";
+
+function getStorageDescriptor(photoReference) {
+  if (!photoReference) return null;
+  if (photoReference.startsWith("pending://")) {
+    return {
+      bucket: "comments-pending",
+      path: photoReference.slice("pending://".length),
+    };
+  }
+  const marker = "/storage/v1/object/public/comments/";
+  const index = photoReference.indexOf(marker);
+  if (index === -1) return null;
+  return {
+    bucket: "comments",
+    path: decodeURIComponent(photoReference.slice(index + marker.length)),
+  };
+}
 
 export async function getPendingEntries() {
   const { data, error } = await supabase
@@ -18,13 +37,23 @@ export async function getPendingEntries() {
   const profileMap = Object.fromEntries(
     (profiles ?? []).map((p) => [p.user_id, p])
   );
-  return data.map((entry) => ({
+  const hydratedEntries = await hydrateJournalEntriesMedia(data);
+  return hydratedEntries.map((entry) => ({
     ...entry,
     profiles: profileMap[entry.user_id] ?? null,
   }));
 }
 
 export async function approveEntry(id) {
+  const { data: entry, error: fetchError } = await supabase
+    .from("journal_entries")
+    .select("*")
+    .eq("id", id)
+    .single();
+  if (fetchError) throw fetchError;
+
+  validatePublicJournalEntry(entry);
+
   const { error } = await supabase
     .from("journal_entries")
     .update({ status: "approved" })
@@ -60,7 +89,45 @@ export async function getAllComments() {
   return data.map((c) => ({ ...c, profiles: profileMap[c.user_id] ?? null }));
 }
 
+export async function approveComment(id) {
+  const { data: existingComment, error: fetchError } = await supabase
+    .from("comments")
+    .select("photo_url")
+    .eq("id", id)
+    .single();
+  if (fetchError) throw fetchError;
+
+  const publishedPhotoUrl = await publishPendingCommentPhoto(existingComment?.photo_url);
+
+  const { error } = await supabase
+    .from("comments")
+    .update({
+      reported: false,
+      reported_reason: null,
+      photo_url: publishedPhotoUrl,
+    })
+    .eq("id", id);
+  if (error) throw error;
+}
+
 export async function adminDeleteComment(id) {
+  const { data: existingComment, error: fetchError } = await supabase
+    .from("comments")
+    .select("photo_url")
+    .eq("id", id)
+    .single();
+  if (fetchError) throw fetchError;
+
   const { error } = await supabase.from("comments").delete().eq("id", id);
   if (error) throw error;
+
+  const storageDescriptor = getStorageDescriptor(existingComment?.photo_url);
+  if (storageDescriptor) {
+    const { error: storageError } = await supabase.storage
+      .from(storageDescriptor.bucket)
+      .remove([storageDescriptor.path]);
+    if (storageError) {
+      console.error("[adminDeleteComment] photo cleanup failed:", storageError.message);
+    }
+  }
 }

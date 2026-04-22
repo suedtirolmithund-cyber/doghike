@@ -253,6 +253,7 @@ function journalEntryToHike(entry, dog = null, profile = null) {
 async function getApprovedJournalEntries() {
   try {
     const { supabase } = await import("@/lib/supabaseClient");
+    const { hydrateJournalEntriesMedia } = await import("@/lib/journalApi");
 
     // 1. Fetch approved public entries
     const { data: entries, error } = await supabase
@@ -267,8 +268,10 @@ async function getApprovedJournalEntries() {
     }
     if (!entries?.length) return [];
 
+    const hydratedEntries = await hydrateJournalEntriesMedia(entries);
+
     // 2. Fetch dogs for entries that have a dog_id
-    const dogIds = [...new Set(entries.filter((e) => e.dog_id).map((e) => e.dog_id))];
+    const dogIds = [...new Set(hydratedEntries.filter((e) => e.dog_id).map((e) => e.dog_id))];
     const dogMap = {};
     if (dogIds.length > 0) {
       const { data: dogs } = await supabase
@@ -279,7 +282,7 @@ async function getApprovedJournalEntries() {
     }
 
     // 3. Fetch author profiles (separate query — no direct FK to public.profiles)
-    const userIds = [...new Set(entries.map((e) => e.user_id))];
+    const userIds = [...new Set(hydratedEntries.map((e) => e.user_id))];
     const profileMap = {};
     const { data: profiles } = await supabase
       .from("profiles")
@@ -288,7 +291,7 @@ async function getApprovedJournalEntries() {
     (profiles ?? []).forEach((p) => { profileMap[p.user_id] = p; });
 
     console.log("[sheetsClient] approved journal entries:", entries.length);
-    return entries.map((entry) =>
+    return hydratedEntries.map((entry) =>
       journalEntryToHike(
         entry,
         dogMap[entry.dog_id] ?? null,

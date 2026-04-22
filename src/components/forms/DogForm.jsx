@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { uploadFile } from "@/lib/profilesApi";
+import { uploadFile, deleteStoredFile } from "@/lib/profilesApi";
 import { useAuth } from "@/lib/AuthContext";
 import { Upload, Loader2 } from "lucide-react";
 
@@ -28,8 +28,16 @@ export default function DogForm({ dog, onSave, onCancel }) {
     setUploading(true);
     setUploadError(null);
     try {
+      const previousPhotoUrl = formData.photo_url || null;
       const url = await uploadFile("dog-photos", user.id, file);
       setFormData((prev) => ({ ...prev, photo_url: url }));
+      if (previousPhotoUrl && previousPhotoUrl !== url) {
+        try {
+          await deleteStoredFile(previousPhotoUrl, "dog-photos");
+        } catch (cleanupError) {
+          console.error("Dog photo cleanup failed:", cleanupError);
+        }
+      }
     } catch (err) {
       setUploadError("Foto-Upload fehlgeschlagen. Bitte prüfe ob der Bucket 'dog-photos' in Supabase angelegt ist.");
       console.error("Dog photo upload error:", err);

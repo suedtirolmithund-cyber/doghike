@@ -150,6 +150,7 @@ export default function HikeDetail() {
 
   const nextPhoto = () => setCurrentPhotoIndex((prev) => (prev + 1) % photos.length);
   const prevPhoto = () => setCurrentPhotoIndex((prev) => (prev - 1 + photos.length) % photos.length);
+  const canComment = hike?._source === "sheets" || hike?.visibility === "public";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
@@ -554,7 +555,7 @@ export default function HikeDetail() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <CommentSection hikeId={hikeId} />
+              <CommentSection hikeId={hikeId} canComment={canComment} />
             </motion.div>
           </div>
         </div>

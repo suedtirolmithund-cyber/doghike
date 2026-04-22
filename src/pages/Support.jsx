@@ -83,7 +83,7 @@ export default function Support() {
         },
         {
           q: "Wie kann ich mein Konto löschen?",
-          a: "Gehe zu 'Mein Profil' → Konto → 'Konto löschen'. Alle deine Daten werden innerhalb von 72 Stunden dauerhaft gelöscht.",
+          a: "Gehe zu 'Mein Profil' → Konto → 'Konto löschen'. Dort wird eine Löschanfrage per E-Mail vorbereitet, die danach manuell bearbeitet wird.",
         },
         {
           q: "Werden meine GPS-Daten gespeichert?",

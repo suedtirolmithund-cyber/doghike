@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { User, Mail, Trash2, AlertTriangle, Shield, ExternalLink, CheckCircle2 } from "lucide-react";
@@ -19,24 +18,30 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 
+const SUPPORT_EMAIL = "suedtirolmithund@gmail.com";
+
 export default function AccountSettings({ user }) {
   const [deleteRequested, setDeleteRequested] = useState(false);
 
   const handleDeleteAccount = async () => {
-    // Sign the user out immediately so they can't continue using the app
-    await supabase.auth.signOut();
+    const subject = encodeURIComponent("Loeschanfrage Konto");
+    const body = encodeURIComponent(
+      `Hallo,\n\nich moechte die Loeschung meines Kontos beantragen.\n\nE-Mail: ${user?.email || ""}\nUser ID: ${user?.id || ""}\n\nBitte bestaetigt mir die Anfrage.\n`
+    );
+
+    window.location.href = `mailto:${SUPPORT_EMAIL}?subject=${subject}&body=${body}`;
     setDeleteRequested(true);
-    toast.success("Abgemeldet. Dein Konto wird innerhalb von 72 Stunden gelöscht.");
+    toast.success("Loeschanfrage vorbereitet. Bitte sende die E-Mail ab.");
   };
 
   if (deleteRequested) {
     return (
       <div className="bg-white rounded-2xl p-6 border border-stone-200/50 shadow-sm text-center space-y-3">
         <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto" />
-        <h3 className="font-semibold text-stone-800">Löschanfrage registriert</h3>
+        <h3 className="font-semibold text-stone-800">Loeschanfrage vorbereitet</h3>
         <p className="text-sm text-stone-500">
-          Du wirst abgemeldet. Dein Konto und alle deine Daten werden innerhalb von 72 Stunden gelöscht.
-          Schreib uns an <strong>suedtirolmithund@gmail.com</strong>, falls du Fragen hast.
+          Deine Mail-App wurde geoeffnet. Bitte sende die E-Mail an <strong>{SUPPORT_EMAIL}</strong> ab,
+          damit die Loeschung deines Kontos bearbeitet werden kann.
         </p>
       </div>
     );
@@ -44,8 +49,6 @@ export default function AccountSettings({ user }) {
 
   return (
     <div className="space-y-6">
-
-      {/* Profildaten */}
       <div className="bg-white rounded-2xl p-5 border border-stone-200/50 shadow-sm">
         <h3 className="text-base font-semibold text-stone-800 mb-4 flex items-center gap-2">
           <User className="w-4 h-4" /> Profildaten
@@ -54,9 +57,9 @@ export default function AccountSettings({ user }) {
           <Label className="text-sm text-stone-600 mb-1 block">E-Mail-Adresse</Label>
           <Input value={user?.email || ""} disabled className="bg-stone-50 text-stone-500" />
           <p className="text-xs text-stone-400 mt-1">
-            E-Mail-Änderungen können über{" "}
+            E-Mail-Aenderungen koennen ueber{" "}
             <a
-              href="mailto:suedtirolmithund@gmail.com?subject=E-Mail-Änderung"
+              href={`mailto:${SUPPORT_EMAIL}?subject=E-Mail-Aenderung`}
               className="text-emerald-600 hover:underline"
             >
               Kontaktanfrage
@@ -66,22 +69,23 @@ export default function AccountSettings({ user }) {
         </div>
       </div>
 
-      {/* Datenschutz */}
       <div className="bg-white rounded-2xl p-5 border border-stone-200/50 shadow-sm">
         <h3 className="text-base font-semibold text-stone-800 mb-3 flex items-center gap-2">
           <Shield className="w-4 h-4" /> Datenschutz & deine Rechte
         </h3>
         <div className="space-y-3 text-sm text-stone-600">
-          <p>Du hast das Recht auf Auskunft, Berichtigung, Löschung und Datenportabilität gemäß DSGVO.
-          Deine Daten werden auf EU-Servern in Frankfurt (Supabase) gespeichert.</p>
+          <p>
+            Du hast das Recht auf Auskunft, Berichtigung, Loeschung und Datenportabilitaet gemaess DSGVO.
+            Deine Daten werden auf EU-Servern in Frankfurt (Supabase) gespeichert.
+          </p>
           <div className="flex flex-wrap gap-2">
             <Link to={createPageUrl("Datenschutz")}>
               <Button variant="outline" size="sm" className="text-stone-700">
                 <ExternalLink className="w-3 h-3 mr-2" />
-                Datenschutzerklärung
+                Datenschutzerklaerung
               </Button>
             </Link>
-            <a href="mailto:suedtirolmithund@gmail.com?subject=DSGVO-Anfrage">
+            <a href={`mailto:${SUPPORT_EMAIL}?subject=DSGVO-Anfrage`}>
               <Button variant="outline" size="sm" className="text-stone-700">
                 <Mail className="w-3 h-3 mr-2" />
                 Datenauskunft anfragen
@@ -91,32 +95,30 @@ export default function AccountSettings({ user }) {
         </div>
       </div>
 
-      {/* Konto löschen */}
       <div className="bg-white rounded-2xl p-5 border border-red-200 shadow-sm">
         <h3 className="text-base font-semibold text-red-700 mb-2 flex items-center gap-2">
-          <Trash2 className="w-4 h-4" /> Konto & alle Daten löschen
+          <Trash2 className="w-4 h-4" /> Konto & alle Daten loeschen
         </h3>
         <p className="text-sm text-stone-600 mb-4">
-          Du kannst die vollständige Löschung deines Kontos und <strong>aller deiner Daten</strong>{" "}
+          Du kannst die vollstaendige Loeschung deines Kontos und <strong>aller deiner Daten</strong>{" "}
           (Wanderungen, Fotos, Hundeprofil, Kommentare, Routen, Bewertungen) beantragen.
-          Dies entspricht deinem <strong>Recht auf Vergessenwerden (Art. 17 DSGVO)</strong>.
-          Deine Daten werden innerhalb von 72 Stunden gelöscht.
+          Die Anfrage wird per E-Mail vorbereitet und danach manuell bearbeitet.
         </p>
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="outline" className="border-red-300 text-red-600 hover:bg-red-50 hover:border-red-400">
               <AlertTriangle className="w-4 h-4 mr-2" />
-              Konto löschen
+              Konto loeschen
             </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Konto wirklich löschen?</AlertDialogTitle>
+              <AlertDialogTitle>Konto-Loeschung anfragen?</AlertDialogTitle>
               <AlertDialogDescription asChild>
                 <div className="space-y-2 text-sm text-stone-600">
                   <p>
-                    Damit beantragst du die dauerhafte Löschung deines Kontos und{" "}
-                    <strong>aller</strong> deiner gespeicherten Daten:
+                    Damit bereitest du eine E-Mail fuer die dauerhafte Loeschung deines Kontos und{" "}
+                    <strong>aller</strong> deiner gespeicherten Daten vor:
                   </p>
                   <ul className="list-disc pl-5 space-y-1">
                     <li>Profil & E-Mail-Adresse</li>
@@ -126,10 +128,10 @@ export default function AccountSettings({ user }) {
                     <li>Routen & GPS-Daten</li>
                   </ul>
                   <p className="font-medium text-red-600">
-                    Dieser Vorgang kann nicht rückgängig gemacht werden.
+                    Die Loeschung selbst wird nicht sofort in der App ausgefuehrt.
                   </p>
                   <p>
-                    Du wirst sofort abgemeldet. Daten werden innerhalb von 72 Stunden gelöscht.
+                    Es wird deine Mail-App geoeffnet. Danach musst du die Anfrage noch absenden.
                   </p>
                 </div>
               </AlertDialogDescription>
@@ -140,13 +142,12 @@ export default function AccountSettings({ user }) {
                 onClick={handleDeleteAccount}
                 className="bg-red-600 hover:bg-red-700 text-white"
               >
-                Ja, Konto löschen
+                E-Mail vorbereiten
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
       </div>
-
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useSearchParams, Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { supabase } from "@/lib/supabaseClient";
-import { getJournalEntry } from "@/lib/journalApi";
+import { getJournalEntryForDisplay } from "@/lib/journalApi";
 import { useAuth } from "@/lib/AuthContext";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
@@ -71,7 +71,7 @@ export default function JournalDetail() {
 
   const { data: entry, isLoading } = useQuery({
     queryKey: ["journalEntry", entryId],
-    queryFn: () => getJournalEntry(entryId),
+    queryFn: () => getJournalEntryForDisplay(entryId),
     enabled: !!entryId,
   });
 

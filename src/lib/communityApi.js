@@ -1,6 +1,35 @@
 import { supabase } from "./supabaseClient";
 
-// ── Saved Hikes ───────────────────────────────────────────────
+function getStorageDescriptor(photoReference) {
+  if (!photoReference) return null;
+
+  if (photoReference.startsWith("pending://")) {
+    return {
+      bucket: "comments-pending",
+      path: photoReference.slice("pending://".length),
+    };
+  }
+
+  const marker = "/storage/v1/object/public/comments/";
+  const index = photoReference.indexOf(marker);
+  if (index === -1) return null;
+
+  return {
+    bucket: "comments",
+    path: decodeURIComponent(photoReference.slice(index + marker.length)),
+  };
+}
+
+function normalizeForModeration(text) {
+  return (text ?? "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\u00df/g, "ss")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
 export async function getSavedHikes(userId) {
   const { data, error } = await supabase
     .from("saved_hikes")
@@ -14,8 +43,10 @@ export async function getSavedHikes(userId) {
 export async function saveHike(userId, hikeId, hikeSource = "sheets") {
   const { data, error } = await supabase
     .from("saved_hikes")
-    .upsert({ user_id: userId, hike_id: hikeId, hike_source: hikeSource },
-             { onConflict: "user_id,hike_id" })
+    .upsert(
+      { user_id: userId, hike_id: hikeId, hike_source: hikeSource },
+      { onConflict: "user_id,hike_id" }
+    )
     .select()
     .single();
   if (error) throw error;
@@ -31,7 +62,6 @@ export async function unsaveHike(userId, hikeId) {
   if (error) throw error;
 }
 
-// ── Ratings ───────────────────────────────────────────────────
 export async function getRatings(hikeId) {
   const { data, error } = await supabase
     .from("ratings")
@@ -44,29 +74,48 @@ export async function getRatings(hikeId) {
 export async function upsertRating(userId, hikeId, rating) {
   const { data, error } = await supabase
     .from("ratings")
-    .upsert({ user_id: userId, hike_id: hikeId, rating },
-             { onConflict: "user_id,hike_id" })
+    .upsert(
+      { user_id: userId, hike_id: hikeId, rating },
+      { onConflict: "user_id,hike_id" }
+    )
     .select()
     .single();
   if (error) throw error;
   return data;
 }
 
-// ── Comments ──────────────────────────────────────────────────
 export async function getComments(hikeId) {
-  const { data, error } = await supabase
+  const { data: authData } = await supabase.auth.getUser();
+  const currentUserId = authData?.user?.id;
+
+  let query = supabase
     .from("comments")
-    .select(`*, profiles:user_id ( username, full_name, avatar_url )`)
+    .select("*, profiles:user_id ( username, full_name, avatar_url )")
     .eq("hike_id", hikeId)
     .order("created_at", { ascending: false });
+
+  if (currentUserId) {
+    query = query.or(`reported.eq.false,user_id.eq.${currentUserId}`);
+  } else {
+    query = query.eq("reported", false);
+  }
+
+  const { data, error } = await query;
   if (error) throw error;
   return data ?? [];
 }
 
-export async function createComment(userId, hikeId, text, photoUrl = null) {
+export async function createComment(userId, hikeId, text, photoUrl = null, needsReview = false) {
   const { data, error } = await supabase
     .from("comments")
-    .insert({ user_id: userId, hike_id: hikeId, text, photo_url: photoUrl })
+    .insert({
+      user_id: userId,
+      hike_id: hikeId,
+      text,
+      photo_url: photoUrl,
+      reported: needsReview,
+      reported_reason: needsReview ? "trigger_word" : null,
+    })
     .select()
     .single();
   if (error) throw error;
@@ -74,42 +123,132 @@ export async function createComment(userId, hikeId, text, photoUrl = null) {
 }
 
 export async function deleteComment(id) {
+  const { data: existingComment, error: fetchError } = await supabase
+    .from("comments")
+    .select("photo_url")
+    .eq("id", id)
+    .single();
+  if (fetchError) throw fetchError;
+
   const { error } = await supabase.from("comments").delete().eq("id", id);
   if (error) throw error;
+
+  const storageDescriptor = getStorageDescriptor(existingComment?.photo_url);
+  if (storageDescriptor) {
+    const { error: storageError } = await supabase.storage
+      .from(storageDescriptor.bucket)
+      .remove([storageDescriptor.path]);
+    if (storageError) {
+      console.error("[deleteComment] photo cleanup failed:", storageError.message);
+    }
+  }
 }
 
-// ── Trigger-Wörter Filter ─────────────────────────────────────
 const TRIGGER_WORDS = [
-  // Spam
-  "spam", "klick hier", "click here", "gratis", "gewinn", "casino", "werbung",
-  "http://", "https://bit.ly", "t.me/", "whatsapp.com",
-  // Hate / Beleidigung (DE/IT/EN)
-  "scheiß", "scheiss", "hurensohn", "wichser", "arschloch", "idiot", "dummkopf",
-  "nazi", "heil", "fotze", "nutte", "fick", "kacke", "bastard", "asshole",
-  "fuck", "shit", "bitch", "cunt", "nigger", "retard",
-  "cazzo", "vaffanculo", "stronzo", "puttana", "merda",
+  "spam",
+  "klick hier",
+  "click here",
+  "gratis",
+  "gewinn",
+  "casino",
+  "werbung",
+  "http://",
+  "https://bit.ly",
+  "t.me/",
+  "whatsapp.com",
+  "scheiss",
+  "hurensohn",
+  "wichser",
+  "arschloch",
+  "idiot",
+  "dummkopf",
+  "nazi",
+  "heil",
+  "fotze",
+  "nutte",
+  "fick",
+  "kacke",
+  "bastard",
+  "asshole",
+  "fuck",
+  "shit",
+  "bitch",
+  "cunt",
+  "nigger",
+  "retard",
+  "cazzo",
+  "vaffanculo",
+  "stronzo",
+  "puttana",
+  "merda",
 ];
 
 export function containsTriggerWord(text) {
-  const lower = text.toLowerCase();
-  return TRIGGER_WORDS.some((w) => lower.includes(w));
+  const normalizedText = normalizeForModeration(text);
+  return TRIGGER_WORDS.some((word) => normalizedText.includes(normalizeForModeration(word)));
 }
 
-export async function reportComment(commentId, reason = "") {
-  const { error } = await supabase
-    .from("comments")
-    .update({ reported: true, reported_reason: reason || null })
-    .eq("id", commentId);
-  if (error) throw error;
+export function commentNeedsReview(text) {
+  return containsTriggerWord(text);
 }
 
-export async function uploadCommentPhoto(userId, file) {
-  const ext = file.name.split(".").pop();
-  const path = `${userId}/${Date.now()}.${ext}`;
+export async function uploadCommentPhoto(userId, file, { needsReview = false } = {}) {
+  const bucket = needsReview ? "comments-pending" : "comments";
+  const sanitizedName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const path = `${userId}/${Date.now()}_${sanitizedName}`;
   const { data, error } = await supabase.storage
-    .from("comments")
+    .from(bucket)
     .upload(path, file, { upsert: true });
   if (error) throw error;
-  const { data: { publicUrl } } = supabase.storage.from("comments").getPublicUrl(data.path);
+
+  if (needsReview) {
+    return `pending://${data.path}`;
+  }
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from(bucket).getPublicUrl(data.path);
+  return publicUrl;
+}
+
+export async function deleteUploadedCommentPhoto(photoReference) {
+  const storageDescriptor = getStorageDescriptor(photoReference);
+  if (!storageDescriptor) return;
+
+  const { error } = await supabase.storage
+    .from(storageDescriptor.bucket)
+    .remove([storageDescriptor.path]);
+  if (error) {
+    console.error("[deleteUploadedCommentPhoto] cleanup failed:", error.message);
+  }
+}
+
+export async function publishPendingCommentPhoto(photoReference) {
+  const storageDescriptor = getStorageDescriptor(photoReference);
+  if (!storageDescriptor || storageDescriptor.bucket !== "comments-pending") {
+    return photoReference;
+  }
+
+  const { data, error } = await supabase.storage
+    .from("comments-pending")
+    .download(storageDescriptor.path);
+  if (error) throw error;
+
+  const { error: uploadError } = await supabase.storage
+    .from("comments")
+    .upload(storageDescriptor.path, data, { upsert: true });
+  if (uploadError) throw uploadError;
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from("comments").getPublicUrl(storageDescriptor.path);
+
+  const { error: removeError } = await supabase.storage
+    .from("comments-pending")
+    .remove([storageDescriptor.path]);
+  if (removeError) {
+    console.error("[publishPendingCommentPhoto] cleanup failed:", removeError.message);
+  }
+
   return publicUrl;
 }
