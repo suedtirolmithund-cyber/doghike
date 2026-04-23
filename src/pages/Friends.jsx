@@ -152,7 +152,7 @@ export default function Friends() {
       queryClient.invalidateQueries({ queryKey: ["friendships", user?.id] });
       toast.success("Freundschaftsanfrage gesendet");
     },
-    onError: (e) => toast.error("Fehler: " + e.message),
+    onError: () => toast.error("Die Freundschaftsanfrage konnte gerade nicht gesendet werden. Bitte versuche es noch einmal."),
   });
 
   const acceptMutation = useMutation({
@@ -191,7 +191,7 @@ export default function Friends() {
       }
     } catch (err) {
       console.error("[searchProfiles] error:", err);
-      toast.error("Suche fehlgeschlagen: " + err.message);
+      toast.error("Die Suche konnte gerade nicht ausgefuehrt werden. Bitte versuche es noch einmal.");
     } finally {
       setSearching(false);
     }
@@ -266,6 +266,16 @@ export default function Friends() {
               >
                 {searchResults.map((profile) => {
                   const existing = existingFriendship(profile.user_id);
+                  const isIncomingPending =
+                    existing?.status === "pending" &&
+                    existing?.requester_id === profile.user_id &&
+                    existing?.receiver_id === user?.id;
+
+                  const isOutgoingPending =
+                    existing?.status === "pending" &&
+                    existing?.requester_id === user?.id &&
+                    existing?.receiver_id === profile.user_id;
+
                   return (
                     <div key={profile.user_id} className="flex items-center gap-3 p-2 rounded-xl hover:bg-stone-50">
                       <Avatar profile={profile} />
@@ -276,11 +286,15 @@ export default function Friends() {
                             disabled={sendMutation.isPending}
                             className="bg-emerald-600 hover:bg-emerald-700 h-8"
                           >
-                            <UserPlus className="w-3.5 h-3.5 mr-1" /> Anfragen
+                            <UserPlus className="w-3.5 h-3.5 mr-1" /> Anfrage senden
                           </Button>
-                        ) : existing.status === "pending" ? (
+                        ) : isIncomingPending ? (
                           <span className="text-xs text-amber-600 font-medium flex items-center gap-1">
-                            <Clock className="w-3.5 h-3.5" /> Ausstehend
+                            <Clock className="w-3.5 h-3.5" /> Hat dir angefragt
+                          </span>
+                        ) : isOutgoingPending ? (
+                          <span className="text-xs text-amber-600 font-medium flex items-center gap-1">
+                            <Clock className="w-3.5 h-3.5" /> Anfrage gesendet
                           </span>
                         ) : (
                           <span className="text-xs text-emerald-600 font-medium flex items-center gap-1">
