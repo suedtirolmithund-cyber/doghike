@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -27,7 +27,7 @@ import {
 import { getDogs } from "@/lib/profilesApi";
 import { Link } from "react-router-dom";
 
-// ── Sterne-Picker (Gesamtbewertung) ──────────────────────────
+// Sterne-Picker (Gesamtbewertung)
 function StarPicker({ label, value, onChange }) {
   const [hover, setHover] = useState(0);
   return (
@@ -56,7 +56,7 @@ function StarPicker({ label, value, onChange }) {
   );
 }
 
-// ── Berg-Picker (Schwierigkeit Mensch) ───────────────────────
+// Berg-Picker (Schwierigkeit Mensch)
 function MountainPicker({ label, value, onChange }) {
   const [hover, setHover] = useState(0);
   const colors = ["", "text-emerald-500", "text-green-500", "text-yellow-500", "text-orange-500", "text-red-600"];
@@ -94,7 +94,7 @@ function MountainPicker({ label, value, onChange }) {
   );
 }
 
-// ── Knochen-Picker (Schwierigkeit Hund) ──────────────────────
+// Knochen-Picker (Schwierigkeit Hund)
 function BonePicker({ label, value, onChange }) {
   const [hover, setHover] = useState(0);
   const labels = ["", "Sehr leicht", "Leicht", "Mittel", "Schwer", "Sehr schwer"];
@@ -113,7 +113,7 @@ function BonePicker({ label, value, onChange }) {
             }`}
             title={labels[s]}
           >
-            🦴
+            Bone
           </button>
         ))}
         {value > 0 && (
@@ -129,16 +129,16 @@ function BonePicker({ label, value, onChange }) {
   );
 }
 
-// ── Karten-Marker Icon ───────────────────────────────────────
+// Karten-Marker Icon
 const markerIcon = L.divIcon({
-  html: `<div style="background:#16a34a;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,0.25);border:3px solid white;">📍</div>`,
+  html: `<div style="background:#16a34a;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.25);border:3px solid white;">P</div>`,
   className: "",
   iconSize: [28, 28],
   iconAnchor: [14, 28],
   popupAnchor: [0, -30],
 });
 
-// Fliegt zur neuen Position wenn sich center ändert
+// Fliegt zur neuen Position wenn sich center aendert
 function MapFlyTo({ center, zoom }) {
   const map = useMap();
   useEffect(() => {
@@ -153,7 +153,7 @@ function MapClickHandler({ onMapClick }) {
   return null;
 }
 
-// ── Location Picker Komponente ────────────────────────────────
+// Location Picker Komponente
 function LocationPicker({ lat, lng, onChange }) {
   const [markerPos, setMarkerPos] = useState(
     lat && lng ? [Number(lat), Number(lng)] : null
@@ -234,7 +234,7 @@ function LocationPicker({ lat, lng, onChange }) {
         Tippe auf die Karte um den Startpunkt der Tour zu markieren
         {markerPos && (
           <span className="ml-2 text-emerald-600 font-medium">
-            ✓ Punkt gesetzt
+            Punkt gesetzt
           </span>
         )}
       </p>
@@ -242,7 +242,7 @@ function LocationPicker({ lat, lng, onChange }) {
   );
 }
 
-// ── Wasser-Picker (0=keins, 1=wenig, 2=mittel, 3=viel) ───────
+// Wasser-Picker (0=keins, 1=wenig, 2=mittel, 3=viel)
 const WATER_LABELS = ["Kein Wasser", "Wenig Wasser", "Etwas Wasser", "Viel Wasser"];
 function WaterPicker({ label, value, onChange }) {
   return (
@@ -260,7 +260,7 @@ function WaterPicker({ label, value, onChange }) {
             title={WATER_LABELS[level]}
           >
             <span className="text-lg leading-none">
-              {level === 0 ? "🚫" : "💧".repeat(level)}
+              {level === 0 ? "Kein" : "Wasser".repeat(level)}
             </span>
             <span className="text-[10px] font-medium whitespace-nowrap">
               {WATER_LABELS[level]}
@@ -272,13 +272,13 @@ function WaterPicker({ label, value, onChange }) {
   );
 }
 
-// ── Jahreszeiten-Picker (Mehrfachauswahl) ────────────────────
+// Jahreszeiten-Picker (Mehrfachauswahl)
 const SEASON_OPTIONS = [
-  { value: "spring", emoji: "🌸", label: "Frühling", color: "#ec9cf4" },
-  { value: "summer", emoji: "☀️", label: "Sommer",   color: "#d64545" },
-  { value: "autumn", emoji: "🍂", label: "Herbst",   color: "#f19a4b" },
-  { value: "winter", emoji: "❄️", label: "Winter",   color: "#5b83f0" },
-  { value: "all_year", emoji: "🍃", label: "Ganzjährig", color: "#38a062" },
+  { value: "spring", emoji: "Fr", label: "Fruehling", color: "#ec9cf4" },
+  { value: "summer", emoji: "So", label: "Sommer", color: "#d64545" },
+  { value: "autumn", emoji: "He", label: "Herbst", color: "#f19a4b" },
+  { value: "winter", emoji: "Wi", label: "Winter", color: "#5b83f0" },
+  { value: "all_year", emoji: "Gj", label: "Ganzjaehrig", color: "#38a062" },
 ];
 
 function SeasonPicker({ value = [], onChange }) {
@@ -323,11 +323,11 @@ function SeasonPicker({ value = [], onChange }) {
   );
 }
 
-// ── Sichtbarkeits-Picker ─────────────────────────────────────
+// Sichtbarkeits-Picker
 const VISIBILITY_OPTIONS = [
   {
     value: "private",
-    emoji: "🔒",
+    emoji: "P",
     label: "Privat",
     desc: "Nur ich sehe diesen Eintrag",
     active: "border-stone-400 bg-stone-100 text-stone-800",
@@ -335,17 +335,17 @@ const VISIBILITY_OPTIONS = [
   },
   {
     value: "friends",
-    emoji: "👥",
+    emoji: "F",
     label: "Freunde",
-    desc: "Nur bestätigte Freunde",
+    desc: "Nur bestaetigte Freunde",
     active: "border-blue-400 bg-blue-50 text-blue-800",
     idle: "border-stone-200 hover:border-blue-300",
   },
   {
     value: "public",
-    emoji: "🌍",
-    label: "Öffentlich",
-    desc: "Wird an Admin zur Prüfung geschickt",
+    emoji: "O",
+    label: "Oeffentlich",
+    desc: "Wird an Admin zur Pruefung geschickt",
     active: "border-emerald-400 bg-emerald-50 text-emerald-800",
     idle: "border-stone-200 hover:border-emerald-300",
   },
@@ -544,7 +544,7 @@ export default function AddJournalEntry() {
     if (form.visibility === "public") {
       const missing = getMissingPublicJournalFields(form);
       if (missing.length > 0) {
-        toast.error(`Bitte fülle für eine öffentliche Tour noch diese Felder aus:\n${missing.join(", ")}`, {
+        toast.error(`Bitte fuelle fuer eine oeffentliche Tour noch diese Felder aus:\n${missing.join(", ")}`, {
           duration: 6000,
         });
         return;
@@ -553,7 +553,7 @@ export default function AddJournalEntry() {
 
     const needsConsent = form.photos.length > 0 && form.visibility !== "private";
     if (needsConsent && !photoConsent) {
-      toast.error("Bitte bestätige das Einverständnis zu den Fotos.");
+      toast.error("Bitte bestaetige dein Einverstaendnis zu den Fotos.");
       return;
     }
 
@@ -612,20 +612,20 @@ export default function AddJournalEntry() {
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <Link to={createPageUrl("Journal")}>
             <Button variant="ghost" size="sm" className="mb-4 -ml-2 text-stone-600">
-              <ArrowLeft className="w-4 h-4 mr-1" /> Zurück
+              <ArrowLeft className="w-4 h-4 mr-1" /> Zurueck
             </Button>
           </Link>
           <h1 className="text-2xl md:text-3xl font-bold text-stone-800">
             {editId ? "Eintrag bearbeiten" : "Neue Wanderung"}
           </h1>
           <p className="text-stone-500 text-sm mt-0.5">
-            {editId ? "Ändere deine Aufzeichnung" : "Halte dein Wandererlebnis fest"}
+            {editId ? "Aendere deine Aufzeichnung" : "Halte dein Wandererlebnis fest"}
           </p>
         </motion.div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
 
-          {/* ── Basis-Infos ─────────────────────────────── */}
+          {/* Basis-Infos */}
           <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5 space-y-4">
             <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide flex items-center gap-2">
               <FileText className="w-4 h-4" /> Allgemein
@@ -646,7 +646,7 @@ export default function AddJournalEntry() {
               <div>
                 <Label htmlFor="location" className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> Ort</Label>
                 <Input id="location" value={form.location} onChange={(e) => set("location", e.target.value)}
-                  placeholder="z.B. Prags, Südtirol" className="mt-1" />
+                  placeholder="z.B. Prags, Suedtirol" className="mt-1" />
               </div>
             </div>
 
@@ -672,7 +672,7 @@ export default function AddJournalEntry() {
             </div>
           </section>
 
-          {/* ── Stats ───────────────────────────────────── */}
+          {/* Stats */}
           <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5 space-y-4">
             <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide flex items-center gap-2">
               <TrendingUp className="w-4 h-4" /> Statistiken
@@ -686,7 +686,7 @@ export default function AddJournalEntry() {
                   placeholder="z.B. 8.5" className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="elevation_m" className="flex items-center gap-1"><Mountain className="w-3.5 h-3.5" /> Höhenmeter</Label>
+                <Label htmlFor="elevation_m" className="flex items-center gap-1"><Mountain className="w-3.5 h-3.5" /> Hoehenmeter</Label>
                 <Input id="elevation_m" type="number" min="0" value={form.elevation_m}
                   onChange={(e) => set("elevation_m", e.target.value)}
                   placeholder="z.B. 450" className="mt-1" />
@@ -702,7 +702,7 @@ export default function AddJournalEntry() {
             <MountainPicker label="Schwierigkeit (Mensch)" value={form.difficulty} onChange={(v) => set("difficulty", v)} />
           </section>
 
-          {/* ── Hund ────────────────────────────────────── */}
+          {/* Hund */}
           <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5 space-y-4">
             <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide flex items-center gap-2">
               <Dog className="w-4 h-4" /> Mit dem Hund
@@ -710,7 +710,7 @@ export default function AddJournalEntry() {
 
             <div className="flex items-center justify-between p-3 bg-stone-50 rounded-xl">
               <Label htmlFor="dog_suitable" className="cursor-pointer flex items-center gap-2">
-                🐕 Hundefreundlich
+                Hundefreundlich
               </Label>
               <input
                 id="dog_suitable"
@@ -721,14 +721,14 @@ export default function AddJournalEntry() {
               />
             </div>
 
-            <WaterPicker label="💧 Wasserverfügbarkeit" value={form.water_available} onChange={(v) => set("water_available", v)} />
+            <WaterPicker label="Wasserverfuegbarkeit" value={form.water_available} onChange={(v) => set("water_available", v)} />
 
             <BonePicker label="Schwierigkeit (Hund)" value={form.dog_difficulty} onChange={(v) => set("dog_difficulty", v)} />
 
             {/* Dog picker */}
             {userDogs.length > 0 && (
               <div>
-                <Label className="text-sm text-stone-600 mb-2 block">🐕 Welcher Hund war dabei?</Label>
+                <Label className="text-sm text-stone-600 mb-2 block">Welcher Hund war dabei?</Label>
                 <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
@@ -775,7 +775,7 @@ export default function AddJournalEntry() {
             </div>
           </section>
 
-          {/* ── Bewertung ───────────────────────────────── */}
+          {/* Bewertung */}
           <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5">
             <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
               <Star className="w-4 h-4" /> Gesamtbewertung
@@ -783,7 +783,7 @@ export default function AddJournalEntry() {
             <StarPicker label="Wie hat dir die Wanderung gefallen?" value={form.rating} onChange={(v) => set("rating", v)} />
           </section>
 
-          {/* ── Fotos ───────────────────────────────────── */}
+          {/* Fotos */}
           <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5 space-y-4">
             <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide flex items-center gap-2">
               <Upload className="w-4 h-4" /> Fotos
@@ -815,7 +815,7 @@ export default function AddJournalEntry() {
             </label>
           </section>
 
-          {/* ── GPX ─────────────────────────────────────── */}
+          {/* GPX */}
           <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5 space-y-3">
             <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide flex items-center gap-2">
               <MapPin className="w-4 h-4" /> GPX-Route (optional)
@@ -841,11 +841,11 @@ export default function AddJournalEntry() {
             )}
           </section>
 
-          {/* ── Jahreszeit (nur bei friends/public) ─────── */}
+          {/* Jahreszeit (nur bei friends/public) */}
           {(form.visibility === "friends" || form.visibility === "public") && (
             <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5">
               <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
-                🌸 Jahreszeit
+                Jahreszeit
               </h2>
               <SeasonPicker
                 value={form.seasons}
@@ -854,27 +854,27 @@ export default function AddJournalEntry() {
             </section>
           )}
 
-          {/* ── Sichtbarkeit ────────────────────────────── */}
+          {/* Sichtbarkeit */}
           <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5">
             <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
-              🔒 Sichtbarkeit
+              Sichtbarkeit
             </h2>
             <VisibilityPicker value={form.visibility} onChange={(v) => { set("visibility", v); }} />
             {form.visibility === "public" && (
               <div className="mt-3 space-y-2">
                 <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-                  ⏳ Nach dem Speichern wird dieser Eintrag an einen Admin zur Prüfung geschickt und erst danach öffentlich sichtbar.
+                  Nach dem Speichern wird dieser Eintrag an einen Admin zur Pruefung geschickt und erst danach oeffentlich sichtbar.
                 </p>
                 <div className="text-xs bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 text-blue-800">
-                  <p className="font-semibold mb-1">📋 Pflichtfelder für öffentliche Touren:</p>
-                  <p>Ort · Startpunkt (Karte) · Distanz · Höhenmeter · Dauer · Schwierigkeit (Mensch & Hund) · Beschreibung · mind. 1 Foto · Jahreszeit</p>
+                  <p className="font-semibold mb-1">Pflichtfelder fuer oeffentliche Touren:</p>
+                  <p>Ort - Startpunkt (Karte) - Distanz - Hoehenmeter - Dauer - Schwierigkeit (Mensch und Hund) - Beschreibung - mind. 1 Foto - Jahreszeit</p>
                   <p className="mt-1 text-blue-600">GPX-Datei ist optional.</p>
                 </div>
               </div>
             )}
           </section>
 
-          {/* ── Foto-Einverständnis (nur wenn Fotos + nicht privat) ── */}
+          {/* Foto-Einverstaendnis (nur wenn Fotos + nicht privat) */}
           {form.photos.length > 0 && form.visibility !== "private" && (
             <section className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
               <label className="flex items-start gap-3 cursor-pointer">
@@ -885,17 +885,17 @@ export default function AddJournalEntry() {
                   className="mt-1 w-4 h-4 rounded accent-emerald-600 shrink-0 cursor-pointer"
                 />
                 <span className="text-sm text-amber-800 leading-relaxed">
-                  <strong>Einverständnis Fotos:</strong> Ich bestätige, dass ich die Nutzungsrechte
+                  <strong>Einverstaendnis Fotos:</strong> Ich bestaetige, dass ich die Nutzungsrechte
                   an den hochgeladenen Fotos besitze und dass abgebildete Personen der
-                  Veröffentlichung zugestimmt haben. Mir ist bewusst, dass diese Fotos für{" "}
+                  Veroeffentlichung zugestimmt haben. Mir ist bewusst, dass diese Fotos fuer{" "}
                   {form.visibility === "public" ? "alle Nutzer weltweit" : "meine Freunde"}{" "}
-                  sichtbar und über eine URL abrufbar sind.
+                  sichtbar und ueber eine URL abrufbar sind.
                 </span>
               </label>
             </section>
           )}
 
-          {/* ── Submit ──────────────────────────────────── */}
+          {/* Submit */}
           <div className="flex gap-3 justify-end pb-4">
             <Link to={createPageUrl("Journal")}>
               <Button type="button" variant="outline">Abbrechen</Button>
@@ -920,4 +920,6 @@ export default function AddJournalEntry() {
     </div>
   );
 }
+
+
 
