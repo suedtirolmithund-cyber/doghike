@@ -108,7 +108,7 @@ export default function HikeDetail() {
     enabled: !!currentUser?.id,
   });
 
-  // Sheets hikes are read-only; base44 mutations removed
+  // Sheets hikes are read-only
   const isOwnHike = false;
 
   // Journal hikes created by the current user can be edited/deleted via Supabase

@@ -2,9 +2,8 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 
-// AdminReview used the old base44 Hike entity system.
-// The new admin workflow (journal entry review + comment moderation)
-// lives entirely in AdminDashboard which uses Supabase.
+// AdminReview is kept only as a redirect for older links.
+// The active admin workflow lives entirely in AdminDashboard.
 export default function AdminReview() {
   const navigate = useNavigate();
   useEffect(() => {

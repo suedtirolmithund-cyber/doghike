@@ -99,7 +99,7 @@ function slugify(title) {
 
 /**
  * Converts a raw CSV row (column names from the Google Sheet) into a Hike
- * object shaped exactly like the base44 Hike entity used throughout the app.
+ * object shaped exactly like the hike objects used throughout the app.
  */
 function rowToHike(row, index) {
   const parsedLat = parseFloat(row.lat || row.latitude);
@@ -113,7 +113,7 @@ function rowToHike(row, index) {
     ? row.tags.split(",").map((t) => t.trim()).filter(Boolean)
     : [];
 
-  // Wrap single image URL in an array so photos[0] works like base44 objects
+  // Wrap single image URL in an array so photos[0] works consistently in the app
   const photos = row.image ? [row.image] : [];
 
   const id = row.id || (row.title ? slugify(row.title) : String(index));
@@ -148,7 +148,7 @@ function rowToHike(row, index) {
     is_premium: row.is_premium === "true" || row.is_premium === "1",
 
     status: row.status,
-    // Sheets hikes are always public (visibility concept lives in base44 only)
+    // Sheets hikes are always public
     visibility: "public",
 
     season: row.season || null,
@@ -159,14 +159,14 @@ function rowToHike(row, index) {
     restaurant_info: row.restaurant_info || null,
     notes: row.notes || null,
 
-    // Mark origin so consumers can distinguish Sheets hikes from base44 hikes
+    // Mark origin so consumers can distinguish Sheets hikes from journal hikes
     _source: "sheets",
   };
 }
 
 /**
  * Fetches all approved hikes from the public Google Sheet.
- * Returns an array of Hike objects compatible with the base44 Hike entity.
+ * Returns an array of hike objects compatible with the app.
  */
 export async function getHikes() {
   try {
