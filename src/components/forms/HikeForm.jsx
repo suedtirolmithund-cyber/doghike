@@ -10,6 +10,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { Upload, X, Loader2, Star, Map as MapIcon, Trash2, MapPin, HelpCircle } from "lucide-react";
 import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 import RouteEditor from "@/components/map/RouteEditor";
 import StartPointPicker from "@/components/map/StartPointPicker";
 import ConsentDialog from "@/components/ConsentDialog";
@@ -117,7 +118,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       }
     } catch (error) {
       console.error("Fehler beim Parsen der GPX-Datei:", error);
-      alert("Fehler beim Laden der GPX-Datei. Bitte überprüfen Sie das Format.");
+      toast.error("Fehler beim Laden der GPX-Datei. Bitte überprüfe das Format.");
     }
     setUploading(false);
   };
@@ -126,7 +127,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
     e.preventDefault();
     
     if (!formData.latitude || !formData.longitude) {
-      alert("Bitte wähle einen Ausgangspunkt auf der Karte aus.");
+      toast.error("Bitte wähle einen Ausgangspunkt auf der Karte aus.");
       return;
     }
 
@@ -142,7 +143,9 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       if (!formData.water_availability) missing.push("Wasser unterwegs");
       if (!formData.season) missing.push("Beste Jahreszeit");
       if (missing.length > 0) {
-        alert(`Für das Teilen mit Freunden oder öffentlich müssen alle Angaben vollständig sein.\n\nFehlende Felder:\n• ${missing.join("\n• ")}`);
+        toast.error(`Für das Teilen mit Freunden oder öffentlich müssen alle Angaben vollständig sein: ${missing.join(", ")}`, {
+          duration: 7000,
+        });
         return;
       }
     }
