@@ -12,6 +12,17 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { ArrowLeft, Map, Route, Clock, Navigation, Eye, EyeOff, Trash2, TrendingUp, CheckCircle2, Star, Lock, Users, Upload, X, Loader2, Pencil, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
@@ -54,6 +65,7 @@ export default function RouteDetail() {
   const [hoverRating, setHoverRating] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [editingRoute, setEditingRoute] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const { user } = useAuth();
 
@@ -206,18 +218,34 @@ export default function RouteDetail() {
                       Bearbeiten
                     </Button>
                   </Link>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => {
-                      if (confirm("Route wirklich löschen?")) {
-                        deleteRouteMutation.mutate();
-                      }
-                    }}
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </Button>
+                  <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Route löschen?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Diese Route wird dauerhaft gelöscht. Das kann nicht rückgängig gemacht werden.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => deleteRouteMutation.mutate()}
+                          className="bg-red-600 hover:bg-red-700"
+                        >
+                          Löschen
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               )}
             </div>
