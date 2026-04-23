@@ -542,7 +542,7 @@ export default function AddJournalEntry() {
     if (form.visibility === "public") {
       const missing = getMissingPublicJournalFields(form);
       if (missing.length > 0) {
-        toast.error(`Bitte fuelle fuer eine oeffentliche Tour noch diese Felder aus:\n${missing.join(", ")}`, {
+        toast.error(`Bitte fülle für eine öffentliche Tour noch diese Felder aus:\n${missing.join(", ")}`, {
           duration: 6000,
         });
         return;
@@ -551,7 +551,7 @@ export default function AddJournalEntry() {
 
     const needsConsent = form.photos.length > 0 && form.visibility !== "private";
     if (needsConsent && !photoConsent) {
-      toast.error("Bitte bestaetige das Einverstaendnis zu den Fotos.");
+      toast.error("Bitte bestätige das Einverständnis zu den Fotos.");
       return;
     }
 

@@ -40,7 +40,7 @@ function PublicStatusBadge({ status, rejectionReason }) {
   if (status === "approved") {
     return (
       <Badge className="bg-emerald-100 text-emerald-700 border border-emerald-200 hover:bg-emerald-100">
-        Oeffentlich sichtbar
+        Öffentlich sichtbar
       </Badge>
     );
   }
@@ -62,7 +62,7 @@ function PublicStatusBadge({ status, rejectionReason }) {
 
   return (
     <Badge className="bg-amber-100 text-amber-700 border border-amber-200 hover:bg-amber-100">
-      Wartet auf Pruefung
+      Wartet auf Prüfung
     </Badge>
   );
 }

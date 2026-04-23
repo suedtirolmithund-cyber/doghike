@@ -51,7 +51,7 @@ async function loadNotifications(userId) {
         type: "friend_request",
         icon: UserPlus,
         color: "text-blue-600 bg-blue-50 border-blue-200",
-        title: `${profile?.full_name || profile?.username || "Jemand"} moechte dein Freund sein`,
+        title: `${profile?.full_name || profile?.username || "Jemand"} möchte dein Freund sein`,
         time: friendship.created_at,
         link: createPageUrl("Friends"),
       });
@@ -81,9 +81,9 @@ async function loadNotifications(userId) {
           ? "text-emerald-600 bg-emerald-50 border-emerald-200"
           : "text-red-600 bg-red-50 border-red-200",
       title: pending
-        ? `"${entry.title}" wartet auf die Admin-Pruefung`
+        ? `"${entry.title}" wartet auf die Admin-Prüfung`
         : approved
-          ? `"${entry.title}" wurde genehmigt und ist jetzt oeffentlich sichtbar`
+          ? `"${entry.title}" wurde genehmigt und ist jetzt öffentlich sichtbar`
           : entry.rejection_reason?.trim()
             ? `"${entry.title}" wurde abgelehnt: ${entry.rejection_reason.trim()}`
             : `"${entry.title}" wurde abgelehnt`,

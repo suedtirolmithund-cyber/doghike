@@ -109,7 +109,7 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
       toast.success("Hund entfernt");
     },
-    onError: () => toast.error("Der Hund konnte gerade nicht geloescht werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Der Hund konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal."),
   });
 
   // ── Handlers ──────────────────────────────────────────────
