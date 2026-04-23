@@ -13,7 +13,7 @@ const availabilityConfig = {
   SommerOnly:        { color: "#d64545", label: "Nur Sommer" },
   HerbstEmpfohlen:   { color: "#f19a4b", label: "Herbst empfohlen" },
   WinterEmpfohlen:   { color: "#5b83f0", label: "Winter empfohlen" },
-  FruehlingEmpfohlen:{ color: "#ec9cf4", label: "Frühling empfohlen" },
+  FrühlingEmpfohlen:{ color: "#ec9cf4", label: "Frühling empfohlen" },
   YearRound:         { color: "#38a062", label: "Ganzjährig" },
 };
 

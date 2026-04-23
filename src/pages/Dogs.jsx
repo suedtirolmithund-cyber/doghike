@@ -149,7 +149,7 @@ export default function Dogs() {
             }}
             className="bg-slate-800 hover:bg-slate-700"
           >
-            <Plus className="w-4 h-4 mr-2" /> Hund hinzufuegen
+            <Plus className="w-4 h-4 mr-2" /> Hund hinzufügen
           </Button>
         </motion.div>
 
@@ -279,7 +279,7 @@ export default function Dogs() {
               }}
               className="bg-slate-800 hover:bg-slate-700"
             >
-              <Plus className="w-4 h-4 mr-2" /> Hund hinzufuegen
+              <Plus className="w-4 h-4 mr-2" /> Hund hinzufügen
             </Button>
           </motion.div>
         )}
@@ -288,7 +288,7 @@ export default function Dogs() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingDog ? "Hund bearbeiten" : "Hund hinzufuegen"}</DialogTitle>
+            <DialogTitle>{editingDog ? "Hund bearbeiten" : "Hund hinzufügen"}</DialogTitle>
           </DialogHeader>
           <DogForm
             dog={editingDog}

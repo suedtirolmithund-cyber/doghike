@@ -24,8 +24,8 @@ export default function Datenschutz() {
           <div className="space-y-6 md:space-y-8">
             <section>
               <p className="text-sm md:text-base text-stone-600 leading-relaxed">
-                Der Schutz Ihrer persoenlichen Daten ist uns ein besonderes Anliegen. Wir verarbeiten
-                Ihre Daten ausschliesslich auf Grundlage der gesetzlichen Bestimmungen der
+                Der Schutz Ihrer persönlichen Daten ist uns ein besonderes Anliegen. Wir verarbeiten
+                Ihre Daten ausschließlich auf Grundlage der gesetzlichen Bestimmungen der
                 EU-Datenschutz-Grundverordnung (DSGVO / Verordnung (EU) 2016/679) sowie des
                 italienischen Datenschutzgesetzes (D.Lgs. 196/2003 in der geaenderten Fassung).
                 In dieser Erklaerung informieren wir Sie transparent darueber, welche Daten wir erheben,
@@ -117,7 +117,7 @@ export default function Datenschutz() {
                     </tr>
                     <tr className="bg-stone-50">
                       <td className="p-3">Hundedaten</td>
-                      <td className="p-3">Persoenliches Profil</td>
+                      <td className="p-3">Persönliches Profil</td>
                       <td className="p-3">Art. 6 Abs. 1 lit. a DSGVO (freiwillig)</td>
                     </tr>
                     <tr>
@@ -173,7 +173,7 @@ export default function Datenschutz() {
                   <p className="font-medium text-stone-800 mb-2">Innerhalb der App:</p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li><strong>Nur Sie</strong> sehen Ihre privaten Wanderungen und Kontoinformationen.</li>
-                    <li><strong>Alle Nutzer</strong> sehen Touren-Daten aus unserem oeffentlichen Google Sheet (keine personenbezogenen Daten).</li>
+                    <li><strong>Alle Nutzer</strong> sehen Touren-Daten aus unserem öffentlichen Google Sheet (keine personenbezogenen Daten).</li>
                     <li><strong>Administratoren</strong> koennen Inhalte zur Moderation einsehen.</li>
                   </ul>
                 </div>
@@ -210,13 +210,13 @@ export default function Datenschutz() {
 
                   <div className="border border-stone-200 rounded-xl p-4">
                     <p className="font-semibold text-stone-800 mb-1">OpenStreetMap / CARTO (Kartenkacheln)</p>
-                    <p>Laedt Kartenkacheln. Dabei wird Ihre IP-Adresse kurzzeitig uebertragen. Ihre eigenen GPS-Koordinaten werden <strong>nicht</strong> an diese Dienste gesendet - die Karte wird lokal im Browser gerendert.</p>
+                    <p>Lädt Kartenkacheln. Dabei wird Ihre IP-Adresse kurzzeitig übertragen. Ihre eigenen GPS-Koordinaten werden <strong>nicht</strong> an diese Dienste gesendet - die Karte wird lokal im Browser gerendert.</p>
                     <p className="mt-1 text-stone-500"><a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">OSM Datenschutzrichtlinie</a></p>
                   </div>
 
                   <div className="border border-stone-200 rounded-xl p-4">
                     <p className="font-semibold text-stone-800 mb-1">Nominatim / OpenStreetMap (Ortssuche)</p>
-                    <p>Wenn Sie im Routenplaner oder im Tagebuch einen Ort suchen, wird Ihr Suchtext und Ihre IP-Adresse kurzzeitig an den Nominatim-Dienst von OpenStreetMap uebertragen. Es werden keine persoenlichen Daten dauerhaft gespeichert.</p>
+                    <p>Wenn Sie im Routenplaner oder im Tagebuch einen Ort suchen, wird Ihr Suchtext und Ihre IP-Adresse kurzzeitig an den Nominatim-Dienst von OpenStreetMap übertragen. Es werden keine persönlichen Daten dauerhaft gespeichert.</p>
                     <p className="mt-1 text-stone-500"><a href="https://nominatim.org/privacy.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">nominatim.org/privacy.html</a></p>
                   </div>
 
@@ -234,7 +234,7 @@ export default function Datenschutz() {
 
                   <div className="border border-stone-200 rounded-xl p-4">
                     <p className="font-semibold text-stone-800 mb-1">Stripe Inc. (Zahlungen, nur bei Premium)</p>
-                    <p>Wird nur fuer Premium-Zahlungen genutzt. Stripe verarbeitet Zahlungsdaten direkt - wir speichern keine Kreditkartendaten. Stripe ist PCI DSS Level 1 zertifiziert und DSGVO-konform (SCCs fuer US-Transfer).</p>
+                    <p>Wird nur für Premium-Zahlungen genutzt. Stripe verarbeitet Zahlungsdaten direkt - wir speichern keine Kreditkartendaten. Stripe ist PCI DSS Level 1 zertifiziert und DSGVO-konform (SCCs für US-Transfer).</p>
                     <p className="mt-1 text-stone-500"><a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">stripe.com/privacy</a></p>
                   </div>
 
@@ -243,7 +243,7 @@ export default function Datenschutz() {
                     <p className="text-emerald-700">
                       <strong>Kein Google Analytics, kein Facebook Pixel, keine Werbe-Cookies,
                       kein Tracking, keine Datenweitergabe an Werbenetzwerke.</strong> Google wird
-                      ausschliesslich fuer den optionalen OAuth-Login verwendet (nicht fuer Tracking).
+                      ausschließlich für den optionalen OAuth-Login verwendet (nicht für Tracking).
                     </p>
                   </div>
                 </div>
@@ -265,8 +265,8 @@ export default function Datenschutz() {
                 <p><strong>Beim Hochladen von Fotos bestaetigen Sie:</strong></p>
                 <ul className="list-disc pl-5 mt-2 space-y-1">
                   <li>Sie sind der Urheber oder besitzen die Nutzungsrechte an den Fotos.</li>
-                  <li>Die abgebildeten Personen haben der Veroeffentlichung zugestimmt (sofern erkennbar).</li>
-                  <li>Oeffentliche Fotos sind weltweit ueber eine URL abrufbar.</li>
+                  <li>Die abgebildeten Personen haben der Veröffentlichung zugestimmt (sofern erkennbar).</li>
+                  <li>Öffentliche Fotos sind weltweit über eine URL abrufbar.</li>
                   <li>Sie koennen Fotos jederzeit durch Bearbeiten der Wanderung entfernen.</li>
                 </ul>
               </div>
@@ -277,7 +277,7 @@ export default function Datenschutz() {
                 7. Cookies & LocalStorage
               </h2>
               <div className="space-y-3 text-sm text-stone-600">
-                <p>Diese App verwendet <strong>ausschliesslich technisch notwendige</strong> Eintraege im Browser-LocalStorage:</p>
+                <p>Diese App verwendet <strong>ausschließlich technisch notwendige</strong> Einträge im Browser-LocalStorage:</p>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm border-collapse">
                     <thead>
@@ -352,7 +352,7 @@ export default function Datenschutz() {
                   <p className="font-semibold mb-1">Anfragen stellen:</p>
                   <p className="text-slate-300 text-sm">
                     Schreiben Sie an <strong>suedtirolmithund@gmail.com</strong> - wir antworten innerhalb von 30 Tagen.
-                    Fuer Kontoloeschung: direkt in den Profileinstellungen oder per E-Mail.
+                    Für Kontolöschung: direkt in den Profileinstellungen oder per E-Mail.
                   </p>
                 </div>
               </div>
@@ -374,10 +374,10 @@ export default function Datenschutz() {
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
                 <p className="text-amber-800 text-sm md:text-base leading-relaxed">
-                  <strong>Oeffentliche Inhalte:</strong> Kommentare und Bewertungen, die Sie abgeben,
-                  sind fuer alle App-Nutzer sichtbar. Fotos, die Sie zu oeffentlichen Touren hochladen,
+                  <strong>Öffentliche Inhalte:</strong> Kommentare und Bewertungen, die Sie abgeben,
+                  sind für alle App-Nutzer sichtbar. Fotos, die Sie zu öffentlichen Touren hochladen,
                   sind ueber eine URL weltweit abrufbar. Bitte teilen Sie keine sensiblen
-                  personenbezogenen Informationen in oeffentlichen Beitraegen.
+                  personenbezogenen Informationen in öffentlichen Beiträgen.
                 </p>
               </div>
             </section>

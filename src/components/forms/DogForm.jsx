@@ -172,7 +172,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
           {saving ? (
             <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Speichern...</>
           ) : (
-            dog ? "Aktualisieren" : "Hund hinzufuegen"
+            dog ? "Aktualisieren" : "Hund hinzufügen"
           )}
         </Button>
       </div>

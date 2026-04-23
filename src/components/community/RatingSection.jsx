@@ -67,7 +67,7 @@ export default function RatingSection({ hikeId }) {
       {isAuthenticated && (
         <div className="border-t border-stone-200 pt-4 md:pt-6">
           <p className="font-semibold text-stone-800 mb-3 text-sm md:text-base">
-            {userRating ? "Deine Bewertung aendern" : "Wanderung bewerten"}
+            {userRating ? "Deine Bewertung ändern" : "Wanderung bewerten"}
           </p>
           <div className="flex items-center justify-center gap-1 mb-4">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -98,7 +98,7 @@ export default function RatingSection({ hikeId }) {
               onCheckedChange={setConsentPublic}
             />
             <label htmlFor="rating-consent" className="text-sm text-stone-700 cursor-pointer flex-1">
-              Ich akzeptiere, dass meine Bewertung oeffentlich sichtbar ist.
+              Ich akzeptiere, dass meine Bewertung öffentlich sichtbar ist.
             </label>
           </div>
 

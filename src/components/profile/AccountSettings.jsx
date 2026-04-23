@@ -117,7 +117,7 @@ export default function AccountSettings({ user }) {
               <AlertDialogDescription asChild>
                 <div className="space-y-2 text-sm text-stone-600">
                   <p>
-                    Damit bereitest du eine E-Mail fuer die dauerhafte Loeschung deines Kontos und{" "}
+                    Damit bereitest du eine E-Mail für die dauerhafte Löschung deines Kontos und{" "}
                     <strong>aller</strong> deiner gespeicherten Daten vor:
                   </p>
                   <ul className="list-disc pl-5 space-y-1">

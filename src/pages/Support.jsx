@@ -43,12 +43,12 @@ export default function Support() {
       icon: HelpCircle,
       questions: [
         {
-          q: "Wie kann ich eine neue Wanderung hinzufuegen?",
+          q: "Wie kann ich eine neue Wanderung hinzufügen?",
           a: "Gehe zu 'Mein Profil' -> 'Tagebuch' und klicke auf 'Neue Wanderung'. Fuelle die Details aus, markiere den Startpunkt auf der Karte und lade optional Fotos hoch.",
         },
         {
           q: "Kann ich Wanderungen privat halten?",
-          a: "Ja. Bei jeder Wanderung kannst du die Sichtbarkeit einstellen: Privat (nur du), Freunde (nur deine Freunde) oder Oeffentlich (geht zur Admin-Pruefung).",
+          a: "Ja. Bei jeder Wanderung kannst du die Sichtbarkeit einstellen: Privat (nur du), Freunde (nur deine Freunde) oder Öffentlich (geht zur Admin-Prüfung).",
         },
         {
           q: "Wie funktioniert das Freunde-System?",
@@ -80,7 +80,7 @@ export default function Support() {
       questions: [
         {
           q: "Wer kann meine Wanderungen sehen?",
-          a: "Das haengt von deiner Sichtbarkeitseinstellung ab. Private Wanderungen siehst nur du, Freunde-Wanderungen sehen deine Freunde, oeffentliche Wanderungen sind fuer alle sichtbar nach Admin-Freigabe.",
+          a: "Das hängt von deiner Sichtbarkeitseinstellung ab. Private Wanderungen siehst nur du, Freunde-Wanderungen sehen deine Freunde, öffentliche Wanderungen sind für alle sichtbar nach Admin-Freigabe.",
         },
         {
           q: "Wie kann ich mein Konto loeschen?",
@@ -88,7 +88,7 @@ export default function Support() {
         },
         {
           q: "Werden meine GPS-Daten gespeichert?",
-          a: "GPS-Koordinaten werden nur fuer die Routen gespeichert, die du bewusst erstellst. Es findet kein Background-Tracking statt.",
+          a: "GPS-Koordinaten werden nur für die Routen gespeichert, die du bewusst erstellst. Es findet kein Background-Tracking statt.",
         },
       ],
     },
@@ -98,7 +98,7 @@ export default function Support() {
       questions: [
         {
           q: "Die Karte laedt nicht",
-          a: "Ueberpruefe deine Internetverbindung. Falls das Problem weiterhin besteht, versuche die Seite neu zu laden. Adblocker koennen Kartenkacheln blockieren.",
+          a: "Überprüfe deine Internetverbindung. Falls das Problem weiterhin besteht, versuche die Seite neu zu laden. Adblocker können Kartenkacheln blockieren.",
         },
         {
           q: "Ich kann keine Fotos hochladen",

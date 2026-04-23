@@ -11,13 +11,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // â”€â”€ Badge-Definitionen â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const BADGE_DEFS = {
-  champion:    { emoji: "ðŸ†", label: "Champion",        desc: "Platz 1 im Ranking" },
-  veteran:     { emoji: "ðŸ…", label: "Veteran",          desc: "50+ Touren" },
-  explorer:    { emoji: "ðŸ§­", label: "Entdecker",        desc: "10+ Touren" },
-  ultra:       { emoji: "âš¡", label: "Ultra-LÃ¤ufer",     desc: "500+ km" },
-  marathoner:  { emoji: "ðŸƒ", label: "Kilometerfresser", desc: "100+ km" },
-  mountaineer: { emoji: "â›°ï¸", label: "GipfelstÃ¼rmer",    desc: "1.000+ HÃ¶henmeter" },
-  popular:     { emoji: "â­", label: "Liebling",         desc: "âŒ€ 4,5 Sterne (3+ Bewertungen)" },
+  champion:    { emoji: "🏆", label: "Champion",        desc: "Platz 1 im Ranking" },
+  veteran:     { emoji: "🏅", label: "Veteran",         desc: "50+ Touren" },
+  explorer:    { emoji: "🧭", label: "Entdecker",       desc: "10+ Touren" },
+  ultra:       { emoji: "⚡", label: "Ultra-Läufer",    desc: "500+ km" },
+  marathoner:  { emoji: "🏃", label: "Kilometerfresser", desc: "100+ km" },
+  mountaineer: { emoji: "⛰️", label: "Gipfelstürmer",   desc: "1.000+ Höhenmeter" },
+  popular:     { emoji: "⭐", label: "Liebling",        desc: "Ø 4,5 Sterne (3+ Bewertungen)" },
 };
 
 function getBadges(s, isChampion) {
@@ -100,9 +100,9 @@ async function loadLeaderboard() {
 
 // â”€â”€ Hilfsfunktionen UI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const RANK_STYLE = [
-  { ring: "ring-2 ring-yellow-400", bg: "bg-gradient-to-br from-yellow-50 to-amber-50", border: "border-yellow-300", medal: "ðŸ¥‡", num: "text-yellow-600" },
-  { ring: "ring-2 ring-slate-400",  bg: "bg-gradient-to-br from-slate-50 to-stone-50",  border: "border-slate-300",  medal: "ðŸ¥ˆ", num: "text-slate-500"  },
-  { ring: "ring-2 ring-orange-400", bg: "bg-gradient-to-br from-orange-50 to-amber-50", border: "border-orange-300", medal: "ðŸ¥‰", num: "text-orange-600" },
+  { ring: "ring-2 ring-yellow-400", bg: "bg-gradient-to-br from-yellow-50 to-amber-50", border: "border-yellow-300", medal: "🥇", num: "text-yellow-600" },
+  { ring: "ring-2 ring-slate-400",  bg: "bg-gradient-to-br from-slate-50 to-stone-50",  border: "border-slate-300",  medal: "🥈", num: "text-slate-500"  },
+  { ring: "ring-2 ring-orange-400", bg: "bg-gradient-to-br from-orange-50 to-amber-50", border: "border-orange-300", medal: "🥉", num: "text-orange-600" },
 ];
 
 function dogPhoto(dog) {
@@ -266,7 +266,7 @@ function CommunityStats({ rows }) {
       {[
         { icon: Dog,       value: rows.length, label: "Hunde", color: "bg-amber-50 text-amber-700 border-amber-200" },
         { icon: Ruler,     value: `${totalKm.toFixed(0)} km`, label: "gesamt", color: "bg-blue-50 text-blue-700 border-blue-200" },
-        { icon: TrendingUp,value: `${(totalHm/1000).toFixed(1)}k`, label: "HÃ¶henmeter", color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+        { icon: TrendingUp,value: `${(totalHm/1000).toFixed(1)}k`, label: "Höhenmeter", color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
       ].map(({ icon: Icon, value, label, color }) => (
         <div key={label} className={`rounded-xl border p-3 text-center ${color}`}>
           <Icon className="w-4 h-4 mx-auto mb-1 opacity-70" />
@@ -289,7 +289,7 @@ function BadgeLegend() {
         {Object.values(BADGE_DEFS).map((b) => (
           <div key={b.label} className="flex items-center gap-2 text-sm text-stone-600">
             <span className="text-lg">{b.emoji}</span>
-            <span><strong>{b.label}</strong> â€“ {b.desc}</span>
+            <span><strong>{b.label}</strong> – {b.desc}</span>
           </div>
         ))}
       </div>
@@ -375,7 +375,7 @@ export default function TopDogs() {
             <Trophy className="w-8 h-8 text-amber-600" />
           </div>
           <h1 className="text-2xl md:text-3xl font-bold text-stone-800 mb-1">Top Dogs</h1>
-          <p className="text-stone-500 text-sm">Die fleissigsten Wanderhunde der Community</p>
+          <p className="text-stone-500 text-sm">Die fleißigsten Wanderhunde der Community</p>
         </motion.div>
 
         {/* Loading */}
@@ -401,13 +401,13 @@ export default function TopDogs() {
             <Tabs defaultValue="tours">
               <TabsList className="grid w-full grid-cols-3 bg-white border border-stone-200 mb-4">
                 <TabsTrigger value="tours" className="text-xs md:text-sm">
-                  ðŸŽ¯ <span className="hidden sm:inline ml-1">Meiste</span> Touren
+                  🎯 <span className="hidden sm:inline ml-1">Meiste</span> Touren
                 </TabsTrigger>
                 <TabsTrigger value="distance" className="text-xs md:text-sm">
-                  ðŸ“ <span className="hidden sm:inline ml-1">Meiste</span> km
+                  📏 <span className="hidden sm:inline ml-1">Meiste</span> km
                 </TabsTrigger>
                 <TabsTrigger value="elevation" className="text-xs md:text-sm">
-                  â›°ï¸ <span className="hidden sm:inline ml-1">Meiste</span> Hm
+                  ⛰️ <span className="hidden sm:inline ml-1">Meiste</span> Hm
                 </TabsTrigger>
               </TabsList>
 

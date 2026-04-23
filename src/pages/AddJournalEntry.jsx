@@ -274,11 +274,11 @@ function WaterPicker({ label, value, onChange }) {
 
 // Jahreszeiten-Picker (Mehrfachauswahl)
 const SEASON_OPTIONS = [
-  { value: "spring", emoji: "Fr", label: "Fruehling", color: "#ec9cf4" },
+  { value: "spring", emoji: "Fr", label: "Frühling", color: "#ec9cf4" },
   { value: "summer", emoji: "So", label: "Sommer", color: "#d64545" },
   { value: "autumn", emoji: "He", label: "Herbst", color: "#f19a4b" },
   { value: "winter", emoji: "Wi", label: "Winter", color: "#5b83f0" },
-  { value: "all_year", emoji: "Gj", label: "Ganzjaehrig", color: "#38a062" },
+  { value: "all_year", emoji: "Gj", label: "Ganzjährig", color: "#38a062" },
 ];
 
 function SeasonPicker({ value = [], onChange }) {
@@ -337,15 +337,15 @@ const VISIBILITY_OPTIONS = [
     value: "friends",
     emoji: "F",
     label: "Freunde",
-    desc: "Nur bestaetigte Freunde",
+    desc: "Nur bestätigte Freunde",
     active: "border-blue-400 bg-blue-50 text-blue-800",
     idle: "border-stone-200 hover:border-blue-300",
   },
   {
     value: "public",
     emoji: "O",
-    label: "Oeffentlich",
-    desc: "Wird an Admin zur Pruefung geschickt",
+    label: "Öffentlich",
+    desc: "Wird an Admin zur Prüfung geschickt",
     active: "border-emerald-400 bg-emerald-50 text-emerald-800",
     idle: "border-stone-200 hover:border-emerald-300",
   },
@@ -544,7 +544,7 @@ export default function AddJournalEntry() {
     if (form.visibility === "public") {
       const missing = getMissingPublicJournalFields(form);
       if (missing.length > 0) {
-        toast.error(`Bitte fuelle fuer eine oeffentliche Tour noch diese Felder aus:\n${missing.join(", ")}`, {
+        toast.error(`Bitte fülle für eine öffentliche Tour noch diese Felder aus:\n${missing.join(", ")}`, {
           duration: 6000,
         });
         return;
@@ -553,7 +553,7 @@ export default function AddJournalEntry() {
 
     const needsConsent = form.photos.length > 0 && form.visibility !== "private";
     if (needsConsent && !photoConsent) {
-      toast.error("Bitte bestaetige dein Einverstaendnis zu den Fotos.");
+      toast.error("Bitte bestätige dein Einverständnis zu den Fotos.");
       return;
     }
 
@@ -612,14 +612,14 @@ export default function AddJournalEntry() {
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <Link to={createPageUrl("Journal")}>
             <Button variant="ghost" size="sm" className="mb-4 -ml-2 text-stone-600">
-              <ArrowLeft className="w-4 h-4 mr-1" /> Zurueck
+              <ArrowLeft className="w-4 h-4 mr-1" /> Zurück
             </Button>
           </Link>
           <h1 className="text-2xl md:text-3xl font-bold text-stone-800">
             {editId ? "Eintrag bearbeiten" : "Neue Wanderung"}
           </h1>
           <p className="text-stone-500 text-sm mt-0.5">
-            {editId ? "Aendere deine Aufzeichnung" : "Halte dein Wandererlebnis fest"}
+            {editId ? "Ändere deine Aufzeichnung" : "Halte dein Wandererlebnis fest"}
           </p>
         </motion.div>
 
@@ -646,7 +646,7 @@ export default function AddJournalEntry() {
               <div>
                 <Label htmlFor="location" className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> Ort</Label>
                 <Input id="location" value={form.location} onChange={(e) => set("location", e.target.value)}
-                  placeholder="z.B. Prags, Suedtirol" className="mt-1" />
+                  placeholder="z.B. Prags, Südtirol" className="mt-1" />
               </div>
             </div>
 
@@ -686,7 +686,7 @@ export default function AddJournalEntry() {
                   placeholder="z.B. 8.5" className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="elevation_m" className="flex items-center gap-1"><Mountain className="w-3.5 h-3.5" /> Hoehenmeter</Label>
+                <Label htmlFor="elevation_m" className="flex items-center gap-1"><Mountain className="w-3.5 h-3.5" /> Höhenmeter</Label>
                 <Input id="elevation_m" type="number" min="0" value={form.elevation_m}
                   onChange={(e) => set("elevation_m", e.target.value)}
                   placeholder="z.B. 450" className="mt-1" />
@@ -721,7 +721,7 @@ export default function AddJournalEntry() {
               />
             </div>
 
-            <WaterPicker label="Wasserverfuegbarkeit" value={form.water_available} onChange={(v) => set("water_available", v)} />
+            <WaterPicker label="Wasserverfügbarkeit" value={form.water_available} onChange={(v) => set("water_available", v)} />
 
             <BonePicker label="Schwierigkeit (Hund)" value={form.dog_difficulty} onChange={(v) => set("dog_difficulty", v)} />
 
@@ -863,18 +863,18 @@ export default function AddJournalEntry() {
             {form.visibility === "public" && (
               <div className="mt-3 space-y-2">
                 <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-                  Nach dem Speichern wird dieser Eintrag an einen Admin zur Pruefung geschickt und erst danach oeffentlich sichtbar.
+                  Nach dem Speichern wird dieser Eintrag an einen Admin zur Prüfung geschickt und erst danach öffentlich sichtbar.
                 </p>
                 <div className="text-xs bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 text-blue-800">
-                  <p className="font-semibold mb-1">Pflichtfelder fuer oeffentliche Touren:</p>
-                  <p>Ort - Startpunkt (Karte) - Distanz - Hoehenmeter - Dauer - Schwierigkeit (Mensch und Hund) - Beschreibung - mind. 1 Foto - Jahreszeit</p>
+                  <p className="font-semibold mb-1">Pflichtfelder für öffentliche Touren:</p>
+                  <p>Ort - Startpunkt (Karte) - Distanz - Höhenmeter - Dauer - Schwierigkeit (Mensch und Hund) - Beschreibung - mind. 1 Foto - Jahreszeit</p>
                   <p className="mt-1 text-blue-600">GPX-Datei ist optional.</p>
                 </div>
               </div>
             )}
           </section>
 
-          {/* Foto-Einverstaendnis (nur wenn Fotos + nicht privat) */}
+          {/* Foto-Einverständnis (nur wenn Fotos + nicht privat) */}
           {form.photos.length > 0 && form.visibility !== "private" && (
             <section className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
               <label className="flex items-start gap-3 cursor-pointer">
@@ -885,11 +885,11 @@ export default function AddJournalEntry() {
                   className="mt-1 w-4 h-4 rounded accent-emerald-600 shrink-0 cursor-pointer"
                 />
                 <span className="text-sm text-amber-800 leading-relaxed">
-                  <strong>Einverstaendnis Fotos:</strong> Ich bestaetige, dass ich die Nutzungsrechte
+                  <strong>Einverständnis Fotos:</strong> Ich bestätige, dass ich die Nutzungsrechte
                   an den hochgeladenen Fotos besitze und dass abgebildete Personen der
-                  Veroeffentlichung zugestimmt haben. Mir ist bewusst, dass diese Fotos fuer{" "}
+                  Veröffentlichung zugestimmt haben. Mir ist bewusst, dass diese Fotos für{" "}
                   {form.visibility === "public" ? "alle Nutzer weltweit" : "meine Freunde"}{" "}
-                  sichtbar und ueber eine URL abrufbar sind.
+                  sichtbar und über eine URL abrufbar sind.
                 </span>
               </label>
             </section>
