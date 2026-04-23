@@ -132,7 +132,7 @@ export default function GPSTracker({ onSave }) {
 
   const startTracking = () => {
     if (!navigator.geolocation) {
-      alert("GPS wird von deinem Browser nicht unterstützt");
+      toast.error("GPS wird von deinem Browser nicht unterstützt.");
       return;
     }
 
@@ -183,7 +183,7 @@ export default function GPSTracker({ onSave }) {
       },
       (error) => {
         console.error("GPS error:", error);
-        alert("Fehler beim Abrufen der GPS-Position. Bitte GPS aktivieren.");
+        toast.error("Fehler beim Abrufen der GPS-Position. Bitte GPS aktivieren.");
       },
       { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
     );
@@ -232,7 +232,7 @@ export default function GPSTracker({ onSave }) {
         elevation_gain_m: Math.round(finalElev),
       });
     } else {
-      alert("Zu wenige GPS-Punkte aufgezeichnet.");
+      toast.error("Zu wenige GPS-Punkte aufgezeichnet.");
     }
   };
 
