@@ -165,7 +165,7 @@ export default function Friends() {
     mutationFn: acceptFriendRequest,
     onSuccess: () => {
       refreshFriendData();
-      toast.success("Freundschaft bestätigt ✅");
+      toast.success("Freundschaft bestätigt");
     },
   });
 
@@ -197,7 +197,7 @@ export default function Friends() {
       }
     } catch (err) {
       console.error("[searchProfiles] error:", err);
-      toast.error("Die Suche konnte gerade nicht ausgefuehrt werden. Bitte versuche es noch einmal.");
+      toast.error("Die Suche konnte gerade nicht ausgeführt werden. Bitte versuche es noch einmal.");
     } finally {
       setSearching(false);
     }
@@ -314,7 +314,7 @@ export default function Friends() {
               </motion.div>
             )}
             {searchResults.length === 0 && searchQuery && !searching && (
-              <p className="text-xs text-stone-400 mt-2 text-center">Keine Nutzer gefunden für „{searchQuery}"</p>
+              <p className="text-xs text-stone-400 mt-2 text-center">Keine Nutzer gefunden für „{searchQuery}“</p>
             )}
           </AnimatePresence>
         </motion.div>
@@ -456,7 +456,7 @@ export default function Friends() {
               <div className="text-center py-16 bg-white rounded-2xl border border-stone-200/50">
                 <Users className="w-12 h-12 text-stone-200 mx-auto mb-3" />
                 <p className="text-stone-600 font-medium mb-1">Noch keine Freunde</p>
-                <p className="text-stone-400 text-sm">Füge Freunde hinzu um ihre Wanderungen zu sehen.</p>
+                <p className="text-stone-400 text-sm">Füge Freunde hinzu, um ihre Wanderungen zu sehen.</p>
               </div>
             ) : feedEntries.length === 0 ? (
               <div className="text-center py-16 bg-white rounded-2xl border border-stone-200/50">
