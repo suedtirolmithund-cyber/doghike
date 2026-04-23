@@ -22,6 +22,38 @@ export async function getFriendIds(userId) {
 
 // Send a friend request
 export async function sendFriendRequest(requesterId, receiverId) {
+  if (!requesterId || !receiverId) {
+    throw new Error("Freundschaftsanfrage unvollstaendig.");
+  }
+
+  if (requesterId === receiverId) {
+    throw new Error("Du kannst dir nicht selbst eine Freundschaftsanfrage senden.");
+  }
+
+  const { data: existing, error: existingError } = await supabase
+    .from("friendships")
+    .select("id, requester_id, receiver_id, status")
+    .or(
+      `and(requester_id.eq.${requesterId},receiver_id.eq.${receiverId}),and(requester_id.eq.${receiverId},receiver_id.eq.${requesterId})`
+    );
+
+  if (existingError) throw existingError;
+
+  const acceptedFriendship = (existing ?? []).find((friendship) => friendship.status === "accepted");
+  if (acceptedFriendship) {
+    throw new Error("Ihr seid bereits befreundet.");
+  }
+
+  const staleFriendships = (existing ?? []).filter((friendship) => friendship.status !== "accepted");
+  if (staleFriendships.length > 0) {
+    const { error: deleteError } = await supabase
+      .from("friendships")
+      .delete()
+      .in("id", staleFriendships.map((friendship) => friendship.id));
+
+    if (deleteError) throw deleteError;
+  }
+
   const { data, error } = await supabase
     .from("friendships")
     .insert({ requester_id: requesterId, receiver_id: receiverId })
