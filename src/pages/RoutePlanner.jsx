@@ -270,8 +270,8 @@ function SmartRoutePlanner({ onRouteReady }) {
         if (r.elevationProfile?.length > 1) setElevation(r.elevationProfile);
         onRouteReady(r);
       })
-      .catch((err) => {
-        if (!cancelled) toast.error("Route konnte nicht berechnet werden: " + err.message);
+      .catch(() => {
+        if (!cancelled) toast.error("Die Route konnte gerade nicht berechnet werden. Bitte versuche es noch einmal.");
       })
       .finally(() => { if (!cancelled) setCalculating(false); });
 

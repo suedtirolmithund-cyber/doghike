@@ -79,7 +79,7 @@ export default function Profile() {
       setEditingProfile(false);
       toast.success("Profil gespeichert");
     },
-    onError: (e) => toast.error("Fehler: " + e.message),
+    onError: () => toast.error("Dein Profil konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
   });
 
   const createDogMutation = useMutation({
@@ -89,7 +89,7 @@ export default function Profile() {
       setDialogOpen(false);
       toast.success("Hund hinzugefügt");
     },
-    onError: (e) => toast.error("Fehler: " + e.message),
+    onError: () => toast.error("Dein Hund konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
   });
 
   const updateDogMutation = useMutation({
@@ -100,7 +100,7 @@ export default function Profile() {
       setEditingDog(null);
       toast.success("Hund aktualisiert");
     },
-    onError: (e) => toast.error("Fehler: " + e.message),
+    onError: () => toast.error("Die Aenderungen am Hund konnten gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
   });
 
   const deleteDogMutation = useMutation({
@@ -109,7 +109,7 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
       toast.success("Hund entfernt");
     },
-    onError: (e) => toast.error("Fehler: " + e.message),
+    onError: () => toast.error("Der Hund konnte gerade nicht geloescht werden. Bitte versuche es noch einmal."),
   });
 
   // ── Handlers ──────────────────────────────────────────────
@@ -131,7 +131,7 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ["profile", user?.id] });
       toast.success("Profilbild aktualisiert");
     } catch (err) {
-      toast.error("Upload fehlgeschlagen. Bitte prüfe den 'avatars' Bucket in Supabase.");
+      toast.error("Dein Profilbild konnte gerade nicht hochgeladen werden. Bitte versuche es noch einmal.");
     } finally {
       setAvatarUploading(false);
     }

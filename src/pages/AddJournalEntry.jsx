@@ -499,7 +499,7 @@ export default function AddJournalEntry() {
       toast.success(editId ? "Eintrag aktualisiert" : "Wanderung gespeichert!");
       navigate(createPageUrl("Journal"));
     },
-    onError: (e) => toast.error("Fehler: " + e.message),
+    onError: () => toast.error("Deine Wanderung konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
   });
 
   const handlePhotoUpload = async (e) => {
@@ -511,7 +511,7 @@ export default function AddJournalEntry() {
       setForm((p) => ({ ...p, photos: [...p.photos, ...urls] }));
       toast.success(`${urls.length} Foto${urls.length > 1 ? "s" : ""} hochgeladen`);
     } catch {
-      toast.error("Foto-Upload fehlgeschlagen. Bitte 'journal' Bucket in Supabase anlegen.");
+      toast.error("Die Fotos konnten gerade nicht hochgeladen werden. Bitte versuche es noch einmal.");
     } finally {
       setPhotoUploading(false);
     }
@@ -526,7 +526,7 @@ export default function AddJournalEntry() {
       setForm((p) => ({ ...p, gpx_url: url }));
       toast.success("GPX-Datei hochgeladen");
     } catch {
-      toast.error("GPX-Upload fehlgeschlagen.");
+      toast.error("Die GPX-Datei konnte gerade nicht hochgeladen werden. Bitte versuche es noch einmal.");
     } finally {
       setGpxUploading(false);
     }
@@ -542,7 +542,7 @@ export default function AddJournalEntry() {
     if (form.visibility === "public") {
       const missing = getMissingPublicJournalFields(form);
       if (missing.length > 0) {
-        toast.error(`Fehlende Pflichtfelder fuer oeffentliche Touren:\n${missing.join(", ")}`, {
+        toast.error(`Bitte fuelle fuer eine oeffentliche Tour noch diese Felder aus:\n${missing.join(", ")}`, {
           duration: 6000,
         });
         return;

@@ -341,7 +341,7 @@ export default function AdminDashboard() {
       queryClient.invalidateQueries({ queryKey: ["admin_pending"] });
       toast.success("Eintrag genehmigt");
     },
-    onError: (e) => toast.error("Fehler: " + e.message),
+    onError: () => toast.error("Der Eintrag konnte gerade nicht freigegeben werden. Bitte versuche es noch einmal."),
     onSettled: () => {
       setProcessingId(null);
       setProcessingType(null);
@@ -358,7 +358,7 @@ export default function AdminDashboard() {
       queryClient.invalidateQueries({ queryKey: ["admin_pending"] });
       toast.success("Eintrag abgelehnt");
     },
-    onError: (e) => toast.error("Fehler: " + e.message),
+    onError: () => toast.error("Der Eintrag konnte gerade nicht abgelehnt werden. Bitte versuche es noch einmal."),
     onSettled: () => {
       setProcessingId(null);
       setProcessingType(null);
@@ -375,7 +375,7 @@ export default function AdminDashboard() {
       queryClient.invalidateQueries({ queryKey: ["admin_comments"] });
       toast.success("Kommentar freigegeben");
     },
-    onError: (e) => toast.error("Fehler: " + e.message),
+    onError: () => toast.error("Der Kommentar konnte gerade nicht freigegeben werden. Bitte versuche es noch einmal."),
     onSettled: () => {
       setProcessingId(null);
       setProcessingType(null);
@@ -392,7 +392,7 @@ export default function AdminDashboard() {
       queryClient.invalidateQueries({ queryKey: ["admin_comments"] });
       toast.success("Kommentar geloescht");
     },
-    onError: (e) => toast.error("Fehler: " + e.message),
+    onError: () => toast.error("Der Kommentar konnte gerade nicht geloescht werden. Bitte versuche es noch einmal."),
     onSettled: () => {
       setProcessingId(null);
       setProcessingType(null);
