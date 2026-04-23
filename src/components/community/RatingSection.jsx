@@ -20,11 +20,12 @@ export default function RatingSection({ hikeId }) {
     queryFn: () => getRatings(hikeId),
   });
 
-  const averageRating = ratings.length > 0
-    ? (ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length).toFixed(1)
-    : 0;
+  const averageRating =
+    ratings.length > 0
+      ? (ratings.reduce((sum, rating) => sum + rating.rating, 0) / ratings.length).toFixed(1)
+      : 0;
 
-  const userRating = user ? ratings.find((r) => r.user_id === user.id) : null;
+  const userRating = user ? ratings.find((rating) => rating.user_id === user.id) : null;
 
   const ratingMutation = useMutation({
     mutationFn: () => upsertRating(user.id, hikeId, selectedRating),
@@ -34,7 +35,9 @@ export default function RatingSection({ hikeId }) {
       setConsentPublic(false);
       toast.success("Bewertung gespeichert");
     },
-    onError: (e) => toast.error("Fehler: " + e.message),
+    onError: () => {
+      toast.error("Die Bewertung konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.");
+    },
   });
 
   return (
@@ -46,20 +49,25 @@ export default function RatingSection({ hikeId }) {
         </div>
         <div className="flex items-center gap-1 mb-1">
           {[1, 2, 3, 4, 5].map((star) => (
-            <Star key={star} className={`w-5 h-5 ${
-              star <= Math.round(averageRating)
-                ? "fill-yellow-400 text-yellow-400"
-                : "text-stone-300"
-            }`} />
+            <Star
+              key={star}
+              className={`w-5 h-5 ${
+                star <= Math.round(averageRating)
+                  ? "fill-yellow-400 text-yellow-400"
+                  : "text-stone-300"
+              }`}
+            />
           ))}
         </div>
-        <p className="text-sm text-stone-500">{ratings.length} Bewertung{ratings.length !== 1 ? "en" : ""}</p>
+        <p className="text-sm text-stone-500">
+          {ratings.length} Bewertung{ratings.length !== 1 ? "en" : ""}
+        </p>
       </div>
 
       {isAuthenticated && (
         <div className="border-t border-stone-200 pt-4 md:pt-6">
           <p className="font-semibold text-stone-800 mb-3 text-sm md:text-base">
-            {userRating ? "Deine Bewertung ändern" : "Wanderung bewerten"}
+            {userRating ? "Deine Bewertung aendern" : "Wanderung bewerten"}
           </p>
           <div className="flex items-center justify-center gap-1 mb-4">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -72,11 +80,13 @@ export default function RatingSection({ hikeId }) {
                 onMouseLeave={() => setHoverRating(0)}
                 className="focus:outline-none touch-manipulation"
               >
-                <Star className={`w-10 h-10 md:w-8 md:h-8 transition-colors ${
-                  star <= (hoverRating || selectedRating || userRating?.rating || 0)
-                    ? "fill-yellow-400 text-yellow-400"
-                    : "text-stone-300 hover:text-yellow-200"
-                }`} />
+                <Star
+                  className={`w-10 h-10 md:w-8 md:h-8 transition-colors ${
+                    star <= (hoverRating || selectedRating || userRating?.rating || 0)
+                      ? "fill-yellow-400 text-yellow-400"
+                      : "text-stone-300 hover:text-yellow-200"
+                  }`}
+                />
               </motion.button>
             ))}
           </div>
@@ -88,7 +98,7 @@ export default function RatingSection({ hikeId }) {
               onCheckedChange={setConsentPublic}
             />
             <label htmlFor="rating-consent" className="text-sm text-stone-700 cursor-pointer flex-1">
-              Ich akzeptiere, dass meine Bewertung öffentlich sichtbar ist
+              Ich akzeptiere, dass meine Bewertung oeffentlich sichtbar ist.
             </label>
           </div>
 
