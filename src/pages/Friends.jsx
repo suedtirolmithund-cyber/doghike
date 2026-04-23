@@ -145,11 +145,17 @@ export default function Friends() {
   const friendOf = (f) =>
     profileMap[f.requester_id === user?.id ? f.receiver_id : f.requester_id];
 
+  const refreshFriendData = () => {
+    queryClient.invalidateQueries({ queryKey: ["friendships", user?.id] });
+    queryClient.invalidateQueries({ queryKey: ["friendIds", user?.id] });
+    queryClient.invalidateQueries({ queryKey: ["friendFeed"] });
+  };
+
   // Mutations
   const sendMutation = useMutation({
     mutationFn: (receiverId) => sendFriendRequest(user.id, receiverId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["friendships", user?.id] });
+      refreshFriendData();
       toast.success("Freundschaftsanfrage gesendet");
     },
     onError: () => toast.error("Die Freundschaftsanfrage konnte gerade nicht gesendet werden. Bitte versuche es noch einmal."),
@@ -158,7 +164,7 @@ export default function Friends() {
   const acceptMutation = useMutation({
     mutationFn: acceptFriendRequest,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["friendships", user?.id] });
+      refreshFriendData();
       toast.success("Freundschaft bestätigt ✅");
     },
   });
@@ -166,7 +172,7 @@ export default function Friends() {
   const rejectMutation = useMutation({
     mutationFn: rejectFriendRequest,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["friendships", user?.id] });
+      refreshFriendData();
       toast.success("Anfrage abgelehnt");
     },
   });
@@ -174,7 +180,7 @@ export default function Friends() {
   const removeMutation = useMutation({
     mutationFn: removeFriend,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["friendships", user?.id] });
+      refreshFriendData();
       toast.success("Freund entfernt");
     },
   });
