@@ -67,7 +67,7 @@ export default function Dashboard() {
         <div
           className="absolute inset-0 bg-cover"
           style={{
-            backgroundImage: "url('https://media.base44.com/images/public/69809fc1481e5be430f14562/be28d3a20__A734536.jpg')",
+            backgroundImage: "url('/splash/autumn-hero.jpg')",
             backgroundPosition: "60% 75%",
           }}
         />
