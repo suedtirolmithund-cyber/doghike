@@ -36,6 +36,38 @@ const VISIBILITY_INFO = {
   public:  { icon: Globe, label: "Öffentlich",    color: "text-emerald-600" },
 };
 
+function PublicStatusBadge({ status, rejectionReason }) {
+  if (status === "approved") {
+    return (
+      <Badge className="bg-emerald-100 text-emerald-700 border border-emerald-200 hover:bg-emerald-100">
+        Oeffentlich sichtbar
+      </Badge>
+    );
+  }
+
+  if (status === "rejected") {
+    return (
+      <div className="space-y-2">
+        <Badge className="bg-red-100 text-red-700 border border-red-200 hover:bg-red-100">
+          Abgelehnt
+        </Badge>
+        {rejectionReason ? (
+          <p className="text-xs text-red-600">
+            Grund: {rejectionReason}
+          </p>
+        ) : null}
+      </div>
+    );
+  }
+
+  return (
+    <Badge className="bg-amber-100 text-amber-700 border border-amber-200 hover:bg-amber-100">
+      Wartet auf Pruefung
+    </Badge>
+  );
+}
+
+
 function PhotoGallery({ photos }) {
   const [idx, setIdx] = useState(0);
   if (!photos?.length) return null;
@@ -139,7 +171,7 @@ export default function JournalDetail() {
             </Button>
           </button>
           {isOwner && (
-            <Link to={createPageUrl("AddJournalEntry") + `?edit=${entry.id}`}>
+            <Link to={createPageUrl("AddJournalEntry") + `?id=${entry.id}`}>
               <Button variant="outline" size="sm">Bearbeiten</Button>
             </Link>
           )}
@@ -166,6 +198,15 @@ export default function JournalDetail() {
                 <span className={`text-xs font-medium ${visInfo.color}`}>{visInfo.label}</span>
               </div>
             </div>
+
+            {entry.visibility === "public" && isOwner && (
+              <div className="mb-4">
+                <PublicStatusBadge
+                  status={entry.status}
+                  rejectionReason={entry.rejection_reason}
+                />
+              </div>
+            )}
 
             <h1 className="text-xl md:text-2xl font-bold text-stone-800 mb-2">{entry.title}</h1>
 
