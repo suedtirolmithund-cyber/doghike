@@ -22,18 +22,19 @@ export default function Support() {
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
     if (!subject.trim() || !message.trim()) {
-      toast.error("Bitte fülle alle Felder aus");
+      toast.error("Bitte fuelle alle Felder aus");
       return;
     }
-    const from   = user?.email ? `\n\nVon: ${user.email}` : "";
-    const body   = encodeURIComponent(`Betreff: ${subject}\n\nNachricht:\n${message}${from}`);
-    const mailto = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent("Support: " + subject)}&body=${body}`;
+
+    const from = user?.email ? `\n\nVon: ${user.email}` : "";
+    const body = encodeURIComponent(`Betreff: ${subject}\n\nNachricht:\n${message}${from}`);
+    const mailto = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(`Support: ${subject}`)}&body=${body}`;
     window.open(mailto, "_blank");
     setSubmitted(true);
-    toast.success("E-Mail-Programm wird geöffnet…");
+    toast.success("E-Mail-Programm wird geoeffnet...");
   };
 
   const faqs = [
@@ -42,16 +43,16 @@ export default function Support() {
       icon: HelpCircle,
       questions: [
         {
-          q: "Wie kann ich eine neue Wanderung hinzufügen?",
-          a: "Gehe zu 'Mein Profil' → 'Tagebuch' und klicke auf 'Neue Wanderung'. Fülle die Details aus, markiere den Startpunkt auf der Karte und lade optional Fotos hoch.",
+          q: "Wie kann ich eine neue Wanderung hinzufuegen?",
+          a: "Gehe zu 'Mein Profil' -> 'Tagebuch' und klicke auf 'Neue Wanderung'. Fuelle die Details aus, markiere den Startpunkt auf der Karte und lade optional Fotos hoch.",
         },
         {
           q: "Kann ich Wanderungen privat halten?",
-          a: "Ja! Bei jeder Wanderung kannst du die Sichtbarkeit einstellen: Privat (nur du), Freunde (nur deine Freunde) oder Öffentlich (geht zur Admin-Prüfung).",
+          a: "Ja. Bei jeder Wanderung kannst du die Sichtbarkeit einstellen: Privat (nur du), Freunde (nur deine Freunde) oder Oeffentlich (geht zur Admin-Pruefung).",
         },
         {
           q: "Wie funktioniert das Freunde-System?",
-          a: "Gehe zu 'Freunde', suche nach Nutzer-Namen und sende eine Freundschaftsanfrage. Sobald diese akzeptiert wird, könnt ihr gegenseitig eure 'Freunde'-Wanderungen sehen.",
+          a: "Gehe zu 'Freunde', suche nach Nutzer-Namen und sende eine Freundschaftsanfrage. Sobald diese akzeptiert wird, koennt ihr gegenseitig eure 'Freunde'-Wanderungen sehen.",
         },
       ],
     },
@@ -61,15 +62,15 @@ export default function Support() {
       questions: [
         {
           q: "Wie plane ich eine neue Route?",
-          a: "Gehe zu 'Routenplaner', klicke auf die Karte um Wegpunkte zu setzen. Die Route wird automatisch berechnet und bevorzugt Wanderwege (GraphHopper Hiking).",
+          a: "Gehe zu 'Routenplaner' und klicke auf die Karte, um Wegpunkte zu setzen. Die Route wird automatisch berechnet und bevorzugt Wanderwege.",
         },
         {
           q: "Kann ich GPX-Dateien hochladen?",
           a: "Ja, im Routenplaner gibt es einen GPX-Tab. Die Route wird dann automatisch auf der Karte angezeigt.",
         },
         {
-          q: "Wie sehe ich das Höhenprofil einer Route?",
-          a: "Sobald du eine Route mit mindestens 2 Wegpunkten erstellt hast, wird das Höhenprofil automatisch unter der Karte angezeigt – direkt aus den GraphHopper-Daten.",
+          q: "Wie sehe ich das Hoehenprofil einer Route?",
+          a: "Sobald du eine Route mit mindestens 2 Wegpunkten erstellt hast, wird das Hoehenprofil automatisch unter der Karte angezeigt.",
         },
       ],
     },
@@ -79,15 +80,15 @@ export default function Support() {
       questions: [
         {
           q: "Wer kann meine Wanderungen sehen?",
-          a: "Das hängt von deiner Sichtbarkeitseinstellung ab. Private Wanderungen sieht nur du, Freunde-Wanderungen sehen deine Freunde, öffentliche Wanderungen sind für alle sichtbar (nach Admin-Freigabe).",
+          a: "Das haengt von deiner Sichtbarkeitseinstellung ab. Private Wanderungen siehst nur du, Freunde-Wanderungen sehen deine Freunde, oeffentliche Wanderungen sind fuer alle sichtbar nach Admin-Freigabe.",
         },
         {
-          q: "Wie kann ich mein Konto löschen?",
-          a: "Gehe zu 'Mein Profil' → Konto → 'Konto löschen'. Dort wird eine Löschanfrage per E-Mail vorbereitet, die danach manuell bearbeitet wird.",
+          q: "Wie kann ich mein Konto loeschen?",
+          a: "Gehe zu 'Mein Profil' -> Konto -> 'Konto loeschen'. Dort wird eine Loeschanfrage per E-Mail vorbereitet, die danach manuell bearbeitet wird.",
         },
         {
           q: "Werden meine GPS-Daten gespeichert?",
-          a: "GPS-Koordinaten werden nur für die Routen gespeichert, die du bewusst erstellst. Es findet kein Background-Tracking statt.",
+          a: "GPS-Koordinaten werden nur fuer die Routen gespeichert, die du bewusst erstellst. Es findet kein Background-Tracking statt.",
         },
       ],
     },
@@ -96,12 +97,12 @@ export default function Support() {
       icon: Bug,
       questions: [
         {
-          q: "Die Karte lädt nicht",
-          a: "Überprüfe deine Internetverbindung. Falls das Problem weiterhin besteht, versuche die Seite neu zu laden (F5 oder Cmd+R). Adblocker können Kartenkacheln blockieren.",
+          q: "Die Karte laedt nicht",
+          a: "Ueberpruefe deine Internetverbindung. Falls das Problem weiterhin besteht, versuche die Seite neu zu laden. Adblocker koennen Kartenkacheln blockieren.",
         },
         {
           q: "Ich kann keine Fotos hochladen",
-          a: "Stelle sicher, dass die Dateigröße unter 10 MB liegt und es sich um JPG, PNG oder WebP-Dateien handelt.",
+          a: "Stelle sicher, dass die Dateigroesse unter 10 MB liegt und es sich um JPG, PNG oder WebP-Dateien handelt.",
         },
         {
           q: "Ein Fehler tritt beim Speichern auf",
@@ -116,12 +117,11 @@ export default function Support() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <Link to={createPageUrl("Dashboard")}>
           <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Zurück
+            <ArrowLeft className="w-4 h-4 mr-2" /> Zurueck
           </Button>
         </Link>
 
         <div className="space-y-6">
-          {/* Header */}
           <div className="bg-white rounded-2xl p-6 md:p-8 border border-stone-200/50 shadow-sm">
             <div className="flex items-center gap-3 mb-2">
               <MessageCircle className="w-8 h-8 text-slate-700" />
@@ -134,22 +134,21 @@ export default function Support() {
             </div>
           </div>
 
-          {/* FAQ */}
           <div className="bg-white rounded-2xl p-6 md:p-8 border border-stone-200/50 shadow-sm">
-            <h2 className="text-xl font-semibold text-stone-800 mb-6">Häufig gestellte Fragen (FAQ)</h2>
-            {faqs.map((cat, idx) => {
-              const Icon = cat.icon;
+            <h2 className="text-xl font-semibold text-stone-800 mb-6">Haeufig gestellte Fragen (FAQ)</h2>
+            {faqs.map((category, index) => {
+              const Icon = category.icon;
               return (
-                <div key={idx} className="mb-6 last:mb-0">
+                <div key={index} className="mb-6 last:mb-0">
                   <div className="flex items-center gap-2 mb-3">
                     <Icon className="w-5 h-5 text-slate-600" />
-                    <h3 className="font-medium text-stone-800">{cat.category}</h3>
+                    <h3 className="font-medium text-stone-800">{category.category}</h3>
                   </div>
                   <Accordion type="single" collapsible className="space-y-2">
-                    {cat.questions.map((item, qIdx) => (
+                    {category.questions.map((item, questionIndex) => (
                       <AccordionItem
-                        key={qIdx}
-                        value={`${idx}-${qIdx}`}
+                        key={questionIndex}
+                        value={`${index}-${questionIndex}`}
                         className="border border-stone-200 rounded-lg px-4"
                       >
                         <AccordionTrigger className="text-left hover:no-underline">
@@ -166,7 +165,6 @@ export default function Support() {
             })}
           </div>
 
-          {/* Contact form */}
           <div className="bg-white rounded-2xl p-6 md:p-8 border border-stone-200/50 shadow-sm">
             <div className="flex items-center gap-2 mb-6">
               <Mail className="w-6 h-6 text-slate-700" />
@@ -176,12 +174,19 @@ export default function Support() {
             {submitted ? (
               <div className="text-center py-12">
                 <CheckCircle2 className="w-16 h-16 text-green-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-stone-800 mb-2">E-Mail-Programm geöffnet!</h3>
+                <h3 className="text-xl font-semibold text-stone-800 mb-2">E-Mail-Programm geoeffnet!</h3>
                 <p className="text-stone-500 text-sm mb-6">
                   Falls es nicht geklappt hat, schreib direkt an{" "}
                   <a href={`mailto:${SUPPORT_EMAIL}`} className="text-blue-600 underline">{SUPPORT_EMAIL}</a>.
                 </p>
-                <Button variant="outline" onClick={() => { setSubmitted(false); setSubject(""); setMessage(""); }}>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSubmitted(false);
+                    setSubject("");
+                    setMessage("");
+                  }}
+                >
                   Neue Nachricht
                 </Button>
               </div>
@@ -189,15 +194,15 @@ export default function Support() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-stone-700 mb-2">Betreff</label>
-                  <Input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Worum geht es?" required />
+                  <Input value={subject} onChange={(event) => setSubject(event.target.value)} placeholder="Worum geht es?" required />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-stone-700 mb-2">Nachricht</label>
-                  <Textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Beschreibe dein Anliegen..." rows={5} required />
+                  <Textarea value={message} onChange={(event) => setMessage(event.target.value)} placeholder="Beschreibe dein Anliegen..." rows={5} required />
                 </div>
                 {user && (
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800">
-                    📧 Antwort kommt an: <strong>{user.email}</strong>
+                    Antwort kommt an: <strong>{user.email}</strong>
                   </div>
                 )}
                 <Button type="submit" className="w-full bg-slate-800 hover:bg-slate-900">
@@ -207,14 +212,13 @@ export default function Support() {
             )}
           </div>
 
-          {/* Links */}
           <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 md:p-8 text-white shadow-lg">
             <h2 className="text-xl font-semibold mb-4">Weitere Ressourcen</h2>
             <div className="grid md:grid-cols-3 gap-4">
               {[
-                { page: "Datenschutz", icon: Shield, label: "Datenschutz",  desc: "Wie wir deine Daten schützen" },
-                { page: "Legal",       icon: Book,   label: "Rechtliches",  desc: "Haftungsausschluss & Hinweise" },
-                { page: "Impressum",   icon: Mail,   label: "Impressum",    desc: "Angaben zum Betreiber" },
+                { page: "Datenschutz", icon: Shield, label: "Datenschutz", desc: "Wie wir deine Daten schuetzen" },
+                { page: "Legal", icon: Book, label: "Rechtliches", desc: "Haftungsausschluss & Hinweise" },
+                { page: "Impressum", icon: Mail, label: "Impressum", desc: "Angaben zum Betreiber" },
               ].map(({ page, icon: Icon, label, desc }) => (
                 <Link key={page} to={createPageUrl(page)}>
                   <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-all cursor-pointer">
