@@ -76,8 +76,8 @@ export default function CommentSection({ hikeId, canComment = true }) {
           : "Kommentar veroeffentlicht."
       );
     },
-    onError: (error) => {
-      toast.error(error.message || "Kommentar konnte nicht gespeichert werden.");
+    onError: () => {
+      toast.error("Der Kommentar konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.");
     },
   });
 
@@ -88,8 +88,8 @@ export default function CommentSection({ hikeId, canComment = true }) {
       setDeleteId(null);
       toast.success("Kommentar geloescht.");
     },
-    onError: (error) => {
-      toast.error(error.message || "Kommentar konnte nicht geloescht werden.");
+    onError: () => {
+      toast.error("Der Kommentar konnte gerade nicht geloescht werden. Bitte versuche es noch einmal.");
     },
   });
 
@@ -268,7 +268,7 @@ export default function CommentSection({ hikeId, canComment = true }) {
 
         {!isLoading && comments.length === 0 && (
           <p className="text-center text-stone-500 py-8">
-            Noch keine Kommentare. Sei der Erste!
+            Noch keine Kommentare vorhanden.
           </p>
         )}
       </div>
