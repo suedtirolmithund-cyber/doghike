@@ -73,7 +73,7 @@ export default function CommentSection({ hikeId, canComment = true }) {
       toast.success(
         needsReview
           ? "Kommentar gespeichert und zur Freigabe an den Admin gesendet."
-          : "Kommentar veröffentlicht."
+          : "Kommentar veroeffentlicht."
       );
     },
     onError: (error) => {
@@ -86,10 +86,10 @@ export default function CommentSection({ hikeId, canComment = true }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", hikeId] });
       setDeleteId(null);
-      toast.success("Kommentar gelöscht.");
+      toast.success("Kommentar geloescht.");
     },
     onError: (error) => {
-      toast.error(error.message || "Kommentar konnte nicht gelöscht werden.");
+      toast.error(error.message || "Kommentar konnte nicht geloescht werden.");
     },
   });
 
@@ -121,7 +121,7 @@ export default function CommentSection({ hikeId, canComment = true }) {
       {isAuthenticated && canComment && (
         <div className="bg-white rounded-xl p-4 md:p-6 border border-stone-200">
           <h3 className="font-semibold text-stone-800 mb-3 md:mb-4 text-sm md:text-base">
-            Kommentar hinzufügen
+            Kommentar hinzufuegen
           </h3>
           <Textarea
             placeholder="Teile deine Erfahrungen mit dieser Wanderung..."
@@ -185,7 +185,7 @@ export default function CommentSection({ hikeId, canComment = true }) {
                 onCheckedChange={setConsentPublic}
               />
               <label htmlFor="comment-consent" className="text-sm text-stone-700 cursor-pointer flex-1">
-                Ich akzeptiere, dass mein Kommentar und meine Fotos öffentlich sichtbar sein können.
+                Ich akzeptiere, dass mein Kommentar und meine Fotos oeffentlich sichtbar sein koennen.
               </label>
             </div>
           </div>
@@ -194,7 +194,7 @@ export default function CommentSection({ hikeId, canComment = true }) {
 
       {isAuthenticated && !canComment && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
-          Kommentare sind nur bei öffentlichen Wanderungen möglich.
+          Kommentare sind nur bei oeffentlichen Wanderungen moeglich.
         </div>
       )}
 
@@ -276,9 +276,9 @@ export default function CommentSection({ hikeId, canComment = true }) {
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Kommentar löschen?</AlertDialogTitle>
+            <AlertDialogTitle>Kommentar loeschen?</AlertDialogTitle>
             <AlertDialogDescription>
-              Diese Aktion kann nicht rückgängig gemacht werden.
+              Diese Aktion kann nicht rueckgaengig gemacht werden.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -287,7 +287,7 @@ export default function CommentSection({ hikeId, canComment = true }) {
               onClick={() => deleteMutation.mutate(deleteId)}
               className="bg-red-600 hover:bg-red-700"
             >
-              Löschen
+              Loeschen
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
