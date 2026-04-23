@@ -32,6 +32,7 @@ import CommentSection from "@/components/community/CommentSection";
 import RatingSection from "@/components/community/RatingSection";
 import ExpandableText from "@/components/ExpandableText";
 import PremiumGate from "@/components/hikes/PremiumGate";
+import { supabase } from "@/lib/supabaseClient";
 
 const difficultyColors = {
   "1": "bg-emerald-100 text-emerald-700",
@@ -96,7 +97,7 @@ export default function HikeDetail() {
     enabled: !!hikeId
   });
 
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, isAdmin } = useAuth();
 
   const { data: dogs = [] } = useQuery({
     queryKey: ["dogs", currentUser?.id],
@@ -104,6 +105,26 @@ export default function HikeDetail() {
       if (!currentUser?.id) return [];
       const { getDogs } = await import("@/lib/profilesApi");
       return getDogs(currentUser.id);
+    },
+    enabled: !!currentUser?.id,
+  });
+
+  const { data: currentProfile } = useQuery({
+    queryKey: ["profile_summary", currentUser?.id],
+    queryFn: async () => {
+      if (!currentUser?.id) return null;
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("is_premium")
+        .eq("user_id", currentUser.id)
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      return data;
     },
     enabled: !!currentUser?.id,
   });
@@ -134,8 +155,8 @@ export default function HikeDetail() {
   }
 
   // Premium gate: block non-premium users from admin-created premium hikes
-  const isPremiumHike = hike.is_premium && currentUser?.role !== "admin" && !isOwnHike;
-  const userHasPremium = currentUser?.is_premium;
+  const isPremiumHike = hike.is_premium && !isAdmin && !isOwnHike;
+  const userHasPremium = currentProfile?.is_premium === true;
   if (isPremiumHike && !userHasPremium) {
     const coverPhoto = hike.photos?.[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80";
     return <PremiumGate hikeName={hike.trail_name} coverPhoto={coverPhoto} />;
