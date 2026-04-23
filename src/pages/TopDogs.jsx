@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+﻿import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { supabase } from "@/lib/supabaseClient";
@@ -9,15 +9,15 @@ import {
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// ── Badge-Definitionen ────────────────────────────────────────
+// â”€â”€ Badge-Definitionen â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const BADGE_DEFS = {
-  champion:    { emoji: "🏆", label: "Champion",        desc: "Platz 1 im Ranking" },
-  veteran:     { emoji: "🏅", label: "Veteran",          desc: "50+ Touren" },
-  explorer:    { emoji: "🧭", label: "Entdecker",        desc: "10+ Touren" },
-  ultra:       { emoji: "⚡", label: "Ultra-Läufer",     desc: "500+ km" },
-  marathoner:  { emoji: "🏃", label: "Kilometerfresser", desc: "100+ km" },
-  mountaineer: { emoji: "⛰️", label: "Gipfelstürmer",    desc: "1.000+ Höhenmeter" },
-  popular:     { emoji: "⭐", label: "Liebling",         desc: "⌀ 4,5 Sterne (3+ Bewertungen)" },
+  champion:    { emoji: "ðŸ†", label: "Champion",        desc: "Platz 1 im Ranking" },
+  veteran:     { emoji: "ðŸ…", label: "Veteran",          desc: "50+ Touren" },
+  explorer:    { emoji: "ðŸ§­", label: "Entdecker",        desc: "10+ Touren" },
+  ultra:       { emoji: "âš¡", label: "Ultra-LÃ¤ufer",     desc: "500+ km" },
+  marathoner:  { emoji: "ðŸƒ", label: "Kilometerfresser", desc: "100+ km" },
+  mountaineer: { emoji: "â›°ï¸", label: "GipfelstÃ¼rmer",    desc: "1.000+ HÃ¶henmeter" },
+  popular:     { emoji: "â­", label: "Liebling",         desc: "âŒ€ 4,5 Sterne (3+ Bewertungen)" },
 };
 
 function getBadges(s, isChampion) {
@@ -32,9 +32,9 @@ function getBadges(s, isChampion) {
   return b;
 }
 
-// ── Daten laden ───────────────────────────────────────────────
+// â”€â”€ Daten laden â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function loadLeaderboard() {
-  // 1. Alle Journal-Einträge mit dog_id (RLS filtert automatisch)
+  // 1. Alle Journal-EintrÃ¤ge mit dog_id (RLS filtert automatisch)
   const { data: entries, error: eErr } = await supabase
     .from("journal_entries")
     .select("dog_id, distance_km, elevation_m, rating, date")
@@ -98,18 +98,18 @@ async function loadLeaderboard() {
     .filter((r) => r.dog);
 }
 
-// ── Hilfsfunktionen UI ────────────────────────────────────────
+// â”€â”€ Hilfsfunktionen UI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const RANK_STYLE = [
-  { ring: "ring-2 ring-yellow-400", bg: "bg-gradient-to-br from-yellow-50 to-amber-50", border: "border-yellow-300", medal: "🥇", num: "text-yellow-600" },
-  { ring: "ring-2 ring-slate-400",  bg: "bg-gradient-to-br from-slate-50 to-stone-50",  border: "border-slate-300",  medal: "🥈", num: "text-slate-500"  },
-  { ring: "ring-2 ring-orange-400", bg: "bg-gradient-to-br from-orange-50 to-amber-50", border: "border-orange-300", medal: "🥉", num: "text-orange-600" },
+  { ring: "ring-2 ring-yellow-400", bg: "bg-gradient-to-br from-yellow-50 to-amber-50", border: "border-yellow-300", medal: "ðŸ¥‡", num: "text-yellow-600" },
+  { ring: "ring-2 ring-slate-400",  bg: "bg-gradient-to-br from-slate-50 to-stone-50",  border: "border-slate-300",  medal: "ðŸ¥ˆ", num: "text-slate-500"  },
+  { ring: "ring-2 ring-orange-400", bg: "bg-gradient-to-br from-orange-50 to-amber-50", border: "border-orange-300", medal: "ðŸ¥‰", num: "text-orange-600" },
 ];
 
 function dogPhoto(dog) {
   return dog?.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog?.name ?? "dog"}&backgroundColor=f5f5f4`;
 }
 
-// ── Podium (Top 3) ────────────────────────────────────────────
+// â”€â”€ Podium (Top 3) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function Podium({ top3, metric }) {
   if (!top3.length) return null;
   const order = [top3[1], top3[0], top3[2]]; // 2-1-3 Reihenfolge
@@ -167,7 +167,7 @@ function Podium({ top3, metric }) {
   );
 }
 
-// ── Einzelner Rang-Eintrag ────────────────────────────────────
+// â”€â”€ Einzelner Rang-Eintrag â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function RankRow({ entry, rank, metric, isMyDog }) {
   const style  = RANK_STYLE[rank - 1];
   const badges = getBadges(entry, rank === 1);
@@ -226,7 +226,7 @@ function RankRow({ entry, rank, metric, isMyDog }) {
   );
 }
 
-// ── Dein Hund – falls nicht in Top 10 ────────────────────────
+// â”€â”€ Dein Hund â€“ falls nicht in Top 10 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function MyDogCard({ entry, rank, metric }) {
   if (!entry) return null;
   return (
@@ -255,7 +255,7 @@ function MyDogCard({ entry, rank, metric }) {
   );
 }
 
-// ── Community-Stats ───────────────────────────────────────────
+// â”€â”€ Community-Stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function CommunityStats({ rows }) {
   const totalTours = rows.reduce((s, r) => s + r.tourCount, 0);
   const totalKm    = rows.reduce((s, r) => s + r.totalDistance, 0);
@@ -266,7 +266,7 @@ function CommunityStats({ rows }) {
       {[
         { icon: Dog,       value: rows.length, label: "Hunde", color: "bg-amber-50 text-amber-700 border-amber-200" },
         { icon: Ruler,     value: `${totalKm.toFixed(0)} km`, label: "gesamt", color: "bg-blue-50 text-blue-700 border-blue-200" },
-        { icon: TrendingUp,value: `${(totalHm/1000).toFixed(1)}k`, label: "Höhenmeter", color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+        { icon: TrendingUp,value: `${(totalHm/1000).toFixed(1)}k`, label: "HÃ¶henmeter", color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
       ].map(({ icon: Icon, value, label, color }) => (
         <div key={label} className={`rounded-xl border p-3 text-center ${color}`}>
           <Icon className="w-4 h-4 mx-auto mb-1 opacity-70" />
@@ -278,7 +278,7 @@ function CommunityStats({ rows }) {
   );
 }
 
-// ── Legende der Badges ────────────────────────────────────────
+// â”€â”€ Legende der Badges â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function BadgeLegend() {
   return (
     <details className="mt-6 bg-white rounded-xl border border-stone-200 overflow-hidden">
@@ -289,7 +289,7 @@ function BadgeLegend() {
         {Object.values(BADGE_DEFS).map((b) => (
           <div key={b.label} className="flex items-center gap-2 text-sm text-stone-600">
             <span className="text-lg">{b.emoji}</span>
-            <span><strong>{b.label}</strong> – {b.desc}</span>
+            <span><strong>{b.label}</strong> â€“ {b.desc}</span>
           </div>
         ))}
       </div>
@@ -297,7 +297,7 @@ function BadgeLegend() {
   );
 }
 
-// ── Ranking-Tab-Inhalt ────────────────────────────────────────
+// â”€â”€ Ranking-Tab-Inhalt â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function RankingTab({ rows, metric, myDogId }) {
   const sorted = useMemo(() => {
     const key = metric === "tours" ? "tourCount" : metric === "distance" ? "totalDistance" : "totalElevation";
@@ -335,7 +335,7 @@ function RankingTab({ rows, metric, myDogId }) {
           />
         ))}
       </div>
-      {/* Dein Hund falls außerhalb Top 10 */}
+      {/* Dein Hund falls auÃŸerhalb Top 10 */}
       {myEntry && !myInTop10 && (
         <MyDogCard entry={myEntry} rank={myIdx + 1} metric={metric} />
       )}
@@ -343,7 +343,7 @@ function RankingTab({ rows, metric, myDogId }) {
   );
 }
 
-// ── Main Page ─────────────────────────────────────────────────
+// â”€â”€ Main Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function TopDogs() {
   const { user } = useAuth();
 
@@ -353,7 +353,7 @@ export default function TopDogs() {
     staleTime: 5 * 60 * 1000,
   });
 
-  // Mein erster Hund (für Highlight)
+  // Mein erster Hund (fÃ¼r Highlight)
   const { data: myDogs = [] } = useQuery({
     queryKey: ["dogs", user?.id],
     queryFn:  async () => {
@@ -375,7 +375,7 @@ export default function TopDogs() {
             <Trophy className="w-8 h-8 text-amber-600" />
           </div>
           <h1 className="text-2xl md:text-3xl font-bold text-stone-800 mb-1">Top Dogs</h1>
-          <p className="text-stone-500 text-sm">Die fleißigsten Wanderhunde der Community</p>
+          <p className="text-stone-500 text-sm">Die fleissigsten Wanderhunde der Community</p>
         </motion.div>
 
         {/* Loading */}
@@ -389,7 +389,7 @@ export default function TopDogs() {
         {/* Error */}
         {error && !isLoading && (
           <div className="text-center py-16 text-red-500 text-sm">
-            Fehler beim Laden: {error.message}
+            Die Rangliste konnte gerade nicht geladen werden. Bitte versuche es noch einmal.
           </div>
         )}
 
@@ -401,13 +401,13 @@ export default function TopDogs() {
             <Tabs defaultValue="tours">
               <TabsList className="grid w-full grid-cols-3 bg-white border border-stone-200 mb-4">
                 <TabsTrigger value="tours" className="text-xs md:text-sm">
-                  🎯 <span className="hidden sm:inline ml-1">Meiste</span> Touren
+                  ðŸŽ¯ <span className="hidden sm:inline ml-1">Meiste</span> Touren
                 </TabsTrigger>
                 <TabsTrigger value="distance" className="text-xs md:text-sm">
-                  📏 <span className="hidden sm:inline ml-1">Meiste</span> km
+                  ðŸ“ <span className="hidden sm:inline ml-1">Meiste</span> km
                 </TabsTrigger>
                 <TabsTrigger value="elevation" className="text-xs md:text-sm">
-                  ⛰️ <span className="hidden sm:inline ml-1">Meiste</span> Hm
+                  â›°ï¸ <span className="hidden sm:inline ml-1">Meiste</span> Hm
                 </TabsTrigger>
               </TabsList>
 
@@ -429,3 +429,4 @@ export default function TopDogs() {
     </div>
   );
 }
+
