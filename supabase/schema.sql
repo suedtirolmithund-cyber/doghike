@@ -124,6 +124,27 @@ create policy "Eigene Einträge lesen"
   on public.journal_entries for select
   using (auth.uid() = user_id OR public.is_admin());
 
+create policy "Freunde und öffentliche Einträge lesen"
+  on public.journal_entries for select
+  using (
+    (visibility = 'public' and status = 'approved')
+    or (
+      visibility = 'friends'
+      and status in ('approved', 'draft')
+      and auth.uid() is not null
+      and exists (
+        select 1
+        from public.friendships f
+        where
+          f.status = 'accepted'
+          and (
+            (f.requester_id = auth.uid() and f.receiver_id = user_id)
+            or (f.receiver_id = auth.uid() and f.requester_id = user_id)
+          )
+      )
+    )
+  );
+
 create policy "Eigene Einträge anlegen"
   on public.journal_entries for insert
   with check (auth.uid() = user_id);
@@ -289,7 +310,7 @@ as $$
         or (
           auth.uid() is not null
           and je.visibility = 'friends'
-          and je.status = 'approved'
+          and je.status in ('approved', 'draft')
           and exists (
             select 1
             from public.friendships f
