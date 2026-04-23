@@ -170,7 +170,6 @@ function rowToHike(row, index) {
  */
 export async function getHikes() {
   try {
-    console.log("[sheetsClient] fetching CSV...");
     const response = await fetch(SHEETS_CSV_URL);
     if (!response.ok) {
       console.error("[sheetsClient] fetch failed, status:", response.status);
@@ -181,7 +180,6 @@ export async function getHikes() {
     const hikes = rows
       .filter((row) => row.status === "approved")
       .map((row, index) => rowToHike(row, index));
-    console.log("[sheetsClient] approved hikes from Sheets:", hikes.length);
     return hikes;
   } catch (err) {
     console.error("[sheetsClient] error:", err);
@@ -290,7 +288,6 @@ async function getApprovedJournalEntries() {
       .in("user_id", userIds);
     (profiles ?? []).forEach((p) => { profileMap[p.user_id] = p; });
 
-    console.log("[sheetsClient] approved journal entries:", entries.length);
     return hydratedEntries.map((entry) =>
       journalEntryToHike(
         entry,
@@ -322,9 +319,5 @@ export async function getAllHikes() {
     ...journalHikes.filter((h) => !seenIds.has(h.id)),
   ];
 
-  console.log(
-    `[sheetsClient] getAllHikes: ${sheetsHikes.length} from Sheets + ` +
-    `${journalHikes.length} from Journal = ${merged.length} total`
-  );
   return merged;
 }
