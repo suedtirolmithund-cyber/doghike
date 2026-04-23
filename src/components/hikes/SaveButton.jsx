@@ -1,7 +1,6 @@
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Heart } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getSavedHikes, saveHike, unsaveHike } from "@/lib/communityApi";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +26,7 @@ export default function SaveButton({ hikeId, hikeSource = "sheets", className })
       queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] });
       toast.success("Tour gespeichert");
     },
-    onError: (e) => toast.error("Fehler: " + e.message),
+    onError: () => toast.error("Die Tour konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
   });
 
   const unsaveMutation = useMutation({
@@ -36,7 +35,7 @@ export default function SaveButton({ hikeId, hikeSource = "sheets", className })
       queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] });
       toast.success("Tour entfernt");
     },
-    onError: (e) => toast.error("Fehler: " + e.message),
+    onError: () => toast.error("Die Tour konnte gerade nicht aus der Merkliste entfernt werden. Bitte versuche es noch einmal."),
   });
 
   const handleClick = (e) => {
