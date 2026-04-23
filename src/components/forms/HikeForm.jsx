@@ -5,6 +5,16 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { uploadJournalFile } from "@/lib/journalApi";
 import { useAuth } from "@/lib/AuthContext";
 import { Upload, X, Loader2, Star, Map as MapIcon, Trash2, MapPin, HelpCircle } from "lucide-react";
@@ -46,6 +56,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
    const [showRouteEditor, setShowRouteEditor] = useState(false);
    const [showStartPointPicker, setShowStartPointPicker] = useState(false);
    const [showPhotoConsent, setShowPhotoConsent] = useState(false);
+   const [showVisibilityConfirm, setShowVisibilityConfirm] = useState(false);
+   const [pendingVisibility, setPendingVisibility] = useState(null);
 
   const handlePhotoUpload = async (e) => {
     const files = Array.from(e.target.files);
@@ -678,9 +690,9 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
           value={formData.visibility}
           onValueChange={(value) => {
             if (hike && hike.visibility === "public" && value !== "public") {
-              if (!confirm("⚠️ Diese Tour ist aktuell öffentlich. Wenn du sie auf privat oder nur für Freunde änderst, wird sie aus der öffentlichen Liste entfernt. Möchtest du fortfahren?")) {
-                return;
-              }
+              setPendingVisibility(value);
+              setShowVisibilityConfirm(true);
+              return;
             }
             setFormData({ ...formData, visibility: value });
           }}
@@ -705,6 +717,33 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
           </p>
         )}
       </div>
+
+      <AlertDialog open={showVisibilityConfirm} onOpenChange={setShowVisibilityConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Öffentliche Tour ändern?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Diese Tour ist aktuell öffentlich. Wenn du sie auf privat oder nur für Freunde änderst,
+              wird sie aus der öffentlichen Liste entfernt.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setPendingVisibility(null)}>
+              Abbrechen
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (pendingVisibility) {
+                  setFormData((prev) => ({ ...prev, visibility: pendingVisibility }));
+                }
+                setPendingVisibility(null);
+              }}
+            >
+              Fortfahren
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <div className="flex gap-3 justify-end pt-4">
         {onCancel && (
