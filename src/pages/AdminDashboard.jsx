@@ -468,15 +468,9 @@ export default function AdminDashboard() {
             <TabsTrigger value="comments" className="flex-1 flex items-center gap-2 relative">
               <MessageSquare className="w-4 h-4" />
               Kommentare
-              {(pendingCommentsCount > 0 || comments.length > 0) && (
+              {pendingCommentsCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
-                  {pendingCommentsCount > 0
-                    ? pendingCommentsCount > 9
-                      ? "9+"
-                      : pendingCommentsCount
-                    : comments.length > 9
-                      ? "9+"
-                      : comments.length}
+                  {pendingCommentsCount > 9 ? "9+" : pendingCommentsCount}
                 </span>
               )}
             </TabsTrigger>
