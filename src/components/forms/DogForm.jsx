@@ -22,15 +22,18 @@ export default function DogForm({ dog, onSave, onCancel }) {
   const [saving, setSaving] = useState(false);
   const [uploadError, setUploadError] = useState(null);
 
-  const handlePhotoUpload = async (e) => {
-    const file = e.target.files[0];
+  const handlePhotoUpload = async (event) => {
+    const file = event.target.files[0];
     if (!file || !user) return;
+
     setUploading(true);
     setUploadError(null);
+
     try {
       const previousPhotoUrl = formData.photo_url || null;
       const url = await uploadFile("dog-photos", user.id, file);
-      setFormData((prev) => ({ ...prev, photo_url: url }));
+      setFormData((previous) => ({ ...previous, photo_url: url }));
+
       if (previousPhotoUrl && previousPhotoUrl !== url) {
         try {
           await deleteStoredFile(previousPhotoUrl, "dog-photos");
@@ -38,16 +41,16 @@ export default function DogForm({ dog, onSave, onCancel }) {
           console.error("Dog photo cleanup failed:", cleanupError);
         }
       }
-    } catch (err) {
-      setUploadError("Foto-Upload fehlgeschlagen. Bitte prüfe ob der Bucket 'dog-photos' in Supabase angelegt ist.");
-      console.error("Dog photo upload error:", err);
+    } catch (error) {
+      setUploadError("Das Foto konnte gerade nicht hochgeladen werden. Bitte versuche es noch einmal.");
+      console.error("Dog photo upload error:", error);
     } finally {
       setUploading(false);
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setSaving(true);
     try {
       await onSave(formData);
@@ -58,7 +61,6 @@ export default function DogForm({ dog, onSave, onCancel }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Photo upload */}
       <div className="flex flex-col items-center gap-2">
         <div className="relative">
           <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-stone-100">
@@ -67,10 +69,13 @@ export default function DogForm({ dog, onSave, onCancel }) {
                 src={formData.photo_url}
                 alt={formData.name || "Hund"}
                 className="w-full h-full object-cover"
-                onError={(e) => { e.target.onerror = null; e.target.src = `https://api.dicebear.com/7.x/thumbs/svg?seed=${formData.name}&backgroundColor=f5f5f4`; }}
+                onError={(event) => {
+                  event.target.onerror = null;
+                  event.target.src = `https://api.dicebear.com/7.x/thumbs/svg?seed=${formData.name}&backgroundColor=f5f5f4`;
+                }}
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-4xl">🐕</div>
+              <div className="w-full h-full flex items-center justify-center text-4xl">Hund</div>
             )}
           </div>
           <label className="absolute bottom-0 right-0 p-2 bg-slate-800 text-white rounded-full cursor-pointer hover:bg-slate-900 transition-colors shadow-lg">
@@ -95,7 +100,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
           <Input
             id="name"
             value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            onChange={(event) => setFormData({ ...formData, name: event.target.value })}
             placeholder="z.B. Luna"
             required
           />
@@ -106,7 +111,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
           <Input
             id="breed"
             value={formData.breed}
-            onChange={(e) => setFormData({ ...formData, breed: e.target.value })}
+            onChange={(event) => setFormData({ ...formData, breed: event.target.value })}
             placeholder="z.B. Border Collie oder Mischling"
           />
         </div>
@@ -117,7 +122,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
             id="birth_date"
             type="date"
             value={formData.birth_date}
-            onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
+            onChange={(event) => setFormData({ ...formData, birth_date: event.target.value })}
           />
         </div>
 
@@ -126,7 +131,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
           <Input
             id="character"
             value={formData.character}
-            onChange={(e) => setFormData({ ...formData, character: e.target.value })}
+            onChange={(event) => setFormData({ ...formData, character: event.target.value })}
             placeholder="z.B. verspielt, ruhig, aktiv..."
           />
         </div>
@@ -136,8 +141,8 @@ export default function DogForm({ dog, onSave, onCancel }) {
           <Input
             id="favorite_food"
             value={formData.favorite_food}
-            onChange={(e) => setFormData({ ...formData, favorite_food: e.target.value })}
-            placeholder="z.B. Leberwurst, Käse..."
+            onChange={(event) => setFormData({ ...formData, favorite_food: event.target.value })}
+            placeholder="z.B. Leberwurst, Kaese..."
           />
         </div>
       </div>
@@ -147,7 +152,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
         <Textarea
           id="notes"
           value={formData.notes}
-          onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+          onChange={(event) => setFormData({ ...formData, notes: event.target.value })}
           placeholder="z.B. Pragser Wildsee Rundweg, Drei Zinnen..."
           rows={3}
         />
@@ -167,7 +172,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
           {saving ? (
             <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Speichern...</>
           ) : (
-            dog ? "Aktualisieren" : "Hund hinzufügen"
+            dog ? "Aktualisieren" : "Hund hinzufuegen"
           )}
         </Button>
       </div>
