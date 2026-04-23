@@ -496,6 +496,8 @@ export default function AddJournalEntry() {
         : createJournalEntry(user.id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["journal", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["admin_pending"] });
+      queryClient.invalidateQueries({ queryKey: ["allHikes"] });
       toast.success(editId ? "Eintrag aktualisiert" : "Wanderung gespeichert!");
       navigate(createPageUrl("Journal"));
     },
