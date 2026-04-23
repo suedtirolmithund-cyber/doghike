@@ -195,8 +195,7 @@ export default function Friends() {
       if (results.length === 0) {
         toast.info("Keine Nutzer gefunden. Falls die Person neu registriert ist, muss sie sich einmal ab- und wieder anmelden.");
       }
-    } catch (err) {
-      console.error("[searchProfiles] error:", err);
+    } catch {
       toast.error("Die Suche konnte gerade nicht ausgeführt werden. Bitte versuche es noch einmal.");
     } finally {
       setSearching(false);
