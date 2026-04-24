@@ -295,15 +295,15 @@ export default function Friends() {
                           </Button>
                         ) : isIncomingPending ? (
                           <span className="text-xs text-amber-600 font-medium flex items-center gap-1">
-                            <Clock className="w-3.5 h-3.5" /> Hat dir angefragt
+                            <Clock className="w-3.5 h-3.5" /> Offene Anfrage
                           </span>
                         ) : isOutgoingPending ? (
                           <span className="text-xs text-amber-600 font-medium flex items-center gap-1">
-                            <Clock className="w-3.5 h-3.5" /> Anfrage gesendet
+                            <Clock className="w-3.5 h-3.5" /> Gesendet
                           </span>
                         ) : (
                           <span className="text-xs text-brand-400 font-medium flex items-center gap-1">
-                            <Check className="w-3.5 h-3.5" /> Befreundet
+                            <Check className="w-3.5 h-3.5" /> Freund
                           </span>
                         )}
                       </div>
@@ -324,7 +324,7 @@ export default function Friends() {
               Freunde ({accepted.length})
             </TabsTrigger>
             <TabsTrigger value="requests" className="flex-1 relative">
-              Anfragen
+              Offene Anfragen
               {incoming.length > 0 && (
                 <span className="ml-1.5 bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5 py-0.5">
                   {incoming.length}
@@ -335,7 +335,7 @@ export default function Friends() {
               Gesendet ({outgoing.length})
             </TabsTrigger>
             <TabsTrigger value="feed" className="flex-1">
-              Feed
+              Touren von Freunden
             </TabsTrigger>
           </TabsList>
 
@@ -460,7 +460,7 @@ export default function Friends() {
             ) : feedEntries.length === 0 ? (
               <div className="text-center py-16 bg-white rounded-2xl border border-stone-200/50">
                 <BookOpen className="w-12 h-12 text-stone-200 mx-auto mb-3" />
-                <p className="text-stone-600 font-medium mb-1">Noch nichts im Feed</p>
+                <p className="text-stone-600 font-medium mb-1">Noch keine Touren von Freunden</p>
                 <p className="text-stone-400 text-sm">Deine Freunde haben noch keine Wanderungen geteilt.</p>
               </div>
             ) : (

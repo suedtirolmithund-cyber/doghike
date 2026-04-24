@@ -108,8 +108,7 @@ async function loadNotifications(userId) {
       .from("journal_entries")
       .select("id, title, user_id, created_at")
       .in("user_id", friendIds)
-      .in("visibility", ["friends", "public"])
-      .in("status", ["approved", "draft"])
+      .or("and(visibility.eq.friends,status.in.(approved,draft)),and(visibility.eq.public,status.eq.approved)")
       .gte("created_at", since)
       .order("created_at", { ascending: false })
       .limit(5);
