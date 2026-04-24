@@ -155,6 +155,8 @@ export default function HikeDetail() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["journal", currentUser?.id] });
+      queryClient.invalidateQueries({ queryKey: ["allHikes"] });
+      queryClient.invalidateQueries({ queryKey: ["journalEntry"] });
       navigate(createPageUrl("Hikes"));
     },
   });
