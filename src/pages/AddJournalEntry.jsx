@@ -403,6 +403,15 @@ export default function AddJournalEntry() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const editId = searchParams.get("id");
+  const prefillPhotosRaw = searchParams.get("prefill_photos") || "[]";
+
+  let prefillPhotos = [];
+  try {
+    const parsedPhotos = JSON.parse(prefillPhotosRaw);
+    prefillPhotos = Array.isArray(parsedPhotos) ? parsedPhotos : [];
+  } catch {
+    prefillPhotos = [];
+  }
 
   // Pre-fill from route if navigated from RouteDetail
   const prefill = {
@@ -424,6 +433,9 @@ export default function AddJournalEntry() {
       .split(",")
       .map((value) => value.trim())
       .filter(Boolean),
+    photos: prefillPhotos,
+    gpx_url: searchParams.get("prefill_gpx") || "",
+    dog_id: searchParams.get("prefill_dog_id") || null,
   };
   const queryClient = useQueryClient();
 
@@ -446,6 +458,9 @@ export default function AddJournalEntry() {
       hazard_notes: prefill.hazard_notes || EMPTY_FORM.hazard_notes,
       rating: prefill.rating || EMPTY_FORM.rating,
       seasons: prefill.seasons.length > 0 ? prefill.seasons : EMPTY_FORM.seasons,
+      photos: prefill.photos.length > 0 ? prefill.photos : EMPTY_FORM.photos,
+      gpx_url: prefill.gpx_url || EMPTY_FORM.gpx_url,
+      dog_id: prefill.dog_id || EMPTY_FORM.dog_id,
     }),
   });
   const [photoUploading, setPhotoUploading] = useState(false);
