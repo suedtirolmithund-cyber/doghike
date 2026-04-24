@@ -295,15 +295,15 @@ export default function Friends() {
                           </Button>
                         ) : isIncomingPending ? (
                           <span className="text-xs text-amber-600 font-medium flex items-center gap-1">
-                            <Clock className="w-3.5 h-3.5" /> Hat dir angefragt
+                            <Clock className="w-3.5 h-3.5" /> Offene Anfrage
                           </span>
                         ) : isOutgoingPending ? (
                           <span className="text-xs text-amber-600 font-medium flex items-center gap-1">
-                            <Clock className="w-3.5 h-3.5" /> Anfrage gesendet
+                            <Clock className="w-3.5 h-3.5" /> Gesendet
                           </span>
                         ) : (
                           <span className="text-xs text-emerald-600 font-medium flex items-center gap-1">
-                            <Check className="w-3.5 h-3.5" /> Befreundet
+                            <Check className="w-3.5 h-3.5" /> Freunde
                           </span>
                         )}
                       </div>
@@ -335,7 +335,7 @@ export default function Friends() {
               Gesendet ({outgoing.length})
             </TabsTrigger>
             <TabsTrigger value="feed" className="flex-1">
-              Feed
+              Touren von Freunden
             </TabsTrigger>
           </TabsList>
 
@@ -428,7 +428,7 @@ export default function Friends() {
                       <div className="flex-1 min-w-0">
                         <ProfileName profile={profile} />
                         <p className="text-xs text-stone-400 flex items-center gap-1">
-                          <Clock className="w-3 h-3" /> Anfrage gesendet
+                          <Clock className="w-3 h-3" /> Gesendet
                         </p>
                       </div>
                       <Button size="sm" variant="ghost"
@@ -447,7 +447,7 @@ export default function Friends() {
               </div>
             )}
           </TabsContent>
-          {/* Feed */}
+          {/* Touren von Freunden */}
           <TabsContent value="feed">
             {feedLoading ? (
               <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 text-stone-400 animate-spin" /></div>
@@ -460,7 +460,7 @@ export default function Friends() {
             ) : feedEntries.length === 0 ? (
               <div className="text-center py-16 bg-white rounded-2xl border border-stone-200/50">
                 <BookOpen className="w-12 h-12 text-stone-200 mx-auto mb-3" />
-                <p className="text-stone-600 font-medium mb-1">Noch nichts im Feed</p>
+                <p className="text-stone-600 font-medium mb-1">Noch keine Touren von Freunden</p>
                 <p className="text-stone-400 text-sm">Deine Freunde haben noch keine Wanderungen geteilt.</p>
               </div>
             ) : (
