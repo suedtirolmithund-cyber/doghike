@@ -62,7 +62,7 @@ export default function SaveButton({ hikeId, hikeSource = "sheets", className })
       className={cn(
         "flex items-center gap-1.5 px-2 py-1 rounded-full transition-all",
         isSaved
-          ? "text-emerald-400 hover:text-emerald-300"
+          ? "text-brand-400 hover:text-brand-300"
           : "text-white/70 hover:text-white",
         isPending && "opacity-50 cursor-not-allowed",
         className
@@ -71,7 +71,7 @@ export default function SaveButton({ hikeId, hikeSource = "sheets", className })
       <Heart
         className={cn(
           "w-5 h-5 transition-all",
-          isSaved && "fill-emerald-400 text-emerald-400"
+          isSaved && "fill-brand-400 text-brand-400"
         )}
       />
     </button>

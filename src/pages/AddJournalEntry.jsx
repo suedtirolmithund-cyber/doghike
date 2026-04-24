@@ -59,7 +59,7 @@ function StarPicker({ label, value, onChange }) {
 // Berg-Picker (Schwierigkeit Mensch)
 function MountainPicker({ label, value, onChange }) {
   const [hover, setHover] = useState(0);
-  const colors = ["", "text-emerald-500", "text-green-500", "text-yellow-500", "text-orange-500", "text-red-600"];
+  const colors = ["", "text-brand-500", "text-brand-500", "text-yellow-500", "text-orange-500", "text-red-600"];
   const labels = ["", "Sehr leicht", "Leicht", "Mittel", "Schwer", "Sehr schwer"];
   const active = hover || value;
   return (
@@ -233,7 +233,7 @@ function LocationPicker({ lat, lng, onChange }) {
       <p className="text-xs text-stone-400">
         Tippe auf die Karte um den Startpunkt der Tour zu markieren
         {markerPos && (
-          <span className="ml-2 text-emerald-600 font-medium">
+          <span className="ml-2 text-brand-400 font-medium">
             Punkt gesetzt
           </span>
         )}
@@ -346,8 +346,8 @@ const VISIBILITY_OPTIONS = [
     emoji: "O",
     label: "Öffentlich",
     desc: "Wird an Admin zur Prüfung geschickt",
-    active: "border-emerald-400 bg-emerald-50 text-emerald-800",
-    idle: "border-stone-200 hover:border-emerald-300",
+    active: "border-brand-400 bg-brand-50 text-brand-700",
+    idle: "border-stone-200 hover:border-brand-300",
   },
 ];
 
@@ -403,39 +403,15 @@ export default function AddJournalEntry() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const editId = searchParams.get("id");
-  const prefillPhotosRaw = searchParams.get("prefill_photos") || "[]";
-
-  let prefillPhotos = [];
-  try {
-    const parsedPhotos = JSON.parse(prefillPhotosRaw);
-    prefillPhotos = Array.isArray(parsedPhotos) ? parsedPhotos : [];
-  } catch {
-    prefillPhotos = [];
-  }
 
   // Pre-fill from route if navigated from RouteDetail
   const prefill = {
     title: searchParams.get("prefill_title") || "",
-    date: searchParams.get("prefill_date") || "",
     location: searchParams.get("prefill_location") || "",
-    latitude: searchParams.get("prefill_latitude") || "",
-    longitude: searchParams.get("prefill_longitude") || "",
     distance_km: searchParams.get("prefill_distance") || "",
     elevation_m: searchParams.get("prefill_elevation") || "",
     duration_minutes: searchParams.get("prefill_duration") || "",
     description: searchParams.get("prefill_description") || "",
-    difficulty: Number(searchParams.get("prefill_difficulty") || 0),
-    dog_difficulty: Number(searchParams.get("prefill_dog_difficulty") || 0),
-    water_available: Number(searchParams.get("prefill_water") || 0),
-    hazard_notes: searchParams.get("prefill_hazard") || "",
-    rating: Number(searchParams.get("prefill_rating") || 0),
-    seasons: (searchParams.get("prefill_seasons") || "")
-      .split(",")
-      .map((value) => value.trim())
-      .filter(Boolean),
-    photos: prefillPhotos,
-    gpx_url: searchParams.get("prefill_gpx") || "",
-    dog_id: searchParams.get("prefill_dog_id") || null,
   };
   const queryClient = useQueryClient();
 
@@ -444,23 +420,11 @@ export default function AddJournalEntry() {
     // Apply prefill from route params (only when not editing existing entry)
     ...(editId ? {} : {
       title: prefill.title || EMPTY_FORM.title,
-      date: prefill.date || EMPTY_FORM.date,
       location: prefill.location || EMPTY_FORM.location,
-      latitude: prefill.latitude || EMPTY_FORM.latitude,
-      longitude: prefill.longitude || EMPTY_FORM.longitude,
       distance_km: prefill.distance_km || EMPTY_FORM.distance_km,
       elevation_m: prefill.elevation_m || EMPTY_FORM.elevation_m,
       duration_minutes: prefill.duration_minutes || EMPTY_FORM.duration_minutes,
       description: prefill.description || EMPTY_FORM.description,
-      difficulty: prefill.difficulty || EMPTY_FORM.difficulty,
-      dog_difficulty: prefill.dog_difficulty || EMPTY_FORM.dog_difficulty,
-      water_available: prefill.water_available || EMPTY_FORM.water_available,
-      hazard_notes: prefill.hazard_notes || EMPTY_FORM.hazard_notes,
-      rating: prefill.rating || EMPTY_FORM.rating,
-      seasons: prefill.seasons.length > 0 ? prefill.seasons : EMPTY_FORM.seasons,
-      photos: prefill.photos.length > 0 ? prefill.photos : EMPTY_FORM.photos,
-      gpx_url: prefill.gpx_url || EMPTY_FORM.gpx_url,
-      dog_id: prefill.dog_id || EMPTY_FORM.dog_id,
     }),
   });
   const [photoUploading, setPhotoUploading] = useState(false);
@@ -625,7 +589,7 @@ export default function AddJournalEntry() {
         <div className="text-center">
           <p className="text-stone-500 mb-4">Bitte zuerst anmelden.</p>
           <Link to={createPageUrl("Login")}>
-            <Button className="bg-emerald-600 hover:bg-emerald-700">Anmelden</Button>
+            <Button className="bg-brand-400 hover:bg-brand-600">Anmelden</Button>
           </Link>
         </div>
       </div>
@@ -641,7 +605,7 @@ export default function AddJournalEntry() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-emerald-50/10 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/10 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
 
         {/* Header */}
@@ -753,7 +717,7 @@ export default function AddJournalEntry() {
                 type="checkbox"
                 checked={form.dog_suitable}
                 onChange={(e) => set("dog_suitable", e.target.checked)}
-                className="w-5 h-5 rounded accent-emerald-600 cursor-pointer"
+                className="w-5 h-5 rounded accent-brand-400 cursor-pointer"
               />
             </div>
 
@@ -784,8 +748,8 @@ export default function AddJournalEntry() {
                       onClick={() => set("dog_id", dog.id)}
                       className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 text-sm transition-all focus:outline-none ${
                         form.dog_id === dog.id
-                          ? "border-emerald-400 bg-emerald-50 text-emerald-800 font-medium"
-                          : "border-stone-200 text-stone-600 hover:border-emerald-300"
+                          ? "border-brand-400 bg-brand-50 text-brand-700 font-medium"
+                          : "border-stone-200 text-stone-600 hover:border-brand-300"
                       }`}
                     >
                       <div className="w-6 h-6 rounded-full overflow-hidden bg-stone-100 shrink-0">
@@ -841,7 +805,7 @@ export default function AddJournalEntry() {
               </div>
             )}
 
-            <label className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-stone-300 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50/30 transition-colors">
+            <label className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-stone-300 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
               <input type="file" accept="image/*" multiple onChange={handlePhotoUpload} className="hidden" disabled={photoUploading} />
               {photoUploading ? (
                 <><Loader2 className="w-6 h-6 text-stone-400 animate-spin" /><span className="text-sm text-stone-400">Lade hoch...</span></>
@@ -858,15 +822,15 @@ export default function AddJournalEntry() {
             </h2>
 
             {form.gpx_url ? (
-              <div className="flex items-center gap-3 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
-                <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span className="text-sm text-emerald-700 flex-1 truncate">GPX-Datei gespeichert</span>
+              <div className="flex items-center gap-3 p-3 bg-brand-50 border border-brand-200 rounded-lg">
+                <MapPin className="w-4 h-4 text-brand-400 shrink-0" />
+                <span className="text-sm text-brand-600 flex-1 truncate">GPX-Datei gespeichert</span>
                 <button type="button" onClick={() => set("gpx_url", "")} className="text-stone-400 hover:text-red-500">
                   <X className="w-4 h-4" />
                 </button>
               </div>
             ) : (
-              <label className="flex items-center gap-3 p-4 border-2 border-dashed border-stone-300 rounded-xl cursor-pointer hover:border-emerald-400 hover:bg-emerald-50/30 transition-colors">
+              <label className="flex items-center gap-3 p-4 border-2 border-dashed border-stone-300 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
                 <input type="file" accept=".gpx" onChange={handleGpxUpload} className="hidden" disabled={gpxUploading} />
                 {gpxUploading ? (
                   <><Loader2 className="w-5 h-5 text-stone-400 animate-spin" /><span className="text-sm text-stone-400">Lade hoch...</span></>
@@ -918,7 +882,7 @@ export default function AddJournalEntry() {
                   type="checkbox"
                   checked={photoConsent}
                   onChange={(e) => setPhotoConsent(e.target.checked)}
-                  className="mt-1 w-4 h-4 rounded accent-emerald-600 shrink-0 cursor-pointer"
+                  className="mt-1 w-4 h-4 rounded accent-brand-400 shrink-0 cursor-pointer"
                 />
                 <span className="text-sm text-amber-800 leading-relaxed">
                   <strong>Einverständnis Fotos:</strong> Ich bestätige, dass ich die Nutzungsrechte
@@ -942,7 +906,7 @@ export default function AddJournalEntry() {
                 saveMutation.isPending ||
                 (form.photos.length > 0 && form.visibility !== "private" && !photoConsent)
               }
-              className="bg-emerald-600 hover:bg-emerald-700 px-8"
+              className="bg-brand-400 hover:bg-brand-600 px-8"
             >
               {saveMutation.isPending ? (
                 <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Speichern...</>

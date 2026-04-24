@@ -335,7 +335,7 @@ export default function GPSTracker({ onSave }) {
       {/* Controls */}
       <div className="flex gap-2 justify-center flex-wrap">
         {!isTracking ? (
-          <Button onClick={startTracking} className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto">
+          <Button onClick={startTracking} className="bg-brand-400 hover:bg-brand-600 text-white w-full sm:w-auto">
             <Play className="w-4 h-4 mr-2" />
             Aufzeichnung starten
           </Button>

@@ -48,7 +48,7 @@ export default function ExpandableText({
         <button
           type="button"
           onClick={() => setExpanded((v) => !v)}
-          className="mt-2 flex items-center gap-1 text-xs font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
+          className="mt-2 flex items-center gap-1 text-xs font-medium text-brand-400 hover:text-brand-600 transition-colors"
         >
           {expanded ? (
             <>

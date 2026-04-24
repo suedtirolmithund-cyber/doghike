@@ -190,7 +190,7 @@ function ElevationChart({ profile }) {
           <Mountain className="w-3.5 h-3.5" /> Höhenprofil
         </h4>
         <div className="flex gap-3 text-xs text-stone-500">
-          <span className="text-emerald-600 font-medium">↑ {gain} m</span>
+          <span className="text-brand-400 font-medium">↑ {gain} m</span>
           <span className="text-red-500 font-medium">↓ {loss} m</span>
           <span>{minEle}–{maxEle} m</span>
         </div>
@@ -465,7 +465,7 @@ function SmartRoutePlanner({ onRouteReady }) {
           {waypoints.map((wp, i) => (
             <div key={i} className="flex items-center gap-2 text-xs bg-stone-50 rounded-lg px-2 py-1.5 group">
               <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-white text-[10px] shrink-0 ${
-                i === 0 ? "bg-emerald-600" : i === waypoints.length - 1 && waypoints.length > 1 ? "bg-red-600" : "bg-slate-700"
+                i === 0 ? "bg-brand-400" : i === waypoints.length - 1 && waypoints.length > 1 ? "bg-red-600" : "bg-slate-700"
               }`}>
                 {i === 0 ? "S" : i === waypoints.length - 1 && waypoints.length > 1 ? "Z" : wp.label}
               </span>
@@ -506,12 +506,12 @@ function SmartRoutePlanner({ onRouteReady }) {
             </p>
             <p className="text-xs text-slate-500">ca. Zeit</p>
           </div>
-          <div className="bg-emerald-50 rounded-xl p-3 text-center border border-emerald-100">
-            <TrendingUp className="w-4 h-4 text-emerald-600 mx-auto mb-1" />
-            <p className="text-lg font-bold text-emerald-800">
+          <div className="bg-brand-50 rounded-xl p-3 text-center border border-brand-100">
+            <TrendingUp className="w-4 h-4 text-brand-400 mx-auto mb-1" />
+            <p className="text-lg font-bold text-brand-700">
               {elevation.length ? `+${calcElevationGain(elevation).gain} m` : "–"}
             </p>
-            <p className="text-xs text-emerald-600">Aufstieg</p>
+            <p className="text-xs text-brand-400">Aufstieg</p>
           </div>
         </div>
       )}
@@ -534,8 +534,10 @@ export default function RoutePlanner() {
   const [routeGeometry, setRouteGeometry] = useState(null);
   const [routeData, setRouteData] = useState({
     name: "",
+    description: "",
     start_location: "",
     notes: "",
+    is_shared: false, // shared with friends (never truly public)
   });
 
   const navigate = useNavigate();
@@ -560,11 +562,11 @@ export default function RoutePlanner() {
     }
     await createRouteMutation.mutateAsync({
       name: routeData.name,
+      description: routeData.description,
       start_location: routeData.start_location,
-      notes: routeData.notes,
       route_type: activeTab === "track" ? "recorded" : activeTab === "gpx" ? "gpx" : "planned",
       waypoints: routeGeometry.positions ?? routeGeometry.coordinates ?? [],
-      is_public: false,
+      is_public: routeData.is_shared,
       distance_km: routeGeometry.distance_km,
       elevation_gain_m: routeGeometry.elevation_gain_m || null,
       duration_minutes: routeGeometry.duration_minutes || null,
@@ -577,7 +579,7 @@ export default function RoutePlanner() {
         <div className="text-center">
           <p className="text-xl text-stone-700 mb-4">Bitte melde dich an, um Routen zu planen</p>
           <Link to={createPageUrl("Login")}>
-            <Button className="bg-emerald-600 hover:bg-emerald-700">Anmelden</Button>
+            <Button className="bg-brand-400 hover:bg-brand-600">Anmelden</Button>
           </Link>
         </div>
       </div>
@@ -590,8 +592,8 @@ export default function RoutePlanner() {
         <Link to={createPageUrl("Profile")}>
           <Button variant="ghost" className="mb-3 md:mb-4" size="sm">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            <span className="hidden sm:inline">Zur�ck zum Profil</span>
-            <span className="sm:hidden">Zur�ck</span>
+            <span className="hidden sm:inline">Zurück zum Profil</span>
+            <span className="sm:hidden">Zurück</span>
           </Button>
         </Link>
 
@@ -659,15 +661,30 @@ export default function RoutePlanner() {
                   className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="notes">Notizen</Label>
-                <Textarea id="notes" placeholder="Notizen zu deiner geplanten Route..."
-                  value={routeData.notes} onChange={(e) => setRouteData({ ...routeData, notes: e.target.value })}
+                <Label htmlFor="description">Beschreibung</Label>
+                <Textarea id="description" placeholder="Beschreibe deine Route..."
+                  value={routeData.description} onChange={(e) => setRouteData({ ...routeData, description: e.target.value })}
                   rows={2} className="mt-1" />
               </div>
 
-              <div className="rounded-xl border border-stone-200 bg-stone-50 p-3 text-sm text-stone-600">
-                Geplante Routen bleiben immer privat. Freunde oder �ffentlich stellst du erst sp�ter ein,
-                wenn du die Route als erledigte Wanderung eintr�gst.
+              {/* Visibility: always private or shared with friends only */}
+              <div className="flex gap-2">
+                {[
+                  { value: false, label: "🔒 Privat", desc: "Nur ich" },
+                  { value: true,  label: "👥 Freunde", desc: "Mit Freunden teilen" },
+                ].map(({ value, label, desc }) => (
+                  <button key={String(value)} type="button"
+                    onClick={() => setRouteData({ ...routeData, is_shared: value })}
+                    className={`flex-1 p-3 rounded-xl border-2 text-sm font-medium transition-all text-center ${
+                      routeData.is_shared === value
+                        ? "border-slate-700 bg-slate-50 text-slate-800"
+                        : "border-stone-200 text-stone-500 hover:border-stone-300"
+                    }`}
+                  >
+                    <div>{label}</div>
+                    <div className="text-xs font-normal text-stone-400 mt-0.5">{desc}</div>
+                  </button>
+                ))}
               </div>
 
               <div className="flex gap-2 justify-end">

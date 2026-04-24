@@ -39,7 +39,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
         </div>
 
         {route.is_public && (
-          <div className="absolute top-3 right-3 z-[1000] bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+          <div className="absolute top-3 right-3 z-[1000] bg-brand-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
             <Eye className="w-3 h-3" />
             Öffentlich
           </div>

@@ -215,7 +215,7 @@ export default function Profile() {
               Melde dich an, um deine Hunde zu verwalten und dein Profil zu pflegen.
             </p>
             <Link to={createPageUrl("Login")}>
-              <Button className="bg-emerald-600 hover:bg-emerald-700 w-full mb-3">
+              <Button className="bg-brand-400 hover:bg-brand-600 w-full mb-3">
                 <LogIn className="w-4 h-4 mr-2" />
                 Anmelden / Registrieren
               </Button>
@@ -245,7 +245,7 @@ export default function Profile() {
                   <img src={avatarUrl} alt={displayName} className="w-full h-full object-cover" />
                 )}
               </div>
-              <label className="absolute bottom-0 right-0 p-1.5 bg-emerald-600 text-white rounded-full cursor-pointer hover:bg-emerald-700 shadow">
+              <label className="absolute bottom-0 right-0 p-1.5 bg-brand-400 text-white rounded-full cursor-pointer hover:bg-brand-600 shadow">
                 <input type="file" accept="image/*" onChange={handleAvatarUpload} className="hidden" disabled={avatarUploading} />
                 <Camera className="w-3.5 h-3.5" />
               </label>
@@ -275,7 +275,7 @@ export default function Profile() {
                   <div className="flex gap-2 pt-1">
                     <Button
                       size="sm"
-                      className="h-7 bg-emerald-600 hover:bg-emerald-700"
+                      className="h-7 bg-brand-400 hover:bg-brand-600"
                       onClick={() => upsertProfileMutation.mutate(profileDraft)}
                       disabled={upsertProfileMutation.isPending}
                     >
@@ -330,7 +330,7 @@ export default function Profile() {
                 <Heart className="w-3.5 h-3.5" />
                 Gespeichert
                 {savedHikes.length > 0 && (
-                  <span className="bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full px-1.5 py-0.5 leading-none">
+                  <span className="bg-brand-100 text-brand-600 text-[10px] font-bold rounded-full px-1.5 py-0.5 leading-none">
                     {savedHikes.length}
                   </span>
                 )}
@@ -492,9 +492,9 @@ export default function Profile() {
 
                   return (
                     <div key={route.id} className="bg-white rounded-xl border border-stone-200/60 shadow-sm p-4 flex items-center gap-4">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${route.completed ? "bg-emerald-100" : "bg-blue-100"}`}>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${route.completed ? "bg-brand-100" : "bg-blue-100"}`}>
                         {route.completed
-                          ? <Route className="w-5 h-5 text-emerald-600" />
+                          ? <Route className="w-5 h-5 text-brand-400" />
                           : <Navigation className="w-5 h-5 text-blue-600" />}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -502,7 +502,7 @@ export default function Profile() {
                           <p className="font-semibold text-stone-800 truncate">{route.name}</p>
                           <span
                             className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${
-                              route.completed ? "bg-emerald-100 text-emerald-700" : "bg-blue-100 text-blue-700"
+                              route.completed ? "bg-brand-100 text-brand-600" : "bg-blue-100 text-blue-700"
                             }`}
                           >
                             {route.completed ? "Erledigt" : "Geplant"}
@@ -520,7 +520,7 @@ export default function Profile() {
                         </Link>
                         {route.completed && (
                           <Link to={`${createPageUrl("AddJournalEntry")}?${journalParams.toString()}`}>
-                            <Button size="sm" className="h-8 text-xs bg-emerald-600 hover:bg-emerald-700">
+                            <Button size="sm" className="h-8 text-xs bg-brand-400 hover:bg-brand-600">
                               <BookOpen className="w-3.5 h-3.5 mr-1" />
                               Eintragen
                             </Button>
@@ -549,7 +549,7 @@ export default function Profile() {
           <TabsContent value="saved">
             <div className="mb-4 md:mb-6">
               <h2 className="text-lg md:text-xl font-medium text-stone-800 mb-1 flex items-center gap-2">
-                <Heart className="w-5 h-5 text-emerald-600" />
+                <Heart className="w-5 h-5 text-brand-400" />
                 Gespeicherte Touren
               </h2>
               <p className="text-stone-500 text-sm">Touren die du mit dem Herz-Button markiert hast</p>
@@ -573,7 +573,7 @@ export default function Profile() {
                   Tippe das Herz bei einer Tour an, um sie hier zu speichern!
                 </p>
                 <Link to={createPageUrl("Hikes")}>
-                  <Button className="bg-emerald-600 hover:bg-emerald-700">
+                  <Button className="bg-brand-400 hover:bg-brand-600">
                     <Mountain className="w-4 h-4 mr-2" />
                     Touren entdecken
                   </Button>
@@ -610,6 +610,3 @@ export default function Profile() {
     </div>
   );
 }
-
-
-

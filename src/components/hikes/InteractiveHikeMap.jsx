@@ -77,7 +77,7 @@ export default function InteractiveHikeMap({ latitude, longitude, routeCoordinat
         <Marker position={center} icon={startIcon}>
           <Popup>
             <div className="text-center">
-              <p className="font-semibold text-green-700">Ausgangspunkt</p>
+              <p className="font-semibold text-brand-600">Ausgangspunkt</p>
               <p className="text-sm text-stone-600">{trailName}</p>
               {location && <p className="text-xs text-stone-500 mt-1">{location}</p>}
             </div>

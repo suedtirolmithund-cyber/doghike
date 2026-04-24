@@ -35,7 +35,7 @@ import PremiumGate from "@/components/hikes/PremiumGate";
 import { supabase } from "@/lib/supabaseClient";
 
 const difficultyColors = {
-  "1": "bg-emerald-100 text-emerald-700",
+  "1": "bg-brand-100 text-brand-600",
   "2": "bg-lime-100 text-lime-700",
   "3": "bg-amber-100 text-amber-700",
   "4": "bg-orange-100 text-orange-700",
@@ -47,7 +47,7 @@ const seasonConfig = {
   summer: { emoji: "☀️", label: "Sommer", color: "bg-red-100 text-red-700" },
   autumn: { emoji: "🍂", label: "Herbst", color: "bg-orange-100 text-orange-700" },
   winter: { emoji: "❄️", label: "Winter", color: "bg-blue-100 text-blue-700" },
-  all_year: { emoji: "🍃", label: "Ganzjährig", color: "bg-green-100 text-green-700" }
+  all_year: { emoji: "🍃", label: "Ganzjährig", color: "bg-brand-100 text-brand-600" }
 };
 
 const waterConfig = {
@@ -280,7 +280,7 @@ export default function HikeDetail() {
                 className="flex items-center gap-1 px-2 py-1 rounded-full text-white/70 hover:text-white transition-all"
               >
                 {copied
-                  ? <Check className="w-5 h-5 text-emerald-400" />
+                  ? <Check className="w-5 h-5 text-brand-400" />
                   : <Share2 className="w-5 h-5" />}
               </button>
               {hike.country && (

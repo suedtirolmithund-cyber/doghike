@@ -7,7 +7,7 @@ import { createPageUrl } from "@/utils";
 import ExpandableText from "@/components/ExpandableText";
 
 const difficultyColors = {
-  "1": "bg-emerald-100 text-emerald-700 border-emerald-200",
+  "1": "bg-brand-100 text-brand-600 border-brand-200",
   "2": "bg-lime-100 text-lime-700 border-lime-200",
   "3": "bg-amber-100 text-amber-700 border-amber-200",
   "4": "bg-orange-100 text-orange-700 border-orange-200",

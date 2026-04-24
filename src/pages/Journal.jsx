@@ -37,14 +37,14 @@ import { useAuth } from "@/lib/AuthContext";
 import { getJournalEntriesForDisplay, deleteJournalEntry } from "@/lib/journalApi";
 
 const DIFFICULTY_LABEL = ["", "Sehr leicht", "Leicht", "Mittel", "Schwer", "Sehr schwer"];
-const DIFFICULTY_COLOR = ["", "text-emerald-600", "text-green-600", "text-yellow-600", "text-orange-600", "text-red-600"];
+const DIFFICULTY_COLOR = ["", "text-brand-400", "text-brand-400", "text-yellow-600", "text-orange-600", "text-red-600"];
 const PAGE_SIZE = 20;
 
 function VisibilityStatusBadge({ visibility, status }) {
   if (visibility === "public") {
     if (status === "approved") {
       return (
-        <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200">
+        <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-brand-100 text-brand-600 border border-brand-200">
           Öffentlich sichtbar
         </span>
       );
@@ -143,19 +143,19 @@ export default function Journal() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 to-emerald-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 to-brand-50/20 flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-2xl p-8 border border-stone-200/50 shadow-lg text-center max-w-md w-full"
         >
-          <BookOpen className="w-12 h-12 text-emerald-600 mx-auto mb-4" />
+          <BookOpen className="w-12 h-12 text-brand-400 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-stone-800 mb-2">Wandertagebuch</h2>
           <p className="text-stone-500 mb-6 text-sm">
             Melde dich an, um deine persönlichen Wandererlebnisse festzuhalten.
           </p>
           <Link to={createPageUrl("Login")}>
-            <Button className="bg-emerald-600 hover:bg-emerald-700 w-full">
+            <Button className="bg-brand-400 hover:bg-brand-600 w-full">
               <LogIn className="w-4 h-4 mr-2" /> Anmelden
             </Button>
           </Link>
@@ -165,7 +165,7 @@ export default function Journal() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-emerald-50/10 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/10 pb-24 md:pb-8">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
         <motion.div
           initial={{ opacity: 0, y: -16 }}
@@ -174,13 +174,13 @@ export default function Journal() {
         >
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-stone-800 flex items-center gap-2">
-              <BookOpen className="w-7 h-7 text-emerald-600" />
+              <BookOpen className="w-7 h-7 text-brand-400" />
               Wandertagebuch
             </h1>
             <p className="text-stone-500 text-sm mt-0.5">Deine persönlichen Wandererlebnisse</p>
           </div>
           <Link to={createPageUrl("AddJournalEntry")}>
-            <Button className="bg-emerald-600 hover:bg-emerald-700 shrink-0">
+            <Button className="bg-brand-400 hover:bg-brand-600 shrink-0">
               <Plus className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Neue Wanderung</span>
               <span className="sm:hidden">Neu</span>
@@ -196,7 +196,7 @@ export default function Journal() {
             className="grid grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8"
           >
             {[
-              { icon: Mountain, value: entries.length, label: "Wanderungen", color: "text-emerald-600" },
+              { icon: Mountain, value: entries.length, label: "Wanderungen", color: "text-brand-400" },
               { icon: Ruler, value: `${totalDistance.toFixed(0)} km`, label: "Gesamt", color: "text-blue-600" },
               { icon: TrendingUp, value: `${Math.round(totalElevation).toLocaleString()} Hm`, label: "Aufstieg", color: "text-orange-600" },
             ].map(({ icon: Icon, value, label, color }) => (
@@ -288,7 +288,7 @@ export default function Journal() {
 
                         <div className="flex flex-wrap gap-1.5 mb-2">
                           {entry.dog_suitable && (
-                            <Badge variant="secondary" className="text-xs bg-emerald-50 text-emerald-700 border-emerald-200">
+                            <Badge variant="secondary" className="text-xs bg-brand-50 text-brand-600 border-brand-200">
                               Hundefreundlich
                             </Badge>
                           )}
@@ -354,7 +354,7 @@ export default function Journal() {
               <div className="text-center pt-2">
                 <button
                   onClick={() => setVisible((value) => value + PAGE_SIZE)}
-                  className="text-sm text-emerald-600 hover:text-emerald-700 font-medium px-4 py-2 rounded-xl hover:bg-emerald-50 transition-colors"
+                  className="text-sm text-brand-400 hover:text-brand-600 font-medium px-4 py-2 rounded-xl hover:bg-brand-50 transition-colors"
                 >
                   {filtered.length - visible} weitere Einträge laden
                 </button>
@@ -373,7 +373,7 @@ export default function Journal() {
               Halte deine Wanderungen fest - mit Fotos, Daten und persönlichen Notizen.
             </p>
             <Link to={createPageUrl("AddJournalEntry")}>
-              <Button className="bg-emerald-600 hover:bg-emerald-700">
+              <Button className="bg-brand-400 hover:bg-brand-600">
                 <Plus className="w-4 h-4 mr-2" /> Erste Wanderung eintragen
               </Button>
             </Link>

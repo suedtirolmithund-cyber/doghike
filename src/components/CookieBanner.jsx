@@ -41,8 +41,8 @@ export default function CookieBanner() {
         >
           <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl border border-stone-200 p-5 md:p-6">
             <div className="flex items-start gap-3 mb-4">
-              <div className="bg-emerald-100 rounded-xl p-2 shrink-0">
-                <Cookie className="w-5 h-5 text-emerald-700" />
+              <div className="bg-brand-100 rounded-xl p-2 shrink-0">
+                <Cookie className="w-5 h-5 text-brand-600" />
               </div>
               <div>
                 <h3 className="font-semibold text-stone-800 text-sm mb-1">
@@ -55,7 +55,7 @@ export default function CookieBanner() {
                   EU-Servern (Frankfurt) gespeichert.{" "}
                   <Link
                     to={createPageUrl("Datenschutz")}
-                    className="text-emerald-600 hover:underline"
+                    className="text-brand-400 hover:underline"
                   >
                     Mehr erfahren
                   </Link>
@@ -66,7 +66,7 @@ export default function CookieBanner() {
             <div className="flex flex-col sm:flex-row gap-2">
               <Button
                 onClick={accept}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white h-10 text-sm"
+                className="flex-1 bg-brand-400 hover:bg-brand-600 text-white h-10 text-sm"
               >
                 Verstanden & akzeptieren
               </Button>

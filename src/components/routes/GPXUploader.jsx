@@ -174,12 +174,12 @@ export default function GPXUploader({ onSave }) {
       {gpxData && (
         <>
           {/* File info */}
-          <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3">
+          <div className="flex items-center justify-between bg-brand-50 border border-brand-200 rounded-lg p-3">
             <div className="flex items-center gap-2">
-              <FileText className="w-5 h-5 text-green-600" />
+              <FileText className="w-5 h-5 text-brand-400" />
               <div>
                 <p className="text-sm font-medium text-green-800">{fileName}</p>
-                <p className="text-xs text-green-600">{gpxData.coordinates.length} Wegpunkte geladen</p>
+                <p className="text-xs text-brand-400">{gpxData.coordinates.length} Wegpunkte geladen</p>
               </div>
             </div>
             <Button variant="ghost" size="sm" onClick={handleClear} className="text-stone-500 hover:text-red-600">
@@ -194,7 +194,7 @@ export default function GPXUploader({ onSave }) {
               <p className="text-2xl font-bold">{gpxData.distance_km}</p>
               <p className="text-xs opacity-70">km Distanz</p>
             </div>
-            <div className="bg-emerald-700 text-white rounded-xl p-4 text-center">
+            <div className="bg-brand-600 text-white rounded-xl p-4 text-center">
               <TrendingUp className="w-5 h-5 mx-auto mb-1 opacity-70" />
               <p className="text-2xl font-bold">+{gpxData.elevation_gain_m}</p>
               <p className="text-xs opacity-70">m Aufstieg</p>

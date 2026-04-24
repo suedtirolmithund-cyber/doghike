@@ -381,8 +381,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         </div>
 
         {formData.latitude && formData.longitude && (
-          <div className="p-3 bg-white rounded-lg border border-green-200">
-            <p className="text-sm text-green-700 font-medium mb-1">
+          <div className="p-3 bg-white rounded-lg border border-brand-200">
+            <p className="text-sm text-brand-600 font-medium mb-1">
               ✓ Ausgangspunkt gesetzt
             </p>
             <p className="text-xs text-stone-600">
@@ -445,8 +445,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         </div>
 
         {formData.route_coordinates?.length > 0 && (
-          <div className="p-3 bg-white rounded-lg border border-green-200">
-            <p className="text-sm text-green-700 font-medium">
+          <div className="p-3 bg-white rounded-lg border border-brand-200">
+            <p className="text-sm text-brand-600 font-medium">
               ✓ Route mit {formData.route_coordinates.length} Wegpunkten
             </p>
           </div>

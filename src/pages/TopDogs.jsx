@@ -178,7 +178,7 @@ function RankRow({ entry, rank, metric, isMyDog }) {
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: (rank - 4) * 0.04 }}
       className={`flex items-center gap-3 p-3 rounded-xl border ${
-        isMyDog ? "border-emerald-300 bg-emerald-50/60 shadow-sm" : "border-stone-200 bg-white"
+        isMyDog ? "border-brand-300 bg-brand-50/60 shadow-sm" : "border-stone-200 bg-white"
       }`}
     >
       {/* Rang */}
@@ -195,7 +195,7 @@ function RankRow({ entry, rank, metric, isMyDog }) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5 flex-wrap">
           <p className="font-semibold text-stone-800 text-sm truncate">{entry.dog.name}</p>
-          {isMyDog && <span className="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full font-medium shrink-0">Dein Hund</span>}
+          {isMyDog && <span className="text-[10px] bg-brand-100 text-brand-600 px-1.5 py-0.5 rounded-full font-medium shrink-0">Dein Hund</span>}
         </div>
         {entry.dog.breed && <p className="text-xs text-stone-400 truncate">{entry.dog.breed}</p>}
         {/* Badges */}
@@ -233,7 +233,7 @@ function MyDogCard({ entry, rank, metric }) {
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mt-4 p-4 rounded-2xl border-2 border-emerald-300 bg-emerald-50 flex items-center gap-4"
+      className="mt-4 p-4 rounded-2xl border-2 border-brand-300 bg-brand-50 flex items-center gap-4"
     >
       <img src={dogPhoto(entry.dog)} alt={entry.dog.name}
         className="w-12 h-12 rounded-full object-cover border-2 border-white shadow" />
@@ -242,7 +242,7 @@ function MyDogCard({ entry, rank, metric }) {
         <p className="text-xs text-stone-500">Aktuell Platz <strong>#{rank}</strong> in dieser Kategorie</p>
       </div>
       <div className="text-right shrink-0">
-        <p className="text-lg font-extrabold text-emerald-700">
+        <p className="text-lg font-extrabold text-brand-600">
           {metric === "tours"     && entry.tourCount}
           {metric === "distance"  && entry.totalDistance}
           {metric === "elevation" && entry.totalElevation.toLocaleString()}
@@ -266,7 +266,7 @@ function CommunityStats({ rows }) {
       {[
         { icon: Dog,       value: rows.length, label: "Hunde", color: "bg-amber-50 text-amber-700 border-amber-200" },
         { icon: Ruler,     value: `${totalKm.toFixed(0)} km`, label: "gesamt", color: "bg-blue-50 text-blue-700 border-blue-200" },
-        { icon: TrendingUp,value: `${(totalHm/1000).toFixed(1)}k`, label: "Höhenmeter", color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+        { icon: TrendingUp,value: `${(totalHm/1000).toFixed(1)}k`, label: "Höhenmeter", color: "bg-brand-50 text-brand-600 border-brand-200" },
       ].map(({ icon: Icon, value, label, color }) => (
         <div key={label} className={`rounded-xl border p-3 text-center ${color}`}>
           <Icon className="w-4 h-4 mx-auto mb-1 opacity-70" />

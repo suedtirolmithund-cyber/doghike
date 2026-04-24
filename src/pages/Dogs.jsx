@@ -121,7 +121,7 @@ export default function Dogs() {
           <div className="text-6xl mb-4">Hund</div>
           <p className="text-stone-600 mb-4">Bitte melde dich an, um deine Hunde zu verwalten.</p>
           <Link to={createPageUrl("Login")}>
-            <Button className="bg-emerald-600 hover:bg-emerald-700">
+            <Button className="bg-brand-400 hover:bg-brand-600">
               <LogIn className="w-4 h-4 mr-2" /> Anmelden
             </Button>
           </Link>

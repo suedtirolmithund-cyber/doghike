@@ -78,7 +78,7 @@ async function loadNotifications(userId) {
       color: pending
         ? "text-amber-600 bg-amber-50 border-amber-200"
         : approved
-          ? "text-emerald-600 bg-emerald-50 border-emerald-200"
+          ? "text-brand-400 bg-brand-50 border-brand-200"
           : "text-red-600 bg-red-50 border-red-200",
       title: pending
         ? `"${entry.title}" wartet auf die Admin-Prüfung`
@@ -165,7 +165,7 @@ export default function Notifications() {
         <div className="text-center">
           <Bell className="w-12 h-12 text-stone-300 mx-auto mb-3" />
           <p className="text-stone-600 font-medium mb-4">Bitte anmelden</p>
-          <Link to={createPageUrl("Login")} className="text-emerald-600 underline text-sm">
+          <Link to={createPageUrl("Login")} className="text-brand-400 underline text-sm">
             Zur Anmeldung
           </Link>
         </div>
@@ -192,17 +192,17 @@ export default function Notifications() {
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-5 flex items-center gap-3"
+            className="bg-brand-50 border border-brand-200 rounded-2xl p-4 mb-5 flex items-center gap-3"
           >
-            <Bell className="w-5 h-5 text-emerald-600 shrink-0" />
+            <Bell className="w-5 h-5 text-brand-400 shrink-0" />
             <div className="flex-1">
-              <p className="text-sm font-medium text-emerald-800">Push-Benachrichtigungen aktivieren</p>
-              <p className="text-xs text-emerald-600">Erhalte Benachrichtigungen bei neuen Freundschaftsanfragen.</p>
+              <p className="text-sm font-medium text-brand-700">Push-Benachrichtigungen aktivieren</p>
+              <p className="text-xs text-brand-400">Erhalte Benachrichtigungen bei neuen Freundschaftsanfragen.</p>
             </div>
             <Button
               size="sm"
               onClick={handleActivate}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white shrink-0"
+              className="bg-brand-400 hover:bg-brand-600 text-white shrink-0"
             >
               Aktivieren
             </Button>

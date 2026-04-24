@@ -27,19 +27,19 @@ L.Icon.Default.mergeOptions({
 });
 
 const DIFFICULTY_LABEL = { 1: "Leicht", 2: "Mittel-leicht", 3: "Mittel", 4: "Anspruchsvoll", 5: "Schwer" };
-const DIFFICULTY_COLOR = { 1: "text-green-600", 2: "text-lime-600", 3: "text-yellow-600", 4: "text-orange-600", 5: "text-red-600" };
+const DIFFICULTY_COLOR = { 1: "text-brand-400", 2: "text-lime-600", 3: "text-yellow-600", 4: "text-orange-600", 5: "text-red-600" };
 const SEASON_LABEL = { spring: "🌸 Frühling", summer: "☀️ Sommer", autumn: "🍂 Herbst", winter: "❄️ Winter" };
 const WATER_LABEL = ["", "💧 Wenig Wasser", "💧💧 Etwas Wasser", "💧💧💧 Viel Wasser"];
 const VISIBILITY_INFO = {
   private: { icon: Lock,  label: "Privat",       color: "text-stone-500" },
   friends: { icon: Users, label: "Freunde",       color: "text-blue-600"  },
-  public:  { icon: Globe, label: "Öffentlich",    color: "text-emerald-600" },
+  public:  { icon: Globe, label: "Öffentlich",    color: "text-brand-400" },
 };
 
 function PublicStatusBadge({ status, rejectionReason }) {
   if (status === "approved") {
     return (
-      <Badge className="bg-emerald-100 text-emerald-700 border border-emerald-200 hover:bg-emerald-100">
+      <Badge className="bg-brand-100 text-brand-600 border border-brand-200 hover:bg-brand-100">
         Öffentlich sichtbar
       </Badge>
     );
@@ -160,7 +160,7 @@ export default function JournalDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-emerald-50/10 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/10 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-8">
 
         {/* Back button */}
@@ -224,7 +224,7 @@ export default function JournalDetail() {
                 </span>
               )}
               {entry.elevation_m && (
-                <span className="flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
+                <span className="flex items-center gap-1 text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full">
                   <TrendingUp className="w-3.5 h-3.5" /> +{entry.elevation_m} Hm
                 </span>
               )}
@@ -299,7 +299,7 @@ export default function JournalDetail() {
             {entry.dog_suitable && (
               <div className="flex items-center gap-2">
                 <span className="text-xs text-stone-500 w-28">Hundefreundlich</span>
-                <span className="text-sm text-emerald-600 font-medium">🐕 Ja</span>
+                <span className="text-sm text-brand-400 font-medium">🐕 Ja</span>
               </div>
             )}
             {entry.hazard_notes && (

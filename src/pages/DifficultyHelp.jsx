@@ -5,8 +5,8 @@ const humanLevels = [
   {
     level: "T1",
     stufe: "Stufe 1",
-    color: "bg-green-100 border-green-300 text-green-800",
-    badge: "bg-green-500",
+    color: "bg-brand-100 border-green-300 text-green-800",
+    badge: "bg-brand-500",
     title: "Wanderweg",
     desc: "Gut markierter Weg, keine Schwierigkeiten. Geeignet für jeden, auch ohne Wandererfahrung.",
     examples: "Flache Waldwege, Almwiesen, Rundwege im Tal",
@@ -62,8 +62,8 @@ const humanLevels = [
 const dogLevels = [
   {
     stufe: "Stufe 1",
-    color: "bg-green-100 border-green-300 text-green-800",
-    badge: "bg-green-500",
+    color: "bg-brand-100 border-green-300 text-green-800",
+    badge: "bg-brand-500",
     title: "Ideal für jeden Hund",
     desc: "Breite, befestigte Wege ohne nennenswerte Hindernisse. Kein Absturzrisiko.",
     examples: "Feldwege, Waldpfade, flache Rundwege",

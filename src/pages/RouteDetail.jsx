@@ -23,7 +23,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ArrowLeft, Map, Route, Clock, Navigation, Eye, EyeOff, Trash2, TrendingUp, CheckCircle2, Star, Upload, X, Loader2, Pencil, BookOpen } from "lucide-react";
+import { ArrowLeft, Map, Route, Clock, Navigation, Eye, EyeOff, Trash2, TrendingUp, CheckCircle2, Star, Lock, Users, Upload, X, Loader2, Pencil, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import ExpandableText from "@/components/ExpandableText";
@@ -51,6 +51,7 @@ export default function RouteDetail() {
     completed_duration_minutes: "",
     completed_notes: "",
     completed_rating: 0,
+    completed_visibility: "private",
     difficulty: "",
     dog_difficulty: "",
     season: "",
@@ -154,35 +155,21 @@ export default function RouteDetail() {
 
   const isOwner = user?.id === route.user_id;
   const RouteIcon = route.route_type === "recorded" ? Navigation : Map;
-  const routeStartPoint = Array.isArray(route.waypoints) && route.waypoints.length > 0 ? route.waypoints[0] : null;
-  const selectedDogId = completeData.dogs.length === 1 ? completeData.dogs[0] : "";
 
   // Build URL to pre-fill AddJournalEntry from route data
   const journalParams = new URLSearchParams({
     prefill_title: route.name || "",
-    prefill_date: completeData.completed_date || route.completed_date || "",
     prefill_location: route.start_location || "",
-    prefill_latitude: routeStartPoint?.[0] ?? "",
-    prefill_longitude: routeStartPoint?.[1] ?? "",
     prefill_distance: route.distance_km ?? "",
     prefill_elevation: route.elevation_gain_m ?? "",
-    prefill_duration: completeData.completed_duration_minutes || route.completed_duration_minutes || route.duration_minutes || "",
-    prefill_difficulty: completeData.difficulty || "",
-    prefill_dog_difficulty: completeData.dog_difficulty || "",
-    prefill_water: completeData.water_availability || "",
-    prefill_hazard: completeData.hazard_notes || "",
-    prefill_rating: completeData.completed_rating || route.completed_rating || "",
-    prefill_seasons: completeData.season || "",
-    prefill_photos: JSON.stringify(completeData.photos || []),
-    prefill_gpx: route.gpx_url || "",
-    prefill_dog_id: selectedDogId,
+    prefill_duration: route.duration_minutes || "",
     prefill_description: [
-      completeData.completed_notes,
       route.completed_notes,
-      route.notes,
       route.description,
+      route.notes,
     ].filter(Boolean).join("\n\n"),
   });
+  const journalUrl = createPageUrl("AddJournalEntry") + "?" + journalParams.toString();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
@@ -190,7 +177,7 @@ export default function RouteDetail() {
         <Link to={createPageUrl("Profile")}>
           <Button variant="ghost" className="mb-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück
+            ZurÃ¼ck
           </Button>
         </Link>
 
@@ -219,14 +206,12 @@ export default function RouteDetail() {
 
               {isOwner && (
                 <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
-                  {route.completed && (
-                    <Link to={journalUrl}>
-                      <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white">
-                        <BookOpen className="w-4 h-4 mr-1.5" />
-                        Als Wanderung eintragen
-                      </Button>
-                    </Link>
-                  )}
+                  <Link to={journalUrl}>
+                    <Button size="sm" className="bg-brand-400 hover:bg-brand-600 text-white">
+                      <BookOpen className="w-4 h-4 mr-1.5" />
+                      Als Wanderung eintragen
+                    </Button>
+                  </Link>
                   <Link to={createPageUrl("EditRoute") + `?id=${routeId}`}>
                     <Button size="sm" variant="outline">
                       <Pencil className="w-4 h-4 mr-1.5" />
@@ -266,15 +251,10 @@ export default function RouteDetail() {
             </div>
 
             <div className="flex items-center gap-2 text-sm">
-              {route.route_type === "planned" ? (
-                <span className="flex items-center gap-1 text-stone-500">
-                  <EyeOff className="w-4 h-4" />
-                  Private Planung
-                </span>
-              ) : route.is_public ? (
-                <span className="flex items-center gap-1 text-green-600">
+              {route.is_public ? (
+                <span className="flex items-center gap-1 text-brand-400">
                   <Eye className="w-4 h-4" />
-                  Öffentlich
+                  Ã–ffentlich
                 </span>
               ) : (
                 <span className="flex items-center gap-1 text-stone-500">
@@ -423,11 +403,11 @@ export default function RouteDetail() {
             >
               {route.completed ? (
                 <div className="flex items-center gap-3">
-                  <div className="bg-green-100 rounded-full p-2">
-                    <CheckCircle2 className="w-6 h-6 text-green-600" />
+                  <div className="bg-brand-100 rounded-full p-2">
+                    <CheckCircle2 className="w-6 h-6 text-brand-400" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-semibold text-green-700">Tour erledigt! ðŸŽ‰</p>
+                    <p className="font-semibold text-brand-600">Tour erledigt! ðŸŽ‰</p>
                     {route.completed_date && (
                       <p className="text-sm text-stone-500">Am {format(new Date(route.completed_date), "dd.MM.yyyy")}</p>
                     )}
@@ -466,7 +446,7 @@ export default function RouteDetail() {
                   </div>
                   <Button
                     onClick={() => setShowCompleteForm(true)}
-                    className="bg-green-600 hover:bg-green-700 text-white"
+                    className="bg-brand-400 hover:bg-brand-600 text-white"
                   >
                     <CheckCircle2 className="w-4 h-4 mr-2" />
                     Als erledigt markieren
@@ -674,6 +654,31 @@ export default function RouteDetail() {
                       </div>
 
                       {/* Visibility */}
+                      <div>
+                        <label className="text-sm font-medium text-stone-700 mb-2 block">Sichtbarkeit</label>
+                        <div className="flex gap-2">
+                          {[
+                            { value: "private", label: "Privat", icon: Lock },
+                            { value: "friends", label: "Freunde", icon: Users },
+                            { value: "public", label: "Ã–ffentlich", icon: Eye },
+                          ].map(({ value, label, icon: Icon }) => (
+                            <button
+                              key={value}
+                              type="button"
+                              onClick={() => setCompleteData({ ...completeData, completed_visibility: value })}
+                              className={`flex-1 flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all text-sm font-medium ${
+                                completeData.completed_visibility === value
+                                  ? "border-slate-800 bg-slate-50 text-slate-800"
+                                  : "border-stone-200 text-stone-500 hover:border-stone-300"
+                              }`}
+                            >
+                              <Icon className="w-4 h-4" />
+                              {label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
                       <div className="flex gap-2 pt-2">
                         <Button variant="outline" onClick={() => setShowCompleteForm(false)} className="flex-1">
                           Abbrechen
@@ -688,12 +693,12 @@ export default function RouteDetail() {
                               completeData.hazard_notes ? `âš ï¸ ${completeData.hazard_notes}` : null,
                             ].filter(Boolean).join("\n\n") || null,
                             completed_rating: completeData.completed_rating || null,
-                            completed_duration_minutes: completeData.completed_duration_minutes
+                            duration_minutes: completeData.completed_duration_minutes
                               ? Number(completeData.completed_duration_minutes)
                               : undefined,
                           })}
                           disabled={completeRouteMutation.isPending}
-                          className="flex-1 bg-green-600 hover:bg-green-700"
+                          className="flex-1 bg-brand-400 hover:bg-brand-600"
                         >
                           <CheckCircle2 className="w-4 h-4 mr-2" />
                           Speichern
@@ -727,17 +732,19 @@ export default function RouteDetail() {
               <div className="text-center mb-5">
                 <div className="text-4xl mb-3">ðŸŽ‰</div>
                 <h3 className="text-lg font-semibold text-stone-800">Tour erledigt!</h3>
-                <p className="text-stone-500 text-sm mt-2">Möchtest du jetzt direkt einen Tagebucheintrag für diese Wanderung erstellen?</p>`r`n                <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-3">Zusatzangaben wie Fotos, Wasser, Jahreszeit, Bewertung und Hinweise werden nur übernommen, wenn du den Tagebucheintrag jetzt direkt erstellst.</p>
+                <p className="text-stone-500 text-sm mt-2">
+                  MÃ¶chtest du einen Tagebucheintrag fÃ¼r diese Wanderung erstellen?
+                </p>
               </div>
               <div className="flex flex-col gap-2">
                 <Link to={journalUrl} onClick={() => setShowJournalDialog(false)}>
-                  <Button className="w-full bg-emerald-600 hover:bg-emerald-700">
+                  <Button className="w-full bg-brand-400 hover:bg-brand-600">
                     <CheckCircle2 className="w-4 h-4 mr-2" />
-                    Jetzt Tagebucheintrag erstellen
+                    Ja, Tagebucheintrag erstellen
                   </Button>
                 </Link>
                 <Button variant="outline" onClick={() => setShowJournalDialog(false)} className="w-full">
-                  Später ohne Übernahme
+                  Nein, spÃ¤ter vielleicht
                 </Button>
               </div>
             </motion.div>
@@ -747,8 +754,3 @@ export default function RouteDetail() {
     </div>
   );
 }
-
-
-
-
-

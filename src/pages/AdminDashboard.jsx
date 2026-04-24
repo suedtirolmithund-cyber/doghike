@@ -165,7 +165,7 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
             <Button
               onClick={() => onApprove(entry.id)}
               disabled={approving || rejecting}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+              className="bg-brand-400 hover:bg-brand-600 text-white"
               size="sm"
             >
               {approving ? (
@@ -272,7 +272,7 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
               size="sm"
               onClick={() => onApprove(comment.id)}
               disabled={approving || deleting}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+              className="bg-brand-400 hover:bg-brand-600 text-white"
             >
               {approving ? (
                 <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
@@ -414,7 +414,7 @@ export default function AdminDashboard() {
           <ShieldCheck className="w-12 h-12 text-stone-300 mx-auto mb-4" />
           <p className="text-stone-600 font-medium">Bitte zuerst anmelden.</p>
           <Link to={createPageUrl("Login")}>
-            <Button className="mt-4 bg-emerald-600 hover:bg-emerald-700">Anmelden</Button>
+            <Button className="mt-4 bg-brand-400 hover:bg-brand-600">Anmelden</Button>
           </Link>
         </div>
       </div>
@@ -488,7 +488,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
               {entries.length === 0 && (
-                <p className="text-sm text-emerald-600 font-medium ml-auto">Alles erledigt</p>
+                <p className="text-sm text-brand-400 font-medium ml-auto">Alles erledigt</p>
               )}
             </div>
 
@@ -498,7 +498,7 @@ export default function AdminDashboard() {
               </div>
             ) : entries.length === 0 ? (
               <div className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
-                <CheckCircle2 className="w-14 h-14 text-emerald-400 mx-auto mb-4" />
+                <CheckCircle2 className="w-14 h-14 text-brand-400 mx-auto mb-4" />
                 <h3 className="text-xl font-medium text-stone-700 mb-2">Keine offenen Einträge</h3>
                 <p className="text-stone-500 text-sm">Alle Einträge wurden geprüft.</p>
               </div>
@@ -543,7 +543,7 @@ export default function AdminDashboard() {
               </div>
             ) : comments.length === 0 ? (
               <div className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
-                <CheckCircle2 className="w-14 h-14 text-emerald-400 mx-auto mb-4" />
+                <CheckCircle2 className="w-14 h-14 text-brand-400 mx-auto mb-4" />
                 <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Kommentare</h3>
               </div>
             ) : (

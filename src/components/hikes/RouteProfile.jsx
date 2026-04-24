@@ -26,7 +26,7 @@ function formatPace(paceMinPerKm) {
 
 function getIntensity(distKm, elevM) {
   const score = (distKm || 0) * 1.5 + (elevM || 0) * 0.02;
-  if (score < 10) return { label: "Leicht", icon: "🟢", bg: "bg-emerald-50 border-emerald-200 text-emerald-800" };
+  if (score < 10) return { label: "Leicht", icon: "🟢", bg: "bg-brand-50 border-brand-200 text-brand-700" };
   if (score < 22) return { label: "Mittel", icon: "🟡", bg: "bg-amber-50 border-amber-200 text-amber-800" };
   if (score < 40) return { label: "Anspruchsvoll", icon: "🟠", bg: "bg-orange-50 border-orange-200 text-orange-800" };
   return { label: "Sehr schwer", icon: "🔴", bg: "bg-red-50 border-red-200 text-red-800" };
@@ -93,8 +93,8 @@ export default function RouteProfile({ hike }) {
           </div>
         )}
         {hike.duration_minutes && (
-          <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 border border-green-200">
-            <div className="flex items-center gap-1.5 text-green-600 mb-1">
+          <div className="bg-gradient-to-br from-brand-50 to-brand-100 rounded-xl p-4 border border-brand-200">
+            <div className="flex items-center gap-1.5 text-brand-400 mb-1">
               <Clock className="w-4 h-4" />
               <span className="text-xs font-medium">Gehzeit</span>
             </div>

@@ -214,7 +214,7 @@ export default function AGB() {
               </h2>
               <div className="bg-slate-800 text-white rounded-xl p-4 text-sm">
                 <p className="font-semibold mb-1">Betreiberin: Julia Schwärzer</p>
-                <p className="text-slate-300">E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-emerald-400 underline">suedtirolmithund@gmail.com</a></p>
+                <p className="text-slate-300">E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-brand-400 underline">suedtirolmithund@gmail.com</a></p>
                 <p className="text-slate-300 mt-1">Antwort innerhalb von 30 Werktagen.</p>
               </div>
             </section>
