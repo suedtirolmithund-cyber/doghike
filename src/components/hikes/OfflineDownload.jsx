@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Download, Loader2, Check, FileDown } from "lucide-react";
+import { Loader2, Check, FileDown } from "lucide-react";
 import { toast } from "sonner";
-import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { format } from "date-fns";
 
@@ -28,6 +27,23 @@ const waterLabels = {
   moderate: "Etwas Wasser",
   plenty: "Viel Wasser"
 };
+
+async function loadImageAsDataUrl(src) {
+  if (!src) return null;
+
+  const response = await fetch(src);
+  if (!response.ok) {
+    throw new Error("Bild konnte nicht geladen werden");
+  }
+
+  const blob = await response.blob();
+  return await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
 
 export default function OfflineDownload({ hike, dogs = [] }) {
   const [downloading, setDownloading] = useState(false);
@@ -60,8 +76,22 @@ export default function OfflineDownload({ hike, dogs = [] }) {
 
       const pdf = new jsPDF("p", "mm", "a4");
       const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
       const margin = 15;
       let yPosition = margin;
+      const coverPhoto = hike.photos?.[0] || null;
+
+      if (coverPhoto) {
+        try {
+          const imgData = await loadImageAsDataUrl(coverPhoto);
+          const imgWidth = pageWidth - 2 * margin;
+          const imgHeight = 70;
+          pdf.addImage(imgData, "JPEG", margin, yPosition, imgWidth, imgHeight);
+          yPosition += imgHeight + 10;
+        } catch (error) {
+          console.error("Fehler beim Laden des Titelbilds:", error);
+        }
+      }
 
       // Title
       pdf.setFontSize(20);
@@ -93,7 +123,7 @@ export default function OfflineDownload({ hike, dogs = [] }) {
         pdf.text(`Strecke: ${hike.distance_km} km`, margin + 5, yPosition);
       }
       if (hike.elevation_gain_m) {
-        pdf.text(`Hoehenmeter: ${hike.elevation_gain_m} m`, pageWidth / 2, yPosition);
+        pdf.text(`Höhenmeter: ${hike.elevation_gain_m} m`, pageWidth / 2, yPosition);
       }
       yPosition += 6;
       
@@ -121,41 +151,10 @@ export default function OfflineDownload({ hike, dogs = [] }) {
         yPosition += 8;
       }
 
-      // Capture map if exists
-      const mapElement = document.querySelector('.leaflet-container');
-      if (mapElement) {
-        try {
-          const canvas = await html2canvas(mapElement, {
-            useCORS: true,
-            allowTaint: true,
-            backgroundColor: "#f5f5f5"
-          });
-          
-          const imgData = canvas.toDataURL("image/jpeg", 0.8);
-          const imgWidth = pageWidth - 2 * margin;
-          const imgHeight = (canvas.height * imgWidth) / canvas.width;
-          
-          // Add new page if needed
-          if (yPosition + imgHeight > pdf.internal.pageSize.getHeight() - margin) {
-            pdf.addPage();
-            yPosition = margin;
-          }
-          
-          pdf.setFont("helvetica", "bold");
-          pdf.setFontSize(12);
-          pdf.text("Karte:", margin, yPosition);
-          yPosition += 7;
-          
-          pdf.addImage(imgData, "JPEG", margin, yPosition, imgWidth, Math.min(imgHeight, 100));
-          yPosition += Math.min(imgHeight, 100) + 10;
-        } catch (error) {
-          console.error("Fehler beim Erfassen der Karte:", error);
-        }
+      if (yPosition > pageHeight - 80) {
+        pdf.addPage();
+        yPosition = margin;
       }
-
-      // Add new page for details
-      pdf.addPage();
-      yPosition = margin;
 
       // Parking Info
       if (hike.parking_info) {
@@ -173,13 +172,13 @@ export default function OfflineDownload({ hike, dogs = [] }) {
 
       // Restaurant Info
       if (hike.restaurant_info) {
-        if (yPosition > 250) {
+        if (yPosition > pageHeight - 35) {
           pdf.addPage();
           yPosition = margin;
         }
         pdf.setFont("helvetica", "bold");
         pdf.setFontSize(12);
-        pdf.text("Einkehrmoeglichkeiten:", margin, yPosition);
+        pdf.text("Einkehrmöglichkeiten:", margin, yPosition);
         yPosition += 7;
         
         pdf.setFont("helvetica", "normal");
@@ -191,7 +190,7 @@ export default function OfflineDownload({ hike, dogs = [] }) {
 
       // Hazard Notes
       if (hike.hazard_notes) {
-        if (yPosition > 250) {
+        if (yPosition > pageHeight - 35) {
           pdf.addPage();
           yPosition = margin;
         }
@@ -209,7 +208,7 @@ export default function OfflineDownload({ hike, dogs = [] }) {
 
       // Notes
       if (hike.notes) {
-        if (yPosition > 250) {
+        if (yPosition > pageHeight - 35) {
           pdf.addPage();
           yPosition = margin;
         }
@@ -227,7 +226,7 @@ export default function OfflineDownload({ hike, dogs = [] }) {
 
       // Dogs
       if (dogs.length > 0) {
-        if (yPosition > 260) {
+        if (yPosition > pageHeight - 25) {
           pdf.addPage();
           yPosition = margin;
         }
@@ -248,9 +247,9 @@ export default function OfflineDownload({ hike, dogs = [] }) {
       pdf.setFontSize(8);
       pdf.setTextColor(128, 128, 128);
       pdf.text(
-        `Erstellt am ${format(new Date(), "dd.MM.yyyy HH:mm")} - Suedtirol mit Hund`,
+        `Erstellt am ${format(new Date(), "dd.MM.yyyy HH:mm")} - Südtirol mit Hund`,
         margin,
-        pdf.internal.pageSize.getHeight() - 10
+        pageHeight - 10
       );
 
       // Save PDF
