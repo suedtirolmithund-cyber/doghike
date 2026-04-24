@@ -92,7 +92,11 @@ export default function HikeDetail() {
       }
 
       throw new Error("clipboard_unavailable");
-    } catch {
+    } catch (error) {
+      if (error?.name === "AbortError") {
+        return;
+      }
+
       toast.error("Der Link konnte gerade nicht geteilt oder kopiert werden. Bitte versuche es noch einmal.");
     }
   };
