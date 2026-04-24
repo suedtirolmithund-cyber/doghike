@@ -154,21 +154,35 @@ export default function RouteDetail() {
 
   const isOwner = user?.id === route.user_id;
   const RouteIcon = route.route_type === "recorded" ? Navigation : Map;
+  const routeStartPoint = Array.isArray(route.waypoints) && route.waypoints.length > 0 ? route.waypoints[0] : null;
+  const selectedDogId = completeData.dogs.length === 1 ? completeData.dogs[0] : "";
 
   // Build URL to pre-fill AddJournalEntry from route data
   const journalParams = new URLSearchParams({
     prefill_title: route.name || "",
+    prefill_date: completeData.completed_date || route.completed_date || "",
     prefill_location: route.start_location || "",
+    prefill_latitude: routeStartPoint?.[0] ?? "",
+    prefill_longitude: routeStartPoint?.[1] ?? "",
     prefill_distance: route.distance_km ?? "",
     prefill_elevation: route.elevation_gain_m ?? "",
-    prefill_duration: route.duration_minutes || "",
+    prefill_duration: completeData.completed_duration_minutes || route.completed_duration_minutes || route.duration_minutes || "",
+    prefill_difficulty: completeData.difficulty || "",
+    prefill_dog_difficulty: completeData.dog_difficulty || "",
+    prefill_water: completeData.water_availability || "",
+    prefill_hazard: completeData.hazard_notes || "",
+    prefill_rating: completeData.completed_rating || route.completed_rating || "",
+    prefill_seasons: completeData.season || "",
+    prefill_photos: JSON.stringify(completeData.photos || []),
+    prefill_gpx: route.gpx_url || "",
+    prefill_dog_id: selectedDogId,
     prefill_description: [
+      completeData.completed_notes,
       route.completed_notes,
       route.notes,
       route.description,
     ].filter(Boolean).join("\n\n"),
   });
-  const journalUrl = createPageUrl("AddJournalEntry") + "?" + journalParams.toString();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
