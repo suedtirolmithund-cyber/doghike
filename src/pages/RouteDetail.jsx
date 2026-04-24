@@ -219,12 +219,14 @@ export default function RouteDetail() {
 
               {isOwner && (
                 <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
-                  <Link to={journalUrl}>
-                    <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white">
-                      <BookOpen className="w-4 h-4 mr-1.5" />
-                      Als Wanderung eintragen
-                    </Button>
-                  </Link>
+                  {route.completed && (
+                    <Link to={journalUrl}>
+                      <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                        <BookOpen className="w-4 h-4 mr-1.5" />
+                        Als Wanderung eintragen
+                      </Button>
+                    </Link>
+                  )}
                   <Link to={createPageUrl("EditRoute") + `?id=${routeId}`}>
                     <Button size="sm" variant="outline">
                       <Pencil className="w-4 h-4 mr-1.5" />
