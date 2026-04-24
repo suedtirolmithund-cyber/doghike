@@ -296,10 +296,10 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
 
       <p className="text-sm text-stone-700 mt-3 whitespace-pre-wrap">{comment.text}</p>
 
-      {comment.photo_url && (
-        <a href={comment.photo_url} target="_blank" rel="noopener noreferrer">
+      {comment.photo_preview_url && (
+        <a href={comment.photo_preview_url} target="_blank" rel="noopener noreferrer">
           <img
-            src={comment.photo_url}
+            src={comment.photo_preview_url}
             alt=""
             className="mt-2 h-32 rounded-lg object-cover hover:opacity-90"
           />

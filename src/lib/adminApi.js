@@ -86,7 +86,36 @@ export async function getAllComments() {
   const profileMap = Object.fromEntries(
     (profiles ?? []).map((p) => [p.user_id, p])
   );
-  return data.map((c) => ({ ...c, profiles: profileMap[c.user_id] ?? null }));
+
+  const commentsWithPreview = await Promise.all(
+    data.map(async (comment) => {
+      const storageDescriptor = getStorageDescriptor(comment.photo_url);
+
+      if (storageDescriptor?.bucket === "comments-pending") {
+        const { data: signedUrlData, error: signedUrlError } = await supabase.storage
+          .from("comments-pending")
+          .createSignedUrl(storageDescriptor.path, 60 * 60);
+
+        if (signedUrlError) {
+          console.error("[getAllComments] pending photo preview failed:", signedUrlError.message);
+        }
+
+        return {
+          ...comment,
+          photo_preview_url: signedUrlData?.signedUrl ?? null,
+          profiles: profileMap[comment.user_id] ?? null,
+        };
+      }
+
+      return {
+        ...comment,
+        photo_preview_url: comment.photo_url ?? null,
+        profiles: profileMap[comment.user_id] ?? null,
+      };
+    })
+  );
+
+  return commentsWithPreview;
 }
 
 export async function approveComment(id) {

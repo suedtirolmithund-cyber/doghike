@@ -113,7 +113,7 @@ function BonePicker({ label, value, onChange }) {
             }`}
             title={labels[s]}
           >
-            Bone
+            🦴
           </button>
         ))}
         {value > 0 && (
