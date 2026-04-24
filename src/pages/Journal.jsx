@@ -307,45 +307,46 @@ export default function Journal() {
                         {entry.description && (
                           <p className="text-xs text-stone-500 line-clamp-2">{entry.description}</p>
                         )}
-
-                        <div className="flex gap-2 mt-3" onClick={(event) => event.stopPropagation()}>
-                          <Link to={`${createPageUrl("AddJournalEntry")}?id=${entry.id}`}>
-                            <Button size="sm" variant="outline" className="h-7 text-xs">
-                              Bearbeiten
-                            </Button>
-                          </Link>
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                className="h-7 text-xs text-red-500 hover:text-red-600 hover:bg-red-50"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>Eintrag löschen?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  "{entry.title}" wird dauerhaft gelöscht. Das kann nicht rückgängig gemacht werden.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Abbrechen</AlertDialogCancel>
-                                <AlertDialogAction
-                                  onClick={() => deleteMutation.mutate(entry.id)}
-                                  className="bg-red-600 hover:bg-red-700"
-                                >
-                                  Löschen
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </div>
                       </div>
                     </div>
                   </Link>
+                  <div className="px-4 md:px-5 pb-4 md:pb-5">
+                    <div className="flex gap-2 mt-3">
+                      <Link to={`${createPageUrl("AddJournalEntry")}?id=${entry.id}`}>
+                        <Button size="sm" variant="outline" className="h-7 text-xs">
+                          Bearbeiten
+                        </Button>
+                      </Link>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-7 text-xs text-red-500 hover:text-red-600 hover:bg-red-50"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Eintrag löschen?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              "{entry.title}" wird dauerhaft gelöscht. Das kann nicht rückgängig gemacht werden.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => deleteMutation.mutate(entry.id)}
+                              className="bg-red-600 hover:bg-red-700"
+                            >
+                              Löschen
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </div>
                 </motion.div>
               ))}
             </AnimatePresence>
