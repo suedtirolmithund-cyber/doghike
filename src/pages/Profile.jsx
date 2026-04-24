@@ -108,6 +108,9 @@ export default function Profile() {
     mutationFn: (updates) => upsertProfile(user.id, updates),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["friendProfiles"] });
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+      queryClient.invalidateQueries({ queryKey: ["comments"] });
       setEditingProfile(false);
       toast.success("Profil gespeichert");
     },
@@ -167,6 +170,9 @@ export default function Profile() {
       }
 
       queryClient.invalidateQueries({ queryKey: ["profile", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["friendProfiles"] });
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+      queryClient.invalidateQueries({ queryKey: ["comments"] });
       toast.success("Profilbild aktualisiert");
     } catch {
       toast.error("Dein Profilbild konnte gerade nicht hochgeladen werden. Bitte versuche es noch einmal.");
