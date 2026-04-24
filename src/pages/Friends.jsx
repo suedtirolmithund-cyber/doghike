@@ -46,7 +46,7 @@ function FeedCard({ entry }) {
           </span>
         </div>
         <h3 className="font-semibold text-stone-800 mb-1">{entry.title}</h3>
-        {entry.location && <p className="text-xs text-stone-500 mb-2">Ã°Å¸â€œÂ {entry.location}</p>}
+        {entry.location && <p className="text-xs text-stone-500 mb-2">Ort: {entry.location}</p>}
         <div className="flex flex-wrap gap-3 text-xs text-stone-500 mb-2">
           {entry.distance_km && <span className="flex items-center gap-1"><Ruler className="w-3 h-3" />{entry.distance_km} km</span>}
           {entry.elevation_m && <span className="flex items-center gap-1"><TrendingUp className="w-3 h-3" />{entry.elevation_m} Hm</span>}
@@ -55,7 +55,7 @@ function FeedCard({ entry }) {
         {entry.description && <p className="text-sm text-stone-500 line-clamp-2">{entry.description}</p>}
         {entry.dog_suitable && (
           <Badge variant="secondary" className="mt-2 text-xs bg-emerald-50 text-emerald-700 border-emerald-200">
-            Ã°Å¸Ââ€¢ Hundefreundlich
+            Hundefreundlich
           </Badge>
         )}
       </div>
@@ -165,7 +165,7 @@ export default function Friends() {
     mutationFn: acceptFriendRequest,
     onSuccess: () => {
       refreshFriendData();
-      toast.success("Freundschaft bestÃƒÂ¤tigt");
+      toast.success("Freundschaft bestätigt");
     },
   });
 
@@ -196,7 +196,7 @@ export default function Friends() {
         toast.info("Keine Nutzer gefunden. Falls die Person neu registriert ist, muss sie sich einmal ab- und wieder anmelden.");
       }
     } catch {
-      toast.error("Die Suche konnte gerade nicht ausgefÃƒÂ¼hrt werden. Bitte versuche es noch einmal.");
+      toast.error("Die Suche konnte gerade nicht ausgeführt werden. Bitte versuche es noch einmal.");
     } finally {
       setSearching(false);
     }
@@ -239,7 +239,7 @@ export default function Friends() {
             {accepted.length} Freund{accepted.length !== 1 ? "e" : ""}
             {incoming.length > 0 && (
               <span className="ml-2 inline-flex items-center gap-1 text-amber-600 font-medium">
-                Â· {incoming.length} offene Anfrage{incoming.length !== 1 ? "n" : ""}
+                · {incoming.length} offene Anfrage{incoming.length !== 1 ? "n" : ""}
               </span>
             )}
           </p>
