@@ -157,6 +157,7 @@ export default function RouteDetail() {
     mutationFn: (data) => updateRoute(routeId, { completed: true, ...data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["route", routeId] });
+      queryClient.invalidateQueries({ queryKey: ["userRoutes", user?.id] });
       setShowCompleteForm(false);
       setShowJournalDialog(true); // Prompt to create journal entry
     },
