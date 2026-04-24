@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// â”€â”€ Badge-Definitionen â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Badge-Definitionen
 const BADGE_DEFS = {
   champion:    { emoji: "🏆", label: "Champion",        desc: "Platz 1 im Ranking" },
   veteran:     { emoji: "🏅", label: "Veteran",         desc: "50+ Touren" },
@@ -32,9 +32,9 @@ function getBadges(s, isChampion) {
   return b;
 }
 
-// â”€â”€ Daten laden â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Daten laden
 async function loadLeaderboard() {
-  // 1. Alle Journal-EintrÃ¤ge mit dog_id (RLS filtert automatisch)
+  // 1. Alle Journal-Einträge mit dog_id (RLS filtert automatisch)
   const { data: entries, error: eErr } = await supabase
     .from("journal_entries")
     .select("dog_id, distance_km, elevation_m, rating, date")
@@ -98,7 +98,7 @@ async function loadLeaderboard() {
     .filter((r) => r.dog);
 }
 
-// â”€â”€ Hilfsfunktionen UI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Hilfsfunktionen UI
 const RANK_STYLE = [
   { ring: "ring-2 ring-yellow-400", bg: "bg-gradient-to-br from-yellow-50 to-amber-50", border: "border-yellow-300", medal: "🥇", num: "text-yellow-600" },
   { ring: "ring-2 ring-slate-400",  bg: "bg-gradient-to-br from-slate-50 to-stone-50",  border: "border-slate-300",  medal: "🥈", num: "text-slate-500"  },
@@ -109,7 +109,7 @@ function dogPhoto(dog) {
   return dog?.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog?.name ?? "dog"}&backgroundColor=f5f5f4`;
 }
 
-// â”€â”€ Podium (Top 3) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Podium (Top 3)
 function Podium({ top3, metric }) {
   if (!top3.length) return null;
   const order = [top3[1], top3[0], top3[2]]; // 2-1-3 Reihenfolge
@@ -167,7 +167,7 @@ function Podium({ top3, metric }) {
   );
 }
 
-// â”€â”€ Einzelner Rang-Eintrag â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Einzelner Rang-Eintrag
 function RankRow({ entry, rank, metric, isMyDog }) {
   const style  = RANK_STYLE[rank - 1];
   const badges = getBadges(entry, rank === 1);
@@ -226,7 +226,7 @@ function RankRow({ entry, rank, metric, isMyDog }) {
   );
 }
 
-// â”€â”€ Dein Hund â€“ falls nicht in Top 10 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Dein Hund - falls nicht in Top 10
 function MyDogCard({ entry, rank, metric }) {
   if (!entry) return null;
   return (
@@ -255,7 +255,7 @@ function MyDogCard({ entry, rank, metric }) {
   );
 }
 
-// â”€â”€ Community-Stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Community-Stats
 function CommunityStats({ rows }) {
   const totalTours = rows.reduce((s, r) => s + r.tourCount, 0);
   const totalKm    = rows.reduce((s, r) => s + r.totalDistance, 0);
@@ -278,7 +278,7 @@ function CommunityStats({ rows }) {
   );
 }
 
-// â”€â”€ Legende der Badges â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Legende der Badges
 function BadgeLegend() {
   return (
     <details className="mt-6 bg-white rounded-xl border border-stone-200 overflow-hidden">
@@ -297,7 +297,7 @@ function BadgeLegend() {
   );
 }
 
-// â”€â”€ Ranking-Tab-Inhalt â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Ranking-Tab-Inhalt
 function RankingTab({ rows, metric, myDogId }) {
   const sorted = useMemo(() => {
     const key = metric === "tours" ? "tourCount" : metric === "distance" ? "totalDistance" : "totalElevation";
@@ -335,7 +335,7 @@ function RankingTab({ rows, metric, myDogId }) {
           />
         ))}
       </div>
-      {/* Dein Hund falls auÃŸerhalb Top 10 */}
+      {/* Dein Hund falls außerhalb Top 10 */}
       {myEntry && !myInTop10 && (
         <MyDogCard entry={myEntry} rank={myIdx + 1} metric={metric} />
       )}
@@ -343,7 +343,7 @@ function RankingTab({ rows, metric, myDogId }) {
   );
 }
 
-// â”€â”€ Main Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Main Page
 export default function TopDogs() {
   const { user } = useAuth();
 
@@ -353,7 +353,7 @@ export default function TopDogs() {
     staleTime: 5 * 60 * 1000,
   });
 
-  // Mein erster Hund (fÃ¼r Highlight)
+  // Mein erster Hund (für Highlight)
   const { data: myDogs = [] } = useQuery({
     queryKey: ["dogs", user?.id],
     queryFn:  async () => {
