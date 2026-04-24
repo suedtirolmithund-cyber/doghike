@@ -1,8 +1,9 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 
 export default function PageNotFound() {
   const location = useLocation();
+  const navigate = useNavigate();
   const pageName = location.pathname.substring(1);
   const { isAdmin } = useAuth();
 
@@ -32,7 +33,7 @@ export default function PageNotFound() {
 
         <div className="pt-4">
           <button
-            onClick={() => window.location.href = '/'}
+            onClick={() => navigate('/')}
             className="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
