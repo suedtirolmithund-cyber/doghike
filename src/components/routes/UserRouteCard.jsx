@@ -2,14 +2,15 @@ import { MapContainer, TileLayer, Polyline } from "react-leaflet";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
-import { Map, Navigation, Clock, Route, Eye, Trash2, Edit } from "lucide-react";
+import { Map, Navigation, Clock, Route, CheckCircle2, Trash2, Edit } from "lucide-react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import "leaflet/dist/leaflet.css";
 
 export default function UserRouteCard({ route, index, onDelete }) {
-  const routeIcon = route.route_type === "recorded" ? Navigation : Map;
-  const RouteIcon = routeIcon;
+  const RouteIcon = route.route_type === "recorded" ? Navigation : Map;
+  const coordinates = route.waypoints ?? [];
+  const createdAt = route.created_at ?? null;
 
   return (
     <motion.div
@@ -18,10 +19,9 @@ export default function UserRouteCard({ route, index, onDelete }) {
       transition={{ delay: index * 0.05 }}
       className="bg-white rounded-xl overflow-hidden border border-stone-200 hover:shadow-lg transition-shadow"
     >
-      {/* Map Preview */}
       <div className="h-48 relative">
         <MapContainer
-          center={route.coordinates[0] || [46.5, 11.9]}
+          center={coordinates[0] || [46.5, 11.9]}
           zoom={12}
           style={{ height: "100%", width: "100%" }}
           dragging={false}
@@ -30,35 +30,33 @@ export default function UserRouteCard({ route, index, onDelete }) {
           attributionControl={false}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <Polyline positions={route.coordinates} color="#1e293b" weight={3} />
+          <Polyline positions={coordinates} color="#1e293b" weight={3} />
         </MapContainer>
-        
+
         <div className="absolute top-3 left-3 z-[1000] bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-stone-700 flex items-center gap-1">
           <RouteIcon className="w-3 h-3" />
           {route.route_type === "recorded" ? "GPS-Aufzeichnung" : "Geplante Route"}
         </div>
 
-        {route.is_public && (
+        {route.completed && (
           <div className="absolute top-3 right-3 z-[1000] bg-brand-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-            <Eye className="w-3 h-3" />
-            Öffentlich
+            <CheckCircle2 className="w-3 h-3" />
+            Erledigt
           </div>
         )}
       </div>
 
-      {/* Content */}
       <div className="p-4">
         <h3 className="text-lg font-semibold text-stone-800 mb-2">{route.name}</h3>
-        
+
         {route.description && (
           <p className="text-sm text-stone-600 mb-3 line-clamp-2">{route.description}</p>
         )}
 
         {route.start_location && (
-          <p className="text-xs text-stone-500 mb-3">📍 {route.start_location}</p>
+          <p className="text-xs text-stone-500 mb-3">Ort: {route.start_location}</p>
         )}
 
-        {/* Stats */}
         <div className="flex flex-wrap gap-3 mb-3 text-xs text-stone-600">
           <div className="flex items-center gap-1">
             <Route className="w-3 h-3" />
@@ -79,10 +77,9 @@ export default function UserRouteCard({ route, index, onDelete }) {
         </div>
 
         <div className="text-xs text-stone-400 mb-3">
-          Erstellt am {format(new Date(route.created_date), "dd.MM.yyyy")}
+          Erstellt am {createdAt ? format(new Date(createdAt), "dd.MM.yyyy") : "—"}
         </div>
 
-        {/* Actions */}
         <div className="flex gap-2">
           <Link to={createPageUrl(`RouteDetail?id=${route.id}`)} className="flex-1">
             <Button variant="outline" className="w-full" size="sm">
