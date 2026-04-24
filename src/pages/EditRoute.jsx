@@ -91,7 +91,7 @@ export default function EditRoute() {
       <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
         <Link to={`${createPageUrl("RouteDetail")}?id=${routeId}`}>
           <Button variant="ghost" className="mb-3 md:mb-4" size="sm">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Zurueck zur Route
+            <ArrowLeft className="w-4 h-4 mr-2" /> Zurück zur Route
           </Button>
         </Link>
 

@@ -93,7 +93,7 @@ export default function OfflineDownload({ hike, dogs = [] }) {
         pdf.text(`Strecke: ${hike.distance_km} km`, margin + 5, yPosition);
       }
       if (hike.elevation_gain_m) {
-        pdf.text(`Hoehenmeter: ${hike.elevation_gain_m} m`, pageWidth / 2, yPosition);
+      pdf.text(`Höhenmeter: ${hike.elevation_gain_m} m`, pageWidth / 2, yPosition);
       }
       yPosition += 6;
       

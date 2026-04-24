@@ -25,7 +25,7 @@ export default function Support() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!subject.trim() || !message.trim()) {
-      toast.error("Bitte fuelle alle Felder aus");
+      toast.error("Bitte fülle alle Felder aus");
       return;
     }
 
@@ -34,7 +34,7 @@ export default function Support() {
     const mailto = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(`Support: ${subject}`)}&body=${body}`;
     window.open(mailto, "_blank");
     setSubmitted(true);
-    toast.success("E-Mail-Programm wird geoeffnet...");
+    toast.success("E-Mail-Programm wird geöffnet...");
   };
 
   const faqs = [
@@ -44,7 +44,7 @@ export default function Support() {
       questions: [
         {
           q: "Wie kann ich eine neue Wanderung hinzufügen?",
-          a: "Gehe zu 'Mein Profil' -> 'Tagebuch' und klicke auf 'Neue Wanderung'. Fuelle die Details aus, markiere den Startpunkt auf der Karte und lade optional Fotos hoch.",
+          a: "Gehe zu 'Mein Profil' -> 'Tagebuch' und klicke auf 'Neue Wanderung'. Fülle die Details aus, markiere den Startpunkt auf der Karte und lade optional Fotos hoch.",
         },
         {
           q: "Kann ich Wanderungen privat halten?",
@@ -52,7 +52,7 @@ export default function Support() {
         },
         {
           q: "Wie funktioniert das Freunde-System?",
-          a: "Gehe zu 'Freunde', suche nach Nutzer-Namen und sende eine Freundschaftsanfrage. Sobald diese akzeptiert wird, koennt ihr gegenseitig eure 'Freunde'-Wanderungen sehen.",
+          a: "Gehe zu 'Freunde', suche nach Nutzer-Namen und sende eine Freundschaftsanfrage. Sobald diese akzeptiert wird, könnt ihr gegenseitig eure 'Freunde'-Wanderungen sehen.",
         },
       ],
     },
@@ -69,8 +69,8 @@ export default function Support() {
           a: "Ja, im Routenplaner gibt es einen GPX-Tab. Die Route wird dann automatisch auf der Karte angezeigt.",
         },
         {
-          q: "Wie sehe ich das Hoehenprofil einer Route?",
-          a: "Sobald du eine Route mit mindestens 2 Wegpunkten erstellt hast, wird das Hoehenprofil automatisch unter der Karte angezeigt.",
+          q: "Wie sehe ich das Höhenprofil einer Route?",
+          a: "Sobald du eine Route mit mindestens 2 Wegpunkten erstellt hast, wird das Höhenprofil automatisch unter der Karte angezeigt.",
         },
       ],
     },
@@ -83,8 +83,8 @@ export default function Support() {
           a: "Das hängt von deiner Sichtbarkeitseinstellung ab. Private Wanderungen siehst nur du, Freunde-Wanderungen sehen deine Freunde, öffentliche Wanderungen sind für alle sichtbar nach Admin-Freigabe.",
         },
         {
-          q: "Wie kann ich mein Konto loeschen?",
-          a: "Gehe zu 'Mein Profil' -> Konto -> 'Konto loeschen'. Dort wird eine Loeschanfrage per E-Mail vorbereitet, die danach manuell bearbeitet wird.",
+          q: "Wie kann ich mein Konto löschen?",
+          a: "Gehe zu 'Mein Profil' -> Konto -> 'Konto löschen'. Dort wird eine Löschanfrage per E-Mail vorbereitet, die danach manuell bearbeitet wird.",
         },
         {
           q: "Werden meine GPS-Daten gespeichert?",
@@ -97,12 +97,12 @@ export default function Support() {
       icon: Bug,
       questions: [
         {
-          q: "Die Karte laedt nicht",
+          q: "Die Karte lädt nicht",
           a: "Überprüfe deine Internetverbindung. Falls das Problem weiterhin besteht, versuche die Seite neu zu laden. Adblocker können Kartenkacheln blockieren.",
         },
         {
           q: "Ich kann keine Fotos hochladen",
-          a: "Stelle sicher, dass die Dateigroesse unter 10 MB liegt und es sich um JPG, PNG oder WebP-Dateien handelt.",
+          a: "Stelle sicher, dass die Dateigröße unter 10 MB liegt und es sich um JPG, PNG oder WebP-Dateien handelt.",
         },
         {
           q: "Ein Fehler tritt beim Speichern auf",
@@ -117,7 +117,7 @@ export default function Support() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <Link to={createPageUrl("Dashboard")}>
           <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Zurueck
+            <ArrowLeft className="w-4 h-4 mr-2" /> Zurück
           </Button>
         </Link>
 
@@ -135,7 +135,7 @@ export default function Support() {
           </div>
 
           <div className="bg-white rounded-2xl p-6 md:p-8 border border-stone-200/50 shadow-sm">
-            <h2 className="text-xl font-semibold text-stone-800 mb-6">Haeufig gestellte Fragen (FAQ)</h2>
+            <h2 className="text-xl font-semibold text-stone-800 mb-6">Häufig gestellte Fragen (FAQ)</h2>
             {faqs.map((category, index) => {
               const Icon = category.icon;
               return (
@@ -174,7 +174,7 @@ export default function Support() {
             {submitted ? (
               <div className="text-center py-12">
                 <CheckCircle2 className="w-16 h-16 text-brand-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-stone-800 mb-2">E-Mail-Programm geoeffnet!</h3>
+                <h3 className="text-xl font-semibold text-stone-800 mb-2">E-Mail-Programm geöffnet!</h3>
                 <p className="text-stone-500 text-sm mb-6">
                   Falls es nicht geklappt hat, schreib direkt an{" "}
                   <a href={`mailto:${SUPPORT_EMAIL}`} className="text-blue-600 underline">{SUPPORT_EMAIL}</a>.
@@ -216,7 +216,7 @@ export default function Support() {
             <h2 className="text-xl font-semibold mb-4">Weitere Ressourcen</h2>
             <div className="grid md:grid-cols-3 gap-4">
               {[
-                { page: "Datenschutz", icon: Shield, label: "Datenschutz", desc: "Wie wir deine Daten schuetzen" },
+                { page: "Datenschutz", icon: Shield, label: "Datenschutz", desc: "Wie wir deine Daten schützen" },
                 { page: "Legal", icon: Book, label: "Rechtliches", desc: "Haftungsausschluss & Hinweise" },
                 { page: "Impressum", icon: Mail, label: "Impressum", desc: "Angaben zum Betreiber" },
               ].map(({ page, icon: Icon, label, desc }) => (
