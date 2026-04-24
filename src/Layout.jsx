@@ -12,31 +12,28 @@ import { Button } from "@/components/ui/button";
 import { registerServiceWorker } from "@/lib/browserNotifications";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 
-// ── Bottom-Nav: nur 5 Haupt-Einträge ────────────────────────
 const MAIN_NAV = [
-  { name: "Dashboard",    icon: Home,       label: "Home" },
-  { name: "Hikes",        icon: Mountain,   label: "Touren" },
-  { name: "Journal",      icon: BookOpen,   label: "Tagebuch" },
+  { name: "Dashboard", icon: Home, label: "Home" },
+  { name: "Hikes", icon: Mountain, label: "Touren" },
+  { name: "Journal", icon: BookOpen, label: "Tagebuch" },
   { name: "RoutePlanner", icon: Navigation, label: "Planen" },
-  { name: "Profile",      icon: Dog,        label: "Profil" },
+  { name: "Profile", icon: Dog, label: "Profil" },
 ];
 
-// ── Desktop-Nav: alle Seiten ──────────────────────────────────
 const ALL_NAV = [
-  { name: "Dashboard",    icon: Home,       label: "Startseite" },
-  { name: "Hikes",        icon: Mountain,   label: "Alle Touren" },
-  { name: "Journal",      icon: BookOpen,   label: "Tagebuch" },
-  { name: "Friends",      icon: Users,      label: "Freunde" },
+  { name: "Dashboard", icon: Home, label: "Startseite" },
+  { name: "Hikes", icon: Mountain, label: "Alle Touren" },
+  { name: "Journal", icon: BookOpen, label: "Tagebuch" },
+  { name: "Friends", icon: Users, label: "Freunde" },
   { name: "RoutePlanner", icon: Navigation, label: "Routenplaner" },
-  { name: "TopDogs",      icon: Trophy,     label: "Top Dogs" },
-  { name: "Profile",      icon: Dog,        label: "Mein Profil" },
+  { name: "TopDogs", icon: Trophy, label: "Top Dogs" },
+  { name: "Profile", icon: Dog, label: "Mein Profil" },
 ];
 
-// ── "Mehr"-Menü: die restlichen Seiten ──────────────────────
 const MORE_ITEMS = [
-  { name: "Friends",      icon: Users,      label: "Freunde" },
-  { name: "TopDogs",      icon: Trophy,     label: "Top Dogs" },
-  { name: "MapView",      icon: Map,        label: "Karte" },
+  { name: "Friends", icon: Users, label: "Freunde" },
+  { name: "TopDogs", icon: Trophy, label: "Top Dogs" },
+  { name: "MapView", icon: Map, label: "Karte" },
 ];
 
 export default function Layout({ children, currentPageName }) {
@@ -44,9 +41,13 @@ export default function Layout({ children, currentPageName }) {
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const [moreOpen, setMoreOpen] = useState(false);
 
-  useEffect(() => { setMoreOpen(false); }, [location.pathname]);
+  useEffect(() => {
+    setMoreOpen(false);
+  }, [location.pathname]);
 
-  useEffect(() => { registerServiceWorker(); }, []);
+  useEffect(() => {
+    registerServiceWorker();
+  }, []);
 
   useRealtimeNotifications(user?.id);
 
@@ -59,14 +60,12 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col">
-      {/* Abstand für die fixierte Desktop-Nav (oben) */}
       <div className="hidden md:block h-16 shrink-0" />
       <div className="flex-1">{children}</div>
 
-      {/* Footer */}
       <footer className="bg-white border-t border-stone-200 py-3 md:py-4 px-4 md:px-6 text-center mb-20 md:mb-0">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 md:gap-4 text-xs md:text-sm text-stone-500">
-          <span>© 2026 Südtirol mit Hund</span>
+          <span>© 2026 DogHike</span>
           <span className="hidden sm:inline">•</span>
           <Link to={createPageUrl("Impressum")} className="hover:text-stone-700 underline">Impressum</Link>
           <span className="hidden sm:inline">•</span>
@@ -80,14 +79,10 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </footer>
 
-      {/* ── Bottom Navigation — Mobile ──────────────────────── */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 md:hidden z-50 shadow-lg">
-
-        {/* "Mehr"-Menü — klappt über der Navbar auf */}
         <AnimatePresence>
           {moreOpen && (
             <>
-              {/* Backdrop */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -96,7 +91,6 @@ export default function Layout({ children, currentPageName }) {
                 onClick={() => setMoreOpen(false)}
               />
 
-              {/* Panel */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -115,7 +109,9 @@ export default function Layout({ children, currentPageName }) {
                   {MORE_ITEMS.map(({ name, icon: Icon, label }) => {
                     const active = isActive(name);
                     return (
-                      <Link key={name} to={createPageUrl(name)}
+                      <Link
+                        key={name}
+                        to={createPageUrl(name)}
                         className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all ${
                           active ? "bg-slate-100 text-slate-800" : "text-stone-500 hover:bg-stone-50"
                         }`}
@@ -126,7 +122,8 @@ export default function Layout({ children, currentPageName }) {
                     );
                   })}
                   {isAdmin && (
-                    <Link to={createPageUrl("AdminDashboard")}
+                    <Link
+                      to={createPageUrl("AdminDashboard")}
                       className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all ${
                         isActive("AdminDashboard") ? "bg-amber-100 text-amber-800" : "text-amber-600 hover:bg-amber-50"
                       }`}
@@ -141,12 +138,13 @@ export default function Layout({ children, currentPageName }) {
           )}
         </AnimatePresence>
 
-        {/* Haupt-Icons */}
         <div className="flex items-center justify-around py-2 px-1 safe-area-pb">
           {MAIN_NAV.map(({ name, icon: Icon, label }) => {
             const active = isActive(name);
             return (
-              <Link key={name} to={createPageUrl(name)}
+              <Link
+                key={name}
+                to={createPageUrl(name)}
                 className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all min-w-[52px] ${
                   active ? "text-slate-800 bg-slate-100" : "text-stone-500 hover:text-stone-700"
                 }`}
@@ -159,9 +157,8 @@ export default function Layout({ children, currentPageName }) {
             );
           })}
 
-          {/* Mehr-Button */}
           <button
-            onClick={() => setMoreOpen((v) => !v)}
+            onClick={() => setMoreOpen((value) => !value)}
             className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all min-w-[52px] ${
               moreOpen ? "text-slate-800 bg-slate-100" : "text-stone-500 hover:text-stone-700"
             }`}
@@ -172,29 +169,29 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </nav>
 
-      {/* ── Top Navigation — Desktop ─────────────────────────── */}
       <nav className="fixed top-0 left-0 right-0 bg-white border-b border-stone-200 hidden md:block z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-3">
           <div className="flex items-center justify-between">
-            {/* Logo */}
-            <Link to={createPageUrl("Dashboard")}
+            <Link
+              to={createPageUrl("Dashboard")}
               className="flex items-center gap-2 hover:opacity-80 transition-opacity shrink-0"
             >
               <div className="bg-slate-800 rounded-lg p-2">
                 <Mountain className="w-5 h-5 text-white" />
               </div>
               <div>
-                <span className="text-lg font-semibold text-stone-800 block leading-none">Südtirol mit Hund</span>
+                <span className="text-lg font-semibold text-stone-800 block leading-none">DogHike</span>
                 <span className="text-xs text-stone-500">Hundefreundliche Wanderungen</span>
               </div>
             </Link>
 
-            {/* Nav links */}
             <div className="flex items-center gap-1">
               {ALL_NAV.map(({ name, icon: Icon, label }) => {
                 const active = isActive(name);
                 return (
-                  <Link key={name} to={createPageUrl(name)}
+                  <Link
+                    key={name}
+                    to={createPageUrl(name)}
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all ${
                       active ? "bg-slate-800 text-white shadow-md" : "text-stone-600 hover:text-stone-800 hover:bg-stone-100"
                     }`}
@@ -205,7 +202,8 @@ export default function Layout({ children, currentPageName }) {
                 );
               })}
               {isAdmin && (
-                <Link to={createPageUrl("AdminDashboard")}
+                <Link
+                  to={createPageUrl("AdminDashboard")}
                   className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all ${
                     isActive("AdminDashboard") ? "bg-slate-800 text-white shadow-md" : "text-amber-700 hover:text-amber-900 hover:bg-amber-50"
                   }`}
@@ -216,7 +214,6 @@ export default function Layout({ children, currentPageName }) {
               )}
             </div>
 
-            {/* Auth */}
             <div className="flex items-center gap-2 shrink-0 ml-2">
               {isAuthenticated && user ? (
                 <>
@@ -226,7 +223,10 @@ export default function Layout({ children, currentPageName }) {
                       {displayName}
                     </span>
                   </div>
-                  <Button variant="outline" size="sm" onClick={logout}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={logout}
                     className="flex items-center gap-1.5 border-stone-200 text-stone-600 hover:text-red-600 hover:border-red-300 hover:bg-red-50"
                   >
                     <LogOut className="w-4 h-4" />
@@ -235,9 +235,7 @@ export default function Layout({ children, currentPageName }) {
                 </>
               ) : (
                 <Link to={createPageUrl("Login")}>
-                  <Button size="sm"
-                    className="flex items-center gap-1.5 bg-brand-400 hover:bg-brand-600 text-white"
-                  >
+                  <Button size="sm" className="flex items-center gap-1.5 bg-brand-400 hover:bg-brand-600 text-white">
                     <LogIn className="w-4 h-4" />
                     Anmelden
                   </Button>
@@ -248,7 +246,6 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </nav>
 
-      {/* Abstand für die fixierte Mobile-Nav (unten) */}
       <div className="md:hidden h-20" />
     </div>
   );

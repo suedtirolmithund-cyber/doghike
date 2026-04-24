@@ -74,7 +74,7 @@ export default function Legal() {
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
-                  <strong>Südtirol mit Hund</strong> ist eine Informationsplattform. Alle Inhalte – Tourenberichte, GPS-Koordinaten, Fotos, Schwierigkeitsbewertungen, Empfehlungen – dienen ausschließlich zur allgemeinen Orientierung und Information.
+                  <strong>DogHike</strong> ist eine Informationsplattform. Alle Inhalte – Tourenberichte, GPS-Koordinaten, Fotos, Schwierigkeitsbewertungen, Empfehlungen – dienen ausschließlich zur allgemeinen Orientierung und Information.
                 </p>
                 <p>
                   Die App ist <strong>kein Navigationsgerät, kein offizielles Kartenmaterial und kein Ersatz für Wanderführer</strong> oder behördliche Informationen. Sie dient als Ergänzung, nicht als Alleinquelle für die Planung einer Tour.

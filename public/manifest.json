@@ -1,7 +1,7 @@
 {
-  "name": "DogHike Südtirol",
+  "name": "DogHike",
   "short_name": "DogHike",
-  "description": "Hundefreundliche Wanderungen in Südtirol und den Dolomiten",
+  "description": "DogHike: Hundefreundliche Wanderungen in Südtirol und den Dolomiten",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#fafaf9",

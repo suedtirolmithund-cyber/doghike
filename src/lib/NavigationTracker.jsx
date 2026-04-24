@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { pagesConfig } from '@/pages.config';
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { pagesConfig } from "@/pages.config";
 
 export default function NavigationTracker() {
   const location = useLocation();
@@ -10,16 +10,18 @@ export default function NavigationTracker() {
   useEffect(() => {
     const pathname = location.pathname;
     let pageName;
-    if (pathname === '/' || pathname === '') {
+
+    if (pathname === "/" || pathname === "") {
       pageName = mainPageKey;
     } else {
-      const pathSegment = pathname.replace(/^\//, '').split('/')[0];
+      const pathSegment = pathname.replace(/^\//, "").split("/")[0];
       pageName = Object.keys(Pages).find(
-        (k) => k.toLowerCase() === pathSegment.toLowerCase()
+        (key) => key.toLowerCase() === pathSegment.toLowerCase()
       ) || null;
     }
+
     if (pageName) {
-      document.title = `${pageName} · DogHike Südtirol`;
+      document.title = `${pageName} · DogHike`;
     }
   }, [location, Pages, mainPageKey]);
 

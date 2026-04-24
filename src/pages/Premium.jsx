@@ -53,7 +53,7 @@ export default function Premium() {
             </div>
             <h2 className="text-3xl font-semibold text-stone-800 mb-3">Du bist Premium! 🎉</h2>
             <p className="text-stone-500 mb-8">
-              Du hast Zugang zu allen exklusiven Premium-Touren auf Südtirol mit Hund.
+              Du hast Zugang zu allen exklusiven Premium-Touren auf DogHike.
             </p>
             <Link to={createPageUrl("Hikes")}>
               <Button className="bg-amber-500 hover:bg-amber-600 text-white h-12 px-8">

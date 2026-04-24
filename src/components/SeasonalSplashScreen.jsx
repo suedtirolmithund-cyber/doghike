@@ -20,7 +20,9 @@ function getCurrentSeason(date = new Date()) {
 
 export default function SeasonalSplashScreen() {
   const season = getCurrentSeason();
-  const [imageSrc, setImageSrc] = useState(SPLASH_IMAGE_BY_SEASON[season] ?? FALLBACK_SPLASH_IMAGE);
+  const [imageSrc, setImageSrc] = useState(
+    SPLASH_IMAGE_BY_SEASON[season] ?? FALLBACK_SPLASH_IMAGE
+  );
 
   useEffect(() => {
     setImageSrc(SPLASH_IMAGE_BY_SEASON[season] ?? FALLBACK_SPLASH_IMAGE);
@@ -30,7 +32,7 @@ export default function SeasonalSplashScreen() {
     <div className="fixed inset-0 z-[100] overflow-hidden bg-slate-950">
       <img
         src={imageSrc}
-        alt="DogHike Suedtirol Startbild"
+        alt="DogHike Startbild"
         className="h-full w-full object-cover object-center"
         onError={() => setImageSrc(FALLBACK_SPLASH_IMAGE)}
       />
