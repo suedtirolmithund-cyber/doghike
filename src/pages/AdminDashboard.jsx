@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
@@ -58,7 +58,7 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap mb-1">
               <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-200">
-                Wartet auf Prüfung
+                Wartet auf PrÃ¼fung
               </span>
               <span className="text-xs text-stone-400">
                 {format(new Date(entry.created_at), "d. MMM yyyy, HH:mm", { locale: de })}
@@ -256,7 +256,7 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
               <span className="text-sm font-semibold text-stone-800">{authorName}</span>
               {needsApproval && (
                 <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200">
-                  Triggerwort - Freigabe nötig
+                  Triggerwort - Freigabe nÃ¶tig
                 </span>
               )}
             </div>
@@ -373,6 +373,7 @@ export default function AdminDashboard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin_comments"] });
+      queryClient.invalidateQueries({ queryKey: ["comments"] });
       toast.success("Kommentar freigegeben");
     },
     onError: () => toast.error("Der Kommentar konnte gerade nicht freigegeben werden. Bitte versuche es noch einmal."),
@@ -390,6 +391,7 @@ export default function AdminDashboard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin_comments"] });
+      queryClient.invalidateQueries({ queryKey: ["comments"] });
       toast.success("Kommentar gelöscht");
     },
     onError: () => toast.error("Der Kommentar konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal."),
@@ -427,10 +429,10 @@ export default function AdminDashboard() {
         <div className="text-center">
           <ShieldCheck className="w-12 h-12 text-red-300 mx-auto mb-4" />
           <p className="text-stone-700 font-semibold text-lg">Kein Zugriff</p>
-          <p className="text-stone-500 text-sm mt-1">Diese Seite ist nur für Administratoren.</p>
+          <p className="text-stone-500 text-sm mt-1">Diese Seite ist nur fÃ¼r Administratoren.</p>
           <Link to="/">
             <Button variant="outline" className="mt-4">
-              Zurück
+              ZurÃ¼ck
             </Button>
           </Link>
         </div>
@@ -449,7 +451,7 @@ export default function AdminDashboard() {
             <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Admin Dashboard</h1>
           </div>
           <p className="text-stone-500 text-sm mt-1 ml-12">
-            Einträge freigeben, Triggerwort-Kommentare prüfen und Kommentare löschen
+            EintrÃ¤ge freigeben, Triggerwort-Kommentare prÃ¼fen und Kommentare lÃ¶schen
           </p>
         </motion.div>
 
@@ -457,7 +459,7 @@ export default function AdminDashboard() {
           <TabsList className="bg-white border border-stone-200/60 mb-6 w-full">
             <TabsTrigger value="entries" className="flex-1 flex items-center gap-2 relative">
               <Clock className="w-4 h-4" />
-              Touren prüfen
+              Touren prÃ¼fen
               {entries.length > 0 && (
                 <span className="absolute -top-1 -right-1 bg-yellow-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
                   {entries.length > 9 ? "9+" : entries.length}
@@ -484,7 +486,7 @@ export default function AdminDashboard() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-stone-800 leading-none">{entries.length}</p>
-                  <p className="text-xs text-stone-500">Wartet auf Prüfung</p>
+                  <p className="text-xs text-stone-500">Wartet auf PrÃ¼fung</p>
                 </div>
               </div>
               {entries.length === 0 && (
@@ -499,8 +501,8 @@ export default function AdminDashboard() {
             ) : entries.length === 0 ? (
               <div className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
                 <CheckCircle2 className="w-14 h-14 text-brand-400 mx-auto mb-4" />
-                <h3 className="text-xl font-medium text-stone-700 mb-2">Keine offenen Einträge</h3>
-                <p className="text-stone-500 text-sm">Alle Einträge wurden geprüft.</p>
+                <h3 className="text-xl font-medium text-stone-700 mb-2">Keine offenen EintrÃ¤ge</h3>
+                <p className="text-stone-500 text-sm">Alle EintrÃ¤ge wurden geprÃ¼ft.</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -533,7 +535,7 @@ export default function AdminDashboard() {
               </div>
               <div className="border-l border-stone-200 pl-4">
                 <p className="text-2xl font-bold text-amber-700 leading-none">{pendingCommentsCount}</p>
-                <p className="text-xs text-stone-500">Freigaben nötig</p>
+                <p className="text-xs text-stone-500">Freigaben nÃ¶tig</p>
               </div>
             </div>
 
@@ -568,3 +570,5 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
+
