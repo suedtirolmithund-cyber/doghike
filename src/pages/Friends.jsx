@@ -149,6 +149,7 @@ export default function Friends() {
     queryClient.invalidateQueries({ queryKey: ["friendships", user?.id] });
     queryClient.invalidateQueries({ queryKey: ["friendIds", user?.id] });
     queryClient.invalidateQueries({ queryKey: ["friendFeed"] });
+    queryClient.invalidateQueries({ queryKey: ["notifications", user?.id] });
   };
 
   // Mutations
