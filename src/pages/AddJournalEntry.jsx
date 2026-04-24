@@ -415,6 +415,15 @@ export default function AddJournalEntry() {
     elevation_m: searchParams.get("prefill_elevation") || "",
     duration_minutes: searchParams.get("prefill_duration") || "",
     description: searchParams.get("prefill_description") || "",
+    difficulty: Number(searchParams.get("prefill_difficulty") || 0),
+    dog_difficulty: Number(searchParams.get("prefill_dog_difficulty") || 0),
+    water_available: Number(searchParams.get("prefill_water") || 0),
+    hazard_notes: searchParams.get("prefill_hazard") || "",
+    rating: Number(searchParams.get("prefill_rating") || 0),
+    seasons: (searchParams.get("prefill_seasons") || "")
+      .split(",")
+      .map((value) => value.trim())
+      .filter(Boolean),
   };
   const queryClient = useQueryClient();
 
@@ -431,6 +440,12 @@ export default function AddJournalEntry() {
       elevation_m: prefill.elevation_m || EMPTY_FORM.elevation_m,
       duration_minutes: prefill.duration_minutes || EMPTY_FORM.duration_minutes,
       description: prefill.description || EMPTY_FORM.description,
+      difficulty: prefill.difficulty || EMPTY_FORM.difficulty,
+      dog_difficulty: prefill.dog_difficulty || EMPTY_FORM.dog_difficulty,
+      water_available: prefill.water_available || EMPTY_FORM.water_available,
+      hazard_notes: prefill.hazard_notes || EMPTY_FORM.hazard_notes,
+      rating: prefill.rating || EMPTY_FORM.rating,
+      seasons: prefill.seasons.length > 0 ? prefill.seasons : EMPTY_FORM.seasons,
     }),
   });
   const [photoUploading, setPhotoUploading] = useState(false);
