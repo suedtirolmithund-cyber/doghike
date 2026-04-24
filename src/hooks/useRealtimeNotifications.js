@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { showBrowserNotification } from '@/lib/browserNotifications';
 
@@ -39,3 +39,4 @@ export function useRealtimeNotifications(userId) {
     return () => { supabase.removeChannel(channel); };
   }, [userId]);
 }
+
