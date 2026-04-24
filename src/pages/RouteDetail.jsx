@@ -725,19 +725,17 @@ export default function RouteDetail() {
               <div className="text-center mb-5">
                 <div className="text-4xl mb-3">ğŸ‰</div>
                 <h3 className="text-lg font-semibold text-stone-800">Tour erledigt!</h3>
-                <p className="text-stone-500 text-sm mt-2">
-                  MÃ¶chtest du einen Tagebucheintrag fÃ¼r diese Wanderung erstellen?
-                </p>
+                <p className="text-stone-500 text-sm mt-2">Möchtest du jetzt direkt einen Tagebucheintrag für diese Wanderung erstellen?</p>`r`n                <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-3">Zusatzangaben wie Fotos, Wasser, Jahreszeit, Bewertung und Hinweise werden nur übernommen, wenn du den Tagebucheintrag jetzt direkt erstellst.</p>
               </div>
               <div className="flex flex-col gap-2">
                 <Link to={journalUrl} onClick={() => setShowJournalDialog(false)}>
                   <Button className="w-full bg-emerald-600 hover:bg-emerald-700">
                     <CheckCircle2 className="w-4 h-4 mr-2" />
-                    Ja, Tagebucheintrag erstellen
+                    Jetzt Tagebucheintrag erstellen
                   </Button>
                 </Link>
                 <Button variant="outline" onClick={() => setShowJournalDialog(false)} className="w-full">
-                  Nein, spÃ¤ter vielleicht
+                  Später ohne Übernahme
                 </Button>
               </div>
             </motion.div>
@@ -747,6 +745,7 @@ export default function RouteDetail() {
     </div>
   );
 }
+
 
 
 
