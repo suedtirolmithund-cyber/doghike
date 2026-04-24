@@ -339,6 +339,10 @@ export default function AdminDashboard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin_pending"] });
+      queryClient.invalidateQueries({ queryKey: ["allHikes"] });
+      queryClient.invalidateQueries({ queryKey: ["journal"] });
+      queryClient.invalidateQueries({ queryKey: ["journalEntry"] });
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
       toast.success("Eintrag genehmigt");
     },
     onError: () => toast.error("Der Eintrag konnte gerade nicht freigegeben werden. Bitte versuche es noch einmal."),
@@ -356,6 +360,10 @@ export default function AdminDashboard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin_pending"] });
+      queryClient.invalidateQueries({ queryKey: ["allHikes"] });
+      queryClient.invalidateQueries({ queryKey: ["journal"] });
+      queryClient.invalidateQueries({ queryKey: ["journalEntry"] });
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
       toast.success("Eintrag abgelehnt");
     },
     onError: () => toast.error("Der Eintrag konnte gerade nicht abgelehnt werden. Bitte versuche es noch einmal."),
