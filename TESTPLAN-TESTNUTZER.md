@@ -1,251 +1,140 @@
-# Doghike Testplan für Testnutzer
+# Doghike Test-Checkliste
 
-Dieses Dokument ist für Testnutzer gedacht, die die App einmal in Ruhe durchklicken sollen.
+Bitte alles einmal in Ruhe durchtesten und abhaken.
 
 Wichtig:
-- Bitte nicht nur kurz anschauen, sondern die Schritte wirklich ausführen.
-- Wenn etwas nicht funktioniert, bitte dazuschreiben:
-  - Was genau gemacht wurde
-  - Auf welcher Seite der Fehler war
-  - Welche Fehlermeldung angezeigt wurde
-  - Ob ihr am Handy oder am Computer wart
+- Wenn etwas nicht funktioniert, bitte kurz dazuschreiben was passiert ist.
+- Bitte wenn möglich am Handy und am Computer testen.
 
-## Ziel
+## Tester
 
-Geprüft werden soll, ob die wichtigsten Funktionen der App im Alltag sauber funktionieren.
+| Punkt | Eintrag |
+|---|---|
+| Name |  |
+| Datum |  |
+| Gerät | Handy / Computer |
 
-## Allgemeine Hinweise für Tester
+## 1. Login und Konto
 
-- Bitte testet, wenn möglich, am Handy und am Computer.
-- Bitte achtet auch darauf:
-  - Lädt die Seite schnell genug?
-  - Sind Texte verständlich?
-  - Ist etwas unklar oder verwirrend?
-  - Fehlt irgendwo ein Button oder eine Info?
-
-## 1. Registrierung und Login
-
-Bitte testen:
-- App öffnen
-- Neues Konto erstellen
-- Prüfen, ob die Registrierung funktioniert
-- Danach ausloggen
-- Wieder einloggen
-
-Bitte zusätzlich testen:
-- `Passwort oder E-Mail vergessen?`
-- Eigene E-Mail eingeben
-- Prüfen, ob die E-Mail ankommt
-- Link aus der E-Mail öffnen
-- Neues Passwort setzen
-- Danach mit dem neuen Passwort einloggen
-
-Bitte melden, wenn:
-- keine E-Mail kommt
-- der Link nicht funktioniert
-- das neue Passwort nicht gespeichert wird
+| Test | Ja | Nein | Notiz |
+|---|---|---|---|
+| Registrierung funktioniert | [ ] | [ ] |  |
+| Login funktioniert | [ ] | [ ] |  |
+| Logout funktioniert | [ ] | [ ] |  |
+| Passwort vergessen funktioniert | [ ] | [ ] |  |
+| Neues Passwort setzen funktioniert | [ ] | [ ] |  |
 
 ## 2. Profil
 
-Bitte testen:
-- Profil öffnen
-- Name oder Angaben ändern
-- Profilbild hochladen
-- Profilbild wieder ändern
-
-Bitte prüfen:
-- Wird alles gespeichert?
-- Wird das neue Bild richtig angezeigt?
+| Test | Ja | Nein | Notiz |
+|---|---|---|---|
+| Profil bearbeiten funktioniert | [ ] | [ ] |  |
+| Profilbild hochladen funktioniert | [ ] | [ ] |  |
+| Profilbild ändern funktioniert | [ ] | [ ] |  |
 
 ## 3. Hunde
 
-Bitte testen:
-- Einen Hund anlegen
-- Hundebild hochladen
-- Angaben zum Hund ändern
-- Hundebild ändern
-- Hund wieder löschen
-
-Bitte prüfen:
-- Wird alles gespeichert?
-- Ist alles verständlich?
+| Test | Ja | Nein | Notiz |
+|---|---|---|---|
+| Hund anlegen funktioniert | [ ] | [ ] |  |
+| Hundebild hochladen funktioniert | [ ] | [ ] |  |
+| Hund bearbeiten funktioniert | [ ] | [ ] |  |
+| Hund löschen funktioniert | [ ] | [ ] |  |
 
 ## 4. Freunde
 
-Bitte mit zwei Testkonten prüfen:
-
-Konto A:
-- Konto B suchen
-- Freundschaftsanfrage senden
-
-Konto B:
-- Anfrage sehen
-- Anfrage annehmen
-
-Danach prüfen:
-- Werden beide als Freunde angezeigt?
-- Ist die Seite verständlich?
-- Sind `Offene Anfragen`, `Gesendet` und `Touren von Freunden` klar?
-
-Zusätzlich:
-- Freund wieder entfernen
+| Test | Ja | Nein | Notiz |
+|---|---|---|---|
+| Nutzer suchen funktioniert | [ ] | [ ] |  |
+| Freundschaftsanfrage senden funktioniert | [ ] | [ ] |  |
+| Freundschaftsanfrage annehmen funktioniert | [ ] | [ ] |  |
+| Freunde werden richtig angezeigt | [ ] | [ ] |  |
+| Touren von Freunden werden angezeigt | [ ] | [ ] |  |
 
 ## 5. Route planen
 
-Bitte testen:
-- Route planen
-- Name eingeben
-- Startpunkt setzen
-- Mehrere Punkte auf der Karte setzen
-- Route speichern
-
-Bitte prüfen:
-- Wird die Route gespeichert?
-- Wird sie im Profil angezeigt?
-- Bleibt sie privat?
+| Test | Ja | Nein | Notiz |
+|---|---|---|---|
+| Route planen funktioniert | [ ] | [ ] |  |
+| Route speichern funktioniert | [ ] | [ ] |  |
+| Route bleibt privat | [ ] | [ ] |  |
+| Route bearbeiten funktioniert | [ ] | [ ] |  |
+| Route löschen funktioniert | [ ] | [ ] |  |
 
 ## 6. Route als erledigt markieren
 
-Bitte testen:
-- Gespeicherte Route öffnen
-- `Als erledigt markieren`
-- Datum eintragen
-- Dauer eintragen
-- Notizen ergänzen
-
-Danach:
-- Prüfen, ob die Route als erledigt gespeichert wurde
-- Prüfen, ob `Als Wanderung eintragen` erst dann sichtbar ist
+| Test | Ja | Nein | Notiz |
+|---|---|---|---|
+| Als erledigt markieren funktioniert | [ ] | [ ] |  |
+| Datum wird gespeichert | [ ] | [ ] |  |
+| Dauer wird gespeichert | [ ] | [ ] |  |
+| Notizen werden gespeichert | [ ] | [ ] |  |
 
 ## 7. Wanderung eintragen
 
-Bitte testen:
-- Aus einer erledigten Route einen Wanderungseintrag machen
-- Prüfen, ob Daten übernommen wurden:
-  - Titel
-  - Ort
-  - Dauer
-  - Strecke
-  - Höhenmeter
-  - Beschreibung
-
-Dann bitte diese drei Fälle testen:
-
-### Privat
-- Eintrag privat speichern
-- Prüfen, ob alles gespeichert wurde
-
-### Freunde
-- Eintrag auf `Freunde` stellen
-- Prüfen, ob befreundete Nutzer ihn sehen
-- Prüfen, ob fremde Nutzer ihn nicht sehen
-
-### Öffentlich
-- Eintrag auf `Öffentlich` stellen
-- Prüfen, ob alle Pflichtfelder verlangt werden
-- Prüfen, ob der Eintrag erst nach Admin-Freigabe öffentlich sichtbar wird
+| Test | Ja | Nein | Notiz |
+|---|---|---|---|
+| Route kann als Wanderung eingetragen werden | [ ] | [ ] |  |
+| Daten werden übernommen | [ ] | [ ] |  |
+| Privat speichern funktioniert | [ ] | [ ] |  |
+| Freunde-Sichtbarkeit funktioniert | [ ] | [ ] |  |
+| Öffentlich senden funktioniert | [ ] | [ ] |  |
+| Pflichtfelder bei öffentlich werden verlangt | [ ] | [ ] |  |
 
 ## 8. Kommentare
 
-Bitte auf einer öffentlichen Wanderung testen:
-- Kommentar schreiben
-- Kommentar mit Foto schreiben
-- Einverständnisfeld anklicken
-- Kommentar absenden
-
-Bitte prüfen:
-- Wird der Kommentar angezeigt?
-- Wird das Bild angezeigt?
-
-Danach:
-- Eigenen Kommentar löschen
-- Prüfen, ob das funktioniert
-
-Wichtig:
-- Fremde Kommentare dürfen nicht löschbar sein
+| Test | Ja | Nein | Notiz |
+|---|---|---|---|
+| Kommentar schreiben funktioniert | [ ] | [ ] |  |
+| Kommentar mit Foto funktioniert | [ ] | [ ] |  |
+| Einverständnis ist vor dem Absenden klar | [ ] | [ ] |  |
+| Eigenen Kommentar löschen funktioniert | [ ] | [ ] |  |
+| Fremde Kommentare können nicht gelöscht werden | [ ] | [ ] |  |
 
 ## 9. Triggerwort-Test
 
-Bitte testen:
-- Einen Kommentar mit einem problematischen Wort schreiben
+| Test | Ja | Nein | Notiz |
+|---|---|---|---|
+| Kommentar mit Triggerwort wird nicht sofort öffentlich | [ ] | [ ] |  |
+| Kommentar wartet auf Freigabe | [ ] | [ ] |  |
+| Foto wird dabei nicht öffentlich geteilt | [ ] | [ ] |  |
 
-Bitte prüfen:
-- Wird der Kommentar nicht sofort öffentlich?
-- Bleibt er für den eigenen Nutzer als wartend erkennbar?
-- Ist das Bild dabei nicht öffentlich sichtbar?
+## 10. Merkliste und Download
 
-## 10. Merkliste
+| Test | Ja | Nein | Notiz |
+|---|---|---|---|
+| Wanderung speichern funktioniert | [ ] | [ ] |  |
+| Wanderung aus Merkliste entfernen funktioniert | [ ] | [ ] |  |
+| Offline-Download funktioniert | [ ] | [ ] |  |
 
-Bitte testen:
-- Eine Wanderung speichern
-- Prüfen, ob sie in der Merkliste erscheint
-- Wieder entfernen
+## 11. Öffentliche Seiten
 
-## 11. Offline-Download
+| Test | Ja | Nein | Notiz |
+|---|---|---|---|
+| Startseite funktioniert | [ ] | [ ] |  |
+| Login-Seite funktioniert | [ ] | [ ] |  |
+| Support-Seite funktioniert | [ ] | [ ] |  |
+| Datenschutz funktioniert | [ ] | [ ] |  |
+| Impressum funktioniert | [ ] | [ ] |  |
 
-Bitte testen:
-- Bei einer Wanderung den Download auslösen
+## 12. Admin
 
-Bitte prüfen:
-- Wird eine Datei erstellt?
-- Sind wichtige Infos enthalten?
-- Ist nur das Titelbild enthalten?
-- Fehlen Kommentare und Bewertungen?
+| Test | Ja | Nein | Notiz |
+|---|---|---|---|
+| Öffentliche Tour zur Prüfung sichtbar | [ ] | [ ] |  |
+| Öffentliche Tour freigeben funktioniert | [ ] | [ ] |  |
+| Öffentliche Tour ablehnen funktioniert | [ ] | [ ] |  |
+| Öffentliche Tour bearbeiten funktioniert | [ ] | [ ] |  |
+| Kommentar mit Triggerwort sichtbar | [ ] | [ ] |  |
+| Kommentar freigeben funktioniert | [ ] | [ ] |  |
+| Kommentar löschen funktioniert | [ ] | [ ] |  |
 
-## 12. Öffentliche Seiten
+## Allgemeiner Eindruck
 
-Bitte einmal allgemein durchgehen:
-- Startseite
-- Login
-- Support
-- Datenschutz
-- Impressum
-
-Bitte prüfen:
-- Laden die Seiten normal?
-- Sind Texte verständlich?
-- Gibt es noch kaputte Umlaute oder komische Zeichen?
-
-## 13. Admin-Test
-
-Bitte mit einem Admin-Konto prüfen:
-
-### Öffentliche Wanderungen
-- Öffentliche Nutzer-Wanderung sehen
-- Eintrag freigeben
-- Eintrag ablehnen
-- Eintrag bearbeiten
-
-### Kommentare
-- Kommentar mit Triggerwort sehen
-- Kommentar freigeben
-- Kommentar löschen
-
-Bitte prüfen:
-- Ist im Admin-Bereich alles klar verständlich?
-- Werden wartende Dinge richtig angezeigt?
-
-## 14. Was Testnutzer am Ende zurückmelden sollen
-
-Bitte jede Rückmeldung so einfach wie möglich schreiben:
-
-- Was hat gut funktioniert?
-- Was hat nicht funktioniert?
-- Was war unklar?
-- Wo habt ihr euch unsicher gefühlt?
-- Welche Seite war betroffen?
-- Handy oder Computer?
-
-## Kurzfassung für schnelle Tester
-
-Wenn jemand nicht alles testen will, dann bitte mindestens diese Punkte:
-
-1. Registrierung und Login
-2. Passwort vergessen
-3. Hund anlegen
-4. Route planen
-5. Wanderung eintragen
-6. Kommentar schreiben
-7. Freundschaftsanfrage
-8. Admin-Freigabe einer öffentlichen Wanderung
+| Frage | Gut | Nicht gut | Notiz |
+|---|---|---|---|
+| App ist verständlich | [ ] | [ ] |  |
+| Texte sind klar | [ ] | [ ] |  |
+| Es gab kaputte Zeichen oder Umlaute | [ ] | [ ] |  |
+| Die App wirkt stabil | [ ] | [ ] |  |
 
