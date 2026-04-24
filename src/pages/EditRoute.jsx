@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/lib/AuthContext";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { getRoute, updateRoute } from "@/lib/routesApi";
@@ -18,6 +19,7 @@ export default function EditRoute() {
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
   const routeId = searchParams.get("id");
+  const { user } = useAuth();
 
   const [routeData, setRouteData] = useState(null);
   const [routeGeometry, setRouteGeometry] = useState(null);
@@ -49,7 +51,7 @@ export default function EditRoute() {
   const updateMutation = useMutation({
     mutationFn: (data) => updateRoute(routeId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userRoutes"] });
+      queryClient.invalidateQueries({ queryKey: ["userRoutes", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["route", routeId] });
       toast.success("Route aktualisiert");
       navigate(`${createPageUrl("RouteDetail")}?id=${routeId}`);
