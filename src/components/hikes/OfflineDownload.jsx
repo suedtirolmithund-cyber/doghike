@@ -248,7 +248,7 @@ export default function OfflineDownload({ hike, dogs = [] }) {
       pdf.setFontSize(8);
       pdf.setTextColor(128, 128, 128);
       pdf.text(
-        `Erstellt am ${format(new Date(), "dd.MM.yyyy HH:mm")} - Suedtirol mit Hund`,
+        `Erstellt am ${format(new Date(), "dd.MM.yyyy HH:mm")} - Südtirol mit Hund`,
         margin,
         pdf.internal.pageSize.getHeight() - 10
       );
