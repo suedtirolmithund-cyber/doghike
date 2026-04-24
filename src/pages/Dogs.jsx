@@ -47,7 +47,7 @@ export default function Dogs() {
   });
 
   const { data: statsMap = {} } = useQuery({
-    queryKey: ["dogStats", user?.id],
+    queryKey: ["dogStats", user?.id, dogs.map((dog) => dog.id).join(",")],
     queryFn: async () => {
       if (!dogs.length) return {};
 
@@ -79,6 +79,7 @@ export default function Dogs() {
     mutationFn: (data) => createDog(user.id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
       setDialogOpen(false);
       toast.success("Hund hinzugefuegt");
     },
@@ -89,6 +90,7 @@ export default function Dogs() {
     mutationFn: ({ id, data }) => updateDog(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
       setDialogOpen(false);
       setEditingDog(null);
       toast.success("Hund aktualisiert");
@@ -100,6 +102,7 @@ export default function Dogs() {
     mutationFn: (id) => deleteDog(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
       toast.success("Hund entfernt");
     },
     onError: () => toast.error("Der Hund konnte gerade nicht entfernt werden. Bitte versuche es noch einmal."),
