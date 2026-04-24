@@ -142,7 +142,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
             id="favorite_food"
             value={formData.favorite_food}
             onChange={(event) => setFormData({ ...formData, favorite_food: event.target.value })}
-            placeholder="z.B. Leberwurst, Kaese..."
+            placeholder="z.B. Leberwurst, Käse..."
           />
         </div>
       </div>
