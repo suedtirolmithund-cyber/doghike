@@ -534,10 +534,8 @@ export default function RoutePlanner() {
   const [routeGeometry, setRouteGeometry] = useState(null);
   const [routeData, setRouteData] = useState({
     name: "",
-    description: "",
     start_location: "",
     notes: "",
-    is_shared: false, // shared with friends (never truly public)
   });
 
   const navigate = useNavigate();
@@ -562,11 +560,11 @@ export default function RoutePlanner() {
     }
     await createRouteMutation.mutateAsync({
       name: routeData.name,
-      description: routeData.description,
       start_location: routeData.start_location,
+      notes: routeData.notes,
       route_type: activeTab === "track" ? "recorded" : activeTab === "gpx" ? "gpx" : "planned",
       waypoints: routeGeometry.positions ?? routeGeometry.coordinates ?? [],
-      is_public: routeData.is_shared,
+      is_public: false,
       distance_km: routeGeometry.distance_km,
       elevation_gain_m: routeGeometry.elevation_gain_m || null,
       duration_minutes: routeGeometry.duration_minutes || null,
@@ -592,8 +590,8 @@ export default function RoutePlanner() {
         <Link to={createPageUrl("Profile")}>
           <Button variant="ghost" className="mb-3 md:mb-4" size="sm">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            <span className="hidden sm:inline">ZurÃ¼ck zum Profil</span>
-            <span className="sm:hidden">ZurÃ¼ck</span>
+            <span className="hidden sm:inline">Zurück zum Profil</span>
+            <span className="sm:hidden">Zurück</span>
           </Button>
         </Link>
 
@@ -661,30 +659,15 @@ export default function RoutePlanner() {
                   className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="description">Beschreibung</Label>
-                <Textarea id="description" placeholder="Beschreibe deine Route..."
-                  value={routeData.description} onChange={(e) => setRouteData({ ...routeData, description: e.target.value })}
+                <Label htmlFor="notes">Notizen</Label>
+                <Textarea id="notes" placeholder="Notizen zu deiner geplanten Route..."
+                  value={routeData.notes} onChange={(e) => setRouteData({ ...routeData, notes: e.target.value })}
                   rows={2} className="mt-1" />
               </div>
 
-              {/* Visibility: always private or shared with friends only */}
-              <div className="flex gap-2">
-                {[
-                  { value: false, label: "ðŸ”’ Privat", desc: "Nur ich" },
-                  { value: true,  label: "ðŸ‘¥ Freunde", desc: "Mit Freunden teilen" },
-                ].map(({ value, label, desc }) => (
-                  <button key={String(value)} type="button"
-                    onClick={() => setRouteData({ ...routeData, is_shared: value })}
-                    className={`flex-1 p-3 rounded-xl border-2 text-sm font-medium transition-all text-center ${
-                      routeData.is_shared === value
-                        ? "border-slate-700 bg-slate-50 text-slate-800"
-                        : "border-stone-200 text-stone-500 hover:border-stone-300"
-                    }`}
-                  >
-                    <div>{label}</div>
-                    <div className="text-xs font-normal text-stone-400 mt-0.5">{desc}</div>
-                  </button>
-                ))}
+              <div className="rounded-xl border border-stone-200 bg-stone-50 p-3 text-sm text-stone-600">
+                Geplante Routen bleiben immer privat. Freunde oder öffentlich stellst du erst später ein,
+                wenn du die Route als erledigte Wanderung einträgst.
               </div>
 
               <div className="flex gap-2 justify-end">

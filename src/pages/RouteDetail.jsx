@@ -165,8 +165,8 @@ export default function RouteDetail() {
     prefill_duration: route.duration_minutes || "",
     prefill_description: [
       route.completed_notes,
-      route.description,
       route.notes,
+      route.description,
     ].filter(Boolean).join("\n\n"),
   });
   const journalUrl = createPageUrl("AddJournalEntry") + "?" + journalParams.toString();
@@ -177,7 +177,7 @@ export default function RouteDetail() {
         <Link to={createPageUrl("Profile")}>
           <Button variant="ghost" className="mb-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            ZurÃ¼ck
+            Zurück
           </Button>
         </Link>
 
@@ -251,10 +251,15 @@ export default function RouteDetail() {
             </div>
 
             <div className="flex items-center gap-2 text-sm">
-              {route.is_public ? (
+              {route.route_type === "planned" ? (
+                <span className="flex items-center gap-1 text-stone-500">
+                  <EyeOff className="w-4 h-4" />
+                  Private Planung
+                </span>
+              ) : route.is_public ? (
                 <span className="flex items-center gap-1 text-green-600">
                   <Eye className="w-4 h-4" />
-                  Ã–ffentlich
+                  Öffentlich
                 </span>
               ) : (
                 <span className="flex items-center gap-1 text-stone-500">

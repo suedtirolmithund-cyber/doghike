@@ -33,10 +33,8 @@ export default function EditRoute() {
     if (route) {
       setRouteData({
         name: route.name ?? "",
-        description: route.description ?? "",
         start_location: route.start_location ?? "",
-        notes: route.notes ?? "",
-        is_public: route.is_public ?? false,
+        notes: route.notes ?? route.description ?? "",
       });
       setRouteGeometry({
         coordinates: route.waypoints ?? [],
@@ -67,10 +65,9 @@ export default function EditRoute() {
 
     await updateMutation.mutateAsync({
       name: routeData.name,
-      description: routeData.description,
       start_location: routeData.start_location,
       notes: routeData.notes,
-      is_public: routeData.is_public,
+      is_public: false,
       waypoints: routeGeometry.coordinates,
       distance_km: routeGeometry.distance_km,
       duration_minutes: routeGeometry.duration_minutes ?? null,
@@ -91,7 +88,7 @@ export default function EditRoute() {
       <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
         <Link to={`${createPageUrl("RouteDetail")}?id=${routeId}`}>
           <Button variant="ghost" className="mb-3 md:mb-4" size="sm">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Zurueck zur Route
+            <ArrowLeft className="w-4 h-4 mr-2" /> Zurück zur Route
           </Button>
         </Link>
 
@@ -104,7 +101,7 @@ export default function EditRoute() {
             <Map className="w-6 h-6 text-slate-700 flex-shrink-0 mt-1" />
             <div>
               <h1 className="text-xl md:text-2xl font-bold text-stone-800">Route bearbeiten</h1>
-              <p className="text-xs text-stone-500 mt-0.5">Aendere den Streckenverlauf oder die Details</p>
+              <p className="text-xs text-stone-500 mt-0.5">Ändere den Streckenverlauf oder die Details</p>
             </div>
           </div>
 
@@ -128,7 +125,7 @@ export default function EditRoute() {
               </div>
               {route?.route_type === "planned" && (
                 <Button variant="outline" size="sm" onClick={() => setEditingMap(true)}>
-                  <Map className="w-4 h-4 mr-2" /> Streckenverlauf aendern
+                  <Map className="w-4 h-4 mr-2" /> Streckenverlauf ändern
                 </Button>
               )}
             </div>
@@ -184,24 +181,19 @@ export default function EditRoute() {
               />
             </div>
             <div>
-              <Label htmlFor="description">Beschreibung</Label>
-              <Textarea
-                id="description"
-                value={routeData.description}
-                rows={3}
-                onChange={(event) => setRouteData({ ...routeData, description: event.target.value })}
-                className="mt-1"
-              />
-            </div>
-            <div>
               <Label htmlFor="notes">Notizen</Label>
               <Textarea
                 id="notes"
                 value={routeData.notes}
-                rows={2}
+                rows={3}
                 onChange={(event) => setRouteData({ ...routeData, notes: event.target.value })}
                 className="mt-1"
               />
+            </div>
+
+            <div className="rounded-xl border border-stone-200 bg-stone-50 p-3 text-sm text-stone-600">
+              Geplante Routen bleiben privat. Freunde oder öffentlich stellst du erst später ein,
+              wenn du die Route als erledigte Wanderung einträgst.
             </div>
 
             <div className="flex gap-3 pt-2">
@@ -215,7 +207,7 @@ export default function EditRoute() {
                 size="sm"
               >
                 {updateMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                Aenderungen speichern
+                Änderungen speichern
               </Button>
             </div>
           </form>
