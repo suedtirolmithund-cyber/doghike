@@ -31,6 +31,7 @@ import RatingSection from "@/components/community/RatingSection";
 import ExpandableText from "@/components/ExpandableText";
 import PremiumGate from "@/components/hikes/PremiumGate";
 import { supabase } from "@/lib/supabaseClient";
+import { toast } from "sonner";
 
 const difficultyColors = {
   "1": "bg-brand-100 text-brand-600",
@@ -75,15 +76,24 @@ export default function HikeDetail() {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [copied, setCopied] = useState(false);
 
-  const handleShare = () => {
+  const handleShare = async () => {
     const url = window.location.href;
-    if (navigator.share) {
-      navigator.share({ title: hike?.trail_name, url });
-    } else {
-      navigator.clipboard.writeText(url).then(() => {
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: hike?.trail_name, url });
+        return;
+      }
+
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
-      });
+        return;
+      }
+
+      throw new Error("clipboard_unavailable");
+    } catch {
+      toast.error("Der Link konnte gerade nicht geteilt oder kopiert werden. Bitte versuche es noch einmal.");
     }
   };
 

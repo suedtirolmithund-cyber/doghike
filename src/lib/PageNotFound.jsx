@@ -26,7 +26,7 @@ export default function PageNotFound() {
           <div className="mt-4 p-4 bg-slate-100 rounded-lg border border-slate-200 text-left">
             <p className="text-sm font-medium text-slate-700 mb-1">Admin-Hinweis</p>
             <p className="text-sm text-slate-600">
-              Diese Seite ist nicht in pages.config.js registriert oder noch nicht implementiert.
+              Diese Route ist nicht registriert oder die Seite ist noch nicht implementiert.
             </p>
           </div>
         )}
