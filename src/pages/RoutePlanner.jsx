@@ -536,7 +536,6 @@ export default function RoutePlanner() {
     description: "",
     start_location: "",
     notes: "",
-    is_shared: false, // shared with friends (never truly public)
   });
 
   const navigate = useNavigate();
@@ -565,7 +564,7 @@ export default function RoutePlanner() {
       start_location: routeData.start_location,
       route_type: activeTab === "track" ? "recorded" : activeTab === "gpx" ? "gpx" : "planned",
       waypoints: routeGeometry.positions ?? routeGeometry.coordinates ?? [],
-      is_public: routeData.is_shared,
+      is_public: false,
       distance_km: routeGeometry.distance_km,
       elevation_gain_m: routeGeometry.elevation_gain_m || null,
       duration_minutes: routeGeometry.duration_minutes || null,
@@ -666,24 +665,9 @@ export default function RoutePlanner() {
                   rows={2} className="mt-1" />
               </div>
 
-              {/* Visibility: always private or shared with friends only */}
-              <div className="flex gap-2">
-                {[
-                  { value: false, label: "🔒 Privat", desc: "Nur ich" },
-                  { value: true,  label: "👥 Freunde", desc: "Mit Freunden teilen" },
-                ].map(({ value, label, desc }) => (
-                  <button key={String(value)} type="button"
-                    onClick={() => setRouteData({ ...routeData, is_shared: value })}
-                    className={`flex-1 p-3 rounded-xl border-2 text-sm font-medium transition-all text-center ${
-                      routeData.is_shared === value
-                        ? "border-slate-700 bg-slate-50 text-slate-800"
-                        : "border-stone-200 text-stone-500 hover:border-stone-300"
-                    }`}
-                  >
-                    <div>{label}</div>
-                    <div className="text-xs font-normal text-stone-400 mt-0.5">{desc}</div>
-                  </button>
-                ))}
+              <div className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-600">
+                Diese Planung bleibt privat. Erst wenn du die Route später als Wanderung einträgst,
+                kannst du sie auf Freunde oder öffentlich stellen.
               </div>
 
               <div className="flex gap-2 justify-end">

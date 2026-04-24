@@ -261,7 +261,7 @@ create table if not exists public.user_routes (
 );
 alter table public.user_routes enable row level security;
 create policy "Eigene Routen lesen" on public.user_routes
-  for select using (auth.uid() = user_id or is_public = true);
+  for select using (auth.uid() = user_id or public.is_admin());
 create policy "Eigene Routen verwalten" on public.user_routes
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
