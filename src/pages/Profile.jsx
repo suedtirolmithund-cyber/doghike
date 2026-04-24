@@ -481,15 +481,6 @@ export default function Profile() {
             ) : userRoutes.length > 0 ? (
               <div className="space-y-3">
                 {userRoutes.map((route) => {
-                  const journalParams = new URLSearchParams({
-                    prefill_title: route.name || "",
-                    prefill_location: route.start_location || "",
-                    prefill_distance: route.distance_km ?? "",
-                    prefill_elevation: route.elevation_gain_m ?? "",
-                    prefill_duration: route.duration_minutes ?? "",
-                    prefill_description: [route.description, route.notes].filter(Boolean).join("\n\n"),
-                  });
-
                   return (
                     <div key={route.id} className="bg-white rounded-xl border border-stone-200/60 shadow-sm p-4 flex items-center gap-4">
                       <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${route.completed ? "bg-brand-100" : "bg-blue-100"}`}>
@@ -519,7 +510,7 @@ export default function Profile() {
                           <Button size="sm" variant="outline" className="h-8 text-xs">Details</Button>
                         </Link>
                         {route.completed && (
-                          <Link to={`${createPageUrl("AddJournalEntry")}?${journalParams.toString()}`}>
+                          <Link to={`${createPageUrl("RouteDetail")}?id=${route.id}`}>
                             <Button size="sm" className="h-8 text-xs bg-brand-400 hover:bg-brand-600">
                               <BookOpen className="w-3.5 h-3.5 mr-1" />
                               Eintragen
