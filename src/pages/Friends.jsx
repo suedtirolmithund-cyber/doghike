@@ -46,7 +46,7 @@ function FeedCard({ entry }) {
           </span>
         </div>
         <h3 className="font-semibold text-stone-800 mb-1">{entry.title}</h3>
-        {entry.location && <p className="text-xs text-stone-500 mb-2">📍 {entry.location}</p>}
+        {entry.location && <p className="text-xs text-stone-500 mb-2">Ã°Å¸â€œÂ {entry.location}</p>}
         <div className="flex flex-wrap gap-3 text-xs text-stone-500 mb-2">
           {entry.distance_km && <span className="flex items-center gap-1"><Ruler className="w-3 h-3" />{entry.distance_km} km</span>}
           {entry.elevation_m && <span className="flex items-center gap-1"><TrendingUp className="w-3 h-3" />{entry.elevation_m} Hm</span>}
@@ -55,7 +55,7 @@ function FeedCard({ entry }) {
         {entry.description && <p className="text-sm text-stone-500 line-clamp-2">{entry.description}</p>}
         {entry.dog_suitable && (
           <Badge variant="secondary" className="mt-2 text-xs bg-emerald-50 text-emerald-700 border-emerald-200">
-            🐕 Hundefreundlich
+            Ã°Å¸Ââ€¢ Hundefreundlich
           </Badge>
         )}
       </div>
@@ -165,7 +165,7 @@ export default function Friends() {
     mutationFn: acceptFriendRequest,
     onSuccess: () => {
       refreshFriendData();
-      toast.success("Freundschaft bestätigt");
+      toast.success("Freundschaft bestÃƒÂ¤tigt");
     },
   });
 
@@ -196,7 +196,7 @@ export default function Friends() {
         toast.info("Keine Nutzer gefunden. Falls die Person neu registriert ist, muss sie sich einmal ab- und wieder anmelden.");
       }
     } catch {
-      toast.error("Die Suche konnte gerade nicht ausgeführt werden. Bitte versuche es noch einmal.");
+      toast.error("Die Suche konnte gerade nicht ausgefÃƒÂ¼hrt werden. Bitte versuche es noch einmal.");
     } finally {
       setSearching(false);
     }
@@ -239,7 +239,7 @@ export default function Friends() {
             {accepted.length} Freund{accepted.length !== 1 ? "e" : ""}
             {incoming.length > 0 && (
               <span className="ml-2 inline-flex items-center gap-1 text-amber-600 font-medium">
-                · {incoming.length} offene Anfrage{incoming.length !== 1 ? "n" : ""}
+                Â· {incoming.length} offene Anfrage{incoming.length !== 1 ? "n" : ""}
               </span>
             )}
           </p>
@@ -324,7 +324,7 @@ export default function Friends() {
               Freunde ({accepted.length})
             </TabsTrigger>
             <TabsTrigger value="requests" className="flex-1 relative">
-              Anfragen
+              Offene Anfragen
               {incoming.length > 0 && (
                 <span className="ml-1.5 bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5 py-0.5">
                   {incoming.length}
@@ -473,7 +473,7 @@ export default function Friends() {
                     <button onClick={() => setFeedVisible((v) => v + 10)}
                       className="text-sm text-emerald-600 hover:text-emerald-700 font-medium px-4 py-2 rounded-xl hover:bg-emerald-50 transition-colors"
                     >
-                      {feedEntries.length - feedVisible} weitere laden ↓
+                      {feedEntries.length - feedVisible} weitere laden →
                     </button>
                   </div>
                 )}
