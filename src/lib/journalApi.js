@@ -194,6 +194,19 @@ export async function deleteJournalEntry(id) {
   }
 }
 
+export async function deleteJournalFiles(fileReferences = []) {
+  const storagePaths = fileReferences.filter((fileReference) => isJournalStoragePath(fileReference));
+  if (storagePaths.length === 0) return;
+
+  const { error } = await supabase.storage
+    .from("journal")
+    .remove(storagePaths);
+
+  if (error) {
+    console.error("[deleteJournalFiles] journal file cleanup failed:", error.message);
+  }
+}
+
 // Upload photo or GPX to "journal" bucket
 export async function uploadJournalFile(userId, file) {
   const ext = file.name.split(".").pop();

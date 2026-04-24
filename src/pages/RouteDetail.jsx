@@ -1,8 +1,8 @@
-import { useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { getRoute, updateRoute, deleteRoute } from "@/lib/routesApi";
-import { uploadJournalFile } from "@/lib/journalApi";
+import { deleteJournalFiles, uploadJournalFile } from "@/lib/journalApi";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { MapContainer, TileLayer, Polyline, Marker } from "react-leaflet";
@@ -65,8 +65,34 @@ export default function RouteDetail() {
   const [uploading, setUploading] = useState(false);
   const [editingRoute, setEditingRoute] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const preservePendingMediaRef = useRef(false);
+  const pendingPhotosRef = useRef([]);
 
   const { user } = useAuth();
+
+  useEffect(() => {
+    pendingPhotosRef.current = completeData.photos ?? [];
+  }, [completeData.photos]);
+
+  useEffect(() => {
+    return () => {
+      if (!preservePendingMediaRef.current && pendingPhotosRef.current.length > 0) {
+        void deleteJournalFiles(pendingPhotosRef.current);
+      }
+    };
+  }, []);
+
+  const clearPendingCompletionPhotos = async () => {
+    const pendingPhotos = completeData.photos ?? [];
+    if (pendingPhotos.length > 0) {
+      await deleteJournalFiles(pendingPhotos);
+    }
+
+    setCompleteData((prev) => ({
+      ...prev,
+      photos: [],
+    }));
+  };
 
   const updateCoordinatesMutation = useMutation({
     mutationFn: (data) => updateRoute(routeId, data),
@@ -103,7 +129,12 @@ export default function RouteDetail() {
     }
   };
 
-  const removePhoto = (index) => {
+  const removePhoto = async (index) => {
+    const photoToRemove = completeData.photos?.[index];
+    if (photoToRemove) {
+      await deleteJournalFiles([photoToRemove]);
+    }
+
     setCompleteData(prev => ({ ...prev, photos: prev.photos.filter((_, i) => i !== index) }));
   };
 
@@ -145,7 +176,7 @@ export default function RouteDetail() {
         <div className="text-center">
           <p className="text-xl text-stone-700 mb-4">Route nicht gefunden</p>
           <Link to={createPageUrl("Profile")}>
-            <Button>Zurück zum Profil</Button>
+            <Button>ZurÃ¼ck zum Profil</Button>
           </Link>
         </div>
       </div>
@@ -184,6 +215,7 @@ export default function RouteDetail() {
   });
 
   const handleCreateJournalEntry = () => {
+    preservePendingMediaRef.current = true;
     navigate(createPageUrl("AddJournalEntry"), {
       state: { routePrefill: buildJournalPrefill() },
     });
@@ -196,7 +228,7 @@ export default function RouteDetail() {
         <Link to={createPageUrl("Profile")}>
           <Button variant="ghost" className="mb-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück
+            ZurÃ¼ck
           </Button>
         </Link>
 
@@ -219,7 +251,7 @@ export default function RouteDetail() {
                   {route.name}
                 </h1>
                 {route.start_location && (
-                  <p className="text-stone-600">📍 {route.start_location}</p>
+                  <p className="text-stone-600">ðŸ“ {route.start_location}</p>
                 )}
               </div>
 
@@ -249,9 +281,9 @@ export default function RouteDetail() {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Route löschen?</AlertDialogTitle>
+                        <AlertDialogTitle>Route lÃ¶schen?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Diese Route wird dauerhaft gelöscht. Das kann nicht rückgängig gemacht werden.
+                          Diese Route wird dauerhaft gelÃ¶scht. Das kann nicht rÃ¼ckgÃ¤ngig gemacht werden.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
@@ -260,7 +292,7 @@ export default function RouteDetail() {
                           onClick={() => deleteRouteMutation.mutate()}
                           className="bg-red-600 hover:bg-red-700"
                         >
-                          Löschen
+                          LÃ¶schen
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -281,7 +313,7 @@ export default function RouteDetail() {
                   Private Planung
                 </span>
               )}
-              <span className="text-stone-400">•</span>
+              <span className="text-stone-400">â€¢</span>
               <span className="text-stone-500">
                 {route.created_at ? format(new Date(route.created_at), "dd.MM.yyyy") : ""}
               </span>
@@ -362,7 +394,7 @@ export default function RouteDetail() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               <div className="text-center p-4 bg-slate-50 rounded-lg">
                 <Route className="w-5 h-5 mx-auto mb-2 text-slate-700" />
-                <p className="text-2xl font-bold text-slate-800">{route.distance_km ?? "–"}</p>
+                <p className="text-2xl font-bold text-slate-800">{route.distance_km ?? "â€“"}</p>
                 <p className="text-xs text-stone-500">Kilometer</p>
               </div>
               <div className="text-center p-4 bg-slate-50 rounded-lg">
@@ -372,22 +404,22 @@ export default function RouteDetail() {
                     ? Math.floor(route.duration_minutes / 60) > 0
                       ? `${Math.floor(route.duration_minutes / 60)}h ${route.duration_minutes % 60}min`
                       : `${route.duration_minutes}min`
-                    : "–"}
+                    : "â€“"}
                 </p>
                 <p className="text-xs text-stone-500">Gehzeit</p>
               </div>
               <div className="text-center p-4 bg-slate-50 rounded-lg">
                 <TrendingUp className="w-5 h-5 mx-auto mb-2 text-slate-700" />
                 <p className="text-2xl font-bold text-slate-800">
-                  {route.elevation_gain_m ? `+${route.elevation_gain_m}` : "–"}
+                  {route.elevation_gain_m ? `+${route.elevation_gain_m}` : "â€“"}
                 </p>
-                <p className="text-xs text-stone-500">Höhenmeter</p>
+                <p className="text-xs text-stone-500">HÃ¶henmeter</p>
               </div>
               {route.avg_speed_kmh && (
                 <div className="text-center p-4 bg-slate-50 rounded-lg">
                   <Navigation className="w-5 h-5 mx-auto mb-2 text-slate-700" />
                   <p className="text-2xl font-bold text-slate-800">{route.avg_speed_kmh}</p>
-                  <p className="text-xs text-stone-500">km/h ⌀</p>
+                  <p className="text-xs text-stone-500">km/h âŒ€</p>
                 </div>
               )}
               <div className="text-center p-4 bg-slate-50 rounded-lg">
@@ -426,7 +458,7 @@ export default function RouteDetail() {
                     <CheckCircle2 className="w-6 h-6 text-brand-400" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-semibold text-brand-600">Tour erledigt! 🎉</p>
+                    <p className="font-semibold text-brand-600">Tour erledigt! ðŸŽ‰</p>
                     {route.completed_date && (
                       <p className="text-sm text-stone-500">Am {format(new Date(route.completed_date), "dd.MM.yyyy")}</p>
                     )}
@@ -475,7 +507,7 @@ export default function RouteDetail() {
                     className="overflow-hidden"
                   >
                     <div className="border-t border-stone-200 mt-4 pt-4 space-y-4">
-                      <h4 className="font-medium text-stone-800">Tour-Details ergänzen</h4>
+                      <h4 className="font-medium text-stone-800">Tour-Details ergÃ¤nzen</h4>
 
                       {/* Date */}
                       <div>
@@ -489,7 +521,7 @@ export default function RouteDetail() {
 
                       {/* Duration */}
                       <div>
-                        <label className="text-sm font-medium text-stone-700 mb-1 block">Tatsächliche Gehzeit (Minuten)</label>
+                        <label className="text-sm font-medium text-stone-700 mb-1 block">TatsÃ¤chliche Gehzeit (Minuten)</label>
                         <Input
                           type="number"
                           placeholder="z.B. 150"
@@ -501,28 +533,28 @@ export default function RouteDetail() {
                       {/* Difficulty */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="text-sm font-medium text-stone-700 mb-1 block">Schwierigkeit (Mensch) 👤</label>
+                          <label className="text-sm font-medium text-stone-700 mb-1 block">Schwierigkeit (Mensch) ðŸ‘¤</label>
                           <Select value={completeData.difficulty} onValueChange={(v) => setCompleteData({ ...completeData, difficulty: v })}>
-                            <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
+                            <SelectTrigger><SelectValue placeholder="WÃ¤hlen" /></SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="1">1 – Leicht</SelectItem>
-                              <SelectItem value="2">2 – Mittel-leicht</SelectItem>
-                              <SelectItem value="3">3 – Mittel</SelectItem>
-                              <SelectItem value="4">4 – Anspruchsvoll</SelectItem>
-                              <SelectItem value="5">5 – Schwer</SelectItem>
+                              <SelectItem value="1">1 â€“ Leicht</SelectItem>
+                              <SelectItem value="2">2 â€“ Mittel-leicht</SelectItem>
+                              <SelectItem value="3">3 â€“ Mittel</SelectItem>
+                              <SelectItem value="4">4 â€“ Anspruchsvoll</SelectItem>
+                              <SelectItem value="5">5 â€“ Schwer</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
                         <div>
-                          <label className="text-sm font-medium text-stone-700 mb-1 block">Schwierigkeit (Hund) 🐕</label>
+                          <label className="text-sm font-medium text-stone-700 mb-1 block">Schwierigkeit (Hund) ðŸ•</label>
                           <Select value={completeData.dog_difficulty} onValueChange={(v) => setCompleteData({ ...completeData, dog_difficulty: v })}>
-                            <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
+                            <SelectTrigger><SelectValue placeholder="WÃ¤hlen" /></SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="1">1 – Leicht</SelectItem>
-                              <SelectItem value="2">2 – Mittel-leicht</SelectItem>
-                              <SelectItem value="3">3 – Mittel</SelectItem>
-                              <SelectItem value="4">4 – Anspruchsvoll</SelectItem>
-                              <SelectItem value="5">5 – Schwer</SelectItem>
+                              <SelectItem value="1">1 â€“ Leicht</SelectItem>
+                              <SelectItem value="2">2 â€“ Mittel-leicht</SelectItem>
+                              <SelectItem value="3">3 â€“ Mittel</SelectItem>
+                              <SelectItem value="4">4 â€“ Anspruchsvoll</SelectItem>
+                              <SelectItem value="5">5 â€“ Schwer</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -533,25 +565,25 @@ export default function RouteDetail() {
                         <div>
                           <label className="text-sm font-medium text-stone-700 mb-1 block">Beste Jahreszeit</label>
                           <Select value={completeData.season} onValueChange={(v) => setCompleteData({ ...completeData, season: v })}>
-                            <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
+                            <SelectTrigger><SelectValue placeholder="WÃ¤hlen" /></SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="spring">🌸 Frühling</SelectItem>
-                              <SelectItem value="summer">☀️ Sommer</SelectItem>
-                              <SelectItem value="autumn">🍂 Herbst</SelectItem>
-                              <SelectItem value="winter">❄️ Winter</SelectItem>
-                              <SelectItem value="all_year">🍃 Ganzjährig</SelectItem>
+                              <SelectItem value="spring">ðŸŒ¸ FrÃ¼hling</SelectItem>
+                              <SelectItem value="summer">â˜€ï¸ Sommer</SelectItem>
+                              <SelectItem value="autumn">ðŸ‚ Herbst</SelectItem>
+                              <SelectItem value="winter">â„ï¸ Winter</SelectItem>
+                              <SelectItem value="all_year">ðŸƒ GanzjÃ¤hrig</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
                         <div>
-                          <label className="text-sm font-medium text-stone-700 mb-1 block">Wasser unterwegs 💧</label>
+                          <label className="text-sm font-medium text-stone-700 mb-1 block">Wasser unterwegs ðŸ’§</label>
                           <Select value={completeData.water_availability} onValueChange={(v) => setCompleteData({ ...completeData, water_availability: v })}>
-                            <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
+                            <SelectTrigger><SelectValue placeholder="WÃ¤hlen" /></SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="none">🚫 Kein Wasser</SelectItem>
-                              <SelectItem value="little">💧 Wenig Wasser</SelectItem>
-                              <SelectItem value="moderate">💧💧 Etwas Wasser</SelectItem>
-                              <SelectItem value="plenty">💧💧💧 Viel Wasser</SelectItem>
+                              <SelectItem value="none">ðŸš« Kein Wasser</SelectItem>
+                              <SelectItem value="little">ðŸ’§ Wenig Wasser</SelectItem>
+                              <SelectItem value="moderate">ðŸ’§ðŸ’§ Etwas Wasser</SelectItem>
+                              <SelectItem value="plenty">ðŸ’§ðŸ’§ðŸ’§ Viel Wasser</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -578,7 +610,7 @@ export default function RouteDetail() {
                       {/* Dogs */}
                       {myDogs.length > 0 && (
                         <div>
-                          <label className="text-sm font-medium text-stone-700 mb-2 block">🐕 Welche Hunde waren dabei?</label>
+                          <label className="text-sm font-medium text-stone-700 mb-2 block">ðŸ• Welche Hunde waren dabei?</label>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             {myDogs.map((dog) => (
                               <div
@@ -623,9 +655,9 @@ export default function RouteDetail() {
 
                       {/* Parking */}
                       <div>
-                        <label className="text-sm font-medium text-stone-700 mb-1 block">🅿️ Ausgangspunkt & Parken</label>
+                        <label className="text-sm font-medium text-stone-700 mb-1 block">ðŸ…¿ï¸ Ausgangspunkt & Parken</label>
                         <Textarea
-                          placeholder="z.B. Großer Parkplatz am Pragser Wildsee..."
+                          placeholder="z.B. GroÃŸer Parkplatz am Pragser Wildsee..."
                           value={completeData.parking_info}
                           onChange={(e) => setCompleteData({ ...completeData, parking_info: e.target.value })}
                           rows={2}
@@ -634,9 +666,9 @@ export default function RouteDetail() {
 
                       {/* Restaurant */}
                       <div>
-                        <label className="text-sm font-medium text-stone-700 mb-1 block">🍽️ Einkehrmöglichkeiten (optional)</label>
+                        <label className="text-sm font-medium text-stone-700 mb-1 block">ðŸ½ï¸ EinkehrmÃ¶glichkeiten (optional)</label>
                         <Textarea
-                          placeholder="z.B. Seekofel Hütte (2324m)..."
+                          placeholder="z.B. Seekofel HÃ¼tte (2324m)..."
                           value={completeData.restaurant_info}
                           onChange={(e) => setCompleteData({ ...completeData, restaurant_info: e.target.value })}
                           rows={2}
@@ -645,9 +677,9 @@ export default function RouteDetail() {
 
                       {/* Hazard */}
                       <div>
-                        <label className="text-sm font-medium text-stone-700 mb-1 block">⚠️ Gefahrenstellen (optional)</label>
+                        <label className="text-sm font-medium text-stone-700 mb-1 block">âš ï¸ Gefahrenstellen (optional)</label>
                         <Textarea
-                          placeholder="z.B. steile Passagen, Leitern, Kühe auf der Alm..."
+                          placeholder="z.B. steile Passagen, Leitern, KÃ¼he auf der Alm..."
                           value={completeData.hazard_notes}
                           onChange={(e) => setCompleteData({ ...completeData, hazard_notes: e.target.value })}
                           rows={2}
@@ -666,7 +698,14 @@ export default function RouteDetail() {
                       </div>
 
                       <div className="flex gap-2 pt-2">
-                        <Button variant="outline" onClick={() => setShowCompleteForm(false)} className="flex-1">
+                        <Button
+                          variant="outline"
+                          onClick={async () => {
+                            await clearPendingCompletionPhotos();
+                            setShowCompleteForm(false);
+                          }}
+                          className="flex-1"
+                        >
                           Abbrechen
                         </Button>
                         <Button
@@ -674,9 +713,9 @@ export default function RouteDetail() {
                             completed_date: completeData.completed_date || null,
                             completed_notes: [
                               completeData.completed_notes,
-                              completeData.parking_info ? `🅿️ ${completeData.parking_info}` : null,
-                              completeData.restaurant_info ? `🍽️ ${completeData.restaurant_info}` : null,
-                              completeData.hazard_notes ? `⚠️ ${completeData.hazard_notes}` : null,
+                              completeData.parking_info ? `ðŸ…¿ï¸ ${completeData.parking_info}` : null,
+                              completeData.restaurant_info ? `ðŸ½ï¸ ${completeData.restaurant_info}` : null,
+                              completeData.hazard_notes ? `âš ï¸ ${completeData.hazard_notes}` : null,
                             ].filter(Boolean).join("\n\n") || null,
                             completed_rating: completeData.completed_rating || null,
                           })}
@@ -713,10 +752,10 @@ export default function RouteDetail() {
               className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full"
             >
               <div className="text-center mb-5">
-                <div className="text-4xl mb-3">🎉</div>
+                <div className="text-4xl mb-3">ðŸŽ‰</div>
                 <h3 className="text-lg font-semibold text-stone-800">Tour erledigt!</h3>
                 <p className="text-stone-500 text-sm mt-2">
-                  Möchtest du einen Tagebucheintrag für diese Wanderung erstellen?
+                  MÃ¶chtest du einen Tagebucheintrag fÃ¼r diese Wanderung erstellen?
                 </p>
               </div>
               <div className="flex flex-col gap-2">
@@ -724,7 +763,14 @@ export default function RouteDetail() {
                   <CheckCircle2 className="w-4 h-4 mr-2" />
                   Ja, Tagebucheintrag erstellen
                 </Button>
-                <Button variant="outline" onClick={() => setShowJournalDialog(false)} className="w-full">
+                <Button
+                  variant="outline"
+                  onClick={async () => {
+                    await clearPendingCompletionPhotos();
+                    setShowJournalDialog(false);
+                  }}
+                  className="w-full"
+                >
                   Nein, später vielleicht
                 </Button>
               </div>
@@ -735,3 +781,5 @@ export default function RouteDetail() {
     </div>
   );
 }
+
+
