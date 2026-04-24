@@ -156,7 +156,7 @@ export default function Datenschutz() {
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mt-4">
                   <p className="text-amber-800 text-sm">
                     <strong>Recht auf Vergessenwerden:</strong> Sie können Ihr Konto und alle Ihre Daten jederzeit
-                    in den Profileinstellungen unter "Konto loeschen" beantragen.
+                    in den Profileinstellungen unter "Konto löschen" beantragen.
                     Die Anfrage wird per E-Mail vorbereitet und danach manuell bearbeitet.
                   </p>
                 </div>
@@ -322,7 +322,7 @@ export default function Datenschutz() {
                   </div>
                   <div className="bg-stone-50 rounded-xl p-4">
                     <p className="font-semibold text-stone-800 mb-1">Löschung (Art. 17)</p>
-                    <p className="text-sm">Vollständige Datenloeschung - direkt in den Profileinstellungen.</p>
+                    <p className="text-sm">Vollständige Datenlöschung - direkt in den Profileinstellungen.</p>
                   </div>
                   <div className="bg-stone-50 rounded-xl p-4">
                     <p className="font-semibold text-stone-800 mb-1">Datenportabilität (Art. 20)</p>
@@ -363,7 +363,7 @@ export default function Datenschutz() {
                 9. Datensicherheit
               </h2>
               <ul className="list-disc pl-6 space-y-2 text-sm md:text-base text-stone-600">
-                <li>Alle Übertragungen verschlüsselt ueber HTTPS/TLS</li>
+                <li>Alle Übertragungen verschlüsselt über HTTPS/TLS</li>
                 <li>Passwörter werden gehasht gespeichert (bcrypt, nie im Klartext)</li>
                 <li>Supabase Row-Level-Security (RLS): jeder Nutzer sieht nur seine eigenen Daten</li>
                 <li>Daten in EU-Rechenzentrum Frankfurt (Supabase EU-West-1)</li>
