@@ -99,6 +99,13 @@ export const AuthProvider = ({ children }) => {
     return {};
   };
 
+  const updatePassword = async (password) => {
+    setAuthError(null);
+    const { data, error } = await supabase.auth.updateUser({ password });
+    if (error) { setAuthError(error.message); return { error }; }
+    return { data };
+  };
+
   const loginWithGoogle = async () => {
     setAuthError(null);
     const { error } = await supabase.auth.signInWithOAuth({
@@ -116,7 +123,7 @@ export const AuthProvider = ({ children }) => {
       user, isAuthenticated, isAdmin,
       isLoadingAuth, isLoadingPublicSettings,
       authError, appPublicSettings,
-      logout, loginWithEmail, signUpWithEmail, loginWithGoogle, resetPasswordForEmail,
+      logout, loginWithEmail, signUpWithEmail, loginWithGoogle, resetPasswordForEmail, updatePassword,
       navigateToLogin, checkAppState,
     }}>
       {children}

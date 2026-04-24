@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -13,7 +13,7 @@ const BROWN = "#b88c73";
 const BROWN_DARK = "#8c6b4a";
 
 export default function Login() {
-  const { loginWithEmail, signUpWithEmail, loginWithGoogle, resetPasswordForEmail, authError } = useAuth();
+  const { loginWithEmail, signUpWithEmail, loginWithGoogle, resetPasswordForEmail, updatePassword, authError } = useAuth();
   const navigate = useNavigate();
 
   const [mode, setMode] = useState("login");
@@ -28,6 +28,21 @@ export default function Login() {
   const [successMsg, setSuccessMsg] = useState(null);
 
   const error = localError || authError;
+
+  useEffect(() => {
+    const hash = window.location.hash || "";
+    const search = window.location.search || "";
+    const recoveryDetected =
+      hash.includes("type=recovery") ||
+      search.includes("type=recovery") ||
+      (hash.includes("access_token=") && hash.includes("refresh_token="));
+
+    if (recoveryDetected) {
+      setMode("update-password");
+      setLocalError(null);
+      setSuccessMsg("Lege jetzt dein neues Passwort fest.");
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -104,6 +119,40 @@ export default function Login() {
     }
   };
 
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault();
+    setLocalError(null);
+    setSuccessMsg(null);
+
+    if (!password) {
+      setLocalError("Bitte neues Passwort eingeben.");
+      return;
+    }
+    if (password.length < 6) {
+      setLocalError("Das Passwort muss mindestens 6 Zeichen lang sein.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setLocalError("Die Passwörter stimmen nicht überein.");
+      return;
+    }
+
+    setLoading(true);
+    const { error: err } = await updatePassword(password);
+    setLoading(false);
+
+    if (err) {
+      setLocalError(err.message);
+      return;
+    }
+
+    window.history.replaceState({}, document.title, createPageUrl("Login"));
+    setSuccessMsg("Passwort erfolgreich geändert. Du kannst dich jetzt anmelden.");
+    setPassword("");
+    setConfirmPassword("");
+    setMode("login");
+  };
+
   return (
     <div className="min-h-screen relative flex items-end justify-center overflow-hidden">
       {/* Background image */}
@@ -129,13 +178,13 @@ export default function Login() {
           {/* Title */}
           <h1
             className="text-4xl font-semibold mb-6"
-            style={{ color: mode === "reset" ? "white" : BROWN_DARK, fontFamily: "Roboto, sans-serif" }}
+            style={{ color: mode === "reset" || mode === "update-password" ? "white" : BROWN_DARK, fontFamily: "Roboto, sans-serif" }}
           >
-            {mode === "reset" ? "Passwort" : mode === "register" ? "Registrieren" : "Login"}
+            {mode === "reset" ? "Passwort" : mode === "update-password" ? "Neues Passwort" : mode === "register" ? "Registrieren" : "Login"}
           </h1>
 
           {/* Mode tabs (login / register) */}
-          {mode !== "reset" && (
+          {mode !== "reset" && mode !== "update-password" && (
             <div className="flex gap-3 mb-5">
               <button
                 onClick={() => switchMode("register")}
@@ -198,8 +247,56 @@ export default function Login() {
             </form>
           )}
 
+          {mode === "update-password" && (
+            <form onSubmit={handleUpdatePassword} className="space-y-3">
+              <p className="text-sm text-white/80 mb-1">
+                Gib jetzt dein neues Passwort ein und bestätige es.
+              </p>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Neues Passwort"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full h-14 px-4 pr-12 rounded-2xl text-base outline-none border-0"
+                  style={{ background: "#f0f0f0", color: "#222", fontFamily: "Roboto, sans-serif" }}
+                  autoComplete="new-password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Neues Passwort bestätigen"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full h-14 px-4 rounded-2xl text-base outline-none border-0"
+                style={{ background: "#f0f0f0", color: "#222", fontFamily: "Roboto, sans-serif" }}
+                autoComplete="new-password"
+                required
+              />
+              <Feedback error={error} success={successMsg} />
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full h-11 rounded-xl text-white font-medium flex items-center justify-center gap-2"
+                style={{ background: BROWN, fontFamily: "Roboto, sans-serif" }}
+              >
+                {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+                Passwort speichern
+              </button>
+            </form>
+          )}
+
           {/* ── Login / Register form ── */}
-          {mode !== "reset" && (
+          {mode !== "reset" && mode !== "update-password" && (
             <>
               <form onSubmit={handleSubmit} className="space-y-3">
                 <input
