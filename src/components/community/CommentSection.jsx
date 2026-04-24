@@ -28,7 +28,7 @@ import {
   deleteUploadedCommentPhoto,
 } from "@/lib/communityApi";
 
-export default function CommentSection({ hikeId, canComment = true }) {
+export default function CommentSection({ hikeId, hikeSource = "sheets", canComment = true }) {
   const { user, isAuthenticated } = useAuth();
   const [text, setText] = useState("");
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState(null);
@@ -38,8 +38,8 @@ export default function CommentSection({ hikeId, canComment = true }) {
   const queryClient = useQueryClient();
 
   const { data: comments = [], isLoading } = useQuery({
-    queryKey: ["comments", hikeId],
-    queryFn: () => getComments(hikeId),
+    queryKey: ["comments", hikeSource, hikeId],
+    queryFn: () => getComments(hikeId, hikeSource),
   });
 
   const createMutation = useMutation({
@@ -52,7 +52,14 @@ export default function CommentSection({ hikeId, canComment = true }) {
           uploadedPhotoReference = await uploadCommentPhoto(user.id, photoFile, { needsReview });
         }
 
-        return await createComment(user.id, hikeId, text, uploadedPhotoReference, needsReview);
+        return await createComment(
+          user.id,
+          hikeId,
+          hikeSource,
+          text,
+          uploadedPhotoReference,
+          needsReview
+        );
       } catch (error) {
         if (uploadedPhotoReference) {
           await deleteUploadedCommentPhoto(uploadedPhotoReference);
@@ -62,7 +69,7 @@ export default function CommentSection({ hikeId, canComment = true }) {
     },
     onSuccess: () => {
       const needsReview = commentNeedsReview(text);
-      queryClient.invalidateQueries({ queryKey: ["comments", hikeId] });
+      queryClient.invalidateQueries({ queryKey: ["comments", hikeSource, hikeId] });
       setText("");
       if (photoPreviewUrl) {
         URL.revokeObjectURL(photoPreviewUrl);
@@ -84,7 +91,7 @@ export default function CommentSection({ hikeId, canComment = true }) {
   const deleteMutation = useMutation({
     mutationFn: (id) => deleteComment(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments", hikeId] });
+      queryClient.invalidateQueries({ queryKey: ["comments", hikeSource, hikeId] });
       setDeleteId(null);
       toast.success("Kommentar gelöscht.");
     },

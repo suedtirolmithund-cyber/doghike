@@ -84,7 +84,7 @@ export async function upsertRating(userId, hikeId, rating) {
   return data;
 }
 
-export async function getComments(hikeId) {
+export async function getComments(hikeId, hikeSource = "sheets") {
   const { data: authData } = await supabase.auth.getUser();
   const currentUserId = authData?.user?.id;
 
@@ -92,6 +92,7 @@ export async function getComments(hikeId) {
     .from("comments")
     .select("*, profiles:user_id ( username, full_name, avatar_url )")
     .eq("hike_id", hikeId)
+    .eq("hike_source", hikeSource)
     .order("created_at", { ascending: false });
 
   if (currentUserId) {
@@ -105,12 +106,20 @@ export async function getComments(hikeId) {
   return data ?? [];
 }
 
-export async function createComment(userId, hikeId, text, photoUrl = null, needsReview = false) {
+export async function createComment(
+  userId,
+  hikeId,
+  hikeSource = "sheets",
+  text,
+  photoUrl = null,
+  needsReview = false
+) {
   const { data, error } = await supabase
     .from("comments")
     .insert({
       user_id: userId,
       hike_id: hikeId,
+      hike_source: hikeSource,
       text,
       photo_url: photoUrl,
       reported: needsReview,

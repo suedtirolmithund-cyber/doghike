@@ -216,6 +216,7 @@ create table if not exists public.comments (
   id              uuid default gen_random_uuid() primary key,
   user_id         uuid references auth.users(id) on delete cascade not null,
   hike_id         text not null,
+  hike_source     text default 'sheets' check (hike_source in ('sheets','journal')),
   text            text not null,
   photo_url       text,
   reported        boolean default false,

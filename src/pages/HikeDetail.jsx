@@ -574,7 +574,11 @@ export default function HikeDetail() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <CommentSection hikeId={hikeId} canComment={canComment} />
+              <CommentSection
+                hikeId={hikeId}
+                hikeSource={hike?._source === "journal" ? "journal" : "sheets"}
+                canComment={canComment}
+              />
             </motion.div>
           </div>
         </div>
