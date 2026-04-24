@@ -2,7 +2,7 @@ import { MapContainer, TileLayer, Polyline } from "react-leaflet";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
-import { Map, Navigation, Clock, Route, Eye, EyeOff, Trash2, Edit } from "lucide-react";
+import { Map, Navigation, Clock, Route, Eye, Trash2, Edit } from "lucide-react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import "leaflet/dist/leaflet.css";

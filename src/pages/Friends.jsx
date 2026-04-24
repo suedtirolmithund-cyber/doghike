@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
   Users, Search, UserPlus, UserMinus, Check, X,
-  Loader2, LogIn, Clock, Mountain, Ruler, TrendingUp, Star, BookOpen
+  Loader2, LogIn, Clock, Ruler, TrendingUp, Star, BookOpen
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

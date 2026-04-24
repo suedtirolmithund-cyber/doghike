@@ -1,4 +1,3 @@
-import { useRef, useEffect } from "react";
 import { MapContainer, TileLayer, Polyline, useMapEvents, Marker } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Trash2, Undo } from "lucide-react";

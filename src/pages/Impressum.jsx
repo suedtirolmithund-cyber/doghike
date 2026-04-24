@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { ArrowLeft, Building2, Mail, Globe, AlertCircle } from "lucide-react";
+import { ArrowLeft, Building2, Mail, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Impressum() {

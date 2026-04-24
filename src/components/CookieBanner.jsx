@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Cookie, X } from "lucide-react";
+import { Cookie } from "lucide-react";
 
 const CONSENT_KEY = "doghike_cookie_consent";
 

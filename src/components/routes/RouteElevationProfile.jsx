@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { Mountain, Route as RouteIcon } from "lucide-react";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { Mountain } from "lucide-react";
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
   const R = 6371;

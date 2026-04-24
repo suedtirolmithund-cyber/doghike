@@ -3,7 +3,6 @@ import { useAuth } from "@/lib/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
-import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle2 } from "lucide-react";
 

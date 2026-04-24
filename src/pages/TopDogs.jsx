@@ -2,9 +2,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { supabase } from "@/lib/supabaseClient";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
-  Trophy, Mountain, TrendingUp, Ruler, Star,
+  Trophy, TrendingUp, Ruler,
   Loader2, Dog, Sparkles,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

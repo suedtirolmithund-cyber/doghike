@@ -9,13 +9,15 @@
     "moduleResolution": "bundler",
     "lib": ["esnext", "dom"],
     "target": "esnext",
-    "checkJs": true,
+    "allowJs": false,
+    "checkJs": false,
+    "noEmit": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "types": []
+    "types": ["node"]
   },
-  "include": ["src/components/**/*.js", "src/pages/**/*.jsx", "src/Layout.jsx"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts"],
   "exclude": ["node_modules", "dist", "src/vite-plugins", "src/components/ui", "src/api", "src/lib"]
 } 

@@ -7,8 +7,7 @@ import { createPageUrl } from "@/utils";
 import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowLeft, MapPin, Calendar, Clock, Mountain, Route,
-  Star, Edit, Trash2, ChevronLeft, ChevronRight, X, Globe, Share2, Check
+  ArrowLeft, MapPin, Calendar, Clock, Mountain, Route, Edit, Trash2, ChevronLeft, ChevronRight, X, Globe, Share2, Check
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,7 +22,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import HikeMap from "@/components/map/HikeMap";
 import RouteProfile from "@/components/hikes/RouteProfile";
 import HikeWeatherInfo from "@/components/weather/HikeWeatherInfo";
 import InteractiveHikeMap from "@/components/hikes/InteractiveHikeMap";

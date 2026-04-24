@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { Plus, Search, Filter, Grid, List } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import HikeCard from "@/components/hikes/HikeCard";

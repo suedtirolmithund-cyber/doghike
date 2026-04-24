@@ -12,8 +12,7 @@ import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import {
-  ArrowLeft, MapPin, Ruler, TrendingUp, Clock, Star,
-  Droplets, AlertTriangle, Dog, Lock, Users, Globe,
+  ArrowLeft, MapPin, Ruler, TrendingUp, Clock, Star, AlertTriangle, Dog, Lock, Users, Globe,
   Loader2, ShieldOff, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";

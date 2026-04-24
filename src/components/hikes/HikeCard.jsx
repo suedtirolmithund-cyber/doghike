@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
-import { format } from "date-fns";
-import { MapPin, Mountain, Clock, Star, ChevronRight } from "lucide-react";
+import { MapPin, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";

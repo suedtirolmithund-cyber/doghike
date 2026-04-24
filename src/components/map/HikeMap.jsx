@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
-import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";

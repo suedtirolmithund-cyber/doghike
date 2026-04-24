@@ -12,8 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
-  ArrowLeft, Map, Navigation, Loader2, Upload, Search,
-  Trash2, RotateCcw, Layers, Mountain, Clock, Ruler, TrendingUp, X, Plus
+  ArrowLeft, Map, Navigation, Loader2, Upload, Search, RotateCcw, Layers, Mountain, Clock, Ruler, TrendingUp, X
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { motion, AnimatePresence } from "framer-motion";
