@@ -407,7 +407,10 @@ export default function AddJournalEntry() {
   // Pre-fill from route if navigated from RouteDetail
   const prefill = {
     title: searchParams.get("prefill_title") || "",
+    date: searchParams.get("prefill_date") || "",
     location: searchParams.get("prefill_location") || "",
+    latitude: searchParams.get("prefill_latitude") || "",
+    longitude: searchParams.get("prefill_longitude") || "",
     distance_km: searchParams.get("prefill_distance") || "",
     elevation_m: searchParams.get("prefill_elevation") || "",
     duration_minutes: searchParams.get("prefill_duration") || "",
@@ -420,7 +423,10 @@ export default function AddJournalEntry() {
     // Apply prefill from route params (only when not editing existing entry)
     ...(editId ? {} : {
       title: prefill.title || EMPTY_FORM.title,
+      date: prefill.date || EMPTY_FORM.date,
       location: prefill.location || EMPTY_FORM.location,
+      latitude: prefill.latitude || EMPTY_FORM.latitude,
+      longitude: prefill.longitude || EMPTY_FORM.longitude,
       distance_km: prefill.distance_km || EMPTY_FORM.distance_km,
       elevation_m: prefill.elevation_m || EMPTY_FORM.elevation_m,
       duration_minutes: prefill.duration_minutes || EMPTY_FORM.duration_minutes,
