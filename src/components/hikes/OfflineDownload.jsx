@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, Loader2, Check, FileDown } from "lucide-react";
+import { toast } from "sonner";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { format } from "date-fns";
@@ -260,7 +261,7 @@ export default function OfflineDownload({ hike, dogs = [] }) {
       setTimeout(() => setSuccess(false), 3000);
     } catch (error) {
       console.error("Fehler beim Erstellen der PDF:", error);
-      alert("Fehler beim Erstellen der Offline-Datei. Bitte versuchen Sie es erneut.");
+      toast.error("Fehler beim Erstellen der Offline-Datei. Bitte versuche es noch einmal.");
     } finally {
       setDownloading(false);
     }
