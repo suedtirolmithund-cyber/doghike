@@ -698,7 +698,7 @@ export default function RouteDetail() {
                               completeData.hazard_notes ? `⚠️ ${completeData.hazard_notes}` : null,
                             ].filter(Boolean).join("\n\n") || null,
                             completed_rating: completeData.completed_rating || null,
-                            duration_minutes: completeData.completed_duration_minutes
+                            completed_duration_minutes: completeData.completed_duration_minutes
                               ? Number(completeData.completed_duration_minutes)
                               : undefined,
                           })}
@@ -759,3 +759,4 @@ export default function RouteDetail() {
     </div>
   );
 }
+
