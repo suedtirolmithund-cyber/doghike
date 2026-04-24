@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { supabase } from "@/lib/supabaseClient";
 import { getJournalEntryForDisplay } from "@/lib/journalApi";
@@ -98,6 +98,7 @@ function PhotoGallery({ photos }) {
 export default function JournalDetail() {
   const [searchParams] = useSearchParams();
   const entryId = searchParams.get("id");
+  const navigate = useNavigate();
   const { user } = useAuth();
 
   const { data: entry, isLoading } = useQuery({
@@ -135,6 +136,15 @@ export default function JournalDetail() {
   const isOwner = user?.id === entry?.user_id;
   const visInfo = VISIBILITY_INFO[entry?.visibility ?? "private"];
 
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+      return;
+    }
+
+    navigate(createPageUrl("Journal"));
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -164,7 +174,7 @@ export default function JournalDetail() {
 
         {/* Back button */}
         <div className="mb-4 flex items-center justify-between">
-          <button onClick={() => history.back()}>
+          <button onClick={handleBack}>
             <Button variant="ghost" size="sm">
               <ArrowLeft className="w-4 h-4 mr-2" /> Zurück
             </Button>
