@@ -90,6 +90,13 @@ export default function Login() {
 
   const handleGoogle = async () => {
     setLocalError(null);
+    setSuccessMsg(null);
+
+    if (mode === "register" && !privacyAccepted) {
+      setLocalError("Bitte akzeptiere die Datenschutzerklärung.");
+      return;
+    }
+
     setGoogleLoading(true);
     const result = await loginWithGoogle();
     if (result?.error) setGoogleLoading(false);
