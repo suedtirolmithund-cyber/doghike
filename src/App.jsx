@@ -8,7 +8,6 @@ import { pagesConfig } from './pages.config'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
-import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import SeasonalSplashScreen from '@/components/SeasonalSplashScreen';
 import React from 'react';
 
@@ -42,7 +41,7 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
   : <>{children}</>;
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const { isLoadingAuth, isLoadingPublicSettings } = useAuth();
   const [minimumSplashElapsed, setMinimumSplashElapsed] = React.useState(false);
   const isBootLoading = isLoadingPublicSettings || isLoadingAuth;
 
@@ -57,17 +56,6 @@ const AuthenticatedApp = () => {
   // Keep the splash visible until the initial boot is finished and the hero had time to appear.
   if (isBootLoading || !minimumSplashElapsed) {
     return <SeasonalSplashScreen />;
-  }
-
-  // Handle authentication errors
-  if (authError) {
-    if (authError.type === 'user_not_registered') {
-      return <UserNotRegisteredError />;
-    } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
-      navigateToLogin();
-      return null;
-    }
   }
 
   // Render the main app

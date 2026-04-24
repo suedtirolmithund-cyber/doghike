@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import { createPageUrl } from "@/utils";
 
 const AuthContext = createContext();
 
@@ -115,7 +116,7 @@ export const AuthProvider = ({ children }) => {
     if (error) { setAuthError(error.message); return { error }; }
   };
 
-  const navigateToLogin = () => { window.location.href = "/login"; };
+  const navigateToLogin = () => { window.location.href = createPageUrl("Login"); };
   const checkAppState = () => {};
 
   return (
