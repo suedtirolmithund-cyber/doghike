@@ -303,7 +303,7 @@ async function getApprovedJournalEntries() {
 
 /**
  * Combines Google Sheets hikes + approved Supabase journal entries.
- * Deduplicates by id. Sheets hikes take priority on conflict.
+ * Keeps Sheets and journal hikes separate, even when ids collide.
  * Use this as the single source of truth for all public hike lists.
  */
 export async function getAllHikes() {
@@ -312,12 +312,5 @@ export async function getAllHikes() {
     getApprovedJournalEntries(),
   ]);
 
-  // Merge: Sheets first, then journal entries whose id doesn't collide
-  const seenIds = new Set(sheetsHikes.map((h) => h.id));
-  const merged = [
-    ...sheetsHikes,
-    ...journalHikes.filter((h) => !seenIds.has(h.id)),
-  ];
-
-  return merged;
+  return [...sheetsHikes, ...journalHikes];
 }
