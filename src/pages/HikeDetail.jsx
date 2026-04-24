@@ -565,7 +565,10 @@ export default function HikeDetail() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <RatingSection hikeId={hikeId} />
+              <RatingSection
+                hikeId={hikeId}
+                hikeSource={hike?._source === "journal" ? "journal" : "sheets"}
+              />
             </motion.div>
 
             {/* Community Section - Comments */}

@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { getRatings, upsertRating } from "@/lib/communityApi";
 import { toast } from "sonner";
 
-export default function RatingSection({ hikeId }) {
+export default function RatingSection({ hikeId, hikeSource = "sheets" }) {
   const { user, isAuthenticated } = useAuth();
   const [selectedRating, setSelectedRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
@@ -16,8 +16,8 @@ export default function RatingSection({ hikeId }) {
   const queryClient = useQueryClient();
 
   const { data: ratings = [] } = useQuery({
-    queryKey: ["ratings", hikeId],
-    queryFn: () => getRatings(hikeId),
+    queryKey: ["ratings", hikeSource, hikeId],
+    queryFn: () => getRatings(hikeId, hikeSource),
   });
 
   const averageRating =
@@ -28,9 +28,9 @@ export default function RatingSection({ hikeId }) {
   const userRating = user ? ratings.find((rating) => rating.user_id === user.id) : null;
 
   const ratingMutation = useMutation({
-    mutationFn: () => upsertRating(user.id, hikeId, selectedRating),
+    mutationFn: () => upsertRating(user.id, hikeId, hikeSource, selectedRating),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["ratings", hikeId] });
+      queryClient.invalidateQueries({ queryKey: ["ratings", hikeSource, hikeId] });
       setSelectedRating(0);
       setConsentPublic(false);
       toast.success("Bewertung gespeichert");

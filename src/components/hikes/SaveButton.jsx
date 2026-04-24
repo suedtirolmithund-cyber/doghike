@@ -18,7 +18,7 @@ export default function SaveButton({ hikeId, hikeSource = "sheets", className })
     enabled: !!user?.id,
   });
 
-  const isSaved = savedHikes.some((s) => s.hike_id === hikeId);
+  const isSaved = savedHikes.some((s) => s.hike_id === hikeId && s.hike_source === hikeSource);
 
   const saveMutation = useMutation({
     mutationFn: () => saveHike(user.id, hikeId, hikeSource),
@@ -30,7 +30,7 @@ export default function SaveButton({ hikeId, hikeSource = "sheets", className })
   });
 
   const unsaveMutation = useMutation({
-    mutationFn: () => unsaveHike(user.id, hikeId),
+    mutationFn: () => unsaveHike(user.id, hikeId, hikeSource),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] });
       toast.success("Tour entfernt");

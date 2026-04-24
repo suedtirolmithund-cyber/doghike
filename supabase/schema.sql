@@ -191,7 +191,7 @@ create table if not exists public.saved_hikes (
   hike_id     text not null,
   hike_source text default 'sheets' check (hike_source in ('sheets','journal')),
   created_at  timestamptz default now(),
-  unique (user_id, hike_id)
+  unique (user_id, hike_id, hike_source)
 );
 alter table public.saved_hikes enable row level security;
 create policy "Eigene gespeicherte Touren" on public.saved_hikes
@@ -202,9 +202,10 @@ create table if not exists public.ratings (
   id         uuid default gen_random_uuid() primary key,
   user_id    uuid references auth.users(id) on delete cascade not null,
   hike_id    text not null,
+  hike_source text default 'sheets' check (hike_source in ('sheets','journal')),
   rating     smallint not null check (rating between 1 and 5),
   created_at timestamptz default now(),
-  unique (user_id, hike_id)
+  unique (user_id, hike_id, hike_source)
 );
 alter table public.ratings enable row level security;
 create policy "Ratings lesen" on public.ratings for select using (true);

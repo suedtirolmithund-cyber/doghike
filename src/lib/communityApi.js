@@ -45,7 +45,7 @@ export async function saveHike(userId, hikeId, hikeSource = "sheets") {
     .from("saved_hikes")
     .upsert(
       { user_id: userId, hike_id: hikeId, hike_source: hikeSource },
-      { onConflict: "user_id,hike_id" }
+      { onConflict: "user_id,hike_id,hike_source" }
     )
     .select()
     .single();
@@ -53,30 +53,32 @@ export async function saveHike(userId, hikeId, hikeSource = "sheets") {
   return data;
 }
 
-export async function unsaveHike(userId, hikeId) {
+export async function unsaveHike(userId, hikeId, hikeSource = "sheets") {
   const { error } = await supabase
     .from("saved_hikes")
     .delete()
     .eq("user_id", userId)
-    .eq("hike_id", hikeId);
+    .eq("hike_id", hikeId)
+    .eq("hike_source", hikeSource);
   if (error) throw error;
 }
 
-export async function getRatings(hikeId) {
+export async function getRatings(hikeId, hikeSource = "sheets") {
   const { data, error } = await supabase
     .from("ratings")
     .select("*")
-    .eq("hike_id", hikeId);
+    .eq("hike_id", hikeId)
+    .eq("hike_source", hikeSource);
   if (error) throw error;
   return data ?? [];
 }
 
-export async function upsertRating(userId, hikeId, rating) {
+export async function upsertRating(userId, hikeId, hikeSource = "sheets", rating) {
   const { data, error } = await supabase
     .from("ratings")
     .upsert(
-      { user_id: userId, hike_id: hikeId, rating },
-      { onConflict: "user_id,hike_id" }
+      { user_id: userId, hike_id: hikeId, hike_source: hikeSource, rating },
+      { onConflict: "user_id,hike_id,hike_source" }
     )
     .select()
     .single();

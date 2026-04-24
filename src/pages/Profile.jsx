@@ -97,7 +97,11 @@ export default function Profile() {
   });
 
   const savedHikeObjects = savedHikes
-    .map((saved) => allHikes.find((hike) => hike.id === saved.hike_id))
+    .map((saved) =>
+      allHikes.find(
+        (hike) => hike.id === saved.hike_id && (hike._source ?? "sheets") === (saved.hike_source ?? "sheets")
+      )
+    )
     .filter(Boolean);
 
   const upsertProfileMutation = useMutation({
