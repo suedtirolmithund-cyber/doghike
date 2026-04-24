@@ -23,7 +23,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ArrowLeft, Map, Route, Clock, Navigation, Eye, EyeOff, Trash2, TrendingUp, CheckCircle2, Star, Lock, Users, Upload, X, Loader2, Pencil, BookOpen } from "lucide-react";
+import { ArrowLeft, Map, Route, Clock, Navigation, EyeOff, Trash2, TrendingUp, CheckCircle2, Star, Upload, X, Loader2, Pencil, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import ExpandableText from "@/components/ExpandableText";
@@ -51,7 +51,6 @@ export default function RouteDetail() {
     completed_duration_minutes: "",
     completed_notes: "",
     completed_rating: 0,
-    completed_visibility: "private",
     difficulty: "",
     dog_difficulty: "",
     season: "",
@@ -156,20 +155,40 @@ export default function RouteDetail() {
   const isOwner = user?.id === route.user_id;
   const RouteIcon = route.route_type === "recorded" ? Navigation : Map;
 
-  // Build URL to pre-fill AddJournalEntry from route data
-  const journalParams = new URLSearchParams({
-    prefill_title: route.name || "",
-    prefill_location: route.start_location || "",
-    prefill_distance: route.distance_km ?? "",
-    prefill_elevation: route.elevation_gain_m ?? "",
-    prefill_duration: route.duration_minutes || "",
-    prefill_description: [
+  const buildJournalPrefill = () => ({
+    title: route.name || "",
+    location: route.start_location || "",
+    date: completeData.completed_date || route.completed_date || "",
+    distance_km: route.distance_km ?? "",
+    elevation_m: route.elevation_gain_m ?? "",
+    duration_minutes: completeData.completed_duration_minutes || route.duration_minutes || "",
+    description: [
+      completeData.completed_notes,
       route.completed_notes,
       route.description,
       route.notes,
     ].filter(Boolean).join("\n\n"),
+    difficulty: completeData.difficulty ? Number(completeData.difficulty) : 0,
+    dog_difficulty: completeData.dog_difficulty ? Number(completeData.dog_difficulty) : 0,
+    water_available:
+      completeData.water_availability === "none" ? 0 :
+      completeData.water_availability === "little" ? 1 :
+      completeData.water_availability === "moderate" ? 2 :
+      completeData.water_availability === "plenty" ? 3 : 0,
+    hazard_notes: completeData.hazard_notes || "",
+    rating: completeData.completed_rating || 0,
+    seasons: completeData.season ? [completeData.season] : [],
+    photos: completeData.photos || [],
+    dog_id: completeData.dogs?.length === 1 ? completeData.dogs[0] : null,
+    gpx_url: route.gpx_url || "",
   });
-  const journalUrl = createPageUrl("AddJournalEntry") + "?" + journalParams.toString();
+
+  const handleCreateJournalEntry = () => {
+    navigate(createPageUrl("AddJournalEntry"), {
+      state: { routePrefill: buildJournalPrefill() },
+    });
+    setShowJournalDialog(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
@@ -206,12 +225,12 @@ export default function RouteDetail() {
 
               {isOwner && (
                 <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
-                  <Link to={journalUrl}>
-                    <Button size="sm" className="bg-brand-400 hover:bg-brand-600 text-white">
+                  {route.completed && (
+                    <Button size="sm" className="bg-brand-400 hover:bg-brand-600 text-white" onClick={handleCreateJournalEntry}>
                       <BookOpen className="w-4 h-4 mr-1.5" />
                       Als Wanderung eintragen
                     </Button>
-                  </Link>
+                  )}
                   <Link to={createPageUrl("EditRoute") + `?id=${routeId}`}>
                     <Button size="sm" variant="outline">
                       <Pencil className="w-4 h-4 mr-1.5" />
@@ -251,15 +270,15 @@ export default function RouteDetail() {
             </div>
 
             <div className="flex items-center gap-2 text-sm">
-              {route.is_public ? (
+              {route.completed ? (
                 <span className="flex items-center gap-1 text-brand-400">
-                  <Eye className="w-4 h-4" />
-                  Öffentlich
+                  <CheckCircle2 className="w-4 h-4" />
+                  Erledigte Route
                 </span>
               ) : (
                 <span className="flex items-center gap-1 text-stone-500">
                   <EyeOff className="w-4 h-4" />
-                  Privat
+                  Private Planung
                 </span>
               )}
               <span className="text-stone-400">•</span>
@@ -420,13 +439,6 @@ export default function RouteDetail() {
                     )}
                     {route.completed_notes && (
                       <p className="text-sm text-stone-600 mt-1">{route.completed_notes}</p>
-                    )}
-                    {route.completed_duration_minutes && (
-                      <p className="text-sm text-stone-500 mt-1">
-                        Dauer: {Math.floor(route.completed_duration_minutes / 60) > 0
-                          ? `${Math.floor(route.completed_duration_minutes / 60)}h ${route.completed_duration_minutes % 60}min`
-                          : `${route.completed_duration_minutes}min`}
-                      </p>
                     )}
                   </div>
                   <Button
@@ -653,32 +665,6 @@ export default function RouteDetail() {
                         />
                       </div>
 
-                      {/* Visibility */}
-                      <div>
-                        <label className="text-sm font-medium text-stone-700 mb-2 block">Sichtbarkeit</label>
-                        <div className="flex gap-2">
-                          {[
-                            { value: "private", label: "Privat", icon: Lock },
-                            { value: "friends", label: "Freunde", icon: Users },
-                            { value: "public", label: "Öffentlich", icon: Eye },
-                          ].map(({ value, label, icon: Icon }) => (
-                            <button
-                              key={value}
-                              type="button"
-                              onClick={() => setCompleteData({ ...completeData, completed_visibility: value })}
-                              className={`flex-1 flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all text-sm font-medium ${
-                                completeData.completed_visibility === value
-                                  ? "border-slate-800 bg-slate-50 text-slate-800"
-                                  : "border-stone-200 text-stone-500 hover:border-stone-300"
-                              }`}
-                            >
-                              <Icon className="w-4 h-4" />
-                              {label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
                       <div className="flex gap-2 pt-2">
                         <Button variant="outline" onClick={() => setShowCompleteForm(false)} className="flex-1">
                           Abbrechen
@@ -693,9 +679,6 @@ export default function RouteDetail() {
                               completeData.hazard_notes ? `⚠️ ${completeData.hazard_notes}` : null,
                             ].filter(Boolean).join("\n\n") || null,
                             completed_rating: completeData.completed_rating || null,
-                            duration_minutes: completeData.completed_duration_minutes
-                              ? Number(completeData.completed_duration_minutes)
-                              : undefined,
                           })}
                           disabled={completeRouteMutation.isPending}
                           className="flex-1 bg-brand-400 hover:bg-brand-600"
@@ -737,12 +720,10 @@ export default function RouteDetail() {
                 </p>
               </div>
               <div className="flex flex-col gap-2">
-                <Link to={journalUrl} onClick={() => setShowJournalDialog(false)}>
-                  <Button className="w-full bg-brand-400 hover:bg-brand-600">
-                    <CheckCircle2 className="w-4 h-4 mr-2" />
-                    Ja, Tagebucheintrag erstellen
-                  </Button>
-                </Link>
+                <Button className="w-full bg-brand-400 hover:bg-brand-600" onClick={handleCreateJournalEntry}>
+                  <CheckCircle2 className="w-4 h-4 mr-2" />
+                  Ja, Tagebucheintrag erstellen
+                </Button>
                 <Button variant="outline" onClick={() => setShowJournalDialog(false)} className="w-full">
                   Nein, später vielleicht
                 </Button>

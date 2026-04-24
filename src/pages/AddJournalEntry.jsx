@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { createPageUrl } from "@/utils";
@@ -401,17 +401,32 @@ const EMPTY_FORM = {
 export default function AddJournalEntry() {
   const { user, isAuthenticated, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const editId = searchParams.get("id");
 
+  const routePrefill = location.state?.routePrefill || null;
+
   // Pre-fill from route if navigated from RouteDetail
   const prefill = {
-    title: searchParams.get("prefill_title") || "",
-    location: searchParams.get("prefill_location") || "",
-    distance_km: searchParams.get("prefill_distance") || "",
-    elevation_m: searchParams.get("prefill_elevation") || "",
-    duration_minutes: searchParams.get("prefill_duration") || "",
-    description: searchParams.get("prefill_description") || "",
+    title: routePrefill?.title ?? searchParams.get("prefill_title") ?? "",
+    location: routePrefill?.location ?? searchParams.get("prefill_location") ?? "",
+    date: routePrefill?.date ?? "",
+    latitude: routePrefill?.latitude ?? "",
+    longitude: routePrefill?.longitude ?? "",
+    distance_km: routePrefill?.distance_km ?? searchParams.get("prefill_distance") ?? "",
+    elevation_m: routePrefill?.elevation_m ?? searchParams.get("prefill_elevation") ?? "",
+    duration_minutes: routePrefill?.duration_minutes ?? searchParams.get("prefill_duration") ?? "",
+    description: routePrefill?.description ?? searchParams.get("prefill_description") ?? "",
+    difficulty: routePrefill?.difficulty ?? 0,
+    rating: routePrefill?.rating ?? 0,
+    dog_difficulty: routePrefill?.dog_difficulty ?? 0,
+    water_available: routePrefill?.water_available ?? 0,
+    hazard_notes: routePrefill?.hazard_notes ?? "",
+    seasons: routePrefill?.seasons ?? [],
+    dog_id: routePrefill?.dog_id ?? null,
+    photos: routePrefill?.photos ?? [],
+    gpx_url: routePrefill?.gpx_url ?? "",
   };
   const queryClient = useQueryClient();
 
@@ -420,11 +435,23 @@ export default function AddJournalEntry() {
     // Apply prefill from route params (only when not editing existing entry)
     ...(editId ? {} : {
       title: prefill.title || EMPTY_FORM.title,
+      date: prefill.date || EMPTY_FORM.date,
       location: prefill.location || EMPTY_FORM.location,
+      latitude: prefill.latitude || EMPTY_FORM.latitude,
+      longitude: prefill.longitude || EMPTY_FORM.longitude,
       distance_km: prefill.distance_km || EMPTY_FORM.distance_km,
       elevation_m: prefill.elevation_m || EMPTY_FORM.elevation_m,
       duration_minutes: prefill.duration_minutes || EMPTY_FORM.duration_minutes,
       description: prefill.description || EMPTY_FORM.description,
+      difficulty: prefill.difficulty || EMPTY_FORM.difficulty,
+      rating: prefill.rating || EMPTY_FORM.rating,
+      dog_difficulty: prefill.dog_difficulty || EMPTY_FORM.dog_difficulty,
+      water_available: prefill.water_available ?? EMPTY_FORM.water_available,
+      hazard_notes: prefill.hazard_notes || EMPTY_FORM.hazard_notes,
+      seasons: Array.isArray(prefill.seasons) ? prefill.seasons : EMPTY_FORM.seasons,
+      dog_id: prefill.dog_id ?? EMPTY_FORM.dog_id,
+      photos: Array.isArray(prefill.photos) ? prefill.photos : EMPTY_FORM.photos,
+      gpx_url: prefill.gpx_url || EMPTY_FORM.gpx_url,
     }),
   });
   const [photoUploading, setPhotoUploading] = useState(false);

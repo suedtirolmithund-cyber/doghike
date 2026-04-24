@@ -36,7 +36,6 @@ export default function EditRoute() {
         description: route.description ?? "",
         start_location: route.start_location ?? "",
         notes: route.notes ?? "",
-        is_public: route.is_public ?? false,
       });
       setRouteGeometry({
         coordinates: route.waypoints ?? [],
@@ -70,7 +69,7 @@ export default function EditRoute() {
       description: routeData.description,
       start_location: routeData.start_location,
       notes: routeData.notes,
-      is_public: routeData.is_public,
+      is_public: false,
       waypoints: routeGeometry.coordinates,
       distance_km: routeGeometry.distance_km,
       duration_minutes: routeGeometry.duration_minutes ?? null,
