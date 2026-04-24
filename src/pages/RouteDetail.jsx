@@ -23,7 +23,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ArrowLeft, Map, Route, Clock, Navigation, Eye, EyeOff, Trash2, TrendingUp, CheckCircle2, Star, Lock, Users, Upload, X, Loader2, Pencil, BookOpen } from "lucide-react";
+import { ArrowLeft, Map, Route, Clock, Navigation, Eye, EyeOff, Trash2, TrendingUp, CheckCircle2, Star, Upload, X, Loader2, Pencil, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import ExpandableText from "@/components/ExpandableText";
@@ -51,7 +51,6 @@ export default function RouteDetail() {
     completed_duration_minutes: "",
     completed_notes: "",
     completed_rating: 0,
-    completed_visibility: "private",
     difficulty: "",
     dog_difficulty: "",
     season: "",
@@ -659,31 +658,6 @@ export default function RouteDetail() {
                       </div>
 
                       {/* Visibility */}
-                      <div>
-                        <label className="text-sm font-medium text-stone-700 mb-2 block">Sichtbarkeit</label>
-                        <div className="flex gap-2">
-                          {[
-                            { value: "private", label: "Privat", icon: Lock },
-                            { value: "friends", label: "Freunde", icon: Users },
-                            { value: "public", label: "Öffentlich", icon: Eye },
-                          ].map(({ value, label, icon: Icon }) => (
-                            <button
-                              key={value}
-                              type="button"
-                              onClick={() => setCompleteData({ ...completeData, completed_visibility: value })}
-                              className={`flex-1 flex flex-col items-center gap-1 p-3 rounded-lg border-2 transition-all text-sm font-medium ${
-                                completeData.completed_visibility === value
-                                  ? "border-slate-800 bg-slate-50 text-slate-800"
-                                  : "border-stone-200 text-stone-500 hover:border-stone-300"
-                              }`}
-                            >
-                              <Icon className="w-4 h-4" />
-                              {label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
                       <div className="flex gap-2 pt-2">
                         <Button variant="outline" onClick={() => setShowCompleteForm(false)} className="flex-1">
                           Abbrechen
