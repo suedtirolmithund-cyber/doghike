@@ -67,6 +67,7 @@ const weatherEmojis = {
 export default function HikeDetail() {
   const [searchParams] = useSearchParams();
   const hikeId = searchParams.get("id");
+  const hikeSource = searchParams.get("source") ?? "sheets";
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   
@@ -87,10 +88,10 @@ export default function HikeDetail() {
   };
 
   const { data: hike, isLoading } = useQuery({
-    queryKey: ["hike", hikeId],
+    queryKey: ["hike", hikeSource, hikeId],
     queryFn: async () => {
       const hikes = await getAllHikes();
-      return hikes.find((h) => h.id === hikeId);
+      return hikes.find((h) => h.id === hikeId && (h._source ?? "sheets") === hikeSource);
     },
     enabled: !!hikeId
   });

@@ -177,7 +177,7 @@ export default function Dashboard() {
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {visibleHikes.map((hike, i) => (
-                  <HikeCard key={hike.id} hike={hike} index={i} />
+                  <HikeCard key={`${hike._source ?? "sheets"}-${hike.id}`} hike={hike} index={i} />
                 ))}
               </div>
 

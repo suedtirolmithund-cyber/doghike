@@ -102,6 +102,7 @@ function MarkersLayer({ hikes }) {
 
     hikes.forEach((hike) => {
       if (!hike.latitude || !hike.longitude) return;
+      const hikeSource = hike._source ?? "sheets";
 
       const color = getColor(hike);
       // Journal hikes: show dog photo → user avatar → paw fallback
@@ -113,7 +114,7 @@ function MarkersLayer({ hikes }) {
       });
 
       const imgHtml = hike.photos?.[0]
-        ? `<a href="${createPageUrl("HikeDetail")}?id=${hike.id}">
+        ? `<a href="${createPageUrl("HikeDetail")}?id=${hike.id}&source=${hikeSource}">
              <img src="${hike.photos[0]}" alt="${hike.trail_name}"
                style="width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:6px;display:block;cursor:pointer"/>
            </a>`

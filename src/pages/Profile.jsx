@@ -557,7 +557,7 @@ export default function Profile() {
             ) : savedHikeObjects.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {savedHikeObjects.map((hike, index) => (
-                  <HikeCard key={hike.id} hike={hike} dogs={dogs} index={index} />
+                  <HikeCard key={`${hike._source ?? "sheets"}-${hike.id}`} hike={hike} dogs={dogs} index={index} />
                 ))}
               </div>
             ) : (

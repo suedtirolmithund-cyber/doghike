@@ -47,6 +47,7 @@ const weatherIcons = {
 export default function HikeCard({ hike, dogs = [], index = 0 }) {
   const hikeDogs = dogs.filter((d) => hike.dogs?.includes(d.id));
   const coverPhoto = hike.photos?.[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80";
+  const hikeSource = hike._source ?? "sheets";
 
   return (
     <motion.div
@@ -54,7 +55,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.5 }}>
 
-      <Link to={createPageUrl("HikeDetail") + `?id=${hike.id}`}>
+      <Link to={createPageUrl("HikeDetail") + `?id=${hike.id}&source=${hikeSource}`}>
         <div className="group bg-white rounded-2xl overflow-hidden border border-stone-200/50 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer">
           <div className="relative h-52 overflow-hidden">
             <img
