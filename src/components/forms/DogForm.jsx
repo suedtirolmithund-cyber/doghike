@@ -9,10 +9,11 @@ import { Upload, Loader2 } from "lucide-react";
 
 export default function DogForm({ dog, onSave, onCancel }) {
   const { user } = useAuth();
+  const originalPhotoUrl = dog?.photo_url || "";
   const [formData, setFormData] = useState({
     name: dog?.name || "",
     breed: dog?.breed || "",
-    photo_url: dog?.photo_url || "",
+    photo_url: originalPhotoUrl,
     birth_date: dog?.birth_date || "",
     notes: dog?.notes || "",
     favorite_food: dog?.favorite_food || "",
@@ -21,6 +22,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [uploadError, setUploadError] = useState(null);
+  const [temporaryUploadedPhotoUrl, setTemporaryUploadedPhotoUrl] = useState(null);
 
   const handlePhotoUpload = async (event) => {
     const file = event.target.files[0];
@@ -30,17 +32,18 @@ export default function DogForm({ dog, onSave, onCancel }) {
     setUploadError(null);
 
     try {
-      const previousPhotoUrl = formData.photo_url || null;
       const url = await uploadFile("dog-photos", user.id, file);
       setFormData((previous) => ({ ...previous, photo_url: url }));
 
-      if (previousPhotoUrl && previousPhotoUrl !== url) {
+      if (temporaryUploadedPhotoUrl && temporaryUploadedPhotoUrl !== url) {
         try {
-          await deleteStoredFile(previousPhotoUrl, "dog-photos");
+          await deleteStoredFile(temporaryUploadedPhotoUrl, "dog-photos");
         } catch (cleanupError) {
           console.error("Dog photo cleanup failed:", cleanupError);
         }
       }
+
+      setTemporaryUploadedPhotoUrl(url);
     } catch (error) {
       setUploadError("Das Foto konnte gerade nicht hochgeladen werden. Bitte versuche es noch einmal.");
       console.error("Dog photo upload error:", error);
@@ -54,9 +57,35 @@ export default function DogForm({ dog, onSave, onCancel }) {
     setSaving(true);
     try {
       await onSave(formData);
+
+      if (
+        originalPhotoUrl &&
+        temporaryUploadedPhotoUrl &&
+        originalPhotoUrl !== temporaryUploadedPhotoUrl
+      ) {
+        try {
+          await deleteStoredFile(originalPhotoUrl, "dog-photos");
+        } catch (cleanupError) {
+          console.error("Dog photo cleanup failed after save:", cleanupError);
+        }
+      }
+
+      setTemporaryUploadedPhotoUrl(null);
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleCancel = async () => {
+    if (temporaryUploadedPhotoUrl && temporaryUploadedPhotoUrl !== originalPhotoUrl) {
+      try {
+        await deleteStoredFile(temporaryUploadedPhotoUrl, "dog-photos");
+      } catch (cleanupError) {
+        console.error("Temporary dog photo cleanup failed:", cleanupError);
+      }
+    }
+
+    onCancel?.();
   };
 
   return (
@@ -160,7 +189,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
 
       <div className="flex gap-3 justify-end pt-2">
         {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel}>
+          <Button type="button" variant="outline" onClick={handleCancel}>
             Abbrechen
           </Button>
         )}
