@@ -67,6 +67,10 @@ function formatDuration(minutes) {
   return m > 0 ? `${h}h ${m}min` : `${h}h`;
 }
 
+const MAX_ACCEPTED_ACCURACY_METERS = 25;
+const MIN_POINT_DISTANCE_METERS = 2;
+const MAX_REASONABLE_SPEED_KMH = 12;
+
 export default function GPSTracker({ onSave }) {
   const [isTracking, setIsTracking] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -82,6 +86,7 @@ export default function GPSTracker({ onSave }) {
   const pollIntervalRef = useRef(null);
   const isPausedRef = useRef(false);
   const routePointsRef = useRef([]);
+  const pointSamplesRef = useRef([]);
   const altitudesRef = useRef([]); // track altitudes for elevation gain
   const startTimeRef = useRef(null);
   const pausedTimeRef = useRef(0);
@@ -135,23 +140,34 @@ export default function GPSTracker({ onSave }) {
     if (isPausedRef.current) return;
 
     const { latitude, longitude, altitude, accuracy } = position.coords;
-    // Skip highly inaccurate points (> 50m accuracy)
-    if (accuracy && accuracy > 50) return;
+    if (accuracy && accuracy > MAX_ACCEPTED_ACCURACY_METERS) return;
 
     const newPoint = [latitude, longitude];
     const prev = routePointsRef.current;
+    const sampleTime = position.timestamp || Date.now();
 
-    // Minimum distance filter: only add point if moved > 5m
+    // Minimum distance filter and spike protection so the track follows the
+    // real path instead of jumps caused by noisy GPS fixes.
     if (prev.length > 0) {
-      const dist = haversineDistance(prev[prev.length - 1], newPoint) * 1000; // in meters
-      if (dist < 5) {
+      const dist = haversineDistance(prev[prev.length - 1], newPoint) * 1000;
+      const lastSample = pointSamplesRef.current[pointSamplesRef.current.length - 1];
+      const elapsedHours = lastSample ? Math.max((sampleTime - lastSample.timestamp) / 3_600_000, 1 / 3600) : 0;
+      const speedKmh = elapsedHours > 0 ? dist / 1000 / elapsedHours : 0;
+
+      if (dist < MIN_POINT_DISTANCE_METERS) {
         setCurrentPosition(newPoint);
         return;
       }
-      distanceRef.current += dist / 1000; // km
+
+      if (speedKmh > MAX_REASONABLE_SPEED_KMH) {
+        return;
+      }
+
+      distanceRef.current += dist / 1000;
     }
 
     routePointsRef.current = [...prev, newPoint];
+    pointSamplesRef.current = [...pointSamplesRef.current, { point: newPoint, timestamp: sampleTime, altitude }];
     setRoutePoints([...routePointsRef.current]);
     setCurrentPosition(newPoint);
 
@@ -173,6 +189,7 @@ export default function GPSTracker({ onSave }) {
     }
 
     routePointsRef.current = [];
+    pointSamplesRef.current = [];
     altitudesRef.current = [];
     distanceRef.current = 0;
     elevationGainRef.current = 0;
@@ -204,7 +221,7 @@ export default function GPSTracker({ onSave }) {
         () => {},
         { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
       );
-    }, 5000);
+    }, 2000);
 
     intervalRef.current = setInterval(computeStats, 1000);
   };
