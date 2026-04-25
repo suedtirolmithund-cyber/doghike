@@ -155,10 +155,12 @@ export default function Profile() {
     if (!file || !user) return;
 
     setAvatarUploading(true);
+    let uploadedAvatarUrl = null;
 
     try {
       const previousAvatarUrl = profile?.avatar_url || null;
       const url = await uploadFile("avatars", user.id, file);
+      uploadedAvatarUrl = url;
       await upsertProfile(user.id, { avatar_url: url });
 
       if (previousAvatarUrl && previousAvatarUrl !== url) {
@@ -175,6 +177,13 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ["comments"] });
       toast.success("Profilbild aktualisiert");
     } catch {
+      if (uploadedAvatarUrl) {
+        try {
+          await deleteStoredFile(uploadedAvatarUrl, "avatars");
+        } catch (cleanupError) {
+          console.error("Temporary avatar cleanup failed:", cleanupError);
+        }
+      }
       toast.error("Dein Profilbild konnte gerade nicht hochgeladen werden. Bitte versuche es noch einmal.");
     } finally {
       setAvatarUploading(false);
