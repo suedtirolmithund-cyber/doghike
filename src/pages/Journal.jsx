@@ -123,6 +123,7 @@ export default function Journal() {
       queryClient.invalidateQueries({ queryKey: ["journal", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["allHikes"] });
       queryClient.invalidateQueries({ queryKey: ["journalEntry"] });
+      queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] });
       toast.success("Eintrag gelÃ¶scht");
     },
     onError: () => {
@@ -390,4 +391,5 @@ export default function Journal() {
     </div>
   );
 }
+
 
