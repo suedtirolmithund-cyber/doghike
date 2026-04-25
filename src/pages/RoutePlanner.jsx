@@ -549,7 +549,7 @@ export default function RoutePlanner() {
       toast.success("Route gespeichert!");
       navigate(createPageUrl("RouteDetail") + `?id=${savedRoute.id}`);
     },
-    onError: (e) => toast.error("Fehler beim Speichern: " + e.message),
+    onError: () => toast.error("Die Route konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
   });
 
   const handleSubmit = async (e) => {
