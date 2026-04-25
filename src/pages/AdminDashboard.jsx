@@ -400,9 +400,9 @@ export default function AdminDashboard() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin_comments"] });
       queryClient.invalidateQueries({ queryKey: ["comments"] });
-      toast.success("Kommentar gelöscht");
+      toast.success("Kommentar gelÃ¶scht");
     },
-    onError: () => toast.error("Der Kommentar konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Der Kommentar konnte gerade nicht gelÃ¶scht werden. Bitte versuche es noch einmal."),
     onSettled: () => {
       setProcessingId(null);
       setProcessingType(null);
