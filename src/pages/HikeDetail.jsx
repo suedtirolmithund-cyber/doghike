@@ -165,7 +165,7 @@ export default function HikeDetail() {
     },
   });
 
-  if (isLoading || !hike) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-stone-50 flex items-center justify-center">
         <div className="animate-pulse text-stone-400">Lädt...</div>
@@ -173,6 +173,19 @@ export default function HikeDetail() {
     );
   }
 
+
+  if (!hike) {
+    return (
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
+        <div className="text-center">
+          <p className="text-xl text-stone-700 mb-4">Tour nicht gefunden</p>
+          <Link to={createPageUrl("Hikes")}>
+            <Button>Zurück zu den Touren</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
   // Premium gate: block non-premium users from admin-created premium hikes
   const isPremiumHike = hike.is_premium && !isAdmin && !isOwnHike;
   const userHasPremium = currentProfile?.is_premium === true;
