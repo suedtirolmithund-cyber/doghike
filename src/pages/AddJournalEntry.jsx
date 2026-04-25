@@ -461,6 +461,10 @@ export default function AddJournalEntry() {
   const [photoPreviewUrls, setPhotoPreviewUrls] = useState([]);
   const uploadedPhotosRef = useRef([]);
   const uploadedGpxRef = useRef([]);
+  const originalPhotosRef = useRef([]);
+  const originalGpxRef = useRef("");
+  const removedExistingPhotosRef = useRef([]);
+  const removedExistingGpxRef = useRef([]);
   const keepUploadedMediaRef = useRef(false);
 
   const { data: userDogs = [] } = useQuery({
@@ -478,6 +482,10 @@ export default function AddJournalEntry() {
 
   useEffect(() => {
     if (existing) {
+      originalPhotosRef.current = existing.photos ?? [];
+      originalGpxRef.current = existing.gpx_url ?? "";
+      removedExistingPhotosRef.current = [];
+      removedExistingGpxRef.current = [];
       setForm({
         title: existing.title ?? "",
         date: existing.date ?? EMPTY_FORM.date,
@@ -536,7 +544,20 @@ export default function AddJournalEntry() {
       editId
         ? updateJournalEntry(editId, data)
         : createJournalEntry(user.id, data),
-    onSuccess: () => {
+    onSuccess: async () => {
+      const filesToDelete = [
+        ...removedExistingPhotosRef.current,
+        ...removedExistingGpxRef.current,
+      ].filter(Boolean);
+
+      if (filesToDelete.length > 0) {
+        try {
+          await deleteJournalFiles(filesToDelete);
+        } catch {
+          toast.error("Einige ersetzte Dateien konnten nicht vollständig entfernt werden.");
+        }
+      }
+
       keepUploadedMediaRef.current = true;
       queryClient.invalidateQueries({ queryKey: ["journal", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
@@ -570,14 +591,21 @@ export default function AddJournalEntry() {
     const photoToRemove = form.photos?.[index];
     if (!photoToRemove) return;
 
-    try {
-      await deleteJournalFiles([photoToRemove]);
-    } catch {
-      toast.error("Das Foto konnte gerade nicht entfernt werden. Bitte versuche es noch einmal.");
-      return;
+    const isNewUpload = uploadedPhotosRef.current.includes(photoToRemove);
+
+    if (isNewUpload) {
+      try {
+        await deleteJournalFiles([photoToRemove]);
+      } catch {
+        toast.error("Das Foto konnte gerade nicht entfernt werden. Bitte versuche es noch einmal.");
+        return;
+      }
+
+      uploadedPhotosRef.current = uploadedPhotosRef.current.filter((url) => url !== photoToRemove);
+    } else if (originalPhotosRef.current.includes(photoToRemove)) {
+      removedExistingPhotosRef.current = [...new Set([...removedExistingPhotosRef.current, photoToRemove])];
     }
 
-    uploadedPhotosRef.current = uploadedPhotosRef.current.filter((url) => url !== photoToRemove);
     set("photos", form.photos.filter((_, j) => j !== index));
   };
 
@@ -588,8 +616,12 @@ export default function AddJournalEntry() {
     try {
       const url = await uploadJournalFile(user.id, file);
       if (form.gpx_url) {
-        await deleteJournalFiles([form.gpx_url]);
-        uploadedGpxRef.current = uploadedGpxRef.current.filter((existingUrl) => existingUrl !== form.gpx_url);
+        if (uploadedGpxRef.current.includes(form.gpx_url)) {
+          await deleteJournalFiles([form.gpx_url]);
+          uploadedGpxRef.current = uploadedGpxRef.current.filter((existingUrl) => existingUrl !== form.gpx_url);
+        } else if (originalGpxRef.current === form.gpx_url) {
+          removedExistingGpxRef.current = [...new Set([...removedExistingGpxRef.current, form.gpx_url])];
+        }
       }
       uploadedGpxRef.current = [...uploadedGpxRef.current, url];
       setForm((p) => ({ ...p, gpx_url: url }));
@@ -604,12 +636,16 @@ export default function AddJournalEntry() {
   const removeUploadedGpx = async () => {
     if (!form.gpx_url) return;
 
-    try {
-      await deleteJournalFiles([form.gpx_url]);
+    if (uploadedGpxRef.current.includes(form.gpx_url)) {
+      try {
+        await deleteJournalFiles([form.gpx_url]);
         uploadedGpxRef.current = uploadedGpxRef.current.filter((existingUrl) => existingUrl !== form.gpx_url);
-    } catch {
-      toast.error("Die GPX-Datei konnte gerade nicht entfernt werden. Bitte versuche es noch einmal.");
-      return;
+      } catch {
+        toast.error("Die GPX-Datei konnte gerade nicht entfernt werden. Bitte versuche es noch einmal.");
+        return;
+      }
+    } else if (originalGpxRef.current === form.gpx_url) {
+      removedExistingGpxRef.current = [...new Set([...removedExistingGpxRef.current, form.gpx_url])];
     }
 
     set("gpx_url", "");
@@ -644,8 +680,6 @@ export default function AddJournalEntry() {
         : form.visibility === "friends"
           ? "approved"
           : "draft";
-
-    keepUploadedMediaRef.current = true;
 
     saveMutation.mutate({
       ...form,
