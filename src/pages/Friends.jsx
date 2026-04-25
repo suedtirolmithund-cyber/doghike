@@ -168,6 +168,7 @@ export default function Friends() {
       refreshFriendData();
       toast.success("Freundschaft bestätigt");
     },
+    onError: () => toast.error("Die Anfrage konnte gerade nicht angenommen werden. Bitte versuche es noch einmal."),
   });
 
   const rejectMutation = useMutation({
@@ -176,6 +177,7 @@ export default function Friends() {
       refreshFriendData();
       toast.success("Anfrage abgelehnt");
     },
+    onError: () => toast.error("Die Anfrage konnte gerade nicht abgelehnt werden. Bitte versuche es noch einmal."),
   });
 
   const removeMutation = useMutation({
@@ -184,6 +186,7 @@ export default function Friends() {
       refreshFriendData();
       toast.success("Freund entfernt");
     },
+    onError: () => toast.error("Der Kontakt konnte gerade nicht entfernt werden. Bitte versuche es noch einmal."),
   });
 
   const handleSearch = async (e) => {
