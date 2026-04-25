@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -22,6 +22,7 @@ import {
   getJournalEntry,
   getSignedJournalUrls,
   uploadJournalFile,
+  deleteJournalFiles,
   getMissingPublicJournalFields,
 } from "@/lib/journalApi";
 import { getDogs } from "@/lib/profilesApi";
@@ -458,6 +459,9 @@ export default function AddJournalEntry() {
   const [gpxUploading, setGpxUploading] = useState(false);
   const [photoConsent, setPhotoConsent] = useState(false);
   const [photoPreviewUrls, setPhotoPreviewUrls] = useState([]);
+  const uploadedPhotosRef = useRef([]);
+  const uploadedGpxRef = useRef([]);
+  const keepUploadedMediaRef = useRef(false);
 
   const { data: userDogs = [] } = useQuery({
     queryKey: ["dogs", user?.id],
@@ -516,6 +520,17 @@ export default function AddJournalEntry() {
     };
   }, [form.photos]);
 
+  useEffect(() => {
+    return () => {
+      if (keepUploadedMediaRef.current) return;
+
+      const filesToDelete = [...uploadedPhotosRef.current, ...uploadedGpxRef.current].filter(Boolean);
+      if (filesToDelete.length > 0) {
+        void deleteJournalFiles(filesToDelete);
+      }
+    };
+  }, []);
+
   const saveMutation = useMutation({
     mutationFn: (data) =>
       editId
@@ -540,6 +555,7 @@ export default function AddJournalEntry() {
     setPhotoUploading(true);
     try {
       const urls = await Promise.all(files.map((f) => uploadJournalFile(user.id, f)));
+      uploadedPhotosRef.current = [...uploadedPhotosRef.current, ...urls];
       setForm((p) => ({ ...p, photos: [...p.photos, ...urls] }));
       toast.success(`${urls.length} Foto${urls.length > 1 ? "s" : ""} hochgeladen`);
     } catch {
@@ -549,12 +565,32 @@ export default function AddJournalEntry() {
     }
   };
 
+  const removeUploadedPhoto = async (index) => {
+    const photoToRemove = form.photos?.[index];
+    if (!photoToRemove) return;
+
+    try {
+      await deleteJournalFiles([photoToRemove]);
+    } catch {
+      toast.error("Das Foto konnte gerade nicht entfernt werden. Bitte versuche es noch einmal.");
+      return;
+    }
+
+    uploadedPhotosRef.current = uploadedPhotosRef.current.filter((url) => url !== photoToRemove);
+    set("photos", form.photos.filter((_, j) => j !== index));
+  };
+
   const handleGpxUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
     setGpxUploading(true);
     try {
       const url = await uploadJournalFile(user.id, file);
+      if (form.gpx_url) {
+        await deleteJournalFiles([form.gpx_url]);
+        uploadedGpxRef.current = uploadedGpxRef.current.filter((existingUrl) => existingUrl !== form.gpx_url);
+      }
+      uploadedGpxRef.current = [...uploadedGpxRef.current, url];
       setForm((p) => ({ ...p, gpx_url: url }));
       toast.success("GPX-Datei hochgeladen");
     } catch {
@@ -562,6 +598,20 @@ export default function AddJournalEntry() {
     } finally {
       setGpxUploading(false);
     }
+  };
+
+  const removeUploadedGpx = async () => {
+    if (!form.gpx_url) return;
+
+    try {
+      await deleteJournalFiles([form.gpx_url]);
+        uploadedGpxRef.current = uploadedGpxRef.current.filter((existingUrl) => existingUrl !== form.gpx_url);
+    } catch {
+      toast.error("Die GPX-Datei konnte gerade nicht entfernt werden. Bitte versuche es noch einmal.");
+      return;
+    }
+
+    set("gpx_url", "");
   };
 
   const handleSubmit = (e) => {
@@ -593,6 +643,10 @@ export default function AddJournalEntry() {
         : form.visibility === "friends"
           ? "approved"
           : "draft";
+
+    keepUploadedMediaRef.current = true;
+
+    keepUploadedMediaRef.current = true;
 
     saveMutation.mutate({
       ...form,
@@ -825,7 +879,7 @@ export default function AddJournalEntry() {
                   <div key={i} className="relative group aspect-square">
                     <img src={url} alt="" className="w-full h-full object-cover rounded-lg" />
                     <button type="button"
-                      onClick={() => set("photos", form.photos.filter((_, j) => j !== i))}
+                      onClick={() => void removeUploadedPhoto(i)}
                       className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <X className="w-3 h-3" />
@@ -855,7 +909,7 @@ export default function AddJournalEntry() {
               <div className="flex items-center gap-3 p-3 bg-brand-50 border border-brand-200 rounded-lg">
                 <MapPin className="w-4 h-4 text-brand-400 shrink-0" />
                 <span className="text-sm text-brand-600 flex-1 truncate">GPX-Datei gespeichert</span>
-                <button type="button" onClick={() => set("gpx_url", "")} className="text-stone-400 hover:text-red-500">
+                <button type="button" onClick={() => void removeUploadedGpx()} className="text-stone-400 hover:text-red-500">
                   <X className="w-4 h-4" />
                 </button>
               </div>
@@ -950,6 +1004,7 @@ export default function AddJournalEntry() {
     </div>
   );
 }
+
 
 
 
