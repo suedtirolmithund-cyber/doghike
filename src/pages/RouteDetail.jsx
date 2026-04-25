@@ -85,7 +85,11 @@ export default function RouteDetail() {
   const clearPendingCompletionPhotos = async () => {
     const pendingPhotos = completeData.photos ?? [];
     if (pendingPhotos.length > 0) {
-      await deleteJournalFiles(pendingPhotos);
+      try {
+        await deleteJournalFiles(pendingPhotos);
+      } catch {
+        toast.error("Nicht alle temporären Fotos konnten entfernt werden.");
+      }
     }
 
     setCompleteData((prev) => ({
@@ -100,6 +104,9 @@ export default function RouteDetail() {
       queryClient.invalidateQueries({ queryKey: ["route", routeId] });
       queryClient.invalidateQueries({ queryKey: ["userRoutes", user?.id] });
       setEditingRoute(false);
+    },
+    onError: () => {
+      toast.error("Die Route konnte gerade nicht aktualisiert werden. Bitte versuche es noch einmal.");
     },
   });
 
@@ -125,6 +132,9 @@ export default function RouteDetail() {
     try {
       const urls = await Promise.all(files.map((f) => uploadJournalFile(user.id, f)));
       setCompleteData((prev) => ({ ...prev, photos: [...(prev.photos || []), ...urls] }));
+      toast.success(`${urls.length} Foto${urls.length > 1 ? "s" : ""} hochgeladen`);
+    } catch {
+      toast.error("Die Fotos konnten gerade nicht hochgeladen werden. Bitte versuche es noch einmal.");
     } finally {
       setUploading(false);
     }
@@ -133,7 +143,12 @@ export default function RouteDetail() {
   const removePhoto = async (index) => {
     const photoToRemove = completeData.photos?.[index];
     if (photoToRemove) {
-      await deleteJournalFiles([photoToRemove]);
+      try {
+        await deleteJournalFiles([photoToRemove]);
+      } catch {
+        toast.error("Das Foto konnte gerade nicht entfernt werden. Bitte versuche es noch einmal.");
+        return;
+      }
     }
 
     setCompleteData(prev => ({ ...prev, photos: prev.photos.filter((_, i) => i !== index) }));
@@ -152,6 +167,9 @@ export default function RouteDetail() {
       queryClient.invalidateQueries({ queryKey: ["userRoutes", user?.id] });
       navigate(createPageUrl("Profile"));
     },
+    onError: () => {
+      toast.error("Die Route konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal.");
+    },
   });
 
   const completeRouteMutation = useMutation({
@@ -161,6 +179,9 @@ export default function RouteDetail() {
       queryClient.invalidateQueries({ queryKey: ["userRoutes", user?.id] });
       setShowCompleteForm(false);
       setShowJournalDialog(true); // Prompt to create journal entry
+    },
+    onError: () => {
+      toast.error("Die Route konnte gerade nicht als erledigt gespeichert werden. Bitte versuche es noch einmal.");
     },
   });
 
