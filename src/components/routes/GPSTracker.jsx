@@ -70,6 +70,8 @@ function formatDuration(minutes) {
 const MAX_ACCEPTED_ACCURACY_METERS = 25;
 const MIN_POINT_DISTANCE_METERS = 2;
 const MAX_REASONABLE_SPEED_KMH = 12;
+const MIN_ELEVATION_GAIN_STEP_METERS = 3;
+const MAX_REASONABLE_ELEVATION_STEP_METERS = 40;
 
 export default function GPSTracker({ onSave }) {
   const [isTracking, setIsTracking] = useState(false);
@@ -96,6 +98,7 @@ export default function GPSTracker({ onSave }) {
   const flyControllerRef = useRef(null);
   const distanceRef = useRef(0);
   const elevationGainRef = useRef(0);
+  const wakeLockRef = useRef(null);
 
   const findMyLocation = () => {
     if (!navigator.geolocation) {
@@ -176,10 +179,29 @@ export default function GPSTracker({ onSave }) {
       const alts = altitudesRef.current;
       if (alts.length > 0) {
         const diff = altitude - alts[alts.length - 1];
-        if (diff > 0) elevationGainRef.current += diff;
+        if (diff >= MIN_ELEVATION_GAIN_STEP_METERS && diff <= MAX_REASONABLE_ELEVATION_STEP_METERS) {
+          elevationGainRef.current += diff;
+        }
       }
       altitudesRef.current = [...alts, altitude];
     }
+  }, []);
+
+  const releaseWakeLock = useCallback(async () => {
+    try {
+      await wakeLockRef.current?.release?.();
+    } catch {}
+    wakeLockRef.current = null;
+  }, []);
+
+  const requestWakeLock = useCallback(async () => {
+    try {
+      if (!("wakeLock" in navigator) || !navigator.wakeLock?.request) return;
+      wakeLockRef.current = await navigator.wakeLock.request("screen");
+      wakeLockRef.current?.addEventListener?.("release", () => {
+        wakeLockRef.current = null;
+      });
+    } catch {}
   }, []);
 
   const startTracking = () => {
@@ -201,6 +223,7 @@ export default function GPSTracker({ onSave }) {
     setIsPaused(false);
     startTimeRef.current = Date.now();
     pausedTimeRef.current = 0;
+    requestWakeLock();
 
     watchIdRef.current = navigator.geolocation.watchPosition(
       handlePositionSample,
@@ -232,6 +255,7 @@ export default function GPSTracker({ onSave }) {
     lastPauseTimeRef.current = Date.now();
     clearInterval(intervalRef.current);
     computeStats();
+    releaseWakeLock();
   };
 
   const resumeTracking = () => {
@@ -241,12 +265,14 @@ export default function GPSTracker({ onSave }) {
       pausedTimeRef.current += Date.now() - lastPauseTimeRef.current;
     }
     intervalRef.current = setInterval(computeStats, 1000);
+    requestWakeLock();
   };
 
   const stopTracking = () => {
     if (watchIdRef.current) navigator.geolocation.clearWatch(watchIdRef.current);
     clearInterval(intervalRef.current);
     clearInterval(pollIntervalRef.current);
+    releaseWakeLock();
 
     const points = routePointsRef.current;
     const finalDist = distanceRef.current;
@@ -277,8 +303,9 @@ export default function GPSTracker({ onSave }) {
       if (watchIdRef.current) navigator.geolocation.clearWatch(watchIdRef.current);
       clearInterval(intervalRef.current);
       clearInterval(pollIntervalRef.current);
+      releaseWakeLock();
     };
-  }, []);
+  }, [releaseWakeLock]);
 
   const formatTime = (totalSeconds) => {
     const h = Math.floor(totalSeconds / 3600);
