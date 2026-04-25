@@ -45,7 +45,7 @@ function VisibilityStatusBadge({ visibility, status }) {
     if (status === "approved") {
       return (
         <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-brand-100 text-brand-600 border border-brand-200">
-          Ã–ffentlich sichtbar
+          Öffentlich sichtbar
         </span>
       );
     }
@@ -60,7 +60,7 @@ function VisibilityStatusBadge({ visibility, status }) {
 
     return (
       <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-200">
-        Wartet auf PrÃ¼fung
+        Wartet auf Prüfung
       </span>
     );
   }
@@ -124,10 +124,10 @@ export default function Journal() {
       queryClient.invalidateQueries({ queryKey: ["allHikes"] });
       queryClient.invalidateQueries({ queryKey: ["journalEntry"] });
       queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] });
-      toast.success("Eintrag gelÃ¶scht");
+      toast.success("Eintrag gelöscht");
     },
     onError: () => {
-      toast.error("Der Eintrag konnte gerade nicht gelÃ¶scht werden. Bitte versuche es noch einmal.");
+      toast.error("Der Eintrag konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal.");
     },
   });
 
@@ -155,7 +155,7 @@ export default function Journal() {
           <BookOpen className="w-12 h-12 text-brand-400 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-stone-800 mb-2">Wandertagebuch</h2>
           <p className="text-stone-500 mb-6 text-sm">
-            Melde dich an, um deine persÃ¶nlichen Wandererlebnisse festzuhalten.
+            Melde dich an, um deine persönlichen Wandererlebnisse festzuhalten.
           </p>
           <Link to={createPageUrl("Login")}>
             <Button className="bg-brand-400 hover:bg-brand-600 w-full">
@@ -180,7 +180,7 @@ export default function Journal() {
               <BookOpen className="w-7 h-7 text-brand-400" />
               Wandertagebuch
             </h1>
-            <p className="text-stone-500 text-sm mt-0.5">Deine persÃ¶nlichen Wandererlebnisse</p>
+            <p className="text-stone-500 text-sm mt-0.5">Deine persönlichen Wandererlebnisse</p>
           </div>
           <Link to={createPageUrl("AddJournalEntry")}>
             <Button className="bg-brand-400 hover:bg-brand-600 shrink-0">
@@ -332,9 +332,9 @@ export default function Journal() {
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Eintrag lÃ¶schen?</AlertDialogTitle>
+                            <AlertDialogTitle>Eintrag löschen?</AlertDialogTitle>
                             <AlertDialogDescription>
-                              "{entry.title}" wird dauerhaft gelÃ¶scht. Das kann nicht rÃ¼ckgÃ¤ngig gemacht werden.
+                              "{entry.title}" wird dauerhaft gelöscht. Das kann nicht rückgängig gemacht werden.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
@@ -343,7 +343,7 @@ export default function Journal() {
                               onClick={() => deleteMutation.mutate(entry.id)}
                               className="bg-red-600 hover:bg-red-700"
                             >
-                              LÃ¶schen
+                              Löschen
                             </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
@@ -360,7 +360,7 @@ export default function Journal() {
                   onClick={() => setVisible((value) => value + PAGE_SIZE)}
                   className="text-sm text-brand-400 hover:text-brand-600 font-medium px-4 py-2 rounded-xl hover:bg-brand-50 transition-colors"
                 >
-                  {filtered.length - visible} weitere EintrÃ¤ge laden
+                  {filtered.length - visible} weitere Einträge laden
                 </button>
               </div>
             )}
@@ -372,9 +372,9 @@ export default function Journal() {
             className="text-center py-24 bg-white rounded-2xl border border-stone-200/50"
           >
             <BookOpen className="w-14 h-14 text-stone-300 mx-auto mb-4" />
-            <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine EintrÃ¤ge</h3>
+            <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Einträge</h3>
             <p className="text-stone-500 mb-6 text-sm max-w-xs mx-auto">
-              Halte deine Wanderungen fest - mit Fotos, Daten und persÃ¶nlichen Notizen.
+              Halte deine Wanderungen fest - mit Fotos, Daten und persönlichen Notizen.
             </p>
             <Link to={createPageUrl("AddJournalEntry")}>
               <Button className="bg-brand-400 hover:bg-brand-600">
@@ -384,7 +384,7 @@ export default function Journal() {
           </motion.div>
         ) : (
           <div className="text-center py-12 text-stone-500 text-sm">
-            Keine Ergebnisse fÃ¼r "{search}"
+            Keine Ergebnisse für "{search}"
           </div>
         )}
       </div>

@@ -123,7 +123,7 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
       setDialogOpen(false);
-      toast.success("Hund hinzugefÃ¼gt");
+      toast.success("Hund hinzugefügt");
     },
     onError: () => toast.error("Dein Hund konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
   });
@@ -137,7 +137,7 @@ export default function Profile() {
       setEditingDog(null);
       toast.success("Hund aktualisiert");
     },
-    onError: () => toast.error("Die Ã„nderungen am Hund konnten gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Die Änderungen am Hund konnten gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
   });
 
   const deleteDogMutation = useMutation({
@@ -147,7 +147,7 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
       toast.success("Hund entfernt");
     },
-    onError: () => toast.error("Der Hund konnte gerade nicht gelÃ¶scht werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Der Hund konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal."),
   });
 
   const handleAvatarUpload = async (event) => {
@@ -364,7 +364,7 @@ export default function Profile() {
                 size="sm"
               >
                 <Plus className="w-4 h-4 md:mr-2" />
-                <span className="hidden md:inline ml-1">Hund hinzufÃ¼gen</span>
+                <span className="hidden md:inline ml-1">Hund hinzufügen</span>
               </Button>
             </div>
 
@@ -455,7 +455,7 @@ export default function Profile() {
               <div className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
                 <div className="text-6xl mb-4">Hund</div>
                 <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Hunde</h3>
-                  <p className="text-stone-500 mb-6">FÃ¼ge deinen ersten Wanderbegleiter hinzu!</p>
+                  <p className="text-stone-500 mb-6">Füge deinen ersten Wanderbegleiter hinzu!</p>
                 <Button
                   onClick={() => {
                     setEditingDog(null);
@@ -464,7 +464,7 @@ export default function Profile() {
                   className="bg-slate-800 hover:bg-slate-700"
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  Hund hinzufÃ¼gen
+                  Hund hinzufügen
                 </Button>
               </div>
             )}
@@ -589,7 +589,7 @@ export default function Profile() {
           <TabsContent value="settings">
             <div className="mb-4 md:mb-6">
               <h2 className="text-lg md:text-xl font-medium text-stone-800 mb-1">Kontoeinstellungen</h2>
-              <p className="text-stone-500 text-sm">Datenschutz und Konto lÃ¶schen</p>
+              <p className="text-stone-500 text-sm">Datenschutz und Konto löschen</p>
             </div>
             <AccountSettings user={user} />
           </TabsContent>
@@ -599,7 +599,7 @@ export default function Profile() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingDog ? "Hund bearbeiten" : "Hund hinzufÃ¼gen"}</DialogTitle>
+            <DialogTitle>{editingDog ? "Hund bearbeiten" : "Hund hinzufügen"}</DialogTitle>
           </DialogHeader>
           <DogForm
             dog={editingDog}
