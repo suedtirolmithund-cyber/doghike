@@ -63,7 +63,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
       {/* Hero */}
-      <div className="relative overflow-hidden">
+      <div className="relative min-h-[430px] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover"
           style={{
@@ -72,14 +72,14 @@ export default function Dashboard() {
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-stone-50" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32 md:pt-[82px]">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
             className="text-center">
-            <h1 className="text-4xl md:text-6xl font-light text-white mb-4 tracking-tight">
+            <h1 className="text-4xl md:text-6xl font-light text-white mb-[18px] tracking-tight leading-tight md:leading-[1.05]">
               Hundefreundliche Wanderungen
             </h1>
             <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">
-              Entdecke die schönsten Wanderungen in den Bergen zusammen mit deinem Vierbeinern.
+              Entdecke die schönsten Wanderungen in den Bergen zusammen mit deinem Vierbeiner.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Link to={createPageUrl("Hikes")}>
