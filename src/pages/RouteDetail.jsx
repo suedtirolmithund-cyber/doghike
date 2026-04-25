@@ -98,6 +98,7 @@ export default function RouteDetail() {
     mutationFn: (data) => updateRoute(routeId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["route", routeId] });
+      queryClient.invalidateQueries({ queryKey: ["userRoutes", user?.id] });
       setEditingRoute(false);
     },
   });
