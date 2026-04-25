@@ -79,6 +79,7 @@ export default function GPSTracker({ onSave }) {
   const [locating, setLocating] = useState(false);
 
   const watchIdRef = useRef(null);
+  const pollIntervalRef = useRef(null);
   const isPausedRef = useRef(false);
   const routePointsRef = useRef([]);
   const altitudesRef = useRef([]); // track altitudes for elevation gain
@@ -130,6 +131,41 @@ export default function GPSTracker({ onSave }) {
     });
   }, []);
 
+  const handlePositionSample = useCallback((position) => {
+    if (isPausedRef.current) return;
+
+    const { latitude, longitude, altitude, accuracy } = position.coords;
+    // Skip highly inaccurate points (> 50m accuracy)
+    if (accuracy && accuracy > 50) return;
+
+    const newPoint = [latitude, longitude];
+    const prev = routePointsRef.current;
+
+    // Minimum distance filter: only add point if moved > 5m
+    if (prev.length > 0) {
+      const dist = haversineDistance(prev[prev.length - 1], newPoint) * 1000; // in meters
+      if (dist < 5) {
+        setCurrentPosition(newPoint);
+        return;
+      }
+      distanceRef.current += dist / 1000; // km
+    }
+
+    routePointsRef.current = [...prev, newPoint];
+    setRoutePoints([...routePointsRef.current]);
+    setCurrentPosition(newPoint);
+
+    // Elevation gain
+    if (altitude !== null && altitude !== undefined) {
+      const alts = altitudesRef.current;
+      if (alts.length > 0) {
+        const diff = altitude - alts[alts.length - 1];
+        if (diff > 0) elevationGainRef.current += diff;
+      }
+      altitudesRef.current = [...alts, altitude];
+    }
+  }, []);
+
   const startTracking = () => {
     if (!navigator.geolocation) {
       toast.error("GPS wird von deinem Browser nicht unterstützt.");
@@ -150,43 +186,25 @@ export default function GPSTracker({ onSave }) {
     pausedTimeRef.current = 0;
 
     watchIdRef.current = navigator.geolocation.watchPosition(
-      (position) => {
-        if (isPausedRef.current) return; // ignore points during pause
-
-        const { latitude, longitude, altitude, accuracy } = position.coords;
-        // Skip highly inaccurate points (> 50m accuracy)
-        if (accuracy && accuracy > 50) return;
-
-        const newPoint = [latitude, longitude];
-        const prev = routePointsRef.current;
-
-        // Minimum distance filter: only add point if moved > 5m
-        if (prev.length > 0) {
-          const dist = haversineDistance(prev[prev.length - 1], newPoint) * 1000; // in meters
-          if (dist < 5) return;
-          distanceRef.current += dist / 1000; // km
-        }
-
-        routePointsRef.current = [...prev, newPoint];
-        setRoutePoints([...routePointsRef.current]);
-        setCurrentPosition(newPoint);
-
-        // Elevation gain
-        if (altitude !== null && altitude !== undefined) {
-          const alts = altitudesRef.current;
-          if (alts.length > 0) {
-            const diff = altitude - alts[alts.length - 1];
-            if (diff > 0) elevationGainRef.current += diff;
-          }
-          altitudesRef.current = [...alts, altitude];
-        }
-      },
+      handlePositionSample,
       (error) => {
         console.error("GPS error:", error);
         toast.error("Fehler beim Abrufen der GPS-Position. Bitte GPS aktivieren.");
       },
       { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
     );
+
+    // Supplement watchPosition with an explicit GPS poll so mobile browsers
+    // produce denser tracks instead of long straight segments.
+    pollIntervalRef.current = setInterval(() => {
+      if (isPausedRef.current) return;
+
+      navigator.geolocation.getCurrentPosition(
+        handlePositionSample,
+        () => {},
+        { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
+      );
+    }, 5000);
 
     intervalRef.current = setInterval(computeStats, 1000);
   };
@@ -211,6 +229,7 @@ export default function GPSTracker({ onSave }) {
   const stopTracking = () => {
     if (watchIdRef.current) navigator.geolocation.clearWatch(watchIdRef.current);
     clearInterval(intervalRef.current);
+    clearInterval(pollIntervalRef.current);
 
     const points = routePointsRef.current;
     const finalDist = distanceRef.current;
@@ -240,6 +259,7 @@ export default function GPSTracker({ onSave }) {
     return () => {
       if (watchIdRef.current) navigator.geolocation.clearWatch(watchIdRef.current);
       clearInterval(intervalRef.current);
+      clearInterval(pollIntervalRef.current);
     };
   }, []);
 
