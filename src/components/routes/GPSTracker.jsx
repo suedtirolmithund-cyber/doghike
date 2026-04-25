@@ -100,6 +100,15 @@ export default function GPSTracker({ onSave }) {
   const elevationGainRef = useRef(0);
   const wakeLockRef = useRef(null);
 
+  const getTotalPausedMs = useCallback(() => {
+    const activePauseMs =
+      isPausedRef.current && lastPauseTimeRef.current
+        ? Date.now() - lastPauseTimeRef.current
+        : 0;
+
+    return pausedTimeRef.current + activePauseMs;
+  }, []);
+
   const findMyLocation = () => {
     if (!navigator.geolocation) {
       toast.error("GPS wird von deinem Browser nicht unterstützt.");
@@ -124,7 +133,7 @@ export default function GPSTracker({ onSave }) {
 
   const computeStats = useCallback(() => {
     const now = Date.now();
-    const totalElapsedMs = now - startTimeRef.current - pausedTimeRef.current;
+    const totalElapsedMs = now - startTimeRef.current - getTotalPausedMs();
     const durationMin = Math.floor(totalElapsedMs / 60000);
     const durationSec = Math.floor(totalElapsedMs / 1000);
     const dist = distanceRef.current;
@@ -137,7 +146,7 @@ export default function GPSTracker({ onSave }) {
       avgSpeed,
       elevationGain: elevationGainRef.current,
     });
-  }, []);
+  }, [getTotalPausedMs]);
 
   const handlePositionSample = useCallback((position) => {
     if (isPausedRef.current) return;
@@ -263,6 +272,7 @@ export default function GPSTracker({ onSave }) {
     setIsPaused(false);
     if (lastPauseTimeRef.current) {
       pausedTimeRef.current += Date.now() - lastPauseTimeRef.current;
+      lastPauseTimeRef.current = null;
     }
     intervalRef.current = setInterval(computeStats, 1000);
     requestWakeLock();
@@ -277,13 +287,14 @@ export default function GPSTracker({ onSave }) {
     const points = routePointsRef.current;
     const finalDist = distanceRef.current;
     const finalElev = elevationGainRef.current;
-    const totalElapsedMs = Date.now() - startTimeRef.current - pausedTimeRef.current;
+    const totalElapsedMs = Date.now() - startTimeRef.current - getTotalPausedMs();
     const durationMin = Math.floor(totalElapsedMs / 60000);
     const avgSpeed = durationMin > 0 ? parseFloat(((finalDist / durationMin) * 60).toFixed(1)) : 0;
 
     setIsTracking(false);
     setIsPaused(false);
     isPausedRef.current = false;
+    lastPauseTimeRef.current = null;
 
     if (points.length >= 2) {
       onSave({
