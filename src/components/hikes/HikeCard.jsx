@@ -10,7 +10,7 @@ const difficultyColors = {
   "2": "bg-lime-100 text-lime-700 border-lime-200",
   "3": "bg-amber-100 text-amber-700 border-amber-200",
   "4": "bg-orange-100 text-orange-700 border-orange-200",
-  "5": "bg-red-100 text-red-700 border-red-200"
+  "5": "bg-red-100 text-red-700 border-red-200",
 };
 
 const seasonEmojis = {
@@ -18,64 +18,58 @@ const seasonEmojis = {
   summer: "☀️",
   autumn: "🍂",
   winter: "❄️",
-  all_year: "🍃"
+  all_year: "🍃",
 };
 
 const waterLabels = {
   none: "Kein Wasser",
   little: "Wenig Wasser",
   moderate: "Etwas Wasser",
-  plenty: "Viel Wasser"
+  plenty: "Viel Wasser",
 };
 
 const waterColors = {
   none: "text-red-500",
   little: "text-orange-500",
   moderate: "text-blue-400",
-  plenty: "text-blue-600"
-};
-
-const weatherIcons = {
-  sunny: "☀️",
-  cloudy: "☁️",
-  partly_cloudy: "⛅",
-  rainy: "🌧️",
-  snowy: "❄️",
-  foggy: "🌫️"
+  plenty: "text-blue-600",
 };
 
 export default function HikeCard({ hike, dogs = [], index = 0 }) {
   const hikeDogs = dogs.filter((d) => hike.dogs?.includes(d.id));
-  const coverPhoto = hike.photos?.[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80";
+  const coverPhoto =
+    hike.photos?.[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80";
   const hikeSource = hike._source ?? "sheets";
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.5 }}>
-
+      transition={{ delay: index * 0.1, duration: 0.5 }}
+    >
       <Link to={createPageUrl("HikeDetail") + `?id=${hike.id}&source=${hikeSource}`}>
         <div className="group bg-white rounded-2xl overflow-hidden border border-stone-200/50 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer">
           <div className="relative h-52 overflow-hidden">
             <img
               src={coverPhoto}
               alt={hike.trail_name}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-            
+
             {hike.is_premium && (
               <span className="absolute top-4 left-4 bg-amber-400 text-white text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1">
                 💎 Premium
               </span>
             )}
-            {hike.season &&
-            <span className="absolute top-4 right-4 text-2xl bg-white/80 backdrop-blur-sm rounded-full w-10 h-10 flex items-center justify-center">
+
+            {hike.season && (
+              <span className="absolute top-4 right-4 text-2xl bg-white/80 backdrop-blur-sm rounded-full w-10 h-10 flex items-center justify-center">
                 {seasonEmojis[hike.season]}
               </span>
-            }
-            
+            )}
+
             <div className="absolute bottom-4 left-4 right-4">
               <h3 className="text-xl font-semibold text-white mb-1">{hike.trail_name}</h3>
               <div className="flex items-center gap-1.5 text-white/80 text-sm">
@@ -84,7 +78,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               </div>
             </div>
           </div>
-          
+
           <div className="p-5">
             <div className="flex items-center gap-1.5 flex-wrap mb-3">
               {hike.difficulty && (
@@ -106,30 +100,30 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                 <span className="text-xs font-medium text-red-500">🚫 Kein Wasser</span>
               )}
             </div>
-            
+
             <div className="grid grid-cols-3 gap-3 mb-4">
-              {hike.distance_km &&
-              <div className="text-center p-2 bg-stone-50 rounded-xl">
+              {hike.distance_km && (
+                <div className="text-center p-2 bg-stone-50 rounded-xl">
                   <p className="text-lg font-semibold text-stone-800">{hike.distance_km}</p>
                   <p className="text-xs text-stone-500">km</p>
                 </div>
-              }
-              {hike.elevation_gain_m &&
-              <div className="text-center p-2 bg-stone-50 rounded-xl">
+              )}
+              {hike.elevation_gain_m && (
+                <div className="text-center p-2 bg-stone-50 rounded-xl">
                   <p className="text-lg font-semibold text-stone-800">{hike.elevation_gain_m}</p>
                   <p className="text-xs text-stone-500">Hm</p>
                 </div>
-              }
-              {hike.duration_minutes &&
-              <div className="text-center p-2 bg-stone-50 rounded-xl">
+              )}
+              {hike.duration_minutes && (
+                <div className="text-center p-2 bg-stone-50 rounded-xl">
                   <p className="text-lg font-semibold text-stone-800">
                     {(hike.duration_minutes / 60).toFixed(1)}
                   </p>
                   <p className="text-xs text-stone-500">Std</p>
                 </div>
-              }
+              )}
             </div>
-            
+
             {hike.notes && (
               <div className="mb-3">
                 <ExpandableText
@@ -142,7 +136,6 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                {/* Journal-Tour: Hundebild + Username des Erstellers */}
                 {hike._source === "journal" ? (
                   <div className="flex items-center gap-2">
                     {(hike.dog_photo_url || hike.author_avatar) && (
@@ -163,38 +156,39 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                     )}
                   </div>
                 ) : (
-                  /* Normale Tour: Hunde aus dogs[] prop */
                   <>
-                    {hikeDogs.slice(0, 3).map((dog, i) =>
-                    <div
-                      key={dog.id}
-                      className="w-8 h-8 rounded-full border-2 border-white shadow-sm overflow-hidden"
-                      style={{ marginLeft: i > 0 ? "-8px" : 0 }}>
+                    {hikeDogs.slice(0, 3).map((dog, i) => (
+                      <div
+                        key={dog.id}
+                        className="w-8 h-8 rounded-full border-2 border-white shadow-sm overflow-hidden"
+                        style={{ marginLeft: i > 0 ? "-8px" : 0 }}
+                      >
                         <img
                           src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
                           alt={dog.name}
-                          className="w-full h-full object-cover" />
+                          className="w-full h-full object-cover"
+                        />
                       </div>
-                    )}
-                    {hikeDogs.length > 0 &&
+                    ))}
+                    {hikeDogs.length > 0 && (
                       <span className="text-sm text-stone-500 ml-1">
                         {hikeDogs.map((d) => d.name).join(", ")}
                       </span>
-                    }
+                    )}
                   </>
                 )}
               </div>
-              
-              {hike.rating &&
-              <div className="flex items-center gap-1">
+
+              {hike.rating && (
+                <div className="flex items-center gap-1">
                   <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                   <span className="text-sm font-medium text-stone-700">{hike.rating}</span>
                 </div>
-              }
+              )}
             </div>
           </div>
         </div>
       </Link>
-    </motion.div>);
-
+    </motion.div>
+  );
 }

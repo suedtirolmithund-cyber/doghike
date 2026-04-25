@@ -1,7 +1,17 @@
 import { useState, useRef } from "react";
 import { MapContainer, TileLayer, Polyline, Marker } from "react-leaflet";
 import { Button } from "@/components/ui/button";
-import { Upload, FileText, Trash2, AlertCircle, Mountain, Route, Clock, TrendingUp, Zap } from "lucide-react";
+import {
+  Upload,
+  FileText,
+  Trash2,
+  AlertCircle,
+  Mountain,
+  Route,
+  Clock,
+  TrendingUp,
+  Zap,
+} from "lucide-react";
 import RouteElevationProfile from "./RouteElevationProfile";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -13,25 +23,45 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-// Haversine distance between two points
 function haversine(lat1, lon1, lat2, lon2) {
   const R = 6371;
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLon = ((lon2 - lon1) * Math.PI) / 180;
   const a =
     Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) ** 2;
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function mapGpxError(message) {
+  const msg = String(message || "").toLowerCase();
+
+  if (msg.includes("keine wegpunkte")) {
+    return "In der GPX-Datei wurden keine brauchbaren Wegpunkte gefunden.";
+  }
+  if (msg.includes("parsererror") || msg.includes("xml")) {
+    return "Die GPX-Datei konnte nicht gelesen werden. Bitte prüfe das Format.";
+  }
+
+  return "Die GPX-Datei konnte nicht verarbeitet werden. Bitte prüfe die Datei und versuche es noch einmal.";
 }
 
 function parseGPX(text) {
   const parser = new DOMParser();
   const xml = parser.parseFromString(text, "application/xml");
 
+  if (xml.querySelector("parsererror")) {
+    throw new Error("parsererror");
+  }
+
   const trkpts = xml.querySelectorAll("trkpt");
   const wpts = trkpts.length > 0 ? trkpts : xml.querySelectorAll("rtept");
 
-  if (wpts.length === 0) throw new Error("Keine Wegpunkte im GPX gefunden.");
+  if (wpts.length === 0) {
+    throw new Error("Keine Wegpunkte im GPX gefunden.");
+  }
 
   const points = [];
   let elevGain = 0;
@@ -44,7 +74,7 @@ function parseGPX(text) {
     const eleEl = pt.querySelector("ele");
     const ele = eleEl ? parseFloat(eleEl.textContent) : null;
 
-    if (!isNaN(lat) && !isNaN(lon)) {
+    if (!Number.isNaN(lat) && !Number.isNaN(lon)) {
       points.push({ lat, lon, ele });
 
       if (ele !== null && prevElev !== null) {
@@ -56,15 +86,13 @@ function parseGPX(text) {
     }
   });
 
-  // Calculate total distance
   let distKm = 0;
-  for (let i = 1; i < points.length; i++) {
+  for (let i = 1; i < points.length; i += 1) {
     distKm += haversine(points[i - 1].lat, points[i - 1].lon, points[i].lat, points[i].lon);
   }
 
-  // Estimate duration: Naismith's rule (4 km/h + 1 min per 10m gain)
-  const baseTime = distKm / 4; // hours
-  const climbTime = elevGain / 600; // hours (600m/h ascent)
+  const baseTime = distKm / 4;
+  const climbTime = elevGain / 600;
   const durationMin = Math.round((baseTime + climbTime) * 60);
 
   return {
@@ -74,8 +102,14 @@ function parseGPX(text) {
     elevation_gain_m: Math.round(elevGain),
     elevation_loss_m: Math.round(elevLoss),
     duration_minutes: durationMin,
-    max_elevation: points.reduce((max, p) => (p.ele !== null && p.ele > max ? p.ele : max), -Infinity),
-    min_elevation: points.reduce((min, p) => (p.ele !== null && p.ele < min ? p.ele : min), Infinity),
+    max_elevation: points.reduce(
+      (max, p) => (p.ele !== null && p.ele > max ? p.ele : max),
+      -Infinity,
+    ),
+    min_elevation: points.reduce(
+      (min, p) => (p.ele !== null && p.ele < min ? p.ele : min),
+      Infinity,
+    ),
   };
 }
 
@@ -89,10 +123,12 @@ export default function GPXUploader({ onSave }) {
   const processFile = (file) => {
     setError("");
     if (!file) return;
+
     if (!file.name.toLowerCase().endsWith(".gpx")) {
       setError("Bitte nur GPX-Dateien hochladen.");
       return;
     }
+
     setFileName(file.name);
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -100,7 +136,7 @@ export default function GPXUploader({ onSave }) {
         const parsed = parseGPX(e.target.result);
         setGpxData(parsed);
       } catch (err) {
-        setError(err.message);
+        setError(mapGpxError(err.message));
         setGpxData(null);
       }
     };
@@ -128,7 +164,10 @@ export default function GPXUploader({ onSave }) {
   };
 
   const mapCenter = gpxData
-    ? [gpxData.coordinates[Math.floor(gpxData.coordinates.length / 2)][0], gpxData.coordinates[Math.floor(gpxData.coordinates.length / 2)][1]]
+    ? [
+        gpxData.coordinates[Math.floor(gpxData.coordinates.length / 2)][0],
+        gpxData.coordinates[Math.floor(gpxData.coordinates.length / 2)][1],
+      ]
     : [46.5, 11.9];
 
   const formatDuration = (min) => {
@@ -139,13 +178,17 @@ export default function GPXUploader({ onSave }) {
 
   return (
     <div className="space-y-4">
-      {/* Upload Zone */}
       {!gpxData && (
         <div
           className={`border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer ${
-            isDragging ? "border-slate-500 bg-slate-50" : "border-stone-300 hover:border-slate-400 hover:bg-stone-50"
+            isDragging
+              ? "border-slate-500 bg-slate-50"
+              : "border-stone-300 hover:border-slate-400 hover:bg-stone-50"
           }`}
-          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDragging(true);
+          }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
           onClick={() => fileInputRef.current.click()}
@@ -160,7 +203,7 @@ export default function GPXUploader({ onSave }) {
           <Upload className="w-12 h-12 text-stone-400 mx-auto mb-3" />
           <p className="text-base font-medium text-stone-700 mb-1">GPX-Datei hochladen</p>
           <p className="text-sm text-stone-500">Datei hierher ziehen oder klicken zum Auswählen</p>
-          <p className="text-xs text-stone-400 mt-2">Unterstützt: .gpx (Garmin, Komoot, Strava, etc.)</p>
+          <p className="text-xs text-stone-400 mt-2">Unterstützt: .gpx (Garmin, Komoot, Strava und ähnliche)</p>
         </div>
       )}
 
@@ -173,7 +216,6 @@ export default function GPXUploader({ onSave }) {
 
       {gpxData && (
         <>
-          {/* File info */}
           <div className="flex items-center justify-between bg-brand-50 border border-brand-200 rounded-lg p-3">
             <div className="flex items-center gap-2">
               <FileText className="w-5 h-5 text-brand-400" />
@@ -187,7 +229,6 @@ export default function GPXUploader({ onSave }) {
             </Button>
           </div>
 
-          {/* Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="bg-slate-800 text-white rounded-xl p-4 text-center">
               <Route className="w-5 h-5 mx-auto mb-1 opacity-70" />
@@ -206,25 +247,28 @@ export default function GPXUploader({ onSave }) {
             </div>
             <div className="bg-amber-700 text-white rounded-xl p-4 text-center">
               <Mountain className="w-5 h-5 mx-auto mb-1 opacity-70" />
-              <p className="text-2xl font-bold">{gpxData.max_elevation !== -Infinity ? Math.round(gpxData.max_elevation) : "–"}</p>
+              <p className="text-2xl font-bold">
+                {gpxData.max_elevation !== -Infinity ? Math.round(gpxData.max_elevation) : "–"}
+              </p>
               <p className="text-xs opacity-70">m max. Höhe</p>
             </div>
           </div>
 
           <div className="bg-stone-50 rounded-lg p-3 text-xs text-stone-600 flex flex-wrap gap-4">
             <span>⬇️ Abstieg: <strong>{gpxData.elevation_loss_m} m</strong></span>
-            {gpxData.min_elevation !== Infinity && <span>🏔️ Min. Höhe: <strong>{Math.round(gpxData.min_elevation)} m</strong></span>}
+            {gpxData.min_elevation !== Infinity && (
+              <span>🏔️ Min. Höhe: <strong>{Math.round(gpxData.min_elevation)} m</strong></span>
+            )}
             <span className="text-stone-400 ml-auto flex items-center gap-1">
               <Zap className="w-3 h-3" /> Dauer nach Naismith-Formel geschätzt
             </span>
           </div>
 
-          {/* Map Preview */}
           <div className="relative h-72 md:h-96 rounded-xl overflow-hidden border-2 border-stone-200">
             <MapContainer center={mapCenter} zoom={12} style={{ height: "100%", width: "100%" }}>
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; OpenStreetMap'
+                attribution="&copy; OpenStreetMap"
               />
               <Polyline positions={gpxData.coordinates} color="#ef4444" weight={4} opacity={0.85} />
               {gpxData.coordinates.length > 0 && (
@@ -236,19 +280,14 @@ export default function GPXUploader({ onSave }) {
             </MapContainer>
           </div>
 
-          {/* Elevation Profile */}
           <RouteElevationProfile
             coordinates={gpxData.coordinates}
             distance={gpxData.distance_km}
           />
 
-          {/* Save Button */}
-          <Button
-            onClick={handleSave}
-            className="w-full bg-slate-800 hover:bg-slate-900"
-          >
+          <Button onClick={handleSave} className="w-full bg-slate-800 hover:bg-slate-900">
             <Upload className="w-4 h-4 mr-2" />
-            GPX-Route übernehmen & speichern
+            GPX-Route übernehmen und speichern
           </Button>
         </>
       )}

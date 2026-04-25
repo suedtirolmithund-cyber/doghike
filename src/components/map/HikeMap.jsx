@@ -7,22 +7,36 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import L from "leaflet";
 import "leaflet.markercluster";
 
-// Availability → color mapping
-const availabilityConfig = {
-  SommerOnly:        { color: "#d64545", label: "Nur Sommer" },
-  HerbstEmpfohlen:   { color: "#f19a4b", label: "Herbst empfohlen" },
-  WinterEmpfohlen:   { color: "#5b83f0", label: "Winter empfohlen" },
-  FrühlingEmpfohlen:{ color: "#ec9cf4", label: "Frühling empfohlen" },
-  YearRound:         { color: "#38a062", label: "Ganzjährig" },
+const seasonConfig = {
+  spring: { color: "#ec9cf4", label: "Frühling" },
+  summer: { color: "#d64545", label: "Sommer" },
+  autumn: { color: "#f19a4b", label: "Herbst" },
+  winter: { color: "#5b83f0", label: "Winter" },
+  all_year: { color: "#38a062", label: "Ganzjährig" },
+};
+
+const legacyAvailabilityMap = {
+  SommerOnly: "summer",
+  HerbstEmpfohlen: "autumn",
+  WinterEmpfohlen: "winter",
+  FrühlingEmpfohlen: "spring",
+  YearRound: "all_year",
 };
 
 const DEFAULT_COLOR = "#38a062";
 
-function getColor(hike) {
-  if (hike.availability && availabilityConfig[hike.availability]) {
-    return availabilityConfig[hike.availability].color;
+function getSeasonKey(hike) {
+  if (hike.season && seasonConfig[hike.season]) {
+    return hike.season;
   }
-  return DEFAULT_COLOR;
+
+  const legacyKey = legacyAvailabilityMap[hike.availability];
+  return legacyKey && seasonConfig[legacyKey] ? legacyKey : null;
+}
+
+function getColor(hike) {
+  const seasonKey = getSeasonKey(hike);
+  return seasonKey ? seasonConfig[seasonKey].color : DEFAULT_COLOR;
 }
 
 function createPawIcon(color) {
@@ -49,7 +63,6 @@ function createPawIcon(color) {
   });
 }
 
-// Photo marker for journal hikes: shows dog photo, user avatar, or falls back to paw
 function createPhotoIcon(photoUrl) {
   const html = `
     <div style="
@@ -82,7 +95,7 @@ function MarkersLayer({ hikes }) {
   const clusterRef = useRef(null);
 
   useEffect(() => {
-    if (!map) return;
+    if (!map) return undefined;
 
     const cluster = L.markerClusterGroup({
       maxClusterRadius: 60,
@@ -103,12 +116,10 @@ function MarkersLayer({ hikes }) {
     hikes.forEach((hike) => {
       if (!hike.latitude || !hike.longitude) return;
       const hikeSource = hike._source ?? "sheets";
-
       const color = getColor(hike);
-      // Journal hikes: show dog photo → user avatar → paw fallback
-      const photoUrl = hike._source === "journal"
-        ? (hike.dog_photo_url || hike.author_avatar)
-        : null;
+      const photoUrl =
+        hike._source === "journal" ? hike.dog_photo_url || hike.author_avatar : null;
+
       const marker = L.marker([hike.latitude, hike.longitude], {
         icon: photoUrl ? createPhotoIcon(photoUrl) : createPawIcon(color),
       });
@@ -148,7 +159,6 @@ function MarkersLayer({ hikes }) {
     map.addLayer(cluster);
     clusterRef.current = cluster;
 
-    // Fit bounds to all markers
     const coords = hikes
       .filter((h) => h.latitude && h.longitude)
       .map((h) => [h.latitude, h.longitude]);
@@ -201,7 +211,7 @@ export default function HikeMap({
 
       {showLegend && (
         <div className="absolute bottom-3 left-3 z-[1000] bg-white/90 backdrop-blur-sm rounded-xl px-3 py-2 shadow border border-stone-200/60 hidden md:flex flex-col gap-1 text-xs text-stone-700">
-          {Object.entries(availabilityConfig).map(([key, { color, label }]) => (
+          {Object.entries(seasonConfig).map(([key, { color, label }]) => (
             <div key={key} className="flex items-center gap-2">
               <span
                 style={{
