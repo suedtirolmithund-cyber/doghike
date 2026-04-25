@@ -2,7 +2,15 @@ import { MapContainer, TileLayer, Polyline } from "react-leaflet";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
-import { Map, Navigation, Clock, Route, CheckCircle2, Trash2, Edit } from "lucide-react";
+import {
+  Map,
+  Navigation,
+  Clock,
+  Route,
+  CheckCircle2,
+  Trash2,
+  Edit,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import "leaflet/dist/leaflet.css";
@@ -71,7 +79,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
           {route.avg_speed_kmh && (
             <div className="flex items-center gap-1">
               <Navigation className="w-3 h-3" />
-              <span>{route.avg_speed_kmh} km/h ⌀</span>
+              <span>{route.avg_speed_kmh} km/h</span>
             </div>
           )}
         </div>
@@ -81,12 +89,12 @@ export default function UserRouteCard({ route, index, onDelete }) {
         </div>
 
         <div className="flex gap-2">
-          <Link to={createPageUrl(`RouteDetail?id=${route.id}`)} className="flex-1">
+          <Link to={`${createPageUrl("RouteDetail")}?id=${route.id}`} className="flex-1">
             <Button variant="outline" className="w-full" size="sm">
               Details
             </Button>
           </Link>
-          <Link to={createPageUrl(`EditRoute?id=${route.id}`)}>
+          <Link to={`${createPageUrl("EditRoute")}?id=${route.id}`}>
             <Button variant="ghost" size="icon" className="text-stone-600 hover:bg-stone-100">
               <Edit className="w-4 h-4" />
             </Button>
