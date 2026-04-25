@@ -208,6 +208,7 @@ export default function RouteDetail() {
 
   const isOwner = user?.id === route.user_id;
   const RouteIcon = route.route_type === "recorded" ? Navigation : Map;
+  const effectiveDurationMinutes = route.completed_duration_minutes ?? route.duration_minutes ?? null;
 
   const buildJournalPrefill = () => ({
     title: route.name || "",
@@ -215,7 +216,7 @@ export default function RouteDetail() {
     date: completeData.completed_date || route.completed_date || "",
     distance_km: route.distance_km ?? "",
     elevation_m: route.elevation_gain_m ?? "",
-    duration_minutes: completeData.completed_duration_minutes || route.duration_minutes || "",
+    duration_minutes: completeData.completed_duration_minutes || route.completed_duration_minutes || route.duration_minutes || "",
     description: [
       completeData.completed_notes,
       route.completed_notes,
@@ -423,10 +424,10 @@ export default function RouteDetail() {
               <div className="text-center p-4 bg-slate-50 rounded-lg">
                 <Clock className="w-5 h-5 mx-auto mb-2 text-slate-700" />
                 <p className="text-2xl font-bold text-slate-800">
-                  {route.duration_minutes
-                    ? Math.floor(route.duration_minutes / 60) > 0
-                      ? `${Math.floor(route.duration_minutes / 60)}h ${route.duration_minutes % 60}min`
-                      : `${route.duration_minutes}min`
+                  {effectiveDurationMinutes
+                    ? Math.floor(effectiveDurationMinutes / 60) > 0
+                      ? `${Math.floor(effectiveDurationMinutes / 60)}h ${effectiveDurationMinutes % 60}min`
+                      : `${effectiveDurationMinutes}min`
                     : "–"}
                 </p>
                 <p className="text-xs text-stone-500">Gehzeit</p>
@@ -734,6 +735,7 @@ export default function RouteDetail() {
                         <Button
                           onClick={() => completeRouteMutation.mutate({
                             completed_date: completeData.completed_date || null,
+                            completed_duration_minutes: completeData.completed_duration_minutes || null,
                             completed_notes: [
                               completeData.completed_notes,
                               completeData.parking_info ? `🅿️ ${completeData.parking_info}` : null,

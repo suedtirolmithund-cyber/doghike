@@ -257,6 +257,7 @@ create table if not exists public.user_routes (
   is_public   boolean default false,
   completed   boolean default false,
   completed_date date,
+  completed_duration_minutes integer,
   completed_notes text,
   completed_rating smallint check (completed_rating between 1 and 5),
   created_at  timestamptz default now()

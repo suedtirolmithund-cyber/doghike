@@ -19,6 +19,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
   const RouteIcon = route.route_type === "recorded" ? Navigation : Map;
   const coordinates = route.waypoints ?? [];
   const createdAt = route.created_at ?? null;
+  const effectiveDurationMinutes = route.completed_duration_minutes ?? route.duration_minutes ?? null;
 
   return (
     <motion.div
@@ -70,10 +71,10 @@ export default function UserRouteCard({ route, index, onDelete }) {
             <Route className="w-3 h-3" />
             <span>{route.distance_km} km</span>
           </div>
-          {route.duration_minutes && (
+          {effectiveDurationMinutes && (
             <div className="flex items-center gap-1">
               <Clock className="w-3 h-3" />
-              <span>{route.duration_minutes} min</span>
+              <span>{effectiveDurationMinutes} min</span>
             </div>
           )}
           {route.avg_speed_kmh && (
