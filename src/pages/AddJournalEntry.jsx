@@ -537,6 +537,7 @@ export default function AddJournalEntry() {
         ? updateJournalEntry(editId, data)
         : createJournalEntry(user.id, data),
     onSuccess: () => {
+      keepUploadedMediaRef.current = true;
       queryClient.invalidateQueries({ queryKey: ["journal", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["admin_pending"] });
@@ -643,8 +644,6 @@ export default function AddJournalEntry() {
         : form.visibility === "friends"
           ? "approved"
           : "draft";
-
-    keepUploadedMediaRef.current = true;
 
     keepUploadedMediaRef.current = true;
 
