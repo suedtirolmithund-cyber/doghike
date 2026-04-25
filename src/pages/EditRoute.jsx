@@ -79,10 +79,23 @@ export default function EditRoute() {
     });
   };
 
-  if (isLoading || !routeData) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-stone-400" />
+      </div>
+    );
+  }
+
+  if (!route || !routeData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="text-center">
+          <p className="text-xl text-stone-700 mb-4">Route nicht gefunden</p>
+          <Link to={createPageUrl("Profile")}>
+            <Button>Zurück zum Profil</Button>
+          </Link>
+        </div>
       </div>
     );
   }
@@ -105,7 +118,7 @@ export default function EditRoute() {
             <Map className="w-6 h-6 text-slate-700 flex-shrink-0 mt-1" />
             <div>
               <h1 className="text-xl md:text-2xl font-bold text-stone-800">Route bearbeiten</h1>
-              <p className="text-xs text-stone-500 mt-0.5">Aendere den Streckenverlauf oder die Details</p>
+              <p className="text-xs text-stone-500 mt-0.5">Ändere den Streckenverlauf oder die Details</p>
             </div>
           </div>
 
