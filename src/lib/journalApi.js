@@ -38,6 +38,26 @@ function isJournalStoragePath(value) {
   return typeof value === "string" && value.length > 0 && !isRemoteJournalReference(value);
 }
 
+function getCommentStorageDescriptor(photoReference) {
+  if (!photoReference) return null;
+
+  if (photoReference.startsWith("pending://")) {
+    return {
+      bucket: "comments-pending",
+      path: photoReference.slice("pending://".length),
+    };
+  }
+
+  const marker = "/storage/v1/object/public/comments/";
+  const index = photoReference.indexOf(marker);
+  if (index === -1) return null;
+
+  return {
+    bucket: "comments",
+    path: decodeURIComponent(photoReference.slice(index + marker.length)),
+  };
+}
+
 export async function getSignedJournalUrl(fileReference) {
   if (!fileReference) return null;
   if (!isJournalStoragePath(fileReference)) return fileReference;
@@ -172,11 +192,37 @@ export async function deleteJournalEntry(id) {
 
   if (fetchError && fetchError.code !== "PGRST116") throw fetchError;
 
+  const { data: relatedComments, error: commentsFetchError } = await supabase
+    .from("comments")
+    .select("photo_url")
+    .eq("hike_id", id)
+    .eq("hike_source", "journal");
+
+  if (commentsFetchError) throw commentsFetchError;
+
   const { error } = await supabase
     .from("journal_entries")
     .delete()
     .eq("id", id);
   if (error) throw error;
+
+  const cleanupResults = await Promise.allSettled([
+    supabase.from("comments").delete().eq("hike_id", id).eq("hike_source", "journal"),
+    supabase.from("ratings").delete().eq("hike_id", id).eq("hike_source", "journal"),
+    supabase.from("saved_hikes").delete().eq("hike_id", id).eq("hike_source", "journal"),
+  ]);
+
+  cleanupResults.forEach((result, index) => {
+    const label = ["comments", "ratings", "saved_hikes"][index];
+    const errorMessage =
+      result.status === "rejected"
+        ? result.reason?.message
+        : result.value?.error?.message;
+
+    if (errorMessage) {
+      console.error(`[deleteJournalEntry] ${label} cleanup failed:`, errorMessage);
+    }
+  });
 
   const storagePaths = [
     ...(Array.isArray(existingEntry?.photos) ? existingEntry.photos : []),
@@ -192,6 +238,29 @@ export async function deleteJournalEntry(id) {
       console.error("[deleteJournalEntry] journal file cleanup failed:", storageError.message);
     }
   }
+
+  const commentStorageByBucket = (relatedComments ?? [])
+    .map((comment) => getCommentStorageDescriptor(comment.photo_url))
+    .filter(Boolean)
+    .reduce((acc, descriptor) => {
+      acc[descriptor.bucket] = [...(acc[descriptor.bucket] ?? []), descriptor.path];
+      return acc;
+    }, {});
+
+  await Promise.all(
+    Object.entries(commentStorageByBucket).map(async ([bucket, paths]) => {
+      const uniquePaths = [...new Set(paths)];
+      if (uniquePaths.length === 0) return;
+
+      const { error: storageError } = await supabase.storage
+        .from(bucket)
+        .remove(uniquePaths);
+
+      if (storageError) {
+        console.error(`[deleteJournalEntry] ${bucket} comment photo cleanup failed:`, storageError.message);
+      }
+    })
+  );
 }
 
 export async function deleteJournalFiles(fileReferences = []) {
