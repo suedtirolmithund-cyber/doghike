@@ -18,6 +18,7 @@ import {
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import {
   notificationsSupported,
   notificationPermission,
@@ -146,8 +147,12 @@ export default function Notifications() {
   const [permission, setPermission] = useState(() => notificationPermission());
 
   const handleActivate = async () => {
-    const granted = await requestNotificationPermission();
-    setPermission(granted ? "granted" : "denied");
+    try {
+      const granted = await requestNotificationPermission();
+      setPermission(granted ? "granted" : "denied");
+    } catch {
+      toast.error("Benachrichtigungen konnten gerade nicht aktiviert werden. Bitte versuche es noch einmal.");
+    }
   };
 
   const { data: notifications = [], isLoading } = useQuery({
