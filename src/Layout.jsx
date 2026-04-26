@@ -24,9 +24,7 @@ const ALL_NAV = [
   { name: "Dashboard", icon: Home, label: "Startseite" },
   { name: "Hikes", icon: Mountain, label: "Alle Touren" },
   { name: "Journal", icon: BookOpen, label: "Tagebuch" },
-  { name: "Friends", icon: Users, label: "Freunde" },
   { name: "RoutePlanner", icon: Navigation, label: "Routenplaner" },
-  { name: "TopDogs", icon: Trophy, label: "Top Dogs" },
   { name: "Profile", icon: Dog, label: "Mein Profil" },
 ];
 
