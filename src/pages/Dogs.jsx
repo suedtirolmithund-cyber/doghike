@@ -80,6 +80,7 @@ export default function Dogs() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["dog"] });
       setDialogOpen(false);
       toast.success("Hund hinzugefuegt");
     },
@@ -91,6 +92,7 @@ export default function Dogs() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["dog"] });
       setDialogOpen(false);
       setEditingDog(null);
       toast.success("Hund aktualisiert");
@@ -103,6 +105,7 @@ export default function Dogs() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["dog"] });
       toast.success("Hund entfernt");
     },
     onError: () => toast.error("Der Hund konnte gerade nicht entfernt werden. Bitte versuche es noch einmal."),
