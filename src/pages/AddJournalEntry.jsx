@@ -721,6 +721,19 @@ export default function AddJournalEntry() {
     );
   }
 
+  if (editId && !existing) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="text-center">
+          <p className="text-xl text-stone-700 mb-4">Eintrag nicht gefunden</p>
+          <Link to={createPageUrl("Journal")}>
+            <Button variant="outline">Zurück zum Tagebuch</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/10 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
