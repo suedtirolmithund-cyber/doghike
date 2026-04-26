@@ -6,6 +6,19 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
 
+const ONBOARDING_IMAGE = "/onboarding/A739105.jpg";
+const LOGIN_IMAGE = "/onboarding/A739195-2.jpg";
+
+function preloadImage(src) {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = resolve;
+    image.onerror = resolve;
+    image.src = src;
+    if (image.complete) resolve();
+  });
+}
+
 function mapAuthError(message) {
   const msg = String(message || "").toLowerCase();
   if (msg.includes("invalid login credentials")) return "E-Mail oder Passwort stimmen nicht.";
@@ -38,9 +51,20 @@ export default function GuestWelcomeScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [loginImageReady, setLoginImageReady] = useState(false);
   const [localError, setLocalError] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
   const error = localError || authError;
+
+  useEffect(() => {
+    let active = true;
+    preloadImage(LOGIN_IMAGE).then(() => {
+      if (active) setLoginImageReady(true);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     const hash = window.location.hash || "";
@@ -114,6 +138,14 @@ export default function GuestWelcomeScreen() {
     }
   };
 
+  const handleOnboardingContinue = async () => {
+    if (!loginImageReady) {
+      await preloadImage(LOGIN_IMAGE);
+      setLoginImageReady(true);
+    }
+    setShowAuth(true);
+  };
+
   const handleReset = async (event) => {
     event.preventDefault();
     setLocalError(null);
@@ -185,13 +217,13 @@ export default function GuestWelcomeScreen() {
   };
 
   if (!showAuth) {
-    return <OnboardingScreen onContinue={() => setShowAuth(true)} />;
+    return <OnboardingScreen onContinue={handleOnboardingContinue} />;
   }
 
   return (
     <div className="min-h-screen bg-black md:relative md:grid md:place-items-center md:overflow-hidden">
       <img
-        src="/onboarding/A739195-2.jpg"
+        src={LOGIN_IMAGE}
         alt=""
         className="hidden md:block md:absolute md:inset-0 md:h-full md:w-full md:object-contain"
       />
@@ -202,7 +234,7 @@ export default function GuestWelcomeScreen() {
         className="relative mx-auto h-[812px] max-h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-[#F8F8F8] md:bg-transparent"
       >
         <img
-          src="/onboarding/A739195-2.jpg"
+          src={LOGIN_IMAGE}
           alt=""
           className="absolute inset-0 h-full w-full object-cover md:hidden"
           style={{ objectPosition: "center center" }}
@@ -436,13 +468,13 @@ function OnboardingScreen({ onContinue }) {
   return (
     <div className="min-h-screen bg-black md:relative md:grid md:place-items-center md:overflow-hidden">
       <img
-        src="/onboarding/A739105.jpg"
+        src={ONBOARDING_IMAGE}
         alt=""
         className="hidden md:block md:absolute md:inset-0 md:h-full md:w-full md:object-contain"
       />
       <section className="relative mx-auto h-[812px] max-h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-black md:bg-transparent">
         <img
-          src="/onboarding/A739105.jpg"
+          src={ONBOARDING_IMAGE}
           alt=""
           className="absolute inset-0 h-full w-full object-cover md:hidden"
           style={{ objectPosition: "center center" }}
