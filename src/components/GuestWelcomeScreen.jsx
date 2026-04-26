@@ -499,7 +499,7 @@ function OnboardingScreen({ onContinue }) {
           type="button"
           onClick={onContinue}
           aria-label="Weiter"
-          className="absolute bottom-[7px] left-1/2 z-30 grid h-[54px] w-[52px] -translate-x-1/2 place-items-center rounded-full bg-[#BE8C70]/80 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/30"
+          className="absolute left-[161px] top-[751px] z-30 grid h-[54px] w-[52px] place-items-center rounded-full bg-[#BE8C70]/80 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/30"
         >
           <PawPrint className="h-[36px] w-[36px] fill-white stroke-white stroke-[1.8]" />
         </button>
