@@ -82,7 +82,7 @@ export default function Dogs() {
       queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dog"] });
       setDialogOpen(false);
-      toast.success("Hund hinzugefuegt");
+      toast.success("Hund hinzugefügt");
     },
     onError: () => toast.error("Der Hund konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
   });
@@ -97,7 +97,7 @@ export default function Dogs() {
       setEditingDog(null);
       toast.success("Hund aktualisiert");
     },
-    onError: () => toast.error("Die Aenderungen am Hund konnten gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Die Änderungen am Hund konnten gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
   });
 
   const deleteMutation = useMutation({

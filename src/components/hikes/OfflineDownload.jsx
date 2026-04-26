@@ -179,7 +179,7 @@ export default function OfflineDownload({ hike, dogs = [] }) {
         }
         pdf.setFont("helvetica", "bold");
         pdf.setFontSize(12);
-        pdf.text("Einkehrmoeglichkeiten:", margin, yPosition);
+      pdf.text("Einkehrmöglichkeiten:", margin, yPosition);
         yPosition += 7;
         
         pdf.setFont("helvetica", "normal");
