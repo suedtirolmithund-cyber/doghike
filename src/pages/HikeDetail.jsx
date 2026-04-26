@@ -75,6 +75,7 @@ export default function HikeDetail() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [copied, setCopied] = useState(false);
+  const normalizedHikeId = hikeId ? String(hikeId) : null;
 
   const handleShare = async () => {
     const url = window.location.href;
@@ -105,9 +106,9 @@ export default function HikeDetail() {
     queryKey: ["hike", hikeSource, hikeId],
     queryFn: async () => {
       const hikes = await getAllHikes();
-      return hikes.find((h) => h.id === hikeId && (h._source ?? "sheets") === hikeSource);
+      return hikes.find((h) => String(h.id) === normalizedHikeId && (h._source ?? "sheets") === hikeSource);
     },
-    enabled: !!hikeId
+    enabled: !!normalizedHikeId
   });
 
   const { user: currentUser, isAdmin } = useAuth();

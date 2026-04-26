@@ -10,6 +10,7 @@ import { toast } from "sonner";
 export default function SaveButton({ hikeId, hikeSource = "sheets", className }) {
   const { user, isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
+  const normalizedHikeId = String(hikeId);
   const navigate = useNavigate();
 
   const { data: savedHikes = [] } = useQuery({
@@ -18,10 +19,10 @@ export default function SaveButton({ hikeId, hikeSource = "sheets", className })
     enabled: !!user?.id,
   });
 
-  const isSaved = savedHikes.some((s) => s.hike_id === hikeId && s.hike_source === hikeSource);
+  const isSaved = savedHikes.some((s) => String(s.hike_id) === normalizedHikeId && s.hike_source === hikeSource);
 
   const saveMutation = useMutation({
-    mutationFn: () => saveHike(user.id, hikeId, hikeSource),
+    mutationFn: () => saveHike(user.id, normalizedHikeId, hikeSource),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] });
       toast.success("Tour gespeichert");
@@ -30,7 +31,7 @@ export default function SaveButton({ hikeId, hikeSource = "sheets", className })
   });
 
   const unsaveMutation = useMutation({
-    mutationFn: () => unsaveHike(user.id, hikeId, hikeSource),
+    mutationFn: () => unsaveHike(user.id, normalizedHikeId, hikeSource),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] });
       toast.success("Tour entfernt");

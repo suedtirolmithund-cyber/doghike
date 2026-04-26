@@ -99,7 +99,7 @@ export default function Profile() {
   const savedHikeObjects = savedHikes
     .map((saved) =>
       allHikes.find(
-        (hike) => hike.id === saved.hike_id && (hike._source ?? "sheets") === (saved.hike_source ?? "sheets")
+        (hike) => String(hike.id) === String(saved.hike_id) && (hike._source ?? "sheets") === (saved.hike_source ?? "sheets")
       )
     )
     .filter(Boolean);
