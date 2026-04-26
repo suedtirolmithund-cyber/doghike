@@ -8,7 +8,8 @@ import { pagesConfig } from './pages.config'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
-import SeasonalSplashScreen from '@/components/SeasonalSplashScreen';
+import AppLoadingScreen from '@/components/AppLoadingScreen';
+import GuestWelcomeScreen from '@/components/GuestWelcomeScreen';
 import React from 'react';
 
 class ErrorBoundary extends React.Component {
@@ -41,21 +42,30 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
   : <>{children}</>;
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings } = useAuth();
+  const { isAuthenticated, isLoadingAuth, isLoadingPublicSettings } = useAuth();
   const [minimumSplashElapsed, setMinimumSplashElapsed] = React.useState(false);
   const isBootLoading = isLoadingPublicSettings || isLoadingAuth;
 
   React.useEffect(() => {
     const timer = window.setTimeout(() => {
       setMinimumSplashElapsed(true);
-    }, 2600);
+    }, 3000);
 
     return () => window.clearTimeout(timer);
   }, []);
 
-  // Keep the splash visible until the initial boot is finished and the hero had time to appear.
-  if (isBootLoading || !minimumSplashElapsed) {
-    return <SeasonalSplashScreen />;
+  // Keep the first loading screen visible for a short, calm app start.
+  if (!minimumSplashElapsed) {
+    return <AppLoadingScreen />;
+  }
+
+  // If auth/settings/data still need time, keep a second loading state on screen.
+  if (isBootLoading) {
+    return <AppLoadingScreen extended />;
+  }
+
+  if (!isAuthenticated) {
+    return <GuestWelcomeScreen />;
   }
 
   // Render the main app
