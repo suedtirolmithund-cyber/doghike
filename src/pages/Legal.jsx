@@ -19,54 +19,30 @@ export default function Legal() {
             <Shield className="w-6 h-6 md:w-8 md:h-8 text-slate-700" />
             <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Rechtliche Hinweise</h1>
           </div>
-          <p className="text-xs text-stone-400 mb-8">Letzte Aktualisierung: Februar 2026</p>
+          <p className="text-xs text-stone-400 mb-8">Letzte Aktualisierung: April 2026</p>
 
-          {/* Haupthinweis – prominent */}
           <div className="bg-slate-800 text-white rounded-2xl p-5 mb-6">
             <div className="flex gap-3 items-start">
               <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
               <p className="text-sm md:text-base leading-relaxed">
-                <strong>Alle Touren erfolgen auf eigene Verantwortung.</strong> Wir übernehmen keine Haftung für Unfälle, Schäden oder falsche Angaben.
+                <strong>Alle Touren erfolgen auf eigene Verantwortung.</strong> Die bereitgestellten Inhalte dienen nur der Orientierung und ersetzen keine eigene Sicherheitsprüfung vor Ort.
               </p>
             </div>
           </div>
 
-          {/* Aktuelle Gefahren / Bedingungen */}
           <div className="bg-amber-50 border border-amber-300 rounded-2xl p-4 mb-8">
             <p className="font-semibold text-amber-800 mb-3 flex items-center gap-2">
               <AlertTriangle className="w-4 h-4" /> Bedingungen können sich jederzeit ändern
             </p>
             <ul className="space-y-2 text-sm text-amber-800">
-              <li className="flex items-start gap-2">
-                <span className="mt-0.5">❄️</span>
-                <span><strong>Lawinengefahr:</strong> Immer den aktuellen Lawinenlagebericht prüfen, besonders im Winter und Frühling.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-0.5">🚧</span>
-                <span><strong>Sperrungen:</strong> Wege können gesperrt sein (Forstarbeiten, Erosion, Unwetterschäden). Hinweisschilder vor Ort beachten.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-0.5">⚠️</span>
-                <span><strong>Wege nicht gewartet:</strong> Nicht alle Wege werden regelmäßig instand gehalten. Markierungen können fehlen oder überwachsen sein.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-0.5">🌦️</span>
-                <span><strong>Wetterwechsel:</strong> Bergwetter kann sich innerhalb von Minuten ändern. Immer aktuelle Vorhersage prüfen.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-0.5">🏠</span>
-                <span><strong>Hütten nicht immer geöffnet:</strong> Almhütten und Berghütten haben saisonale Öffnungszeiten und sind besonders im Winter und in der Nebensaison oft geschlossen. Immer vorab telefonisch oder online informieren.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-0.5">🚡</span>
-                <span><strong>Seilbahnen & Lifte:</strong> Betriebszeiten und Saisonen von Seilbahnen, Gondeln und Liften können sich jederzeit ändern (Wartung, Witterung, saisonale Schließung). Vor der Tour aktuellen Fahrplan prüfen.</span>
-              </li>
+              <li><strong>Lawinengefahr:</strong> Immer den aktuellen Lawinenlagebericht prüfen.</li>
+              <li><strong>Sperrungen:</strong> Wege können gesperrt sein. Hinweisschilder vor Ort beachten.</li>
+              <li><strong>Wetterwechsel:</strong> Bergwetter kann sich innerhalb von Minuten ändern.</li>
+              <li><strong>Hütten und Lifte:</strong> Öffnungszeiten und Betrieb können saisonal oder wetterbedingt abweichen.</li>
             </ul>
           </div>
 
           <div className="space-y-6 md:space-y-8">
-
-            {/* 1. Nur zur Information */}
             <section>
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <Info className="w-5 h-5 text-slate-600" />
@@ -74,62 +50,56 @@ export default function Legal() {
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
-                  <strong>DogHike</strong> ist eine Informationsplattform. Alle Inhalte – Tourenberichte, GPS-Koordinaten, Fotos, Schwierigkeitsbewertungen, Empfehlungen – dienen ausschließlich zur allgemeinen Orientierung und Information.
+                  <strong>DogHike</strong> ist eine Informationsplattform. Alle Inhalte – Tourenberichte,
+                  GPS-Koordinaten, Fotos, Schwierigkeitsbewertungen und Empfehlungen – dienen ausschließlich
+                  der allgemeinen Orientierung.
                 </p>
                 <p>
-                  Die App ist <strong>kein Navigationsgerät, kein offizielles Kartenmaterial und kein Ersatz für Wanderführer</strong> oder behördliche Informationen. Sie dient als Ergänzung, nicht als Alleinquelle für die Planung einer Tour.
+                  Die App ist <strong>kein Navigationsgerät, kein offizielles Kartenmaterial und kein Ersatz für behördliche Informationen oder professionelle Tourenplanung</strong>.
                 </p>
               </div>
             </section>
 
-            {/* 2. Keine Garantie für Richtigkeit */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <FileText className="w-5 h-5 text-slate-600" />
-                2. Keine Garantie für die Richtigkeit der Touren
+                2. Keine Gewähr für die Richtigkeit der Touren
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
-                  Alle Touren und Inhalte auf dieser Plattform werden von Nutzern erstellt und eingereicht. Der Betreiber prüft die Inhalte inhaltlich, kann jedoch <strong>keine Garantie für Richtigkeit, Vollständigkeit oder Aktualität</strong> übernehmen.
+                  Alle Touren und Inhalte auf dieser Plattform werden von Nutzern erstellt oder aus externen Quellen übernommen.
+                  Der Betreiber kann <strong>keine Gewähr für Richtigkeit, Vollständigkeit oder Aktualität</strong> übernehmen.
                 </p>
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Wege, Markierungen und Beschaffenheiten können sich seit der Erfassung verändert haben.</li>
-                  <li>Distanz-, Höhen- und Zeitangaben sind Näherungswerte und können je nach Kondition und Tempo stark abweichen.</li>
-                  <li>Schwierigkeitsbewertungen sind subjektiv und spiegeln die persönliche Einschätzung des Erstellers wider.</li>
+                  <li>Distanz-, Höhen- und Zeitangaben sind Näherungswerte.</li>
+                  <li>Schwierigkeitsbewertungen sind subjektiv.</li>
                   <li>GPS-Koordinaten und Routen können technische Ungenauigkeiten enthalten.</li>
                 </ul>
-                <div className="bg-stone-50 rounded-xl p-4 mt-2">
-                  <p className="text-stone-700 text-sm">
-                    <strong>Empfehlung:</strong> Informiere dich zusätzlich bei offiziellen Stellen (Alpenverein, Tourismusverband Südtirol, lokale Bergrettung) über den aktuellen Zustand der Wege.
-                  </p>
-                </div>
               </div>
             </section>
 
-            {/* 3. Keine Haftung */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <AlertTriangle className="w-5 h-5 text-amber-600" />
-                3. Keine Haftung bei Unfällen
+                3. Haftung
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
-                  Der Betreiber dieser Plattform übernimmt <strong>keinerlei Haftung</strong> für Unfälle, Verletzungen, gesundheitliche Schäden, materielle Schäden oder sonstige Verluste, die im Zusammenhang mit der Nutzung der in dieser App bereitgestellten Informationen entstehen – weder für Personen noch für Tiere.
+                  Der Betreiber dieser Plattform übernimmt keine Gewähr für die Richtigkeit, Vollständigkeit oder ständige Verfügbarkeit aller Tourenangaben.
                 </p>
                 <p>
-                  Dies gilt insbesondere für:
+                  Eine Haftung für Schäden im Zusammenhang mit der Nutzung der App ist – soweit gesetzlich zulässig – auf Vorsatz und grobe Fahrlässigkeit beschränkt.
                 </p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>Unfälle auf Wanderwegen, die in der App beschrieben sind</li>
-                  <li>Stürze, Absturzgefahr, Orientierungsverlust oder Erschöpfung</li>
-                  <li>Schäden durch Tiere, Unwetter oder Naturgefahren (Lawinen, Steinschlag, etc.)</li>
-                  <li>Schäden durch fehlerhafte oder veraltete Informationen</li>
+                  <li>Unfälle auf Wanderwegen</li>
+                  <li>Orientierungsfehler oder Fehleinschätzungen vor Ort</li>
+                  <li>Wetterumschwünge, Naturgefahren oder Sperrungen</li>
                   <li>Verletzungen oder Schäden an Hunden</li>
                 </ul>
               </div>
             </section>
 
-            {/* 4. Eigenverantwortung */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <User className="w-5 h-5 text-slate-600" />
@@ -137,19 +107,18 @@ export default function Legal() {
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
-                  Jeder Nutzer trägt die <strong>alleinige Verantwortung</strong> für seine Entscheidungen beim Wandern. Dazu gehört insbesondere:
+                  Jeder Nutzer trägt die alleinige Verantwortung für Entscheidungen beim Wandern.
                 </p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>Die Einschätzung der eigenen körperlichen Fitness und die der mitgeführten Hunde</li>
-                  <li>Die Wahl einer geeigneten Tour entsprechend der eigenen Erfahrung und Ausrüstung</li>
-                  <li>Das Mitführen von ausreichend Wasser, Nahrung, Karte, Erste-Hilfe-Material und Notfallausrüstung</li>
-                  <li>Die Einhaltung aller lokalen Vorschriften (Leinenpflicht, Betretungsverbote, Naturschutzgebiete)</li>
-                  <li>Die Entscheidung, eine Tour abzubrechen, wenn die Bedingungen sich verschlechtern</li>
+                  <li>Einschätzung der eigenen Fitness und der des Hundes</li>
+                  <li>Wahl einer geeigneten Tour</li>
+                  <li>Mitführen angemessener Ausrüstung</li>
+                  <li>Einhaltung lokaler Vorschriften</li>
+                  <li>Abbruch einer Tour bei unsicheren Bedingungen</li>
                 </ul>
               </div>
             </section>
 
-            {/* 5. Kein Ersatz für alpine Erfahrung */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <PawPrint className="w-5 h-5 text-slate-600" />
@@ -157,20 +126,11 @@ export default function Legal() {
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
-                  Das Wandern in den Dolomiten und im Alpenraum erfordert <strong>alpine Grundkenntnisse und Erfahrung</strong>. Diese App ersetzt diese Erfahrung nicht.
+                  Das Wandern im Alpenraum erfordert alpine Grundkenntnisse und Erfahrung. Diese App ersetzt diese Erfahrung nicht.
                 </p>
-                <p>
-                  Einige Touren können anspruchsvoll sein und verlangen Trittsicherheit, Schwindelfreiheit, Klettersteigausrüstung oder Ortskenntnis. Bitte beurteile deine Fähigkeiten ehrlich, bevor du eine Tour unternimmst – besonders mit einem Hund.
-                </p>
-                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mt-2">
-                  <p className="text-blue-800 text-sm">
-                    <strong>Tipp:</strong> Für unerfahrene Bergwanderer empfehlen wir Kurse des Alpenvereins (CAI/AVS) oder die Begleitung durch lokale Bergführer.
-                  </p>
-                </div>
               </div>
             </section>
 
-            {/* 6. Wetter & Gefahren */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <CloudRain className="w-5 h-5 text-slate-600" />
@@ -178,27 +138,22 @@ export default function Legal() {
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
-                  Das Bergwetter in Südtirol kann sich <strong>innerhalb von Minuten drastisch ändern</strong>. Gewitter, Nebel, Schnee und Eisglätte sind auch im Sommer möglich.
+                  Das Bergwetter in Südtirol kann sich innerhalb von Minuten drastisch ändern.
                 </p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>Prüfe <strong>immer</strong> die aktuelle Wettervorhersage vor dem Start (z.B. <a href="https://www.provinz.bz.it/wetter" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Wetterdienst Provinz Bozen</a>)</li>
-                  <li>Starte Hochtouren so früh wie möglich – Nachmittagsgewitter sind häufig</li>
-                  <li>Bei Gewittern sofort in ein Schutzgebäude oder tief ins Tal flüchten</li>
-                  <li>Achte auf Lawinenbulletins im Winter und Frühling</li>
-                  <li>Schütze deinen Hund vor Hitze: Pfotenverbrennungen auf heißem Fels sind real</li>
+                  <li>Prüfe immer die aktuelle Wettervorhersage vor dem Start.</li>
+                  <li>Achte auf Lawinenbulletins im Winter und Frühling.</li>
+                  <li>Schütze deinen Hund vor Hitze, Eis und Absturzgefahren.</li>
                 </ul>
                 <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-3">
                   <p className="font-semibold text-red-800 mb-2 flex items-center gap-2">
                     <Phone className="w-4 h-4" /> Im Notfall
                   </p>
-                  <p className="text-red-700 text-sm">🚨 Euronotruf: <strong>112</strong> (auch ohne SIM-Karte)</p>
-                  <p className="text-red-700 text-sm mt-1">Bergrettung Südtirol (CNSAS): <strong>+39 0471 797 397</strong></p>
-                  <p className="text-red-600 text-xs mt-2">Standort angeben – GPS-Koordinaten kannst du in der App auf der Karte ablesen.</p>
+                  <p className="text-red-700 text-sm">Euronotruf: <strong>112</strong></p>
                 </div>
               </div>
             </section>
 
-            {/* Moderation */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <Shield className="w-5 h-5 text-slate-600" />
@@ -206,23 +161,12 @@ export default function Legal() {
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
-                  Der Betreiber behält sich das Recht vor, alle eingereichten Inhalte (Touren, Fotos, Kommentare, Routen) <strong>vor oder nach der Veröffentlichung zu prüfen und ohne Angabe von Gründen zu löschen</strong>, insbesondere wenn sie:
+                  Der Betreiber behält sich das Recht vor, eingereichte Inhalte zu prüfen und bei Rechtsverstößen,
+                  Gefährdungen oder Regelverstößen zu entfernen.
                 </p>
-                <ul className="list-disc pl-6 space-y-1">
-                  <li>unrichtige oder gefährliche Informationen enthalten,</li>
-                  <li>Rechte Dritter verletzen,</li>
-                  <li>gegen geltendes Recht oder die guten Sitten verstoßen,</li>
-                  <li>andere Nutzer oder Tiere gefährden könnten.</li>
-                </ul>
-                <div className="bg-stone-50 rounded-xl p-4 mt-2">
-                  <p className="text-stone-700 text-sm">
-                    <strong>Kein Anspruch auf Veröffentlichung:</strong> Das Einreichen einer Tour oder das Hochladen von Inhalten begründet keinen Anspruch auf Veröffentlichung. Die Entscheidung liegt allein beim Betreiber.
-                  </p>
-                </div>
               </div>
             </section>
 
-            {/* Rechteübertragung */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <FileText className="w-5 h-5 text-slate-600" />
@@ -230,30 +174,15 @@ export default function Legal() {
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
-                  Mit dem Hochladen von Fotos und Bildern auf diese Plattform bestätigt der Nutzer ausdrücklich:
+                  Mit dem Hochladen von Fotos bestätigt der Nutzer, dass er die erforderlichen Rechte besitzt.
                 </p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Er ist der <strong>Urheber oder rechtmäßige Inhaber</strong> der hochgeladenen Bilder.</li>
-                  <li>Die Bilder verletzen <strong>keine Urheberrechte, Persönlichkeitsrechte oder sonstigen Rechte Dritter</strong>.</li>
-                  <li>Er räumt dem Betreiber das <strong>nicht-exklusive, kostenlose Recht</strong> ein, die Bilder im Rahmen der Plattform anzuzeigen, zu speichern und in der App darzustellen.</li>
-                </ul>
                 <div className="bg-red-50 border border-red-200 rounded-xl p-4 mt-2">
                   <p className="text-red-800 text-sm">
-                    <strong>⚠️ Haftung bei Rechtsverletzungen:</strong> Wer Fotos hochlädt, die ihm nicht gehören oder die Rechte Dritter verletzen, haftet selbst für alle daraus entstehenden Schäden und Ansprüche. Der Betreiber übernimmt hierfür keine Haftung.
+                    <strong>Haftung bei Rechtsverletzungen:</strong> Wer Fotos hochlädt, die Rechte Dritter verletzen, ist für diese Inhalte selbst verantwortlich und stellt den Betreiber im Rahmen der gesetzlichen Möglichkeiten von daraus entstehenden Ansprüchen Dritter frei.
                   </p>
                 </div>
-                <p className="text-sm text-stone-500 mt-2">
-                  Bitte lade keine Bilder hoch, auf denen erkennbare Personen ohne deren Einwilligung abgebildet sind.
-                </p>
               </div>
             </section>
-
-            <section className="border-t border-stone-200 pt-6">
-              <p className="text-xs text-stone-400">
-                Der Betreiber behält sich das Recht vor, diese Hinweise jederzeit zu ändern. Die Nutzung der Plattform erfolgt unter Anerkennung dieser Bedingungen.
-              </p>
-            </section>
-
           </div>
         </div>
       </div>

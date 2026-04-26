@@ -30,8 +30,6 @@ export default function AGB() {
           </div>
 
           <div className="space-y-6 md:space-y-8">
-
-            {/* 1. Betreiber */}
             <section>
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <FileText className="w-5 h-5 text-slate-600" />
@@ -40,7 +38,7 @@ export default function AGB() {
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
                   Diese Nutzungsbedingungen gelten für die Nutzung der Web-App
-                  <strong>„DogHike”</strong>{" "}
+                  <strong> „DogHike“</strong>{" "}
                   (doghike-suedtirol.vercel.app), betrieben von:
                 </p>
                 <div className="bg-stone-50 rounded-xl p-4">
@@ -49,13 +47,11 @@ export default function AGB() {
                   <p>E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-blue-600 underline">suedtirolmithund@gmail.com</a></p>
                 </div>
                 <p>
-                  Anwendbares Recht: Italienisches Recht und EU-Recht (insb. DSGVO, D.Lgs. 70/2003,
-                  D.Lgs. 206/2005 Verbraucherschutz). Zuständiges Gericht: Bozen (BZ), Italien.
+                  Anwendbares Recht: Italienisches Recht und EU-Recht.
                 </p>
               </div>
             </section>
 
-            {/* 2. Nutzerkonto */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <UserCheck className="w-5 h-5 text-slate-600" />
@@ -65,14 +61,13 @@ export default function AGB() {
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Die Registrierung ist kostenlos. Sie benötigen eine gültige E-Mail-Adresse oder ein Google-Konto.</li>
                   <li>Sie sind für die Sicherheit Ihres Kontos verantwortlich. Teilen Sie Ihr Passwort nicht.</li>
-                  <li>Pro Person ist ein Konto erlaubt. Mehrfachkonten können ohne Vorwarnung gesperrt werden.</li>
-                  <li>Sie müssen mindestens 16 Jahre alt sein (Art. 8 DSGVO).</li>
-                  <li>Sie können Ihr Konto jederzeit löschen: Profil → Konto → „Konto löschen".</li>
+                  <li>Pro Person ist ein Konto erlaubt. Mehrfachkonten können bei Missbrauch gesperrt werden.</li>
+                  <li>Sie müssen mindestens 16 Jahre alt sein.</li>
+                  <li>Sie können die Löschung Ihres Kontos jederzeit anfragen: Profil → Konto → „Konto löschen".</li>
                 </ul>
               </div>
             </section>
 
-            {/* 3. Nutzerinhalte */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <Image className="w-5 h-5 text-slate-600" />
@@ -88,12 +83,12 @@ export default function AGB() {
                   <ul className="list-disc pl-5 space-y-1 text-sm">
                     <li>Sie sind der Urheber der Inhalte oder haben die notwendigen Rechte.</li>
                     <li>Auf Fotos abgebildete Personen haben der Veröffentlichung zugestimmt.</li>
-                    <li>Die Inhalte sind wahrheitsgemäß und schaden niemanden.</li>
+                    <li>Die Inhalte sind nach bestem Wissen wahrheitsgemäß.</li>
                     <li>Sie räumen dem Betreiber das nicht-exklusive, kostenlose Recht ein, die Inhalte im Rahmen der App anzuzeigen und zu speichern.</li>
                   </ul>
                 </div>
                 <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-                  <p className="font-semibold text-red-800 mb-2">Verboten sind Inhalte die:</p>
+                  <p className="font-semibold text-red-800 mb-2">Verboten sind Inhalte, die:</p>
                   <ul className="list-disc pl-5 space-y-1 text-sm text-red-700">
                     <li>falsch, irreführend oder gefährlich für andere Wanderer sind,</li>
                     <li>Urheberrechte, Markenrechte oder Persönlichkeitsrechte Dritter verletzen,</li>
@@ -110,7 +105,6 @@ export default function AGB() {
               </div>
             </section>
 
-            {/* 4. Bewertungen */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <Star className="w-5 h-5 text-slate-600" />
@@ -121,34 +115,29 @@ export default function AGB() {
                   <li>Bewertungen und Kommentare müssen auf eigener Erfahrung beruhen.</li>
                   <li>Gefälschte oder gekaufte Bewertungen sind verboten.</li>
                   <li>Sie können eigene Kommentare jederzeit löschen.</li>
-                  <li>Kommentare, die gegen diese Regeln verstoßen, werden ohne Vorankündigung entfernt.</li>
+                  <li>Kommentare, die gegen diese Regeln verstoßen, können entfernt werden.</li>
                 </ul>
               </div>
             </section>
 
-            {/* 5. Premium */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <CreditCard className="w-5 h-5 text-slate-600" />
-                5. Premium-Mitgliedschaft (falls aktiv)
+                5. Premium-Mitgliedschaft (falls aktiviert)
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>Preise und Laufzeiten werden auf der Premium-Seite klar ausgewiesen.</li>
-                  <li>Zahlungen werden über Stripe Inc. (PCI DSS Level 1) abgewickelt.</li>
+                  <li>Preise und Laufzeiten werden auf der Premium-Seite klar ausgewiesen, sobald Premium technisch aktiviert ist.</li>
+                  <li>Online-Zahlungen sind derzeit noch nicht live. Sobald sie aktiviert werden, sollen Zahlungen über Stripe Inc. abgewickelt werden.</li>
                   <li>
-                    <strong>Widerrufsrecht (EU/IT):</strong> Sie haben das Recht, einen digitalen
-                    Kauf innerhalb von 14 Tagen ohne Angabe von Gründen zu widerrufen
-                    (Art. 49 D.Lgs. 206/2005 / EU-Verbraucherrechterichtlinie 2011/83/EU),
-                    sofern Sie nicht explizit auf dieses Recht verzichtet haben.
+                    <strong>Widerrufsrecht:</strong> Für digitale Leistungen gelten die jeweils einschlägigen gesetzlichen Verbraucherrechte.
                   </li>
-                  <li>Kündigung: Premium kann jederzeit zum Ende der Laufzeit gekündigt werden.</li>
-                  <li>Bei Missbrauch des Kontos (Verstoß gegen §3) kann Premium ohne Erstattung entzogen werden.</li>
+                  <li>Kündigungs- und Laufzeitregeln werden erst mit Aktivierung eines echten Premium-Bezahlmodells verbindlich festgelegt.</li>
+                  <li>Bei Missbrauch des Kontos können Premium-Funktionen gesperrt werden.</li>
                 </ul>
               </div>
             </section>
 
-            {/* 6. Verfügbarkeit */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <AlertTriangle className="w-5 h-5 text-amber-600" />
@@ -158,17 +147,16 @@ export default function AGB() {
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Die App wird „wie besehen" bereitgestellt. Wir übernehmen keine Garantie für ununterbrochene Verfügbarkeit.</li>
                   <li>Wartungsarbeiten können die Verfügbarkeit vorübergehend einschränken.</li>
-                  <li>Wir haften nicht für Datenverluste, die durch technische Fehler entstehen. Bitte sichern Sie wichtige GPX-Daten lokal.</li>
+                  <li>Wir übernehmen keine Gewähr dafür, dass alle Daten dauerhaft verfügbar bleiben. Bitte sichern Sie wichtige GPX-Daten zusätzlich lokal.</li>
                   <li>
-                    Die Haftung für Unfälle, Verletzungen oder Schäden beim Wandern ist vollständig ausgeschlossen.
-                    Alle Toureninformationen dienen nur zur Orientierung.
+                    Toureninformationen dienen nur zur Orientierung. Eine Haftung für leichte Fahrlässigkeit bei
+                    unzutreffenden oder veralteten Tourangaben wird - soweit gesetzlich zulässig - ausgeschlossen.
                     Details: <Link to={createPageUrl("Legal")} className="text-blue-600 underline">Rechtliche Hinweise</Link>.
                   </li>
                 </ul>
               </div>
             </section>
 
-            {/* 7. Sperrung */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <XCircle className="w-5 h-5 text-red-600" />
@@ -181,16 +169,9 @@ export default function AGB() {
                   <li>Inhalte eingereicht werden, die gegen geltendes Recht verstoßen,</li>
                   <li>das Konto für Spam, Fake-Bewertungen oder Missbrauch genutzt wird.</li>
                 </ul>
-                <p>
-                  Bei einer Sperrung werden Sie per E-Mail informiert.
-                  Einsprüche können innerhalb von 14 Tagen an{" "}
-                  <a href="mailto:suedtirolmithund@gmail.com" className="text-blue-600 underline">suedtirolmithund@gmail.com</a>{" "}
-                  gerichtet werden.
-                </p>
               </div>
             </section>
 
-            {/* 8. Änderungen */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <FileText className="w-5 h-5 text-slate-600" />
@@ -198,15 +179,12 @@ export default function AGB() {
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
-                  Der Betreiber behält sich vor, diese Bedingungen jederzeit zu ändern.
-                  Bei wesentlichen Änderungen werden registrierte Nutzer per E-Mail informiert
-                  (mindestens 14 Tage vor Inkrafttreten). Die fortgesetzte Nutzung nach
-                  Inkrafttreten gilt als Zustimmung.
+                  Der Betreiber behält sich vor, diese Bedingungen für die Zukunft zu ändern.
+                  Bei wesentlichen Änderungen werden registrierte Nutzer in geeigneter Weise informiert.
                 </p>
               </div>
             </section>
 
-            {/* 9. Kontakt */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
                 <Mail className="w-5 h-5 text-slate-600" />
@@ -215,7 +193,6 @@ export default function AGB() {
               <div className="bg-slate-800 text-white rounded-xl p-4 text-sm">
                 <p className="font-semibold mb-1">Betreiberin: Julia Schwärzer</p>
                 <p className="text-slate-300">E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-brand-400 underline">suedtirolmithund@gmail.com</a></p>
-                <p className="text-slate-300 mt-1">Antwort innerhalb von 30 Werktagen.</p>
               </div>
             </section>
 
@@ -228,7 +205,6 @@ export default function AGB() {
                 <Link to={createPageUrl("Legal")} className="text-blue-500 underline">Rechtliche Hinweise</Link>
               </div>
             </section>
-
           </div>
         </div>
       </div>

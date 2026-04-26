@@ -21,11 +21,9 @@ export default function Impressum() {
           </div>
 
           <div className="space-y-6 md:space-y-8">
-
-            {/* Betreiber */}
             <section>
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4">
-                Angaben gemäß D.Lgs. 70/2003 (E-Commerce) und Art. 13 DSGVO
+                Angaben gemäß D.Lgs. 70/2003 und Art. 13 DSGVO
               </h2>
               <div className="bg-stone-50 rounded-xl p-4 space-y-2 text-sm md:text-base text-stone-600">
                 <p className="font-semibold text-stone-800">Julia Schwärzer</p>
@@ -38,10 +36,12 @@ export default function Impressum() {
                   <strong>Partita IVA:</strong>{" "}
                   <span className="text-stone-400 italic">nicht vorhanden (privater Betrieb ohne gewerbliche Tätigkeit)</span>
                 </p>
+                <p className="text-xs text-amber-700 pt-2">
+                  Hinweis: Für eine vollständige Anbieterkennzeichnung sollte hier eine vollständige geografische Postanschrift angegeben werden.
+                </p>
               </div>
             </section>
 
-            {/* Kontakt */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4">Kontakt</h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600">
@@ -53,28 +53,22 @@ export default function Impressum() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Globe className="w-4 h-4 shrink-0" />
-                  <a href="https://www.mithundenunterwegsinsuedtirol.it" target="_blank" rel="noopener noreferrer"
-                    className="text-blue-600 underline hover:text-blue-800">
+                  <a href="https://www.mithundenunterwegsinsuedtirol.it" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">
                     www.mithundenunterwegsinsuedtirol.it
                   </a>
                 </div>
                 <div className="flex items-center gap-2">
                   <Globe className="w-4 h-4 shrink-0" />
-                  <a href="https://doghike-suedtirol.vercel.app" target="_blank" rel="noopener noreferrer"
-                    className="text-blue-600 underline hover:text-blue-800">
+                  <a href="https://doghike-suedtirol.vercel.app" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">
                     doghike-suedtirol.vercel.app
                   </a>
                 </div>
-                <p className="text-xs text-stone-400 pt-1">
-                  Anfragen werden innerhalb von 30 Tagen beantwortet (Art. 12 DSGVO).
-                </p>
               </div>
             </section>
 
-            {/* Verantwortlich */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4">
-                Verantwortliche Person (Art. 4 Abs. 7 DSGVO / Titolare del trattamento)
+                Verantwortliche Person (Art. 4 Abs. 7 DSGVO)
               </h2>
               <div className="space-y-1 text-sm md:text-base text-stone-600">
                 <p>Julia Schwärzer</p>
@@ -83,41 +77,29 @@ export default function Impressum() {
               </div>
             </section>
 
-            {/* EU-Streitschlichtung */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4">
-                EU-Online-Streitbeilegung (ODR)
+                Verbraucherstreitbeilegung
               </h2>
               <p className="text-sm md:text-base text-stone-600 leading-relaxed">
-                Gemäß Art. 14 Abs. 1 EU-Verordnung 524/2013: Die Europäische Kommission stellt
-                eine Plattform zur Online-Streitbeilegung bereit:{" "}
-                <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer"
-                  className="text-blue-600 underline hover:text-blue-800">
-                  https://ec.europa.eu/consumers/odr
-                </a>
-              </p>
-              <p className="text-sm md:text-base text-stone-600 leading-relaxed mt-3">
                 Wir sind nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren
                 vor einer Verbraucherschlichtungsstelle teilzunehmen.
               </p>
             </section>
 
-            {/* Haftung Inhalte */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4">
-                Haftung für Inhalte (D.Lgs. 70/2003, Art. 14–17)
+                Haftung für Inhalte
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
                   Als Diensteanbieter sind wir für eigene Inhalte nach den allgemeinen
                   Gesetzen verantwortlich. Wir sind jedoch nicht verpflichtet, übermittelte
-                  oder gespeicherte fremde Informationen zu überwachen. Bei Kenntnis einer
-                  konkreten Rechtsverletzung werden die betreffenden Inhalte umgehend entfernt.
+                  oder gespeicherte fremde Informationen allgemein zu überwachen.
                 </p>
               </div>
             </section>
 
-            {/* Haftung Links */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4">
                 Haftung für externe Links
@@ -129,10 +111,9 @@ export default function Impressum() {
               </p>
             </section>
 
-            {/* Urheberrecht */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4">
-                Urheberrecht (Legge n. 633/1941 + EU-Urheberrechtsrichtlinie 2019/790)
+                Urheberrecht
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
                 <p>
@@ -147,7 +128,6 @@ export default function Impressum() {
               </div>
             </section>
 
-            {/* Kartenmaterial */}
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4">
                 Kartenmaterial & Datenquellen
@@ -155,39 +135,46 @@ export default function Impressum() {
               <div className="space-y-2 text-sm md:text-base text-stone-600">
                 <p>
                   Kartenkacheln:{" "}
-                  <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer"
-                    className="text-blue-600 underline">OpenStreetMap</a>{" "}
-                  © OpenStreetMap-Mitwirkende (ODbL) sowie{" "}
-                  <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer"
-                    className="text-blue-600 underline">CARTO</a>.
+                  <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                    OpenStreetMap
+                  </a>{" "}
+                  sowie{" "}
+                  <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                    CARTO
+                  </a>.
                 </p>
                 <p>
                   Routing & Höhenprofile:{" "}
-                  <a href="https://www.graphhopper.com" target="_blank" rel="noopener noreferrer"
-                    className="text-blue-600 underline">GraphHopper GmbH</a>{" "}
+                  <a href="https://brouter.de/brouter-web/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                    BRouter
+                  </a>{" "}
                   (primär) und{" "}
-                  <a href="https://project-osrm.org/" target="_blank" rel="noopener noreferrer"
-                    className="text-blue-600 underline">OSRM</a>{" "}
-                  (Fallback). Ortsnamensuche:{" "}
-                  <a href="https://nominatim.org" target="_blank" rel="noopener noreferrer"
-                    className="text-blue-600 underline">Nominatim / OpenStreetMap</a>.
+                  <a href="https://www.graphhopper.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                    GraphHopper GmbH
+                  </a>{" "}
+                  (technischer Fallback). Ortsnamensuche:{" "}
+                  <a href="https://nominatim.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                    Nominatim / OpenStreetMap
+                  </a>.
                 </p>
                 <p>
                   Wetterdaten:{" "}
-                  <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer"
-                    className="text-blue-600 underline">Open-Meteo</a>{" "}
-                  (Open-Source, EU-Server, keine Tracker).
+                  <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                    Open-Meteo
+                  </a>.
                 </p>
                 <p>
                   Authentifizierung: Google Sign-In über{" "}
-                  <a href="https://supabase.com" target="_blank" rel="noopener noreferrer"
-                    className="text-blue-600 underline">Supabase Auth</a>.
+                  <a href="https://supabase.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                    Supabase Auth
+                  </a>.
                 </p>
                 <p>
                   Hosting:{" "}
-                  <a href="https://vercel.com" target="_blank" rel="noopener noreferrer"
-                    className="text-blue-600 underline">Vercel Inc.</a>
-                  , San Francisco, CA, USA — mit EU-Edge-Nodes.
+                  <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                    Vercel Inc.
+                  </a>
+                  .
                 </p>
               </div>
             </section>
