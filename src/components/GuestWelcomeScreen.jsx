@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2, Mountain } from "lucide-react";
+import { AlertCircle, ArrowRight, CheckCircle2, Eye, EyeOff, Loader2, Mountain } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -20,6 +20,7 @@ function mapAuthError(message) {
 export default function GuestWelcomeScreen() {
   const { loginWithEmail, signUpWithEmail, loginWithGoogle, authError } = useAuth();
   const navigate = useNavigate();
+  const [showAuth, setShowAuth] = useState(false);
   const [mode, setMode] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -102,6 +103,10 @@ export default function GuestWelcomeScreen() {
       setLocalError(mapAuthError(result.error.message));
     }
   };
+
+  if (!showAuth) {
+    return <OnboardingScreen onContinue={() => setShowAuth(true)} />;
+  }
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
@@ -253,6 +258,41 @@ export default function GuestWelcomeScreen() {
           </p>
         </motion.section>
       </main>
+    </div>
+  );
+}
+
+function OnboardingScreen({ onContinue }) {
+  return (
+    <div className="min-h-screen bg-black md:grid md:place-items-center">
+      <section className="relative mx-auto h-[812px] max-h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-black">
+        <img
+          src="/onboarding/A739105.jpg"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ objectPosition: "center center" }}
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,#000000_-31.83%,rgba(0,0,0,0)_43.72%)]" />
+
+        <div className="absolute left-4 top-[524px] h-[216px] w-[343px] opacity-80">
+          <h1 className="absolute left-0 top-0 h-[113px] w-[343px] text-center font-['Roboto',sans-serif] text-[40px] font-normal leading-[47px] text-white">
+            Hundefreundliche Wanderungen
+          </h1>
+          <p className="absolute left-0 top-[131px] h-[85px] w-[343px] text-center font-['Roboto',sans-serif] text-[25px] font-medium leading-[29px] text-white">
+            Entdecke die perfekte Wanderung für dich und deinen Hund
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={onContinue}
+          aria-label="Weiter"
+          className="absolute left-[161px] top-[751px] grid h-[54px] w-[52px] place-items-center rounded-full bg-[#BE8C70]/80 text-white"
+          style={{ mixBlendMode: "plus-lighter" }}
+        >
+          <ArrowRight className="h-[31px] w-[31px] stroke-[2.4]" />
+        </button>
+      </section>
     </div>
   );
 }
