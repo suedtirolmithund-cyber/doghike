@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, ArrowRight, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { createPageUrl } from "@/utils";
@@ -14,11 +14,20 @@ function mapAuthError(message) {
   if (msg.includes("password should be at least")) return "Das Passwort ist zu kurz.";
   if (msg.includes("unable to validate email address")) return "Bitte gib eine gültige E-Mail-Adresse ein.";
   if (msg.includes("signup is disabled")) return "Registrierungen sind gerade nicht möglich.";
+  if (msg.includes("same password")) return "Bitte wähle ein anderes Passwort als bisher.";
+  if (msg.includes("for security purposes")) return "Bitte warte einen Moment und versuche es dann noch einmal.";
   return "Das hat gerade nicht geklappt. Bitte versuche es noch einmal.";
 }
 
 export default function GuestWelcomeScreen() {
-  const { loginWithEmail, signUpWithEmail, loginWithGoogle, authError } = useAuth();
+  const {
+    loginWithEmail,
+    signUpWithEmail,
+    loginWithGoogle,
+    resetPasswordForEmail,
+    updatePassword,
+    authError,
+  } = useAuth();
   const navigate = useNavigate();
   const [showAuth, setShowAuth] = useState(false);
   const [mode, setMode] = useState("login");
@@ -32,6 +41,22 @@ export default function GuestWelcomeScreen() {
   const [localError, setLocalError] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
   const error = localError || authError;
+
+  useEffect(() => {
+    const hash = window.location.hash || "";
+    const search = window.location.search || "";
+    const recoveryDetected =
+      hash.includes("type=recovery") ||
+      search.includes("type=recovery") ||
+      (hash.includes("access_token=") && hash.includes("refresh_token="));
+
+    if (recoveryDetected) {
+      setShowAuth(true);
+      setMode("update-password");
+      setLocalError(null);
+      setSuccessMsg("Lege jetzt dein neues Passwort fest.");
+    }
+  }, []);
 
   const switchMode = (nextMode) => {
     setMode(nextMode);
@@ -89,6 +114,61 @@ export default function GuestWelcomeScreen() {
     }
   };
 
+  const handleReset = async (event) => {
+    event.preventDefault();
+    setLocalError(null);
+    setSuccessMsg(null);
+
+    if (!email) {
+      setLocalError("Bitte E-Mail-Adresse eingeben.");
+      return;
+    }
+
+    setLoading(true);
+    const { error: err } = await resetPasswordForEmail(email);
+    setLoading(false);
+
+    if (err) {
+      setLocalError(mapAuthError(err.message));
+    } else {
+      setSuccessMsg("E-Mail gesendet. Prüfe dein Postfach.");
+    }
+  };
+
+  const handleUpdatePassword = async (event) => {
+    event.preventDefault();
+    setLocalError(null);
+    setSuccessMsg(null);
+
+    if (!password) {
+      setLocalError("Bitte neues Passwort eingeben.");
+      return;
+    }
+    if (password.length < 6) {
+      setLocalError("Das Passwort muss mindestens 6 Zeichen lang sein.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setLocalError("Die Passwörter stimmen nicht überein.");
+      return;
+    }
+
+    setLoading(true);
+    const { error: err } = await updatePassword(password);
+    setLoading(false);
+
+    if (err) {
+      setLocalError(mapAuthError(err.message));
+      return;
+    }
+
+    window.history.replaceState({}, document.title, createPageUrl("Login"));
+    setSuccessMsg("Passwort erfolgreich geändert. Du kannst dich jetzt anmelden.");
+    setPassword("");
+    setConfirmPassword("");
+    setMode("login");
+  };
+
   const handleGoogle = async () => {
     setLocalError(null);
     setSuccessMsg(null);
@@ -135,89 +215,218 @@ export default function GuestWelcomeScreen() {
           Plane hundefreundliche Touren, speichere deine Lieblingswege und entdecke neue Ziele
         </p>
 
-        <form onSubmit={handleSubmit}>
-          <h1 className="absolute left-[22px] top-[442px] h-[47px] w-[140px] font-['Roboto',sans-serif] text-[40px] font-medium leading-[47px] text-[#8C6B4A]">
-            {mode === "register" ? "Register" : "Login"}
+        <motion.div
+          initial={{ opacity: 0, y: 22 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="absolute bottom-4 left-4 right-4 max-h-[476px] overflow-y-auto rounded-[24px] bg-white/10 px-5 py-5 shadow-2xl ring-1 ring-white/20 backdrop-blur-[2px]"
+        >
+          <h1
+            className="mb-4 font-['Roboto',sans-serif] text-[36px] font-semibold leading-none"
+            style={{ color: mode === "reset" || mode === "update-password" ? "white" : "#8C6B4A" }}
+          >
+            {mode === "reset"
+              ? "Passwort"
+              : mode === "update-password"
+                ? "Neues Passwort"
+                : mode === "register"
+                  ? "Registrieren"
+                  : "Login"}
           </h1>
 
-          <input
-            type="email"
-            aria-label="Username or Email"
-            placeholder="Username or Email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            className="absolute left-[22px] top-[508px] h-[54px] w-[316px] rounded-[14px] border-0 bg-[#F0F0F0] px-4 font-['Roboto',sans-serif] text-[20px] font-normal leading-[23px] text-black outline-none placeholder:text-black/25"
-            autoComplete="email"
-            required
-          />
-
-          <input
-            type={showPassword ? "text" : "password"}
-            aria-label="Password"
-            placeholder="Password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            className="absolute left-[22px] top-[584px] h-[54px] w-[316px] rounded-[14px] border-0 bg-[#F0F0F0] px-4 pr-12 font-['Roboto',sans-serif] text-[20px] font-normal leading-[23px] text-black outline-none placeholder:text-black/25"
-            autoComplete={mode === "login" ? "current-password" : "new-password"}
-            required
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword((value) => !value)}
-            className="absolute left-[300px] top-[600px] text-black/25"
-            tabIndex={-1}
-            aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
-          >
-            {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-          </button>
-
-          {mode === "register" && (
-            <div className="absolute left-[22px] top-[626px] flex w-[316px] items-center gap-2">
-              <Checkbox
-                id="guest-privacy"
-                checked={privacyAccepted}
-                onCheckedChange={setPrivacyAccepted}
-                className="border-white/70 data-[state=checked]:bg-[#B88C73] data-[state=checked]:border-[#B88C73]"
-              />
-              <label htmlFor="guest-privacy" className="font-['Roboto',sans-serif] text-[11px] leading-[13px] text-white">
-                Datenschutz akzeptieren
-              </label>
+          {mode !== "reset" && mode !== "update-password" && (
+            <div className="mb-4 grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => switchMode("register")}
+                className={`h-10 rounded-[10px] font-['Roboto',sans-serif] text-[16px] font-medium text-white ${
+                  mode === "register" ? "bg-[#B88C73]" : "bg-white/15"
+                }`}
+              >
+                Registrieren
+              </button>
+              <button
+                type="button"
+                onClick={() => switchMode("login")}
+                className={`h-10 rounded-[10px] font-['Roboto',sans-serif] text-[16px] font-medium text-white ${
+                  mode === "login" ? "bg-[#B88C73]" : "bg-white/15"
+                }`}
+              >
+                Login
+              </button>
             </div>
           )}
 
-          <button
-            type="button"
-            onClick={() => switchMode("register")}
-            className="absolute left-[22px] top-[660px] h-[41px] w-[149px] rounded-[10px] bg-[#B88C73] font-['Roboto',sans-serif] text-[20px] font-medium leading-[23px] text-white shadow-[0px_100px_80px_rgba(185,62,62,0.07),0px_64.8148px_46.8519px_rgba(185,62,62,0.0531481),0px_38.5185px_25.4815px_rgba(185,62,62,0.0425185),0px_20px_13px_rgba(185,62,62,0.035),0px_8.14815px_6.51852px_rgba(185,62,62,0.0274815),0px_1.85185px_3.14815px_rgba(185,62,62,0.0168519)]"
-          >
-            Register
-          </button>
+          {mode === "reset" && (
+            <form onSubmit={handleReset} className="space-y-3">
+              <p className="font-['Roboto',sans-serif] text-sm leading-relaxed text-white/80">
+                Gib deine E-Mail-Adresse ein. Wir senden dir einen Link zum Zurücksetzen.
+              </p>
+              <input
+                type="email"
+                placeholder="E-Mail Adresse"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 font-['Roboto',sans-serif] text-base text-stone-900 outline-none placeholder:text-stone-500"
+                autoComplete="email"
+                required
+              />
+              <Feedback error={error} success={successMsg} />
+              <button
+                type="submit"
+                disabled={loading}
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#B88C73] font-['Roboto',sans-serif] font-medium text-white disabled:opacity-70"
+              >
+                {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+                Link senden
+              </button>
+              <button type="button" onClick={() => switchMode("login")} className="w-full text-center text-sm text-white/70">
+                Zurück zur Anmeldung
+              </button>
+            </form>
+          )}
 
-          <button
-            type={mode === "login" ? "submit" : "button"}
-            onClick={mode === "register" ? handleSubmit : undefined}
-            disabled={loading || googleLoading}
-            className="absolute left-[187px] top-[660px] h-[41px] w-[151px] rounded-[10px] bg-[#B88C73] font-['Roboto',sans-serif] text-[20px] font-normal leading-[23px] text-white shadow-[0px_100px_80px_rgba(185,62,62,0.07),0px_64.8148px_46.8519px_rgba(185,62,62,0.0531481),0px_38.5185px_25.4815px_rgba(185,62,62,0.0425185),0px_20px_13px_rgba(185,62,62,0.035),0px_8.14815px_6.51852px_rgba(185,62,62,0.0274815),0px_1.85185px_3.14815px_rgba(185,62,62,0.0168519)] disabled:opacity-70"
-          >
-            {loading ? <Loader2 className="mx-auto h-5 w-5 animate-spin" /> : "Login"}
-          </button>
-        </form>
+          {mode === "update-password" && (
+            <form onSubmit={handleUpdatePassword} className="space-y-3">
+              <p className="font-['Roboto',sans-serif] text-sm leading-relaxed text-white/80">
+                Gib jetzt dein neues Passwort ein und bestätige es.
+              </p>
+              <PasswordField
+                showPassword={showPassword}
+                setShowPassword={setShowPassword}
+                value={password}
+                onChange={setPassword}
+                placeholder="Neues Passwort"
+                autoComplete="new-password"
+              />
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Neues Passwort bestätigen"
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+                className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 font-['Roboto',sans-serif] text-base text-stone-900 outline-none placeholder:text-stone-500"
+                autoComplete="new-password"
+                required
+              />
+              <Feedback error={error} success={successMsg} />
+              <button
+                type="submit"
+                disabled={loading}
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#B88C73] font-['Roboto',sans-serif] font-medium text-white disabled:opacity-70"
+              >
+                {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+                Passwort speichern
+              </button>
+            </form>
+          )}
 
-        <button
-          type="button"
-          onClick={() => setLocalError("Bitte nutze die Passwort-zurücksetzen-Funktion auf der klassischen Login-Seite.")}
-          className="absolute left-[171px] top-[714px] h-[16px] w-[167px] text-left font-['Roboto',sans-serif] text-[14px] font-normal leading-[16px] text-white"
-        >
-          Forgot Password or Email?
-        </button>
+          {mode !== "reset" && mode !== "update-password" && (
+            <>
+              <form onSubmit={handleSubmit} className="space-y-3">
+                <input
+                  type="email"
+                  placeholder="E-Mail Adresse"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 font-['Roboto',sans-serif] text-base text-stone-900 outline-none placeholder:text-stone-500"
+                  autoComplete="email"
+                  required
+                />
+                <PasswordField
+                  showPassword={showPassword}
+                  setShowPassword={setShowPassword}
+                  value={password}
+                  onChange={setPassword}
+                  placeholder="Passwort"
+                  autoComplete={mode === "login" ? "current-password" : "new-password"}
+                />
 
-        <p className="absolute left-[87px] top-[764px] h-[32px] w-[187px] text-center font-['Roboto',sans-serif] text-[14px] font-medium leading-[16px] text-white">
-          Privacy Policy - Terms of Use DogHike App
-        </p>
+                <AnimatePresence>
+                  {mode === "register" && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="space-y-3 overflow-hidden"
+                    >
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Passwort bestätigen"
+                        value={confirmPassword}
+                        onChange={(event) => setConfirmPassword(event.target.value)}
+                        className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 font-['Roboto',sans-serif] text-base text-stone-900 outline-none placeholder:text-stone-500"
+                        autoComplete="new-password"
+                      />
+                      <div className="flex items-start gap-3 px-1">
+                        <Checkbox
+                          id="guest-privacy"
+                          checked={privacyAccepted}
+                          onCheckedChange={setPrivacyAccepted}
+                          className="mt-0.5 border-white/70 data-[state=checked]:border-[#B88C73] data-[state=checked]:bg-[#B88C73]"
+                        />
+                        <label htmlFor="guest-privacy" className="font-['Roboto',sans-serif] text-xs leading-relaxed text-white/80">
+                          Ich akzeptiere die{" "}
+                          <Link to={createPageUrl("Datenschutz")} className="text-white underline" target="_blank">
+                            Datenschutzerklärung
+                          </Link>
+                          .
+                        </label>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-        <div className="absolute left-[22px] top-[716px] w-[145px]">
-          <Feedback error={error} success={successMsg} />
-        </div>
+                <Feedback error={error} success={successMsg} />
+
+                <button
+                  type="submit"
+                  disabled={loading || googleLoading}
+                  className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#B88C73] font-['Roboto',sans-serif] font-medium text-white disabled:opacity-70"
+                >
+                  {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+                  {mode === "login" ? "Anmelden" : "Konto erstellen"}
+                </button>
+              </form>
+
+              <div className="my-3 flex items-center gap-3">
+                <div className="h-px flex-1 bg-white/20" />
+                <span className="text-xs text-white/60">oder</span>
+                <div className="h-px flex-1 bg-white/20" />
+              </div>
+
+              <button
+                type="button"
+                onClick={handleGoogle}
+                disabled={googleLoading || loading}
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-white/15 font-['Roboto',sans-serif] text-sm font-medium text-white disabled:opacity-70"
+              >
+                {googleLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <GoogleIcon />}
+                Mit Google {mode === "login" ? "anmelden" : "registrieren"}
+              </button>
+
+              {mode === "login" && (
+                <button
+                  type="button"
+                  onClick={() => switchMode("reset")}
+                  className="mt-3 w-full text-center font-['Roboto',sans-serif] text-sm text-white/75"
+                >
+                  Passwort oder E-Mail vergessen?
+                </button>
+              )}
+            </>
+          )}
+
+          <p className="mt-4 text-center font-['Roboto',sans-serif] text-xs text-white/55">
+            <Link to={createPageUrl("Datenschutz")} className="hover:text-white">
+              Datenschutz
+            </Link>
+            {" · "}
+            <Link to={createPageUrl("Legal")} className="hover:text-white">
+              Nutzungsbedingungen
+            </Link>
+          </p>
+        </motion.div>
       </motion.section>
     </div>
   );
@@ -263,16 +472,67 @@ function OnboardingScreen({ onContinue }) {
   );
 }
 
-function Feedback({ error, success }) {
-  if (!error && !success) return null;
+function PasswordField({ showPassword, setShowPassword, value, onChange, placeholder, autoComplete }) {
   return (
-    <div
-      className={`flex items-start gap-2 rounded-2xl p-3 text-sm ${
-        error ? "bg-red-500/15 text-red-100" : "bg-emerald-500/15 text-emerald-100"
-      }`}
-    >
-      {error ? <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" /> : <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />}
-      <span>{error || success}</span>
+    <div className="relative">
+      <input
+        type={showPassword ? "text" : "password"}
+        placeholder={placeholder}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 pr-12 font-['Roboto',sans-serif] text-base text-stone-900 outline-none placeholder:text-stone-500"
+        autoComplete={autoComplete}
+        required
+      />
+      <button
+        type="button"
+        onClick={() => setShowPassword((value) => !value)}
+        className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-400"
+        tabIndex={-1}
+        aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
+      >
+        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+      </button>
     </div>
+  );
+}
+
+function GoogleIcon() {
+  return (
+    <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
+      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+    </svg>
+  );
+}
+
+function Feedback({ error, success }) {
+  return (
+    <AnimatePresence>
+      {error && (
+        <motion.div
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          className="flex items-start gap-2 rounded-xl bg-red-500/15 p-3 text-sm text-red-100"
+        >
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+          <span>{error}</span>
+        </motion.div>
+      )}
+      {success && (
+        <motion.div
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          className="flex items-start gap-2 rounded-xl bg-emerald-500/15 p-3 text-sm text-emerald-100"
+        >
+          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+          <span>{success}</span>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
