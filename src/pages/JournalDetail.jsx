@@ -110,11 +110,16 @@ export default function JournalDetail() {
   const { data: author } = useQuery({
     queryKey: ["profile", entry?.user_id],
     queryFn: async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("profiles")
         .select("user_id, username, full_name, avatar_url")
         .eq("user_id", entry.user_id)
-        .single();
+        .maybeSingle();
+
+      if (error) {
+        throw error;
+      }
+
       return data;
     },
     enabled: !!entry?.user_id,
@@ -123,11 +128,16 @@ export default function JournalDetail() {
   const { data: dog } = useQuery({
     queryKey: ["dog", entry?.dog_id],
     queryFn: async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("dogs")
         .select("id, name, breed, photo_url")
         .eq("id", entry.dog_id)
-        .single();
+        .maybeSingle();
+
+      if (error) {
+        throw error;
+      }
+
       return data;
     },
     enabled: !!entry?.dog_id,

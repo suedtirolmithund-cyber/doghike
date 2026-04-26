@@ -132,7 +132,7 @@ export default function HikeDetail() {
         .from("profiles")
         .select("is_premium")
         .eq("user_id", currentUser.id)
-        .single();
+        .maybeSingle();
 
       if (error) {
         throw error;
