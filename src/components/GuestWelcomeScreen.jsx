@@ -471,23 +471,17 @@ function OnboardingScreen({ onContinue }) {
   }, [onContinue]);
 
   return (
-    <div className="grid min-h-[100dvh] place-items-center overflow-hidden bg-black md:relative">
-      <img
-        src={ONBOARDING_IMAGE}
-        alt=""
-        className="hidden md:block md:absolute md:inset-0 md:h-full md:w-full md:object-contain"
-      />
-      <section className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-black md:h-[812px] md:bg-transparent">
+    <div className="min-h-screen bg-black">
+      <section className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-black md:max-w-none md:rounded-none">
         <img
           src={ONBOARDING_IMAGE}
           alt=""
-          className="absolute inset-0 h-full w-full object-cover md:hidden"
-          style={{ objectPosition: "center center" }}
+          className="absolute inset-0 h-full w-full object-cover object-right md:object-center"
         />
         <div className="absolute inset-0 bg-[linear-gradient(0deg,#000000_-31.83%,rgba(0,0,0,0)_43.72%)]" />
 
-        <div className="absolute bottom-[72px] left-4 h-[216px] w-[343px] opacity-80 md:top-[524px]">
-          <h1 className="absolute left-0 top-0 h-[113px] w-[343px] text-center text-[40px] font-normal leading-[47px] text-white">
+        <div className="absolute bottom-[72px] left-4 h-[216px] w-[343px] opacity-80 md:left-1/2 md:-translate-x-1/2">
+          <h1 className="absolute left-0 top-0 h-[113px] w-[343px] text-center font-['Roboto',sans-serif] text-[40px] font-normal leading-[47px] text-white">
             Hundefreundliche Wanderungen
           </h1>
           <p className="absolute left-0 top-[131px] h-[85px] w-[343px] text-center text-[25px] font-medium leading-[29px] text-white">
@@ -499,7 +493,7 @@ function OnboardingScreen({ onContinue }) {
           type="button"
           onClick={onContinue}
           aria-label="Weiter"
-          className="absolute bottom-4 left-1/2 z-30 grid h-[54px] w-[52px] -translate-x-1/2 place-items-center rounded-full bg-[#BE8C70]/80 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/30 md:bottom-auto md:left-[161px] md:top-[751px] md:translate-x-0"
+          className="absolute bottom-[7px] left-[161px] z-30 grid h-[54px] w-[52px] place-items-center rounded-full bg-[#BE8C70]/80 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/30 md:left-1/2 md:-translate-x-1/2"
         >
           <ChevronRight className="h-[36px] w-[36px] stroke-white stroke-[2]" />
         </button>
