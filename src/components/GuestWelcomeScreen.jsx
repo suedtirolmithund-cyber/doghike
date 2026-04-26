@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircle, ArrowRight, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -494,9 +494,17 @@ function OnboardingScreen({ onContinue }) {
           type="button"
           onClick={onContinue}
           aria-label="Weiter"
-          className="fixed bottom-6 left-1/2 z-[999] grid h-[58px] w-[58px] -translate-x-1/2 place-items-center rounded-full bg-[#BE8C70] text-white shadow-[0_12px_32px_rgba(0,0,0,0.4)] ring-2 ring-white/55"
+          className="absolute bottom-[7px] left-1/2 z-30 grid h-[54px] w-[52px] -translate-x-1/2 place-items-center rounded-full bg-[#BE8C70]/80 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/30"
         >
-          <ArrowRight className="h-[31px] w-[31px] stroke-[2.4]" />
+          <svg width="31" height="31" viewBox="0 0 51 51" fill="none" aria-hidden="true">
+            <path
+              d="M10 25.5H39M28.5 14.5L39.5 25.5L28.5 36.5"
+              stroke="white"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </button>
       </section>
     </div>
