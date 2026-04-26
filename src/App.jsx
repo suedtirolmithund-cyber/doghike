@@ -43,23 +43,8 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
 
 const AuthenticatedApp = () => {
   const { isAuthenticated, isLoadingAuth, isLoadingPublicSettings } = useAuth();
-  const [minimumSplashElapsed, setMinimumSplashElapsed] = React.useState(false);
   const isBootLoading = isLoadingPublicSettings || isLoadingAuth;
 
-  React.useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setMinimumSplashElapsed(true);
-    }, 3000);
-
-    return () => window.clearTimeout(timer);
-  }, []);
-
-  // Keep the first loading screen visible for a short, calm app start.
-  if (!minimumSplashElapsed) {
-    return <AppLoadingScreen />;
-  }
-
-  // If auth/settings/data still need time, keep a second loading state on screen.
   if (isBootLoading) {
     return <AppLoadingScreen extended />;
   }
