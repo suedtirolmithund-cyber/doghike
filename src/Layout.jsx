@@ -233,7 +233,7 @@ export default function Layout({ children, currentPageName }) {
                 </>
               ) : (
                 <Link to={createPageUrl("Login")}>
-                  <Button size="sm" className="flex items-center gap-1.5 bg-brand-400 hover:bg-brand-600 text-white">
+                  <Button size="sm" className="flex items-center gap-1.5 bg-[#a8c686] hover:bg-[#94b872] text-white">
                     <LogIn className="w-4 h-4" />
                     Anmelden
                   </Button>

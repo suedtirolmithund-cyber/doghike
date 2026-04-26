@@ -75,26 +75,26 @@ export default function Dashboard() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32 md:pt-[82px]">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
             className="text-center">
-            <h1 className="text-4xl md:text-6xl font-light text-white mb-[18px] tracking-tight leading-tight md:leading-[1.05]">
+            <h1 className="text-4xl md:text-[60px] font-light text-white mb-[18px] tracking-tight leading-tight md:leading-[1.05]">
               Hundefreundliche Wanderungen
             </h1>
-            <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg leading-relaxed text-white/70 mb-8 max-w-2xl mx-auto">
               Entdecke die schönsten Wanderungen in den Bergen zusammen mit deinem Vierbeiner.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Link to={createPageUrl("Hikes")}>
-                <Button size="lg" className="bg-white text-slate-800 hover:bg-white/90 shadow-lg">
+                <Button size="lg" className="h-[46px] rounded-[10px] px-5 bg-white text-slate-800 hover:bg-white/90 shadow-lg">
                   <Mountain className="w-5 h-5 mr-2" /> Alle Touren entdecken
                 </Button>
               </Link>
               <Link to={createPageUrl("AddJournalEntry")}>
-                <Button size="lg" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
+                <Button size="lg" variant="outline" className="h-[46px] rounded-[10px] px-5 bg-white/10 border-white/30 text-white hover:bg-white/20">
                   <Plus className="w-5 h-5 mr-2" /> Tour einreichen
                 </Button>
               </Link>
               {!isAuthenticated && (
                 <Link to={createPageUrl("Login")}>
-                  <Button size="lg" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
+                  <Button size="lg" variant="outline" className="h-[46px] rounded-[10px] px-5 bg-white/10 border-white/30 text-white hover:bg-white/20">
                     <UserPlus className="w-5 h-5 mr-2" /> Registrieren
                   </Button>
                 </Link>
