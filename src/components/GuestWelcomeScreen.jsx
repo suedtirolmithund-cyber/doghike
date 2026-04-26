@@ -109,17 +109,22 @@ export default function GuestWelcomeScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-black md:grid md:place-items-center">
+    <div className="min-h-screen bg-black md:relative md:grid md:place-items-center md:overflow-hidden">
+      <img
+        src="/onboarding/A739195-2.jpg"
+        alt=""
+        className="hidden md:block md:absolute md:inset-0 md:h-full md:w-full md:object-contain"
+      />
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.25 }}
-        className="relative mx-auto h-[812px] max-h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-[#F8F8F8]"
+        className="relative mx-auto h-[812px] max-h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-[#F8F8F8] md:bg-transparent"
       >
         <img
           src="/onboarding/A739195-2.jpg"
           alt=""
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover md:hidden"
           style={{ objectPosition: "center center" }}
         />
 
@@ -220,12 +225,17 @@ export default function GuestWelcomeScreen() {
 
 function OnboardingScreen({ onContinue }) {
   return (
-    <div className="min-h-screen bg-black md:grid md:place-items-center">
-      <section className="relative mx-auto h-[812px] max-h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-black">
+    <div className="min-h-screen bg-black md:relative md:grid md:place-items-center md:overflow-hidden">
+      <img
+        src="/onboarding/A739105.jpg"
+        alt=""
+        className="hidden md:block md:absolute md:inset-0 md:h-full md:w-full md:object-contain"
+      />
+      <section className="relative mx-auto h-[812px] max-h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-black md:bg-transparent">
         <img
           src="/onboarding/A739105.jpg"
           alt=""
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover md:hidden"
           style={{ objectPosition: "center center" }}
         />
         <div className="absolute inset-0 bg-[linear-gradient(0deg,#000000_-31.83%,rgba(0,0,0,0)_43.72%)]" />
