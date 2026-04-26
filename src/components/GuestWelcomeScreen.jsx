@@ -462,7 +462,7 @@ function OnboardingScreen({ onContinue }) {
           type="button"
           onClick={onContinue}
           aria-label="Weiter"
-          className="absolute bottom-[7px] left-1/2 z-20 grid h-[54px] w-[52px] -translate-x-1/2 place-items-center rounded-full bg-[#BE8C70]/90 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/35"
+          className="fixed bottom-6 left-1/2 z-[999] grid h-[58px] w-[58px] -translate-x-1/2 place-items-center rounded-full bg-[#BE8C70] text-white shadow-[0_12px_32px_rgba(0,0,0,0.4)] ring-2 ring-white/55"
         >
           <ArrowRight className="h-[31px] w-[31px] stroke-[2.4]" />
         </button>
