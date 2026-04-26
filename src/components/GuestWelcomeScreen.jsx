@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
@@ -138,13 +138,13 @@ export default function GuestWelcomeScreen() {
     }
   };
 
-  const handleOnboardingContinue = async () => {
+  const handleOnboardingContinue = useCallback(async () => {
     if (!loginImageReady) {
       await preloadImage(LOGIN_IMAGE);
       setLoginImageReady(true);
     }
     setShowAuth(true);
-  };
+  }, [loginImageReady]);
 
   const handleReset = async (event) => {
     event.preventDefault();
@@ -465,6 +465,11 @@ export default function GuestWelcomeScreen() {
 }
 
 function OnboardingScreen({ onContinue }) {
+  useEffect(() => {
+    const timer = window.setTimeout(onContinue, 3000);
+    return () => window.clearTimeout(timer);
+  }, [onContinue]);
+
   return (
     <div className="min-h-screen bg-black md:relative md:grid md:place-items-center md:overflow-hidden">
       <img
