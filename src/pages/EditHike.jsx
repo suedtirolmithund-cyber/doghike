@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 
 export default function EditHike() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const id = urlParams.get("id");
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
   const navigate = useNavigate();
 
   useEffect(() => {

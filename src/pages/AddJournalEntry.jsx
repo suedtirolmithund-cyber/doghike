@@ -475,7 +475,7 @@ export default function AddJournalEntry() {
 
   // Load existing entry for editing
   const { data: existing, isLoading: loadingEntry } = useQuery({
-    queryKey: ["journal_entry", editId],
+    queryKey: ["journalEntry", editId],
     queryFn: () => getJournalEntry(editId),
     enabled: !!editId,
   });
