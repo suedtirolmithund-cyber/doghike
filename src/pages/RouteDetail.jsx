@@ -26,6 +26,7 @@ import {
 import { ArrowLeft, Map, Route, Clock, Navigation, EyeOff, Trash2, TrendingUp, CheckCircle2, Star, Upload, X, Loader2, Pencil, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
+import { toast } from "sonner";
 import ExpandableText from "@/components/ExpandableText";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";

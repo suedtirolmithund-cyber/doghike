@@ -86,7 +86,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
         </div>
 
         <div className="text-xs text-stone-400 mb-3">
-          Erstellt am {createdAt ? format(new Date(createdAt), "dd.MM.yyyy") : "—"}
+          Erstellt am {createdAt ? format(new Date(createdAt), "dd.MM.yyyy") : "-"}
         </div>
 
         <div className="flex gap-2">
