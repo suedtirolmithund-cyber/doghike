@@ -30,6 +30,7 @@ import {
 
 export default function CommentSection({ hikeId, hikeSource = "sheets", canComment = true }) {
   const { user, isAuthenticated } = useAuth();
+  const normalizedHikeId = String(hikeId);
   const [text, setText] = useState("");
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState(null);
   const [photoFile, setPhotoFile] = useState(null);
@@ -38,8 +39,8 @@ export default function CommentSection({ hikeId, hikeSource = "sheets", canComme
   const queryClient = useQueryClient();
 
   const { data: comments = [], isLoading } = useQuery({
-    queryKey: ["comments", hikeSource, hikeId],
-    queryFn: () => getComments(hikeId, hikeSource),
+    queryKey: ["comments", hikeSource, normalizedHikeId],
+    queryFn: () => getComments(normalizedHikeId, hikeSource),
   });
 
   const createMutation = useMutation({
@@ -54,7 +55,7 @@ export default function CommentSection({ hikeId, hikeSource = "sheets", canComme
 
         return await createComment(
           user.id,
-          hikeId,
+          normalizedHikeId,
           hikeSource,
           text,
           uploadedPhotoReference,
@@ -69,7 +70,7 @@ export default function CommentSection({ hikeId, hikeSource = "sheets", canComme
     },
     onSuccess: () => {
       const needsReview = commentNeedsReview(text);
-      queryClient.invalidateQueries({ queryKey: ["comments", hikeSource, hikeId] });
+      queryClient.invalidateQueries({ queryKey: ["comments", hikeSource, normalizedHikeId] });
       setText("");
       if (photoPreviewUrl) {
         URL.revokeObjectURL(photoPreviewUrl);
@@ -91,7 +92,7 @@ export default function CommentSection({ hikeId, hikeSource = "sheets", canComme
   const deleteMutation = useMutation({
     mutationFn: (id) => deleteComment(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments", hikeSource, hikeId] });
+      queryClient.invalidateQueries({ queryKey: ["comments", hikeSource, normalizedHikeId] });
       setDeleteId(null);
       toast.success("Kommentar gelöscht.");
     },

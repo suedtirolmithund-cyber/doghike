@@ -41,10 +41,11 @@ export async function getSavedHikes(userId) {
 }
 
 export async function saveHike(userId, hikeId, hikeSource = "sheets") {
+  const normalizedHikeId = String(hikeId);
   const { data, error } = await supabase
     .from("saved_hikes")
     .upsert(
-      { user_id: userId, hike_id: hikeId, hike_source: hikeSource },
+      { user_id: userId, hike_id: normalizedHikeId, hike_source: hikeSource },
       { onConflict: "user_id,hike_id,hike_source" }
     )
     .select()
@@ -54,30 +55,33 @@ export async function saveHike(userId, hikeId, hikeSource = "sheets") {
 }
 
 export async function unsaveHike(userId, hikeId, hikeSource = "sheets") {
+  const normalizedHikeId = String(hikeId);
   const { error } = await supabase
     .from("saved_hikes")
     .delete()
     .eq("user_id", userId)
-    .eq("hike_id", hikeId)
+    .eq("hike_id", normalizedHikeId)
     .eq("hike_source", hikeSource);
   if (error) throw error;
 }
 
 export async function getRatings(hikeId, hikeSource = "sheets") {
+  const normalizedHikeId = String(hikeId);
   const { data, error } = await supabase
     .from("ratings")
     .select("*")
-    .eq("hike_id", hikeId)
+    .eq("hike_id", normalizedHikeId)
     .eq("hike_source", hikeSource);
   if (error) throw error;
   return data ?? [];
 }
 
 export async function upsertRating(userId, hikeId, hikeSource = "sheets", rating) {
+  const normalizedHikeId = String(hikeId);
   const { data, error } = await supabase
     .from("ratings")
     .upsert(
-      { user_id: userId, hike_id: hikeId, hike_source: hikeSource, rating },
+      { user_id: userId, hike_id: normalizedHikeId, hike_source: hikeSource, rating },
       { onConflict: "user_id,hike_id,hike_source" }
     )
     .select()
@@ -87,13 +91,14 @@ export async function upsertRating(userId, hikeId, hikeSource = "sheets", rating
 }
 
 export async function getComments(hikeId, hikeSource = "sheets") {
+  const normalizedHikeId = String(hikeId);
   const { data: authData } = await supabase.auth.getUser();
   const currentUserId = authData?.user?.id;
 
   let query = supabase
     .from("comments")
     .select("*, profiles:user_id ( username, full_name, avatar_url )")
-    .eq("hike_id", hikeId)
+    .eq("hike_id", normalizedHikeId)
     .eq("hike_source", hikeSource)
     .order("created_at", { ascending: false });
 
@@ -116,11 +121,12 @@ export async function createComment(
   photoUrl = null,
   needsReview = false
 ) {
+  const normalizedHikeId = String(hikeId);
   const { data, error } = await supabase
     .from("comments")
     .insert({
       user_id: userId,
-      hike_id: hikeId,
+      hike_id: normalizedHikeId,
       hike_source: hikeSource,
       text,
       photo_url: photoUrl,

@@ -10,14 +10,15 @@ import { toast } from "sonner";
 
 export default function RatingSection({ hikeId, hikeSource = "sheets" }) {
   const { user, isAuthenticated } = useAuth();
+  const normalizedHikeId = String(hikeId);
   const [selectedRating, setSelectedRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [consentPublic, setConsentPublic] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: ratings = [] } = useQuery({
-    queryKey: ["ratings", hikeSource, hikeId],
-    queryFn: () => getRatings(hikeId, hikeSource),
+    queryKey: ["ratings", hikeSource, normalizedHikeId],
+    queryFn: () => getRatings(normalizedHikeId, hikeSource),
   });
 
   const averageRating =
@@ -28,9 +29,9 @@ export default function RatingSection({ hikeId, hikeSource = "sheets" }) {
   const userRating = user ? ratings.find((rating) => rating.user_id === user.id) : null;
 
   const ratingMutation = useMutation({
-    mutationFn: () => upsertRating(user.id, hikeId, hikeSource, selectedRating),
+    mutationFn: () => upsertRating(user.id, normalizedHikeId, hikeSource, selectedRating),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["ratings", hikeSource, hikeId] });
+      queryClient.invalidateQueries({ queryKey: ["ratings", hikeSource, normalizedHikeId] });
       setSelectedRating(0);
       setConsentPublic(false);
       toast.success("Bewertung gespeichert");
