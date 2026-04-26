@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2, Mountain } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -19,6 +19,7 @@ function mapAuthError(message) {
 
 export default function GuestWelcomeScreen() {
   const { loginWithEmail, signUpWithEmail, loginWithGoogle, authError } = useAuth();
+  const navigate = useNavigate();
   const [mode, setMode] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -65,10 +66,12 @@ export default function GuestWelcomeScreen() {
       }
 
       setLoading(true);
-      const { error: err } = await signUpWithEmail(email, password);
+      const { data, error: err } = await signUpWithEmail(email, password);
       setLoading(false);
       if (err) {
         setLocalError(mapAuthError(err.message));
+      } else if (data?.session || data?.user) {
+        navigate(createPageUrl("Profile"), { replace: true });
       } else {
         setSuccessMsg("Registrierung erfolgreich. Bitte bestätige dein Konto per E-Mail.");
         setPassword("");
@@ -80,7 +83,9 @@ export default function GuestWelcomeScreen() {
     setLoading(true);
     const { error: err } = await loginWithEmail(email, password);
     setLoading(false);
-    if (err) setLocalError(mapAuthError(err.message));
+    if (err) {
+      setLocalError(mapAuthError(err.message));
+    }
   };
 
   const handleGoogle = async () => {
@@ -91,7 +96,7 @@ export default function GuestWelcomeScreen() {
       return;
     }
     setGoogleLoading(true);
-    const result = await loginWithGoogle();
+    const result = await loginWithGoogle(mode === "register" ? createPageUrl("Profile") : "/");
     if (result?.error) {
       setGoogleLoading(false);
       setLocalError(mapAuthError(result.error.message));

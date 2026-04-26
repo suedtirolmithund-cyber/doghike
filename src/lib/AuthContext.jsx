@@ -106,11 +106,11 @@ export const AuthProvider = ({ children }) => {
     return { data };
   };
 
-  const loginWithGoogle = async () => {
+  const loginWithGoogle = async (redirectPath = "/") => {
     setAuthError(null);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: window.location.origin + "/" },
+      options: { redirectTo: window.location.origin + redirectPath },
     });
     if (error) { setAuthError(error.message); return { error }; }
   };
