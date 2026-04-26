@@ -63,61 +63,58 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
       {/* Hero */}
-      <div className="relative min-h-[430px] overflow-hidden">
+      <div className="relative h-[512px] overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover"
+          className="absolute inset-0 bg-cover bg-bottom"
           style={{
             backgroundImage: "url('/splash/autumn-hero.jpg')",
-            backgroundPosition: "60% 75%",
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-stone-50" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32 md:pt-[82px]">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 md:pt-[82px]">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
             className="text-center">
             <h1 className="text-4xl md:text-[60px] font-light text-white mb-[18px] tracking-tight leading-tight md:leading-[1.05]">
               Hundefreundliche Wanderungen
             </h1>
-            <p className="text-lg leading-relaxed text-white/70 mb-8 max-w-2xl mx-auto">
-              Entdecke die schönsten Wanderungen in den Bergen zusammen mit deinem Vierbeiner.
+            <p className="text-lg leading-[29.7px] text-white mb-[66px] max-w-[680px] mx-auto">
+              Entdecke die schönsten Wanderungen in den Bergen,<br className="hidden sm:block" />
+              zusammen mit deinem Vierbeiner.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Link to={createPageUrl("Hikes")}>
-                <Button size="lg" className="h-[46px] rounded-[10px] px-5 bg-white text-slate-800 hover:bg-white/90 shadow-lg">
+                <Button size="lg" className="h-[46px] rounded-[15px] px-5 bg-white text-slate-800 hover:bg-white/90 shadow-lg">
                   <Mountain className="w-5 h-5 mr-2" /> Alle Touren entdecken
                 </Button>
               </Link>
               <Link to={createPageUrl("AddJournalEntry")}>
-                <Button size="lg" variant="outline" className="h-[46px] rounded-[10px] px-5 bg-white/10 border-white/30 text-white hover:bg-white/20">
+                <Button size="lg" variant="outline" className="h-[46px] rounded-[15px] px-5 bg-slate-900/50 border-white/30 text-white hover:bg-slate-900/60">
                   <Plus className="w-5 h-5 mr-2" /> Tour einreichen
                 </Button>
               </Link>
               {!isAuthenticated && (
                 <Link to={createPageUrl("Login")}>
-                  <Button size="lg" variant="outline" className="h-[46px] rounded-[10px] px-5 bg-white/10 border-white/30 text-white hover:bg-white/20">
+                  <Button size="lg" variant="outline" className="h-[46px] rounded-[15px] px-5 bg-slate-900/50 border-white/30 text-white hover:bg-slate-900/60">
                     <UserPlus className="w-5 h-5 mr-2" /> Registrieren
                   </Button>
                 </Link>
               )}
             </div>
+
+            <div className="relative max-w-[672px] mx-auto mt-[76px]">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/75" />
+              <Input
+                placeholder="Tour oder Ort suchen..."
+                value={searchQuery}
+                onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE); }}
+                className="pl-12 h-14 text-xl text-white placeholder:text-white bg-stone-800/15 border-white rounded-[15px] shadow-[0_8px_22px_rgba(41,37,36,0.12)] [text-shadow:0_4px_4px_rgba(0,0,0,0.25)]"
+              />
+            </div>
           </motion.div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-10 pb-20">
-        {/* Search */}
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 max-w-2xl mx-auto">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
-            <Input
-              placeholder="Tour oder Ort suchen..."
-              value={searchQuery}
-              onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE); }}
-              className="pl-12 h-14 text-lg bg-white shadow-md border-stone-200"
-            />
-          </div>
-        </motion.div>
-
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pb-20 pt-10">
         {/* Stats */}
         <div className="mb-12 text-center">
           <StatsCard icon={Route} label="Wanderungen" value={filteredHikes.length} delay={0} />
