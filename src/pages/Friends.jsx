@@ -110,10 +110,12 @@ export default function Friends() {
     enabled: !!user?.id,
   });
 
+  const stableFriendIds = [...friendIds].sort();
+
   const { data: feedEntries = [], isLoading: feedLoading } = useQuery({
-    queryKey: ["friendFeed", friendIds.join(",")],
-    queryFn: () => getFriendFeedEntries(friendIds),
-    enabled: friendIds.length > 0,
+    queryKey: ["friendFeed", user?.id, stableFriendIds.join(",")],
+    queryFn: () => getFriendFeedEntries(stableFriendIds),
+    enabled: stableFriendIds.length > 0,
     refetchInterval: 5 * 60_000,
   });
 
@@ -128,18 +130,19 @@ export default function Friends() {
 
   // Fetch profiles for all involved user IDs
   const allIds = [...new Set(friendships.flatMap((f) => [f.requester_id, f.receiver_id]))];
+  const stableAllIds = [...allIds].sort();
   const { data: profileMap = {} } = useQuery({
-    queryKey: ["friendProfiles", allIds.join(",")],
+    queryKey: ["friendProfiles", user?.id, stableAllIds.join(",")],
     queryFn: async () => {
-      if (!allIds.length) return {};
+      if (!stableAllIds.length) return {};
       const { supabase } = await import("@/lib/supabaseClient");
       const { data } = await supabase
         .from("profiles")
         .select("user_id, username, full_name, avatar_url")
-        .in("user_id", allIds);
+        .in("user_id", stableAllIds);
       return Object.fromEntries((data ?? []).map((p) => [p.user_id, p]));
     },
-    enabled: allIds.length > 0,
+    enabled: stableAllIds.length > 0,
   });
 
   const friendOf = (f) =>
