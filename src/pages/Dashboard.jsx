@@ -65,9 +65,10 @@ export default function Dashboard() {
       {/* Hero */}
       <div className="relative h-[512px] overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover bg-bottom"
+          className="absolute inset-0 bg-cover"
           style={{
             backgroundImage: "url('/splash/autumn-hero.jpg')",
+            backgroundPosition: "center 38%",
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-stone-50" />
