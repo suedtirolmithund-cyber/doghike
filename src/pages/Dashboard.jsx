@@ -71,7 +71,7 @@ export default function Dashboard() {
             backgroundPosition: "center 38%",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-stone-50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/35 to-stone-50/35" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 md:pt-[82px]">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
             className="text-center">
