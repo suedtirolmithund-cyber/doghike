@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2, PawPrint } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -501,15 +501,7 @@ function OnboardingScreen({ onContinue }) {
           aria-label="Weiter"
           className="absolute bottom-[7px] left-1/2 z-30 grid h-[54px] w-[52px] -translate-x-1/2 place-items-center rounded-full bg-[#BE8C70]/80 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/30"
         >
-          <svg width="31" height="31" viewBox="0 0 51 51" fill="none" aria-hidden="true">
-            <path
-              d="M10 25.5H39M28.5 14.5L39.5 25.5L28.5 36.5"
-              stroke="white"
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <PawPrint className="h-[36px] w-[36px] fill-white stroke-white stroke-[1.8]" />
         </button>
       </section>
     </div>
