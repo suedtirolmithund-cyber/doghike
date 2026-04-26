@@ -11,6 +11,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import AppLoadingScreen from '@/components/AppLoadingScreen';
 import GuestWelcomeScreen from '@/components/GuestWelcomeScreen';
 import React from 'react';
+import { useEffect, useState } from 'react';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -41,12 +42,27 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
   <Layout currentPageName={currentPageName}>{children}</Layout>
   : <>{children}</>;
 
+const BootLoadingGate = () => {
+  const [showLoading, setShowLoading] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setShowLoading(true), 900);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  if (!showLoading) {
+    return <div className="fixed inset-0 z-[100] bg-black" />;
+  }
+
+  return <AppLoadingScreen extended />;
+};
+
 const AuthenticatedApp = () => {
   const { isAuthenticated, isLoadingAuth, isLoadingPublicSettings } = useAuth();
   const isBootLoading = isLoadingPublicSettings || isLoadingAuth;
 
   if (isBootLoading) {
-    return <AppLoadingScreen extended />;
+    return <BootLoadingGate />;
   }
 
   if (!isAuthenticated) {
