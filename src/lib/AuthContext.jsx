@@ -38,12 +38,24 @@ export const AuthProvider = ({ children }) => {
   // Fetch admin role from profiles table
   const fetchRole = async (userId) => {
     if (!userId) { setIsAdmin(false); return; }
-    const { data } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("user_id", userId)
-      .single();
-    setIsAdmin(data?.role === "admin");
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+      if (error) {
+        console.error("[fetchRole] error:", error.message);
+        setIsAdmin(false);
+        return;
+      }
+
+      setIsAdmin(data?.role === "admin");
+    } catch (err) {
+      console.error("[fetchRole] exception:", err);
+      setIsAdmin(false);
+    }
   };
 
   useEffect(() => {
