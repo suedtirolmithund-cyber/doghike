@@ -124,6 +124,7 @@ export default function Journal() {
       queryClient.invalidateQueries({ queryKey: ["allHikes"] });
       queryClient.invalidateQueries({ queryKey: ["journalEntry"] });
       queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] });
+      queryClient.invalidateQueries({ queryKey: ["notifications", user?.id] });
       toast.success("Eintrag gelöscht");
     },
     onError: () => {

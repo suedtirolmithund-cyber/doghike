@@ -133,7 +133,7 @@ async function loadNotifications(userId) {
           color: "text-stone-600 bg-stone-50 border-stone-200",
           title: `${profile?.full_name || profile?.username || "Freund"} hat "${entry.title}" geteilt`,
           time: entry.created_at,
-          link: createPageUrl("Friends"),
+          link: `${createPageUrl("JournalDetail")}?id=${entry.id}`,
         });
       });
     }
