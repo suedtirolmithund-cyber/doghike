@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -37,6 +37,14 @@ export default function CommentSection({ hikeId, hikeSource = "sheets", canComme
   const [consentPublic, setConsentPublic] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    return () => {
+      if (photoPreviewUrl) {
+        URL.revokeObjectURL(photoPreviewUrl);
+      }
+    };
+  }, [photoPreviewUrl]);
 
   const { data: comments = [], isLoading } = useQuery({
     queryKey: ["comments", hikeSource, normalizedHikeId],
