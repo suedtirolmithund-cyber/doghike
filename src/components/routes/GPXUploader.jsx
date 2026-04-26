@@ -134,7 +134,7 @@ export default function GPXUploader({ onSave }) {
     reader.onload = (e) => {
       try {
         const parsed = parseGPX(e.target.result);
-        setGpxData(parsed);
+        setGpxData({ ...parsed, rawFile: file });
       } catch (err) {
         setError(mapGpxError(err.message));
         setGpxData(null);

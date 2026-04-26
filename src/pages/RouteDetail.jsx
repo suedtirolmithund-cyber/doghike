@@ -163,7 +163,17 @@ export default function RouteDetail() {
   };
 
   const deleteRouteMutation = useMutation({
-    mutationFn: () => deleteRoute(routeId),
+    mutationFn: async () => {
+      await deleteRoute(routeId);
+
+      if (route?.gpx_url) {
+        try {
+          await deleteJournalFiles([route.gpx_url]);
+        } catch {
+          toast.error("Die zugehörige GPX-Datei konnte nicht vollständig entfernt werden.");
+        }
+      }
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userRoutes", user?.id] });
       navigate(createPageUrl("Profile"));

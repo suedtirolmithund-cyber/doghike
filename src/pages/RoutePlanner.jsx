@@ -18,6 +18,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianG
 import { motion, AnimatePresence } from "framer-motion";
 import GPSTracker from "@/components/routes/GPSTracker";
 import GPXUploader from "@/components/routes/GPXUploader";
+import { deleteJournalFiles, uploadJournalFile } from "@/lib/journalApi";
 import { toast } from "sonner";
 
 // ── Leaflet fix ───────────────────────────────────────────────
@@ -558,17 +559,34 @@ export default function RoutePlanner() {
       toast.error("Bitte Namen eingeben und eine Route zeichnen");
       return;
     }
-    await createRouteMutation.mutateAsync({
-      name: routeData.name,
-      description: routeData.description,
-      start_location: routeData.start_location,
-      route_type: activeTab === "track" ? "recorded" : activeTab === "gpx" ? "gpx" : "planned",
-      waypoints: routeGeometry.positions ?? routeGeometry.coordinates ?? [],
-      is_public: false,
-      distance_km: routeGeometry.distance_km,
-      elevation_gain_m: routeGeometry.elevation_gain_m || null,
-      duration_minutes: routeGeometry.duration_minutes || null,
-    });
+    let uploadedGpxUrl = null;
+
+    try {
+      if (activeTab === "gpx" && routeGeometry.rawFile) {
+        uploadedGpxUrl = await uploadJournalFile(user.id, routeGeometry.rawFile);
+      }
+
+      await createRouteMutation.mutateAsync({
+        name: routeData.name,
+        description: routeData.description,
+        start_location: routeData.start_location,
+        route_type: activeTab === "track" ? "recorded" : activeTab === "gpx" ? "gpx" : "planned",
+        waypoints: routeGeometry.positions ?? routeGeometry.coordinates ?? [],
+        is_public: false,
+        distance_km: routeGeometry.distance_km,
+        elevation_gain_m: routeGeometry.elevation_gain_m || null,
+        duration_minutes: routeGeometry.duration_minutes || null,
+        gpx_url: uploadedGpxUrl,
+      });
+    } catch (error) {
+      if (uploadedGpxUrl) {
+        try {
+          await deleteJournalFiles([uploadedGpxUrl]);
+        } catch {}
+      }
+
+      throw error;
+    }
   };
 
   if (!isAuthenticated) {
