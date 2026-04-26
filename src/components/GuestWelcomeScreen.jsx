@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { AlertCircle, ArrowRight, CheckCircle2, Eye, EyeOff, Loader2, Mountain } from "lucide-react";
+import { AlertCircle, ArrowRight, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -109,155 +109,111 @@ export default function GuestWelcomeScreen() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
-      <img
-        src="/splash/autumn-hero.jpg"
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover"
-        style={{ objectPosition: "center 38%" }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/50 via-slate-950/35 to-slate-950/70" />
+    <div className="min-h-screen bg-black md:grid md:place-items-center">
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.25 }}
+        className="relative mx-auto h-[812px] max-h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-[#F8F8F8]"
+      >
+        <img
+          src="/onboarding/A739195-2.jpg"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ objectPosition: "center center" }}
+        />
 
-      <main className="relative mx-auto grid min-h-screen w-full max-w-6xl items-center gap-10 px-5 py-10 md:grid-cols-[1fr_390px] md:px-8">
-        <section className="pt-8 text-center md:text-left">
-          <div className="mx-auto mb-7 grid h-14 w-14 place-items-center rounded-2xl bg-white/15 backdrop-blur-sm ring-1 ring-white/20 md:mx-0">
-            <Mountain className="h-7 w-7" />
-          </div>
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-white/70">
-            Willkommen bei DogHike
-          </p>
-          <h1 className="max-w-2xl text-5xl font-light leading-[1.05] tracking-tight md:text-7xl">
-            Wandern mit Hund wird einfacher.
+        <p className="absolute left-[22px] top-[129px] h-[33px] w-[340px] text-center font-['Roboto',sans-serif] text-[20px] font-extrabold leading-[23px] text-white">
+          WILLKOMMEN BEI DOGHIKE
+        </p>
+        <p className="absolute left-[21px] top-[215px] h-[33px] w-[340px] text-center font-['Roboto',sans-serif] text-[20px] font-medium leading-[23px] text-white">
+          Plane hundefreundliche Touren, speichere deine Lieblingswege und entdecke neue Ziele
+        </p>
+
+        <form onSubmit={handleSubmit}>
+          <h1 className="absolute left-[22px] top-[442px] h-[47px] w-[140px] font-['Roboto',sans-serif] text-[40px] font-medium leading-[47px] text-[#8C6B4A]">
+            {mode === "register" ? "Register" : "Login"}
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/75">
-            Plane hundefreundliche Touren, speichere deine Lieblingswege und entdecke passende
-            Wanderungen in Südtirol.
-          </p>
-        </section>
 
-        <motion.section
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35 }}
-          className="rounded-[28px] bg-white/14 p-5 shadow-2xl ring-1 ring-white/20 backdrop-blur-md"
-        >
-          <h2 className="mb-5 text-4xl font-semibold text-white">
-            {mode === "register" ? "Registrieren" : "Login"}
-          </h2>
-          <div className="mb-5 grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={() => switchMode("register")}
-              className={`h-11 rounded-2xl text-sm font-semibold transition ${
-                mode === "register" ? "bg-brand-400 text-white" : "bg-white/15 text-white"
-              }`}
-            >
-              Registrieren
-            </button>
-            <button
-              type="button"
-              onClick={() => switchMode("login")}
-              className={`h-11 rounded-2xl text-sm font-semibold transition ${
-                mode === "login" ? "bg-brand-400 text-white" : "bg-white/15 text-white"
-              }`}
-            >
-              Login
-            </button>
-          </div>
+          <input
+            type="email"
+            aria-label="Username or Email"
+            placeholder="Username or Email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            className="absolute left-[22px] top-[508px] h-[54px] w-[316px] rounded-[14px] border-0 bg-[#F0F0F0] px-4 font-['Roboto',sans-serif] text-[20px] font-normal leading-[23px] text-black outline-none placeholder:text-black/25"
+            autoComplete="email"
+            required
+          />
 
-          <form onSubmit={handleSubmit} className="space-y-3">
-            <input
-              type="email"
-              placeholder="E-Mail Adresse"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              className="h-14 w-full rounded-2xl border-0 bg-white/90 px-4 text-base text-stone-900 outline-none placeholder:text-stone-500"
-              autoComplete="email"
-              required
-            />
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Passwort"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                className="h-14 w-full rounded-2xl border-0 bg-white/90 px-4 pr-12 text-base text-stone-900 outline-none placeholder:text-stone-500"
-                autoComplete={mode === "login" ? "current-password" : "new-password"}
-                required
+          <input
+            type={showPassword ? "text" : "password"}
+            aria-label="Password"
+            placeholder="Password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            className="absolute left-[22px] top-[584px] h-[54px] w-[316px] rounded-[14px] border-0 bg-[#F0F0F0] px-4 pr-12 font-['Roboto',sans-serif] text-[20px] font-normal leading-[23px] text-black outline-none placeholder:text-black/25"
+            autoComplete={mode === "login" ? "current-password" : "new-password"}
+            required
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((value) => !value)}
+            className="absolute left-[300px] top-[600px] text-black/25"
+            tabIndex={-1}
+            aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
+          >
+            {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+          </button>
+
+          {mode === "register" && (
+            <div className="absolute left-[22px] top-[626px] flex w-[316px] items-center gap-2">
+              <Checkbox
+                id="guest-privacy"
+                checked={privacyAccepted}
+                onCheckedChange={setPrivacyAccepted}
+                className="border-white/70 data-[state=checked]:bg-[#B88C73] data-[state=checked]:border-[#B88C73]"
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword((value) => !value)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-500"
-                tabIndex={-1}
-              >
-                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-              </button>
+              <label htmlFor="guest-privacy" className="font-['Roboto',sans-serif] text-[11px] leading-[13px] text-white">
+                Datenschutz akzeptieren
+              </label>
             </div>
-
-            {mode === "register" && (
-              <>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Passwort bestätigen"
-                  value={confirmPassword}
-                  onChange={(event) => setConfirmPassword(event.target.value)}
-                  className="h-14 w-full rounded-2xl border-0 bg-white/90 px-4 text-base text-stone-900 outline-none placeholder:text-stone-500"
-                  autoComplete="new-password"
-                />
-                <div className="flex items-start gap-3 px-1">
-                  <Checkbox
-                    id="guest-privacy"
-                    checked={privacyAccepted}
-                    onCheckedChange={setPrivacyAccepted}
-                    className="mt-0.5 border-white/70 data-[state=checked]:bg-brand-400 data-[state=checked]:border-brand-400"
-                  />
-                  <label htmlFor="guest-privacy" className="text-xs leading-relaxed text-white/80">
-                    Ich akzeptiere die{" "}
-                    <Link to={createPageUrl("Datenschutz")} className="underline" target="_blank">
-                      Datenschutzerklärung
-                    </Link>
-                    .
-                  </label>
-                </div>
-              </>
-            )}
-
-            <Feedback error={error} success={successMsg} />
-
-            <button
-              type="submit"
-              disabled={loading || googleLoading}
-              className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-brand-400 font-semibold text-white transition hover:bg-brand-500 disabled:opacity-70"
-            >
-              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-              {mode === "login" ? "Anmelden" : "Konto erstellen"}
-            </button>
-          </form>
-
-          <div className="my-4 flex items-center gap-3">
-            <div className="h-px flex-1 bg-white/20" />
-            <span className="text-xs text-white/60">oder</span>
-            <div className="h-px flex-1 bg-white/20" />
-          </div>
+          )}
 
           <button
             type="button"
-            onClick={handleGoogle}
-            disabled={loading || googleLoading}
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-white/15 text-sm font-semibold text-white transition hover:bg-white/20 disabled:opacity-70"
+            onClick={() => switchMode("register")}
+            className="absolute left-[22px] top-[660px] h-[41px] w-[149px] rounded-[10px] bg-[#B88C73] font-['Roboto',sans-serif] text-[20px] font-medium leading-[23px] text-white shadow-[0px_100px_80px_rgba(185,62,62,0.07),0px_64.8148px_46.8519px_rgba(185,62,62,0.0531481),0px_38.5185px_25.4815px_rgba(185,62,62,0.0425185),0px_20px_13px_rgba(185,62,62,0.035),0px_8.14815px_6.51852px_rgba(185,62,62,0.0274815),0px_1.85185px_3.14815px_rgba(185,62,62,0.0168519)]"
           >
-            {googleLoading && <Loader2 className="h-4 w-4 animate-spin" />}
-            Mit Google {mode === "login" ? "anmelden" : "registrieren"}
+            Register
           </button>
 
-          <p className="mt-4 text-center text-xs text-white/55">
-            <Link to={createPageUrl("Datenschutz")} className="hover:text-white">Datenschutz</Link>
-            {" · "}
-            <Link to={createPageUrl("Legal")} className="hover:text-white">Nutzungsbedingungen</Link>
-          </p>
-        </motion.section>
-      </main>
+          <button
+            type={mode === "login" ? "submit" : "button"}
+            onClick={mode === "register" ? handleSubmit : undefined}
+            disabled={loading || googleLoading}
+            className="absolute left-[187px] top-[660px] h-[41px] w-[151px] rounded-[10px] bg-[#B88C73] font-['Roboto',sans-serif] text-[20px] font-normal leading-[23px] text-white shadow-[0px_100px_80px_rgba(185,62,62,0.07),0px_64.8148px_46.8519px_rgba(185,62,62,0.0531481),0px_38.5185px_25.4815px_rgba(185,62,62,0.0425185),0px_20px_13px_rgba(185,62,62,0.035),0px_8.14815px_6.51852px_rgba(185,62,62,0.0274815),0px_1.85185px_3.14815px_rgba(185,62,62,0.0168519)] disabled:opacity-70"
+          >
+            {loading ? <Loader2 className="mx-auto h-5 w-5 animate-spin" /> : "Login"}
+          </button>
+        </form>
+
+        <button
+          type="button"
+          onClick={() => setLocalError("Bitte nutze die Passwort-zurücksetzen-Funktion auf der klassischen Login-Seite.")}
+          className="absolute left-[171px] top-[714px] h-[16px] w-[167px] text-left font-['Roboto',sans-serif] text-[14px] font-normal leading-[16px] text-white"
+        >
+          Forgot Password or Email?
+        </button>
+
+        <p className="absolute left-[87px] top-[764px] h-[32px] w-[187px] text-center font-['Roboto',sans-serif] text-[14px] font-medium leading-[16px] text-white">
+          Privacy Policy - Terms of Use DogHike App
+        </p>
+
+        <div className="absolute left-[22px] top-[716px] w-[145px]">
+          <Feedback error={error} success={successMsg} />
+        </div>
+      </motion.section>
     </div>
   );
 }
