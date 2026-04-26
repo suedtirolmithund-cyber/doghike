@@ -142,7 +142,7 @@ export default function EditRoute() {
               </div>
               {route?.route_type === "planned" && (
                 <Button variant="outline" size="sm" onClick={() => setEditingMap(true)}>
-                  <Map className="w-4 h-4 mr-2" /> Streckenverlauf aendern
+                  <Map className="w-4 h-4 mr-2" /> Streckenverlauf ändern
                 </Button>
               )}
             </div>
@@ -229,7 +229,7 @@ export default function EditRoute() {
                 size="sm"
               >
                 {updateMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                Aenderungen speichern
+                Änderungen speichern
               </Button>
             </div>
           </form>
