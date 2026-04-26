@@ -7,6 +7,8 @@ import RouteElevationProfile from "./RouteElevationProfile";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
+const GH_API_KEY = import.meta.env.VITE_GRAPHHOPPER_KEY || "LijBPDQGfu7Imiq1X1Jw83a5787IYJB2mEQhHe8A7";
+
 // Fix Leaflet default marker icon
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -170,7 +172,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
       // but also uses footpaths and side trails
       const pointsParam = points.map(p => `point=${p[0]},${p[1]}`).join('&');
       const response = await fetch(
-        `https://graphhopper.com/api/1/route?${pointsParam}&profile=hike&locale=de&calc_points=true&instructions=false&points_encoded=false&key=LijBPDQGfu7Iiq80ebFCtWMuznIa7Ca3pbXHQnrCn1M8`
+        `https://graphhopper.com/api/1/route?${pointsParam}&profile=hike&locale=de&calc_points=true&instructions=false&points_encoded=false&key=${GH_API_KEY}`
       );
       const data = await response.json();
 
