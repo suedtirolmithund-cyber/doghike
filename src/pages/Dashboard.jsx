@@ -63,7 +63,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
       {/* Hero */}
-      <div className="relative h-[512px] overflow-hidden">
+      <div className="relative h-[507px] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover"
           style={{
@@ -71,44 +71,43 @@ export default function Dashboard() {
             backgroundPosition: "center 38%",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/35 to-stone-50/35" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 md:pt-[82px]">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-            className="text-center">
-            <h1 className="text-4xl md:text-[60px] font-light text-white mb-[18px] tracking-tight leading-tight md:leading-[1.05]">
+        <div className="absolute left-1/2 top-0 h-[507px] w-full max-w-[1280px] -translate-x-1/2">
+          <div className="absolute left-[-14.19px] top-[403.95px] h-[159.45px] w-[1333.01px] -rotate-[0.07deg] bg-white/30 opacity-70 blur-[8.25px]" />
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <h1 className="absolute left-[24px] top-[78.2px] h-[63px] w-[1232px] text-center font-['Inter',sans-serif] text-[60px] font-light leading-[63px] tracking-[-1.2px] text-white">
               Hundefreundliche Wanderungen
             </h1>
-            <p className="text-lg leading-[29.7px] text-white mb-[66px] max-w-[680px] mx-auto">
-              Entdecke die schönsten Wanderungen in den Bergen,<br className="hidden sm:block" />
+            <p className="absolute left-[300px] top-[162.4px] h-[60px] w-[680px] text-center font-['Inter',sans-serif] text-[18px] font-normal leading-[30px] text-white">
+              Entdecke die schönsten Wanderungen in den Bergen,<br />
               zusammen mit deinem Vierbeiner.
             </p>
-            <div className="flex flex-wrap gap-4 justify-center">
+            <div className="absolute left-[44px] top-[281px] h-[46px] w-[1232px]">
               <Link to={createPageUrl("Hikes")}>
-                <Button size="lg" className="h-[46px] rounded-[15px] px-5 bg-white text-slate-800 hover:bg-white/90 shadow-lg">
-                  <Mountain className="w-5 h-5 mr-2" /> Alle Touren entdecken
+                <Button size="lg" variant="outline" className="absolute left-[322.3px] top-0 h-[46px] w-[224.19px] rounded-[15px] border border-white bg-slate-900/50 px-0 text-[16px] font-semibold leading-[19px] text-white shadow-[0_12px_24px_rgba(0,0,0,0.14)] hover:bg-slate-900/60 hover:text-white">
+                  <Mountain className="mr-0 h-[18px] w-[18px]" /> Alle Touren entdecken
                 </Button>
               </Link>
               <Link to={createPageUrl("AddJournalEntry")}>
-                <Button size="lg" variant="outline" className="h-[46px] rounded-[15px] px-5 bg-slate-900/50 border-white/30 text-white hover:bg-slate-900/60">
-                  <Plus className="w-5 h-5 mr-2" /> Tour einreichen
+                <Button size="lg" variant="outline" className="absolute left-[562.49px] top-0 h-[46px] w-[177.56px] rounded-[15px] border border-white bg-slate-900/50 px-0 text-[16px] font-semibold leading-[19px] text-white hover:bg-slate-900/60 hover:text-white">
+                  <Plus className="mr-0 h-[18px] w-[18px]" /> Tour einreichen
                 </Button>
               </Link>
               {!isAuthenticated && (
                 <Link to={createPageUrl("Login")}>
-                  <Button size="lg" variant="outline" className="h-[46px] rounded-[15px] px-5 bg-slate-900/50 border-white/30 text-white hover:bg-slate-900/60">
-                    <UserPlus className="w-5 h-5 mr-2" /> Registrieren
+                  <Button size="lg" variant="outline" className="absolute left-[756.05px] top-0 h-[46px] w-[153.64px] rounded-[15px] border border-white bg-slate-900/50 px-0 text-[16px] font-semibold leading-[19px] text-white hover:bg-slate-900/60 hover:text-white">
+                    <UserPlus className="mr-0 h-[18px] w-[18px]" /> Registrieren
                   </Button>
                 </Link>
               )}
             </div>
 
-            <div className="relative max-w-[672px] mx-auto mt-[76px]">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/75" />
+            <div className="absolute left-[324px] top-[422px] h-[56px] w-[672px]">
+              <Search className="absolute left-[16px] top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-white/75" />
               <Input
                 placeholder="Tour oder Ort suchen..."
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE); }}
-                className="pl-12 h-14 text-xl text-white placeholder:text-white bg-stone-800/15 border-white rounded-[15px] shadow-[0_8px_22px_rgba(41,37,36,0.12)] [text-shadow:0_4px_4px_rgba(0,0,0,0.25)]"
+                className="h-[56px] w-[672px] rounded-[15px] border border-white bg-stone-800/15 pl-12 pr-[18px] font-['Inter',sans-serif] text-[20px] font-normal leading-[24px] text-white shadow-[0_8px_22px_rgba(41,37,36,0.12)] placeholder:text-white [text-shadow:0_4px_4px_rgba(0,0,0,0.25)]"
               />
             </div>
           </motion.div>
