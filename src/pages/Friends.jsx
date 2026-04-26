@@ -46,7 +46,7 @@ function FeedCard({ entry }) {
           </span>
         </div>
         <h3 className="font-semibold text-stone-800 mb-1">{entry.title}</h3>
-        {entry.location && <p className="text-xs text-stone-500 mb-2">📍 {entry.location}</p>}
+        {entry.location && <p className="text-xs text-stone-500 mb-2">Ort: {entry.location}</p>}
         <div className="flex flex-wrap gap-3 text-xs text-stone-500 mb-2">
           {entry.distance_km && <span className="flex items-center gap-1"><Ruler className="w-3 h-3" />{entry.distance_km} km</span>}
           {entry.elevation_m && <span className="flex items-center gap-1"><TrendingUp className="w-3 h-3" />{entry.elevation_m} Hm</span>}
@@ -55,7 +55,7 @@ function FeedCard({ entry }) {
         {entry.description && <p className="text-sm text-stone-500 line-clamp-2">{entry.description}</p>}
         {entry.dog_suitable && (
           <Badge variant="secondary" className="mt-2 text-xs bg-brand-50 text-brand-600 border-brand-200">
-            🐕 Hundefreundlich
+            Hundefreundlich
           </Badge>
         )}
       </div>
@@ -432,7 +432,7 @@ export default function Friends() {
                       <div className="flex-1 min-w-0">
                         <ProfileName profile={profile} />
                         <p className="text-xs text-stone-400 flex items-center gap-1">
-                          <Clock className="w-3 h-3" /> Anfrage gesendet
+                          <Clock className="w-3 h-3" /> Gesendet
                         </p>
                       </div>
                       <Button size="sm" variant="ghost"

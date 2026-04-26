@@ -1,4 +1,4 @@
-﻿import { getHikes } from "@/api/sheetsClient";
+import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -9,8 +9,8 @@ import HikeMap from "@/components/map/HikeMap";
 
 export default function MapView() {
   const { data: hikes = [], isLoading } = useQuery({
-    queryKey: ["hikes"],
-    queryFn: getHikes
+    queryKey: ["allHikes"],
+    queryFn: getAllHikes
   });
 
   const hikesWithCoords = hikes.filter(h => h.latitude && h.longitude);
