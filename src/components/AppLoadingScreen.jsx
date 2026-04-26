@@ -10,7 +10,7 @@ export default function AppLoadingScreen({ extended = false }) {
       <img
         src="/splash/autumn-hero.jpg"
         alt=""
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover md:object-contain"
         style={{ objectPosition: "center 38%" }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-slate-950/65 via-slate-950/45 to-slate-950/70" />

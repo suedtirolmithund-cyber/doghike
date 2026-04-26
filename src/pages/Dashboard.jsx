@@ -63,9 +63,9 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
       {/* Hero */}
-      <div className="relative h-[507px] overflow-hidden">
+      <div className="relative h-[507px] overflow-hidden bg-black">
         <div
-          className="absolute inset-0 bg-cover"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat md:bg-contain"
           style={{
             backgroundImage: "url('/splash/autumn-hero.jpg')",
             backgroundPosition: "center 38%",
