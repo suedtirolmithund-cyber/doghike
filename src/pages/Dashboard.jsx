@@ -63,7 +63,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
       {/* Hero */}
-      <div className="relative h-[507px] overflow-hidden bg-black">
+      <div className="relative h-[560px] overflow-hidden bg-black md:h-[507px]">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat md:bg-contain"
           style={{
@@ -71,7 +71,47 @@ export default function Dashboard() {
             backgroundPosition: "center 38%",
           }}
         />
-        <div className="absolute left-1/2 top-0 h-[507px] w-full max-w-[1280px] -translate-x-1/2">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/65 md:hidden" />
+        <div className="relative z-10 flex h-full flex-col items-center justify-end px-4 pb-8 text-center md:hidden">
+          <h1 className="max-w-[340px] font-['Inter',sans-serif] text-[38px] font-light leading-[42px] text-white">
+            Hundefreundliche Wanderungen
+          </h1>
+          <p className="mt-4 max-w-[330px] font-['Inter',sans-serif] text-[16px] leading-[24px] text-white">
+            Entdecke die schönsten Wanderungen in den Bergen, zusammen mit deinem Vierbeiner.
+          </p>
+
+          <div className="mt-6 grid w-full max-w-[343px] gap-3">
+            <Link to={createPageUrl("Hikes")}>
+              <Button size="lg" variant="outline" className="h-[46px] w-full rounded-[15px] border border-white bg-slate-900/50 text-[16px] font-semibold text-white shadow-[0_12px_24px_rgba(0,0,0,0.14)] hover:bg-slate-900/60 hover:text-white">
+                <Mountain className="h-[18px] w-[18px]" /> Alle Touren entdecken
+              </Button>
+            </Link>
+            <Link to={createPageUrl("AddJournalEntry")}>
+              <Button size="lg" variant="outline" className="h-[46px] w-full rounded-[15px] border border-white bg-slate-900/50 text-[16px] font-semibold text-white hover:bg-slate-900/60 hover:text-white">
+                <Plus className="h-[18px] w-[18px]" /> Tour einreichen
+              </Button>
+            </Link>
+            {!isAuthenticated && (
+              <Link to={createPageUrl("Login")}>
+                <Button size="lg" variant="outline" className="h-[46px] w-full rounded-[15px] border border-white bg-slate-900/50 text-[16px] font-semibold text-white hover:bg-slate-900/60 hover:text-white">
+                  <UserPlus className="h-[18px] w-[18px]" /> Registrieren
+                </Button>
+              </Link>
+            )}
+          </div>
+
+          <div className="relative mt-5 h-[52px] w-full max-w-[343px]">
+            <Search className="absolute left-[16px] top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-white/75" />
+            <Input
+              placeholder="Tour oder Ort suchen..."
+              value={searchQuery}
+              onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE); }}
+              className="h-[52px] w-full rounded-[15px] border border-white bg-stone-800/20 pl-12 pr-4 font-['Inter',sans-serif] text-[16px] text-white placeholder:text-white"
+            />
+          </div>
+        </div>
+
+        <div className="absolute left-1/2 top-0 hidden h-[507px] w-full max-w-[1280px] -translate-x-1/2 md:block">
           <div className="absolute left-[-14.19px] top-[403.95px] h-[159.45px] w-[1333.01px] -rotate-[0.07deg] bg-white/30 opacity-70 blur-[8.25px]" />
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <h1 className="absolute left-[24px] top-[78.2px] h-[63px] w-[1232px] text-center font-['Inter',sans-serif] text-[60px] font-light leading-[63px] tracking-[-1.2px] text-white">

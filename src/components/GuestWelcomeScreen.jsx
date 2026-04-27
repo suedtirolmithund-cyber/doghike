@@ -221,7 +221,7 @@ export default function GuestWelcomeScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-black md:relative md:grid md:place-items-center md:overflow-hidden">
+    <div className="grid min-h-[100dvh] place-items-center overflow-hidden bg-black md:relative">
       <img
         src={LOGIN_IMAGE}
         alt=""
@@ -231,7 +231,7 @@ export default function GuestWelcomeScreen() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.25 }}
-        className="relative mx-auto h-[812px] max-h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-[#F8F8F8] md:bg-transparent"
+        className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-[#F8F8F8] md:h-[812px] md:bg-transparent"
       >
         <img
           src={LOGIN_IMAGE}
@@ -471,13 +471,13 @@ function OnboardingScreen({ onContinue }) {
   }, [onContinue]);
 
   return (
-    <div className="min-h-screen bg-black md:relative md:grid md:place-items-center md:overflow-hidden">
+    <div className="grid min-h-[100dvh] place-items-center overflow-hidden bg-black md:relative">
       <img
         src={ONBOARDING_IMAGE}
         alt=""
         className="hidden md:block md:absolute md:inset-0 md:h-full md:w-full md:object-contain"
       />
-      <section className="relative mx-auto h-[812px] max-h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-black md:bg-transparent">
+      <section className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-black md:h-[812px] md:bg-transparent">
         <img
           src={ONBOARDING_IMAGE}
           alt=""
@@ -486,7 +486,7 @@ function OnboardingScreen({ onContinue }) {
         />
         <div className="absolute inset-0 bg-[linear-gradient(0deg,#000000_-31.83%,rgba(0,0,0,0)_43.72%)]" />
 
-        <div className="absolute left-4 top-[524px] h-[216px] w-[343px] opacity-80">
+        <div className="absolute bottom-[72px] left-4 h-[216px] w-[343px] opacity-80 md:top-[524px]">
           <h1 className="absolute left-0 top-0 h-[113px] w-[343px] text-center font-['Roboto',sans-serif] text-[40px] font-normal leading-[47px] text-white">
             Hundefreundliche Wanderungen
           </h1>
@@ -499,7 +499,7 @@ function OnboardingScreen({ onContinue }) {
           type="button"
           onClick={onContinue}
           aria-label="Weiter"
-          className="absolute left-[161px] top-[751px] z-30 grid h-[54px] w-[52px] place-items-center rounded-full bg-[#BE8C70]/80 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/30"
+          className="absolute bottom-4 left-1/2 z-30 grid h-[54px] w-[52px] -translate-x-1/2 place-items-center rounded-full bg-[#BE8C70]/80 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/30 md:bottom-auto md:left-[161px] md:top-[751px] md:translate-x-0"
         >
           <PawPrint className="h-[36px] w-[36px] fill-white stroke-white stroke-[1.8]" />
         </button>
