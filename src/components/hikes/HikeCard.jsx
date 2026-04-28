@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import ExpandableText from "@/components/ExpandableText";
-import { getDifficultyBadgeClass, getDifficultyLabel, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
+import { getDifficultyBadgeClass, getDifficultyLabel, getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
 
 const seasonEmojis = {
   spring: "🌸",
@@ -86,7 +86,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               )}
               {hike.water_availability && (
                 <span className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${getWaterBadgeClass(hike.water_availability)}`}>
-                  {getWaterLabel(hike.water_availability) ?? hike.water_availability}
+                  {getWaterIcon(hike.water_availability)} {getWaterLabel(hike.water_availability) ?? hike.water_availability}
                 </span>
               )}
             </div>

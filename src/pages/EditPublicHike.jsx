@@ -378,7 +378,7 @@ export default function EditPublicHike() {
                   <SelectContent>
                     {WATER_LEVELS.map((level) => (
                       <SelectItem key={level.value} value={level.value}>
-                        {level.label}
+                        {level.icon} {level.label}
                       </SelectItem>
                     ))}
                   </SelectContent>

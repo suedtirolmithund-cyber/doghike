@@ -3,8 +3,8 @@ import { Droplets } from "lucide-react";
 const waterLevels = [
   {
     value: "none",
-    label: "0 · Kein Wasser",
-    icon: "🚫",
+    label: "Kein Wasser",
+    icon: "🚫💧",
     color: "bg-red-50 border-red-200 text-red-800",
     desc: "Auf der gesamten Route gibt es keine natürlichen Wasserquellen.",
     examples: "Hochalpine Touren, trockene Felspfade im Sommer",
@@ -12,7 +12,7 @@ const waterLevels = [
   },
   {
     value: "little",
-    label: "1 · Wenig Wasser",
+    label: "Wenig Wasser",
     icon: "💧",
     color: "bg-orange-50 border-orange-200 text-orange-800",
     desc: "Es gibt vereinzelt Bachläufe oder Quellen, aber nicht zuverlässig oder nur saisonal.",
@@ -21,7 +21,7 @@ const waterLevels = [
   },
   {
     value: "moderate",
-    label: "2 · Etwas Wasser",
+    label: "Etwas Wasser",
     icon: "💧💧",
     color: "bg-blue-50 border-blue-200 text-blue-800",
     desc: "Mehrere Bachläufe oder Quellen entlang des Weges, aber nicht in sehr kurzem Abstand.",
@@ -30,7 +30,7 @@ const waterLevels = [
   },
   {
     value: "plenty",
-    label: "3 · Viel Wasser",
+    label: "Viel Wasser",
     icon: "💧💧💧",
     color: "bg-cyan-50 border-cyan-200 text-cyan-800",
     desc: "Regelmäßig Bäche, Quellen oder Seen entlang des Weges. Wasser ist fast immer erreichbar.",
@@ -72,7 +72,7 @@ export default function WaterHelp() {
         <div className="mt-6 p-4 bg-white border border-stone-200 rounded-2xl text-sm text-stone-600">
           <p className="font-medium mb-1">Hinweis für Hundebesitzer</p>
           <p className="text-xs">
-            Hunde brauchen bei Hitze und Belastung deutlich mehr Wasser. Plane bei Stufe 0 oder 1 zusätzlich eigenes Wasser für Mensch und Hund ein.
+            Hunde brauchen bei Hitze und Belastung deutlich mehr Wasser. Plane bei wenig oder keinem Wasser zusätzlich eigenes Wasser für Mensch und Hund ein.
           </p>
         </div>
       </div>

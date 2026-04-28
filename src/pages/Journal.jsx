@@ -38,7 +38,7 @@ import {
 import { toast } from "sonner";
 import { useAuth } from "@/lib/AuthContext";
 import { getJournalEntriesForDisplay, deleteJournalEntry } from "@/lib/journalApi";
-import { getDifficultyLabel, getDifficultyTextColor, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
+import { getDifficultyLabel, getDifficultyTextColor, getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
 
 const PAGE_SIZE = 20;
 
@@ -308,7 +308,7 @@ export default function Journal() {
                                 variant="secondary"
                                 className={`text-xs border ${getWaterBadgeClass(entry.water_available)}`}
                               >
-                                {getWaterLabel(entry.water_available) ?? getWaterLabel(0)}
+                      {getWaterIcon(entry.water_available)} {getWaterLabel(entry.water_available) ?? getWaterLabel(0)}
                               </Badge>
                           )}
                           {entry.gpx_url && (

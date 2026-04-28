@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { getDifficultyLabel, getDifficultyTextColor, getWaterLabel, getWaterTextColor } from "@/lib/difficultyConfig";
+import { getDifficultyLabel, getDifficultyTextColor, getWaterIcon, getWaterLabel, getWaterTextColor } from "@/lib/difficultyConfig";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -301,7 +301,7 @@ export default function JournalDetail() {
               <div className="flex items-center gap-2">
                 <span className="text-xs text-stone-500 w-28">Wasser</span>
                 <span className={`text-sm font-medium ${getWaterTextColor(entry.water_available)}`}>
-                  {getWaterLabel(entry.water_available)}
+                    {getWaterIcon(entry.water_available)} {getWaterLabel(entry.water_available)}
                 </span>
               </div>
             )}
