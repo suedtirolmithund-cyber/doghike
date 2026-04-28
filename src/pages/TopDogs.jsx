@@ -34,12 +34,10 @@ function getBadges(s, isChampion) {
 
 // Daten laden
 async function loadLeaderboard() {
-  // 1. Nur öffentliche, freigegebene Community-Einträge mit dog_id
+  // 1. Alle Tour-Einträge mit dog_id
   const { data: entries, error: eErr } = await supabase
     .from("journal_entries")
     .select("dog_id, distance_km, elevation_m, rating, date")
-    .eq("visibility", "public")
-    .eq("status", "approved")
     .not("dog_id", "is", null);
   if (eErr) throw eErr;
   if (!entries?.length) return [];
