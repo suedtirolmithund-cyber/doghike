@@ -57,6 +57,7 @@ import Datenschutz from './pages/Datenschutz';
 import DifficultyHelp from './pages/DifficultyHelp';
 import Dogs from './pages/Dogs';
 import EditHike from './pages/EditHike';
+import EditPublicHike from './pages/EditPublicHike';
 import EditRoute from './pages/EditRoute';
 import Friends from './pages/Friends';
 import HikeDetail from './pages/HikeDetail';
@@ -89,6 +90,7 @@ export const PAGES = {
     "DifficultyHelp": DifficultyHelp,
     "Dogs": Dogs,
     "EditHike": EditHike,
+    "EditPublicHike": EditPublicHike,
     "EditRoute": EditRoute,
     "Friends": Friends,
     "HikeDetail": HikeDetail,

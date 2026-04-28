@@ -220,15 +220,21 @@ export default function HikeDetail() {
             </Button>
           </Link>
           <div className="flex gap-2 flex-wrap">
-            {isOwnJournalHike && (
+            {(isOwnJournalHike || (isAdmin && hike?._source === "sheets" && hike?._public_hike_id)) && (
               <>
-                <Link to={createPageUrl("AddJournalEntry") + `?id=${hike?._journal_id}`}>
+                <Link
+                  to={
+                    isOwnJournalHike
+                      ? createPageUrl("AddJournalEntry") + `?id=${hike?._journal_id}`
+                      : createPageUrl("EditPublicHike") + `?id=${encodeURIComponent(hike?.id ?? "")}`
+                  }
+                >
                   <Button variant="ghost" className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20">
                     <Edit className="w-4 h-4 mr-1" />
                     Bearbeiten
                   </Button>
                 </Link>
-                <AlertDialog>
+                {isOwnJournalHike && <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="ghost" className="bg-red-500/20 backdrop-blur-sm text-white hover:bg-red-500/40">
                       <Trash2 className="w-4 h-4 mr-1" />
@@ -252,7 +258,7 @@ export default function HikeDetail() {
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
-                </AlertDialog>
+                </AlertDialog>}
               </>
             )}
           </div>
