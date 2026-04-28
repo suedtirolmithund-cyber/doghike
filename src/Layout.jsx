@@ -219,17 +219,15 @@ export default function Layout({ children, currentPageName }) {
 
             <div className="flex items-center gap-2 shrink-0">
               {isAuthenticated && user ? (
-                <>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={logout}
-                    className="flex items-center gap-1.5 border-stone-200 text-stone-600 hover:text-red-600 hover:border-red-300 hover:bg-red-50"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    Abmelden
-                  </Button>
-                </>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={logout}
+                  className="flex items-center gap-1.5 border-stone-200 text-stone-600 hover:text-red-600 hover:border-red-300 hover:bg-red-50"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Abmelden
+                </Button>
               ) : (
                 <Link to={createPageUrl("Login")}>
                   <Button size="sm" className="flex items-center gap-1.5 bg-[#a8c686] hover:bg-[#94b872] text-white">
