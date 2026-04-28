@@ -451,27 +451,6 @@ export default function HikeDetail() {
           )}
         </motion.div>
 
-        {Array.isArray(hike.tags) && hike.tags.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.16 }}
-            className="mb-10 bg-white rounded-2xl p-6 border border-stone-200/50"
-          >
-            <h2 className="text-lg font-medium text-stone-800 mb-4">Tags</h2>
-            <div className="flex flex-wrap gap-2">
-              {hike.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-stone-200 bg-stone-50 px-3 py-1 text-sm text-stone-600"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        )}
-
         {/* Route Profile - Full Width */}
         {hike.route_coordinates && hike.route_coordinates.length > 1 && (
           <motion.div
