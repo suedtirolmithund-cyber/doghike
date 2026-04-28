@@ -326,23 +326,27 @@ export default function Friends() {
         </motion.div>
 
         <Tabs defaultValue={incoming.length > 0 ? "requests" : "friends"}>
-          <TabsList className="bg-white border border-stone-200/60 w-full mb-4">
-            <TabsTrigger value="friends" className="flex-1">
-              Freunde ({accepted.length})
+          <TabsList className="grid w-full grid-cols-4 bg-white border border-stone-200/60 mb-4">
+            <TabsTrigger value="friends" className="px-1 text-[11px] sm:text-sm">
+              <span className="sm:hidden">Freunde</span>
+              <span className="hidden sm:inline">Freunde ({accepted.length})</span>
             </TabsTrigger>
-            <TabsTrigger value="requests" className="flex-1 relative">
-              Offene Anfragen
+            <TabsTrigger value="requests" className="relative px-1 text-[11px] sm:text-sm">
+              <span className="sm:hidden">Anfragen</span>
+              <span className="hidden sm:inline">Offene Anfragen</span>
               {incoming.length > 0 && (
                 <span className="ml-1.5 bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5 py-0.5">
                   {incoming.length}
                 </span>
               )}
             </TabsTrigger>
-            <TabsTrigger value="sent" className="flex-1">
-              Gesendet ({outgoing.length})
+            <TabsTrigger value="sent" className="px-1 text-[11px] sm:text-sm">
+              <span className="sm:hidden">Gesendet</span>
+              <span className="hidden sm:inline">Gesendet ({outgoing.length})</span>
             </TabsTrigger>
-            <TabsTrigger value="feed" className="flex-1">
-              Touren von Freunden
+            <TabsTrigger value="feed" className="px-1 text-[11px] sm:text-sm">
+              <span className="sm:hidden">Touren</span>
+              <span className="hidden sm:inline">Touren von Freunden</span>
             </TabsTrigger>
           </TabsList>
 
