@@ -34,6 +34,15 @@ import { supabase } from "@/lib/supabaseClient";
 import { getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
 import { toast } from "sonner";
 
+function getCountryLabel(country) {
+  if (country === "italy") return "Italien";
+  if (country === "austria") return "Österreich";
+  if (country === "germany") return "Deutschland";
+  if (country === "switzerland") return "Schweiz";
+  if (country === "other") return "Anderes";
+  return country || null;
+}
+
 const difficultyColors = {
   "1": "bg-brand-100 text-brand-600",
   "2": "bg-lime-100 text-lime-700",
@@ -194,8 +203,7 @@ export default function HikeDetail() {
   const photos = hike.photos || [];
   const coverPhoto = photos[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80";
   
-  // Extract country from location
-  const country = hike.location ? hike.location.split(',').map(p => p.trim()).pop() : null;
+  const countryLabel = getCountryLabel(hike.country);
 
   const nextPhoto = () => setCurrentPhotoIndex((prev) => (prev + 1) % photos.length);
   const prevPhoto = () => setCurrentPhotoIndex((prev) => (prev - 1 + photos.length) % photos.length);
@@ -317,14 +325,8 @@ export default function HikeDetail() {
                   ? <Check className="w-5 h-5 text-brand-400" />
                   : <Share2 className="w-5 h-5" />}
               </button>
-              {hike.country && (
-                <span className="ml-2">
-                  {hike.country === "italy" && "🇮🇹 Italien"}
-                  {hike.country === "austria" && "🇦🇹 Österreich"}
-                  {hike.country === "germany" && "🇩🇪 Deutschland"}
-                  {hike.country === "switzerland" && "🇨🇭 Schweiz"}
-                  {hike.country === "other" && "🌍"}
-                </span>
+              {countryLabel && (
+                <span className="ml-2">{countryLabel}</span>
               )}
             </div>
           </motion.div>
