@@ -64,8 +64,8 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
 
             <div className="absolute bottom-4 left-4 right-4">
               <h3 className="mb-1 text-xl font-semibold text-white">{hike.trail_name}</h3>
-              <div className="flex items-center gap-1.5 text-sm text-white/85">
-                <MapPin className="h-3.5 w-3.5" />
+              <div className="flex items-center gap-1.5 text-base font-medium text-white/90">
+                <MapPin className="h-4 w-4" />
                 <span>{hike.location || "Dolomites"}</span>
               </div>
             </div>

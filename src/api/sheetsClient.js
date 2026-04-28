@@ -158,6 +158,7 @@ function rowToHike(row, index) {
     parking_info: row.parking_info || null,
     restaurant_info: row.restaurant_info || null,
     notes: row.notes || null,
+    date: row.date || row.datum || null,
 
     // Mark origin so consumers can distinguish Sheets hikes from journal hikes
     _source: "sheets",

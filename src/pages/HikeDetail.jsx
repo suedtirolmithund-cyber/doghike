@@ -293,9 +293,9 @@ export default function HikeDetail() {
               )}
             </div>
             <h1 className="text-4xl md:text-5xl font-light text-white mb-2">{hike.trail_name}</h1>
-            <div className="flex items-center gap-3 text-white/80">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
+            <div className="flex items-center gap-3 text-white/85">
+              <div className="flex items-center gap-2 text-base md:text-lg font-medium">
+                <MapPin className="w-4 h-4 md:w-5 md:h-5" />
                 <span>{hike.location || "Dolomites"}</span>
               </div>
               <SaveButton
