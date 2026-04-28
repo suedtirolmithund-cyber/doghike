@@ -175,6 +175,21 @@ function mapSupabaseWaterLevel(value) {
   return null;
 }
 
+function normalizeTags(value) {
+  if (Array.isArray(value)) {
+    return value.map((tag) => String(tag).trim()).filter(Boolean);
+  }
+
+  if (typeof value === "string") {
+    return value
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+  }
+
+  return [];
+}
+
 function publicHikeRowToHike(row, photos = []) {
   return {
     // Keep the old external id shape stable so saved hikes, comments, and ratings keep matching.
@@ -190,7 +205,7 @@ function publicHikeRowToHike(row, photos = []) {
     link: row.gpx_url || null,
     gpx_url: row.gpx_url || null,
 
-    tags: [],
+    tags: normalizeTags(row.tags),
 
     distance_km: row.distance_km != null ? Number(row.distance_km) : null,
     elevation_gain_m: row.elevation_gain_m ?? null,

@@ -32,6 +32,7 @@ function buildInitialFormData(hike) {
     restaurant_info: hike?.restaurant_info || "",
     notes: hike?.notes || "",
     gpx_url: hike?.gpx_url || hike?.link || "",
+    tagsText: Array.isArray(hike?.tags) ? hike.tags.join(", ") : "",
     status: hike?.status || "approved",
     is_premium: hike?.is_premium ? "true" : "false",
     latitude: hike?.latitude ?? "",
@@ -74,6 +75,10 @@ export default function EditPublicHike() {
         .split("\n")
         .map((line) => line.trim())
         .filter(Boolean);
+      const tags = formData.tagsText
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean);
 
       return updatePublicHike(hike._public_hike_id, {
         title: formData.title.trim(),
@@ -92,6 +97,7 @@ export default function EditPublicHike() {
         restaurant_info: formData.restaurant_info.trim() || null,
         notes: formData.notes.trim() || null,
         gpx_url: formData.gpx_url.trim() || null,
+        tags,
         status: formData.status || "draft",
         is_premium: formData.is_premium === "true",
         latitude: formData.latitude === "" ? null : Number(formData.latitude),
@@ -367,6 +373,16 @@ export default function EditPublicHike() {
                 value={formData.gpx_url}
                 onChange={(e) => setFormData((prev) => ({ ...prev, gpx_url: e.target.value }))}
                 placeholder="https://..."
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="tags">Tags, mit Komma getrennt</Label>
+              <Input
+                id="tags"
+                value={formData.tagsText}
+                onChange={(e) => setFormData((prev) => ({ ...prev, tagsText: e.target.value }))}
+                placeholder="See, Schatten, Rundweg, Hütte"
               />
             </div>
 

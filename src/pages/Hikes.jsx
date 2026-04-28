@@ -29,6 +29,7 @@ export default function Hikes() {
   const [elevationMax, setElevationMax] = useState("");
   const [seasonFilter, setSeasonFilter] = useState("all");
   const [waterFilter, setWaterFilter] = useState("all");
+  const [tagFilter, setTagFilter] = useState("all");
 
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["allHikes"],
@@ -45,13 +46,23 @@ export default function Hikes() {
   };
 
   const currentSeason = getCurrentSeason();
+  const availableTags = Array.from(
+    new Set(
+      hikes.flatMap((hike) =>
+        Array.isArray(hike.tags)
+          ? hike.tags.map((tag) => tag.trim()).filter(Boolean)
+          : []
+      )
+    )
+  ).sort((a, b) => a.localeCompare(b));
 
   const filteredHikes = hikes
     .filter((hike) => {
       const query = searchQuery.trim().toLowerCase();
       const matchesSearch = !query ||
         hike.trail_name?.toLowerCase().includes(query) ||
-        hike.location?.toLowerCase().includes(query);
+        hike.location?.toLowerCase().includes(query) ||
+        hike.tags?.some((tag) => tag.toLowerCase().includes(query));
       if (!matchesSearch) return false;
 
       if (humanDifficultyFilter !== "all" && hike.difficulty !== humanDifficultyFilter) return false;
@@ -65,6 +76,7 @@ export default function Hikes() {
         if (!seasons.includes(seasonFilter) && !seasons.includes("all_year")) return false;
       }
       if (waterFilter !== "all" && hike.water_availability !== waterFilter) return false;
+      if (tagFilter !== "all" && !hike.tags?.includes(tagFilter)) return false;
 
       if (levelFilter === "all") return true;
       if (sortBy === "difficulty") return hike.difficulty === levelFilter;
@@ -199,6 +211,24 @@ export default function Hikes() {
 
               <div>
                 <label className="text-sm font-medium text-stone-700 mb-2 block">🔄 Sortieren</label>
+                <label className="text-sm font-medium text-stone-700 mb-2 block"># Tags</label>
+                <Select value={tagFilter} onValueChange={setTagFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Alle" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Alle</SelectItem>
+                    {availableTags.map((tag) => (
+                      <SelectItem key={tag} value={tag}>
+                        #{tag}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">Sortieren</label>
                 <Select value={sortBy} onValueChange={(v) => { setSortBy(v); setLevelFilter("all"); }}>
                   <SelectTrigger>
                     <SelectValue placeholder="Neueste zuerst" />

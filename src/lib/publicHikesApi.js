@@ -3,12 +3,16 @@ import { supabase } from "@/lib/supabaseClient";
 export async function updatePublicHike(hikeId, values) {
   const {
     photoUrls = [],
+    tags = [],
     ...hikeValues
   } = values;
 
   const { data, error } = await supabase
     .from("public_hikes")
-    .update(hikeValues)
+    .update({
+      ...hikeValues,
+      tags,
+    })
     .eq("id", hikeId)
     .select()
     .single();

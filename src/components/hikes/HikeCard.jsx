@@ -90,6 +90,19 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               )}
             </div>
 
+            {Array.isArray(hike.tags) && hike.tags.length > 0 && (
+              <div className="mb-4 flex flex-wrap gap-1.5">
+                {hike.tags.slice(0, 4).map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-0.5 text-xs text-stone-600"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+
             <div className="mb-4 grid grid-cols-3 gap-2">
               <StatTile value={hike.distance_km} label="km" />
               <StatTile value={hike.elevation_gain_m} label="Hm" />
