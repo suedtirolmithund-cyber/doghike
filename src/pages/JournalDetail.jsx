@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { getDifficultyLabel, getDifficultyTextColor } from "@/lib/difficultyConfig";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -25,8 +26,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-const DIFFICULTY_LABEL = { 1: "Leicht", 2: "Mittel-leicht", 3: "Mittel", 4: "Anspruchsvoll", 5: "Schwer" };
-const DIFFICULTY_COLOR = { 1: "text-brand-400", 2: "text-lime-600", 3: "text-yellow-600", 4: "text-orange-600", 5: "text-red-600" };
 const SEASON_LABEL = { spring: "🌸 Frühling", summer: "☀️ Sommer", autumn: "🍂 Herbst", winter: "❄️ Winter" };
 const WATER_LABEL = ["", "💧 Wenig Wasser", "💧💧 Etwas Wasser", "💧💧💧 Viel Wasser"];
 const VISIBILITY_INFO = {
@@ -285,9 +284,9 @@ export default function JournalDetail() {
             )}
             {entry.difficulty && (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-stone-500 w-28">Schwierigkeit</span>
-                <span className={`text-sm font-medium ${DIFFICULTY_COLOR[entry.difficulty]}`}>
-                  {DIFFICULTY_LABEL[entry.difficulty]}
+                <span className="text-xs text-stone-500 w-28">👤 Mensch</span>
+                <span className={`text-sm font-medium ${getDifficultyTextColor(entry.difficulty)}`}>
+                  {getDifficultyLabel(entry.difficulty)}
                 </span>
               </div>
             )}

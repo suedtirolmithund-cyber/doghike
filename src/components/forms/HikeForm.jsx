@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import RouteEditor from "@/components/map/RouteEditor";
 import StartPointPicker from "@/components/map/StartPointPicker";
 import ConsentDialog from "@/components/ConsentDialog";
+import { DIFFICULTY_LEVELS } from "@/lib/difficultyConfig";
 
 export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabel }) {
   const { user } = useAuth();
@@ -247,11 +248,9 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               <SelectValue placeholder="Wählen" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">Stufe 1</SelectItem>
-              <SelectItem value="2">Stufe 2</SelectItem>
-              <SelectItem value="3">Stufe 3</SelectItem>
-              <SelectItem value="4">Stufe 4</SelectItem>
-              <SelectItem value="5">Stufe 5</SelectItem>
+              {DIFFICULTY_LEVELS.map((level) => (
+                <SelectItem key={level.value} value={level.value}>{level.short} · {level.label}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -271,11 +270,9 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               <SelectValue placeholder="Wählen" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">Stufe 1</SelectItem>
-              <SelectItem value="2">Stufe 2</SelectItem>
-              <SelectItem value="3">Stufe 3</SelectItem>
-              <SelectItem value="4">Stufe 4</SelectItem>
-              <SelectItem value="5">Stufe 5</SelectItem>
+              {DIFFICULTY_LEVELS.map((level) => (
+                <SelectItem key={level.value} value={level.value}>{level.short} · {level.label}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

@@ -31,15 +31,8 @@ import RatingSection from "@/components/community/RatingSection";
 import ExpandableText from "@/components/ExpandableText";
 import PremiumGate from "@/components/hikes/PremiumGate";
 import { supabase } from "@/lib/supabaseClient";
+import { getDifficultyBadgeClass, getDifficultyLabel } from "@/lib/difficultyConfig";
 import { toast } from "sonner";
-
-const difficultyColors = {
-  "1": "bg-brand-100 text-brand-600",
-  "2": "bg-lime-100 text-lime-700",
-  "3": "bg-amber-100 text-amber-700",
-  "4": "bg-orange-100 text-orange-700",
-  "5": "bg-red-100 text-red-700"
-};
 
 const seasonConfig = {
   spring: { emoji: "🌸", label: "Frühling", color: "bg-pink-100 text-pink-700" },
@@ -199,6 +192,8 @@ export default function HikeDetail() {
   const hikeDogs = dogs.filter(d => hike.dogs?.includes(d.id));
   const photos = hike.photos || [];
   const coverPhoto = photos[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80";
+  const humanDifficultyLabel = getDifficultyLabel(hike.difficulty);
+  const dogDifficultyLabel = getDifficultyLabel(hike.dog_difficulty);
   
   // Extract country from location
   const country = hike.location ? hike.location.split(',').map(p => p.trim()).pop() : null;
@@ -287,14 +282,14 @@ export default function HikeDetail() {
                   {seasonConfig[hike.season].emoji} {seasonConfig[hike.season].label}
                 </Badge>
               )}
-              {hike.difficulty && (
-                <Badge className={difficultyColors[hike.difficulty]}>
-                  👤 Stufe {hike.difficulty}
+              {humanDifficultyLabel && (
+                <Badge className={`${getDifficultyBadgeClass(hike.difficulty)} border`}>
+                  👤 {humanDifficultyLabel}
                 </Badge>
               )}
-              {hike.dog_difficulty && (
-                <Badge className={difficultyColors[hike.dog_difficulty]}>
-                  🐕 Stufe {hike.dog_difficulty}
+              {dogDifficultyLabel && (
+                <Badge className={`${getDifficultyBadgeClass(hike.dog_difficulty)} border`}>
+                  🐕 {dogDifficultyLabel}
                 </Badge>
               )}
             </div>
@@ -399,22 +394,22 @@ export default function HikeDetail() {
               <p className="text-sm text-stone-500">Gehzeit</p>
             </div>
           )}
-          {hike.difficulty && (
+          {humanDifficultyLabel && (
             <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
               <Mountain className="w-5 h-5 text-stone-400 mx-auto mb-2" />
               <p className="text-lg font-medium text-stone-800">
-                {"⬛".repeat(Number(hike.difficulty))}{"⬜".repeat(5 - Number(hike.difficulty))}
+                {"🏔️".repeat(Number(hike.difficulty))}
               </p>
-              <p className="text-sm text-stone-500">Stufe {hike.difficulty} / Mensch</p>
+              <p className="text-sm text-stone-500">👤 {humanDifficultyLabel}</p>
             </div>
           )}
-          {hike.dog_difficulty && (
+          {dogDifficultyLabel && (
             <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
               <span className="text-xl block mb-1">🦴</span>
               <p className="text-lg font-medium text-stone-800">
                 {"🦴".repeat(Number(hike.dog_difficulty))}
               </p>
-              <p className="text-sm text-stone-500">Stufe {hike.dog_difficulty} / Hund</p>
+              <p className="text-sm text-stone-500">🐕 {dogDifficultyLabel}</p>
             </div>
           )}
         </motion.div>

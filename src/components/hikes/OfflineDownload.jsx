@@ -5,14 +5,7 @@ import { toast } from "sonner";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { format } from "date-fns";
-
-const difficultyLabels = {
-  "1": "Stufe 1 (Sehr leicht)",
-  "2": "Stufe 2 (Leicht)",
-  "3": "Stufe 3 (Mittel)",
-  "4": "Stufe 4 (Schwer)",
-  "5": "Stufe 5 (Sehr schwer)"
-};
+import { getDifficultyLabel } from "@/lib/difficultyConfig";
 
 const seasonLabels = {
   spring: "Frühling",
@@ -101,12 +94,12 @@ export default function OfflineDownload({ hike, dogs = [] }) {
         pdf.text(`Gehzeit: ${(hike.duration_minutes / 60).toFixed(1)} Std`, margin + 5, yPosition);
       }
       if (hike.difficulty) {
-        pdf.text(`Schwierigkeit Mensch: ${difficultyLabels[hike.difficulty]}`, margin + 5, yPosition + 6);
+        pdf.text(`Schwierigkeit Mensch: ${getDifficultyLabel(hike.difficulty)}`, margin + 5, yPosition + 6);
       }
       yPosition += 12;
       
       if (hike.dog_difficulty) {
-        pdf.text(`Schwierigkeit Hund: ${difficultyLabels[hike.dog_difficulty]}`, margin + 5, yPosition);
+        pdf.text(`Schwierigkeit Hund: ${getDifficultyLabel(hike.dog_difficulty)}`, margin + 5, yPosition);
       }
       yPosition += 10;
 

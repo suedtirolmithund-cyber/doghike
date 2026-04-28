@@ -27,6 +27,7 @@ import {
 } from "@/lib/journalApi";
 import { getDogs } from "@/lib/profilesApi";
 import { Link } from "react-router-dom";
+import { DIFFICULTY_LEVELS, getDifficultyLabel, getDifficultyTextColor } from "@/lib/difficultyConfig";
 
 // Sterne-Picker (Gesamtbewertung)
 function StarPicker({ label, value, onChange }) {
@@ -60,34 +61,34 @@ function StarPicker({ label, value, onChange }) {
 // Berg-Picker (Schwierigkeit Mensch)
 function MountainPicker({ label, value, onChange }) {
   const [hover, setHover] = useState(0);
-  const colors = ["", "text-brand-500", "text-brand-500", "text-yellow-500", "text-orange-500", "text-red-600"];
-  const labels = ["", "Sehr leicht", "Leicht", "Mittel", "Schwer", "Sehr schwer"];
   const active = hover || value;
   return (
     <div>
       <Label className="text-sm text-stone-600 mb-1 block">{label}</Label>
       <div className="flex items-center gap-1">
-        {[1, 2, 3, 4, 5].map((s) => (
+        {DIFFICULTY_LEVELS.map(({ value: levelValue }) => {
+          const s = Number(levelValue);
+          return (
           <button key={s} type="button"
             onClick={() => onChange(s === value ? 0 : s)}
             onMouseEnter={() => setHover(s)}
             onMouseLeave={() => setHover(0)}
             className="focus:outline-none"
-            title={labels[s]}
+            title={getDifficultyLabel(s)}
           >
             <Mountain className={`w-7 h-7 transition-colors ${
               s <= active
-                ? `${colors[active]} fill-current`
+                ? `${getDifficultyTextColor(active)} fill-current`
                 : "text-stone-300"
             }`} />
           </button>
-        ))}
+        )})}
         {value > 0 && (
           <>
             <button type="button" onClick={() => onChange(0)} className="ml-1 text-stone-400 hover:text-stone-600">
               <X className="w-4 h-4" />
             </button>
-            <span className={`text-xs font-medium ml-1 ${colors[value]}`}>{labels[value]}</span>
+            <span className={`text-xs font-medium ml-1 ${getDifficultyTextColor(value)}`}>{getDifficultyLabel(value)}</span>
           </>
         )}
       </div>
@@ -98,13 +99,14 @@ function MountainPicker({ label, value, onChange }) {
 // Knochen-Picker (Schwierigkeit Hund)
 function BonePicker({ label, value, onChange }) {
   const [hover, setHover] = useState(0);
-  const labels = ["", "Sehr leicht", "Leicht", "Mittel", "Schwer", "Sehr schwer"];
   const active = hover || value;
   return (
     <div>
       <Label className="text-sm text-stone-600 mb-1 block">{label}</Label>
       <div className="flex items-center gap-1">
-        {[1, 2, 3, 4, 5].map((s) => (
+        {DIFFICULTY_LEVELS.map(({ value: levelValue }) => {
+          const s = Number(levelValue);
+          return (
           <button key={s} type="button"
             onClick={() => onChange(s === value ? 0 : s)}
             onMouseEnter={() => setHover(s)}
@@ -112,17 +114,17 @@ function BonePicker({ label, value, onChange }) {
             className={`text-2xl leading-none transition-opacity focus:outline-none ${
               s <= active ? "opacity-100" : "opacity-25"
             }`}
-            title={labels[s]}
+            title={getDifficultyLabel(s)}
           >
             🦴
           </button>
-        ))}
+        )})}
         {value > 0 && (
           <>
             <button type="button" onClick={() => onChange(0)} className="ml-1 text-stone-400 hover:text-stone-600">
               <X className="w-4 h-4" />
             </button>
-            <span className="text-xs font-medium ml-1 text-stone-500">{labels[value]}</span>
+            <span className={`text-xs font-medium ml-1 ${getDifficultyTextColor(value)}`}>{getDifficultyLabel(value)}</span>
           </>
         )}
       </div>

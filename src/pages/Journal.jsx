@@ -38,9 +38,8 @@ import {
 import { toast } from "sonner";
 import { useAuth } from "@/lib/AuthContext";
 import { getJournalEntriesForDisplay, deleteJournalEntry } from "@/lib/journalApi";
+import { getDifficultyLabel, getDifficultyTextColor } from "@/lib/difficultyConfig";
 
-const DIFFICULTY_LABEL = ["", "Sehr leicht", "Leicht", "Mittel", "Schwer", "Sehr schwer"];
-const DIFFICULTY_COLOR = ["", "text-brand-400", "text-brand-400", "text-yellow-600", "text-orange-600", "text-red-600"];
 const WATER_LABEL = ["🚫 Kein Wasser", "💧 Wenig Wasser", "💧💧 Etwas Wasser", "💧💧💧 Viel Wasser"];
 const PAGE_SIZE = 20;
 
@@ -293,8 +292,8 @@ export default function Journal() {
                             color="text-blue-600"
                           />
                           {entry.difficulty && (
-                            <span className={`text-xs font-medium ${DIFFICULTY_COLOR[entry.difficulty]}`}>
-                              Schwierigkeit: {DIFFICULTY_LABEL[entry.difficulty]}
+                            <span className={`text-xs font-medium ${getDifficultyTextColor(entry.difficulty)}`}>
+                              👤 {getDifficultyLabel(entry.difficulty)}
                             </span>
                           )}
                         </div>

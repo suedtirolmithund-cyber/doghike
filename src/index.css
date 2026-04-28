@@ -85,8 +85,8 @@
   body {
     @apply bg-background text-foreground;
     background-image:
-      radial-gradient(circle at top left, rgba(196, 111, 82, 0.10), transparent 28rem),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(239, 227, 211, 0.40));
+      radial-gradient(circle at top left, rgba(196, 111, 82, 0.06), transparent 28rem),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(239, 227, 211, 0.26));
     min-height: 100vh;
   }
 }
