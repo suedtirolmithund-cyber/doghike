@@ -65,7 +65,7 @@ export default function Dashboard() {
       {/* Hero */}
       <div className="relative h-[560px] overflow-hidden bg-black md:h-[507px]">
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat md:bg-contain"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url('/splash/autumn-hero.jpg')",
             backgroundPosition: "center 38%",
