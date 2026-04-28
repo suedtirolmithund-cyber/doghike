@@ -11,7 +11,7 @@ function ExtendedLoadingScreen() {
         <div className="absolute inset-0 bg-black" />
 
         <div className="absolute left-[40px] top-[675px] h-[58px] w-[285px] opacity-80">
-          <p className="h-[58px] w-[285px] text-center font-['Roboto',sans-serif] text-[25px] font-medium leading-[29px] text-white">
+          <p className="h-[58px] w-[285px] text-center text-[25px] font-medium leading-[29px] text-white">
             Halte deine schönsten Wanderungen fest
           </p>
         </div>

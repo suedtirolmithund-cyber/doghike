@@ -240,10 +240,10 @@ export default function GuestWelcomeScreen() {
           style={{ objectPosition: "center center" }}
         />
 
-        <p className="absolute left-[22px] top-[129px] h-[33px] w-[340px] text-center font-['Roboto',sans-serif] text-[20px] font-extrabold leading-[23px] text-white">
+        <p className="absolute left-[22px] top-[129px] h-[33px] w-[340px] text-center text-[20px] font-extrabold leading-[23px] text-white">
           WILLKOMMEN BEI DOGHIKE
         </p>
-        <p className="absolute left-[21px] top-[215px] h-[33px] w-[340px] text-center font-['Roboto',sans-serif] text-[20px] font-medium leading-[23px] text-white">
+        <p className="absolute left-[21px] top-[215px] h-[33px] w-[340px] text-center text-[20px] font-medium leading-[23px] text-white">
           Plane hundefreundliche Touren, speichere deine Lieblingswege und entdecke neue Ziele
         </p>
 
@@ -254,7 +254,7 @@ export default function GuestWelcomeScreen() {
           className="absolute bottom-4 left-4 right-4 max-h-[476px] overflow-y-auto rounded-[24px] bg-white/10 px-5 py-5 shadow-2xl ring-1 ring-white/20 backdrop-blur-[2px]"
         >
           <h1
-            className="mb-4 font-['Roboto',sans-serif] text-[36px] font-semibold leading-none"
+            className="mb-4 text-[36px] font-semibold leading-none"
             style={{ color: mode === "reset" || mode === "update-password" ? "white" : "#8C6B4A" }}
           >
             {mode === "reset"
@@ -271,7 +271,7 @@ export default function GuestWelcomeScreen() {
               <button
                 type="button"
                 onClick={() => switchMode("register")}
-                className={`h-10 rounded-[10px] font-['Roboto',sans-serif] text-[16px] font-medium text-white ${
+                className={`h-10 rounded-[10px] text-[16px] font-medium text-white ${
                   mode === "register" ? "bg-[#B88C73]" : "bg-white/15"
                 }`}
               >
@@ -280,7 +280,7 @@ export default function GuestWelcomeScreen() {
               <button
                 type="button"
                 onClick={() => switchMode("login")}
-                className={`h-10 rounded-[10px] font-['Roboto',sans-serif] text-[16px] font-medium text-white ${
+                className={`h-10 rounded-[10px] text-[16px] font-medium text-white ${
                   mode === "login" ? "bg-[#B88C73]" : "bg-white/15"
                 }`}
               >
@@ -291,7 +291,7 @@ export default function GuestWelcomeScreen() {
 
           {mode === "reset" && (
             <form onSubmit={handleReset} className="space-y-3">
-              <p className="font-['Roboto',sans-serif] text-sm leading-relaxed text-white/80">
+              <p className="text-sm leading-relaxed text-white/80">
                 Gib deine E-Mail-Adresse ein. Wir senden dir einen Link zum Zurücksetzen.
               </p>
               <input
@@ -299,7 +299,7 @@ export default function GuestWelcomeScreen() {
                 placeholder="E-Mail Adresse"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 font-['Roboto',sans-serif] text-base text-stone-900 outline-none placeholder:text-stone-500"
+                className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-stone-900 outline-none placeholder:text-stone-500"
                 autoComplete="email"
                 required
               />
@@ -307,7 +307,7 @@ export default function GuestWelcomeScreen() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#B88C73] font-['Roboto',sans-serif] font-medium text-white disabled:opacity-70"
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#B88C73] font-medium text-white disabled:opacity-70"
               >
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 Link senden
@@ -320,7 +320,7 @@ export default function GuestWelcomeScreen() {
 
           {mode === "update-password" && (
             <form onSubmit={handleUpdatePassword} className="space-y-3">
-              <p className="font-['Roboto',sans-serif] text-sm leading-relaxed text-white/80">
+              <p className="text-sm leading-relaxed text-white/80">
                 Gib jetzt dein neues Passwort ein und bestätige es.
               </p>
               <PasswordField
@@ -336,7 +336,7 @@ export default function GuestWelcomeScreen() {
                 placeholder="Neues Passwort bestätigen"
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
-                className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 font-['Roboto',sans-serif] text-base text-stone-900 outline-none placeholder:text-stone-500"
+                className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-stone-900 outline-none placeholder:text-stone-500"
                 autoComplete="new-password"
                 required
               />
@@ -344,7 +344,7 @@ export default function GuestWelcomeScreen() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#B88C73] font-['Roboto',sans-serif] font-medium text-white disabled:opacity-70"
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#B88C73] font-medium text-white disabled:opacity-70"
               >
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 Passwort speichern
@@ -360,7 +360,7 @@ export default function GuestWelcomeScreen() {
                   placeholder="E-Mail Adresse"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
-                  className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 font-['Roboto',sans-serif] text-base text-stone-900 outline-none placeholder:text-stone-500"
+                  className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-stone-900 outline-none placeholder:text-stone-500"
                   autoComplete="email"
                   required
                 />
@@ -387,7 +387,7 @@ export default function GuestWelcomeScreen() {
                         placeholder="Passwort bestätigen"
                         value={confirmPassword}
                         onChange={(event) => setConfirmPassword(event.target.value)}
-                        className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 font-['Roboto',sans-serif] text-base text-stone-900 outline-none placeholder:text-stone-500"
+                        className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-stone-900 outline-none placeholder:text-stone-500"
                         autoComplete="new-password"
                       />
                       <div className="flex items-start gap-3 px-1">
@@ -397,7 +397,7 @@ export default function GuestWelcomeScreen() {
                           onCheckedChange={setPrivacyAccepted}
                           className="mt-0.5 border-white/70 data-[state=checked]:border-[#B88C73] data-[state=checked]:bg-[#B88C73]"
                         />
-                        <label htmlFor="guest-privacy" className="font-['Roboto',sans-serif] text-xs leading-relaxed text-white/80">
+                        <label htmlFor="guest-privacy" className="text-xs leading-relaxed text-white/80">
                           Ich akzeptiere die{" "}
                           <Link to={createPageUrl("Datenschutz")} className="text-white underline" target="_blank">
                             Datenschutzerklärung
@@ -414,7 +414,7 @@ export default function GuestWelcomeScreen() {
                 <button
                   type="submit"
                   disabled={loading || googleLoading}
-                  className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#B88C73] font-['Roboto',sans-serif] font-medium text-white disabled:opacity-70"
+                  className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#B88C73] font-medium text-white disabled:opacity-70"
                 >
                   {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                   {mode === "login" ? "Anmelden" : "Konto erstellen"}
@@ -431,7 +431,7 @@ export default function GuestWelcomeScreen() {
                 type="button"
                 onClick={handleGoogle}
                 disabled={googleLoading || loading}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-white/15 font-['Roboto',sans-serif] text-sm font-medium text-white disabled:opacity-70"
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-white/15 text-sm font-medium text-white disabled:opacity-70"
               >
                 {googleLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <GoogleIcon />}
                 Mit Google {mode === "login" ? "anmelden" : "registrieren"}
@@ -441,7 +441,7 @@ export default function GuestWelcomeScreen() {
                 <button
                   type="button"
                   onClick={() => switchMode("reset")}
-                  className="mt-3 w-full text-center font-['Roboto',sans-serif] text-sm text-white/75"
+                  className="mt-3 w-full text-center text-sm text-white/75"
                 >
                   Passwort oder E-Mail vergessen?
                 </button>
@@ -449,7 +449,7 @@ export default function GuestWelcomeScreen() {
             </>
           )}
 
-          <p className="mt-4 text-center font-['Roboto',sans-serif] text-xs text-white/55">
+          <p className="mt-4 text-center text-xs text-white/55">
             <Link to={createPageUrl("Datenschutz")} className="hover:text-white">
               Datenschutz
             </Link>
@@ -487,10 +487,10 @@ function OnboardingScreen({ onContinue }) {
         <div className="absolute inset-0 bg-[linear-gradient(0deg,#000000_-31.83%,rgba(0,0,0,0)_43.72%)]" />
 
         <div className="absolute bottom-[72px] left-4 h-[216px] w-[343px] opacity-80 md:top-[524px]">
-          <h1 className="absolute left-0 top-0 h-[113px] w-[343px] text-center font-['Roboto',sans-serif] text-[40px] font-normal leading-[47px] text-white">
+          <h1 className="absolute left-0 top-0 h-[113px] w-[343px] text-center text-[40px] font-normal leading-[47px] text-white">
             Hundefreundliche Wanderungen
           </h1>
-          <p className="absolute left-0 top-[131px] h-[85px] w-[343px] text-center font-['Roboto',sans-serif] text-[25px] font-medium leading-[29px] text-white">
+          <p className="absolute left-0 top-[131px] h-[85px] w-[343px] text-center text-[25px] font-medium leading-[29px] text-white">
             Entdecke die perfekte Wanderung für dich und deinen Hund
           </p>
         </div>
@@ -516,7 +516,7 @@ function PasswordField({ showPassword, setShowPassword, value, onChange, placeho
         placeholder={placeholder}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 pr-12 font-['Roboto',sans-serif] text-base text-stone-900 outline-none placeholder:text-stone-500"
+        className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 pr-12 text-base text-stone-900 outline-none placeholder:text-stone-500"
         autoComplete={autoComplete}
         required
       />

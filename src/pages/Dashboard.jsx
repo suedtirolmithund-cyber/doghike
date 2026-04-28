@@ -73,10 +73,10 @@ export default function Dashboard() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/65 md:hidden" />
         <div className="relative z-10 flex h-full flex-col items-center justify-end px-4 pb-8 text-center md:hidden">
-          <h1 className="max-w-[340px] font-['Inter',sans-serif] text-[38px] font-light leading-[42px] text-white">
+          <h1 className="max-w-[340px] text-[38px] font-light leading-[42px] text-white">
             Hundefreundliche Wanderungen
           </h1>
-          <p className="mt-4 max-w-[330px] font-['Inter',sans-serif] text-[16px] leading-[24px] text-white">
+          <p className="mt-4 max-w-[330px] text-[16px] leading-[24px] text-white">
             Entdecke die schönsten Wanderungen in den Bergen, zusammen mit deinem Vierbeiner.
           </p>
 
@@ -106,7 +106,7 @@ export default function Dashboard() {
               placeholder="Tour oder Ort suchen..."
               value={searchQuery}
               onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE); }}
-              className="h-[52px] w-full rounded-[15px] border border-white bg-stone-800/20 pl-12 pr-4 font-['Inter',sans-serif] text-[16px] text-white placeholder:text-white"
+              className="h-[52px] w-full rounded-[15px] border border-white bg-stone-800/20 pl-12 pr-4 text-[16px] text-white placeholder:text-white"
             />
           </div>
         </div>
@@ -114,10 +114,10 @@ export default function Dashboard() {
         <div className="absolute left-1/2 top-0 hidden h-[507px] w-full max-w-[1280px] -translate-x-1/2 md:block">
           <div className="absolute left-[-14.19px] top-[403.95px] h-[159.45px] w-[1333.01px] -rotate-[0.07deg] bg-white/30 opacity-70 blur-[8.25px]" />
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <h1 className="absolute left-[24px] top-[78.2px] h-[63px] w-[1232px] text-center font-['Inter',sans-serif] text-[60px] font-light leading-[63px] tracking-[-1.2px] text-white">
+            <h1 className="absolute left-[24px] top-[78.2px] h-[63px] w-[1232px] text-center text-[60px] font-light leading-[63px] tracking-[-1.2px] text-white">
               Hundefreundliche Wanderungen
             </h1>
-            <p className="absolute left-[300px] top-[162.4px] h-[60px] w-[680px] text-center font-['Inter',sans-serif] text-[18px] font-normal leading-[30px] text-white">
+            <p className="absolute left-[300px] top-[162.4px] h-[60px] w-[680px] text-center text-[18px] font-normal leading-[30px] text-white">
               Entdecke die schönsten Wanderungen in den Bergen,<br />
               zusammen mit deinem Vierbeiner.
             </p>
@@ -147,7 +147,7 @@ export default function Dashboard() {
                 placeholder="Tour oder Ort suchen..."
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE); }}
-                className="h-[56px] w-[672px] rounded-[15px] border border-white bg-stone-800/15 pl-12 pr-[18px] font-['Inter',sans-serif] text-[20px] font-normal leading-[24px] text-white shadow-[0_8px_22px_rgba(41,37,36,0.12)] placeholder:text-white [text-shadow:0_4px_4px_rgba(0,0,0,0.25)]"
+                className="h-[56px] w-[672px] rounded-[15px] border border-white bg-stone-800/15 pl-12 pr-[18px] text-[20px] font-normal leading-[24px] text-white shadow-[0_8px_22px_rgba(41,37,36,0.12)] placeholder:text-white [text-shadow:0_4px_4px_rgba(0,0,0,0.25)]"
               />
             </div>
           </motion.div>
