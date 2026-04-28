@@ -3,6 +3,14 @@ import { supabase } from "@/lib/supabaseClient";
 const PUBLIC_HIKE_BUCKET = "journal";
 const PUBLIC_HIKE_PREFIX = "public-hikes/";
 
+function mapSupabaseWaterLevel(value) {
+  if (value === 0 || value === "0") return "none";
+  if (value === 1 || value === "1") return "little";
+  if (value === 2 || value === "2") return "moderate";
+  if (value === 3 || value === "3") return "plenty";
+  return null;
+}
+
 function getPublicHikeStorageDescriptor(photoUrl) {
   if (!photoUrl || typeof photoUrl !== "string") return null;
 
@@ -41,6 +49,37 @@ export async function deleteUploadedPublicHikePhoto(photoUrl) {
     .remove([storageDescriptor.path]);
 
   if (error) throw error;
+}
+
+export async function getPublicHikeById(hikeId) {
+  const { data: hikeRow, error: hikeError } = await supabase
+    .from("public_hikes")
+    .select("*")
+    .eq("id", hikeId)
+    .maybeSingle();
+
+  if (hikeError) throw hikeError;
+  if (!hikeRow) return null;
+
+  const { data: photoRows = [], error: photosError } = await supabase
+    .from("public_hike_photos")
+    .select("photo_url, sort_order")
+    .eq("hike_id", hikeId)
+    .order("sort_order", { ascending: true });
+
+  if (photosError) throw photosError;
+
+  return {
+    ...hikeRow,
+    trail_name: hikeRow.title,
+    route_id: String(hikeRow.id),
+    _public_hike_id: hikeRow.id,
+    _source: "sheets",
+    photos: photoRows.map((photo) => photo.photo_url).filter(Boolean),
+    water_availability: mapSupabaseWaterLevel(hikeRow.water_availability),
+    difficulty: hikeRow.difficulty != null ? String(hikeRow.difficulty) : null,
+    dog_difficulty: hikeRow.dog_difficulty != null ? String(hikeRow.dog_difficulty) : null,
+  };
 }
 
 export async function updatePublicHike(hikeId, values) {

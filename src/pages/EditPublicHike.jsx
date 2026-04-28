@@ -1,12 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Camera, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
-import { getAllHikes } from "@/api/sheetsClient";
-import { deleteUploadedPublicHikePhoto, updatePublicHike, uploadPublicHikePhoto } from "@/lib/publicHikesApi";
+import { deleteUploadedPublicHikePhoto, getPublicHikeById, updatePublicHike, uploadPublicHikePhoto } from "@/lib/publicHikesApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,10 +22,10 @@ function buildInitialFormData(hike) {
     distance_km: hike?.distance_km ?? "",
     elevation_gain_m: hike?.elevation_gain_m ?? "",
     duration_minutes: hike?.duration_minutes ?? "",
-    difficulty: hike?.difficulty || "3",
-    dog_difficulty: hike?.dog_difficulty || "3",
-    water_availability: hike?.water_availability || "moderate",
-    season: hike?.season || "all_year",
+    difficulty: hike?.difficulty || "unset",
+    dog_difficulty: hike?.dog_difficulty || "unset",
+    water_availability: hike?.water_availability || "unset",
+    season: hike?.season || "unset",
     hazard_notes: hike?.hazard_notes || "",
     parking_info: hike?.parking_info || "",
     restaurant_info: hike?.restaurant_info || "",
@@ -51,18 +50,11 @@ export default function EditPublicHike() {
   const uploadedDuringEditRef = useRef(new Set());
   const savedPhotoUrlsRef = useRef(new Set());
 
-  const { data: hikes = [], isLoading } = useQuery({
-    queryKey: ["allHikes"],
-    queryFn: getAllHikes,
+  const { data: hike, isLoading } = useQuery({
+    queryKey: ["publicHikeEditor", hikeId],
+    queryFn: () => getPublicHikeById(hikeId),
+    enabled: !!hikeId && isAdmin,
   });
-
-  const hike = useMemo(
-    () => hikes.find((entry) => (
-      entry._source === "sheets" &&
-      (String(entry._public_hike_id ?? entry.route_id ?? "") === String(hikeId) || String(entry.id) === String(hikeId))
-    )),
-    [hikes, hikeId]
-  );
   const detailId = hike?._public_hike_id ? hike.route_id || String(hike._public_hike_id) : hike?.id;
 
   useEffect(() => {
@@ -151,10 +143,12 @@ export default function EditPublicHike() {
         distance_km: formData.distance_km === "" ? null : Number(formData.distance_km),
         elevation_gain_m: formData.elevation_gain_m === "" ? null : Number(formData.elevation_gain_m),
         duration_minutes: formData.duration_minutes === "" ? null : Number(formData.duration_minutes),
-        difficulty: formData.difficulty === "" ? null : Number(formData.difficulty),
-        dog_difficulty: formData.dog_difficulty === "" ? null : Number(formData.dog_difficulty),
-        water_availability: WATER_LEVELS.find((level) => level.value === formData.water_availability)?.numeric ?? null,
-        season: formData.season || null,
+        difficulty: formData.difficulty === "unset" ? null : Number(formData.difficulty),
+        dog_difficulty: formData.dog_difficulty === "unset" ? null : Number(formData.dog_difficulty),
+        water_availability: formData.water_availability === "unset"
+          ? null
+          : WATER_LEVELS.find((level) => level.value === formData.water_availability)?.numeric ?? null,
+        season: formData.season === "unset" ? null : formData.season || null,
         hazard_notes: formData.hazard_notes.trim() || null,
         parking_info: formData.parking_info.trim() || null,
         restaurant_info: formData.restaurant_info.trim() || null,
@@ -268,7 +262,7 @@ export default function EditPublicHike() {
                 <Label>Land</Label>
                 <Select value={formData.country} onValueChange={(value) => setFormData((prev) => ({ ...prev, country: value }))}>
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Nicht gesetzt" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="italy">Italien</SelectItem>
@@ -325,9 +319,10 @@ export default function EditPublicHike() {
                 <Label>Jahreszeit</Label>
                 <Select value={formData.season} onValueChange={(value) => setFormData((prev) => ({ ...prev, season: value }))}>
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Nicht gesetzt" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="unset">Nicht gesetzt</SelectItem>
                     <SelectItem value="spring">Frühling</SelectItem>
                     <SelectItem value="summer">Sommer</SelectItem>
                     <SelectItem value="autumn">Herbst</SelectItem>
@@ -341,9 +336,10 @@ export default function EditPublicHike() {
                 <Label>Schwierigkeit Mensch</Label>
                 <Select value={formData.difficulty} onValueChange={(value) => setFormData((prev) => ({ ...prev, difficulty: value }))}>
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Nicht gesetzt" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="unset">Nicht gesetzt</SelectItem>
                     {DIFFICULTY_LEVELS.map((level) => (
                       <SelectItem key={level.value} value={level.value}>
                         {level.short} · {level.label}
@@ -357,9 +353,10 @@ export default function EditPublicHike() {
                 <Label>Schwierigkeit Hund</Label>
                 <Select value={formData.dog_difficulty} onValueChange={(value) => setFormData((prev) => ({ ...prev, dog_difficulty: value }))}>
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Nicht gesetzt" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="unset">Nicht gesetzt</SelectItem>
                     {DIFFICULTY_LEVELS.map((level) => (
                       <SelectItem key={level.value} value={level.value}>
                         {level.short} · {level.label}
@@ -373,9 +370,10 @@ export default function EditPublicHike() {
                 <Label>Wasser</Label>
                 <Select value={formData.water_availability} onValueChange={(value) => setFormData((prev) => ({ ...prev, water_availability: value }))}>
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Nicht gesetzt" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="unset">Nicht gesetzt</SelectItem>
                     {WATER_LEVELS.map((level) => (
                       <SelectItem key={level.value} value={level.value}>
                         {level.icon} {level.label}
