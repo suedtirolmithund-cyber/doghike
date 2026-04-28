@@ -121,27 +121,27 @@ export default function Dashboard() {
               Entdecke die schönsten Wanderungen in den Bergen,<br />
               zusammen mit deinem Vierbeiner.
             </p>
-            <div className="absolute left-[44px] top-[281px] h-[46px] w-[1232px]">
+            <div className="absolute left-1/2 top-[281px] flex h-[46px] -translate-x-1/2 items-center justify-center gap-4">
               <Link to={createPageUrl("Hikes")}>
-                <Button size="lg" variant="outline" className="absolute left-[322.3px] top-0 h-[46px] w-[224.19px] rounded-[15px] border border-white bg-slate-900/50 px-0 text-[16px] font-semibold leading-[19px] text-white shadow-[0_12px_24px_rgba(0,0,0,0.14)] hover:bg-slate-900/60 hover:text-white">
+                <Button size="lg" variant="outline" className="h-[46px] w-[224.19px] rounded-[15px] border border-white bg-slate-900/50 px-0 text-[16px] font-semibold leading-[19px] text-white shadow-[0_12px_24px_rgba(0,0,0,0.14)] hover:bg-slate-900/60 hover:text-white">
                   <Mountain className="mr-0 h-[18px] w-[18px]" /> Alle Touren entdecken
                 </Button>
               </Link>
               <Link to={createPageUrl("AddJournalEntry")}>
-                <Button size="lg" variant="outline" className="absolute left-[562.49px] top-0 h-[46px] w-[177.56px] rounded-[15px] border border-white bg-slate-900/50 px-0 text-[16px] font-semibold leading-[19px] text-white hover:bg-slate-900/60 hover:text-white">
+                <Button size="lg" variant="outline" className="h-[46px] w-[177.56px] rounded-[15px] border border-white bg-slate-900/50 px-0 text-[16px] font-semibold leading-[19px] text-white hover:bg-slate-900/60 hover:text-white">
                   <Plus className="mr-0 h-[18px] w-[18px]" /> Tour einreichen
                 </Button>
               </Link>
               {!isAuthenticated && (
                 <Link to={createPageUrl("Login")}>
-                  <Button size="lg" variant="outline" className="absolute left-[756.05px] top-0 h-[46px] w-[153.64px] rounded-[15px] border border-white bg-slate-900/50 px-0 text-[16px] font-semibold leading-[19px] text-white hover:bg-slate-900/60 hover:text-white">
+                  <Button size="lg" variant="outline" className="h-[46px] w-[153.64px] rounded-[15px] border border-white bg-slate-900/50 px-0 text-[16px] font-semibold leading-[19px] text-white hover:bg-slate-900/60 hover:text-white">
                     <UserPlus className="mr-0 h-[18px] w-[18px]" /> Registrieren
                   </Button>
                 </Link>
               )}
             </div>
 
-            <div className="absolute left-[324px] top-[422px] h-[56px] w-[672px]">
+            <div className="absolute left-1/2 top-[422px] h-[56px] w-[672px] -translate-x-1/2">
               <Search className="absolute left-[16px] top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-white/75" />
               <Input
                 placeholder="Tour oder Ort suchen..."
