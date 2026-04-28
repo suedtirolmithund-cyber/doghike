@@ -210,7 +210,6 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-stone-700 mb-2 block">🔄 Sortieren</label>
                 <label className="text-sm font-medium text-stone-700 mb-2 block"># Tags</label>
                 <Select value={tagFilter} onValueChange={setTagFilter}>
                   <SelectTrigger>

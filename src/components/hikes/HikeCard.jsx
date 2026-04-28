@@ -29,6 +29,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
   const hikeDogs = dogs.filter((dog) => hike.dogs?.includes(dog.id));
   const coverPhoto = hike.photos?.[0];
   const hikeSource = hike._source ?? "sheets";
+  const detailId = hikeSource === "sheets" && hike._public_hike_id ? hike.route_id || String(hike._public_hike_id) : hike.id;
   const dogDifficultyLabel = getDifficultyLabel(hike.dog_difficulty);
   const humanDifficultyLabel = getDifficultyLabel(hike.difficulty);
 
@@ -38,7 +39,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.08, duration: 0.42 }}
     >
-      <Link to={createPageUrl("HikeDetail") + `?id=${hike.id}&source=${hikeSource}`}>
+      <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=${hikeSource}`}>
         <div className="group overflow-hidden rounded-2xl border border-stone-200/75 bg-white/72 shadow-[0_12px_30px_rgba(142,78,54,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(142,78,54,0.13)]">
           <div className="relative h-52 overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a]">
             {coverPhoto && (

@@ -194,6 +194,7 @@ function publicHikeRowToHike(row, photos = []) {
   return {
     // Keep the old external id shape stable so saved hikes, comments, and ratings keep matching.
     id: slugify(row.title || String(row.id)),
+    route_id: String(row.id),
     trail_name: row.title,
     location: row.location,
     country: row.country || null,

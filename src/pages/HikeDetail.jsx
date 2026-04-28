@@ -109,7 +109,15 @@ export default function HikeDetail() {
     queryKey: ["hike", hikeSource, hikeId],
     queryFn: async () => {
       const hikes = await getAllHikes();
-      return hikes.find((h) => String(h.id) === normalizedHikeId && (h._source ?? "sheets") === hikeSource);
+      return hikes.find((h) => {
+        if ((h._source ?? "sheets") !== hikeSource) return false;
+
+        if (hikeSource === "sheets") {
+          return String(h._public_hike_id ?? h.route_id ?? "") === normalizedHikeId || String(h.id) === normalizedHikeId;
+        }
+
+        return String(h.id) === normalizedHikeId;
+      });
     },
     enabled: !!normalizedHikeId
   });
@@ -202,6 +210,10 @@ export default function HikeDetail() {
   const hikeDogs = dogs.filter(d => hike.dogs?.includes(d.id));
   const photos = hike.photos || [];
   const coverPhoto = photos[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80";
+  const detailId = hike?._source === "sheets" && hike?._public_hike_id
+    ? hike.route_id || String(hike._public_hike_id)
+    : hike.id;
+  const communityHikeId = hike?.id;
   
   const countryLabel = getCountryLabel(hike.country);
 
@@ -234,7 +246,7 @@ export default function HikeDetail() {
                   to={
                     isOwnJournalHike
                       ? createPageUrl("AddJournalEntry") + `?id=${hike?._journal_id}`
-                      : createPageUrl("EditPublicHike") + `?id=${encodeURIComponent(hike?.id ?? "")}`
+                      : createPageUrl("EditPublicHike") + `?id=${encodeURIComponent(detailId ?? "")}`
                   }
                 >
                   <Button variant="ghost" className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20">
@@ -313,7 +325,7 @@ export default function HikeDetail() {
                 <span>{hike.location || "Dolomites"}</span>
               </div>
               <SaveButton
-                hikeId={hikeId}
+                hikeId={communityHikeId}
                 hikeSource={hike?._source === "journal" ? "journal" : "sheets"}
               />
               <button
@@ -643,7 +655,7 @@ export default function HikeDetail() {
               transition={{ delay: 0.2 }}
             >
               <RatingSection
-                hikeId={hikeId}
+                hikeId={communityHikeId}
                 hikeSource={hike?._source === "journal" ? "journal" : "sheets"}
               />
             </motion.div>
@@ -655,7 +667,7 @@ export default function HikeDetail() {
               transition={{ delay: 0.5 }}
             >
               <CommentSection
-                hikeId={hikeId}
+                hikeId={communityHikeId}
                 hikeSource={hike?._source === "journal" ? "journal" : "sheets"}
                 canComment={canComment}
               />

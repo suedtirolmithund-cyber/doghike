@@ -54,9 +54,13 @@ export default function EditPublicHike() {
   });
 
   const hike = useMemo(
-    () => hikes.find((entry) => String(entry.id) === String(hikeId) && entry._source === "sheets"),
+    () => hikes.find((entry) => (
+      entry._source === "sheets" &&
+      (String(entry._public_hike_id ?? entry.route_id ?? "") === String(hikeId) || String(entry.id) === String(hikeId))
+    )),
     [hikes, hikeId]
   );
+  const detailId = hike?._public_hike_id ? hike.route_id || String(hike._public_hike_id) : hike?.id;
 
   useEffect(() => {
     if (hike && !formData) {
@@ -107,7 +111,7 @@ export default function EditPublicHike() {
       queryClient.invalidateQueries({ queryKey: ["allHikes"] });
       queryClient.invalidateQueries({ queryKey: ["hike"] });
       toast.success("Öffentliche Tour gespeichert");
-      navigate(createPageUrl("HikeDetail") + `?id=${encodeURIComponent(hike.id)}&source=sheets`);
+      navigate(createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`);
     },
     onError: () => {
       toast.error("Die öffentliche Tour konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.");
@@ -152,7 +156,7 @@ export default function EditPublicHike() {
     <div className="min-h-screen bg-stone-50 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
-          <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(hike.id)}&source=sheets`}>
+          <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`}>
             <Button variant="ghost" className="pl-0 text-stone-600 hover:text-stone-800">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Zurück zur Tour
@@ -430,7 +434,7 @@ export default function EditPublicHike() {
                 {saveMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 Speichern
               </Button>
-              <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(hike.id)}&source=sheets`}>
+              <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`}>
                 <Button type="button" variant="outline">Abbrechen</Button>
               </Link>
             </div>
