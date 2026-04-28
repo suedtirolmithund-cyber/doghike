@@ -558,13 +558,14 @@ export default function AddJournalEntry() {
         }
       }
 
-      keepUploadedMediaRef.current = true;
-      queryClient.invalidateQueries({ queryKey: ["journal", user?.id] });
-      queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
-      queryClient.invalidateQueries({ queryKey: ["admin_pending"] });
-      queryClient.invalidateQueries({ queryKey: ["allHikes"] });
-      queryClient.invalidateQueries({ queryKey: ["journalEntry"] });
-      queryClient.invalidateQueries({ queryKey: ["notifications", user?.id] });
+        keepUploadedMediaRef.current = true;
+        queryClient.invalidateQueries({ queryKey: ["journal", user?.id] });
+        queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
+        queryClient.invalidateQueries({ queryKey: ["admin_pending"] });
+        queryClient.invalidateQueries({ queryKey: ["allHikes"] });
+        queryClient.invalidateQueries({ queryKey: ["topDogs"] });
+        queryClient.invalidateQueries({ queryKey: ["journalEntry"] });
+        queryClient.invalidateQueries({ queryKey: ["notifications", user?.id] });
       toast.success(editId ? "Eintrag aktualisiert" : "Wanderung gespeichert!");
       navigate(createPageUrl("Journal"));
     },

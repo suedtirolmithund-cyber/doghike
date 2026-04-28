@@ -34,10 +34,12 @@ function getBadges(s, isChampion) {
 
 // Daten laden
 async function loadLeaderboard() {
-  // 1. Alle Journal-Einträge mit dog_id (RLS filtert automatisch)
+  // 1. Nur öffentliche, freigegebene Community-Einträge mit dog_id
   const { data: entries, error: eErr } = await supabase
     .from("journal_entries")
     .select("dog_id, distance_km, elevation_m, rating, date")
+    .eq("visibility", "public")
+    .eq("status", "approved")
     .not("dog_id", "is", null);
   if (eErr) throw eErr;
   if (!entries?.length) return [];
@@ -298,7 +300,7 @@ function BadgeLegend() {
 }
 
 // Ranking-Tab-Inhalt
-function RankingTab({ rows, metric, myDogId }) {
+function RankingTab({ rows, metric, myDogIds }) {
   const sorted = useMemo(() => {
     const key = metric === "tours" ? "tourCount" : metric === "distance" ? "totalDistance" : "totalElevation";
     return [...rows].sort((a, b) => b[key] - a[key]);
@@ -306,8 +308,8 @@ function RankingTab({ rows, metric, myDogId }) {
 
   const top3 = sorted.slice(0, 3);
   const rest  = sorted.slice(3, 10);
-
-  const myIdx  = myDogId ? sorted.findIndex((r) => r.dog?.id === myDogId) : -1;
+  const ownDogIdSet = new Set(myDogIds ?? []);
+  const myIdx = sorted.findIndex((r) => ownDogIdSet.has(r.dog?.id));
   const myEntry = myIdx >= 0 ? sorted[myIdx] : null;
   const myInTop10 = myIdx >= 0 && myIdx < 10;
 
@@ -331,7 +333,7 @@ function RankingTab({ rows, metric, myDogId }) {
             entry={entry}
             rank={i + 4}
             metric={metric}
-            isMyDog={entry.dog?.id === myDogId}
+            isMyDog={ownDogIdSet.has(entry.dog?.id)}
           />
         ))}
       </div>
@@ -362,7 +364,7 @@ export default function TopDogs() {
     },
     enabled: !!user?.id,
   });
-  const myDogId = myDogs[0]?.id ?? null;
+  const myDogIds = myDogs.map((dog) => dog.id);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-amber-50/20 pb-24 md:pb-8">
@@ -412,13 +414,13 @@ export default function TopDogs() {
               </TabsList>
 
               <TabsContent value="tours">
-                <RankingTab rows={rows} metric="tours" myDogId={myDogId} />
+                <RankingTab rows={rows} metric="tours" myDogIds={myDogIds} />
               </TabsContent>
               <TabsContent value="distance">
-                <RankingTab rows={rows} metric="distance" myDogId={myDogId} />
+                <RankingTab rows={rows} metric="distance" myDogIds={myDogIds} />
               </TabsContent>
               <TabsContent value="elevation">
-                <RankingTab rows={rows} metric="elevation" myDogId={myDogId} />
+                <RankingTab rows={rows} metric="elevation" myDogIds={myDogIds} />
               </TabsContent>
             </Tabs>
 
