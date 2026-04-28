@@ -7,6 +7,15 @@ import jsPDF from "jspdf";
 import { format } from "date-fns";
 import { getDifficultyLabel, getWaterLabel } from "@/lib/difficultyConfig";
 
+function getCountryLabel(country) {
+  if (country === "italy") return "Italien";
+  if (country === "austria") return "Österreich";
+  if (country === "germany") return "Deutschland";
+  if (country === "switzerland") return "Schweiz";
+  if (country === "other") return "Anderes";
+  return country || null;
+}
+
 const seasonLabels = {
   spring: "Frühling",
   summer: "Sommer",
@@ -60,6 +69,11 @@ export default function OfflineDownload({ hike, dogs = [] }) {
       pdf.setFont("helvetica", "normal");
       if (hike.location) {
         pdf.text(`Ort: ${hike.location}`, margin, yPosition);
+        yPosition += 6;
+      }
+      const countryLabel = getCountryLabel(hike.country);
+      if (countryLabel) {
+        pdf.text(`Land: ${countryLabel}`, margin, yPosition);
         yPosition += 6;
       }
       if (hike.date) {

@@ -25,6 +25,15 @@ const legacyAvailabilityMap = {
 
 const DEFAULT_COLOR = "#38a062";
 
+function getCountryLabel(country) {
+  if (country === "italy") return "Italien";
+  if (country === "austria") return "Österreich";
+  if (country === "germany") return "Deutschland";
+  if (country === "switzerland") return "Schweiz";
+  if (country === "other") return "Anderes";
+  return country || "";
+}
+
 function getSeasonKey(hike) {
   if (hike.season && seasonConfig[hike.season]) {
     return hike.season;
@@ -146,6 +155,7 @@ function MarkersLayer({ hikes }) {
           <h3 style="font-weight:600;color:#1c1917;margin:0 0 8px">${hike.trail_name}</h3>
           ${imgHtml}
           <p style="font-size:13px;color:#78716c;margin:0 0 6px">${hike.location || ""}</p>
+          ${hike.country ? `<p style="font-size:12px;color:#57534e;margin:0 0 6px">Land: ${getCountryLabel(hike.country)}</p>` : ""}
           <div style="font-size:12px;color:#57534e;display:flex;flex-direction:column;gap:3px">
             ${distHtml}${ascentHtml}${durHtml}
           </div>
