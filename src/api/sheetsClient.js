@@ -130,7 +130,7 @@ function rowToHike(row, index) {
     longitude: isNaN(parsedLng) ? null : parsedLng,
 
     photos,
-    link: row.link || null,
+    link: null,
 
     tags,
 
@@ -202,8 +202,8 @@ function publicHikeRowToHike(row, photos = []) {
     longitude: row.longitude != null ? Number(row.longitude) : null,
 
     photos,
-    link: row.gpx_url || null,
-    gpx_url: row.gpx_url || null,
+    link: null,
+    gpx_url: null,
 
     tags: normalizeTags(row.tags),
 

@@ -31,7 +31,6 @@ function buildInitialFormData(hike) {
     parking_info: hike?.parking_info || "",
     restaurant_info: hike?.restaurant_info || "",
     notes: hike?.notes || "",
-    gpx_url: hike?.gpx_url || hike?.link || "",
     tagsText: Array.isArray(hike?.tags) ? hike.tags.join(", ") : "",
     status: hike?.status || "approved",
     is_premium: hike?.is_premium ? "true" : "false",
@@ -96,7 +95,6 @@ export default function EditPublicHike() {
         parking_info: formData.parking_info.trim() || null,
         restaurant_info: formData.restaurant_info.trim() || null,
         notes: formData.notes.trim() || null,
-        gpx_url: formData.gpx_url.trim() || null,
         tags,
         status: formData.status || "draft",
         is_premium: formData.is_premium === "true",
@@ -364,16 +362,6 @@ export default function EditPublicHike() {
                   onChange={(e) => setFormData((prev) => ({ ...prev, longitude: e.target.value }))}
                 />
               </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="gpx_url">GPX-Link</Label>
-              <Input
-                id="gpx_url"
-                value={formData.gpx_url}
-                onChange={(e) => setFormData((prev) => ({ ...prev, gpx_url: e.target.value }))}
-                placeholder="https://..."
-              />
             </div>
 
             <div className="space-y-2">
