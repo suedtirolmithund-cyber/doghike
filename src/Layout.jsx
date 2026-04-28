@@ -8,7 +8,6 @@ import {
   Dog,
   LogIn,
   LogOut,
-  User,
   BookOpen,
   ShieldCheck,
   Users,
@@ -62,11 +61,6 @@ export default function Layout({ children, currentPageName }) {
   }, []);
 
   useRealtimeNotifications(user?.id);
-
-  const displayName =
-    user?.user_metadata?.full_name ||
-    user?.user_metadata?.name ||
-    (user?.email ? user.email.split("@")[0] : null);
 
   const isActive = (pageName) => currentPageName === pageName;
 
@@ -229,12 +223,6 @@ export default function Layout({ children, currentPageName }) {
             <div className="flex items-center gap-2 shrink-0">
               {isAuthenticated && user ? (
                 <>
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-100 rounded-lg">
-                    <User className="w-4 h-4 text-stone-500 shrink-0" />
-                    <span className="text-sm text-stone-700 font-medium max-w-[140px] truncate">
-                      {displayName}
-                    </span>
-                  </div>
                   <Button
                     variant="outline"
                     size="sm"
