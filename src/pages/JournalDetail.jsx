@@ -299,10 +299,18 @@ export default function JournalDetail() {
                 </span>
               </div>
             )}
-            {entry.water_available > 0 && (
+            {entry.water_available !== null && entry.water_available !== undefined && (
               <div className="flex items-center gap-2">
                 <span className="text-xs text-stone-500 w-28">Wasser</span>
-                <span className="text-sm text-blue-600">{WATER_LABEL[entry.water_available]}</span>
+                <span className={entry.water_available === 0 ? "text-sm text-red-600" : "text-sm text-blue-600"}>
+                  {entry.water_available === 0
+                    ? "🚫 Kein Wasser"
+                    : entry.water_available === 1
+                      ? "💧 Wenig Wasser"
+                      : entry.water_available === 2
+                        ? "💧💧 Etwas Wasser"
+                        : "💧💧💧 Viel Wasser"}
+                </span>
               </div>
             )}
             {entry.seasons?.length > 0 && (

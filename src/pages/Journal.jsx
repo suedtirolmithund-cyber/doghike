@@ -38,6 +38,7 @@ import { getJournalEntriesForDisplay, deleteJournalEntry } from "@/lib/journalAp
 
 const DIFFICULTY_LABEL = ["", "Sehr leicht", "Leicht", "Mittel", "Schwer", "Sehr schwer"];
 const DIFFICULTY_COLOR = ["", "text-brand-400", "text-brand-400", "text-yellow-600", "text-orange-600", "text-red-600"];
+const WATER_LABEL = ["🚫 Kein Wasser", "💧 Wenig Wasser", "💧💧 Etwas Wasser", "💧💧💧 Viel Wasser"];
 const PAGE_SIZE = 20;
 
 function VisibilityStatusBadge({ visibility, status }) {
@@ -296,9 +297,16 @@ export default function Journal() {
                               Hundefreundlich
                             </Badge>
                           )}
-                          {entry.water_available > 0 && (
-                            <Badge variant="secondary" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
-                              Wasser: {entry.water_available}
+                          {entry.water_available !== null && entry.water_available !== undefined && (
+                            <Badge
+                              variant="secondary"
+                              className={`text-xs border ${
+                                entry.water_available === 0
+                                  ? "bg-red-50 text-red-700 border-red-200"
+                                  : "bg-blue-50 text-blue-700 border-blue-200"
+                              }`}
+                            >
+                              {WATER_LABEL[entry.water_available] ?? WATER_LABEL[0]}
                             </Badge>
                           )}
                           {entry.gpx_url && (
