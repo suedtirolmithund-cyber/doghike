@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Camera, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
 import { getAllHikes } from "@/api/sheetsClient";
-import { updatePublicHike } from "@/lib/publicHikesApi";
+import { deleteUploadedPublicHikePhoto, updatePublicHike, uploadPublicHikePhoto } from "@/lib/publicHikesApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -36,7 +36,7 @@ function buildInitialFormData(hike) {
     is_premium: hike?.is_premium ? "true" : "false",
     latitude: hike?.latitude ?? "",
     longitude: hike?.longitude ?? "",
-    photoUrlsText: Array.isArray(hike?.photos) ? hike.photos.join("\n") : "",
+    photoUrls: Array.isArray(hike?.photos) ? hike.photos : [],
   };
 }
 
@@ -45,8 +45,11 @@ export default function EditPublicHike() {
   const hikeId = searchParams.get("id");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { isAdmin, isLoadingAuth } = useAuth();
+  const { user, isAdmin, isLoadingAuth } = useAuth();
   const [formData, setFormData] = useState(null);
+  const [isUploadingPhotos, setIsUploadingPhotos] = useState(false);
+  const uploadedDuringEditRef = useRef(new Set());
+  const savedPhotoUrlsRef = useRef(new Set());
 
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["allHikes"],
@@ -65,8 +68,66 @@ export default function EditPublicHike() {
   useEffect(() => {
     if (hike && !formData) {
       setFormData(buildInitialFormData(hike));
+      savedPhotoUrlsRef.current = new Set(Array.isArray(hike.photos) ? hike.photos : []);
     }
   }, [hike, formData]);
+
+  useEffect(() => {
+    return () => {
+      const uploadedUrls = [...uploadedDuringEditRef.current];
+      if (uploadedUrls.length === 0) return;
+
+      uploadedUrls.forEach((photoUrl) => {
+        deleteUploadedPublicHikePhoto(photoUrl).catch((error) => {
+          console.error("[EditPublicHike] abandoned photo cleanup failed:", error.message);
+        });
+      });
+    };
+  }, []);
+
+  const handlePhotoUpload = async (event) => {
+    const files = Array.from(event.target.files ?? []);
+    event.target.value = "";
+
+    if (!user?.id || files.length === 0) return;
+
+    setIsUploadingPhotos(true);
+    try {
+      const uploadedUrls = [];
+
+      for (const file of files) {
+        const photoUrl = await uploadPublicHikePhoto(user.id, file);
+        uploadedUrls.push(photoUrl);
+        uploadedDuringEditRef.current.add(photoUrl);
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        photoUrls: [...prev.photoUrls, ...uploadedUrls],
+      }));
+      toast.success(`${uploadedUrls.length} Bild${uploadedUrls.length !== 1 ? "er" : ""} hochgeladen`);
+    } catch {
+      toast.error("Die Bilder konnten gerade nicht hochgeladen werden. Bitte versuche es noch einmal.");
+    } finally {
+      setIsUploadingPhotos(false);
+    }
+  };
+
+  const removePhotoUrl = async (photoUrl) => {
+    setFormData((prev) => ({
+      ...prev,
+      photoUrls: prev.photoUrls.filter((url) => url !== photoUrl),
+    }));
+
+    if (uploadedDuringEditRef.current.has(photoUrl)) {
+      uploadedDuringEditRef.current.delete(photoUrl);
+      try {
+        await deleteUploadedPublicHikePhoto(photoUrl);
+      } catch {
+        toast.error("Das entfernte Bild konnte im Speicher nicht aufgeräumt werden.");
+      }
+    }
+  };
 
   const saveMutation = useMutation({
     mutationFn: async () => {
@@ -74,9 +135,8 @@ export default function EditPublicHike() {
         throw new Error("missing_public_hike_id");
       }
 
-      const photoUrls = formData.photoUrlsText
-        .split("\n")
-        .map((line) => line.trim())
+      const photoUrls = formData.photoUrls
+        .map((url) => url.trim())
         .filter(Boolean);
       const tags = formData.tagsText
         .split(",")
@@ -108,6 +168,13 @@ export default function EditPublicHike() {
       });
     },
     onSuccess: () => {
+      const finalPhotoUrls = formData.photoUrls.filter(Boolean);
+      const savedPhotoUrls = savedPhotoUrlsRef.current;
+      uploadedDuringEditRef.current.forEach((photoUrl) => {
+        if (finalPhotoUrls.includes(photoUrl) || savedPhotoUrls.has(photoUrl)) {
+          uploadedDuringEditRef.current.delete(photoUrl);
+        }
+      });
       queryClient.invalidateQueries({ queryKey: ["allHikes"] });
       queryClient.invalidateQueries({ queryKey: ["hike"] });
       toast.success("Öffentliche Tour gespeichert");
@@ -418,15 +485,53 @@ export default function EditPublicHike() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="photo_urls">Bild-URLs, eine pro Zeile</Label>
-              <Textarea
-                id="photo_urls"
-                value={formData.photoUrlsText}
-                onChange={(e) => setFormData((prev) => ({ ...prev, photoUrlsText: e.target.value }))}
-                rows={6}
-                placeholder={"https://...\nhttps://..."}
-              />
+            <div className="space-y-3">
+              <Label htmlFor="photo_upload">Fotos</Label>
+              <label>
+                <input
+                  id="photo_upload"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handlePhotoUpload}
+                  className="hidden"
+                  disabled={isUploadingPhotos || saveMutation.isPending}
+                />
+                <Button type="button" variant="outline" asChild disabled={isUploadingPhotos || saveMutation.isPending}>
+                  <span className="cursor-pointer">
+                    {isUploadingPhotos ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <Camera className="w-4 h-4 mr-2" />
+                    )}
+                    Bilder auswählen
+                  </span>
+                </Button>
+              </label>
+
+              {Array.isArray(formData.photoUrls) && formData.photoUrls.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {formData.photoUrls.map((photoUrl, index) => (
+                    <div key={`${photoUrl}-${index}`} className="relative overflow-hidden rounded-xl border border-stone-200 bg-stone-50">
+                      <img
+                        src={photoUrl}
+                        alt={`Foto ${index + 1}`}
+                        className="h-32 w-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removePhotoUrl(photoUrl)}
+                        className="absolute top-2 right-2 rounded-full bg-white/90 p-1.5 text-stone-700 shadow-sm hover:bg-white"
+                        title="Bild entfernen"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-stone-500">Noch keine Fotos ausgewählt.</p>
+              )}
             </div>
 
             <div className="flex gap-3 pt-2">

@@ -1,5 +1,48 @@
 import { supabase } from "@/lib/supabaseClient";
 
+const PUBLIC_HIKE_BUCKET = "journal";
+const PUBLIC_HIKE_PREFIX = "public-hikes/";
+
+function getPublicHikeStorageDescriptor(photoUrl) {
+  if (!photoUrl || typeof photoUrl !== "string") return null;
+
+  const marker = `/storage/v1/object/public/${PUBLIC_HIKE_BUCKET}/${PUBLIC_HIKE_PREFIX}`;
+  const index = photoUrl.indexOf(marker);
+  if (index === -1) return null;
+
+  return {
+    bucket: PUBLIC_HIKE_BUCKET,
+    path: decodeURIComponent(photoUrl.slice(index + `/storage/v1/object/public/${PUBLIC_HIKE_BUCKET}/`.length)),
+  };
+}
+
+export async function uploadPublicHikePhoto(userId, file) {
+  const sanitizedName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const path = `${PUBLIC_HIKE_PREFIX}${userId}/${Date.now()}_${sanitizedName}`;
+  const { data, error } = await supabase.storage
+    .from(PUBLIC_HIKE_BUCKET)
+    .upload(path, file, { upsert: true });
+
+  if (error) throw error;
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from(PUBLIC_HIKE_BUCKET).getPublicUrl(data.path);
+
+  return publicUrl;
+}
+
+export async function deleteUploadedPublicHikePhoto(photoUrl) {
+  const storageDescriptor = getPublicHikeStorageDescriptor(photoUrl);
+  if (!storageDescriptor) return;
+
+  const { error } = await supabase.storage
+    .from(storageDescriptor.bucket)
+    .remove([storageDescriptor.path]);
+
+  if (error) throw error;
+}
+
 export async function updatePublicHike(hikeId, values) {
   const {
     photoUrls = [],
@@ -16,6 +59,7 @@ export async function updatePublicHike(hikeId, values) {
     .order("sort_order", { ascending: true });
 
   if (existingPhotosError) throw existingPhotosError;
+  const existingPhotoUrls = existingPhotos.map((photo) => photo.photo_url).filter(Boolean);
 
   const { data, error } = await supabase
     .from("public_hikes")
@@ -62,6 +106,21 @@ export async function updatePublicHike(hikeId, values) {
       throw insertPhotosError;
     }
   }
+
+  const removedManagedPhotoUrls = existingPhotoUrls.filter(
+    (photoUrl) =>
+      !cleanedPhotoUrls.includes(photoUrl) && getPublicHikeStorageDescriptor(photoUrl)
+  );
+
+  await Promise.all(
+    removedManagedPhotoUrls.map(async (photoUrl) => {
+      try {
+        await deleteUploadedPublicHikePhoto(photoUrl);
+      } catch (storageError) {
+        console.error("[updatePublicHike] removed photo cleanup failed:", storageError.message);
+      }
+    })
+  );
 
   return data;
 }
