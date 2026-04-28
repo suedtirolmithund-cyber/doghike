@@ -217,6 +217,9 @@ export default function Profile() {
     return `${months} Monat${months !== 1 ? "e" : ""}`;
   };
 
+  const fallbackAvatarUrl = `https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.id}&backgroundColor=f5f5f4`;
+  const hasResolvedProfile = !user?.id || profile !== undefined;
+
   const displayName =
     profile?.full_name ||
     user?.user_metadata?.full_name ||
@@ -226,8 +229,8 @@ export default function Profile() {
 
   const avatarUrl =
     profile?.avatar_url ||
-    user?.user_metadata?.avatar_url ||
-    `https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.id}&backgroundColor=f5f5f4`;
+    (hasResolvedProfile ? user?.user_metadata?.avatar_url : null) ||
+    fallbackAvatarUrl;
 
   if (!isAuthenticated) {
     return (
