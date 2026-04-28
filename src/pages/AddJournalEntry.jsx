@@ -27,7 +27,7 @@ import {
 } from "@/lib/journalApi";
 import { getDogs } from "@/lib/profilesApi";
 import { Link } from "react-router-dom";
-import { DIFFICULTY_LEVELS, getDifficultyLabel, getDifficultyTextColor } from "@/lib/difficultyConfig";
+import { DIFFICULTY_LEVELS, WATER_LEVELS, getDifficultyLabel, getDifficultyTextColor, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
 
 // Sterne-Picker (Gesamtbewertung)
 function StarPicker({ label, value, onChange }) {
@@ -246,13 +246,14 @@ function LocationPicker({ lat, lng, onChange }) {
 }
 
 // Wasser-Picker (0=keins, 1=wenig, 2=mittel, 3=viel)
-const WATER_LABELS = ["Kein Wasser", "Wenig Wasser", "Etwas Wasser", "Viel Wasser"];
 function WaterPicker({ label, value, onChange }) {
   return (
     <div>
       <Label className="text-sm text-stone-600 mb-1 block">{label}</Label>
       <div className="flex gap-2">
-        {[0, 1, 2, 3].map((level) => (
+        {WATER_LEVELS.map((option) => {
+          const level = option.numeric;
+          return (
           <button key={level} type="button"
             onClick={() => onChange(level)}
             className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl border transition-all focus:outline-none ${
@@ -260,16 +261,16 @@ function WaterPicker({ label, value, onChange }) {
                 ? "border-blue-400 bg-blue-50 text-blue-700"
                 : "border-stone-200 bg-stone-50 text-stone-400 hover:border-blue-300 hover:bg-blue-50/50"
             }`}
-            title={WATER_LABELS[level]}
-          >
-            <span className="text-lg leading-none">
-              {level === 0 ? "Kein" : "Wasser".repeat(level)}
-            </span>
-            <span className="text-[10px] font-medium whitespace-nowrap">
-              {WATER_LABELS[level]}
-            </span>
-          </button>
-        ))}
+            title={getWaterLabel(level)}
+            >
+              <span className="text-lg leading-none">
+                {getWaterIcon(level)}
+              </span>
+              <span className="text-[10px] font-medium whitespace-nowrap">
+                {getWaterLabel(level)}
+              </span>
+            </button>
+        )})}
       </div>
     </div>
   );

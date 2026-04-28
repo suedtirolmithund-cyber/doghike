@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { format } from "date-fns";
-import { getDifficultyLabel } from "@/lib/difficultyConfig";
+import { getDifficultyLabel, getWaterLabel } from "@/lib/difficultyConfig";
 
 const seasonLabels = {
   spring: "Frühling",
@@ -13,13 +13,6 @@ const seasonLabels = {
   autumn: "Herbst",
   winter: "Winter",
   all_year: "Ganzjährig"
-};
-
-const waterLabels = {
-  none: "Kein Wasser",
-  little: "Wenig Wasser",
-  moderate: "Etwas Wasser",
-  plenty: "Viel Wasser"
 };
 
 export default function OfflineDownload({ hike, dogs = [] }) {
@@ -110,7 +103,7 @@ export default function OfflineDownload({ hike, dogs = [] }) {
         yPosition += 6;
       }
       if (hike.water_availability) {
-        pdf.text(`Wasser unterwegs: ${waterLabels[hike.water_availability]}`, margin, yPosition);
+        pdf.text(`Wasser unterwegs: ${getWaterLabel(hike.water_availability)}`, margin, yPosition);
         yPosition += 8;
       }
 

@@ -28,7 +28,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import ExpandableText from "@/components/ExpandableText";
-import { DIFFICULTY_LEVELS } from "@/lib/difficultyConfig";
+import { DIFFICULTY_LEVELS, WATER_LEVELS } from "@/lib/difficultyConfig";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -606,10 +606,11 @@ export default function RouteDetail() {
                           <Select value={completeData.water_availability} onValueChange={(v) => setCompleteData({ ...completeData, water_availability: v })}>
                             <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="none">🚫 Kein Wasser</SelectItem>
-                              <SelectItem value="little">💧 Wenig Wasser</SelectItem>
-                              <SelectItem value="moderate">💧💧 Etwas Wasser</SelectItem>
-                              <SelectItem value="plenty">💧💧💧 Viel Wasser</SelectItem>
+                              {WATER_LEVELS.map((level) => (
+                                <SelectItem key={level.value} value={level.value}>
+                                  {level.icon} {level.label}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                         </div>

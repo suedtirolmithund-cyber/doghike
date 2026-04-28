@@ -7,7 +7,7 @@ import { createPageUrl } from "@/utils";
 import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowLeft, MapPin, Calendar, Clock, Mountain, Route, Edit, Trash2, ChevronLeft, ChevronRight, X, Globe, Share2, Check
+  ArrowLeft, MapPin, Edit, Trash2, ChevronLeft, ChevronRight, X, Share2, Check
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +31,7 @@ import RatingSection from "@/components/community/RatingSection";
 import ExpandableText from "@/components/ExpandableText";
 import PremiumGate from "@/components/hikes/PremiumGate";
 import { supabase } from "@/lib/supabaseClient";
+import { getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
 import { toast } from "sonner";
 
 const difficultyColors = {
@@ -47,13 +48,6 @@ const seasonConfig = {
   autumn: { emoji: "🍂", label: "Herbst", color: "bg-orange-100 text-orange-700" },
   winter: { emoji: "❄️", label: "Winter", color: "bg-blue-100 text-blue-700" },
   all_year: { emoji: "🍃", label: "Ganzjährig", color: "bg-brand-100 text-brand-600" }
-};
-
-const waterConfig = {
-  none: { label: "Kein Wasser unterwegs", color: "bg-red-100 text-red-700", icon: "🚫" },
-  little: { label: "Wenig Wasser", color: "bg-orange-100 text-orange-700", icon: "💧" },
-  moderate: { label: "Etwas Wasser", color: "bg-blue-100 text-blue-600", icon: "💧💧" },
-  plenty: { label: "Viel Wasser", color: "bg-blue-100 text-blue-700", icon: "💧💧💧" }
 };
 
 const weatherEmojis = {
@@ -508,12 +502,12 @@ export default function HikeDetail() {
               <h2 className="text-lg font-medium text-stone-800 mb-4">🐕 Infos für Hundebesitzer</h2>
               <div className="space-y-4">
                 {/* Wasser: immer anzeigen */}
-                {hike.water_availability && waterConfig[hike.water_availability] ? (
-                  <div className={`flex items-center gap-3 p-3 rounded-xl ${waterConfig[hike.water_availability].color}`}>
-                    <span className="text-lg">{waterConfig[hike.water_availability].icon}</span>
+                {hike.water_availability ? (
+                  <div className={`flex items-center gap-3 p-3 rounded-xl ${getWaterBadgeClass(hike.water_availability)}`}>
+                    <span className="text-lg">{getWaterIcon(hike.water_availability)}</span>
                     <div>
                       <p className="font-medium">Wasser unterwegs</p>
-                      <p className="text-sm opacity-80">{waterConfig[hike.water_availability].label}</p>
+                      <p className="text-sm opacity-80">{getWaterLabel(hike.water_availability)}</p>
                     </div>
                   </div>
                 ) : (

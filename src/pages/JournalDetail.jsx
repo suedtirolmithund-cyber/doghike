@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { getDifficultyLabel, getDifficultyTextColor } from "@/lib/difficultyConfig";
+import { getDifficultyLabel, getDifficultyTextColor, getWaterLabel, getWaterTextColor } from "@/lib/difficultyConfig";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -27,7 +27,6 @@ L.Icon.Default.mergeOptions({
 });
 
 const SEASON_LABEL = { spring: "🌸 Frühling", summer: "☀️ Sommer", autumn: "🍂 Herbst", winter: "❄️ Winter" };
-const WATER_LABEL = ["", "💧 Wenig Wasser", "💧💧 Etwas Wasser", "💧💧💧 Viel Wasser"];
 const VISIBILITY_INFO = {
   private: { icon: User,  label: "Privat",       color: "text-stone-500" },
   friends: { icon: Users, label: "Freunde",       color: "text-blue-600"  },
@@ -301,14 +300,8 @@ export default function JournalDetail() {
             {entry.water_available !== null && entry.water_available !== undefined && (
               <div className="flex items-center gap-2">
                 <span className="text-xs text-stone-500 w-28">Wasser</span>
-                <span className={entry.water_available === 0 ? "text-sm text-red-600" : "text-sm text-blue-600"}>
-                  {entry.water_available === 0
-                    ? "🚫 Kein Wasser"
-                    : entry.water_available === 1
-                      ? "💧 Wenig Wasser"
-                      : entry.water_available === 2
-                        ? "💧💧 Etwas Wasser"
-                        : "💧💧💧 Viel Wasser"}
+                <span className={`text-sm font-medium ${getWaterTextColor(entry.water_available)}`}>
+                  {getWaterLabel(entry.water_available)}
                 </span>
               </div>
             )}

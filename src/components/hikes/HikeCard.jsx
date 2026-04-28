@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import ExpandableText from "@/components/ExpandableText";
-import { getDifficultyBadgeClass, getDifficultyLabel } from "@/lib/difficultyConfig";
+import { getDifficultyBadgeClass, getDifficultyLabel, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
 
 const seasonEmojis = {
   spring: "🌸",
@@ -12,20 +12,6 @@ const seasonEmojis = {
   autumn: "🍂",
   winter: "❄️",
   all_year: "🍃",
-};
-
-const waterLabels = {
-  none: "Kein Wasser",
-  little: "Wenig Wasser",
-  moderate: "Etwas Wasser",
-  plenty: "Viel Wasser",
-};
-
-const waterClasses = {
-  none: "text-[#9f4f39] bg-[#f4ded6] border-[#e7c6bb]",
-  little: "text-[#9a6c58] bg-[#f3e7dc] border-[#e4d0c0]",
-  moderate: "text-[#6f7f86] bg-[#e7eef0] border-[#cfdee2]",
-  plenty: "text-[#4f7280] bg-[#dce9ed] border-[#bfd4dc]",
 };
 
 function StatTile({ value, label }) {
@@ -98,8 +84,8 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                 </Badge>
               )}
               {hike.water_availability && (
-                <span className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${waterClasses[hike.water_availability] ?? waterClasses.moderate}`}>
-                  {waterLabels[hike.water_availability] ?? hike.water_availability}
+                <span className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${getWaterBadgeClass(hike.water_availability)}`}>
+                  {getWaterLabel(hike.water_availability) ?? hike.water_availability}
                 </span>
               )}
             </div>

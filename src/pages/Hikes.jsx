@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
-import { DIFFICULTY_LEVELS } from "@/lib/difficultyConfig";
+import { DIFFICULTY_LEVELS, WATER_LEVELS } from "@/lib/difficultyConfig";
 
 export default function Hikes() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -175,10 +175,11 @@ export default function Hikes() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Alle</SelectItem>
-                    <SelectItem value="none">🚫 Kein Wasser</SelectItem>
-                    <SelectItem value="little">💧 Wenig Wasser</SelectItem>
-                    <SelectItem value="moderate">💧💧 Etwas Wasser</SelectItem>
-                    <SelectItem value="plenty">💧💧💧 Viel Wasser</SelectItem>
+                    {WATER_LEVELS.map((level) => (
+                      <SelectItem key={level.value} value={level.value}>
+                        {level.icon} {level.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

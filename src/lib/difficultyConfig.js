@@ -38,3 +38,37 @@ export function getDifficultyTextColor(level) {
 export function getDifficultyBadgeClass(level) {
   return DIFFICULTY_BADGE_CLASSES[level] ?? "bg-stone-100 text-stone-600 border-stone-200";
 }
+
+export const WATER_LEVELS = [
+  { value: "none", numeric: 0, label: "0 · Kein Wasser", icon: "🚫", textColor: "text-red-700", badgeClass: "bg-red-50 text-red-700 border-red-200" },
+  { value: "little", numeric: 1, label: "1 · Wenig Wasser", icon: "💧", textColor: "text-orange-700", badgeClass: "bg-orange-50 text-orange-700 border-orange-200" },
+  { value: "moderate", numeric: 2, label: "2 · Etwas Wasser", icon: "💧💧", textColor: "text-blue-700", badgeClass: "bg-blue-50 text-blue-700 border-blue-200" },
+  { value: "plenty", numeric: 3, label: "3 · Viel Wasser", icon: "💧💧💧", textColor: "text-cyan-700", badgeClass: "bg-cyan-50 text-cyan-700 border-cyan-200" },
+];
+
+export const WATER_BY_VALUE = Object.fromEntries(
+  WATER_LEVELS.flatMap((level) => [
+    [level.value, level],
+    [level.numeric, level],
+  ])
+);
+
+export function getWaterLevel(value) {
+  return WATER_BY_VALUE[value] ?? null;
+}
+
+export function getWaterLabel(value) {
+  return getWaterLevel(value)?.label ?? null;
+}
+
+export function getWaterIcon(value) {
+  return getWaterLevel(value)?.icon ?? "💧";
+}
+
+export function getWaterBadgeClass(value) {
+  return getWaterLevel(value)?.badgeClass ?? "bg-stone-100 text-stone-600 border-stone-200";
+}
+
+export function getWaterTextColor(value) {
+  return getWaterLevel(value)?.textColor ?? "text-stone-600";
+}

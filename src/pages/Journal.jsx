@@ -38,9 +38,8 @@ import {
 import { toast } from "sonner";
 import { useAuth } from "@/lib/AuthContext";
 import { getJournalEntriesForDisplay, deleteJournalEntry } from "@/lib/journalApi";
-import { getDifficultyLabel, getDifficultyTextColor } from "@/lib/difficultyConfig";
+import { getDifficultyLabel, getDifficultyTextColor, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
 
-const WATER_LABEL = ["🚫 Kein Wasser", "💧 Wenig Wasser", "💧💧 Etwas Wasser", "💧💧💧 Viel Wasser"];
 const PAGE_SIZE = 20;
 
 function VisibilityStatusBadge({ visibility, status }) {
@@ -305,16 +304,12 @@ export default function Journal() {
                             </Badge>
                           )}
                           {entry.water_available !== null && entry.water_available !== undefined && (
-                            <Badge
-                              variant="secondary"
-                              className={`text-xs border ${
-                                entry.water_available === 0
-                                  ? "bg-red-50 text-red-700 border-red-200"
-                                  : "bg-blue-50 text-blue-700 border-blue-200"
-                              }`}
-                            >
-                              {WATER_LABEL[entry.water_available] ?? WATER_LABEL[0]}
-                            </Badge>
+                              <Badge
+                                variant="secondary"
+                                className={`text-xs border ${getWaterBadgeClass(entry.water_available)}`}
+                              >
+                                {getWaterLabel(entry.water_available) ?? getWaterLabel(0)}
+                              </Badge>
                           )}
                           {entry.gpx_url && (
                             <Badge variant="secondary" className="text-xs bg-stone-100 text-stone-600">
