@@ -14,7 +14,6 @@ import {
   Trophy,
   Grid,
   X,
-  Map,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/lib/AuthContext";
@@ -33,7 +32,6 @@ const MAIN_NAV = [
 const MORE_ITEMS = [
   { name: "Friends", icon: Users, label: "Freunde" },
   { name: "TopDogs", icon: Trophy, label: "Top Dogs" },
-  { name: "MapView", icon: Map, label: "Karte" },
 ];
 
 const DESKTOP_NAV = [
@@ -43,7 +41,6 @@ const DESKTOP_NAV = [
   { name: "RoutePlanner", icon: Navigation, label: "Routenplaner" },
   { name: "Friends", icon: Users, label: "Freunde" },
   { name: "TopDogs", icon: Trophy, label: "Top Dogs" },
-  { name: "MapView", icon: Map, label: "Karte" },
   { name: "Profile", icon: Dog, label: "Mein Profil" },
 ];
 
