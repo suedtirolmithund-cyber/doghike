@@ -1,3 +1,5 @@
+import { supabase } from "@/lib/supabaseClient";
+
 const SHEETS_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vS6YeL4WqJZWHAQ8HBuodH98vwfIeaUV4p89bAvnM3TDavLKtnsmGUOfcSyAN0ID0rcVYd-OCQUkbiv/pub?gid=624993458&single=true&output=csv";
 
@@ -165,11 +167,59 @@ function rowToHike(row, index) {
   };
 }
 
-/**
- * Fetches all approved hikes from the public Google Sheet.
- * Returns an array of hike objects compatible with the app.
- */
-export async function getHikes() {
+function mapSupabaseWaterLevel(value) {
+  if (value === 0 || value === "0") return "none";
+  if (value === 1 || value === "1") return "little";
+  if (value === 2 || value === "2") return "moderate";
+  if (value === 3 || value === "3") return "plenty";
+  return null;
+}
+
+function publicHikeRowToHike(row, photos = []) {
+  return {
+    // Keep the old external id shape stable so saved hikes, comments, and ratings keep matching.
+    id: slugify(row.title || String(row.id)),
+    trail_name: row.title,
+    location: row.location,
+    country: row.country || null,
+
+    latitude: row.latitude != null ? Number(row.latitude) : null,
+    longitude: row.longitude != null ? Number(row.longitude) : null,
+
+    photos,
+    link: row.gpx_url || null,
+    gpx_url: row.gpx_url || null,
+
+    tags: [],
+
+    distance_km: row.distance_km != null ? Number(row.distance_km) : null,
+    elevation_gain_m: row.elevation_gain_m ?? null,
+    duration_minutes: row.duration_minutes ?? null,
+
+    difficulty: row.difficulty != null ? String(row.difficulty) : null,
+    dog_difficulty: row.dog_difficulty != null ? String(row.dog_difficulty) : null,
+    water_availability: mapSupabaseWaterLevel(row.water_availability),
+
+    is_premium: row.is_premium === true,
+    status: row.status,
+    visibility: "public",
+
+    season: row.season || null,
+    seasons: row.season ? [row.season] : [],
+    availability: null,
+
+    hazard_notes: row.hazard_notes || null,
+    parking_info: row.parking_info || null,
+    restaurant_info: row.restaurant_info || null,
+    notes: row.notes || null,
+    date: row.date || null,
+
+    _source: "sheets",
+    _public_hike_id: row.id,
+  };
+}
+
+async function getLegacySheetHikes() {
   try {
     const response = await fetch(SHEETS_CSV_URL);
     if (!response.ok) {
@@ -185,6 +235,46 @@ export async function getHikes() {
   } catch (err) {
     console.error("[sheetsClient] error:", err);
     return [];
+  }
+}
+
+/**
+ * Fetches all approved hikes from Supabase.
+ * Falls back to the old public Google Sheet if the new source is not readable yet.
+ */
+export async function getHikes() {
+  try {
+    const { data: hikeRows, error: hikesError } = await supabase
+      .from("public_hikes")
+      .select("*")
+      .eq("status", "approved")
+      .order("date", { ascending: false, nullsFirst: false })
+      .order("created_at", { ascending: false });
+
+    if (hikesError) throw hikesError;
+    if (!hikeRows?.length) return [];
+
+    const hikeIds = hikeRows.map((row) => row.id);
+    const { data: photoRows, error: photosError } = await supabase
+      .from("public_hike_photos")
+      .select("hike_id, photo_url, sort_order")
+      .in("hike_id", hikeIds)
+      .order("sort_order", { ascending: true });
+
+    if (photosError) throw photosError;
+
+    const photosByHikeId = {};
+    for (const photoRow of photoRows ?? []) {
+      if (!photosByHikeId[photoRow.hike_id]) {
+        photosByHikeId[photoRow.hike_id] = [];
+      }
+      photosByHikeId[photoRow.hike_id].push(photoRow.photo_url);
+    }
+
+    return hikeRows.map((row) => publicHikeRowToHike(row, photosByHikeId[row.id] ?? []));
+  } catch (err) {
+    console.error("[sheetsClient] public_hikes fetch failed, falling back to sheet:", err);
+    return getLegacySheetHikes();
   }
 }
 
