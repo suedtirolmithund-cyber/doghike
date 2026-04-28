@@ -12,7 +12,7 @@ import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import {
-  ArrowLeft, MapPin, Ruler, TrendingUp, Clock, Star, AlertTriangle, Dog, Lock, Users, Globe,
+  ArrowLeft, MapPin, Ruler, TrendingUp, Clock, Star, AlertTriangle, Dog, User, Users, Globe,
   Loader2, ShieldOff, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,7 @@ const DIFFICULTY_COLOR = { 1: "text-brand-400", 2: "text-lime-600", 3: "text-yel
 const SEASON_LABEL = { spring: "🌸 Frühling", summer: "☀️ Sommer", autumn: "🍂 Herbst", winter: "❄️ Winter" };
 const WATER_LABEL = ["", "💧 Wenig Wasser", "💧💧 Etwas Wasser", "💧💧💧 Viel Wasser"];
 const VISIBILITY_INFO = {
-  private: { icon: Lock,  label: "Privat",       color: "text-stone-500" },
+  private: { icon: User,  label: "Privat",       color: "text-stone-500" },
   friends: { icon: Users, label: "Freunde",       color: "text-blue-600"  },
   public:  { icon: Globe, label: "Öffentlich",    color: "text-brand-400" },
 };

@@ -328,7 +328,7 @@ function SeasonPicker({ value = [], onChange }) {
 const VISIBILITY_OPTIONS = [
   {
     value: "private",
-    emoji: "P",
+    emoji: "👤",
     label: "Privat",
     desc: "Nur ich sehe diesen Eintrag",
     active: "border-stone-400 bg-stone-100 text-stone-800",
@@ -336,7 +336,7 @@ const VISIBILITY_OPTIONS = [
   },
   {
     value: "friends",
-    emoji: "F",
+    emoji: "🫂",
     label: "Freunde",
     desc: "Nur bestätigte Freunde",
     active: "border-blue-400 bg-blue-50 text-blue-800",
@@ -344,7 +344,7 @@ const VISIBILITY_OPTIONS = [
   },
   {
     value: "public",
-    emoji: "O",
+    emoji: "🌍",
     label: "Öffentlich",
     desc: "Wird an Admin zur Prüfung geschickt",
     active: "border-brand-400 bg-brand-50 text-brand-700",

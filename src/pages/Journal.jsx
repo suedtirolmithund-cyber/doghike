@@ -17,6 +17,9 @@ import {
   LogIn,
   Loader2,
   Search,
+  User,
+  Users,
+  Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,6 +49,7 @@ function VisibilityStatusBadge({ visibility, status }) {
     if (status === "approved") {
       return (
         <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-brand-100 text-brand-600 border border-brand-200">
+          <Globe className="w-3 h-3" />
           Öffentlich sichtbar
         </span>
       );
@@ -54,6 +58,7 @@ function VisibilityStatusBadge({ visibility, status }) {
     if (status === "rejected") {
       return (
         <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-700 border border-red-200">
+          <Globe className="w-3 h-3" />
           Abgelehnt
         </span>
       );
@@ -61,6 +66,7 @@ function VisibilityStatusBadge({ visibility, status }) {
 
     return (
       <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-200">
+        <Globe className="w-3 h-3" />
         Wartet auf Prüfung
       </span>
     );
@@ -69,6 +75,7 @@ function VisibilityStatusBadge({ visibility, status }) {
   if (visibility === "friends") {
     return (
       <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">
+        <Users className="w-3 h-3" />
         Mit Freunden geteilt
       </span>
     );
@@ -76,6 +83,7 @@ function VisibilityStatusBadge({ visibility, status }) {
 
   return (
     <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-stone-100 text-stone-500 border border-stone-200">
+      <User className="w-3 h-3" />
       Privat
     </span>
   );
