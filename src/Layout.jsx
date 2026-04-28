@@ -82,7 +82,7 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </footer>
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 md:hidden z-50 shadow-lg">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/45 bg-[#efe3d3]/78 shadow-[0_-14px_36px_rgba(68,54,41,0.18)] backdrop-blur-xl md:hidden">
         <AnimatePresence>
           {moreOpen && (
             <>
@@ -90,7 +90,7 @@ export default function Layout({ children, currentPageName }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black/30 z-40"
+                className="fixed inset-0 z-40 bg-stone-950/28 backdrop-blur-[1px]"
                 onClick={() => setMoreOpen(false)}
               />
 
@@ -99,11 +99,11 @@ export default function Layout({ children, currentPageName }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                className="absolute bottom-full left-0 right-0 z-50 bg-white border-t border-stone-200 rounded-t-2xl shadow-xl px-4 pt-4 pb-3"
+                className="absolute bottom-full left-3 right-3 z-50 rounded-t-2xl border border-white/45 bg-[#f3e8d9]/88 px-4 pb-3 pt-4 shadow-[0_-16px_40px_rgba(68,54,41,0.2)] backdrop-blur-xl"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-semibold text-stone-700">Weitere Seiten</span>
-                  <button onClick={() => setMoreOpen(false)} className="p-1 text-stone-400 hover:text-stone-600">
+                  <span className="text-sm font-semibold text-[#6f5a48]">Weitere Seiten</span>
+                  <button onClick={() => setMoreOpen(false)} className="p-1 text-[#8c7561] hover:text-[#5c4939]">
                     <X className="w-5 h-5" />
                   </button>
                 </div>
@@ -116,7 +116,7 @@ export default function Layout({ children, currentPageName }) {
                         key={name}
                         to={createPageUrl(name)}
                         className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all ${
-                          active ? "bg-slate-100 text-slate-800" : "text-stone-500 hover:bg-stone-50"
+                          active ? "bg-white/70 text-[#7b5f49] shadow-sm" : "text-[#8c7561] hover:bg-white/45"
                         }`}
                       >
                         <Icon className="w-5 h-5" />
@@ -128,7 +128,7 @@ export default function Layout({ children, currentPageName }) {
                     <Link
                       to={createPageUrl("AdminDashboard")}
                       className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all ${
-                        isActive("AdminDashboard") ? "bg-amber-100 text-amber-800" : "text-amber-600 hover:bg-amber-50"
+                        isActive("AdminDashboard") ? "bg-white/70 text-[#7b5f49] shadow-sm" : "text-[#8c7561] hover:bg-white/45"
                       }`}
                     >
                       <ShieldCheck className="w-5 h-5" />
@@ -141,7 +141,7 @@ export default function Layout({ children, currentPageName }) {
           )}
         </AnimatePresence>
 
-        <div className="flex items-center justify-around py-2 px-1 safe-area-pb">
+        <div className="flex items-center justify-around px-1 py-2 safe-area-pb">
           {MAIN_NAV.map(({ name, icon: Icon, label }) => {
             const active = isActive(name);
             return (
@@ -149,7 +149,7 @@ export default function Layout({ children, currentPageName }) {
                 key={name}
                 to={createPageUrl(name)}
                 className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all min-w-[52px] ${
-                  active ? "text-slate-800 bg-slate-100" : "text-stone-500 hover:text-stone-700"
+                  active ? "bg-white/70 text-[#7b5f49] shadow-sm" : "text-[#8c7561] hover:bg-white/35 hover:text-[#5c4939]"
                 }`}
               >
                 <Icon className={`w-5 h-5 ${active ? "stroke-[2.5]" : "stroke-[2]"}`} />
@@ -163,7 +163,7 @@ export default function Layout({ children, currentPageName }) {
           <button
             onClick={() => setMoreOpen((value) => !value)}
             className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all min-w-[52px] ${
-              moreOpen ? "text-slate-800 bg-slate-100" : "text-stone-500 hover:text-stone-700"
+              moreOpen ? "bg-white/70 text-[#7b5f49] shadow-sm" : "text-[#8c7561] hover:bg-white/35 hover:text-[#5c4939]"
             }`}
           >
             <Grid className={`w-5 h-5 ${moreOpen ? "stroke-[2.5]" : "stroke-[2]"}`} />
@@ -172,19 +172,19 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </nav>
 
-      <nav className="fixed top-0 left-0 right-0 bg-white border-b border-stone-200 hidden md:block z-50 shadow-sm">
+      <nav className="fixed left-0 right-0 top-0 z-50 hidden border-b border-white/45 bg-[#efe3d3]/78 shadow-[0_12px_34px_rgba(68,54,41,0.14)] backdrop-blur-xl md:block">
         <div className="max-w-7xl mx-auto px-6 py-3">
           <div className="flex items-center justify-between gap-4">
             <Link
               to={createPageUrl("Dashboard")}
-              className="flex items-center gap-2 hover:opacity-80 transition-opacity shrink-0"
+              className="flex shrink-0 items-center gap-2 transition-opacity hover:opacity-80"
             >
-              <div className="bg-slate-800 rounded-lg p-2">
+              <div className="rounded-lg bg-[#8a6a52] p-2 shadow-sm">
                 <Mountain className="w-5 h-5 text-white" />
               </div>
               <div>
-                <span className="text-lg font-semibold text-stone-800 block leading-none">DogHike</span>
-                <span className="text-xs text-stone-500">Hundefreundliche Wanderungen</span>
+                <span className="block text-lg font-semibold leading-none text-[#5c4939]">DogHike</span>
+                <span className="text-xs text-[#8c7561]">Hundefreundliche Wanderungen</span>
               </div>
             </Link>
 
@@ -196,7 +196,7 @@ export default function Layout({ children, currentPageName }) {
                     key={name}
                     to={createPageUrl(name)}
                     className={`flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all whitespace-nowrap ${
-                      active ? "bg-slate-800 text-white shadow-md" : "text-stone-600 hover:text-stone-800 hover:bg-stone-100"
+                      active ? "bg-white/72 text-[#7b5f49] shadow-sm" : "text-[#7b6a58] hover:bg-white/42 hover:text-[#5c4939]"
                     }`}
                   >
                     <Icon className={`w-4 h-4 ${active ? "stroke-[2.5]" : ""}`} />
@@ -208,7 +208,7 @@ export default function Layout({ children, currentPageName }) {
                 <Link
                   to={createPageUrl("AdminDashboard")}
                   className={`flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all whitespace-nowrap ${
-                    isActive("AdminDashboard") ? "bg-slate-800 text-white shadow-md" : "text-amber-700 hover:text-amber-900 hover:bg-amber-50"
+                    isActive("AdminDashboard") ? "bg-white/72 text-[#7b5f49] shadow-sm" : "text-[#8c7561] hover:bg-white/42 hover:text-[#5c4939]"
                   }`}
                 >
                   <ShieldCheck className="w-4 h-4" />
@@ -223,14 +223,14 @@ export default function Layout({ children, currentPageName }) {
                   variant="outline"
                   size="sm"
                   onClick={logout}
-                  className="flex items-center gap-1.5 border-stone-200 text-stone-600 hover:text-red-600 hover:border-red-300 hover:bg-red-50"
+                  className="flex items-center gap-1.5 border-white/55 bg-white/35 text-[#7b6a58] hover:border-red-300 hover:bg-red-50 hover:text-red-600"
                 >
                   <LogOut className="w-4 h-4" />
                   Abmelden
                 </Button>
               ) : (
                 <Link to={createPageUrl("Login")}>
-                  <Button size="sm" className="flex items-center gap-1.5 bg-[#a8c686] hover:bg-[#94b872] text-white">
+                  <Button size="sm" className="flex items-center gap-1.5 bg-[#8a6a52] text-white hover:bg-[#775943]">
                     <LogIn className="w-4 h-4" />
                     Anmelden
                   </Button>
