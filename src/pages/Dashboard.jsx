@@ -50,10 +50,11 @@ export default function Dashboard() {
 
   const filteredHikes = sortBySeason(
     hikes.filter((h) => {
-      if (!searchQuery) return true;
+      const query = searchQuery.trim().toLowerCase();
+      if (!query) return true;
       return (
-        h.trail_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        h.location?.toLowerCase().includes(searchQuery.toLowerCase())
+        h.trail_name?.toLowerCase().includes(query) ||
+        h.location?.toLowerCase().includes(query)
       );
     }),
     season

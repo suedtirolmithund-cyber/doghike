@@ -262,7 +262,13 @@ export default function Friends() {
           <form onSubmit={handleSearch} className="flex gap-2">
             <Input
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                setSearchQuery(value);
+                if (!value.trim()) {
+                  setSearchResults([]);
+                }
+              }}
               placeholder="Username oder Name suchen..."
               className="flex-1"
             />

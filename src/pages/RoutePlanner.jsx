@@ -309,12 +309,13 @@ function SmartRoutePlanner({ onRouteReady }) {
 
   const handleSearch = async (e) => {
     e?.preventDefault();
-    if (!searchText.trim()) return;
+    const query = searchText.trim();
+    if (!query) return;
     setSearching(true);
     setSearchError(null);
     try {
       const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchText)}&format=json&limit=1&accept-language=de`
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1&accept-language=de`
       );
       const results = await res.json();
       if (results.length > 0) {

@@ -173,11 +173,12 @@ function LocationPicker({ lat, lng, onChange }) {
 
   const handleSearch = async (e) => {
     e?.preventDefault();
-    if (!searchText.trim()) return;
+    const query = searchText.trim();
+    if (!query) return;
     setSearching(true);
     setSearchError(null);
     try {
-      const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchText)}&format=json&limit=1&accept-language=de`;
+      const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1&accept-language=de`;
       const resp = await fetch(url, { headers: { "Accept-Language": "de" } });
       const results = await resp.json();
       if (results.length > 0) {

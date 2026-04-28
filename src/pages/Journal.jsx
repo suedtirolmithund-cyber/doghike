@@ -143,8 +143,8 @@ export default function Journal() {
   const totalElevation = entries.reduce((sum, entry) => sum + (entry.elevation_m || 0), 0);
 
   const filtered = entries.filter((entry) => {
-    if (!search) return true;
-    const query = search.toLowerCase();
+    const query = search.trim().toLowerCase();
+    if (!query) return true;
 
     return (
       entry.title?.toLowerCase().includes(query) ||

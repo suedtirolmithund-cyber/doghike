@@ -48,8 +48,10 @@ export default function Hikes() {
 
   const filteredHikes = hikes
     .filter((hike) => {
-      const matchesSearch = hike.trail_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        hike.location?.toLowerCase().includes(searchQuery.toLowerCase());
+      const query = searchQuery.trim().toLowerCase();
+      const matchesSearch = !query ||
+        hike.trail_name?.toLowerCase().includes(query) ||
+        hike.location?.toLowerCase().includes(query);
       if (!matchesSearch) return false;
 
       if (humanDifficultyFilter !== "all" && hike.difficulty !== humanDifficultyFilter) return false;

@@ -92,7 +92,7 @@ export async function removeFriend(friendshipId) {
 
 // Search profiles by username or full_name (excludes self)
 export async function searchProfiles(query, currentUserId) {
-  const q = query.trim();
+  const q = query.trim().replace(/[,%()]/g, " ").replace(/\s+/g, " ");
   if (!q) return [];
 
   const { data, error } = await supabase
