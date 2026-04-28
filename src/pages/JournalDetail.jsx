@@ -293,8 +293,8 @@ export default function JournalDetail() {
             {entry.dog_difficulty && (
               <div className="flex items-center gap-2">
                 <span className="text-xs text-stone-500 w-28">🐕 Hund</span>
-                <span className={`text-sm font-medium ${DIFFICULTY_COLOR[entry.dog_difficulty]}`}>
-                  {DIFFICULTY_LABEL[entry.dog_difficulty]}
+                <span className={`text-sm font-medium ${getDifficultyTextColor(entry.dog_difficulty)}`}>
+                  {getDifficultyLabel(entry.dog_difficulty)}
                 </span>
               </div>
             )}

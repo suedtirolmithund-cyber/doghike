@@ -88,13 +88,13 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
           <div className="p-5">
             <div className="mb-3 flex flex-wrap items-center gap-1.5">
               {humanDifficultyLabel && (
-                <Badge className="border border-[#e4d0c0] bg-[#f3e7dc] px-2.5 py-0.5 text-xs font-medium text-[#8c5f43]">
-                  Mensch: {humanDifficultyLabel}
+                <Badge className={`${getDifficultyBadgeClass(hike.difficulty)} border px-2.5 py-0.5 text-xs font-medium`}>
+                  👤 {humanDifficultyLabel}
                 </Badge>
               )}
               {dogDifficultyLabel && (
                 <Badge className={`${getDifficultyBadgeClass(hike.dog_difficulty)} border px-2.5 py-0.5 text-xs font-medium`}>
-                  Hund: {dogDifficultyLabel}
+                  🐕 {dogDifficultyLabel}
                 </Badge>
               )}
               {hike.water_availability && (

@@ -28,6 +28,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import ExpandableText from "@/components/ExpandableText";
+import { DIFFICULTY_LEVELS } from "@/lib/difficultyConfig";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -562,11 +563,11 @@ export default function RouteDetail() {
                           <Select value={completeData.difficulty} onValueChange={(v) => setCompleteData({ ...completeData, difficulty: v })}>
                             <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="1">1 – Leicht</SelectItem>
-                              <SelectItem value="2">2 – Mittel-leicht</SelectItem>
-                              <SelectItem value="3">3 – Mittel</SelectItem>
-                              <SelectItem value="4">4 – Anspruchsvoll</SelectItem>
-                              <SelectItem value="5">5 – Schwer</SelectItem>
+                              {DIFFICULTY_LEVELS.map((level) => (
+                                <SelectItem key={level.value} value={level.value}>
+                                  {level.short} · {level.label}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                         </div>
@@ -575,11 +576,11 @@ export default function RouteDetail() {
                           <Select value={completeData.dog_difficulty} onValueChange={(v) => setCompleteData({ ...completeData, dog_difficulty: v })}>
                             <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="1">1 – Leicht</SelectItem>
-                              <SelectItem value="2">2 – Mittel-leicht</SelectItem>
-                              <SelectItem value="3">3 – Mittel</SelectItem>
-                              <SelectItem value="4">4 – Anspruchsvoll</SelectItem>
-                              <SelectItem value="5">5 – Schwer</SelectItem>
+                              {DIFFICULTY_LEVELS.map((level) => (
+                                <SelectItem key={level.value} value={level.value}>
+                                  {level.short} · {level.label}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                         </div>

@@ -31,8 +31,15 @@ import RatingSection from "@/components/community/RatingSection";
 import ExpandableText from "@/components/ExpandableText";
 import PremiumGate from "@/components/hikes/PremiumGate";
 import { supabase } from "@/lib/supabaseClient";
-import { getDifficultyBadgeClass, getDifficultyLabel } from "@/lib/difficultyConfig";
 import { toast } from "sonner";
+
+const difficultyColors = {
+  "1": "bg-brand-100 text-brand-600",
+  "2": "bg-lime-100 text-lime-700",
+  "3": "bg-amber-100 text-amber-700",
+  "4": "bg-orange-100 text-orange-700",
+  "5": "bg-red-100 text-red-700"
+};
 
 const seasonConfig = {
   spring: { emoji: "🌸", label: "Frühling", color: "bg-pink-100 text-pink-700" },
@@ -192,8 +199,6 @@ export default function HikeDetail() {
   const hikeDogs = dogs.filter(d => hike.dogs?.includes(d.id));
   const photos = hike.photos || [];
   const coverPhoto = photos[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80";
-  const humanDifficultyLabel = getDifficultyLabel(hike.difficulty);
-  const dogDifficultyLabel = getDifficultyLabel(hike.dog_difficulty);
   
   // Extract country from location
   const country = hike.location ? hike.location.split(',').map(p => p.trim()).pop() : null;
@@ -282,14 +287,14 @@ export default function HikeDetail() {
                   {seasonConfig[hike.season].emoji} {seasonConfig[hike.season].label}
                 </Badge>
               )}
-              {humanDifficultyLabel && (
-                <Badge className={`${getDifficultyBadgeClass(hike.difficulty)} border`}>
-                  👤 {humanDifficultyLabel}
+              {hike.difficulty && (
+                <Badge className={difficultyColors[hike.difficulty]}>
+                  👤 Stufe {hike.difficulty}
                 </Badge>
               )}
-              {dogDifficultyLabel && (
-                <Badge className={`${getDifficultyBadgeClass(hike.dog_difficulty)} border`}>
-                  🐕 {dogDifficultyLabel}
+              {hike.dog_difficulty && (
+                <Badge className={difficultyColors[hike.dog_difficulty]}>
+                  🐕 Stufe {hike.dog_difficulty}
                 </Badge>
               )}
             </div>
@@ -355,61 +360,79 @@ export default function HikeDetail() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10"
+          className="flex flex-wrap gap-2 mb-10"
         >
           {country && (
-            <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
-              <Globe className="w-5 h-5 text-stone-400 mx-auto mb-2" />
-              <p className="text-lg font-medium text-stone-800">{country}</p>
-              <p className="text-sm text-stone-500">Land</p>
+            <div className="flex items-center gap-2 bg-brand-50 border border-brand-200 rounded-full px-4 py-2">
+              <span className="text-base">🌍</span>
+              <div>
+                <div className="text-sm font-bold text-stone-900 leading-tight">{country}</div>
+                <div className="text-xs text-stone-400">Land</div>
+              </div>
             </div>
           )}
-          <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
-            <Calendar className="w-5 h-5 text-stone-400 mx-auto mb-2" />
-            <p className="text-lg font-medium text-stone-800">
-              {hike.date && format(new Date(hike.date), "dd.MM.yyyy")}
-            </p>
-            <p className="text-sm text-stone-500">Datum</p>
+          <div className="flex items-center gap-2 bg-brand-50 border border-brand-200 rounded-full px-4 py-2">
+            <span className="text-base">📅</span>
+            <div>
+              <div className="text-sm font-bold text-stone-900 leading-tight">
+                {hike.date && format(new Date(hike.date), "dd.MM.yyyy")}
+              </div>
+              <div className="text-xs text-stone-400">Datum</div>
+            </div>
           </div>
           {hike.distance_km && (
-            <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
-              <Route className="w-5 h-5 text-stone-400 mx-auto mb-2" />
-              <p className="text-lg font-medium text-stone-800">{hike.distance_km} km</p>
-              <p className="text-sm text-stone-500">Strecke</p>
+            <div className="flex items-center gap-2 bg-brand-50 border border-brand-200 rounded-full px-4 py-2">
+              <span className="text-base">📏</span>
+              <div>
+                <div className="text-sm font-bold text-stone-900 leading-tight">{hike.distance_km} km</div>
+                <div className="text-xs text-stone-400">Strecke</div>
+              </div>
             </div>
           )}
           {hike.elevation_gain_m && (
-            <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
-              <Mountain className="w-5 h-5 text-stone-400 mx-auto mb-2" />
-              <p className="text-lg font-medium text-stone-800">{hike.elevation_gain_m} m</p>
-              <p className="text-sm text-stone-500">Höhenmeter</p>
+            <div className="flex items-center gap-2 bg-brand-50 border border-brand-200 rounded-full px-4 py-2">
+              <span className="text-base">⛰️</span>
+              <div>
+                <div className="text-sm font-bold text-stone-900 leading-tight">{hike.elevation_gain_m} m</div>
+                <div className="text-xs text-stone-400">Höhenmeter</div>
+              </div>
             </div>
           )}
           {hike.duration_minutes && (
-            <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
-              <Clock className="w-5 h-5 text-stone-400 mx-auto mb-2" />
-              <p className="text-lg font-medium text-stone-800">
-                {(hike.duration_minutes / 60).toFixed(1)} Std
-              </p>
-              <p className="text-sm text-stone-500">Gehzeit</p>
+            <div className="flex items-center gap-2 bg-brand-50 border border-brand-200 rounded-full px-4 py-2">
+              <span className="text-base">⏱️</span>
+              <div>
+                <div className="text-sm font-bold text-stone-900 leading-tight">
+                  {(hike.duration_minutes / 60).toFixed(1)} Std
+                </div>
+                <div className="text-xs text-stone-400">Gehzeit</div>
+              </div>
             </div>
           )}
-          {humanDifficultyLabel && (
-            <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
-              <Mountain className="w-5 h-5 text-stone-400 mx-auto mb-2" />
-              <p className="text-lg font-medium text-stone-800">
-                {"🏔️".repeat(Number(hike.difficulty))}
-              </p>
-              <p className="text-sm text-stone-500">👤 {humanDifficultyLabel}</p>
+          {hike.difficulty && (
+            <div className="flex items-center gap-2 bg-brand-100 border border-brand-400 rounded-full px-4 py-2">
+              <span className="text-base">🧗</span>
+              <div>
+                <div className="flex gap-0.5 mb-0.5">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <span key={i} className={`inline-block w-2 h-2 rounded-full ${i < Number(hike.difficulty) ? 'bg-brand-400' : 'bg-brand-200'}`} />
+                  ))}
+                </div>
+                <div className="text-xs text-stone-400">Mensch</div>
+              </div>
             </div>
           )}
-          {dogDifficultyLabel && (
-            <div className="bg-white rounded-2xl p-5 border border-stone-200/50 text-center">
-              <span className="text-xl block mb-1">🦴</span>
-              <p className="text-lg font-medium text-stone-800">
-                {"🦴".repeat(Number(hike.dog_difficulty))}
-              </p>
-              <p className="text-sm text-stone-500">🐕 {dogDifficultyLabel}</p>
+          {hike.dog_difficulty && (
+            <div className="flex items-center gap-2 bg-brand-100 border border-brand-400 rounded-full px-4 py-2">
+              <span className="text-base">🐕</span>
+              <div>
+                <div className="flex gap-0.5 mb-0.5">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <span key={i} className={`inline-block w-2 h-2 rounded-full ${i < Number(hike.dog_difficulty) ? 'bg-brand-600' : 'bg-brand-200'}`} />
+                  ))}
+                </div>
+                <div className="text-xs text-stone-400">Hund</div>
+              </div>
             </div>
           )}
         </motion.div>

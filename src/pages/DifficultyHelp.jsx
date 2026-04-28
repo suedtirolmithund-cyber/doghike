@@ -7,8 +7,8 @@ const humanLevels = [
     stufe: "Stufe 1",
     color: "bg-brand-100 border-green-300 text-green-800",
     badge: "bg-brand-500",
-    title: "Wanderweg",
-    desc: "Gut markierter Weg, keine Schwierigkeiten. Geeignet für jeden, auch ohne Wandererfahrung.",
+    title: "Sehr leicht – Wanderweg",
+    desc: "Gut markierter Weg ohne besondere Schwierigkeiten. Geeignet für fast alle, auch ohne Wandererfahrung.",
     examples: "Flache Waldwege, Almwiesen, Rundwege im Tal",
     terrain: "Befestigter Weg oder breiter Pfad, kein Absturzrisiko",
     fitness: "Keine besondere Kondition nötig",
@@ -18,8 +18,8 @@ const humanLevels = [
     stufe: "Stufe 2",
     color: "bg-lime-100 border-lime-300 text-lime-800",
     badge: "bg-lime-500",
-    title: "Bergwanderweg",
-    desc: "Schmaler, teils steiler Pfad mit leichten Geländeunterschieden. Gute Trittsicherheit empfohlen.",
+    title: "Leicht – Bergwanderweg",
+    desc: "Schmalerer, teils steiler Pfad mit leichten Geländeunterschieden. Gute Trittsicherheit ist hilfreich.",
     examples: "Hügelige Wanderungen, einfache Almtouren",
     terrain: "Markierter Pfad, ab und zu steinig, geringe Absturzgefahr",
     fitness: "Leichte Ausdauer erforderlich",
@@ -29,33 +29,33 @@ const humanLevels = [
     stufe: "Stufe 3",
     color: "bg-yellow-100 border-yellow-300 text-yellow-800",
     badge: "bg-yellow-500",
-    title: "Anspruchsvoller Bergweg",
-    desc: "Steile, rutschige oder exponierte Abschnitte. Trittsicherheit und Schwindelfreiheit erforderlich.",
-    examples: "Touren mit Klettersteig-Abschnitten, Geröllfeldern",
-    terrain: "Teils weglos, felsige Abschnitte, Hände gelegentlich nötig",
-    fitness: "Gute Kondition und Bergerfahrung empfohlen",
+    title: "Mittel – Anspruchsvoller Bergweg",
+    desc: "Steile, rutschige oder exponierte Abschnitte. Trittsicherheit und Schwindelfreiheit sind wichtig.",
+    examples: "Steilere Bergwege, Geröllfelder, ausgesetzte Passagen",
+    terrain: "Teils felsig, uneben oder ausgesetzt, Hände gelegentlich nötig",
+    fitness: "Gute Kondition und etwas Bergerfahrung empfohlen",
   },
   {
     level: "T4",
     stufe: "Stufe 4",
     color: "bg-orange-100 border-orange-300 text-orange-800",
     badge: "bg-orange-500",
-    title: "Alpiner Weg",
-    desc: "Weglos, teils ausgesetzt. Gute Orientierung und Klettererfahrung notwendig.",
-    examples: "Gipfeltouren, alpine Übergänge",
-    terrain: "Fels, Geröll, Schneefelder möglich, III. Grad",
-    fitness: "Sehr gute Kondition, alpine Erfahrung",
+    title: "Schwer – Alpiner Weg",
+    desc: "Weglos oder stark ausgesetzt. Gute Orientierung, Trittsicherheit und alpine Erfahrung sind notwendig.",
+    examples: "Gipfeltouren, alpine Übergänge, sehr steile Wege",
+    terrain: "Fels, Geröll, Schneefelder möglich",
+    fitness: "Sehr gute Kondition und alpine Erfahrung",
   },
   {
     level: "T5",
     stufe: "Stufe 5",
     color: "bg-red-100 border-red-300 text-red-800",
     badge: "bg-red-500",
-    title: "Schwieriger Alpinweg",
-    desc: "Hochalpines Gelände, stark exponiert, Klettern bis III. Grad. Nur für erfahrene Bergsteiger.",
-    examples: "Klettersteige Schwierigkeit D/E, hochalpine Touren",
-    terrain: "Stark exponiert, Gletscher, IV. Grad",
-    fitness: "Sehr erfahrene Alpinisten",
+    title: "Sehr schwer – Schwieriger Alpinweg",
+    desc: "Hochalpines Gelände mit stark exponierten Stellen. Nur für sehr erfahrene Bergsteiger geeignet.",
+    examples: "Schwierige Klettersteige, hochalpine Routen",
+    terrain: "Ausgesetzter Fels, Schnee, Gletscher, heikle Passagen",
+    fitness: "Nur für sehr erfahrene Alpinisten",
   },
 ];
 
@@ -64,7 +64,7 @@ const dogLevels = [
     stufe: "Stufe 1",
     color: "bg-brand-100 border-green-300 text-green-800",
     badge: "bg-brand-500",
-    title: "Ideal für jeden Hund",
+    title: "Sehr leicht – Ideal für jeden Hund",
     desc: "Breite, befestigte Wege ohne nennenswerte Hindernisse. Kein Absturzrisiko.",
     examples: "Feldwege, Waldpfade, flache Rundwege",
     terrain: "Befestigter oder breiter Erdweg, keine Treppen oder Felsen",
@@ -74,41 +74,41 @@ const dogLevels = [
     stufe: "Stufe 2",
     color: "bg-lime-100 border-lime-300 text-lime-800",
     badge: "bg-lime-500",
-    title: "Einfach – für gesunde Hunde",
-    desc: "Leicht hügeliges Gelände, schmale Pfade. Keine gefährlichen Stellen.",
+    title: "Leicht – Für gesunde Hunde",
+    desc: "Leicht hügeliges Gelände, schmale Pfade und keine gefährlichen Stellen.",
     examples: "Hügelige Waldwege, einfache Almwege",
     terrain: "Schmaler Pfad, wenig Geröll, geringe Steigung",
-    note: "Für die meisten Hunde problemlos",
+    note: "Für die meisten gesunden Hunde problemlos",
   },
   {
     stufe: "Stufe 3",
     color: "bg-yellow-100 border-yellow-300 text-yellow-800",
     badge: "bg-yellow-500",
-    title: "Mittel – trittsichere Hunde",
-    desc: "Steile Abschnitte, Geröll, schmale Pfade mit leichter Absturzgefahr.",
+    title: "Mittel – Trittsichere Hunde",
+    desc: "Steile Abschnitte, Geröll und schmale Pfade mit leichter Absturzgefahr.",
     examples: "Steile Almwege, einfache Gipfeltouren",
     terrain: "Felsige Passagen, Geröll, teils steil",
-    note: "Leine empfohlen bei Ausgesetzt-Stellen. Hunde mit Gelenkproblemen besser meiden.",
+    note: "Leine an ausgesetzten Stellen empfohlen. Hunde mit Gelenkproblemen besser meiden.",
   },
   {
     stufe: "Stufe 4",
     color: "bg-orange-100 border-orange-300 text-orange-800",
     badge: "bg-orange-500",
-    title: "Schwer – nur für fitte Hunde",
-    desc: "Ausgesetzte Abschnitte, Leitern oder Treppen, enge Felsdurchgänge. Hund muss gegebenenfalls getragen werden.",
+    title: "Schwer – Nur für fitte Hunde",
+    desc: "Ausgesetzte Abschnitte, Leitern oder Treppen, enge Felsdurchgänge. Der Hund muss gegebenenfalls getragen werden.",
     examples: "Klettersteige, hochalpine Wege",
     terrain: "Fels, Seilversicherungen, Leitern",
-    note: "Große oder schwere Hunde ggf. nicht geeignet",
+    note: "Große oder schwere Hunde sind hier oft nicht geeignet",
   },
   {
     stufe: "Stufe 5",
     color: "bg-red-100 border-red-300 text-red-800",
     badge: "bg-red-500",
     title: "Sehr schwer – Hunde nicht empfohlen",
-    desc: "Sehr steiles Felsgelände, Kletterpassagen, kaum überwindbare Hindernisse für Hunde.",
+    desc: "Sehr steiles Felsgelände, Kletterpassagen und kaum überwindbare Hindernisse für Hunde.",
     examples: "Anspruchsvolle Klettersteige, hochalpines Terrain",
     terrain: "Senkrechte Felspassagen, Schnee, Gletscher",
-    note: "Hunde sollten zu Hause bleiben",
+    note: "Hunde sollten hier zu Hause bleiben",
   },
 ];
 
@@ -121,11 +121,10 @@ export default function DifficultyHelp() {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-light text-stone-800 mb-2">Schwierigkeitsskala</h1>
           <p className="text-stone-500 text-sm">
-            Orientiert an der SAC-Wanderskala (Schweizer Alpen Club)
+            Einheitliche Orientierung für Mensch und Hund
           </p>
         </div>
 
-        {/* Tab switcher */}
         <div className="flex gap-2 mb-8 bg-white rounded-xl p-1 border border-stone-200 shadow-sm">
           <button
             onClick={() => setActiveTab("human")}
@@ -149,45 +148,42 @@ export default function DifficultyHelp() {
 
         {activeTab === "human" && (
           <div className="space-y-4">
-            {humanLevels.map((l) => (
-              <div key={l.stufe} className={`border rounded-2xl p-5 ${l.color}`}>
+            {humanLevels.map((level) => (
+              <div key={level.stufe} className={`border rounded-2xl p-5 ${level.color}`}>
                 <div className="flex items-center gap-3 mb-3">
-                  <span className={`text-white text-xs font-bold px-2 py-1 rounded-full ${l.badge}`}>{l.level}</span>
+                  <span className={`text-white text-xs font-bold px-2 py-1 rounded-full ${level.badge}`}>{level.level}</span>
                   <div>
-                    <span className="font-semibold">{l.stufe}</span>
-                    <span className="text-sm ml-2 opacity-80">– {l.title}</span>
+                    <span className="font-semibold">{level.stufe}</span>
+                    <span className="text-sm ml-2 opacity-80">– {level.title}</span>
                   </div>
                 </div>
-                <p className="text-sm mb-3">{l.desc}</p>
+                <p className="text-sm mb-3">{level.desc}</p>
                 <div className="grid grid-cols-1 gap-1.5 text-xs opacity-80">
-                  <div><span className="font-medium">Beispiele:</span> {l.examples}</div>
-                  <div><span className="font-medium">Gelände:</span> {l.terrain}</div>
-                  <div><span className="font-medium">Fitness:</span> {l.fitness}</div>
+                  <div><span className="font-medium">Beispiele:</span> {level.examples}</div>
+                  <div><span className="font-medium">Gelände:</span> {level.terrain}</div>
+                  <div><span className="font-medium">Fitness:</span> {level.fitness}</div>
                 </div>
               </div>
             ))}
-            <p className="text-xs text-stone-400 text-center pt-2">
-              Quelle: Angelehnt an die T-Skala des Schweizer Alpen Club (SAC)
-            </p>
           </div>
         )}
 
         {activeTab === "dog" && (
           <div className="space-y-4">
-            {dogLevels.map((l) => (
-              <div key={l.stufe} className={`border rounded-2xl p-5 ${l.color}`}>
+            {dogLevels.map((level) => (
+              <div key={level.stufe} className={`border rounded-2xl p-5 ${level.color}`}>
                 <div className="flex items-center gap-3 mb-3">
-                  <span className={`text-white text-xs font-bold px-2 py-1 rounded-full ${l.badge}`}>🐾</span>
+                  <span className={`text-white text-xs font-bold px-2 py-1 rounded-full ${level.badge}`}>🐾</span>
                   <div>
-                    <span className="font-semibold">{l.stufe}</span>
-                    <span className="text-sm ml-2 opacity-80">– {l.title}</span>
+                    <span className="font-semibold">{level.stufe}</span>
+                    <span className="text-sm ml-2 opacity-80">– {level.title}</span>
                   </div>
                 </div>
-                <p className="text-sm mb-3">{l.desc}</p>
+                <p className="text-sm mb-3">{level.desc}</p>
                 <div className="grid grid-cols-1 gap-1.5 text-xs opacity-80">
-                  <div><span className="font-medium">Beispiele:</span> {l.examples}</div>
-                  <div><span className="font-medium">Gelände:</span> {l.terrain}</div>
-                  <div><span className="font-medium">Hinweis:</span> {l.note}</div>
+                  <div><span className="font-medium">Beispiele:</span> {level.examples}</div>
+                  <div><span className="font-medium">Gelände:</span> {level.terrain}</div>
+                  <div><span className="font-medium">Hinweis:</span> {level.note}</div>
                 </div>
               </div>
             ))}
