@@ -193,6 +193,10 @@ export async function getHikes() {
  */
 // dog and profile are pre-fetched objects passed in from getApprovedJournalEntries
 function journalEntryToHike(entry, dog = null, profile = null) {
+  const seasons = Array.isArray(entry.seasons)
+    ? entry.seasons.filter(Boolean)
+    : [];
+
   return {
     id: `journal-${entry.id}`,
     trail_name: entry.title,
@@ -213,13 +217,19 @@ function journalEntryToHike(entry, dog = null, profile = null) {
     difficulty: entry.difficulty ? String(entry.difficulty) : null,
     dog_difficulty: entry.dog_difficulty ? String(entry.dog_difficulty) : null,
 
-    water_availability: (["little","moderate","plenty"])[entry.water_available - 1] ?? null,
+    water_availability:
+      entry.water_available === 0 ? "none"
+      : entry.water_available === 1 ? "little"
+      : entry.water_available === 2 ? "moderate"
+      : entry.water_available === 3 ? "plenty"
+      : null,
 
     is_premium: false,
     status: "approved",
     visibility: "public",
 
-    season: null,
+    season: seasons[0] || null,
+    seasons,
     availability: null,
 
     hazard_notes: entry.hazard_notes || null,

@@ -24,8 +24,13 @@ function getCurrentSeason() {
 
 function sortBySeason(hikes, season) {
   return [...hikes].sort((a, b) => {
-    const score = (h) =>
-      h.season === season ? 3 : h.season === "all_year" ? 2 : h.season ? 1 : 0;
+    const score = (h) => {
+      const seasons = Array.isArray(h.seasons) && h.seasons.length > 0
+        ? h.seasons
+        : h.season ? [h.season] : [];
+
+      return seasons.includes(season) ? 3 : seasons.includes("all_year") ? 2 : seasons.length > 0 ? 1 : 0;
+    };
     return score(b) - score(a);
   });
 }
