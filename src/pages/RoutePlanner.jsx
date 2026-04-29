@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
-  ArrowLeft, Map, Navigation, Loader2, Upload, Search, RotateCcw, Layers, Mountain, Clock, Ruler, TrendingUp, X
+  ArrowLeft, Map, Navigation, Loader2, Upload, Search, RotateCcw, Layers, Mountain, X
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { motion, AnimatePresence } from "framer-motion";
@@ -20,6 +20,7 @@ import GPSTracker from "@/components/routes/GPSTracker";
 import GPXUploader from "@/components/routes/GPXUploader";
 import { deleteJournalFiles, uploadJournalFile } from "@/lib/journalApi";
 import { toast } from "sonner";
+import { TOUR_ICONS } from "@/lib/difficultyConfig";
 
 // ── Leaflet fix ───────────────────────────────────────────────
 delete L.Icon.Default.prototype._getIconUrl;
@@ -494,12 +495,12 @@ function SmartRoutePlanner({ onRouteReady }) {
       {route && (
         <div className="grid grid-cols-3 gap-3">
           <div className="bg-blue-50 rounded-xl p-3 text-center border border-blue-100">
-            <Ruler className="w-4 h-4 text-blue-600 mx-auto mb-1" />
+            <span className="block text-lg mb-1">{TOUR_ICONS.distance}</span>
             <p className="text-lg font-bold text-blue-800">{route.distance_km}</p>
             <p className="text-xs text-blue-600">km</p>
           </div>
           <div className="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
-            <Clock className="w-4 h-4 text-slate-600 mx-auto mb-1" />
+            <span className="block text-lg mb-1">{TOUR_ICONS.duration}</span>
             <p className="text-lg font-bold text-slate-800">
               {Math.floor(route.duration_minutes / 60) > 0
                 ? `${Math.floor(route.duration_minutes / 60)}h ${route.duration_minutes % 60}m`
@@ -508,7 +509,7 @@ function SmartRoutePlanner({ onRouteReady }) {
             <p className="text-xs text-slate-500">ca. Zeit</p>
           </div>
           <div className="bg-brand-50 rounded-xl p-3 text-center border border-brand-100">
-            <TrendingUp className="w-4 h-4 text-brand-400 mx-auto mb-1" />
+            <span className="block text-lg mb-1">{TOUR_ICONS.elevation}</span>
             <p className="text-lg font-bold text-brand-700">
               {elevation.length ? `+${calcElevationGain(elevation).gain} m` : "–"}
             </p>

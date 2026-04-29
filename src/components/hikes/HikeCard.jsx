@@ -1,24 +1,17 @@
 import { motion } from "framer-motion";
-import { MapPin, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import ExpandableText from "@/components/ExpandableText";
-import { getDifficultyBadgeClass, getDifficultyLabel, getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
+import { TOUR_ICONS, getDifficultyBadgeClass, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
 
-const seasonEmojis = {
-  spring: "🌸",
-  summer: "☀️",
-  autumn: "🍂",
-  winter: "❄️",
-  all_year: "🍃",
-};
-
-function StatTile({ value, label }) {
+function StatTile({ value, label, icon }) {
   if (!value) return null;
 
   return (
     <div className="rounded-xl border border-stone-200/70 bg-white/58 px-3 py-2 text-center shadow-sm backdrop-blur-sm">
+      <span className="mb-1 block text-sm leading-none">{icon}</span>
       <p className="text-base font-semibold leading-none text-[#8c5f43]">{value}</p>
       <p className="mt-1 text-[11px] text-stone-500">{label}</p>
     </div>
@@ -59,14 +52,14 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
 
             {hike.season && (
               <span className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/74 text-xl shadow-sm backdrop-blur-sm">
-                {seasonEmojis[hike.season]}
+                {getSeasonIcon(hike.season)}
               </span>
             )}
 
             <div className="absolute bottom-4 left-4 right-4">
               <h3 className="mb-1 text-xl font-semibold leading-tight text-white drop-shadow-sm">{hike.trail_name}</h3>
               <div className="flex items-center gap-1.5 text-sm font-medium text-white/85">
-                <MapPin className="h-4 w-4" />
+                <span>{TOUR_ICONS.location}</span>
                 <span>{hike.location || "Dolomites"}</span>
               </div>
             </div>
@@ -76,12 +69,12 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
             <div className="mb-3 flex flex-wrap items-center gap-1.5">
               {humanDifficultyLabel && (
                 <Badge className={`${getDifficultyBadgeClass(hike.difficulty)} border px-2.5 py-1 text-xs font-medium`}>
-                  👤 {humanDifficultyLabel}
+                  {TOUR_ICONS.human} {humanDifficultyLabel}
                 </Badge>
               )}
               {dogDifficultyLabel && (
                 <Badge className={`${getDifficultyBadgeClass(hike.dog_difficulty)} border px-2.5 py-1 text-xs font-medium`}>
-                  🐕 {dogDifficultyLabel}
+                  {TOUR_ICONS.dog} {dogDifficultyLabel}
                 </Badge>
               )}
               {hike.water_availability && (
@@ -110,11 +103,12 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
             )}
 
             <div className="mb-4 grid grid-cols-3 gap-2">
-              <StatTile value={hike.distance_km} label="km" />
-              <StatTile value={hike.elevation_gain_m} label="Hm" />
+              <StatTile value={hike.distance_km} label="km" icon={TOUR_ICONS.distance} />
+              <StatTile value={hike.elevation_gain_m} label="Hm" icon={TOUR_ICONS.elevation} />
               <StatTile
                 value={hike.duration_minutes ? (hike.duration_minutes / 60).toFixed(1) : null}
                 label="Std"
+                icon={TOUR_ICONS.duration}
               />
             </div>
 

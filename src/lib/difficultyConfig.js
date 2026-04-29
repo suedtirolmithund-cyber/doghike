@@ -46,6 +46,44 @@ export const WATER_LEVELS = [
   { value: "plenty", numeric: 3, label: "Viel Wasser", icon: "💧💧💧", textColor: "text-cyan-700", badgeClass: "bg-cyan-50 text-cyan-700 border-cyan-200" },
 ];
 
+export const TOUR_ICONS = {
+  distance: "📏",
+  elevation: "⛰️",
+  duration: "⏱️",
+  location: "📍",
+  map: "🗺️",
+  country: "🌍",
+  date: "📅",
+  human: "👤",
+  dog: "🐕",
+  season: "🌤️",
+  speed: "🏃",
+};
+
+export const SEASON_LEVELS = [
+  { value: "spring", label: "Frühling", icon: "🌸", color: "bg-pink-100 text-pink-700" },
+  { value: "summer", label: "Sommer", icon: "☀️", color: "bg-red-100 text-red-700" },
+  { value: "autumn", label: "Herbst", icon: "🍂", color: "bg-orange-100 text-orange-700" },
+  { value: "winter", label: "Winter", icon: "❄️", color: "bg-blue-100 text-blue-700" },
+  { value: "all_year", label: "Ganzjährig", icon: "🍃", color: "bg-brand-100 text-brand-600" },
+];
+
+export const SEASON_BY_VALUE = Object.fromEntries(
+  SEASON_LEVELS.map((season) => [season.value, season])
+);
+
+export function getSeasonLabel(value) {
+  return SEASON_BY_VALUE[value]?.label ?? null;
+}
+
+export function getSeasonIcon(value) {
+  return SEASON_BY_VALUE[value]?.icon ?? "🌤️";
+}
+
+export function getSeasonBadgeClass(value) {
+  return SEASON_BY_VALUE[value]?.color ?? "bg-stone-100 text-stone-600";
+}
+
 export const WATER_BY_VALUE = Object.fromEntries(
   WATER_LEVELS.flatMap((level) => [
     [level.value, level],

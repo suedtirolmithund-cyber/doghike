@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { Route as RouteIcon, Mountain, Clock, Activity } from "lucide-react";
+import { Mountain } from "lucide-react";
+import { TOUR_ICONS } from "@/lib/difficultyConfig";
 
 function haversine(lat1, lon1, lat2, lon2) {
   const R = 6371;
@@ -73,7 +74,7 @@ export default function RouteProfile({ hike }) {
         {hike.distance_km && (
           <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200">
             <div className="flex items-center gap-1.5 text-blue-600 mb-1">
-              <RouteIcon className="w-4 h-4" />
+              <span className="text-sm leading-none">{TOUR_ICONS.distance}</span>
               <span className="text-xs font-medium">Strecke</span>
             </div>
             <p className="text-2xl font-bold text-blue-900">
@@ -84,7 +85,7 @@ export default function RouteProfile({ hike }) {
         {hike.elevation_gain_m && (
           <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4 border border-orange-200">
             <div className="flex items-center gap-1.5 text-orange-600 mb-1">
-              <Mountain className="w-4 h-4" />
+              <span className="text-sm leading-none">{TOUR_ICONS.elevation}</span>
               <span className="text-xs font-medium">Aufstieg</span>
             </div>
             <p className="text-2xl font-bold text-orange-900">
@@ -95,7 +96,7 @@ export default function RouteProfile({ hike }) {
         {hike.duration_minutes && (
           <div className="bg-gradient-to-br from-brand-50 to-brand-100 rounded-xl p-4 border border-brand-200">
             <div className="flex items-center gap-1.5 text-brand-400 mb-1">
-              <Clock className="w-4 h-4" />
+              <span className="text-sm leading-none">{TOUR_ICONS.duration}</span>
               <span className="text-xs font-medium">Gehzeit</span>
             </div>
             <p className="text-xl font-bold text-green-900">
@@ -106,7 +107,7 @@ export default function RouteProfile({ hike }) {
         {pace && (
           <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 border border-purple-200">
             <div className="flex items-center gap-1.5 text-purple-600 mb-1">
-              <Activity className="w-4 h-4" />
+              <span className="text-sm leading-none">{TOUR_ICONS.speed}</span>
               <span className="text-xs font-medium">Tempo</span>
             </div>
             <p className="text-xl font-bold text-purple-900">
@@ -120,7 +121,7 @@ export default function RouteProfile({ hike }) {
       <div className="flex flex-wrap gap-3">
         {gradient && (
           <div className="flex-1 min-w-[110px] bg-white rounded-xl p-3 border border-stone-200 text-center">
-            <p className="text-xs text-stone-500 mb-1">⛰️ Ø Steigung</p>
+            <p className="text-xs text-stone-500 mb-1">{TOUR_ICONS.elevation} Ø Steigung</p>
             <p className="text-lg font-bold text-stone-800">{gradient}%</p>
           </div>
         )}

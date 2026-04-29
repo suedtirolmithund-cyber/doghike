@@ -14,8 +14,6 @@ import {
   AlertTriangle,
   User,
   MapPin,
-  Ruler,
-  Mountain,
   Image as ImageIcon,
   MessageSquare,
   Trash2,
@@ -36,6 +34,7 @@ import {
 } from "@/lib/adminApi";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { TOUR_ICONS } from "@/lib/difficultyConfig";
 
 function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
   const [expanded, setExpanded] = useState(false);
@@ -78,13 +77,13 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
             <div className="flex flex-wrap gap-3 mt-2 text-xs text-stone-500">
               {entry.distance_km && (
                 <span className="flex items-center gap-1">
-                  <Ruler className="w-3 h-3" />
+                  <span className="text-sm leading-none">{TOUR_ICONS.distance}</span>
                   {entry.distance_km} km
                 </span>
               )}
               {entry.elevation_m && (
                 <span className="flex items-center gap-1">
-                  <Mountain className="w-3 h-3" />
+                  <span className="text-sm leading-none">{TOUR_ICONS.elevation}</span>
                   {entry.elevation_m} Hm
                 </span>
               )}

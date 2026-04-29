@@ -6,13 +6,10 @@ import {
   FileText,
   Trash2,
   AlertCircle,
-  Mountain,
-  Route,
-  Clock,
-  TrendingUp,
   Zap,
 } from "lucide-react";
 import RouteElevationProfile from "./RouteElevationProfile";
+import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -231,22 +228,22 @@ export default function GPXUploader({ onSave }) {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="bg-slate-800 text-white rounded-xl p-4 text-center">
-              <Route className="w-5 h-5 mx-auto mb-1 opacity-70" />
+              <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.distance}</span>
               <p className="text-2xl font-bold">{gpxData.distance_km}</p>
               <p className="text-xs opacity-70">km Distanz</p>
             </div>
             <div className="bg-brand-600 text-white rounded-xl p-4 text-center">
-              <TrendingUp className="w-5 h-5 mx-auto mb-1 opacity-70" />
+              <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.elevation}</span>
               <p className="text-2xl font-bold">+{gpxData.elevation_gain_m}</p>
               <p className="text-xs opacity-70">m Aufstieg</p>
             </div>
             <div className="bg-blue-700 text-white rounded-xl p-4 text-center">
-              <Clock className="w-5 h-5 mx-auto mb-1 opacity-70" />
+              <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.duration}</span>
               <p className="text-2xl font-bold">{formatDuration(gpxData.duration_minutes)}</p>
               <p className="text-xs opacity-70">gesch. Dauer</p>
             </div>
             <div className="bg-amber-700 text-white rounded-xl p-4 text-center">
-              <Mountain className="w-5 h-5 mx-auto mb-1 opacity-70" />
+              <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.elevation}</span>
               <p className="text-2xl font-bold">
                 {gpxData.max_elevation !== -Infinity ? Math.round(gpxData.max_elevation) : "–"}
               </p>

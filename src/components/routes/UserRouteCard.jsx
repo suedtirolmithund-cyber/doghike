@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Map,
   Navigation,
-  Clock,
-  Route,
   CheckCircle2,
   Trash2,
   Edit,
@@ -14,6 +12,7 @@ import {
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import "leaflet/dist/leaflet.css";
+import { TOUR_ICONS } from "@/lib/difficultyConfig";
 
 export default function UserRouteCard({ route, index, onDelete }) {
   const RouteIcon = route.route_type === "recorded" ? Navigation : Map;
@@ -68,18 +67,18 @@ export default function UserRouteCard({ route, index, onDelete }) {
 
         <div className="flex flex-wrap gap-3 mb-3 text-xs text-stone-600">
           <div className="flex items-center gap-1">
-            <Route className="w-3 h-3" />
+            <span className="text-sm leading-none">{TOUR_ICONS.distance}</span>
             <span>{route.distance_km} km</span>
           </div>
           {effectiveDurationMinutes && (
             <div className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
+              <span className="text-sm leading-none">{TOUR_ICONS.duration}</span>
               <span>{effectiveDurationMinutes} min</span>
             </div>
           )}
           {route.avg_speed_kmh && (
             <div className="flex items-center gap-1">
-              <Navigation className="w-3 h-3" />
+              <span className="text-sm leading-none">{TOUR_ICONS.speed}</span>
               <span>{route.avg_speed_kmh} km/h</span>
             </div>
           )}

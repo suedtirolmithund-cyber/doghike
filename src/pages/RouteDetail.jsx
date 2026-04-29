@@ -23,12 +23,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ArrowLeft, Map, Route, Clock, Navigation, EyeOff, Trash2, TrendingUp, CheckCircle2, Star, Upload, X, Loader2, Pencil, BookOpen } from "lucide-react";
+import { ArrowLeft, Map, EyeOff, Trash2, CheckCircle2, Star, Upload, X, Loader2, Pencil, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import ExpandableText from "@/components/ExpandableText";
-import { DIFFICULTY_LEVELS, WATER_LEVELS } from "@/lib/difficultyConfig";
+import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -419,12 +419,12 @@ export default function RouteDetail() {
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               <div className="text-center p-4 bg-slate-50 rounded-lg">
-                <Route className="w-5 h-5 mx-auto mb-2 text-slate-700" />
+                <span className="mb-2 block text-xl">{TOUR_ICONS.distance}</span>
                 <p className="text-2xl font-bold text-slate-800">{route.distance_km ?? "–"}</p>
                 <p className="text-xs text-stone-500">Kilometer</p>
               </div>
               <div className="text-center p-4 bg-slate-50 rounded-lg">
-                <Clock className="w-5 h-5 mx-auto mb-2 text-slate-700" />
+                <span className="mb-2 block text-xl">{TOUR_ICONS.duration}</span>
                 <p className="text-2xl font-bold text-slate-800">
                   {effectiveDurationMinutes
                     ? Math.floor(effectiveDurationMinutes / 60) > 0
@@ -435,7 +435,7 @@ export default function RouteDetail() {
                 <p className="text-xs text-stone-500">Gehzeit</p>
               </div>
               <div className="text-center p-4 bg-slate-50 rounded-lg">
-                <TrendingUp className="w-5 h-5 mx-auto mb-2 text-slate-700" />
+                <span className="mb-2 block text-xl">{TOUR_ICONS.elevation}</span>
                 <p className="text-2xl font-bold text-slate-800">
                   {route.elevation_gain_m ? `+${route.elevation_gain_m}` : "–"}
                 </p>
@@ -443,7 +443,7 @@ export default function RouteDetail() {
               </div>
               {route.avg_speed_kmh && (
                 <div className="text-center p-4 bg-slate-50 rounded-lg">
-                  <Navigation className="w-5 h-5 mx-auto mb-2 text-slate-700" />
+                  <span className="mb-2 block text-xl">{TOUR_ICONS.speed}</span>
                   <p className="text-2xl font-bold text-slate-800">{route.avg_speed_kmh}</p>
                   <p className="text-xs text-stone-500">km/h</p>
                 </div>
@@ -559,7 +559,7 @@ export default function RouteDetail() {
                       {/* Difficulty */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="text-sm font-medium text-stone-700 mb-1 block">Schwierigkeit (Mensch) 👤</label>
+                          <label className="text-sm font-medium text-stone-700 mb-1 block">Schwierigkeit (Mensch) {TOUR_ICONS.human}</label>
                           <Select value={completeData.difficulty} onValueChange={(v) => setCompleteData({ ...completeData, difficulty: v })}>
                             <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
                             <SelectContent>
@@ -572,7 +572,7 @@ export default function RouteDetail() {
                           </Select>
                         </div>
                         <div>
-                          <label className="text-sm font-medium text-stone-700 mb-1 block">Schwierigkeit (Hund) 🐕</label>
+                          <label className="text-sm font-medium text-stone-700 mb-1 block">Schwierigkeit (Hund) {TOUR_ICONS.dog}</label>
                           <Select value={completeData.dog_difficulty} onValueChange={(v) => setCompleteData({ ...completeData, dog_difficulty: v })}>
                             <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
                             <SelectContent>
@@ -589,15 +589,15 @@ export default function RouteDetail() {
                       {/* Season & Water */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="text-sm font-medium text-stone-700 mb-1 block">Beste Jahreszeit</label>
+                          <label className="text-sm font-medium text-stone-700 mb-1 block">Beste Jahreszeit {TOUR_ICONS.season}</label>
                           <Select value={completeData.season} onValueChange={(v) => setCompleteData({ ...completeData, season: v })}>
                             <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="spring">🌸 Frühling</SelectItem>
-                              <SelectItem value="summer">☀️ Sommer</SelectItem>
-                              <SelectItem value="autumn">🍂 Herbst</SelectItem>
-                              <SelectItem value="winter">❄️ Winter</SelectItem>
-                              <SelectItem value="all_year">🍃 Ganzjährig</SelectItem>
+                              {SEASON_LEVELS.map((season) => (
+                                <SelectItem key={season.value} value={season.value}>
+                                  {season.icon} {season.label}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                         </div>
@@ -637,7 +637,7 @@ export default function RouteDetail() {
                       {/* Dogs */}
                       {myDogs.length > 0 && (
                         <div>
-                          <label className="text-sm font-medium text-stone-700 mb-2 block">🐕 Welche Hunde waren dabei?</label>
+                          <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.dog} Welche Hunde waren dabei?</label>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             {myDogs.map((dog) => (
                               <div

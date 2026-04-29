@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
   Users, Search, UserPlus, UserMinus, Check, X,
-  Loader2, LogIn, Clock, Ruler, TrendingUp, Star, BookOpen
+  Loader2, LogIn, Clock, Star, BookOpen
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { useAuth } from "@/lib/AuthContext";
+import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import {
   getFriendships, getFriendIds, getFriendFeedEntries,
   sendFriendRequest, acceptFriendRequest,
@@ -48,8 +49,8 @@ function FeedCard({ entry }) {
         <h3 className="font-semibold text-stone-800 mb-1">{entry.title}</h3>
         {entry.location && <p className="text-xs text-stone-500 mb-2">Ort: {entry.location}</p>}
         <div className="flex flex-wrap gap-3 text-xs text-stone-500 mb-2">
-          {entry.distance_km && <span className="flex items-center gap-1"><Ruler className="w-3 h-3" />{entry.distance_km} km</span>}
-          {entry.elevation_m && <span className="flex items-center gap-1"><TrendingUp className="w-3 h-3" />{entry.elevation_m} Hm</span>}
+          {entry.distance_km && <span className="flex items-center gap-1"><span className="text-sm leading-none">{TOUR_ICONS.distance}</span>{entry.distance_km} km</span>}
+          {entry.elevation_m && <span className="flex items-center gap-1"><span className="text-sm leading-none">{TOUR_ICONS.elevation}</span>{entry.elevation_m} Hm</span>}
           {entry.rating > 0 && <span className="flex items-center gap-1 text-yellow-500"><Star className="w-3 h-3 fill-yellow-400" />{entry.rating}/5</span>}
         </div>
         {entry.description && <p className="text-sm text-stone-500 line-clamp-2">{entry.description}</p>}

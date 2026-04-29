@@ -8,9 +8,6 @@ import { de } from "date-fns/locale";
 import {
   Plus,
   Mountain,
-  Clock,
-  Ruler,
-  TrendingUp,
   Star,
   Trash2,
   BookOpen,
@@ -38,7 +35,7 @@ import {
 import { toast } from "sonner";
 import { useAuth } from "@/lib/AuthContext";
 import { getJournalEntriesForDisplay, deleteJournalEntry } from "@/lib/journalApi";
-import { getDifficultyLabel, getDifficultyTextColor, getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
+import { getDifficultyLabel, getDifficultyTextColor, getWaterBadgeClass, getWaterIcon, getWaterLabel, TOUR_ICONS } from "@/lib/difficultyConfig";
 
 const PAGE_SIZE = 20;
 
@@ -100,12 +97,12 @@ function StarRating({ rating }) {
   );
 }
 
-function StatsChip({ icon: Icon, value, unit, color = "text-stone-600" }) {
+function StatsChip({ icon, value, unit, color = "text-stone-600" }) {
   if (!value) return null;
 
   return (
     <div className={`flex items-center gap-1 text-xs ${color}`}>
-      <Icon className="w-3.5 h-3.5 shrink-0" />
+      <span className="text-sm leading-none shrink-0">{icon}</span>
       <span className="font-medium">{value}</span>
       {unit && <span className="text-stone-400">{unit}</span>}
     </div>
@@ -208,11 +205,15 @@ export default function Journal() {
           >
             {[
               { icon: Mountain, value: entries.length, label: "Wanderungen", color: "text-brand-400" },
-              { icon: Ruler, value: `${totalDistance.toFixed(0)} km`, label: "Gesamt", color: "text-blue-600" },
-              { icon: TrendingUp, value: `${Math.round(totalElevation).toLocaleString()} Hm`, label: "Aufstieg", color: "text-orange-600" },
-            ].map(({ icon: Icon, value, label, color }) => (
+              { icon: TOUR_ICONS.distance, value: `${totalDistance.toFixed(0)} km`, label: "Gesamt", color: "text-blue-600" },
+              { icon: TOUR_ICONS.elevation, value: `${Math.round(totalElevation).toLocaleString()} Hm`, label: "Aufstieg", color: "text-orange-600" },
+            ].map(({ icon, value, label, color }) => (
               <div key={label} className="bg-white rounded-xl p-3 md:p-4 border border-stone-200 text-center shadow-sm">
-                <Icon className={`w-5 h-5 ${color} mx-auto mb-1`} />
+                {typeof icon === "string" ? (
+                  <span className={`block text-xl ${color} mb-1`}>{icon}</span>
+                ) : (
+                  <Mountain className={`w-5 h-5 ${color} mx-auto mb-1`} />
+                )}
                 <p className="text-lg md:text-xl font-bold text-stone-800">{value}</p>
                 <p className="text-xs text-stone-500">{label}</p>
               </div>
@@ -282,17 +283,17 @@ export default function Journal() {
                         </div>
 
                         <div className="flex flex-wrap gap-3 my-2">
-                          <StatsChip icon={Ruler} value={entry.distance_km} unit="km" />
-                          <StatsChip icon={TrendingUp} value={entry.elevation_m} unit="Hm" color="text-orange-600" />
+                          <StatsChip icon={TOUR_ICONS.distance} value={entry.distance_km} unit="km" />
+                          <StatsChip icon={TOUR_ICONS.elevation} value={entry.elevation_m} unit="Hm" color="text-orange-600" />
                           <StatsChip
-                            icon={Clock}
+                            icon={TOUR_ICONS.duration}
                             value={entry.duration_minutes ? Math.round((entry.duration_minutes / 60) * 10) / 10 : null}
                             unit="Std"
                             color="text-blue-600"
                           />
                           {entry.difficulty && (
                             <span className={`text-xs font-medium ${getDifficultyTextColor(entry.difficulty)}`}>
-                              👤 {getDifficultyLabel(entry.difficulty)}
+                              {TOUR_ICONS.human} {getDifficultyLabel(entry.difficulty)}
                             </span>
                           )}
                         </div>

@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { DIFFICULTY_LEVELS, WATER_LEVELS } from "@/lib/difficultyConfig";
+import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 
 function buildInitialFormData(hike) {
   return {
@@ -285,7 +285,7 @@ export default function EditPublicHike() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="distance_km">Distanz (km)</Label>
+                <Label htmlFor="distance_km">{TOUR_ICONS.distance} Distanz (km)</Label>
                 <Input
                   id="distance_km"
                   type="number"
@@ -296,7 +296,7 @@ export default function EditPublicHike() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="elevation_gain_m">Höhenmeter</Label>
+                <Label htmlFor="elevation_gain_m">{TOUR_ICONS.elevation} Höhenmeter</Label>
                 <Input
                   id="elevation_gain_m"
                   type="number"
@@ -316,24 +316,24 @@ export default function EditPublicHike() {
               </div>
 
               <div className="space-y-2">
-                <Label>Jahreszeit</Label>
+                <Label>{TOUR_ICONS.season} Jahreszeit</Label>
                 <Select value={formData.season} onValueChange={(value) => setFormData((prev) => ({ ...prev, season: value }))}>
                   <SelectTrigger>
                     <SelectValue placeholder="Nicht gesetzt" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="unset">Nicht gesetzt</SelectItem>
-                    <SelectItem value="spring">Frühling</SelectItem>
-                    <SelectItem value="summer">Sommer</SelectItem>
-                    <SelectItem value="autumn">Herbst</SelectItem>
-                    <SelectItem value="winter">Winter</SelectItem>
-                          <SelectItem value="all_year">🍃 Ganzjährig</SelectItem>
+                    {SEASON_LEVELS.map((season) => (
+                      <SelectItem key={season.value} value={season.value}>
+                        {season.icon} {season.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label>Schwierigkeit Mensch</Label>
+                <Label>{TOUR_ICONS.human} Schwierigkeit Mensch</Label>
                 <Select value={formData.difficulty} onValueChange={(value) => setFormData((prev) => ({ ...prev, difficulty: value }))}>
                   <SelectTrigger>
                     <SelectValue placeholder="Nicht gesetzt" />
@@ -350,7 +350,7 @@ export default function EditPublicHike() {
               </div>
 
               <div className="space-y-2">
-                <Label>Schwierigkeit Hund</Label>
+                <Label>{TOUR_ICONS.dog} Schwierigkeit Hund</Label>
                 <Select value={formData.dog_difficulty} onValueChange={(value) => setFormData((prev) => ({ ...prev, dog_difficulty: value }))}>
                   <SelectTrigger>
                     <SelectValue placeholder="Nicht gesetzt" />
@@ -367,7 +367,7 @@ export default function EditPublicHike() {
               </div>
 
               <div className="space-y-2">
-                <Label>Wasser</Label>
+                <Label>💧 Wasser</Label>
                 <Select value={formData.water_availability} onValueChange={(value) => setFormData((prev) => ({ ...prev, water_availability: value }))}>
                   <SelectTrigger>
                     <SelectValue placeholder="Nicht gesetzt" />

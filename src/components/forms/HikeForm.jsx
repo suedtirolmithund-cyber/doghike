@@ -24,7 +24,7 @@ import { toast } from "sonner";
 import RouteEditor from "@/components/map/RouteEditor";
 import StartPointPicker from "@/components/map/StartPointPicker";
 import ConsentDialog from "@/components/ConsentDialog";
-import { DIFFICULTY_LEVELS, WATER_LEVELS } from "@/lib/difficultyConfig";
+import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 
 export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabel }) {
   const { user } = useAuth();
@@ -235,7 +235,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="difficulty">Schwierigkeit (Mensch) 👤</Label>
+            <Label htmlFor="difficulty">Schwierigkeit (Mensch) {TOUR_ICONS.human}</Label>
             <a href={createPageUrl("DifficultyHelp")} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline flex items-center gap-1">
               <HelpCircle className="w-3 h-3" /> Was bedeutet das?
             </a>
@@ -257,7 +257,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="dog_difficulty">Schwierigkeit (Hund) 🐕</Label>
+            <Label htmlFor="dog_difficulty">Schwierigkeit (Hund) {TOUR_ICONS.dog}</Label>
             <a href={createPageUrl("DifficultyHelp")} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline flex items-center gap-1">
               <HelpCircle className="w-3 h-3" /> Was bedeutet das?
             </a>
@@ -278,7 +278,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="season">Beste Jahreszeit</Label>
+          <Label htmlFor="season">Beste Jahreszeit {TOUR_ICONS.season}</Label>
           <Select
             value={formData.season}
             onValueChange={(value) => setFormData({ ...formData, season: value })}
@@ -287,11 +287,11 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               <SelectValue placeholder="Wählen" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="spring">🌸 Frühling</SelectItem>
-              <SelectItem value="summer">☀️ Sommer</SelectItem>
-              <SelectItem value="autumn">🍂 Herbst</SelectItem>
-              <SelectItem value="winter">❄️ Winter</SelectItem>
-              <SelectItem value="all_year">🍃 Ganzjährig</SelectItem>
+              {SEASON_LEVELS.map((season) => (
+                <SelectItem key={season.value} value={season.value}>
+                  {season.icon} {season.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -321,7 +321,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="distance">Strecke (km)</Label>
+          <Label htmlFor="distance">{TOUR_ICONS.distance} Strecke (km)</Label>
           <Input
             id="distance"
             type="number"
@@ -333,7 +333,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="elevation">Höhenmeter (m)</Label>
+          <Label htmlFor="elevation">{TOUR_ICONS.elevation} Höhenmeter (m)</Label>
           <Input
             id="elevation"
             type="number"
@@ -344,7 +344,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="duration">Gehzeit (Minuten)</Label>
+          <Label htmlFor="duration">{TOUR_ICONS.duration} Gehzeit (Minuten)</Label>
           <Input
             id="duration"
             type="number"

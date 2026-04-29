@@ -12,12 +12,21 @@ import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import {
-  ArrowLeft, MapPin, Ruler, TrendingUp, Clock, Star, AlertTriangle, Dog, User, Users, Globe,
+  ArrowLeft, Star, AlertTriangle, Dog, User, Users, Globe,
   Loader2, ShieldOff, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { getDifficultyLabel, getDifficultyTextColor, getWaterIcon, getWaterLabel, getWaterTextColor } from "@/lib/difficultyConfig";
+import {
+  getDifficultyLabel,
+  getDifficultyTextColor,
+  getSeasonIcon,
+  getSeasonLabel,
+  getWaterIcon,
+  getWaterLabel,
+  getWaterTextColor,
+  TOUR_ICONS,
+} from "@/lib/difficultyConfig";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -26,7 +35,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-const SEASON_LABEL = { spring: "🌸 Frühling", summer: "☀️ Sommer", autumn: "🍂 Herbst", winter: "❄️ Winter" };
 const VISIBILITY_INFO = {
   private: { icon: User,  label: "Privat",       color: "text-stone-500" },
   friends: { icon: Users, label: "Freunde",       color: "text-blue-600"  },
@@ -229,7 +237,7 @@ export default function JournalDetail() {
 
             {entry.location && (
               <p className="flex items-center gap-1.5 text-stone-500 text-sm mb-3">
-                <MapPin className="w-4 h-4 shrink-0" /> {entry.location}
+                <span className="text-sm leading-none shrink-0">{TOUR_ICONS.location}</span> {entry.location}
               </p>
             )}
 
@@ -237,17 +245,17 @@ export default function JournalDetail() {
             <div className="flex flex-wrap gap-3 text-sm">
               {entry.distance_km && (
                 <span className="flex items-center gap-1 text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full">
-                  <Ruler className="w-3.5 h-3.5" /> {entry.distance_km} km
+                  <span className="text-sm leading-none">{TOUR_ICONS.distance}</span> {entry.distance_km} km
                 </span>
               )}
               {entry.elevation_m && (
                 <span className="flex items-center gap-1 text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full">
-                  <TrendingUp className="w-3.5 h-3.5" /> +{entry.elevation_m} Hm
+                  <span className="text-sm leading-none">{TOUR_ICONS.elevation}</span> +{entry.elevation_m} Hm
                 </span>
               )}
               {entry.duration_minutes && (
                 <span className="flex items-center gap-1 text-stone-600 bg-stone-100 px-2.5 py-1 rounded-full">
-                  <Clock className="w-3.5 h-3.5" />
+                  <span className="text-sm leading-none">{TOUR_ICONS.duration}</span>
                   {Math.floor(entry.duration_minutes / 60) > 0
                     ? `${Math.floor(entry.duration_minutes / 60)}h ${entry.duration_minutes % 60}min`
                     : `${entry.duration_minutes}min`}
@@ -283,7 +291,7 @@ export default function JournalDetail() {
             )}
             {entry.difficulty && (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-stone-500 w-28">👤 Mensch</span>
+                <span className="text-xs text-stone-500 w-28">{TOUR_ICONS.human} Mensch</span>
                 <span className={`text-sm font-medium ${getDifficultyTextColor(entry.difficulty)}`}>
                   {getDifficultyLabel(entry.difficulty)}
                 </span>
@@ -291,7 +299,7 @@ export default function JournalDetail() {
             )}
             {entry.dog_difficulty && (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-stone-500 w-28">🐕 Hund</span>
+                <span className="text-xs text-stone-500 w-28">{TOUR_ICONS.dog} Hund</span>
                 <span className={`text-sm font-medium ${getDifficultyTextColor(entry.dog_difficulty)}`}>
                   {getDifficultyLabel(entry.dog_difficulty)}
                 </span>
@@ -310,7 +318,9 @@ export default function JournalDetail() {
                 <span className="text-xs text-stone-500 w-28">Jahreszeit</span>
                 <div className="flex gap-1.5 flex-wrap">
                   {entry.seasons.map((s) => (
-                    <Badge key={s} variant="secondary" className="text-xs">{SEASON_LABEL[s] || s}</Badge>
+                    <Badge key={s} variant="secondary" className="text-xs">
+                      {getSeasonIcon(s)} {getSeasonLabel(s) || s}
+                    </Badge>
                   ))}
                 </div>
               </div>
@@ -318,7 +328,7 @@ export default function JournalDetail() {
             {entry.dog_suitable && (
               <div className="flex items-center gap-2">
                 <span className="text-xs text-stone-500 w-28">Hundefreundlich</span>
-                <span className="text-sm text-brand-400 font-medium">🐕 Ja</span>
+                <span className="text-sm text-brand-400 font-medium">{TOUR_ICONS.dog} Ja</span>
               </div>
             )}
             {entry.hazard_notes && (

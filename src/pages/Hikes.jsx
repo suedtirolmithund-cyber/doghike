@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
-import { DIFFICULTY_LEVELS, WATER_LEVELS } from "@/lib/difficultyConfig";
+import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 
 function getSeasonValues(hike) {
   if (Array.isArray(hike.seasons) && hike.seasons.length > 0) {
@@ -128,7 +128,7 @@ export default function Hikes() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
-                <label className="text-sm font-medium text-stone-700 mb-2 block">👤 Schwierigkeit Mensch</label>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.human} Schwierigkeit Mensch</label>
                 <Select value={humanDifficultyFilter} onValueChange={setHumanDifficultyFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Alle" />
@@ -145,7 +145,7 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-stone-700 mb-2 block">🐕 Schwierigkeit Hund</label>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.dog} Schwierigkeit Hund</label>
                 <Select value={dogDifficultyFilter} onValueChange={setDogDifficultyFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Alle" />
@@ -162,24 +162,24 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-stone-700 mb-2 block">🌤️ Jahreszeit</label>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.season} Jahreszeit</label>
                 <Select value={seasonFilter} onValueChange={setSeasonFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Alle" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Alle</SelectItem>
-                    <SelectItem value="spring">🌸 Frühling</SelectItem>
-                    <SelectItem value="summer">☀️ Sommer</SelectItem>
-                    <SelectItem value="autumn">🍂 Herbst</SelectItem>
-                    <SelectItem value="winter">❄️ Winter</SelectItem>
-                    <SelectItem value="all_year">🍃 Ganzjährig</SelectItem>
+                    {SEASON_LEVELS.map((season) => (
+                      <SelectItem key={season.value} value={season.value}>
+                        {season.icon} {season.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-stone-700 mb-2 block">📏 Distanz (km)</label>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.distance} Distanz (km)</label>
                 <div className="flex gap-2">
                   <Input type="number" placeholder="Min" value={distanceMin} onChange={(e) => setDistanceMin(e.target.value)} className="w-full" />
                   <Input type="number" placeholder="Max" value={distanceMax} onChange={(e) => setDistanceMax(e.target.value)} className="w-full" />
@@ -187,7 +187,7 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-stone-700 mb-2 block">⛰️ Höhenmeter (m)</label>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.elevation} Höhenmeter (m)</label>
                 <div className="flex gap-2">
                   <Input type="number" placeholder="Min" value={elevationMin} onChange={(e) => setElevationMin(e.target.value)} className="w-full" />
                   <Input type="number" placeholder="Max" value={elevationMax} onChange={(e) => setElevationMax(e.target.value)} className="w-full" />
@@ -236,10 +236,10 @@ export default function Hikes() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">🕐 Neueste zuerst</SelectItem>
-                    <SelectItem value="difficulty">👤 Schwierigkeit Mensch</SelectItem>
-                    <SelectItem value="dog_difficulty">🐕 Schwierigkeit Hund</SelectItem>
-                    <SelectItem value="distance">📏 Kilometer</SelectItem>
-                    <SelectItem value="elevation">⛰️ Höhenmeter</SelectItem>
+                    <SelectItem value="difficulty">{TOUR_ICONS.human} Schwierigkeit Mensch</SelectItem>
+                    <SelectItem value="dog_difficulty">{TOUR_ICONS.dog} Schwierigkeit Hund</SelectItem>
+                    <SelectItem value="distance">{TOUR_ICONS.distance} Kilometer</SelectItem>
+                    <SelectItem value="elevation">{TOUR_ICONS.elevation} Höhenmeter</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
