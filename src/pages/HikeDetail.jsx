@@ -583,7 +583,7 @@ export default function HikeDetail() {
                 className="bg-white rounded-2xl p-6 border border-stone-200/50"
               >
                 <h2 className="text-lg font-medium text-stone-800 mb-4">Beschreibung & Tipps</h2>
-                <ExpandableText text={hike.notes} lines={3} minChars={150} />
+                <ExpandableText text={hike.notes} lines={6} minChars={320} />
               </motion.div>
             )}
 
