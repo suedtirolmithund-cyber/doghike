@@ -110,10 +110,7 @@ function rowToHike(row, index) {
   const parsedAscent = parseFloat(row.ascent_m || row.elevation_gain_m || row.hm || row.hoehenmeter);
   const parsedDurationH = parseFloat(row.duration_h || row.dauer_h || row.duration_hours);
 
-  // Split comma-separated tags into an array, ignore empty strings
-  const tags = row.tags
-    ? row.tags.split(",").map((t) => t.trim()).filter(Boolean)
-    : [];
+  const tags = normalizeTags(...getLegacyTagColumns(row));
 
   // Wrap single image URL in an array so photos[0] works consistently in the app
   const photos = row.image ? [row.image] : [];
@@ -175,19 +172,57 @@ function mapSupabaseWaterLevel(value) {
   return null;
 }
 
-function normalizeTags(value) {
-  if (Array.isArray(value)) {
-    return value.map((tag) => String(tag).trim()).filter(Boolean);
-  }
+function splitTagString(value) {
+  return value
+    .split(/[,#;|]/)
+    .map((tag) => tag.trim().replace(/^#+/, ""))
+    .filter(Boolean);
+}
 
-  if (typeof value === "string") {
-    return value
-      .split(",")
-      .map((tag) => tag.trim())
-      .filter(Boolean);
-  }
+function normalizeTags(...values) {
+  return Array.from(
+    new Set(
+      values.flatMap((value) => {
+        if (Array.isArray(value)) {
+          return value
+            .map((tag) => String(tag).trim().replace(/^#+/, ""))
+            .filter(Boolean);
+        }
 
-  return [];
+        if (typeof value === "string") {
+          return splitTagString(value);
+        }
+
+        return [];
+      })
+    )
+  );
+}
+
+function getLegacyTagColumns(row) {
+  return [
+    row?.tags,
+    row?.tag,
+    row?.tag1,
+    row?.tag2,
+    row?.tag3,
+    row?.tag4,
+    row?.tag5,
+    row?.tags2,
+    row?.tags3,
+    row?.tags4,
+    row?.tags5,
+    row?.["tag 1"],
+    row?.["tag 2"],
+    row?.["tag 3"],
+    row?.["tag 4"],
+    row?.["tag 5"],
+    row?.tag_1,
+    row?.tag_2,
+    row?.tag_3,
+    row?.tag_4,
+    row?.tag_5,
+  ];
 }
 
 function normalizePublicPhotoReference(value) {
@@ -308,7 +343,7 @@ function publicHikeRowToHike(row, photos = []) {
     link: null,
     gpx_url: null,
 
-    tags: normalizeTags(row.tags),
+    tags: normalizeTags(...getLegacyTagColumns(row)),
 
     distance_km: row.distance_km != null ? Number(row.distance_km) : null,
     elevation_gain_m: row.elevation_gain_m ?? null,

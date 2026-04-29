@@ -11,6 +11,59 @@ function mapSupabaseWaterLevel(value) {
   return null;
 }
 
+function splitTagString(value) {
+  return value
+    .split(/[,#;|]/)
+    .map((tag) => tag.trim().replace(/^#+/, ""))
+    .filter(Boolean);
+}
+
+function normalizeTags(...values) {
+  return Array.from(
+    new Set(
+      values.flatMap((value) => {
+        if (Array.isArray(value)) {
+          return value
+            .map((tag) => String(tag).trim().replace(/^#+/, ""))
+            .filter(Boolean);
+        }
+
+        if (typeof value === "string") {
+          return splitTagString(value);
+        }
+
+        return [];
+      })
+    )
+  );
+}
+
+function getLegacyTagColumns(row) {
+  return [
+    row?.tags,
+    row?.tag,
+    row?.tag1,
+    row?.tag2,
+    row?.tag3,
+    row?.tag4,
+    row?.tag5,
+    row?.tags2,
+    row?.tags3,
+    row?.tags4,
+    row?.tags5,
+    row?.["tag 1"],
+    row?.["tag 2"],
+    row?.["tag 3"],
+    row?.["tag 4"],
+    row?.["tag 5"],
+    row?.tag_1,
+    row?.tag_2,
+    row?.tag_3,
+    row?.tag_4,
+    row?.tag_5,
+  ];
+}
+
 function normalizePublicPhotoReference(value) {
   if (typeof value !== "string") return "";
 
@@ -175,6 +228,7 @@ export async function getPublicHikeById(hikeId) {
     route_id: String(hikeRow.id),
     _public_hike_id: hikeRow.id,
     _source: "sheets",
+    tags: normalizeTags(...getLegacyTagColumns(hikeRow)),
     photos: mergePhotoLists(
       photoRows.map((photo) => photo.photo_url),
       getLegacyPhotoColumns(hikeRow)
