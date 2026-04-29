@@ -190,6 +190,34 @@ function normalizeTags(value) {
   return [];
 }
 
+function normalizePublicPhotoReference(value) {
+  if (typeof value !== "string") return "";
+
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+
+  const bucketPrefix = "journal/";
+  const publicMarker = "/storage/v1/object/public/";
+
+  if (trimmed.startsWith(publicMarker)) {
+    return `${import.meta.env.VITE_SUPABASE_URL}${trimmed}`;
+  }
+
+  if (trimmed.startsWith(bucketPrefix)) {
+    return `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${trimmed}`;
+  }
+
+  if (trimmed.startsWith("public-hikes/")) {
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("journal").getPublicUrl(trimmed);
+    return publicUrl;
+  }
+
+  return trimmed;
+}
+
 function getLegacyPhotoColumns(row) {
   return [
     row?.image,
@@ -246,7 +274,7 @@ function getLegacyPhotoColumns(row) {
     row?.image_4,
     row?.image_5,
   ]
-    .map((value) => (typeof value === "string" ? value.trim() : ""))
+    .map((value) => normalizePublicPhotoReference(value))
     .filter(Boolean);
 }
 

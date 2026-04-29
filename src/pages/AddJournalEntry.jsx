@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { createPageUrl } from "@/utils";
 import {
   ArrowLeft, Upload, X, Loader2, Star, FileText,
-  Mountain, Clock, Ruler, TrendingUp, MapPin, AlertTriangle, Dog, Search
+  Mountain, TrendingUp, MapPin, AlertTriangle, Dog, Search
 } from "lucide-react";
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
 import L from "leaflet";
@@ -27,7 +27,7 @@ import {
 } from "@/lib/journalApi";
 import { getDogs } from "@/lib/profilesApi";
 import { Link } from "react-router-dom";
-import { DIFFICULTY_LEVELS, WATER_LEVELS, getDifficultyLabel, getDifficultyTextColor, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
+import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS, getDifficultyLabel, getDifficultyTextColor, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
 
 // Sterne-Picker (Gesamtbewertung)
 function StarPicker({ label, value, onChange }) {
@@ -278,13 +278,18 @@ function WaterPicker({ label, value, onChange }) {
 }
 
 // Jahreszeiten-Picker (Mehrfachauswahl)
-const SEASON_OPTIONS = [
-  { value: "spring", emoji: "🌸", label: "Frühling", color: "#ec9cf4" },
-  { value: "summer", emoji: "☀️", label: "Sommer", color: "#d64545" },
-  { value: "autumn", emoji: "🍂", label: "Herbst", color: "#f19a4b" },
-  { value: "winter", emoji: "❄️", label: "Winter", color: "#5b83f0" },
-  { value: "all_year", emoji: "🍃", label: "Ganzjährig", color: "#38a062" },
-];
+const SEASON_OPTIONS = SEASON_LEVELS.map((season) => ({
+  value: season.value,
+  emoji: season.icon,
+  label: season.label,
+  color: {
+    spring: "#ec9cf4",
+    summer: "#d64545",
+    autumn: "#f19a4b",
+    winter: "#5b83f0",
+    all_year: "#38a062",
+  }[season.value],
+}));
 
 function SeasonPicker({ value = [], onChange }) {
   const toggle = (season) => {
@@ -815,19 +820,19 @@ export default function AddJournalEntry() {
 
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <Label htmlFor="distance_km" className="flex items-center gap-1"><Ruler className="w-3.5 h-3.5" /> Distanz (km)</Label>
+                <Label htmlFor="distance_km" className="flex items-center gap-1"><span>{TOUR_ICONS.distance}</span> Distanz (km)</Label>
                 <Input id="distance_km" type="number" step="0.1" min="0" value={form.distance_km}
                   onChange={(e) => set("distance_km", e.target.value)}
                   placeholder="z.B. 8.5" className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="elevation_m" className="flex items-center gap-1"><Mountain className="w-3.5 h-3.5" /> Höhenmeter</Label>
+                <Label htmlFor="elevation_m" className="flex items-center gap-1"><span>{TOUR_ICONS.elevation}</span> Höhenmeter</Label>
                 <Input id="elevation_m" type="number" min="0" value={form.elevation_m}
                   onChange={(e) => set("elevation_m", e.target.value)}
                   placeholder="z.B. 450" className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="duration_minutes" className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> Dauer (min)</Label>
+                <Label htmlFor="duration_minutes" className="flex items-center gap-1"><span>{TOUR_ICONS.duration}</span> Dauer (min)</Label>
                 <Input id="duration_minutes" type="number" min="0" value={form.duration_minutes}
                   onChange={(e) => set("duration_minutes", e.target.value)}
                   placeholder="z.B. 180" className="mt-1" />
