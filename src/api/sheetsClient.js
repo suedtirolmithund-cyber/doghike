@@ -99,6 +99,15 @@ function slugify(title) {
     .replace(/^-+|-+$/g, "");
 }
 
+function normalizeOptionalText(value) {
+  if (typeof value !== "string") return value ?? null;
+
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  if (trimmed.toLowerCase() === "null") return null;
+  return trimmed;
+}
+
 /**
  * Converts a raw CSV row (column names from the Google Sheet) into a Hike
  * object shaped exactly like the hike objects used throughout the app.
@@ -153,10 +162,10 @@ function rowToHike(row, index) {
     season: row.season || null,
     availability: row.availability || null,
 
-    hazard_notes: row.hazard_notes || null,
-    parking_info: row.parking_info || null,
-    restaurant_info: row.restaurant_info || null,
-    notes: row.notes || null,
+    hazard_notes: normalizeOptionalText(row.hazard_notes),
+    parking_info: normalizeOptionalText(row.parking_info),
+    restaurant_info: normalizeOptionalText(row.restaurant_info),
+    notes: normalizeOptionalText(row.notes),
     date: row.date || row.datum || null,
 
     // Mark origin so consumers can distinguish Sheets hikes from journal hikes
@@ -361,10 +370,10 @@ function publicHikeRowToHike(row, photos = []) {
     seasons: row.season ? [row.season] : [],
     availability: null,
 
-    hazard_notes: row.hazard_notes || null,
-    parking_info: row.parking_info || null,
-    restaurant_info: row.restaurant_info || null,
-    notes: row.notes || null,
+    hazard_notes: normalizeOptionalText(row.hazard_notes),
+    parking_info: normalizeOptionalText(row.parking_info),
+    restaurant_info: normalizeOptionalText(row.restaurant_info),
+    notes: normalizeOptionalText(row.notes),
     date: row.date || null,
 
     _source: "sheets",
@@ -478,10 +487,10 @@ function journalEntryToHike(entry, dog = null, profile = null) {
     seasons,
     availability: null,
 
-    hazard_notes: entry.hazard_notes || null,
+    hazard_notes: normalizeOptionalText(entry.hazard_notes),
     parking_info: null,
     restaurant_info: null,
-    notes: entry.description || null,
+    notes: normalizeOptionalText(entry.description),
 
     // Journal metadata
     rating: entry.rating || null,

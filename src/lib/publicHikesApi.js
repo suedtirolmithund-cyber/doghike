@@ -11,6 +11,15 @@ function mapSupabaseWaterLevel(value) {
   return null;
 }
 
+function normalizeOptionalText(value) {
+  if (typeof value !== "string") return value ?? null;
+
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  if (trimmed.toLowerCase() === "null") return null;
+  return trimmed;
+}
+
 function splitTagString(value) {
   return value
     .split(/[,#;|]/)
@@ -233,6 +242,10 @@ export async function getPublicHikeById(hikeId) {
       photoRows.map((photo) => photo.photo_url),
       getLegacyPhotoColumns(hikeRow)
     ),
+    hazard_notes: normalizeOptionalText(hikeRow.hazard_notes),
+    parking_info: normalizeOptionalText(hikeRow.parking_info),
+    restaurant_info: normalizeOptionalText(hikeRow.restaurant_info),
+    notes: normalizeOptionalText(hikeRow.notes),
     water_availability: mapSupabaseWaterLevel(hikeRow.water_availability),
     difficulty: hikeRow.difficulty != null ? String(hikeRow.difficulty) : null,
     dog_difficulty: hikeRow.dog_difficulty != null ? String(hikeRow.dog_difficulty) : null,
