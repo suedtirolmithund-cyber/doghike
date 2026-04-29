@@ -190,7 +190,43 @@ function normalizeTags(value) {
   return [];
 }
 
+function getLegacyPhotoColumns(row) {
+  return [
+    row?.image,
+    row?.image2,
+    row?.image3,
+    row?.image4,
+    row?.image5,
+    row?.image6,
+    row?.image7,
+    row?.image8,
+    row?.image9,
+    row?.image10,
+    row?.photo,
+    row?.photo2,
+    row?.photo3,
+    row?.photo4,
+    row?.photo5,
+  ]
+    .map((value) => (typeof value === "string" ? value.trim() : ""))
+    .filter(Boolean);
+}
+
+function mergePhotoLists(...photoLists) {
+  return Array.from(
+    new Set(
+      photoLists.flatMap((photoList) =>
+        Array.isArray(photoList)
+          ? photoList.map((photo) => (typeof photo === "string" ? photo.trim() : "")).filter(Boolean)
+          : []
+      )
+    )
+  );
+}
+
 function publicHikeRowToHike(row, photos = []) {
+  const mergedPhotos = mergePhotoLists(photos, getLegacyPhotoColumns(row));
+
   return {
     // Keep the old external id shape stable so saved hikes, comments, and ratings keep matching.
     id: slugify(row.title || String(row.id)),
@@ -202,7 +238,7 @@ function publicHikeRowToHike(row, photos = []) {
     latitude: row.latitude != null ? Number(row.latitude) : null,
     longitude: row.longitude != null ? Number(row.longitude) : null,
 
-    photos,
+    photos: mergedPhotos,
     link: null,
     gpx_url: null,
 

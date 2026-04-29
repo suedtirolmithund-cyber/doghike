@@ -11,6 +11,40 @@ function mapSupabaseWaterLevel(value) {
   return null;
 }
 
+function getLegacyPhotoColumns(row) {
+  return [
+    row?.image,
+    row?.image2,
+    row?.image3,
+    row?.image4,
+    row?.image5,
+    row?.image6,
+    row?.image7,
+    row?.image8,
+    row?.image9,
+    row?.image10,
+    row?.photo,
+    row?.photo2,
+    row?.photo3,
+    row?.photo4,
+    row?.photo5,
+  ]
+    .map((value) => (typeof value === "string" ? value.trim() : ""))
+    .filter(Boolean);
+}
+
+function mergePhotoLists(...photoLists) {
+  return Array.from(
+    new Set(
+      photoLists.flatMap((photoList) =>
+        Array.isArray(photoList)
+          ? photoList.map((photo) => (typeof photo === "string" ? photo.trim() : "")).filter(Boolean)
+          : []
+      )
+    )
+  );
+}
+
 function getPublicHikeStorageDescriptor(photoUrl) {
   if (!photoUrl || typeof photoUrl !== "string") return null;
 
@@ -75,7 +109,10 @@ export async function getPublicHikeById(hikeId) {
     route_id: String(hikeRow.id),
     _public_hike_id: hikeRow.id,
     _source: "sheets",
-    photos: photoRows.map((photo) => photo.photo_url).filter(Boolean),
+    photos: mergePhotoLists(
+      photoRows.map((photo) => photo.photo_url),
+      getLegacyPhotoColumns(hikeRow)
+    ),
     water_availability: mapSupabaseWaterLevel(hikeRow.water_availability),
     difficulty: hikeRow.difficulty != null ? String(hikeRow.difficulty) : null,
     dog_difficulty: hikeRow.dog_difficulty != null ? String(hikeRow.dog_difficulty) : null,
