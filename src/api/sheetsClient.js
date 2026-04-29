@@ -108,6 +108,14 @@ function normalizeOptionalText(value) {
   return trimmed;
 }
 
+function pickFirstText(row, keys) {
+  for (const key of keys) {
+    const value = normalizeOptionalText(row?.[key]);
+    if (value) return value;
+  }
+  return null;
+}
+
 /**
  * Converts a raw CSV row (column names from the Google Sheet) into a Hike
  * object shaped exactly like the hike objects used throughout the app.
@@ -128,7 +136,7 @@ function rowToHike(row, index) {
 
   return {
     id,
-    trail_name: row.title,
+    trail_name: pickFirstText(row, ["title", "trail_name", "name", "tour", "tour_name"]) || row.title,
     location: row.location,
     country: row.country || null,
 
@@ -162,10 +170,10 @@ function rowToHike(row, index) {
     season: row.season || null,
     availability: row.availability || null,
 
-    hazard_notes: normalizeOptionalText(row.hazard_notes),
-    parking_info: normalizeOptionalText(row.parking_info),
-    restaurant_info: normalizeOptionalText(row.restaurant_info),
-    notes: normalizeOptionalText(row.notes),
+    hazard_notes: pickFirstText(row, ["hazard_notes", "hazards", "danger_notes", "danger", "warning", "warnings", "achtung", "gefahr", "gefahren"]),
+    parking_info: pickFirstText(row, ["parking_info", "parking", "parking_notes", "parken", "ausgangspunkt"]),
+    restaurant_info: pickFirstText(row, ["restaurant_info", "restaurant", "restaurant_notes", "einkehr", "hutte", "hütte"]),
+    notes: pickFirstText(row, ["notes", "description", "beschreibung", "text", "details", "tipps"]),
     date: row.date || row.datum || null,
 
     // Mark origin so consumers can distinguish Sheets hikes from journal hikes
@@ -265,6 +273,8 @@ function normalizePublicPhotoReference(value) {
 function getLegacyPhotoColumns(row) {
   return [
     row?.image,
+    row?.bild,
+    row?.bilder,
     row?.image2,
     row?.image3,
     row?.image4,
@@ -279,11 +289,25 @@ function getLegacyPhotoColumns(row) {
     row?.photo3,
     row?.photo4,
     row?.photo5,
+    row?.photo6,
+    row?.photo7,
+    row?.photo8,
+    row?.photo9,
+    row?.photo10,
     row?.foto,
     row?.foto2,
     row?.foto3,
     row?.foto4,
     row?.foto5,
+    row?.foto6,
+    row?.foto7,
+    row?.foto8,
+    row?.foto9,
+    row?.foto10,
+    row?.bild2,
+    row?.bild3,
+    row?.bild4,
+    row?.bild5,
     row?.fotos,
     row?.fotos2,
     row?.fotos3,
@@ -297,10 +321,24 @@ function getLegacyPhotoColumns(row) {
     row?.["photo 3"],
     row?.["photo 4"],
     row?.["photo 5"],
+    row?.["photo 6"],
+    row?.["photo 7"],
+    row?.["photo 8"],
+    row?.["photo 9"],
+    row?.["photo 10"],
     row?.["foto 2"],
     row?.["foto 3"],
     row?.["foto 4"],
     row?.["foto 5"],
+    row?.["foto 6"],
+    row?.["foto 7"],
+    row?.["foto 8"],
+    row?.["foto 9"],
+    row?.["foto 10"],
+    row?.["bild 2"],
+    row?.["bild 3"],
+    row?.["bild 4"],
+    row?.["bild 5"],
     row?.["fotos 2"],
     row?.["fotos 3"],
     row?.["fotos 4"],
@@ -313,10 +351,29 @@ function getLegacyPhotoColumns(row) {
     row?.photo_3,
     row?.photo_4,
     row?.photo_5,
+    row?.photo_6,
+    row?.photo_7,
+    row?.photo_8,
+    row?.photo_9,
+    row?.photo_10,
     row?.image_2,
     row?.image_3,
     row?.image_4,
     row?.image_5,
+    row?.image_6,
+    row?.image_7,
+    row?.image_8,
+    row?.image_9,
+    row?.image_10,
+    row?.foto_6,
+    row?.foto_7,
+    row?.foto_8,
+    row?.foto_9,
+    row?.foto_10,
+    row?.bild_2,
+    row?.bild_3,
+    row?.bild_4,
+    row?.bild_5,
   ]
     .map((value) => normalizePublicPhotoReference(value))
     .filter(Boolean);
@@ -341,7 +398,7 @@ function publicHikeRowToHike(row, photos = []) {
     // Keep the old external id shape stable so saved hikes, comments, and ratings keep matching.
     id: slugify(row.title || String(row.id)),
     route_id: String(row.id),
-    trail_name: row.title,
+    trail_name: pickFirstText(row, ["title", "trail_name", "name", "tour", "tour_name"]) || row.title,
     location: row.location,
     country: row.country || null,
 
@@ -370,10 +427,10 @@ function publicHikeRowToHike(row, photos = []) {
     seasons: row.season ? [row.season] : [],
     availability: null,
 
-    hazard_notes: normalizeOptionalText(row.hazard_notes),
-    parking_info: normalizeOptionalText(row.parking_info),
-    restaurant_info: normalizeOptionalText(row.restaurant_info),
-    notes: normalizeOptionalText(row.notes),
+    hazard_notes: pickFirstText(row, ["hazard_notes", "hazards", "danger_notes", "danger", "warning", "warnings", "achtung", "gefahr", "gefahren"]),
+    parking_info: pickFirstText(row, ["parking_info", "parking", "parking_notes", "parken", "ausgangspunkt"]),
+    restaurant_info: pickFirstText(row, ["restaurant_info", "restaurant", "restaurant_notes", "einkehr", "hutte", "hütte"]),
+    notes: pickFirstText(row, ["notes", "description", "beschreibung", "text", "details", "tipps"]),
     date: row.date || null,
 
     _source: "sheets",
