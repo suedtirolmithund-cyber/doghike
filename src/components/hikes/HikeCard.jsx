@@ -11,10 +11,10 @@ function StatTile({ value, label, icon }) {
   if (!value) return null;
 
   return (
-    <div className="rounded-xl border border-stone-200/70 bg-white/58 px-3 py-2 text-center shadow-sm backdrop-blur-sm">
-      <span className="mb-1 block text-sm leading-none">{icon}</span>
-      <p className="text-base font-semibold leading-none text-[#8c5f43]">{value}</p>
-      <p className="mt-1 text-[11px] text-stone-500">{label}</p>
+    <div className="flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-stone-200/70 bg-white/58 px-2.5 py-1.5 shadow-sm backdrop-blur-sm">
+      <span className="text-sm leading-none">{icon}</span>
+      <span className="min-w-0 text-sm font-semibold leading-none text-[#8c5f43]">{value}</span>
+      <span className="text-[11px] font-medium leading-none text-stone-500">{label}</span>
     </div>
   );
 }
@@ -103,7 +103,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               </div>
             )}
 
-            <div className="mb-4 grid grid-cols-3 gap-2">
+            <div className="mb-3 grid grid-cols-3 gap-1.5">
               <StatTile value={hike.distance_km} label="km" icon={TOUR_ICONS.distance} />
               <StatTile value={hike.elevation_gain_m} label="Hm" icon={TOUR_ICONS.elevation} />
               <StatTile
