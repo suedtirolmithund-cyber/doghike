@@ -4,7 +4,7 @@ const waterLevels = [
   {
     value: "none",
     label: "Kein Wasser",
-    icon: "🚫💧",
+    icon: "🚱",
     color: "bg-red-50 border-red-200 text-red-800",
     desc: "Auf der gesamten Route gibt es keine natürlichen Wasserquellen.",
     examples: "Hochalpine Touren, trockene Felspfade im Sommer",
