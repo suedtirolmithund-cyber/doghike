@@ -11,10 +11,10 @@ function StatTile({ value, label, icon }) {
   if (!value) return null;
 
   return (
-    <div className="flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-stone-200/70 bg-white/58 px-2.5 py-1.5 shadow-sm backdrop-blur-sm">
-      <span className="text-sm leading-none">{icon}</span>
-      <span className="min-w-0 text-sm font-semibold leading-none text-[#8c5f43]">{value}</span>
-      <span className="text-[11px] font-medium leading-none text-stone-500">{label}</span>
+    <div className="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-stone-200/70 bg-white/58 px-3 py-2 shadow-sm backdrop-blur-sm">
+      <span className="text-base leading-none">{icon}</span>
+      <span className="min-w-0 text-base font-semibold leading-none text-[#8c5f43]">{value}</span>
+      <span className="text-xs font-medium leading-none text-stone-500">{label}</span>
     </div>
   );
 }
@@ -63,6 +63,23 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                 <span>{TOUR_ICONS.location}</span>
                 <span>{hike.location || "Dolomites"}</span>
               </div>
+              {Array.isArray(hike.tags) && hike.tags.length > 0 && (
+                <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                  {hike.tags.slice(0, 3).map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-white/40 bg-black/15 px-2.5 py-1 text-[11px] font-medium tracking-wide text-white/92 backdrop-blur-sm"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                  {hike.tags.length > 3 && (
+                    <span className="rounded-full border border-white/40 bg-black/15 px-2.5 py-1 text-[11px] font-medium text-white/78 backdrop-blur-sm">
+                      +{hike.tags.length - 3}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -85,25 +102,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               )}
             </div>
 
-            {Array.isArray(hike.tags) && hike.tags.length > 0 && (
-              <div className="mb-4 flex flex-wrap items-center gap-1.5">
-                {hike.tags.slice(0, 3).map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-stone-200/80 bg-white/62 px-2.5 py-1 text-[11px] font-medium tracking-wide text-stone-600"
-                  >
-                    #{tag}
-                  </span>
-                ))}
-                {hike.tags.length > 3 && (
-                  <span className="rounded-full border border-stone-200/80 bg-white/62 px-2.5 py-1 text-[11px] font-medium text-stone-500">
-                    +{hike.tags.length - 3}
-                  </span>
-                )}
-              </div>
-            )}
-
-            <div className="mb-3 grid grid-cols-3 gap-1.5">
+            <div className="mb-4 grid grid-cols-3 gap-2">
               <StatTile value={hike.distance_km} label="km" icon={TOUR_ICONS.distance} />
               <StatTile value={hike.elevation_gain_m} label="Hm" icon={TOUR_ICONS.elevation} />
               <StatTile
