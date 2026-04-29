@@ -99,7 +99,8 @@ export default function EditPublicHike() {
         photoUrls: [...prev.photoUrls, ...uploadedUrls],
       }));
       toast.success(`${uploadedUrls.length} Bild${uploadedUrls.length !== 1 ? "er" : ""} hochgeladen`);
-    } catch {
+    } catch (error) {
+      console.error("[EditPublicHike] photo upload failed:", error);
       toast.error("Die Bilder konnten gerade nicht hochgeladen werden. Bitte versuche es noch einmal.");
     } finally {
       setIsUploadingPhotos(false);
@@ -170,12 +171,16 @@ export default function EditPublicHike() {
           uploadedDuringEditRef.current.delete(photoUrl);
         }
       });
+      savedPhotoUrlsRef.current = new Set(finalPhotoUrls);
+      queryClient.invalidateQueries({ queryKey: ["publicHikeEditor", hikeId] });
       queryClient.invalidateQueries({ queryKey: ["allHikes"] });
       queryClient.invalidateQueries({ queryKey: ["hike"] });
+      queryClient.invalidateQueries({ queryKey: ["hike", "sheets", detailId] });
       toast.success("Öffentliche Tour gespeichert");
       navigate(createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`);
     },
-    onError: () => {
+    onError: (error) => {
+      console.error("[EditPublicHike] save failed:", error);
       toast.error("Die öffentliche Tour konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.");
     },
   });
