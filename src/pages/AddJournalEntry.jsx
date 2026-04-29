@@ -279,11 +279,11 @@ function WaterPicker({ label, value, onChange }) {
 
 // Jahreszeiten-Picker (Mehrfachauswahl)
 const SEASON_OPTIONS = [
-  { value: "spring", emoji: "Fr", label: "Frühling", color: "#ec9cf4" },
-  { value: "summer", emoji: "So", label: "Sommer", color: "#d64545" },
-  { value: "autumn", emoji: "He", label: "Herbst", color: "#f19a4b" },
-  { value: "winter", emoji: "Wi", label: "Winter", color: "#5b83f0" },
-  { value: "all_year", emoji: "Gj", label: "Ganzjährig", color: "#38a062" },
+  { value: "spring", emoji: "🌸", label: "Frühling", color: "#ec9cf4" },
+  { value: "summer", emoji: "☀️", label: "Sommer", color: "#d64545" },
+  { value: "autumn", emoji: "🍂", label: "Herbst", color: "#f19a4b" },
+  { value: "winter", emoji: "❄️", label: "Winter", color: "#5b83f0" },
+  { value: "all_year", emoji: "🍃", label: "Ganzjährig", color: "#38a062" },
 ];
 
 function SeasonPicker({ value = [], onChange }) {

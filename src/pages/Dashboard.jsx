@@ -43,7 +43,9 @@ export default function Dashboard() {
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
   });
 
   const season = getCurrentSeason();
@@ -69,7 +71,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
       {/* Hero */}
-      <div className="relative h-[560px] overflow-hidden bg-black md:h-[507px]">
+      <div className="relative h-[560px] overflow-hidden bg-gradient-to-br from-[#d8c6b7] via-[#b9a48f] to-[#6f8583] md:h-[507px]">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{

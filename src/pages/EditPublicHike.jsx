@@ -327,7 +327,7 @@ export default function EditPublicHike() {
                     <SelectItem value="summer">Sommer</SelectItem>
                     <SelectItem value="autumn">Herbst</SelectItem>
                     <SelectItem value="winter">Winter</SelectItem>
-                    <SelectItem value="all_year">Ganzjährig</SelectItem>
+                          <SelectItem value="all_year">🍃 Ganzjährig</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

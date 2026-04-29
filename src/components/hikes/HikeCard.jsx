@@ -40,7 +40,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
       transition={{ delay: index * 0.08, duration: 0.42 }}
     >
       <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=${hikeSource}`}>
-        <div className="group overflow-hidden rounded-2xl border border-stone-200/75 bg-white/72 shadow-[0_12px_30px_rgba(142,78,54,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(142,78,54,0.13)]">
+        <div className="group overflow-hidden rounded-[22px] border border-stone-200/75 bg-white/76 shadow-[0_12px_28px_rgba(92,62,42,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(92,62,42,0.13)]">
           <div className="relative h-52 overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a]">
             {coverPhoto && (
               <img
@@ -49,43 +49,43 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/55 via-stone-950/8 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-stone-950/10 to-transparent" />
 
             {hike.is_premium && (
-              <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/72 px-2.5 py-1 text-xs font-semibold text-[#8c5f43] shadow-sm backdrop-blur-sm">
+              <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/74 px-2.5 py-1 text-xs font-semibold text-[#8c5f43] shadow-sm backdrop-blur-sm">
                 Premium
               </span>
             )}
 
             {hike.season && (
-              <span className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/72 text-xl shadow-sm backdrop-blur-sm">
+              <span className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/74 text-xl shadow-sm backdrop-blur-sm">
                 {seasonEmojis[hike.season]}
               </span>
             )}
 
             <div className="absolute bottom-4 left-4 right-4">
-              <h3 className="mb-1 text-xl font-semibold text-white">{hike.trail_name}</h3>
-              <div className="flex items-center gap-1.5 text-base font-medium text-white/90">
+              <h3 className="mb-1 text-xl font-semibold leading-tight text-white drop-shadow-sm">{hike.trail_name}</h3>
+              <div className="flex items-center gap-1.5 text-sm font-medium text-white/85">
                 <MapPin className="h-4 w-4" />
                 <span>{hike.location || "Dolomites"}</span>
               </div>
             </div>
           </div>
 
-          <div className="p-5">
+          <div className="p-4">
             <div className="mb-3 flex flex-wrap items-center gap-1.5">
               {humanDifficultyLabel && (
-                <Badge className={`${getDifficultyBadgeClass(hike.difficulty)} border px-2.5 py-0.5 text-xs font-medium`}>
+                <Badge className={`${getDifficultyBadgeClass(hike.difficulty)} border px-2.5 py-1 text-xs font-medium`}>
                   👤 {humanDifficultyLabel}
                 </Badge>
               )}
               {dogDifficultyLabel && (
-                <Badge className={`${getDifficultyBadgeClass(hike.dog_difficulty)} border px-2.5 py-0.5 text-xs font-medium`}>
+                <Badge className={`${getDifficultyBadgeClass(hike.dog_difficulty)} border px-2.5 py-1 text-xs font-medium`}>
                   🐕 {dogDifficultyLabel}
                 </Badge>
               )}
               {hike.water_availability && (
-                <span className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${getWaterBadgeClass(hike.water_availability)}`}>
+                <span className={`rounded-full border px-2.5 py-1 text-xs font-medium ${getWaterBadgeClass(hike.water_availability)}`}>
                   {getWaterIcon(hike.water_availability)} {getWaterLabel(hike.water_availability) ?? hike.water_availability}
                 </span>
               )}
@@ -96,13 +96,13 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                 {hike.tags.slice(0, 3).map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full border border-stone-200/80 bg-stone-50/90 px-2.5 py-1 text-[11px] font-medium tracking-wide text-stone-600"
+                    className="rounded-full border border-stone-200/80 bg-white/62 px-2.5 py-1 text-[11px] font-medium tracking-wide text-stone-600"
                   >
                     #{tag}
                   </span>
                 ))}
                 {hike.tags.length > 3 && (
-                  <span className="rounded-full border border-stone-200/80 bg-white px-2.5 py-1 text-[11px] font-medium text-stone-500">
+                  <span className="rounded-full border border-stone-200/80 bg-white/62 px-2.5 py-1 text-[11px] font-medium text-stone-500">
                     +{hike.tags.length - 3}
                   </span>
                 )}
@@ -122,7 +122,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               <div className="mb-3">
                 <ExpandableText
                   text={hike.notes}
-                  lines={3}
+                  lines={6}
                   className="text-sm leading-relaxed text-stone-600"
                 />
               </div>
