@@ -34,7 +34,9 @@ export default function Hikes() {
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
   });
 
   const getCurrentSeason = () => {

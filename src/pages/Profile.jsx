@@ -87,7 +87,9 @@ export default function Profile() {
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
     enabled: savedHikes.length > 0,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
   });
 
   const { data: userRoutes = [], isLoading: routesLoading } = useQuery({

@@ -351,7 +351,9 @@ export async function getHikes() {
       .in("hike_id", hikeIds)
       .order("sort_order", { ascending: true });
 
-    if (photosError) throw photosError;
+    if (photosError) {
+      console.error("[sheetsClient] public_hike_photos fetch failed, continuing without table photos:", photosError);
+    }
 
     const photosByHikeId = {};
     for (const photoRow of photoRows ?? []) {
