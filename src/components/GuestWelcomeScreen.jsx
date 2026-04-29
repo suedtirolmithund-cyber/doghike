@@ -6,7 +6,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
 
-const ONBOARDING_IMAGE = "/onboarding/A739105.jpg";
+const ONBOARDING_IMAGE = "/onboarding/A739105-desktop.webp";
+const ONBOARDING_IMAGE_MOBILE = "/onboarding/A739105-mobile.webp";
 const LOGIN_IMAGE = "/onboarding/A739195-2.jpg";
 
 function preloadImage(src) {
@@ -473,11 +474,14 @@ function OnboardingScreen({ onContinue }) {
   return (
     <div className="min-h-screen bg-black">
       <section className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-black md:max-w-none md:rounded-none">
-        <img
-          src={ONBOARDING_IMAGE}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover object-right md:object-center"
-        />
+        <picture>
+          <source media="(max-width: 767px)" srcSet={ONBOARDING_IMAGE_MOBILE} />
+          <img
+            src={ONBOARDING_IMAGE}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+        </picture>
         <div className="absolute inset-0 bg-[linear-gradient(0deg,#000000_-31.83%,rgba(0,0,0,0)_43.72%)]" />
 
         <div className="absolute bottom-[72px] left-4 h-[216px] w-[343px] opacity-80 md:left-1/2 md:-translate-x-1/2">

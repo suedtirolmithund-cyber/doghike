@@ -30,8 +30,9 @@ import CommentSection from "@/components/community/CommentSection";
 import RatingSection from "@/components/community/RatingSection";
 import ExpandableText from "@/components/ExpandableText";
 import PremiumGate from "@/components/hikes/PremiumGate";
+import WaterIcon from "@/components/icons/WaterIcon";
 import { supabase } from "@/lib/supabaseClient";
-import { TOUR_ICONS, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
+import { TOUR_ICONS, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
 import { toast } from "sonner";
 
 function getCountryLabel(country) {
@@ -518,7 +519,7 @@ export default function HikeDetail() {
                 {/* Wasser: immer anzeigen */}
                 {hike.water_availability ? (
                   <div className={`flex items-center gap-3 p-3 rounded-xl ${getWaterBadgeClass(hike.water_availability)}`}>
-                    <span className="text-lg">{getWaterIcon(hike.water_availability)}</span>
+                    <WaterIcon value={hike.water_availability} className="text-lg" />
                     <div>
                       <p className="font-medium">Wasser unterwegs</p>
                       <p className="text-sm opacity-80">{getWaterLabel(hike.water_availability)}</p>

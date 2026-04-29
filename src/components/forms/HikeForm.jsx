@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import RouteEditor from "@/components/map/RouteEditor";
 import StartPointPicker from "@/components/map/StartPointPicker";
 import ConsentDialog from "@/components/ConsentDialog";
+import WaterIcon from "@/components/icons/WaterIcon";
 import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 
 export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabel }) {
@@ -313,7 +314,9 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             <SelectContent>
               {WATER_LEVELS.map((level) => (
                 <SelectItem key={level.value} value={level.value}>
-                  {level.icon} {level.label}
+                  <span className="inline-flex items-center gap-1">
+                    <WaterIcon value={level.value} /> {level.label}
+                  </span>
                 </SelectItem>
               ))}
             </SelectContent>

@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import WaterIcon from "@/components/icons/WaterIcon";
 import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 
 function buildInitialFormData(hike) {
@@ -376,7 +377,9 @@ export default function EditPublicHike() {
                     <SelectItem value="unset">Nicht gesetzt</SelectItem>
                     {WATER_LEVELS.map((level) => (
                       <SelectItem key={level.value} value={level.value}>
-                        {level.icon} {level.label}
+                        <span className="inline-flex items-center gap-1">
+                          <WaterIcon value={level.value} /> {level.label}
+                        </span>
                       </SelectItem>
                     ))}
                   </SelectContent>

@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import WaterIcon from "@/components/icons/WaterIcon";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/AuthContext";
 import {
@@ -27,7 +28,7 @@ import {
 } from "@/lib/journalApi";
 import { getDogs } from "@/lib/profilesApi";
 import { Link } from "react-router-dom";
-import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS, getDifficultyLabel, getDifficultyTextColor, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
+import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS, getDifficultyLabel, getDifficultyTextColor, getWaterLabel } from "@/lib/difficultyConfig";
 
 // Sterne-Picker (Gesamtbewertung)
 function StarPicker({ label, value, onChange }) {
@@ -265,7 +266,7 @@ function WaterPicker({ label, value, onChange }) {
             title={getWaterLabel(level)}
             >
               <span className="text-lg leading-none">
-                {getWaterIcon(level)}
+                <WaterIcon value={level} />
               </span>
               <span className="text-[10px] font-medium whitespace-nowrap">
                 {getWaterLabel(level)}

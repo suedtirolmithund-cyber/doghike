@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
+import WaterIcon from "@/components/icons/WaterIcon";
 import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 
 function getSeasonValues(hike) {
@@ -204,7 +205,9 @@ export default function Hikes() {
                     <SelectItem value="all">Alle</SelectItem>
                     {WATER_LEVELS.map((level) => (
                       <SelectItem key={level.value} value={level.value}>
-                        {level.icon} {level.label}
+                        <span className="inline-flex items-center gap-1">
+                          <WaterIcon value={level.value} /> {level.label}
+                        </span>
                       </SelectItem>
                     ))}
                   </SelectContent>

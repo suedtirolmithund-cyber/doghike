@@ -28,6 +28,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import ExpandableText from "@/components/ExpandableText";
+import WaterIcon from "@/components/icons/WaterIcon";
 import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -608,7 +609,9 @@ export default function RouteDetail() {
                             <SelectContent>
                               {WATER_LEVELS.map((level) => (
                                 <SelectItem key={level.value} value={level.value}>
-                                  {level.icon} {level.label}
+                                  <span className="inline-flex items-center gap-1">
+                                    <WaterIcon value={level.value} /> {level.label}
+                                  </span>
                                 </SelectItem>
                               ))}
                             </SelectContent>
