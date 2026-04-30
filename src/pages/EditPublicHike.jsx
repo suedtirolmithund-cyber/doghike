@@ -5,7 +5,13 @@ import { ArrowLeft, Camera, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
-import { deleteUploadedPublicHikePhoto, getPublicHikeById, updatePublicHike, uploadPublicHikePhoto } from "@/lib/publicHikesApi";
+import {
+  deleteUploadedPublicHikePhoto,
+  getPublicHikeById,
+  resolvePublicHikePhotoReferences,
+  updatePublicHike,
+  uploadPublicHikePhoto,
+} from "@/lib/publicHikesApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -36,7 +42,11 @@ function buildInitialFormData(hike) {
     is_premium: hike?.is_premium ? "true" : "false",
     latitude: hike?.latitude ?? "",
     longitude: hike?.longitude ?? "",
-    photoUrls: Array.isArray(hike?.photos) ? hike.photos : [],
+    photoUrls: Array.isArray(hike?._photo_references)
+      ? hike._photo_references
+      : Array.isArray(hike?.photos)
+        ? hike.photos
+        : [],
   };
 }
 
@@ -47,6 +57,7 @@ export default function EditPublicHike() {
   const queryClient = useQueryClient();
   const { user, isAdmin, isLoadingAuth } = useAuth();
   const [formData, setFormData] = useState(null);
+  const [photoPreviewUrls, setPhotoPreviewUrls] = useState([]);
   const [isUploadingPhotos, setIsUploadingPhotos] = useState(false);
   const uploadedDuringEditRef = useRef(new Set());
   const savedPhotoUrlsRef = useRef(new Set());
@@ -61,9 +72,31 @@ export default function EditPublicHike() {
   useEffect(() => {
     if (hike && !formData) {
       setFormData(buildInitialFormData(hike));
-      savedPhotoUrlsRef.current = new Set(Array.isArray(hike.photos) ? hike.photos : []);
+      savedPhotoUrlsRef.current = new Set(Array.isArray(hike._photo_references) ? hike._photo_references : []);
     }
   }, [hike, formData]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadPhotoPreviews = async () => {
+      if (!Array.isArray(formData?.photoUrls) || formData.photoUrls.length === 0) {
+        setPhotoPreviewUrls([]);
+        return;
+      }
+
+      const previews = await resolvePublicHikePhotoReferences(formData.photoUrls);
+      if (!cancelled) {
+        setPhotoPreviewUrls(previews);
+      }
+    };
+
+    loadPhotoPreviews();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [formData?.photoUrls]);
 
   useEffect(() => {
     return () => {
@@ -519,11 +552,17 @@ export default function EditPublicHike() {
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {formData.photoUrls.map((photoUrl, index) => (
                     <div key={`${photoUrl}-${index}`} className="relative overflow-hidden rounded-xl border border-stone-200 bg-stone-50">
-                      <img
-                        src={photoUrl}
-                        alt={`Foto ${index + 1}`}
-                        className="h-32 w-full object-cover"
-                      />
+                      {photoPreviewUrls[index] ? (
+                        <img
+                          src={photoPreviewUrls[index]}
+                          alt={`Foto ${index + 1}`}
+                          className="h-32 w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-32 w-full items-center justify-center text-sm text-stone-400">
+                          Bild wird geladen...
+                        </div>
+                      )}
                       <button
                         type="button"
                         onClick={() => removePhotoUrl(photoUrl)}

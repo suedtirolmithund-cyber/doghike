@@ -82,7 +82,7 @@ function getLegacyTagColumns(row) {
   ];
 }
 
-function normalizeStoredPublicPhotoReference(value) {
+export function normalizeStoredPublicPhotoReference(value) {
   if (typeof value !== "string") return "";
 
   const trimmed = value.trim();
@@ -298,13 +298,7 @@ export async function uploadPublicHikePhoto(userId, file) {
     .upload(path, file, { upsert: true });
 
   if (error) throw error;
-
-  const signedUrl = await createPublicHikePhotoDisplayUrl(data.path);
-  if (!signedUrl) {
-    throw new Error("public_hike_photo_signed_url_failed");
-  }
-
-  return signedUrl;
+  return data.path;
 }
 
 export async function deleteUploadedPublicHikePhoto(photoUrl) {
@@ -336,12 +330,11 @@ export async function getPublicHikeById(hikeId) {
 
   if (photosError) throw photosError;
 
-  const resolvedPhotos = await resolvePublicHikePhotoReferences(
-    mergePhotoLists(
-      photoRows.map((photo) => photo.photo_url),
-      getLegacyPhotoColumns(hikeRow)
-    )
+  const photoReferences = mergePhotoLists(
+    photoRows.map((photo) => photo.photo_url),
+    getLegacyPhotoColumns(hikeRow)
   );
+  const resolvedPhotos = await resolvePublicHikePhotoReferences(photoReferences);
 
   return {
     ...hikeRow,
@@ -349,6 +342,7 @@ export async function getPublicHikeById(hikeId) {
     route_id: String(hikeRow.id),
     _public_hike_id: hikeRow.id,
     _source: "sheets",
+    _photo_references: photoReferences,
     tags: normalizeTags(...getLegacyTagColumns(hikeRow)),
     photos: resolvedPhotos,
     hazard_notes: pickFirstText(hikeRow, ["hazard_notes", "hazards", "danger_notes", "danger", "warning", "warnings", "achtung", "gefahr", "gefahren"]),
