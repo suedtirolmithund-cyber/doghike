@@ -48,20 +48,6 @@ function getStorageDescriptor(photoReference) {
   return null;
 }
 
-function normalizeForModeration(text) {
-  return (text ?? "")
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\u00df/g, "ss")
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim();
-}
-
-function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
 async function createPendingCommentSignedUrl(photoReference) {
   const storageDescriptor = getStorageDescriptor(photoReference);
   if (!storageDescriptor || storageDescriptor.bucket !== "comments-pending") {
@@ -248,59 +234,8 @@ export async function deleteComment(id) {
   }
 }
 
-const TRIGGER_WORDS = [
-  "spam",
-  "klick hier",
-  "click here",
-  "http://",
-  "https://",
-  "www.",
-  "https://bit.ly",
-  "t.me/",
-  "whatsapp.com",
-  "scheiss",
-  "hurensohn",
-  "wichser",
-  "arschloch",
-  "nazi",
-  "fotze",
-  "nutte",
-  "fick",
-  "kacke",
-  "bastard",
-  "asshole",
-  "fuck",
-  "shit",
-  "bitch",
-  "cunt",
-  "nigger",
-  "retard",
-  "cazzo",
-  "vaffanculo",
-  "stronzo",
-  "puttana",
-  "merda",
-];
-
-export function containsTriggerWord(text) {
-  const rawText = String(text ?? "").toLowerCase();
-  const normalizedText = ` ${normalizeForModeration(text)} `;
-
-  return TRIGGER_WORDS.some((word) => {
-    const normalizedWord = normalizeForModeration(word);
-    if (!normalizedWord) return false;
-
-    if (/[/:.]/.test(word)) {
-      return rawText.includes(word.toLowerCase());
-    }
-
-    const pattern = new RegExp(`(^|\\s)${escapeRegExp(normalizedWord)}(?=\\s|$)`, "i");
-    return pattern.test(normalizedText);
-  });
-}
-
 export function commentNeedsReview(text) {
-  return containsTriggerWord(text);
+  return false;
 }
 
 export async function uploadCommentPhoto(userId, file, { needsReview = false } = {}) {
