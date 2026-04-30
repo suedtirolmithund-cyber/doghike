@@ -252,13 +252,13 @@ function WaterPicker({ label, value, onChange }) {
   return (
     <div>
       <Label className="text-sm text-stone-600 mb-1 block">{label}</Label>
-      <div className="flex gap-2">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {WATER_LEVELS.map((option) => {
           const level = option.numeric;
           return (
           <button key={level} type="button"
             onClick={() => onChange(level)}
-            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl border transition-all focus:outline-none ${
+            className={`flex min-h-[70px] min-w-0 flex-col items-center justify-center gap-1 rounded-xl border px-2 py-2 text-center transition-all focus:outline-none ${
               value === level
                 ? "border-blue-400 bg-blue-50 text-blue-700"
                 : "border-stone-200 bg-stone-50 text-stone-400 hover:border-blue-300 hover:bg-blue-50/50"
@@ -268,7 +268,7 @@ function WaterPicker({ label, value, onChange }) {
               <span className="text-lg leading-none">
                 <WaterIcon value={level} />
               </span>
-              <span className="text-[10px] font-medium whitespace-nowrap">
+              <span className="text-[10px] font-medium leading-tight">
                 {getWaterLabel(level)}
               </span>
             </button>
@@ -819,7 +819,7 @@ export default function AddJournalEntry() {
               <TrendingUp className="w-4 h-4" /> Statistiken
             </h2>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div>
                 <Label htmlFor="distance_km" className="flex items-center gap-1"><span>{TOUR_ICONS.distance}</span> Distanz (km)</Label>
                 <Input id="distance_km" type="number" step="0.1" min="0" value={form.distance_km}
