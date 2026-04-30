@@ -1,5 +1,7 @@
 import { supabase } from "./supabaseClient";
 
+const COMMENT_SIGNED_URL_TTL_SECONDS = 60 * 60;
+
 function getStorageDescriptor(photoReference) {
   if (!photoReference) return null;
 
@@ -10,14 +12,40 @@ function getStorageDescriptor(photoReference) {
     };
   }
 
-  const marker = "/storage/v1/object/public/comments/";
-  const index = photoReference.indexOf(marker);
-  if (index === -1) return null;
+  const trimmed = photoReference.trim();
+  if (!trimmed) return null;
 
-  return {
-    bucket: "comments",
-    path: decodeURIComponent(photoReference.slice(index + marker.length)),
-  };
+  if (trimmed.startsWith("comments/")) {
+    return {
+      bucket: "comments",
+      path: trimmed.slice("comments/".length),
+    };
+  }
+
+  try {
+    const url = new URL(trimmed);
+    const publicMarker = "/storage/v1/object/public/comments/";
+    const signedMarker = "/storage/v1/object/sign/comments/";
+    const pathname = url.pathname;
+
+    if (pathname.includes(publicMarker)) {
+      return {
+        bucket: "comments",
+        path: decodeURIComponent(pathname.slice(pathname.indexOf(publicMarker) + publicMarker.length)),
+      };
+    }
+
+    if (pathname.includes(signedMarker)) {
+      return {
+        bucket: "comments",
+        path: decodeURIComponent(pathname.slice(pathname.indexOf(signedMarker) + signedMarker.length)),
+      };
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
 }
 
 function normalizeForModeration(text) {
@@ -42,10 +70,28 @@ async function createPendingCommentSignedUrl(photoReference) {
 
   const { data, error } = await supabase.storage
     .from("comments-pending")
-    .createSignedUrl(storageDescriptor.path, 60 * 60);
+    .createSignedUrl(storageDescriptor.path, COMMENT_SIGNED_URL_TTL_SECONDS);
 
   if (error) {
     console.error("[createPendingCommentSignedUrl] signed URL failed:", error.message);
+    return null;
+  }
+
+  return data?.signedUrl ?? null;
+}
+
+async function createCommentPhotoDisplayUrl(photoReference) {
+  const storageDescriptor = getStorageDescriptor(photoReference);
+  if (!storageDescriptor) {
+    return photoReference ?? null;
+  }
+
+  const { data, error } = await supabase.storage
+    .from(storageDescriptor.bucket)
+    .createSignedUrl(storageDescriptor.path, COMMENT_SIGNED_URL_TTL_SECONDS);
+
+  if (error) {
+    console.error("[createCommentPhotoDisplayUrl] signed URL failed:", error.message);
     return null;
   }
 
@@ -144,7 +190,7 @@ export async function getComments(hikeId, hikeSource = "sheets") {
 
       return {
         ...comment,
-        photo_preview_url: comment.photo_url ?? null,
+        photo_preview_url: await createCommentPhotoDisplayUrl(comment.photo_url),
       };
     })
   );
@@ -268,10 +314,7 @@ export async function uploadCommentPhoto(userId, file, { needsReview = false } =
     return `pending://${data.path}`;
   }
 
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from(bucket).getPublicUrl(data.path);
-  return publicUrl;
+  return `comments/${data.path}`;
 }
 
 export async function deleteUploadedCommentPhoto(photoReference) {
@@ -302,10 +345,6 @@ export async function publishPendingCommentPhoto(photoReference) {
     .upload(storageDescriptor.path, data, { upsert: true });
   if (uploadError) throw uploadError;
 
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from("comments").getPublicUrl(storageDescriptor.path);
-
   const { error: removeError } = await supabase.storage
     .from("comments-pending")
     .remove([storageDescriptor.path]);
@@ -313,5 +352,5 @@ export async function publishPendingCommentPhoto(photoReference) {
     console.error("[publishPendingCommentPhoto] cleanup failed:", removeError.message);
   }
 
-  return publicUrl;
+  return `comments/${storageDescriptor.path}`;
 }

@@ -10,13 +10,41 @@ function getStorageDescriptor(photoReference) {
       path: photoReference.slice("pending://".length),
     };
   }
-  const marker = "/storage/v1/object/public/comments/";
-  const index = photoReference.indexOf(marker);
-  if (index === -1) return null;
-  return {
-    bucket: "comments",
-    path: decodeURIComponent(photoReference.slice(index + marker.length)),
-  };
+
+  const trimmed = photoReference.trim();
+  if (!trimmed) return null;
+
+  if (trimmed.startsWith("comments/")) {
+    return {
+      bucket: "comments",
+      path: trimmed.slice("comments/".length),
+    };
+  }
+
+  try {
+    const url = new URL(trimmed);
+    const publicMarker = "/storage/v1/object/public/comments/";
+    const signedMarker = "/storage/v1/object/sign/comments/";
+    const pathname = url.pathname;
+
+    if (pathname.includes(publicMarker)) {
+      return {
+        bucket: "comments",
+        path: decodeURIComponent(pathname.slice(pathname.indexOf(publicMarker) + publicMarker.length)),
+      };
+    }
+
+    if (pathname.includes(signedMarker)) {
+      return {
+        bucket: "comments",
+        path: decodeURIComponent(pathname.slice(pathname.indexOf(signedMarker) + signedMarker.length)),
+      };
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
 }
 
 export async function getPendingEntries() {
@@ -98,6 +126,22 @@ export async function getAllComments() {
 
         if (signedUrlError) {
           console.error("[getAllComments] pending photo preview failed:", signedUrlError.message);
+        }
+
+        return {
+          ...comment,
+          photo_preview_url: signedUrlData?.signedUrl ?? null,
+          profiles: profileMap[comment.user_id] ?? null,
+        };
+      }
+
+      if (storageDescriptor?.bucket === "comments") {
+        const { data: signedUrlData, error: signedUrlError } = await supabase.storage
+          .from("comments")
+          .createSignedUrl(storageDescriptor.path, 60 * 60);
+
+        if (signedUrlError) {
+          console.error("[getAllComments] approved photo preview failed:", signedUrlError.message);
         }
 
         return {
