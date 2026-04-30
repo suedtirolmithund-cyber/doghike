@@ -114,24 +114,24 @@ export default function Hikes() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="mb-6 rounded-2xl border border-stone-200/50 bg-white p-4 shadow-sm md:p-5"
+          className="bg-white rounded-2xl p-6 border border-stone-200/50 shadow-sm mb-8"
         >
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
               <Input
                 placeholder="Tour oder Ort suchen..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-10 pl-10 text-sm"
+                className="pl-10"
               />
             </div>
 
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
-                <label className="mb-1 block text-xs font-medium text-stone-700">{TOUR_ICONS.human} Schwierigkeit Mensch</label>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.human} Schwierigkeit Mensch</label>
                 <Select value={humanDifficultyFilter} onValueChange={setHumanDifficultyFilter}>
-                  <SelectTrigger className="h-9 text-sm">
+                  <SelectTrigger>
                     <SelectValue placeholder="Alle" />
                   </SelectTrigger>
                   <SelectContent>
@@ -146,9 +146,9 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-medium text-stone-700">{TOUR_ICONS.dog} Schwierigkeit Hund</label>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.dog} Schwierigkeit Hund</label>
                 <Select value={dogDifficultyFilter} onValueChange={setDogDifficultyFilter}>
-                  <SelectTrigger className="h-9 text-sm">
+                  <SelectTrigger>
                     <SelectValue placeholder="Alle" />
                   </SelectTrigger>
                   <SelectContent>
@@ -163,9 +163,9 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-medium text-stone-700">{TOUR_ICONS.season} Jahreszeit</label>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.season} Jahreszeit</label>
                 <Select value={seasonFilter} onValueChange={setSeasonFilter}>
-                  <SelectTrigger className="h-9 text-sm">
+                  <SelectTrigger>
                     <SelectValue placeholder="Alle" />
                   </SelectTrigger>
                   <SelectContent>
@@ -180,25 +180,25 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-medium text-stone-700">{TOUR_ICONS.distance} Distanz (km)</label>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.distance} Distanz (km)</label>
                 <div className="flex gap-2">
-                  <Input type="number" placeholder="Min" value={distanceMin} onChange={(e) => setDistanceMin(e.target.value)} className="h-9 w-full text-sm" />
-                  <Input type="number" placeholder="Max" value={distanceMax} onChange={(e) => setDistanceMax(e.target.value)} className="h-9 w-full text-sm" />
+                  <Input type="number" placeholder="Min" value={distanceMin} onChange={(e) => setDistanceMin(e.target.value)} className="w-full" />
+                  <Input type="number" placeholder="Max" value={distanceMax} onChange={(e) => setDistanceMax(e.target.value)} className="w-full" />
                 </div>
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-medium text-stone-700">{TOUR_ICONS.elevation} Höhenmeter (m)</label>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.elevation} Höhenmeter (m)</label>
                 <div className="flex gap-2">
-                  <Input type="number" placeholder="Min" value={elevationMin} onChange={(e) => setElevationMin(e.target.value)} className="h-9 w-full text-sm" />
-                  <Input type="number" placeholder="Max" value={elevationMax} onChange={(e) => setElevationMax(e.target.value)} className="h-9 w-full text-sm" />
+                  <Input type="number" placeholder="Min" value={elevationMin} onChange={(e) => setElevationMin(e.target.value)} className="w-full" />
+                  <Input type="number" placeholder="Max" value={elevationMax} onChange={(e) => setElevationMax(e.target.value)} className="w-full" />
                 </div>
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-medium text-stone-700">💧 Wasser unterwegs</label>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">💧 Wasser unterwegs</label>
                 <Select value={waterFilter} onValueChange={setWaterFilter}>
-                  <SelectTrigger className="h-9 text-sm">
+                  <SelectTrigger>
                     <SelectValue placeholder="Alle" />
                   </SelectTrigger>
                   <SelectContent>
@@ -215,9 +215,9 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-medium text-stone-700"># Tags</label>
+                <label className="text-sm font-medium text-stone-700 mb-2 block"># Tags</label>
                 <Select value={tagFilter} onValueChange={setTagFilter}>
-                  <SelectTrigger className="h-9 text-sm">
+                  <SelectTrigger>
                     <SelectValue placeholder="Alle" />
                   </SelectTrigger>
                   <SelectContent>
@@ -232,9 +232,9 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-medium text-stone-700">Sortieren</label>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">Sortieren</label>
                 <Select value={sortBy} onValueChange={(v) => { setSortBy(v); setLevelFilter("all"); }}>
-                  <SelectTrigger className="h-9 text-sm">
+                  <SelectTrigger>
                     <SelectValue placeholder="Neueste zuerst" />
                   </SelectTrigger>
                   <SelectContent>

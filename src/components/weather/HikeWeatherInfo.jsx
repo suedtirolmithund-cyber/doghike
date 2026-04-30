@@ -3,15 +3,15 @@ import { Cloud, Droplets, Wind, Sun, CloudRain, CloudSnow, CloudDrizzle, CloudLi
 import { motion } from "framer-motion";
 
 function wmoToWeather(code) {
-  if (code === 0)   return { label: "Sonnig",       Icon: Sun };
-  if (code <= 3)    return { label: "Teils bewölkt", Icon: Cloud };
-  if (code <= 48)   return { label: "Nebel",         Icon: Cloud };
-  if (code <= 57)   return { label: "Nieselregen",   Icon: CloudDrizzle };
-  if (code <= 67)   return { label: "Regen",         Icon: CloudRain };
-  if (code <= 77)   return { label: "Schnee",        Icon: CloudSnow };
-  if (code <= 82)   return { label: "Regenschauer",  Icon: CloudRain };
-  if (code <= 86)   return { label: "Schneeschauer", Icon: CloudSnow };
-  if (code >= 95)   return { label: "Gewitter",      Icon: CloudLightning };
+  if (code === 0) return { label: "Sonnig", Icon: Sun };
+  if (code <= 3) return { label: "Teils bewölkt", Icon: Cloud };
+  if (code <= 48) return { label: "Nebel", Icon: Cloud };
+  if (code <= 57) return { label: "Nieselregen", Icon: CloudDrizzle };
+  if (code <= 67) return { label: "Regen", Icon: CloudRain };
+  if (code <= 77) return { label: "Schnee", Icon: CloudSnow };
+  if (code <= 82) return { label: "Regenschauer", Icon: CloudRain };
+  if (code <= 86) return { label: "Schneeschauer", Icon: CloudSnow };
+  if (code >= 95) return { label: "Gewitter", Icon: CloudLightning };
   return { label: "Bewölkt", Icon: Cloud };
 }
 
@@ -36,10 +36,10 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
 
   if (isLoading) {
     return (
-      <div className="bg-gradient-to-br from-blue-50 to-sky-50 rounded-2xl p-6 border border-blue-200">
+      <div className="rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-sky-50 p-4">
         <div className="flex items-center justify-center gap-2 text-blue-600">
-          <Loader2 className="w-5 h-5 animate-spin" />
-          <span className="text-sm">Wetterdaten werden geladen...</span>
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span className="text-xs">Wetterdaten werden geladen...</span>
         </div>
       </div>
     );
@@ -51,46 +51,56 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
   const { label, Icon: WeatherIcon } = wmoToWeather(cur.weather_code);
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-br from-blue-50 to-sky-50 rounded-2xl p-6 border border-blue-200">
-
-      <h3 className="text-lg font-semibold text-stone-800 mb-4 flex items-center gap-2">
-        <Cloud className="w-5 h-5" />
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-sky-50 p-4"
+    >
+      <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-800 sm:text-base">
+        <Cloud className="h-4 w-4" />
         Aktuelles Wetter{location ? ` in ${location}` : ""}
       </h3>
 
-      <div className="flex items-start gap-6">
-        <div className="flex flex-col items-center">
-          <WeatherIcon className="w-12 h-12 text-blue-600" />
-          <p className="text-3xl font-bold text-stone-800 mt-2">{Math.round(cur.temperature_2m)}°C</p>
-          <p className="text-sm text-stone-600 mt-1">{label}</p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+        <div className="flex items-center gap-3 sm:min-w-[150px]">
+          <WeatherIcon className="h-9 w-9 text-blue-600" />
+          <div>
+            <p className="text-2xl font-bold leading-none text-stone-800">
+              {Math.round(cur.temperature_2m)}°C
+            </p>
+            <p className="mt-1 text-xs text-stone-600">{label}</p>
+          </div>
         </div>
 
-        <div className="flex-1 grid grid-cols-2 gap-4">
+        <div className="grid flex-1 grid-cols-2 gap-2">
           {cur.relative_humidity_2m != null && (
-            <div className="flex items-center gap-2">
-              <Droplets className="w-5 h-5 text-blue-600" />
+            <div className="flex items-center gap-2 rounded-xl bg-white/45 px-3 py-2">
+              <Droplets className="h-4 w-4 text-blue-600" />
               <div>
                 <p className="text-xs text-stone-500">Luftfeuchtigkeit</p>
-                <p className="font-semibold text-stone-800">{Math.round(cur.relative_humidity_2m)}%</p>
+                <p className="text-sm font-semibold text-stone-800">
+                  {Math.round(cur.relative_humidity_2m)}%
+                </p>
               </div>
             </div>
           )}
           {cur.wind_speed_10m != null && (
-            <div className="flex items-center gap-2">
-              <Wind className="w-5 h-5 text-slate-600" />
+            <div className="flex items-center gap-2 rounded-xl bg-white/45 px-3 py-2">
+              <Wind className="h-4 w-4 text-slate-600" />
               <div>
                 <p className="text-xs text-stone-500">Wind</p>
-                <p className="font-semibold text-stone-800">{Math.round(cur.wind_speed_10m)} km/h</p>
+                <p className="text-sm font-semibold text-stone-800">
+                  {Math.round(cur.wind_speed_10m)} km/h
+                </p>
               </div>
             </div>
           )}
         </div>
       </div>
 
-      <div className="mt-4 p-3 bg-white/50 rounded-lg">
+      <div className="mt-3 rounded-lg bg-white/50 px-3 py-2">
         <p className="text-xs text-stone-500">
-          ⚠️ Wetterbedingungen können sich schnell ändern. Prüfe die Vorhersagen vor deiner Wanderung! ·{" "}
+          Wetterbedingungen können sich schnell ändern. Prüfe die Vorhersagen vor deiner Wanderung! ·{" "}
           <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer" className="underline">Open-Meteo</a>
         </p>
       </div>
