@@ -369,12 +369,6 @@ export async function updatePublicHike(hikeId, values) {
     image2: cleanedPhotoUrls[1] || null,
     image3: cleanedPhotoUrls[2] || null,
     image4: cleanedPhotoUrls[3] || null,
-    image5: cleanedPhotoUrls[4] || null,
-    image6: cleanedPhotoUrls[5] || null,
-    image7: cleanedPhotoUrls[6] || null,
-    image8: cleanedPhotoUrls[7] || null,
-    image9: cleanedPhotoUrls[8] || null,
-    image10: cleanedPhotoUrls[9] || null,
   };
   const { data: existingPhotos = [], error: existingPhotosError } = await supabase
     .from("public_hike_photos")
