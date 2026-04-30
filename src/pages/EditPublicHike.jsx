@@ -50,6 +50,40 @@ function buildInitialFormData(hike) {
   };
 }
 
+function getFriendlySaveErrorMessage(error) {
+  if (!error) {
+    return "Die öffentliche Tour konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.";
+  }
+
+  if (error.message === "missing_public_hike_id") {
+    return "Die Tour-ID fehlt. Bitte öffne die Tour neu und versuche es noch einmal.";
+  }
+
+  const message = String(error.message || error.details || "").toLowerCase();
+
+  if (message.includes("row-level security") || message.includes("permission denied")) {
+    return "Du hast gerade keine Berechtigung, diese öffentliche Tour zu speichern.";
+  }
+
+  if (message.includes("duplicate key")) {
+    return "Eine Tour mit diesen Daten existiert bereits. Bitte prüfe Titel oder Zuordnung.";
+  }
+
+  if (message.includes("invalid input syntax") || message.includes("numeric")) {
+    return "Mindestens ein Zahlenfeld ist ungültig. Bitte prüfe Distanz, Höhenmeter, Dauer oder Koordinaten.";
+  }
+
+  if (message.includes("date/time field value out of range") || message.includes("date")) {
+    return "Das Datum ist ungültig. Bitte prüfe das Datumsfeld.";
+  }
+
+  if (message.includes("network") || message.includes("fetch")) {
+    return "Die Verbindung zum Server ist gerade fehlgeschlagen. Bitte versuche es noch einmal.";
+  }
+
+  return error.message || "Die öffentliche Tour konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.";
+}
+
 export default function EditPublicHike() {
   const [searchParams] = useSearchParams();
   const hikeId = searchParams.get("id");
@@ -214,7 +248,7 @@ export default function EditPublicHike() {
     },
     onError: (error) => {
       console.error("[EditPublicHike] save failed:", error);
-      toast.error("Die öffentliche Tour konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.");
+      toast.error(getFriendlySaveErrorMessage(error));
     },
   });
 
