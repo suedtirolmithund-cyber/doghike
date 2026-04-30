@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+import { resolvePublicHikePhotoReferences } from "@/lib/publicHikesApi";
 
 const SHEETS_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vS6YeL4WqJZWHAQ8HBuodH98vwfIeaUV4p89bAvnM3TDavLKtnsmGUOfcSyAN0ID0rcVYd-OCQUkbiv/pub?gid=624993458&single=true&output=csv";
@@ -242,30 +243,11 @@ function getLegacyTagColumns(row) {
   ];
 }
 
-function normalizePublicPhotoReference(value) {
+function normalizeStoredPublicPhotoReference(value) {
   if (typeof value !== "string") return "";
 
   const trimmed = value.trim();
   if (!trimmed) return "";
-  if (/^https?:\/\//i.test(trimmed)) return trimmed;
-
-  const bucketPrefix = "journal/";
-  const publicMarker = "/storage/v1/object/public/";
-
-  if (trimmed.startsWith(publicMarker)) {
-    return `${import.meta.env.VITE_SUPABASE_URL}${trimmed}`;
-  }
-
-  if (trimmed.startsWith(bucketPrefix)) {
-    return `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${trimmed}`;
-  }
-
-  if (trimmed.startsWith("public-hikes/")) {
-    const {
-      data: { publicUrl },
-    } = supabase.storage.from("journal").getPublicUrl(trimmed);
-    return publicUrl;
-  }
 
   return trimmed;
 }
@@ -375,7 +357,7 @@ function getLegacyPhotoColumns(row) {
     row?.bild_4,
     row?.bild_5,
   ]
-    .map((value) => normalizePublicPhotoReference(value))
+    .map((value) => normalizeStoredPublicPhotoReference(value))
     .filter(Boolean);
 }
 
@@ -392,8 +374,6 @@ function mergePhotoLists(...photoLists) {
 }
 
 function publicHikeRowToHike(row, photos = []) {
-  const mergedPhotos = mergePhotoLists(photos, getLegacyPhotoColumns(row));
-
   return {
     // Keep the old external id shape stable so saved hikes, comments, and ratings keep matching.
     id: slugify(row.title || String(row.id)),
@@ -405,7 +385,7 @@ function publicHikeRowToHike(row, photos = []) {
     latitude: row.latitude != null ? Number(row.latitude) : null,
     longitude: row.longitude != null ? Number(row.longitude) : null,
 
-    photos: mergedPhotos,
+    photos,
     link: null,
     gpx_url: null,
 
@@ -492,7 +472,17 @@ export async function getHikes() {
       photosByHikeId[photoRow.hike_id].push(photoRow.photo_url);
     }
 
-    return hikeRows.map((row) => publicHikeRowToHike(row, photosByHikeId[row.id] ?? []));
+    const hikes = await Promise.all(
+      hikeRows.map(async (row) => {
+        const resolvedPhotos = await resolvePublicHikePhotoReferences(
+          mergePhotoLists(photosByHikeId[row.id] ?? [], getLegacyPhotoColumns(row))
+        );
+
+        return publicHikeRowToHike(row, resolvedPhotos);
+      })
+    );
+
+    return hikes;
   } catch (err) {
     console.error("[sheetsClient] public_hikes fetch failed, falling back to sheet:", err);
     return getLegacySheetHikes();

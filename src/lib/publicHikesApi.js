@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabaseClient";
 
 const PUBLIC_HIKE_BUCKET = "journal";
 const PUBLIC_HIKE_PREFIX = "public-hikes/";
+const SIGNED_URL_TTL_SECONDS = 60 * 60;
 
 function mapSupabaseWaterLevel(value) {
   if (value === 0 || value === "0") return "none";
@@ -81,29 +82,15 @@ function getLegacyTagColumns(row) {
   ];
 }
 
-function normalizePublicPhotoReference(value) {
+function normalizeStoredPublicPhotoReference(value) {
   if (typeof value !== "string") return "";
 
   const trimmed = value.trim();
   if (!trimmed) return "";
-  if (/^https?:\/\//i.test(trimmed)) return trimmed;
 
-  const bucketPrefix = `${PUBLIC_HIKE_BUCKET}/`;
-  const publicMarker = "/storage/v1/object/public/";
-
-  if (trimmed.startsWith(publicMarker)) {
-    return `${import.meta.env.VITE_SUPABASE_URL}${trimmed}`;
-  }
-
-  if (trimmed.startsWith(bucketPrefix)) {
-    return `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/${trimmed}`;
-  }
-
-  if (trimmed.startsWith(PUBLIC_HIKE_PREFIX)) {
-    const {
-      data: { publicUrl },
-    } = supabase.storage.from(PUBLIC_HIKE_BUCKET).getPublicUrl(trimmed);
-    return publicUrl;
+  const storageDescriptor = getPublicHikeStorageDescriptor(trimmed);
+  if (storageDescriptor) {
+    return storageDescriptor.path;
   }
 
   return trimmed;
@@ -214,7 +201,7 @@ function getLegacyPhotoColumns(row) {
     row?.bild_4,
     row?.bild_5,
   ]
-    .map((value) => normalizePublicPhotoReference(value))
+    .map((value) => normalizeStoredPublicPhotoReference(value))
     .filter(Boolean);
 }
 
@@ -233,14 +220,74 @@ function mergePhotoLists(...photoLists) {
 function getPublicHikeStorageDescriptor(photoUrl) {
   if (!photoUrl || typeof photoUrl !== "string") return null;
 
-  const marker = `/storage/v1/object/public/${PUBLIC_HIKE_BUCKET}/${PUBLIC_HIKE_PREFIX}`;
-  const index = photoUrl.indexOf(marker);
-  if (index === -1) return null;
+  const trimmed = photoUrl.trim();
+  if (!trimmed) return null;
 
-  return {
-    bucket: PUBLIC_HIKE_BUCKET,
-    path: decodeURIComponent(photoUrl.slice(index + `/storage/v1/object/public/${PUBLIC_HIKE_BUCKET}/`.length)),
-  };
+  if (trimmed.startsWith(PUBLIC_HIKE_PREFIX)) {
+    return {
+      bucket: PUBLIC_HIKE_BUCKET,
+      path: trimmed,
+    };
+  }
+
+  const bucketPrefix = `${PUBLIC_HIKE_BUCKET}/${PUBLIC_HIKE_PREFIX}`;
+  if (trimmed.startsWith(bucketPrefix)) {
+    return {
+      bucket: PUBLIC_HIKE_BUCKET,
+      path: trimmed.slice(`${PUBLIC_HIKE_BUCKET}/`.length),
+    };
+  }
+
+  try {
+    const url = new URL(trimmed);
+    const publicMarker = `/storage/v1/object/public/${PUBLIC_HIKE_BUCKET}/`;
+    const signedMarker = `/storage/v1/object/sign/${PUBLIC_HIKE_BUCKET}/`;
+    const pathname = url.pathname;
+
+    if (pathname.includes(publicMarker)) {
+      return {
+        bucket: PUBLIC_HIKE_BUCKET,
+        path: decodeURIComponent(pathname.slice(pathname.indexOf(publicMarker) + publicMarker.length)),
+      };
+    }
+
+    if (pathname.includes(signedMarker)) {
+      return {
+        bucket: PUBLIC_HIKE_BUCKET,
+        path: decodeURIComponent(pathname.slice(pathname.indexOf(signedMarker) + signedMarker.length)),
+      };
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
+async function createPublicHikePhotoDisplayUrl(photoReference) {
+  const storageDescriptor = getPublicHikeStorageDescriptor(photoReference);
+  if (!storageDescriptor) {
+    return normalizeStoredPublicPhotoReference(photoReference);
+  }
+
+  const { data, error } = await supabase.storage
+    .from(storageDescriptor.bucket)
+    .createSignedUrl(storageDescriptor.path, SIGNED_URL_TTL_SECONDS);
+
+  if (error) {
+    console.error("[createPublicHikePhotoDisplayUrl] signed URL failed:", error.message);
+    return null;
+  }
+
+  return data?.signedUrl ?? null;
+}
+
+export async function resolvePublicHikePhotoReferences(photoReferences = []) {
+  const resolvedPhotos = await Promise.all(
+    photoReferences.map((photoReference) => createPublicHikePhotoDisplayUrl(photoReference))
+  );
+
+  return resolvedPhotos.filter(Boolean);
 }
 
 export async function uploadPublicHikePhoto(userId, file) {
@@ -252,11 +299,12 @@ export async function uploadPublicHikePhoto(userId, file) {
 
   if (error) throw error;
 
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from(PUBLIC_HIKE_BUCKET).getPublicUrl(data.path);
+  const signedUrl = await createPublicHikePhotoDisplayUrl(data.path);
+  if (!signedUrl) {
+    throw new Error("public_hike_photo_signed_url_failed");
+  }
 
-  return publicUrl;
+  return signedUrl;
 }
 
 export async function deleteUploadedPublicHikePhoto(photoUrl) {
@@ -288,6 +336,13 @@ export async function getPublicHikeById(hikeId) {
 
   if (photosError) throw photosError;
 
+  const resolvedPhotos = await resolvePublicHikePhotoReferences(
+    mergePhotoLists(
+      photoRows.map((photo) => photo.photo_url),
+      getLegacyPhotoColumns(hikeRow)
+    )
+  );
+
   return {
     ...hikeRow,
     trail_name: pickFirstText(hikeRow, ["title", "trail_name", "name", "tour", "tour_name"]) || hikeRow.title,
@@ -295,10 +350,7 @@ export async function getPublicHikeById(hikeId) {
     _public_hike_id: hikeRow.id,
     _source: "sheets",
     tags: normalizeTags(...getLegacyTagColumns(hikeRow)),
-    photos: mergePhotoLists(
-      photoRows.map((photo) => photo.photo_url),
-      getLegacyPhotoColumns(hikeRow)
-    ),
+    photos: resolvedPhotos,
     hazard_notes: pickFirstText(hikeRow, ["hazard_notes", "hazards", "danger_notes", "danger", "warning", "warnings", "achtung", "gefahr", "gefahren"]),
     parking_info: pickFirstText(hikeRow, ["parking_info", "parking", "parking_notes", "parken", "ausgangspunkt"]),
     restaurant_info: pickFirstText(hikeRow, ["restaurant_info", "restaurant", "restaurant_notes", "einkehr", "hutte", "hütte"]),
@@ -316,7 +368,7 @@ export async function updatePublicHike(hikeId, values) {
     ...hikeValues
   } = values;
   const cleanedPhotoUrls = photoUrls
-    .map((url) => url.trim())
+    .map((url) => normalizeStoredPublicPhotoReference(url))
     .filter(Boolean);
   const legacyPhotoColumns = {
     image: cleanedPhotoUrls[0] || null,

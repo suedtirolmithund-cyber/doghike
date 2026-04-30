@@ -177,7 +177,7 @@ export default function EditPublicHike() {
       queryClient.invalidateQueries({ queryKey: ["hike"] });
       queryClient.invalidateQueries({ queryKey: ["hike", "sheets", detailId] });
       toast.success("Öffentliche Tour gespeichert");
-      navigate(createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`);
+      navigate(createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`, { replace: true });
     },
     onError: (error) => {
       console.error("[EditPublicHike] save failed:", error);
