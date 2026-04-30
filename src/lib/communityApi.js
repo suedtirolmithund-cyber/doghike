@@ -158,15 +158,17 @@ export async function upsertRating(userId, hikeId, hikeSource = "sheets", rating
   return data;
 }
 
-export async function getComments(hikeId, hikeSource = "sheets") {
-  const normalizedHikeId = String(hikeId);
+export async function getComments(hikeId, hikeSource = "sheets", alternateHikeIds = []) {
+  const normalizedHikeIds = Array.from(
+    new Set([hikeId, ...alternateHikeIds].map((value) => String(value)).filter(Boolean))
+  );
   const { data: authData } = await supabase.auth.getUser();
   const currentUserId = authData?.user?.id;
 
   let query = supabase
     .from("comments")
     .select("*, profiles:user_id ( username, full_name, avatar_url )")
-    .eq("hike_id", normalizedHikeId)
+    .in("hike_id", normalizedHikeIds)
     .eq("hike_source", hikeSource)
     .order("created_at", { ascending: false });
 

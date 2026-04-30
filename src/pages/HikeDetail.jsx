@@ -206,7 +206,20 @@ export default function HikeDetail() {
   const detailId = hike?._source === "sheets" && hike?._public_hike_id
     ? hike.route_id || String(hike._public_hike_id)
     : hike.id;
-  const communityHikeId = hike?.id;
+  const communityHikeId = hike?._source === "sheets"
+    ? String(hike?._public_hike_id ?? hike?.route_id ?? hike?.id ?? "")
+    : hike?.id;
+  const communityHikeAliases = hike?._source === "sheets"
+    ? Array.from(
+        new Set(
+          [hike?.id, hike?._public_hike_id, hike?.route_id]
+            .map((value) => (value == null ? null : String(value)))
+            .filter(Boolean)
+        )
+      )
+    : communityHikeId
+      ? [String(communityHikeId)]
+      : [];
   
   const countryLabel = getCountryLabel(hike.country);
 
@@ -642,6 +655,7 @@ export default function HikeDetail() {
             >
               <CommentSection
                 hikeId={communityHikeId}
+                hikeAliases={communityHikeAliases}
                 hikeSource={hike?._source === "journal" ? "journal" : "sheets"}
                 canComment={canComment}
               />

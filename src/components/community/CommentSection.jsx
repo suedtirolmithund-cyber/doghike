@@ -28,7 +28,7 @@ import {
   deleteUploadedCommentPhoto,
 } from "@/lib/communityApi";
 
-export default function CommentSection({ hikeId, hikeSource = "sheets", canComment = true }) {
+export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = "sheets", canComment = true }) {
   const { user, isAuthenticated } = useAuth();
   const normalizedHikeId = String(hikeId);
   const [text, setText] = useState("");
@@ -47,8 +47,8 @@ export default function CommentSection({ hikeId, hikeSource = "sheets", canComme
   }, [photoPreviewUrl]);
 
   const { data: comments = [], isLoading } = useQuery({
-    queryKey: ["comments", hikeSource, normalizedHikeId],
-    queryFn: () => getComments(normalizedHikeId, hikeSource),
+    queryKey: ["comments", hikeSource, normalizedHikeId, ...hikeAliases],
+    queryFn: () => getComments(normalizedHikeId, hikeSource, hikeAliases),
   });
 
   const createMutation = useMutation({
