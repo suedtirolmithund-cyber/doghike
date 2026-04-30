@@ -30,6 +30,28 @@ function normalizeForModeration(text) {
     .trim();
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+async function createPendingCommentSignedUrl(photoReference) {
+  const storageDescriptor = getStorageDescriptor(photoReference);
+  if (!storageDescriptor || storageDescriptor.bucket !== "comments-pending") {
+    return null;
+  }
+
+  const { data, error } = await supabase.storage
+    .from("comments-pending")
+    .createSignedUrl(storageDescriptor.path, 60 * 60);
+
+  if (error) {
+    console.error("[createPendingCommentSignedUrl] signed URL failed:", error.message);
+    return null;
+  }
+
+  return data?.signedUrl ?? null;
+}
+
 export async function getSavedHikes(userId) {
   const { data, error } = await supabase
     .from("saved_hikes")
@@ -110,7 +132,24 @@ export async function getComments(hikeId, hikeSource = "sheets") {
 
   const { data, error } = await query;
   if (error) throw error;
-  return data ?? [];
+
+  const commentsWithPreview = await Promise.all(
+    (data ?? []).map(async (comment) => {
+      if (comment.photo_url?.startsWith("pending://") && currentUserId === comment.user_id) {
+        return {
+          ...comment,
+          photo_preview_url: await createPendingCommentSignedUrl(comment.photo_url),
+        };
+      }
+
+      return {
+        ...comment,
+        photo_preview_url: comment.photo_url ?? null,
+      };
+    })
+  );
+
+  return commentsWithPreview;
 }
 
 export async function createComment(
@@ -201,8 +240,20 @@ const TRIGGER_WORDS = [
 ];
 
 export function containsTriggerWord(text) {
-  const normalizedText = normalizeForModeration(text);
-  return TRIGGER_WORDS.some((word) => normalizedText.includes(normalizeForModeration(word)));
+  const rawText = String(text ?? "").toLowerCase();
+  const normalizedText = ` ${normalizeForModeration(text)} `;
+
+  return TRIGGER_WORDS.some((word) => {
+    const normalizedWord = normalizeForModeration(word);
+    if (!normalizedWord) return false;
+
+    if (/[/:.]/.test(word)) {
+      return rawText.includes(word.toLowerCase());
+    }
+
+    const pattern = new RegExp(`(^|\\s)${escapeRegExp(normalizedWord)}(?=\\s|$)`, "i");
+    return pattern.test(normalizedText);
+  });
 }
 
 export function commentNeedsReview(text) {

@@ -271,9 +271,9 @@ export default function CommentSection({ hikeId, hikeSource = "sheets", canComme
 
               <p className="text-stone-700 mb-3 text-sm md:text-base">{comment.text}</p>
 
-              {comment.photo_url && !comment.photo_url.startsWith("pending://") && (
+              {(comment.photo_preview_url || (comment.photo_url && !comment.photo_url.startsWith("pending://") ? comment.photo_url : null)) && (
                 <img
-                  src={comment.photo_url}
+                  src={comment.photo_preview_url || comment.photo_url}
                   alt=""
                   className="w-full max-w-sm h-48 object-cover rounded-lg"
                 />
