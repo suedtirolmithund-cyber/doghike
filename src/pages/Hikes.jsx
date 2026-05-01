@@ -151,7 +151,7 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.season} Jahreszeit</label>
+                <label className="text-sm font-medium text-stone-700 mb-2 block">🍃 Jahreszeit</label>
                 <Select value={seasonFilter} onValueChange={setSeasonFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Alle" />
