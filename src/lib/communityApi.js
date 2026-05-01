@@ -119,12 +119,14 @@ export async function unsaveHike(userId, hikeId, hikeSource = "sheets") {
   if (error) throw error;
 }
 
-export async function getRatings(hikeId, hikeSource = "sheets") {
-  const normalizedHikeId = String(hikeId);
+export async function getRatings(hikeId, hikeSource = "sheets", alternateHikeIds = []) {
+  const normalizedHikeIds = Array.from(
+    new Set([hikeId, ...alternateHikeIds].map((value) => String(value)).filter(Boolean))
+  );
   const { data, error } = await supabase
     .from("ratings")
     .select("*")
-    .eq("hike_id", normalizedHikeId)
+    .in("hike_id", normalizedHikeIds)
     .eq("hike_source", hikeSource);
   if (error) throw error;
   return data ?? [];

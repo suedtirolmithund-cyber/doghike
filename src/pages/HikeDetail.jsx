@@ -643,6 +643,7 @@ export default function HikeDetail() {
             >
               <RatingSection
                 hikeId={communityHikeId}
+                hikeAliases={communityHikeAliases}
                 hikeSource={hike?._source === "journal" ? "journal" : "sheets"}
               />
             </motion.div>

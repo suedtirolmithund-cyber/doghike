@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { getRatings, upsertRating } from "@/lib/communityApi";
 import { toast } from "sonner";
 
-export default function RatingSection({ hikeId, hikeSource = "sheets" }) {
+export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "sheets" }) {
   const { user, isAuthenticated } = useAuth();
   const normalizedHikeId = String(hikeId);
   const [selectedRating, setSelectedRating] = useState(0);
@@ -17,8 +17,8 @@ export default function RatingSection({ hikeId, hikeSource = "sheets" }) {
   const queryClient = useQueryClient();
 
   const { data: ratings = [] } = useQuery({
-    queryKey: ["ratings", hikeSource, normalizedHikeId],
-    queryFn: () => getRatings(normalizedHikeId, hikeSource),
+    queryKey: ["ratings", hikeSource, normalizedHikeId, ...hikeAliases],
+    queryFn: () => getRatings(normalizedHikeId, hikeSource, hikeAliases),
   });
 
   const averageRating =
