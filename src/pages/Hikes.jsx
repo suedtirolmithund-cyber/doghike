@@ -30,7 +30,6 @@ export default function Hikes() {
   const [elevationMax, setElevationMax] = useState("");
   const [seasonFilter, setSeasonFilter] = useState("all");
   const [waterFilter, setWaterFilter] = useState("all");
-  const [tagFilter, setTagFilter] = useState("all");
 
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["allHikes"],
@@ -49,16 +48,6 @@ export default function Hikes() {
   };
 
   const currentSeason = getCurrentSeason();
-  const availableTags = Array.from(
-    new Set(
-      hikes.flatMap((hike) =>
-        Array.isArray(hike.tags)
-          ? hike.tags.map((tag) => tag.trim()).filter(Boolean)
-          : []
-      )
-    )
-  ).sort((a, b) => a.localeCompare(b));
-
   const filteredHikes = hikes
     .filter((hike) => {
       const query = searchQuery.trim().toLowerCase();
@@ -79,7 +68,6 @@ export default function Hikes() {
         if (!seasons.includes(seasonFilter) && !seasons.includes("all_year")) return false;
       }
       if (waterFilter !== "all" && hike.water_availability !== waterFilter) return false;
-      if (tagFilter !== "all" && !hike.tags?.includes(tagFilter)) return false;
 
       if (levelFilter === "all") return true;
       if (sortBy === "difficulty") return hike.difficulty === levelFilter;
@@ -120,7 +108,7 @@ export default function Hikes() {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
               <Input
-                placeholder="Tour oder Ort suchen..."
+                placeholder="Tour, Ort oder Tag suchen..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
@@ -208,23 +196,6 @@ export default function Hikes() {
                         <span className="inline-flex items-center gap-1">
                           <WaterIcon value={level.value} /> {level.label}
                         </span>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-stone-700 mb-2 block"># Tags</label>
-                <Select value={tagFilter} onValueChange={setTagFilter}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Alle" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Alle</SelectItem>
-                    {availableTags.map((tag) => (
-                      <SelectItem key={tag} value={tag}>
-                        #{tag}
                       </SelectItem>
                     ))}
                   </SelectContent>
