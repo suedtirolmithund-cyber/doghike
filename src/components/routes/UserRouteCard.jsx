@@ -14,6 +14,12 @@ import { format } from "date-fns";
 import "leaflet/dist/leaflet.css";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
 
+function getRouteTypeLabel(routeType) {
+  if (routeType === "recorded") return "GPS-Aufzeichnung";
+  if (routeType === "gpx") return "GPX-Import";
+  return "Geplante Route";
+}
+
 export default function UserRouteCard({ route, index, onDelete }) {
   const RouteIcon = route.route_type === "recorded" ? Navigation : Map;
   const coordinates = route.waypoints ?? [];
@@ -43,7 +49,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
 
         <div className="absolute top-3 left-3 z-[1000] bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-stone-700 flex items-center gap-1">
           <RouteIcon className="w-3 h-3" />
-          {route.route_type === "recorded" ? "GPS-Aufzeichnung" : "Geplante Route"}
+          {getRouteTypeLabel(route.route_type)}
         </div>
 
         {route.completed && (

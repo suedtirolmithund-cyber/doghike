@@ -514,6 +514,12 @@ export default function Profile() {
             ) : userRoutes.length > 0 ? (
               <div className="space-y-3">
                 {userRoutes.map((route) => {
+                  const statusLabel = route.completed
+                    ? "Erledigt"
+                    : route.route_type === "gpx"
+                      ? "Importiert"
+                      : "Geplant";
+
                   return (
                     <div key={route.id} className="bg-white rounded-xl border border-stone-200/60 shadow-sm p-4 flex items-center gap-4">
                       <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${route.completed ? "bg-brand-100" : "bg-blue-100"}`}>
@@ -529,7 +535,7 @@ export default function Profile() {
                               route.completed ? "bg-brand-100 text-brand-600" : "bg-blue-100 text-blue-700"
                             }`}
                           >
-                            {route.completed ? "Erledigt" : "Geplant"}
+                            {statusLabel}
                           </span>
                         </div>
                         <div className="flex items-center gap-3 mt-0.5 text-xs text-stone-400 flex-wrap">

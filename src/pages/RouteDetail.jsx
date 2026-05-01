@@ -211,6 +211,14 @@ export default function RouteDetail() {
 
   const isOwner = user?.id === route.user_id;
   const RouteIcon = route.route_type === "recorded" ? Navigation : Map;
+  const routeTypeLabel =
+    route.route_type === "recorded"
+      ? "GPS-Aufzeichnung"
+      : route.route_type === "gpx"
+        ? "GPX-Import"
+        : "Geplante Route";
+  const visibilityLabel =
+    route.route_type === "gpx" ? "Private Import-Route" : "Private Planung";
   const effectiveDurationMinutes = route.completed_duration_minutes ?? route.duration_minutes ?? null;
 
   const buildJournalPrefill = () => ({
@@ -271,7 +279,7 @@ export default function RouteDetail() {
                 <div className="flex items-center gap-2 mb-2">
                   <RouteIcon className="w-5 h-5 text-slate-700" />
                   <span className="text-sm text-stone-500">
-                    {route.route_type === "recorded" ? "GPS-Aufzeichnung" : "Geplante Route"}
+                    {routeTypeLabel}
                   </span>
                 </div>
                 <h1 className="text-2xl md:text-3xl font-bold text-stone-800 mb-2">
@@ -337,7 +345,7 @@ export default function RouteDetail() {
               ) : (
                 <span className="flex items-center gap-1 text-stone-500">
                   <EyeOff className="w-4 h-4" />
-                  Private Planung
+                  {visibilityLabel}
                 </span>
               )}
               <span className="text-stone-400">•</span>

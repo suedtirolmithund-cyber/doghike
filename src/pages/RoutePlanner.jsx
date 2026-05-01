@@ -643,12 +643,12 @@ export default function RoutePlanner() {
         </Link>
 
         <div className="flex items-center gap-3 mb-5">
-          <div className="bg-slate-800 rounded-xl p-2 shrink-0">
-            <Map className="w-5 h-5 text-white" />
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+            <Map className="h-5 w-5" />
           </div>
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Routenplaner</h1>
-            <p className="text-xs text-stone-500">Setze Wegpunkte, die Route wird automatisch berechnet</p>
+            <p className="mt-1 text-sm text-stone-500">Setze Wegpunkte, die Route wird automatisch berechnet</p>
           </div>
         </div>
 
@@ -692,7 +692,11 @@ export default function RoutePlanner() {
               className="mt-6 space-y-4 bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5"
             >
               <h3 className="text-base font-semibold text-stone-800">
-                {activeTab === "track" ? "Aufzeichnung ins Tagebuch übernehmen" : "Route speichern"}
+                {activeTab === "track"
+                  ? "Aufzeichnung ins Tagebuch übernehmen"
+                  : activeTab === "gpx"
+                    ? "GPX-Route speichern"
+                    : "Route speichern"}
               </h3>
 
               <div>
@@ -717,7 +721,9 @@ export default function RoutePlanner() {
               <div className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-600">
                 {activeTab === "track"
                   ? "Diese Aufzeichnung gilt als bereits gemacht und wird direkt als vorausgefüllter Tagebuch-Eintrag geöffnet."
-                  : "Diese Planung bleibt privat. Erst wenn du die Route später als Wanderung einträgst, kannst du sie auf Freunde oder öffentlich stellen."}
+                  : activeTab === "gpx"
+                    ? "Dieser GPX-Import bleibt privat. Du kannst ihn später als Wanderung eintragen oder weiterbearbeiten."
+                    : "Diese Planung bleibt privat. Erst wenn du die Route später als Wanderung einträgst, kannst du sie auf Freunde oder öffentlich stellen."}
               </div>
 
               <div className="flex gap-2 justify-end">
@@ -726,7 +732,11 @@ export default function RoutePlanner() {
                 </Button>
                 <Button type="submit" disabled={createRouteMutation.isPending} className="bg-slate-800 hover:bg-slate-900">
                   {createRouteMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                  {activeTab === "track" ? "Ins Tagebuch übernehmen" : "Route speichern"}
+                  {activeTab === "track"
+                    ? "Ins Tagebuch übernehmen"
+                    : activeTab === "gpx"
+                      ? "GPX-Route speichern"
+                      : "Route speichern"}
                 </Button>
               </div>
             </motion.form>
