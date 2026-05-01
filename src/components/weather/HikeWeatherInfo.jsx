@@ -36,8 +36,8 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
 
   if (isLoading) {
     return (
-      <div className="rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-sky-50 p-4">
-        <div className="flex items-center justify-center gap-2 text-blue-600">
+      <div className="rounded-2xl border border-stone-200/70 bg-white/70 p-4 shadow-sm backdrop-blur-sm">
+        <div className="flex items-center justify-center gap-2 text-brand-600">
           <Loader2 className="h-4 w-4 animate-spin" />
           <span className="text-xs">Wetterdaten werden geladen...</span>
         </div>
@@ -54,7 +54,7 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-sky-50 p-4"
+      className="rounded-2xl border border-stone-200/70 bg-white/70 p-4 shadow-[0_12px_28px_rgba(92,62,42,0.08)] backdrop-blur-sm"
     >
       <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-800 sm:text-base">
         <Cloud className="h-4 w-4" />
@@ -63,7 +63,9 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
         <div className="flex items-center gap-3 sm:min-w-[150px]">
-          <WeatherIcon className="h-9 w-9 text-blue-600" />
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+            <WeatherIcon className="h-5 w-5" />
+          </div>
           <div>
             <p className="text-2xl font-bold leading-none text-stone-800">
               {Math.round(cur.temperature_2m)}°C
@@ -75,7 +77,7 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
         <div className="grid flex-1 grid-cols-2 gap-2">
           {cur.relative_humidity_2m != null && (
             <div className="flex items-center gap-2 rounded-xl bg-white/45 px-3 py-2">
-              <Droplets className="h-4 w-4 text-blue-600" />
+              <Droplets className="h-4 w-4 text-brand-600" />
               <div>
                 <p className="text-xs text-stone-500">Luftfeuchtigkeit</p>
                 <p className="text-sm font-semibold text-stone-800">

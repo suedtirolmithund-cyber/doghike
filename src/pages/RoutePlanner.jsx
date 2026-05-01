@@ -396,7 +396,7 @@ function SmartRoutePlanner({ onRouteReady }) {
           {route && (
             <Polyline
               positions={route.positions}
-              color="#1e3a8a"
+              color="#b8785f"
               weight={6}
               opacity={0.85}
               eventHandlers={{ click: handleRouteClick }}
@@ -452,7 +452,7 @@ function SmartRoutePlanner({ onRouteReady }) {
 
         {calculating && (
           <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs text-stone-600 flex items-center gap-1.5 shadow">
-            <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" /> Route wird berechnet...
+            <Loader2 className="w-3.5 h-3.5 animate-spin text-brand-600" /> Route wird berechnet...
           </div>
         )}
 
@@ -494,12 +494,12 @@ function SmartRoutePlanner({ onRouteReady }) {
       {/* Stats */}
       {route && (
         <div className="grid grid-cols-3 gap-3">
-          <div className="bg-blue-50 rounded-xl p-3 text-center border border-blue-100">
+          <div className="rounded-xl border border-stone-200/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
             <span className="block text-lg mb-1">{TOUR_ICONS.distance}</span>
-            <p className="text-lg font-bold text-blue-800">{route.distance_km}</p>
-            <p className="text-xs text-blue-600">km</p>
+            <p className="text-lg font-bold text-stone-800">{route.distance_km}</p>
+            <p className="text-xs text-stone-500">km</p>
           </div>
-          <div className="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
+          <div className="rounded-xl border border-stone-200/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
             <span className="block text-lg mb-1">{TOUR_ICONS.duration}</span>
             <p className="text-lg font-bold text-slate-800">
               {Math.floor(route.duration_minutes / 60) > 0
@@ -508,12 +508,12 @@ function SmartRoutePlanner({ onRouteReady }) {
             </p>
             <p className="text-xs text-slate-500">ca. Zeit</p>
           </div>
-          <div className="bg-brand-50 rounded-xl p-3 text-center border border-brand-100">
+          <div className="rounded-xl border border-stone-200/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
             <span className="block text-lg mb-1">{TOUR_ICONS.elevation}</span>
-            <p className="text-lg font-bold text-brand-700">
+            <p className="text-lg font-bold text-stone-800">
               {elevation.length ? `+${calcElevationGain(elevation).gain} m` : "–"}
             </p>
-            <p className="text-xs text-brand-400">Aufstieg</p>
+            <p className="text-xs text-stone-500">Aufstieg</p>
           </div>
         </div>
       )}
@@ -730,7 +730,7 @@ export default function RoutePlanner() {
                 <Button type="button" variant="outline" onClick={() => setRouteGeometry(null)}>
                   Abbrechen
                 </Button>
-                <Button type="submit" disabled={createRouteMutation.isPending} className="bg-slate-800 hover:bg-slate-900">
+                <Button type="submit" disabled={createRouteMutation.isPending} className="bg-[#b8785f] hover:bg-[#a4644d]">
                   {createRouteMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                   {activeTab === "track"
                     ? "Ins Tagebuch übernehmen"

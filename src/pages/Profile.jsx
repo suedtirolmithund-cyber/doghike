@@ -494,7 +494,7 @@ export default function Profile() {
             <div className="flex items-center justify-between mb-4 md:mb-6">
               <div>
                 <h2 className="text-lg md:text-xl font-medium text-stone-800 mb-1 flex items-center gap-2">
-                  <Navigation className="w-5 h-5 text-blue-600" />
+                  <Navigation className="w-5 h-5 text-brand-600" />
                   Meine Routen
                 </h2>
                 <p className="text-stone-500 text-sm">Geplante und aufgezeichnete Wanderrouten</p>
@@ -521,18 +521,18 @@ export default function Profile() {
                       : "Geplant";
 
                   return (
-                    <div key={route.id} className="bg-white rounded-xl border border-stone-200/60 shadow-sm p-4 flex items-center gap-4">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${route.completed ? "bg-brand-100" : "bg-blue-100"}`}>
+                    <div key={route.id} className="flex items-center gap-4 rounded-2xl border border-stone-200/70 bg-white/70 p-4 shadow-sm backdrop-blur-sm">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
                         {route.completed
-                          ? <Route className="w-5 h-5 text-brand-400" />
-                          : <Navigation className="w-5 h-5 text-blue-600" />}
+                          ? <Route className="w-5 h-5" />
+                          : <Navigation className="w-5 h-5" />}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <p className="font-semibold text-stone-800 truncate">{route.name}</p>
                           <span
                             className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${
-                              route.completed ? "bg-brand-100 text-brand-600" : "bg-blue-100 text-blue-700"
+                              "bg-brand-100 text-brand-600"
                             }`}
                           >
                             {statusLabel}

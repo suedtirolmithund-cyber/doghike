@@ -237,7 +237,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="difficulty">Schwierigkeit (Mensch) {TOUR_ICONS.human}</Label>
-            <a href={createPageUrl("DifficultyHelp")} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline flex items-center gap-1">
+            <a href={createPageUrl("DifficultyHelp")} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs text-brand-600 hover:underline">
               <HelpCircle className="w-3 h-3" /> Was bedeutet das?
             </a>
           </div>
@@ -259,7 +259,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="dog_difficulty">Schwierigkeit (Hund) {TOUR_ICONS.dog}</Label>
-            <a href={createPageUrl("DifficultyHelp")} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline flex items-center gap-1">
+            <a href={createPageUrl("DifficultyHelp")} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs text-brand-600 hover:underline">
               <HelpCircle className="w-3 h-3" /> Was bedeutet das?
             </a>
           </div>
@@ -300,7 +300,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="water_availability">Wasser unterwegs 💧</Label>
-            <a href={createPageUrl("WaterHelp")} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline flex items-center gap-1">
+            <a href={createPageUrl("WaterHelp")} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs text-brand-600 hover:underline">
               <HelpCircle className="w-3 h-3" /> Was bedeutet das?
             </a>
           </div>
@@ -359,7 +359,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       </div>
 
       {/* Start Point Section */}
-      <div className="space-y-4 p-6 bg-blue-50 rounded-2xl border border-blue-200">
+      <div className="space-y-4 rounded-2xl border border-stone-200/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(92,62,42,0.08)] backdrop-blur-sm md:p-6">
         <div className="flex items-center justify-between">
           <div>
             <Label className="text-lg">📍 Ausgangspunkt *</Label>
@@ -423,7 +423,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       </div>
 
       {/* Route Section */}
-      <div className="space-y-4 p-6 bg-purple-50 rounded-2xl border border-purple-200">
+      <div className="space-y-4 rounded-2xl border border-stone-200/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(92,62,42,0.08)] backdrop-blur-sm md:p-6">
         <div className="flex items-center justify-between">
           <div>
             <Label className="text-lg">🗺️ Routenverlauf (optional)</Label>
@@ -495,8 +495,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
 
         {showRouteEditor && (
           <div className="space-y-2">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <p className="text-xs text-blue-700">
+            <div className="rounded-xl border border-brand-200/70 bg-brand-50/60 p-2">
+              <p className="text-xs text-brand-700">
                 💡 Klicke auf die Karte, um Wegpunkte hinzuzufügen. Der erste Punkt wird automatisch als Ausgangspunkt verwendet.
               </p>
             </div>
@@ -553,7 +553,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
                 key={dog.id}
                 className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
                   formData.dogs?.includes(dog.id)
-                    ? "border-slate-700 bg-slate-50"
+                    ? "border-brand-400 bg-brand-50/60"
                     : "border-stone-200 hover:border-stone-300"
                 }`}
               >
@@ -601,7 +601,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             ))}
           </AnimatePresence>
           
-          <label className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-stone-300 rounded-xl cursor-pointer hover:border-slate-500 transition-colors">
+          <label className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-stone-300 rounded-xl cursor-pointer hover:border-brand-400 transition-colors">
             <input
               type="file"
               accept="image/*"
@@ -755,7 +755,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         <Button
           type="submit"
           disabled={saving}
-          className="bg-slate-800 hover:bg-slate-900"
+          className="bg-[#b8785f] hover:bg-[#a4644d]"
         >
           {saving ? (
             <>

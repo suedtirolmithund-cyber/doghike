@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Datenschutz() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-[#f7efe8] pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <Link to={createPageUrl("Dashboard")}>
           <Button variant="ghost" className="mb-6">
@@ -14,9 +14,11 @@ export default function Datenschutz() {
           </Button>
         </Link>
 
-        <div className="bg-white rounded-2xl p-4 md:p-8 border border-stone-200/50 shadow-sm">
+        <div className="rounded-2xl border border-stone-200/70 bg-white/70 p-4 shadow-[0_14px_34px_rgba(92,62,42,0.1)] backdrop-blur-sm md:p-8">
           <div className="flex items-center gap-3 mb-2">
-            <Shield className="w-6 h-6 md:w-8 md:h-8 text-slate-700" />
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+              <Shield className="h-5 w-5" />
+            </div>
             <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Datenschutzerklärung</h1>
           </div>
           <p className="text-xs text-stone-400 mb-8">Letzte Aktualisierung: April 2026</p>
@@ -41,9 +43,9 @@ export default function Datenschutz() {
               <div className="space-y-2 text-sm md:text-base text-stone-600 bg-stone-50 rounded-xl p-4">
                 <p><strong>Julia Schwärzer</strong></p>
                 <p>Südtirol, Italien</p>
-                <p>E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-blue-600 underline"><strong>suedtirolmithund@gmail.com</strong></a></p>
-                <p>Website: <a href="https://www.mithundenunterwegsinsuedtirol.it" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">www.mithundenunterwegsinsuedtirol.it</a></p>
-                <p>App: <a href="https://doghike-suedtirol.vercel.app" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">doghike-suedtirol.vercel.app</a></p>
+                <p>E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-brand-600 underline"><strong>suedtirolmithund@gmail.com</strong></a></p>
+                <p>Website: <a href="https://www.mithundenunterwegsinsuedtirol.it" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">www.mithundenunterwegsinsuedtirol.it</a></p>
+                <p>App: <a href="https://doghike-suedtirol.vercel.app" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">doghike-suedtirol.vercel.app</a></p>
               </div>
             </section>
 
