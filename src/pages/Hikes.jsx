@@ -93,7 +93,7 @@ export default function Hikes() {
           className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8"
         >
           <div>
-            <h1 className="text-3xl font-bold text-stone-800">Alle Wanderungen</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Alle Wanderungen</h1>
             <p className="text-stone-600 mt-1">{hikes.length} hundefreundliche Touren</p>
           </div>
         </motion.div>

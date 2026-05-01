@@ -647,7 +647,7 @@ export default function RoutePlanner() {
             <Map className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 className="text-xl md:text-2xl font-bold text-stone-800">Routenplaner</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Routenplaner</h1>
             <p className="text-xs text-stone-500">Setze Wegpunkte, die Route wird automatisch berechnet</p>
           </div>
         </div>

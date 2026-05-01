@@ -148,7 +148,7 @@ export default function Dogs() {
           className="flex items-center justify-between mb-8"
         >
           <div>
-            <h1 className="text-2xl md:text-3xl font-light text-stone-800">Meine Hunde</h1>
+              <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Meine Hunde</h1>
             <p className="text-stone-500 mt-1 text-sm">Deine Wanderbegleiter</p>
           </div>
           <Button

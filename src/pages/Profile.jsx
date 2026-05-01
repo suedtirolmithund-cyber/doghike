@@ -322,7 +322,7 @@ export default function Profile() {
                 </div>
               ) : (
                 <div>
-                  <h1 className="text-xl md:text-2xl font-semibold text-stone-800 truncate">{displayName}</h1>
+                  <h1 className="text-2xl md:text-3xl font-bold text-stone-800 truncate">{displayName}</h1>
                   {profile?.username && (
                     <p className="text-sm text-stone-400">@{profile.username}</p>
                   )}
