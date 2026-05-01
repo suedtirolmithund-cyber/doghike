@@ -195,10 +195,7 @@ export default function HikeDetail() {
   // Premium gate: block non-premium users from admin-created premium hikes
   const isPremiumHike = hike.is_premium && !isAdmin && !isOwnHike;
   const userHasPremium = currentProfile?.is_premium === true;
-  if (isPremiumHike && !userHasPremium) {
-    const coverPhoto = hike.photos?.[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80";
-    return <PremiumGate hikeName={hike.trail_name} coverPhoto={coverPhoto} />;
-  }
+  const showPremiumPreviewOnly = isPremiumHike && !userHasPremium;
 
   const hikeDogs = dogs.filter(d => hike.dogs?.includes(d.id));
   const photos = hike.photos || [];
@@ -226,6 +223,11 @@ export default function HikeDetail() {
   const nextPhoto = () => setCurrentPhotoIndex((prev) => (prev + 1) % photos.length);
   const prevPhoto = () => setCurrentPhotoIndex((prev) => (prev - 1 + photos.length) % photos.length);
   const canComment = hike?._source === "sheets" || hike?.visibility === "public";
+  const previewNotes = hike.notes
+    ? hike.notes.length > 220
+      ? `${hike.notes.slice(0, 220).trim()}...`
+      : hike.notes
+    : null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
@@ -460,7 +462,7 @@ export default function HikeDetail() {
         </motion.div>
 
         {/* Route Profile - Full Width */}
-        {hike.route_coordinates && hike.route_coordinates.length > 1 && (
+        {!showPremiumPreviewOnly && hike.route_coordinates && hike.route_coordinates.length > 1 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -471,8 +473,38 @@ export default function HikeDetail() {
           </motion.div>
         )}
 
+        {showPremiumPreviewOnly && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.18 }}
+            className="mb-10"
+          >
+            <div className="bg-white rounded-2xl p-6 border border-stone-200/50">
+              <h2 className="text-lg font-medium text-stone-800 mb-4">Vorschau</h2>
+              <div className="space-y-4">
+                {previewNotes ? (
+                  <p className="text-stone-600 leading-relaxed">{previewNotes}</p>
+                ) : (
+                  <p className="text-stone-500">Zu dieser Premium-Tour ist eine Kurzvorschau sichtbar. Die ganzen Details kannst du mit Premium freischalten.</p>
+                )}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="rounded-xl border border-stone-200 bg-stone-50 p-4">
+                    <p className="text-xs uppercase tracking-wide text-stone-400 mb-1">Ort</p>
+                    <p className="font-medium text-stone-800">{hike.location || "Nicht angegeben"}</p>
+                  </div>
+                  <div className="rounded-xl border border-stone-200 bg-stone-50 p-4">
+                    <p className="text-xs uppercase tracking-wide text-stone-400 mb-1">Land</p>
+                    <p className="font-medium text-stone-800">{countryLabel || "Nicht angegeben"}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* Weather Info - Full Width */}
-        {hike.latitude && hike.longitude && (
+        {!showPremiumPreviewOnly && hike.latitude && hike.longitude && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -488,6 +520,13 @@ export default function HikeDetail() {
           </motion.div>
         )}
 
+        {showPremiumPreviewOnly ? (
+          <PremiumGate
+            hikeName={hike.trail_name}
+            coverPhoto={coverPhoto}
+            variant="inline"
+          />
+        ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
             {/* Parking & Starting Point */}
@@ -663,11 +702,12 @@ export default function HikeDetail() {
             </motion.div>
           </div>
         </div>
+        )}
       </div>
 
       {/* Lightbox */}
       <AnimatePresence>
-        {lightboxOpen && photos.length > 0 && (
+        {!showPremiumPreviewOnly && lightboxOpen && photos.length > 0 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

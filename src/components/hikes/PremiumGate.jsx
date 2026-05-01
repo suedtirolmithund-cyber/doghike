@@ -4,7 +4,55 @@ import { Lock, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
-export default function PremiumGate({ hikeName, coverPhoto }) {
+export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) {
+  if (variant === "inline") {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-white rounded-3xl p-8 border border-stone-200 shadow-sm"
+      >
+        <div className="w-14 h-14 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-5">
+          <Crown className="w-7 h-7 text-amber-500" />
+        </div>
+
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-semibold text-stone-800 mb-2">Mehr Infos mit Premium</h2>
+          <p className="text-stone-500">
+            Die Vorschau zu <span className="font-medium text-stone-700">{hikeName}</span> ist sichtbar.
+            Die ganzen Details, Fotos und Zusatzinfos gibt es mit Premium.
+          </p>
+        </div>
+
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 mb-6 text-left">
+          <p className="font-semibold text-amber-800 mb-3 flex items-center gap-2">
+            <Crown className="w-4 h-4" /> Mit Premium siehst du:
+          </p>
+          <ul className="space-y-2 text-sm text-amber-700">
+            <li className="flex items-center gap-2">✓ komplette Beschreibung und Tipps</li>
+            <li className="flex items-center gap-2">✓ weitere Fotos und Zusatzinfos</li>
+            <li className="flex items-center gap-2">✓ Parken, Einkehr und Hinweise</li>
+            <li className="flex items-center gap-2">✓ alle Premium-Touren in voller Ansicht</li>
+          </ul>
+        </div>
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <Link to={createPageUrl("Premium")}>
+            <Button className="bg-amber-500 hover:bg-amber-600 text-white">
+              <Crown className="w-5 h-5 mr-2" />
+              Jetzt Premium werden
+            </Button>
+          </Link>
+          <Link to={createPageUrl("Hikes")}>
+            <Button variant="outline">
+              Zurück zu allen Touren
+            </Button>
+          </Link>
+        </div>
+      </motion.div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50">
       {/* Blurred preview */}
