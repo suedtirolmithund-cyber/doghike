@@ -611,7 +611,9 @@ export default function RouteDetail() {
                           </Select>
                         </div>
                         <div>
-                          <label className="text-sm font-medium text-stone-700 mb-1 block">Wasser unterwegs 💧</label>
+                          <label className="mb-1 flex items-center gap-1 text-sm font-medium text-stone-700">
+                            Wasser unterwegs <WaterIcon value="little" />
+                          </label>
                           <Select value={completeData.water_availability} onValueChange={(v) => setCompleteData({ ...completeData, water_availability: v })}>
                             <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
                             <SelectContent>

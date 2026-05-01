@@ -56,7 +56,7 @@ export const TOUR_ICONS = {
   date: "📅",
   human: "👤",
   dog: "🐕",
-  season: "🌤️",
+  season: "🍃",
   speed: "🏃",
 };
 
@@ -77,7 +77,7 @@ export function getSeasonLabel(value) {
 }
 
 export function getSeasonIcon(value) {
-  return SEASON_BY_VALUE[value]?.icon ?? "🌤️";
+  return SEASON_BY_VALUE[value]?.icon ?? TOUR_ICONS.season;
 }
 
 export function getSeasonBadgeClass(value) {

@@ -307,7 +307,9 @@ export default function JournalDetail() {
             )}
             {entry.water_available !== null && entry.water_available !== undefined && (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-stone-500 w-28">Wasser</span>
+                <span className="flex w-28 items-center gap-1 text-xs text-stone-500">
+                  <WaterIcon value="little" /> Wasser
+                </span>
                 <span className={`text-sm font-medium ${getWaterTextColor(entry.water_available)}`}>
                     <WaterIcon value={entry.water_available} /> {getWaterLabel(entry.water_available)}
                 </span>
@@ -315,7 +317,7 @@ export default function JournalDetail() {
             )}
             {entry.seasons?.length > 0 && (
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs text-stone-500 w-28">Jahreszeit</span>
+                <span className="text-xs text-stone-500 w-28">{TOUR_ICONS.season} Jahreszeit</span>
                 <div className="flex gap-1.5 flex-wrap">
                   {entry.seasons.map((s) => (
                     <Badge key={s} variant="secondary" className="text-xs">

@@ -580,7 +580,7 @@ export default function HikeDetail() {
                   </div>
                 ) : (
                   <div className="flex items-center gap-3 p-3 rounded-xl bg-stone-50 border border-stone-200">
-                    <span className="text-lg">💧</span>
+                    <WaterIcon value="little" className="text-lg" />
                     <div>
                       <p className="font-medium text-stone-700">Wasser unterwegs</p>
                       <p className="text-sm text-stone-400">Keine Angabe – Wasser mitnehmen empfohlen</p>

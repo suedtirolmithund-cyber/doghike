@@ -64,7 +64,8 @@ export default function WeatherWidget({ location, latitude, longitude }) {
       className="rounded-2xl border border-stone-200/70 bg-white/70 p-4 shadow-[0_12px_28px_rgba(92,62,42,0.08)] backdrop-blur-sm md:p-5"
     >
       <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-800 md:text-base">
-        ☀️ Wetter{location ? ` in ${location}` : ""}
+        <Cloud className="h-4 w-4" />
+        Wetter{location ? ` in ${location}` : ""}
       </h2>
 
       {/* Aktuell */}

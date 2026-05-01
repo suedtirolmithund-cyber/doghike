@@ -440,7 +440,9 @@ export default function EditPublicHike() {
               </div>
 
               <div className="space-y-2">
-                <Label>💧 Wasser</Label>
+                <Label className="flex items-center gap-1">
+                  <WaterIcon value="little" /> Wasser
+                </Label>
                 <Select value={formData.water_availability} onValueChange={(value) => setFormData((prev) => ({ ...prev, water_availability: value }))}>
                   <SelectTrigger>
                     <SelectValue placeholder="Nicht gesetzt" />

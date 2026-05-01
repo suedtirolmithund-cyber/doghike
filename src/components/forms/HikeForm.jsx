@@ -299,7 +299,9 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="water_availability">Wasser unterwegs 💧</Label>
+            <Label htmlFor="water_availability" className="flex items-center gap-1">
+              Wasser unterwegs <WaterIcon value="little" />
+            </Label>
             <a href={createPageUrl("WaterHelp")} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs text-brand-600 hover:underline">
               <HelpCircle className="w-3 h-3" /> Was bedeutet das?
             </a>

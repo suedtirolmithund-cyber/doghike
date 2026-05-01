@@ -301,7 +301,7 @@ function SeasonPicker({ value = [], onChange }) {
   };
   return (
     <div>
-      <Label className="text-sm text-stone-600 mb-2 block">Empfohlene Jahreszeit</Label>
+      <Label className="text-sm text-stone-600 mb-2 block">{TOUR_ICONS.season} Empfohlene Jahreszeit</Label>
       <div className="flex flex-wrap gap-2">
         {SEASON_OPTIONS.map((opt) => {
           const active = value.includes(opt.value);
@@ -993,7 +993,7 @@ export default function AddJournalEntry() {
           {(form.visibility === "friends" || form.visibility === "public") && (
             <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5">
               <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
-                Jahreszeit
+                {TOUR_ICONS.season} Jahreszeit
               </h2>
               <SeasonPicker
                 value={form.seasons}

@@ -1,4 +1,5 @@
 import { Droplets } from "lucide-react";
+import WaterIcon from "@/components/icons/WaterIcon";
 
 const waterLevels = [
   {
@@ -59,7 +60,7 @@ export default function WaterHelp() {
           {waterLevels.map((level) => (
             <div key={level.value} className={`border rounded-2xl p-5 ${level.color}`}>
               <div className="flex items-center gap-3 mb-3">
-                <span className="text-2xl">{level.icon}</span>
+                <WaterIcon value={level.value} className="text-2xl" />
                 <span className="font-semibold text-lg">{level.label}</span>
               </div>
               <p className="text-sm mb-3">{level.desc}</p>
