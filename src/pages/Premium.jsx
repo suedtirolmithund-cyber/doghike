@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Crown, Check, ArrowLeft, Mountain, Star, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 
 const features = [
   "Zugang zu allen Premium-Touren",
@@ -38,6 +39,36 @@ export default function Premium() {
   });
 
   const isPremium = profile?.is_premium === true;
+
+  if (!PREMIUM_FEATURES_ENABLED) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-[#f7efe8] pb-24 md:pb-8">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+            <Link to={createPageUrl("Hikes")}>
+              <Button variant="ghost" className="mb-6 text-stone-600">
+                <ArrowLeft className="w-4 h-4 mr-2" /> Zurück
+              </Button>
+            </Link>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rounded-2xl border border-stone-200/60 bg-white p-8 text-center shadow-sm"
+          >
+            <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-stone-100 text-stone-500">
+              <Crown className="h-7 w-7" />
+            </div>
+            <h1 className="mb-3 text-2xl font-bold text-stone-800 md:text-3xl">Premium ist noch nicht aktiv</h1>
+            <p className="text-stone-500">
+              Die Premium-Funktionen sind im Code vorbereitet, werden für die aktuelle Testphase aber noch nicht für Nutzer freigeschaltet.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-[#f7efe8] pb-24 md:pb-8">

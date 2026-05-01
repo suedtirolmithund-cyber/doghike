@@ -6,6 +6,7 @@ import { createPageUrl } from "@/utils";
 import ExpandableText from "@/components/ExpandableText";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { TOUR_ICONS, getDifficultyBadgeClass, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
+import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 
 function StatTile({ value, label, icon }) {
   if (!value) return null;
@@ -45,7 +46,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-stone-950/10 to-transparent" />
 
-            {hike.is_premium && (
+            {PREMIUM_FEATURES_ENABLED && hike.is_premium && (
               <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/74 px-2.5 py-1 text-xs font-semibold text-[#8c5f43] shadow-sm backdrop-blur-sm">
                 Premium
               </span>

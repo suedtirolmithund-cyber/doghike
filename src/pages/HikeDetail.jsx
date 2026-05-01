@@ -33,6 +33,7 @@ import PremiumGate from "@/components/hikes/PremiumGate";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { supabase } from "@/lib/supabaseClient";
 import { TOUR_ICONS, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
+import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { toast } from "sonner";
 
 function getCountryLabel(country) {
@@ -193,7 +194,7 @@ export default function HikeDetail() {
     );
   }
   // Premium gate: block non-premium users from admin-created premium hikes
-  const isPremiumHike = hike.is_premium && !isAdmin && !isOwnHike;
+  const isPremiumHike = PREMIUM_FEATURES_ENABLED && hike.is_premium && !isAdmin && !isOwnHike;
   const userHasPremium = currentProfile?.is_premium === true;
   const showPremiumPreviewOnly = isPremiumHike && !userHasPremium;
 
