@@ -328,3 +328,107 @@ as $$
       )
   );
 $$;
+
+create or replace function public.extract_storage_object_name(bucket_name text, file_reference text)
+returns text
+language plpgsql
+immutable
+as $$
+declare
+  public_marker text;
+  signed_marker text;
+begin
+  if file_reference is null or btrim(file_reference) = '' then
+    return null;
+  end if;
+
+  public_marker := '/storage/v1/object/public/' || bucket_name || '/';
+  signed_marker := '/storage/v1/object/sign/' || bucket_name || '/';
+
+  if bucket_name = 'comments-pending' and file_reference like 'pending://%' then
+    return substring(file_reference from length('pending://') + 1);
+  end if;
+
+  if file_reference like bucket_name || '/%' then
+    return substring(file_reference from length(bucket_name) + 2);
+  end if;
+
+  if position(public_marker in file_reference) > 0 then
+    return substring(file_reference from position(public_marker in file_reference) + length(public_marker));
+  end if;
+
+  if position(signed_marker in file_reference) > 0 then
+    return split_part(
+      substring(file_reference from position(signed_marker in file_reference) + length(signed_marker)),
+      '?',
+      1
+    );
+  end if;
+
+  return null;
+end;
+$$;
+
+create or replace function public.admin_delete_user_account(target_user_id uuid)
+returns void
+language plpgsql
+security definer
+as $$
+begin
+  if not public.is_admin() then
+    raise exception 'not_allowed';
+  end if;
+
+  delete from storage.objects
+  where bucket_id = 'avatars'
+    and name in (
+      select public.extract_storage_object_name('avatars', avatar_url)
+      from public.profiles
+      where user_id = target_user_id
+    );
+
+  delete from storage.objects
+  where bucket_id = 'dog-photos'
+    and name in (
+      select public.extract_storage_object_name('dog-photos', photo_url)
+      from public.dogs
+      where user_id = target_user_id
+    );
+
+  delete from storage.objects
+  where bucket_id = 'journal'
+    and name in (
+      select public.extract_storage_object_name('journal', photo_ref)
+      from public.journal_entries je,
+      lateral unnest(coalesce(je.photos, '{}'::text[])) as photo_ref
+      where je.user_id = target_user_id
+      union
+      select public.extract_storage_object_name('journal', je.gpx_url)
+      from public.journal_entries je
+      where je.user_id = target_user_id
+      union
+      select public.extract_storage_object_name('journal', ur.gpx_url)
+      from public.user_routes ur
+      where ur.user_id = target_user_id
+    );
+
+  delete from storage.objects
+  where bucket_id = 'comments'
+    and name in (
+      select public.extract_storage_object_name('comments', c.photo_url)
+      from public.comments c
+      where c.user_id = target_user_id
+    );
+
+  delete from storage.objects
+  where bucket_id = 'comments-pending'
+    and name in (
+      select public.extract_storage_object_name('comments-pending', c.photo_url)
+      from public.comments c
+      where c.user_id = target_user_id
+    );
+
+  delete from auth.users
+  where id = target_user_id;
+end;
+$$;
