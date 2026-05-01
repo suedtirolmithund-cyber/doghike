@@ -23,7 +23,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ArrowLeft, Map, EyeOff, Trash2, CheckCircle2, Star, Upload, X, Loader2, Pencil, BookOpen } from "lucide-react";
+import { ArrowLeft, Map, Navigation, EyeOff, Trash2, CheckCircle2, Star, Upload, X, Loader2, Pencil, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { toast } from "sonner";
