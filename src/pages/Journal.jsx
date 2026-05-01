@@ -70,7 +70,7 @@ function VisibilityStatusBadge({ visibility, status }) {
 
   if (visibility === "friends") {
     return (
-      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">
+      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 border border-brand-200">
         <Users className="w-3 h-3" />
         Mit Freunden geteilt
       </span>
@@ -156,7 +156,7 @@ export default function Journal() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl p-8 border border-stone-200/50 shadow-lg text-center max-w-md w-full"
+          className="doghike-glass-card p-8 text-center max-w-md w-full"
         >
           <BookOpen className="w-12 h-12 text-brand-400 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-stone-800 mb-2">Wandertagebuch</h2>
@@ -208,10 +208,10 @@ export default function Journal() {
           >
             {[
               { icon: Mountain, value: entries.length, label: "Wanderungen", color: "text-brand-400" },
-              { icon: TOUR_ICONS.distance, value: `${totalDistance.toFixed(0)} km`, label: "Gesamt", color: "text-blue-600" },
+              { icon: TOUR_ICONS.distance, value: `${totalDistance.toFixed(0)} km`, label: "Gesamt", color: "text-brand-600" },
               { icon: TOUR_ICONS.elevation, value: `${Math.round(totalElevation).toLocaleString()} Hm`, label: "Aufstieg", color: "text-orange-600" },
             ].map(({ icon, value, label, color }) => (
-              <div key={label} className="bg-white rounded-xl p-3 md:p-4 border border-stone-200 text-center shadow-sm">
+              <div key={label} className="doghike-glass-card rounded-xl p-3 md:p-4 text-center">
                 {typeof icon === "string" ? (
                   <span className={`block text-xl ${color} mb-1`}>{icon}</span>
                 ) : (
@@ -231,7 +231,7 @@ export default function Journal() {
               placeholder="Suche nach Titel oder Ort..."
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              className="pl-9 bg-white border-stone-200"
+              className="pl-9 border-brand-100 bg-white/75 shadow-sm"
             />
           </div>
         )}
@@ -250,7 +250,7 @@ export default function Journal() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, x: -40 }}
                   transition={{ delay: index * 0.04 }}
-                  className="bg-white rounded-2xl border border-stone-200/60 shadow-sm hover:shadow-md transition-shadow overflow-hidden"
+                  className="doghike-glass-card-hover overflow-hidden"
                 >
                   <Link to={`${createPageUrl("JournalDetail")}?id=${entry.id}`} className="block">
                     <div className="flex gap-0 md:gap-0">
@@ -292,7 +292,7 @@ export default function Journal() {
                             icon={TOUR_ICONS.duration}
                             value={entry.duration_minutes ? Math.round((entry.duration_minutes / 60) * 10) / 10 : null}
                             unit="Std"
-                            color="text-blue-600"
+                            color="text-brand-600"
                           />
                           {entry.difficulty && (
                             <span className={`text-xs font-medium ${getDifficultyTextColor(entry.difficulty)}`}>
@@ -384,7 +384,7 @@ export default function Journal() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-24 bg-white rounded-2xl border border-stone-200/50"
+            className="doghike-glass-card text-center py-24"
           >
             <BookOpen className="w-14 h-14 text-stone-300 mx-auto mb-4" />
             <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Einträge</h3>

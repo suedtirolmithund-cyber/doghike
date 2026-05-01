@@ -260,8 +260,8 @@ function WaterPicker({ label, value, onChange }) {
             onClick={() => onChange(level)}
             className={`flex min-h-[70px] min-w-0 flex-col items-center justify-center gap-1 rounded-xl border px-2 py-2 text-center transition-all focus:outline-none ${
               value === level
-                ? "border-blue-400 bg-blue-50 text-blue-700"
-                : "border-stone-200 bg-stone-50 text-stone-400 hover:border-blue-300 hover:bg-blue-50/50"
+                ? "border-brand-400 bg-brand-50 text-brand-700"
+                : "border-stone-200 bg-white/70 text-stone-500 hover:border-brand-200 hover:bg-brand-50/40"
             }`}
             title={getWaterLabel(level)}
             >
@@ -349,8 +349,8 @@ const VISIBILITY_OPTIONS = [
     emoji: "🫂",
     label: "Freunde",
     desc: "Nur bestätigte Freunde",
-    active: "border-blue-400 bg-blue-50 text-blue-800",
-    idle: "border-stone-200 hover:border-blue-300",
+    active: "border-brand-300 bg-brand-50 text-brand-800",
+    idle: "border-stone-200 hover:border-brand-200 hover:bg-brand-50/40",
   },
   {
     value: "public",
@@ -774,7 +774,7 @@ export default function AddJournalEntry() {
         <form onSubmit={handleSubmit} className="space-y-6">
 
           {/* Basis-Infos */}
-          <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5 space-y-4">
+          <section className="doghike-glass-card p-5 space-y-4">
             <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide flex items-center gap-2">
               <FileText className="w-4 h-4" /> Allgemein
             </h2>
@@ -821,7 +821,7 @@ export default function AddJournalEntry() {
           </section>
 
           {/* Stats */}
-          <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5 space-y-4">
+          <section className="doghike-glass-card p-5 space-y-4">
             <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide flex items-center gap-2">
               <TrendingUp className="w-4 h-4" /> Statistiken
             </h2>
@@ -851,12 +851,12 @@ export default function AddJournalEntry() {
           </section>
 
           {/* Hund */}
-          <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5 space-y-4">
+          <section className="doghike-glass-card p-5 space-y-4">
             <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide flex items-center gap-2">
               <Dog className="w-4 h-4" /> Mit dem Hund
             </h2>
 
-            <div className="flex items-center justify-between p-3 bg-stone-50 rounded-xl">
+            <div className="doghike-soft-panel flex items-center justify-between p-3">
               <Label htmlFor="dog_suitable" className="cursor-pointer flex items-center gap-2">
                 Hundefreundlich
               </Label>
@@ -924,7 +924,7 @@ export default function AddJournalEntry() {
           </section>
 
           {/* Bewertung */}
-          <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5">
+          <section className="doghike-glass-card p-5">
             <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
               <Star className="w-4 h-4" /> Gesamtbewertung
             </h2>
@@ -932,7 +932,7 @@ export default function AddJournalEntry() {
           </section>
 
           {/* Fotos */}
-          <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5 space-y-4">
+          <section className="doghike-glass-card p-5 space-y-4">
             <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide flex items-center gap-2">
               <Upload className="w-4 h-4" /> Fotos
             </h2>
@@ -964,7 +964,7 @@ export default function AddJournalEntry() {
           </section>
 
           {/* GPX */}
-          <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5 space-y-3">
+          <section className="doghike-glass-card p-5 space-y-3">
             <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide flex items-center gap-2">
               <MapPin className="w-4 h-4" /> GPX-Route (optional)
             </h2>
@@ -991,7 +991,7 @@ export default function AddJournalEntry() {
 
           {/* Jahreszeit (nur bei friends/public) */}
           {(form.visibility === "friends" || form.visibility === "public") && (
-            <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5">
+            <section className="doghike-glass-card p-5">
               <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
                 {TOUR_ICONS.season} Jahreszeit
               </h2>
@@ -1003,7 +1003,7 @@ export default function AddJournalEntry() {
           )}
 
           {/* Sichtbarkeit */}
-          <section className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5">
+          <section className="doghike-glass-card p-5">
             <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
               Sichtbarkeit
             </h2>
@@ -1013,10 +1013,10 @@ export default function AddJournalEntry() {
                 <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
                   Nach dem Speichern wird dieser Eintrag an einen Admin zur Prüfung geschickt und erst danach öffentlich sichtbar.
                 </p>
-                <div className="text-xs bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 text-blue-800">
+                <div className="text-xs rounded-lg border border-brand-200 bg-brand-50/70 px-3 py-2 text-brand-800">
                   <p className="font-semibold mb-1">Pflichtfelder für öffentliche Touren:</p>
                   <p>Ort - Startpunkt (Karte) - Distanz - Höhenmeter - Dauer - Schwierigkeit (Mensch und Hund) - Beschreibung - mind. 1 Foto - Jahreszeit</p>
-                  <p className="mt-1 text-blue-600">GPX-Datei ist optional.</p>
+                  <p className="mt-1 text-brand-600">GPX-Datei ist optional.</p>
                 </div>
               </div>
             )}

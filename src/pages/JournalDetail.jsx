@@ -37,7 +37,7 @@ L.Icon.Default.mergeOptions({
 
 const VISIBILITY_INFO = {
   private: { icon: User,  label: "Privat",       color: "text-stone-500" },
-  friends: { icon: Users, label: "Freunde",       color: "text-blue-600"  },
+  friends: { icon: Users, label: "Freunde",       color: "text-brand-600"  },
   public:  { icon: Globe, label: "Öffentlich",    color: "text-brand-400" },
 };
 
@@ -205,7 +205,7 @@ export default function JournalDetail() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
 
           {/* Header */}
-          <div className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5">
+          <div className="doghike-glass-card p-5">
             {/* Author */}
             <div className="flex items-center gap-3 mb-4">
               <img
@@ -244,7 +244,7 @@ export default function JournalDetail() {
             {/* Stats */}
             <div className="flex flex-wrap gap-3 text-sm">
               {entry.distance_km && (
-                <span className="flex items-center gap-1 text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full">
+                <span className="flex items-center gap-1 text-brand-700 bg-brand-50 px-2.5 py-1 rounded-full border border-brand-100">
                   <span className="text-sm leading-none">{TOUR_ICONS.distance}</span> {entry.distance_km} km
                 </span>
               )}
@@ -269,14 +269,14 @@ export default function JournalDetail() {
 
           {/* Description */}
           {entry.description && (
-            <div className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5">
+            <div className="doghike-glass-card p-5">
               <h2 className="text-sm font-semibold text-stone-600 uppercase tracking-wide mb-3">Beschreibung</h2>
               <p className="text-stone-700 text-sm leading-relaxed whitespace-pre-wrap">{entry.description}</p>
             </div>
           )}
 
           {/* Details */}
-          <div className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5 space-y-3">
+          <div className="doghike-glass-card p-5 space-y-3">
             <h2 className="text-sm font-semibold text-stone-600 uppercase tracking-wide">Details</h2>
 
             {entry.rating > 0 && (
@@ -320,7 +320,7 @@ export default function JournalDetail() {
                 <span className="text-xs text-stone-500 w-28">{TOUR_ICONS.season} Jahreszeit</span>
                 <div className="flex gap-1.5 flex-wrap">
                   {entry.seasons.map((s) => (
-                    <Badge key={s} variant="secondary" className="text-xs">
+                    <Badge key={s} variant="secondary" className="border border-brand-100 bg-brand-50/70 text-brand-700 text-xs">
                       {getSeasonIcon(s)} {getSeasonLabel(s) || s}
                     </Badge>
                   ))}
@@ -343,7 +343,7 @@ export default function JournalDetail() {
 
           {/* Dog */}
           {dog && (
-            <div className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-4 flex items-center gap-3">
+            <div className="doghike-glass-card p-4 flex items-center gap-3">
               <img
                 src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
                 alt={dog.name} className="w-12 h-12 rounded-full object-cover border-2 border-white shadow"
@@ -358,7 +358,7 @@ export default function JournalDetail() {
 
           {/* Map */}
           {entry.latitude && entry.longitude && (
-            <div className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-4">
+            <div className="doghike-glass-card p-4">
               <h2 className="text-sm font-semibold text-stone-600 uppercase tracking-wide mb-3">Standort</h2>
               <div className="h-48 rounded-xl overflow-hidden">
                 <MapContainer
