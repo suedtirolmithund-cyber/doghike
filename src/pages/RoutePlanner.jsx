@@ -555,12 +555,39 @@ export default function RoutePlanner() {
     onError: () => toast.error("Die Route konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
   });
 
+  const buildJournalPrefillFromRecordedRoute = () => {
+    const recordedCoordinates = routeGeometry?.coordinates ?? routeGeometry?.positions ?? [];
+    const startPoint = recordedCoordinates[0] ?? null;
+
+    return {
+      title: routeData.name,
+      location: routeData.start_location,
+      date: new Date().toISOString().split("T")[0],
+      latitude: startPoint?.[0] ?? "",
+      longitude: startPoint?.[1] ?? "",
+      distance_km: routeGeometry?.distance_km ?? "",
+      elevation_m: routeGeometry?.elevation_gain_m ?? "",
+      duration_minutes: routeGeometry?.duration_minutes ?? "",
+      description: routeData.description,
+      photos: [],
+      gpx_url: "",
+    };
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!routeGeometry || !routeData.name) {
       toast.error("Bitte Namen eingeben und eine Route zeichnen");
       return;
     }
+
+    if (activeTab === "track") {
+      navigate(createPageUrl("AddJournalEntry"), {
+        state: { routePrefill: buildJournalPrefillFromRecordedRoute() },
+      });
+      return;
+    }
+
     let uploadedGpxUrl = null;
 
     try {
@@ -664,7 +691,9 @@ export default function RoutePlanner() {
               onSubmit={handleSubmit}
               className="mt-6 space-y-4 bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5"
             >
-              <h3 className="text-base font-semibold text-stone-800">Route speichern</h3>
+              <h3 className="text-base font-semibold text-stone-800">
+                {activeTab === "track" ? "Aufzeichnung ins Tagebuch übernehmen" : "Route speichern"}
+              </h3>
 
               <div>
                 <Label htmlFor="name">Name *</Label>
@@ -686,8 +715,9 @@ export default function RoutePlanner() {
               </div>
 
               <div className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-600">
-                Diese Planung bleibt privat. Erst wenn du die Route später als Wanderung einträgst,
-                kannst du sie auf Freunde oder öffentlich stellen.
+                {activeTab === "track"
+                  ? "Diese Aufzeichnung gilt als bereits gemacht und wird direkt als vorausgefüllter Tagebuch-Eintrag geöffnet."
+                  : "Diese Planung bleibt privat. Erst wenn du die Route später als Wanderung einträgst, kannst du sie auf Freunde oder öffentlich stellen."}
               </div>
 
               <div className="flex gap-2 justify-end">
@@ -696,7 +726,7 @@ export default function RoutePlanner() {
                 </Button>
                 <Button type="submit" disabled={createRouteMutation.isPending} className="bg-slate-800 hover:bg-slate-900">
                   {createRouteMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                  Route speichern
+                  {activeTab === "track" ? "Ins Tagebuch übernehmen" : "Route speichern"}
                 </Button>
               </div>
             </motion.form>
