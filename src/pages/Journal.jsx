@@ -181,12 +181,14 @@ export default function Journal() {
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center justify-between mb-6 md:mb-8 gap-4"
         >
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-stone-800 flex items-center gap-2">
-              <BookOpen className="w-7 h-7 text-brand-400" />
-              Wandertagebuch
-            </h1>
-            <p className="text-stone-500 text-sm mt-0.5">Deine persönlichen Wandererlebnisse</p>
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+              <BookOpen className="h-5 w-5" />
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Wandertagebuch</h1>
+              <p className="mt-1 text-sm text-stone-500">Deine persönlichen Wandererlebnisse</p>
+            </div>
           </div>
           <Link to={createPageUrl("AddJournalEntry")}>
             <Button className="bg-brand-400 hover:bg-brand-600 shrink-0">

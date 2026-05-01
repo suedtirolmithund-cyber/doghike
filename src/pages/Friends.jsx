@@ -238,19 +238,23 @@ export default function Friends() {
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
 
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-stone-800 flex items-center gap-2">
-            <Users className="w-7 h-7 text-brand-400" />
-            Freunde
-          </h1>
-          <p className="text-stone-500 text-sm mt-1">
+        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-6 flex items-center gap-3">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+            <Users className="h-5 w-5" />
+          </div>
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-stone-800">
+              Freunde
+            </h1>
+            <p className="mt-1 text-sm text-stone-500">
             {accepted.length} Freund{accepted.length !== 1 ? "e" : ""}
             {incoming.length > 0 && (
-              <span className="ml-2 inline-flex items-center gap-1 text-amber-600 font-medium">
+              <span className="ml-2 inline-flex items-center gap-1 font-medium text-amber-600">
                 · {incoming.length} offene Anfrage{incoming.length !== 1 ? "n" : ""}
               </span>
             )}
-          </p>
+            </p>
+          </div>
         </motion.div>
 
         {/* Search */}

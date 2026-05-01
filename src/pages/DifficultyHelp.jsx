@@ -118,11 +118,16 @@ export default function DifficultyHelp() {
   return (
     <div className="min-h-screen bg-stone-50 pb-24 md:pb-8 pt-4 md:pt-20">
       <div className="max-w-2xl mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-light text-stone-800 mb-2">Schwierigkeitsskala</h1>
-          <p className="text-stone-500 text-sm">
-            Einheitliche Orientierung für Mensch und Hund
-          </p>
+        <div className="mb-8 flex items-center justify-center gap-3 text-center">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+            <Mountain className="h-5 w-5" />
+          </div>
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Schwierigkeitsskala</h1>
+            <p className="mt-1 text-sm text-stone-500">
+              Einheitliche Orientierung für Mensch und Hund
+            </p>
+          </div>
         </div>
 
         <div className="flex gap-2 mb-8 bg-white rounded-xl p-1 border border-stone-200 shadow-sm">

@@ -43,14 +43,16 @@ export default function WaterHelp() {
   return (
     <div className="min-h-screen bg-stone-50 pb-24 md:pb-8 pt-4 md:pt-20">
       <div className="max-w-2xl mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-blue-100 rounded-2xl mb-4">
-            <Droplets className="w-7 h-7 text-blue-600" />
+        <div className="mb-8 flex items-center justify-center gap-3 text-center">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+            <Droplets className="h-5 w-5" />
           </div>
-          <h1 className="text-3xl font-light text-stone-800 mb-2">Wasser unterwegs</h1>
-          <p className="text-stone-500 text-sm max-w-md mx-auto">
-            Einheitliche Skala für die Wasserverfügbarkeit auf der Route.
-          </p>
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Wasser unterwegs</h1>
+            <p className="mx-auto mt-1 max-w-md text-sm text-stone-500">
+              Einheitliche Skala für die Wasserverfügbarkeit auf der Route.
+            </p>
+          </div>
         </div>
 
         <div className="space-y-4">

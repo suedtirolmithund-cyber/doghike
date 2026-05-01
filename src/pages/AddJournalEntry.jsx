@@ -756,12 +756,19 @@ export default function AddJournalEntry() {
               <ArrowLeft className="w-4 h-4 mr-1" /> Zurück
             </Button>
           </Link>
-          <h1 className="text-2xl md:text-3xl font-bold text-stone-800">
-            {editId ? "Eintrag bearbeiten" : "Neue Wanderung"}
-          </h1>
-          <p className="text-stone-500 text-sm mt-0.5">
-            {editId ? "Ändere deine Aufzeichnung" : "Halte dein Wandererlebnis fest"}
-          </p>
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+              <FileText className="h-5 w-5" />
+            </div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-stone-800">
+                {editId ? "Eintrag bearbeiten" : "Neue Wanderung"}
+              </h1>
+              <p className="mt-1 text-sm text-stone-500">
+                {editId ? "Ändere deine Aufzeichnung" : "Halte dein Wandererlebnis fest"}
+              </p>
+            </div>
+          </div>
         </motion.div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

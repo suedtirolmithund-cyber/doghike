@@ -180,16 +180,20 @@ export default function Notifications() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
-        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-stone-800 flex items-center gap-3">
-            <Bell className="w-7 h-7" />
-            Benachrichtigungen
-          </h1>
-          {notifications.length > 0 && (
-            <p className="text-stone-500 text-sm mt-1">
-              {notifications.length} Benachrichtigung{notifications.length !== 1 ? "en" : ""}
-            </p>
-          )}
+        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-6 flex items-center gap-3">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+            <Bell className="h-5 w-5" />
+          </div>
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-stone-800">
+              Benachrichtigungen
+            </h1>
+            {notifications.length > 0 && (
+              <p className="mt-1 text-sm text-stone-500">
+                {notifications.length} Benachrichtigung{notifications.length !== 1 ? "en" : ""}
+              </p>
+            )}
+          </div>
         </motion.div>
 
         {notificationsSupported() && permission !== "granted" && permission !== "denied" && (

@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { getDogs, createDog, updateDog, deleteDog } from "@/lib/profilesApi";
 import { supabase } from "@/lib/supabaseClient";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Edit, Trash2, Loader2, LogIn } from "lucide-react";
+import { Dog, Plus, Edit, Trash2, Loader2, LogIn } from "lucide-react";
 import { differenceInYears, differenceInMonths } from "date-fns";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -147,9 +147,14 @@ export default function Dogs() {
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center justify-between mb-8"
         >
-          <div>
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+              <Dog className="h-5 w-5" />
+            </div>
+            <div>
               <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Meine Hunde</h1>
-            <p className="text-stone-500 mt-1 text-sm">Deine Wanderbegleiter</p>
+              <p className="mt-1 text-sm text-stone-500">Deine Wanderbegleiter</p>
+            </div>
           </div>
           <Button
             onClick={() => {

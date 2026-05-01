@@ -124,10 +124,12 @@ export default function Support() {
         <div className="space-y-6">
           <div className="bg-white rounded-2xl p-6 md:p-8 border border-stone-200/50 shadow-sm">
             <div className="flex items-center gap-3 mb-2">
-              <MessageCircle className="w-8 h-8 text-slate-700" />
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+                <MessageCircle className="h-5 w-5" />
+              </div>
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Hilfe & Support</h1>
-                <p className="text-stone-500 text-sm mt-0.5">
+                <p className="mt-1 text-sm text-stone-500">
                   Schreib uns direkt: <a href={`mailto:${SUPPORT_EMAIL}`} className="text-blue-600 underline font-medium">{SUPPORT_EMAIL}</a>
                 </p>
               </div>
