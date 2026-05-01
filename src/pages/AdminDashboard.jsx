@@ -8,6 +8,7 @@ import {
   Clock,
   CheckCircle2,
   XCircle,
+  ArrowRight,
   ChevronDown,
   ChevronUp,
   Loader2,
@@ -232,6 +233,9 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
 function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
   const authorName = comment.profiles?.full_name || comment.profiles?.username || "Anonym";
   const needsApproval = comment.reported;
+  const hikeDetailUrl =
+    createPageUrl("HikeDetail") +
+    `?id=${encodeURIComponent(comment.hike_id)}&source=${encodeURIComponent(comment.hike_source ?? "sheets")}`;
 
   return (
     <motion.div
@@ -304,6 +308,15 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
           />
         </a>
       )}
+
+      <div className="mt-3 flex justify-end">
+        <Link to={hikeDetailUrl}>
+          <Button variant="outline" size="sm">
+            Zur Tour
+            <ArrowRight className="w-4 h-4 ml-1.5" />
+          </Button>
+        </Link>
+      </div>
     </motion.div>
   );
 }
