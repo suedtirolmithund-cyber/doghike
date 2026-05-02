@@ -13,6 +13,7 @@ import EditableRouteDrawer from "@/components/routes/EditableRouteDrawer";
 import RoutePreviewMap from "@/components/routes/RoutePreviewMap";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { formatDurationHours } from "@/lib/duration";
 
 export default function EditRoute() {
   const navigate = useNavigate();
@@ -157,11 +158,7 @@ export default function EditRoute() {
               {routeGeometry.duration_minutes && (
                 <div>
                   <p className="text-stone-500">Dauer</p>
-                  <p className="font-bold text-slate-800">
-                    {Math.floor(routeGeometry.duration_minutes / 60) > 0
-                      ? `${Math.floor(routeGeometry.duration_minutes / 60)}h ${routeGeometry.duration_minutes % 60}min`
-                      : `${routeGeometry.duration_minutes}min`}
-                  </p>
+                  <p className="font-bold text-slate-800">{formatDurationHours(routeGeometry.duration_minutes)}</p>
                 </div>
               )}
               {routeGeometry.elevation_gain_m && (

@@ -13,7 +13,7 @@ export function getMissingPublicJournalFields(entry) {
   }
   if (entry?.distance_km === "" || entry?.distance_km == null) missing.push("Distanz (km)");
   if (entry?.elevation_m === "" || entry?.elevation_m == null) missing.push("Höhenmeter");
-  if (entry?.duration_minutes === "" || entry?.duration_minutes == null) missing.push("Dauer (Minuten)");
+  if (entry?.duration_minutes === "" || entry?.duration_minutes == null) missing.push("Dauer (Stunden)");
   if (!entry?.difficulty) missing.push("Schwierigkeit (Mensch)");
   if (!entry?.dog_difficulty) missing.push("Schwierigkeit (Hund)");
   if (!entry?.description?.trim()) missing.push("Beschreibung");

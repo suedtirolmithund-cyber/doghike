@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Mountain } from "lucide-react";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
+import { formatDurationHours } from "@/lib/duration";
 
 function haversine(lat1, lon1, lat2, lon2) {
   const R = 6371;
@@ -9,14 +10,6 @@ function haversine(lat1, lon1, lat2, lon2) {
   const dLon = (lon2 - lon1) * Math.PI / 180;
   const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
-function formatDuration(minutes) {
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  if (h > 0 && m > 0) return `${h}h ${m}min`;
-  if (h > 0) return `${h}h`;
-  return `${m}min`;
 }
 
 function formatPace(paceMinPerKm) {
@@ -100,7 +93,7 @@ export default function RouteProfile({ hike }) {
               <span className="text-xs font-medium">Gehzeit</span>
             </div>
             <p className="text-xl font-bold text-green-900">
-              {formatDuration(hike.duration_minutes)}
+              {formatDurationHours(hike.duration_minutes)}
             </p>
           </div>
         )}

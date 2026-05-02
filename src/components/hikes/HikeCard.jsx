@@ -6,6 +6,7 @@ import { createPageUrl } from "@/utils";
 import ExpandableText from "@/components/ExpandableText";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { TOUR_ICONS, getDifficultyBadgeClass, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
+import { formatDurationHours } from "@/lib/duration";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 
 function StatTile({ value, label, icon }) {
@@ -15,7 +16,7 @@ function StatTile({ value, label, icon }) {
     <div className="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-stone-200/70 bg-white/58 px-3 py-2 shadow-sm backdrop-blur-sm">
       <span className="text-base leading-none">{icon}</span>
       <span className="min-w-0 text-base font-semibold leading-none text-[#8c5f43]">{value}</span>
-      <span className="text-xs font-medium leading-none text-stone-500">{label}</span>
+      {label ? <span className="text-xs font-medium leading-none text-stone-500">{label}</span> : null}
     </div>
   );
 }
@@ -107,8 +108,8 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               <StatTile value={hike.distance_km} label="km" icon={TOUR_ICONS.distance} />
               <StatTile value={hike.elevation_gain_m} label="Hm" icon={TOUR_ICONS.elevation} />
               <StatTile
-                value={hike.duration_minutes ? (hike.duration_minutes / 60).toFixed(1) : null}
-                label="Std"
+                value={formatDurationHours(hike.duration_minutes)}
+                label=""
                 icon={TOUR_ICONS.duration}
               />
             </div>

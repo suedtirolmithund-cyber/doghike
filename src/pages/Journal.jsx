@@ -37,6 +37,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { getJournalEntriesForDisplay, deleteJournalEntry } from "@/lib/journalApi";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { getDifficultyLabel, getDifficultyTextColor, getWaterBadgeClass, getWaterLabel, TOUR_ICONS } from "@/lib/difficultyConfig";
+import { formatDurationHours } from "@/lib/duration";
 
 const PAGE_SIZE = 20;
 
@@ -290,8 +291,8 @@ export default function Journal() {
                           <StatsChip icon={TOUR_ICONS.elevation} value={entry.elevation_m} unit="Hm" color="text-orange-600" />
                           <StatsChip
                             icon={TOUR_ICONS.duration}
-                            value={entry.duration_minutes ? Math.round((entry.duration_minutes / 60) * 10) / 10 : null}
-                            unit="Std"
+                            value={formatDurationHours(entry.duration_minutes)}
+                            unit=""
                             color="text-brand-600"
                           />
                           {entry.difficulty && (

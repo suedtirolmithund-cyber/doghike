@@ -6,6 +6,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { format } from "date-fns";
 import { getDifficultyLabel, getWaterLabel } from "@/lib/difficultyConfig";
+import { formatDurationHours } from "@/lib/duration";
 
 function getCountryLabel(country) {
   if (country === "italy") return "Italien";
@@ -98,7 +99,7 @@ export default function OfflineDownload({ hike, dogs = [] }) {
       yPosition += 6;
       
       if (hike.duration_minutes) {
-        pdf.text(`Gehzeit: ${(hike.duration_minutes / 60).toFixed(1)} Std`, margin + 5, yPosition);
+        pdf.text(`Gehzeit: ${formatDurationHours(hike.duration_minutes)}`, margin + 5, yPosition);
       }
       if (hike.difficulty) {
         pdf.text(`Schwierigkeit Mensch: ${getDifficultyLabel(hike.difficulty)}`, margin + 5, yPosition + 6);

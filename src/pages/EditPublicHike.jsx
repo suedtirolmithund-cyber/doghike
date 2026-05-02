@@ -19,6 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
+import { hoursInputToMinutes, minutesToHoursInput } from "@/lib/duration";
 
 function buildInitialFormData(hike) {
   return {
@@ -28,7 +29,7 @@ function buildInitialFormData(hike) {
     date: hike?.date || "",
     distance_km: hike?.distance_km ?? "",
     elevation_gain_m: hike?.elevation_gain_m ?? "",
-    duration_minutes: hike?.duration_minutes ?? "",
+    duration_minutes: minutesToHoursInput(hike?.duration_minutes),
     difficulty: hike?.difficulty || "unset",
     dog_difficulty: hike?.dog_difficulty || "unset",
     water_availability: hike?.water_availability || "unset",
@@ -211,7 +212,7 @@ export default function EditPublicHike() {
         date: formData.date || null,
         distance_km: formData.distance_km === "" ? null : Number(formData.distance_km),
         elevation_gain_m: formData.elevation_gain_m === "" ? null : Number(formData.elevation_gain_m),
-        duration_minutes: formData.duration_minutes === "" ? null : Number(formData.duration_minutes),
+        duration_minutes: hoursInputToMinutes(formData.duration_minutes),
         difficulty: formData.difficulty === "unset" ? null : Number(formData.difficulty),
         dog_difficulty: formData.dog_difficulty === "unset" ? null : Number(formData.dog_difficulty),
         water_availability: formData.water_availability === "unset"
@@ -379,12 +380,14 @@ export default function EditPublicHike() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="duration_minutes">Dauer (Minuten)</Label>
+                <Label htmlFor="duration_minutes">Dauer (Stunden)</Label>
                 <Input
                   id="duration_minutes"
                   type="number"
+                  step="0.1"
                   value={formData.duration_minutes}
                   onChange={(e) => setFormData((prev) => ({ ...prev, duration_minutes: e.target.value }))}
+                  placeholder="z.B. 4"
                 />
               </div>
 

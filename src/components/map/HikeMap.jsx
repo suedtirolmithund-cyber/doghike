@@ -6,6 +6,7 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import L from "leaflet";
 import "leaflet.markercluster";
+import { formatDurationHours } from "@/lib/duration";
 
 const seasonConfig = {
   spring: { color: "#ec9cf4", label: "Fruehling" },
@@ -186,7 +187,7 @@ function buildHikePopupItem(hike, isGrouped) {
   const stats = [
     hike.distance_km ? `📏 ${hike.distance_km} km` : null,
     hike.elevation_gain_m ? `⛰️ ${hike.elevation_gain_m} Hm` : null,
-    hike.duration_minutes ? `⏱️ ${(hike.duration_minutes / 60).toFixed(1)} Std` : null,
+    hike.duration_minutes ? `⏱️ ${formatDurationHours(hike.duration_minutes)}` : null,
   ]
     .filter(Boolean)
     .join(" · ");

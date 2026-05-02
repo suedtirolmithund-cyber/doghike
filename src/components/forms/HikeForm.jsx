@@ -26,33 +26,45 @@ import StartPointPicker from "@/components/map/StartPointPicker";
 import ConsentDialog from "@/components/ConsentDialog";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
+import { hoursInputToMinutes, minutesToHoursInput } from "@/lib/duration";
+
+function buildInitialFormData(hike) {
+  if (!hike) {
+    return {
+      trail_name: "",
+      location: "",
+      country: "italy",
+      date: new Date().toISOString().split("T")[0],
+      distance_km: "",
+      elevation_gain_m: "",
+      duration_minutes: "",
+      difficulty: "3",
+      dog_difficulty: "3",
+      season: "all_year",
+      water_availability: "moderate",
+      hazard_notes: "",
+      parking_info: "",
+      restaurant_info: "",
+      dogs: [],
+      photos: [],
+      latitude: "",
+      longitude: "",
+      route_coordinates: [],
+      notes: "",
+      rating: 5,
+      visibility: "private",
+    };
+  }
+
+  return {
+    ...hike,
+    duration_minutes: minutesToHoursInput(hike.duration_minutes),
+  };
+}
 
 export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabel }) {
   const { user } = useAuth();
-  const [formData, setFormData] = useState(hike || {
-    trail_name: "",
-    location: "",
-    country: "italy",
-    date: new Date().toISOString().split("T")[0],
-    distance_km: "",
-    elevation_gain_m: "",
-    duration_minutes: "",
-    difficulty: "3",
-    dog_difficulty: "3",
-    season: "all_year",
-    water_availability: "moderate",
-    hazard_notes: "",
-    parking_info: "",
-    restaurant_info: "",
-    dogs: [],
-    photos: [],
-    latitude: "",
-    longitude: "",
-    route_coordinates: [],
-    notes: "",
-    rating: 5,
-    visibility: "private"
-  });
+  const [formData, setFormData] = useState(() => buildInitialFormData(hike));
   const [uploading, setUploading] = useState(false);
    const [saving, setSaving] = useState(false);
    const [showRouteEditor, setShowRouteEditor] = useState(false);
@@ -170,7 +182,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       ...formData,
       distance_km: formData.distance_km ? Number(formData.distance_km) : null,
       elevation_gain_m: formData.elevation_gain_m ? Number(formData.elevation_gain_m) : null,
-      duration_minutes: formData.duration_minutes ? Number(formData.duration_minutes) : null,
+      duration_minutes: hoursInputToMinutes(formData.duration_minutes),
       latitude: formData.latitude ? Number(formData.latitude) : null,
       longitude: formData.longitude ? Number(formData.longitude) : null,
       rating: formData.rating ? Number(formData.rating) : null
@@ -349,13 +361,14 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="duration">{TOUR_ICONS.duration} Gehzeit (Minuten)</Label>
+          <Label htmlFor="duration">{TOUR_ICONS.duration} Gehzeit (Stunden)</Label>
           <Input
             id="duration"
             type="number"
+            step="0.1"
             value={formData.duration_minutes}
             onChange={(e) => setFormData({ ...formData, duration_minutes: e.target.value })}
-            placeholder="240"
+            placeholder="4"
           />
         </div>
       </div>

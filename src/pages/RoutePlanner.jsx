@@ -21,6 +21,7 @@ import GPXUploader from "@/components/routes/GPXUploader";
 import { deleteJournalFiles, uploadJournalFile } from "@/lib/journalApi";
 import { toast } from "sonner";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
+import { formatDurationHours } from "@/lib/duration";
 
 // ── Leaflet fix ───────────────────────────────────────────────
 delete L.Icon.Default.prototype._getIconUrl;
@@ -502,9 +503,7 @@ function SmartRoutePlanner({ onRouteReady }) {
           <div className="rounded-xl border border-stone-200/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
             <span className="block text-lg mb-1">{TOUR_ICONS.duration}</span>
             <p className="text-lg font-bold text-slate-800">
-              {Math.floor(route.duration_minutes / 60) > 0
-                ? `${Math.floor(route.duration_minutes / 60)}h ${route.duration_minutes % 60}m`
-                : `${route.duration_minutes}m`}
+              {formatDurationHours(route.duration_minutes)}
             </p>
             <p className="text-xs text-slate-500">ca. Zeit</p>
           </div>

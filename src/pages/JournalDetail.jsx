@@ -27,6 +27,7 @@ import {
   getWaterTextColor,
   TOUR_ICONS,
 } from "@/lib/difficultyConfig";
+import { formatDurationHours } from "@/lib/duration";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -256,9 +257,7 @@ export default function JournalDetail() {
               {entry.duration_minutes && (
                 <span className="flex items-center gap-1 text-stone-600 bg-stone-100 px-2.5 py-1 rounded-full">
                   <span className="text-sm leading-none">{TOUR_ICONS.duration}</span>
-                  {Math.floor(entry.duration_minutes / 60) > 0
-                    ? `${Math.floor(entry.duration_minutes / 60)}h ${entry.duration_minutes % 60}min`
-                    : `${entry.duration_minutes}min`}
+                  {formatDurationHours(entry.duration_minutes)}
                 </span>
               )}
             </div>

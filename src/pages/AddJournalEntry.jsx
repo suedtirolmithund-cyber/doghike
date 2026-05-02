@@ -29,6 +29,7 @@ import {
 import { getDogs } from "@/lib/profilesApi";
 import { Link } from "react-router-dom";
 import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS, getDifficultyLabel, getDifficultyTextColor, getWaterLabel } from "@/lib/difficultyConfig";
+import { hoursInputToMinutes, minutesToHoursInput } from "@/lib/duration";
 
 // Sterne-Picker (Gesamtbewertung)
 function StarPicker({ label, value, onChange }) {
@@ -427,7 +428,7 @@ export default function AddJournalEntry() {
     longitude: routePrefill?.longitude ?? "",
     distance_km: routePrefill?.distance_km ?? searchParams.get("prefill_distance") ?? "",
     elevation_m: routePrefill?.elevation_m ?? searchParams.get("prefill_elevation") ?? "",
-    duration_minutes: routePrefill?.duration_minutes ?? searchParams.get("prefill_duration") ?? "",
+    duration_minutes: minutesToHoursInput(routePrefill?.duration_minutes ?? searchParams.get("prefill_duration") ?? ""),
     description: routePrefill?.description ?? searchParams.get("prefill_description") ?? "",
     difficulty: routePrefill?.difficulty ?? 0,
     rating: routePrefill?.rating ?? 0,
@@ -504,7 +505,7 @@ export default function AddJournalEntry() {
         longitude: existing.longitude ?? "",
         distance_km: existing.distance_km ?? "",
         elevation_m: existing.elevation_m ?? "",
-        duration_minutes: existing.duration_minutes ?? "",
+        duration_minutes: minutesToHoursInput(existing.duration_minutes),
         difficulty: existing.difficulty ?? 0,
         description: existing.description ?? "",
         photos: existing.photos ?? [],
@@ -696,7 +697,7 @@ export default function AddJournalEntry() {
       ...form,
       distance_km: form.distance_km !== "" ? Number(form.distance_km) : null,
       elevation_m: form.elevation_m !== "" ? Number(form.elevation_m) : null,
-      duration_minutes: form.duration_minutes !== "" ? Number(form.duration_minutes) : null,
+      duration_minutes: hoursInputToMinutes(form.duration_minutes),
       difficulty: form.difficulty || null,
       rating: form.rating || null,
       dog_difficulty: form.dog_difficulty || null,
@@ -840,10 +841,10 @@ export default function AddJournalEntry() {
                   placeholder="z.B. 450" className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="duration_minutes" className="flex items-center gap-1"><span>{TOUR_ICONS.duration}</span> Dauer (min)</Label>
-                <Input id="duration_minutes" type="number" min="0" value={form.duration_minutes}
+                <Label htmlFor="duration_minutes" className="flex items-center gap-1"><span>{TOUR_ICONS.duration}</span> Dauer (Stunden)</Label>
+                <Input id="duration_minutes" type="number" min="0" step="0.1" value={form.duration_minutes}
                   onChange={(e) => set("duration_minutes", e.target.value)}
-                  placeholder="z.B. 180" className="mt-1" />
+                  placeholder="z.B. 3" className="mt-1" />
               </div>
             </div>
 
