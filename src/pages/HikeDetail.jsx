@@ -34,6 +34,7 @@ import WaterIcon from "@/components/icons/WaterIcon";
 import { supabase } from "@/lib/supabaseClient";
 import { TOUR_ICONS, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
+import { formatDurationHours } from "@/lib/duration";
 import { toast } from "sonner";
 
 function getCountryLabel(country) {
@@ -231,7 +232,7 @@ export default function HikeDetail() {
     : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       {/* Hero Image */}
       <div className="relative h-[50vh] overflow-hidden">
         <img
@@ -428,7 +429,7 @@ export default function HikeDetail() {
               <span className="text-base">{TOUR_ICONS.duration}</span>
               <div>
                 <div className="text-sm font-bold text-stone-900 leading-tight">
-                  {(hike.duration_minutes / 60).toFixed(1)} Std
+                  {formatDurationHours(hike.duration_minutes)}
                 </div>
                 <div className="text-xs text-stone-400">Gehzeit</div>
               </div>
@@ -481,7 +482,7 @@ export default function HikeDetail() {
             transition={{ delay: 0.18 }}
             className="mb-10"
           >
-            <div className="bg-white rounded-2xl p-6 border border-stone-200/50">
+            <div className="doghike-glass-card p-6">
               <h2 className="text-lg font-medium text-stone-800 mb-4">Vorschau</h2>
               <div className="space-y-4">
                 {previewNotes ? (
@@ -536,7 +537,7 @@ export default function HikeDetail() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 }}
-                className="bg-white rounded-2xl p-6 border border-stone-200/50"
+                className="doghike-glass-card p-6"
               >
                 <h2 className="text-lg font-medium text-stone-800 mb-3 flex items-center gap-2">
                   🅿️ Ausgangspunkt & Parken
@@ -551,7 +552,7 @@ export default function HikeDetail() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.16 }}
-                className="bg-white rounded-2xl p-6 border border-stone-200/50"
+                className="doghike-glass-card p-6"
               >
                 <h2 className="text-lg font-medium text-stone-800 mb-3 flex items-center gap-2">
                   🍽️ Einkehrmöglichkeiten
@@ -565,7 +566,7 @@ export default function HikeDetail() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.17 }}
-              className="bg-white rounded-2xl p-6 border border-stone-200/50"
+              className="doghike-glass-card p-6"
             >
               <h2 className="text-lg font-medium text-stone-800 mb-4">🐕 Infos für Hundebesitzer</h2>
               <div className="space-y-4">
@@ -579,7 +580,7 @@ export default function HikeDetail() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-3 p-3 rounded-xl bg-stone-50 border border-stone-200">
+                  <div className="doghike-soft-panel flex items-center gap-3 p-3">
                     <WaterIcon value="little" className="text-lg" />
                     <div>
                       <p className="font-medium text-stone-700">Wasser unterwegs</p>
@@ -607,12 +608,12 @@ export default function HikeDetail() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="bg-white rounded-2xl p-6 border border-stone-200/50"
+                className="doghike-glass-card p-6"
               >
                 <h2 className="text-lg font-medium text-stone-800 mb-4">🐕 Mit dabei</h2>
                 <div className="flex flex-wrap gap-4">
                   {hikeDogs.map((dog) => (
-                    <div key={dog.id} className="flex items-center gap-3 p-3 bg-stone-50 rounded-xl">
+                    <div key={dog.id} className="doghike-soft-panel flex items-center gap-3 p-3">
                       <img
                         src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
                         alt={dog.name}
@@ -634,7 +635,7 @@ export default function HikeDetail() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="bg-white rounded-2xl p-6 border border-stone-200/50"
+                className="doghike-glass-card p-6"
               >
                 <h2 className="text-lg font-medium text-stone-800 mb-4">Beschreibung & Tipps</h2>
                 <ExpandableText text={hike.notes} lines={6} minChars={320} />
@@ -647,14 +648,14 @@ export default function HikeDetail() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="bg-white rounded-2xl p-6 border border-stone-200/50"
+                className="doghike-glass-card p-6"
               >
                 <h2 className="text-lg font-medium text-stone-800 mb-4">Fotos</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {photos.map((photo, index) => (
                     <div
                       key={index}
-                      className="aspect-square rounded-xl overflow-hidden cursor-pointer hover:ring-2 ring-slate-400 transition-all"
+                      className="aspect-square rounded-xl overflow-hidden cursor-pointer hover:ring-2 ring-brand-300 transition-all"
                       onClick={() => {
                         setCurrentPhotoIndex(index);
                         setLightboxOpen(true);

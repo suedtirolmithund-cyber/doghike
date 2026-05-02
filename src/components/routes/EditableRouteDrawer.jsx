@@ -6,6 +6,7 @@ import { Undo, Trash2, Save, Loader2, Edit2, Move, X, Search } from "lucide-reac
 import RouteElevationProfile from "./RouteElevationProfile";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { formatDurationHours } from "@/lib/duration";
 
 const GH_API_KEY = import.meta.env.VITE_GRAPHHOPPER_KEY || "LijBPDQGfu7Imiq1X1Jw83a5787IYJB2mEQhHe8A7";
 
@@ -310,7 +311,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
   return (
     <div className="space-y-3 md:space-y-4">
       {/* Ortssuche */}
-      <div className="bg-blue-50 rounded-lg p-3 md:p-4 border border-blue-200">
+      <div className="doghike-soft-panel p-3 md:p-4">
         <p className="font-medium text-xs md:text-sm text-stone-800 mb-2">🔍 Ort suchen</p>
         <div className="flex gap-2">
           <Input
@@ -339,7 +340,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
               <button
                 key={idx}
                 onClick={() => handleSelectLocation(result)}
-                className="w-full text-left p-2 text-xs md:text-sm bg-white rounded border border-blue-200 hover:bg-blue-50 transition-colors"
+            className="w-full text-left p-2 text-xs md:text-sm rounded border border-brand-100 bg-white/70 hover:bg-brand-50/50 transition-colors"
               >
                 <p className="font-medium text-stone-800">{result.display_name}</p>
               </button>
@@ -348,14 +349,14 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
         )}
       </div>
 
-      <div className="bg-slate-100 rounded-lg p-3 md:p-4">
+        <div className="doghike-soft-panel p-3 md:p-4">
         <div className="flex items-start justify-between mb-2">
           <div>
             <p className="font-medium text-xs md:text-sm text-stone-800 mb-1">📍 Routenplaner</p>
             <p className="text-xs text-stone-600">
               {isEditing ? 'Ziehe Wegpunkte um sie zu verschieben' : 'Klicke auf die Karte um Wegpunkte zu setzen'}
             </p>
-            <p className="text-xs text-blue-600 mt-1">
+          <p className="text-xs text-brand-600 mt-1">
               🥾 Bevorzugt Haupt­wanderwege, nutzt auch Seitenwege
             </p>
           </div>
@@ -382,7 +383,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
         </div>
 
         {isCalculating && (
-          <div className="mt-2 flex items-center gap-2 text-blue-600 text-xs md:text-sm">
+        <div className="mt-2 flex items-center gap-2 text-brand-600 text-xs md:text-sm">
             <Loader2 className="w-3 h-3 md:w-4 md:h-4 animate-spin" />
             <span>Route wird berechnet...</span>
           </div>
@@ -390,17 +391,17 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
         {waypoints.length > 0 && !isCalculating && (
           <div className="mt-2 pt-2 border-t border-stone-300 space-y-2">
             <div className="flex items-center justify-between text-xs md:text-sm">
-              <span className="text-stone-600">Wegpunkte: <strong className="text-slate-800">{waypoints.length}</strong></span>
-              <span className="text-stone-600">Distanz: <strong className="text-slate-800">{routeDistance} km</strong></span>
+        <span className="text-stone-600">Wegpunkte: <strong className="text-stone-800">{waypoints.length}</strong></span>
+        <span className="text-stone-600">Distanz: <strong className="text-stone-800">{routeDistance} km</strong></span>
             </div>
             {waypoints.length >= 2 && routeDurationMin > 0 && (
-              <div className="bg-white rounded-lg px-3 py-2 border border-slate-300 flex flex-wrap gap-3 items-center justify-between">
+      <div className="rounded-lg border border-brand-100 bg-white/70 px-3 py-2 flex flex-wrap gap-3 items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="text-lg">⏱️</span>
                   <div>
                     <p className="text-xs text-stone-500 leading-none">Geschätzte Gehzeit</p>
-                    <p className="font-bold text-slate-800 text-sm md:text-base">
-                      {Math.floor(routeDurationMin / 60) > 0 ? `${Math.floor(routeDurationMin / 60)}h ` : ""}{routeDurationMin % 60}min
+                    <p className="font-bold text-stone-800 text-sm md:text-base">
+                      {formatDurationHours(routeDurationMin)}
                     </p>
                   </div>
                 </div>
@@ -409,7 +410,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
                     <span className="text-lg">⛰️</span>
                     <div>
                       <p className="text-xs text-stone-500 leading-none">Höhenmeter</p>
-                      <p className="font-bold text-slate-800 text-sm md:text-base">+{routeElevationGain} m</p>
+        <p className="font-bold text-stone-800 text-sm md:text-base">+{routeElevationGain} m</p>
                     </div>
                   </div>
                 )}
@@ -481,7 +482,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
         <Button
           onClick={handleSave}
           disabled={waypoints.length < 2 || isCalculating}
-          className="bg-slate-800 hover:bg-slate-900 ml-auto"
+            className="bg-brand-400 hover:bg-brand-600 ml-auto"
           size="sm"
         >
           {isCalculating ? (

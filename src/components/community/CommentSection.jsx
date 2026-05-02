@@ -135,7 +135,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
   return (
     <div className="space-y-6">
       {isAuthenticated && canComment && (
-        <div className="bg-white rounded-xl p-4 md:p-6 border border-stone-200">
+        <div className="doghike-glass-card p-4 md:p-6">
           <h3 className="font-semibold text-stone-800 mb-3 md:mb-4 text-sm md:text-base">
             Kommentar hinzufügen
           </h3>
@@ -183,7 +183,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
               <Button
                 onClick={() => createMutation.mutate()}
                 disabled={!text.trim() || createMutation.isPending || !consentPublic}
-                className="bg-slate-800 hover:bg-slate-900 flex-1 sm:flex-initial"
+                className="bg-brand-400 hover:bg-brand-600 flex-1 sm:flex-initial"
               >
                 {createMutation.isPending ? (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -194,7 +194,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
               </Button>
             </div>
 
-            <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <div className="doghike-soft-panel flex items-center gap-3 p-3">
               <Checkbox
                 id="comment-consent"
                 checked={consentPublic}
@@ -232,7 +232,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, x: -100 }}
-              className="bg-white rounded-xl p-4 md:p-6 border border-stone-200"
+              className="doghike-glass-card p-4 md:p-6"
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">

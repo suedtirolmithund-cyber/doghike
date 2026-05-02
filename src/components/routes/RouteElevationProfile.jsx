@@ -78,9 +78,9 @@ export default function RouteElevationProfile({ coordinates, distance }) {
     <div className="space-y-4">
       {/* Statistics */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-        <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
-          <p className="text-xs text-blue-600 font-medium">Distanz</p>
-          <p className="text-lg font-bold text-blue-900">{distance || totalDistance.toFixed(1)} km</p>
+      <div className="doghike-soft-panel p-3">
+        <p className="text-xs text-brand-600 font-medium">Distanz</p>
+        <p className="text-lg font-bold text-stone-900">{distance || totalDistance.toFixed(1)} km</p>
         </div>
         <div className="bg-orange-50 rounded-lg p-3 border border-orange-200">
           <p className="text-xs text-orange-600 font-medium">Höhenunterschied</p>
@@ -93,7 +93,7 @@ export default function RouteElevationProfile({ coordinates, distance }) {
       </div>
 
       {/* Elevation Chart */}
-      <div className="bg-white rounded-xl p-3 md:p-4 border border-stone-200/50 overflow-x-auto">
+      <div className="doghike-glass-card rounded-xl p-3 md:p-4 overflow-x-auto">
         <h3 className="text-sm font-semibold text-stone-800 mb-3 flex items-center gap-2">
           <Mountain className="w-4 h-4" />
           Höhenprofil

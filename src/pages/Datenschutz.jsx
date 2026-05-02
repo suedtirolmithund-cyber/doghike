@@ -195,49 +195,49 @@ export default function Datenschutz() {
                   <div className="border border-stone-200 rounded-xl p-4">
                     <p className="font-semibold text-stone-800 mb-1">Supabase Inc. (Authentifizierung, Datenbank, Storage)</p>
                     <p>Speichert Nutzerkonten, Session-Tokens und App-Daten. Journal-Dateien werden in einem privaten Storage-Bucket gespeichert und in der App bei Bedarf über zeitlich begrenzte Links ausgeliefert.</p>
-                    <p className="mt-1 text-stone-500">Datenschutz: <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">supabase.com/privacy</a></p>
+              <p className="mt-1 text-stone-500">Datenschutz: <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">supabase.com/privacy</a></p>
                   </div>
 
                   <div className="border border-stone-200 rounded-xl p-4">
                     <p className="font-semibold text-stone-800 mb-1">Vercel Inc. (Hosting & CDN)</p>
                     <p>Hostet die Web-App und verarbeitet technische Zugriffsdaten wie IP-Adresse und HTTP-Logs.</p>
-                    <p className="mt-1 text-stone-500">Datenschutz: <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">vercel.com/legal/privacy-policy</a></p>
+              <p className="mt-1 text-stone-500">Datenschutz: <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">vercel.com/legal/privacy-policy</a></p>
                   </div>
 
                   <div className="border border-stone-200 rounded-xl p-4">
                     <p className="font-semibold text-stone-800 mb-1">Google LLC (Sign-in mit Google / OAuth)</p>
                     <p>Wenn Sie sich über "Mit Google anmelden" registrieren oder einloggen, überträgt Google Ihre E-Mail-Adresse, Ihren Namen und Ihr Profilbild an Supabase Auth.</p>
-                    <p className="mt-1 text-stone-500">Datenschutz: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">policies.google.com/privacy</a></p>
+              <p className="mt-1 text-stone-500">Datenschutz: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">policies.google.com/privacy</a></p>
                   </div>
 
                   <div className="border border-stone-200 rounded-xl p-4">
                     <p className="font-semibold text-stone-800 mb-1">OpenStreetMap / CARTO (Kartenkacheln)</p>
                     <p>Lädt Kartenkacheln. Dabei wird Ihre IP-Adresse technisch bedingt an diese Dienste übertragen.</p>
-                    <p className="mt-1 text-stone-500"><a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">OSM Datenschutzrichtlinie</a></p>
+              <p className="mt-1 text-stone-500"><a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">OSM Datenschutzrichtlinie</a></p>
                   </div>
 
                   <div className="border border-stone-200 rounded-xl p-4">
                     <p className="font-semibold text-stone-800 mb-1">Nominatim / OpenStreetMap (Ortssuche)</p>
                     <p>Wenn Sie im Routenplaner oder im Tagebuch einen Ort suchen, werden Suchtext und IP-Adresse kurzzeitig an Nominatim übertragen.</p>
-                    <p className="mt-1 text-stone-500"><a href="https://nominatim.org/privacy.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">nominatim.org/privacy.html</a></p>
+              <p className="mt-1 text-stone-500"><a href="https://nominatim.org/privacy.html" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">nominatim.org/privacy.html</a></p>
                   </div>
 
                   <div className="border border-stone-200 rounded-xl p-4">
                     <p className="font-semibold text-stone-800 mb-1">BRouter und GraphHopper GmbH (Routenberechnung)</p>
                     <p>Beim Planen einer Route werden die von Ihnen gesetzten Wegpunkt-Koordinaten an externe Routing-Dienste übertragen. Aktuell verwendet die App BRouter als primären Dienst und GraphHopper als technischen Fallback. Es werden dabei keine Kontodaten oder Inhaltsdaten Ihrer App-Beiträge an diese Dienste übermittelt.</p>
-                    <p className="mt-1 text-stone-500"><a href="https://www.graphhopper.com/privacy/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">graphhopper.com/privacy</a></p>
+              <p className="mt-1 text-stone-500"><a href="https://www.graphhopper.com/privacy/" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">graphhopper.com/privacy</a></p>
                   </div>
 
                   <div className="border border-stone-200 rounded-xl p-4">
                     <p className="font-semibold text-stone-800 mb-1">Open-Meteo (Wetterdaten)</p>
                     <p>Wenn Sie eine Tourendetailseite aufrufen, die einen Startpunkt hat, werden die GPS-Koordinaten des Startpunkts an Open-Meteo gesendet, um Wetterdaten zu laden.</p>
-                    <p className="mt-1 text-stone-500"><a href="https://open-meteo.com/en/terms" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">open-meteo.com/en/terms</a></p>
+              <p className="mt-1 text-stone-500"><a href="https://open-meteo.com/en/terms" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">open-meteo.com/en/terms</a></p>
                   </div>
 
                   <div className="border border-stone-200 rounded-xl p-4">
                     <p className="font-semibold text-stone-800 mb-1">Stripe Inc. (Zahlungen, nur falls Premium-Zahlungen aktiviert werden)</p>
                     <p>Stripe wird erst dann eingesetzt, wenn Online-Zahlungen für Premium technisch aktiviert werden. Sobald das der Fall ist, verarbeitet Stripe Zahlungsdaten direkt; wir speichern keine Kreditkartendaten selbst.</p>
-                    <p className="mt-1 text-stone-500"><a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">stripe.com/privacy</a></p>
+              <p className="mt-1 text-stone-500"><a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">stripe.com/privacy</a></p>
                   </div>
 
                   <div className="border border-brand-200 rounded-xl p-4 bg-brand-50">
@@ -339,16 +339,16 @@ export default function Datenschutz() {
                     <p className="font-semibold text-stone-800 mb-1">Beschwerde bei Aufsichtsbehörde</p>
                     <p className="text-sm">
                       In Italien:{" "}
-                      <a href="https://www.garanteprivacy.it" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+              <a href="https://www.garanteprivacy.it" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">
                         Garante per la protezione dei dati personali
                       </a>
                     </p>
                   </div>
                 </div>
 
-                <div className="mt-4 bg-slate-800 text-white rounded-xl p-4">
+          <div className="mt-4 rounded-xl bg-gradient-to-br from-brand-700 to-[#c46f52] p-4 text-white shadow-[0_12px_24px_rgba(124,77,52,0.16)]">
                   <p className="font-semibold mb-1">Anfragen stellen:</p>
-                  <p className="text-slate-300 text-sm">
+            <p className="text-brand-50 text-sm">
                     Schreiben Sie an <strong>suedtirolmithund@gmail.com</strong> - wir antworten innerhalb von 30 Tagen.
                     Für Kontolöschung: Anfrage über die Profileinstellungen oder per E-Mail.
                   </p>

@@ -34,7 +34,7 @@ export default function AGB() {
           <div className="space-y-6 md:space-y-8">
             <section>
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                <FileText className="w-5 h-5 text-slate-600" />
+            <FileText className="w-5 h-5 text-brand-600" />
                 1. Betreiber & Geltungsbereich
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
@@ -46,7 +46,7 @@ export default function AGB() {
                 <div className="bg-stone-50 rounded-xl p-4">
                   <p className="font-semibold text-stone-800">Julia Schwärzer</p>
                   <p>Südtirol, Italien</p>
-                  <p>E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-blue-600 underline">suedtirolmithund@gmail.com</a></p>
+            <p>E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-brand-600 underline">suedtirolmithund@gmail.com</a></p>
                 </div>
                 <p>
                   Anwendbares Recht: Italienisches Recht und EU-Recht.
@@ -56,7 +56,7 @@ export default function AGB() {
 
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                <UserCheck className="w-5 h-5 text-slate-600" />
+            <UserCheck className="w-5 h-5 text-brand-600" />
                 2. Nutzerkonto & Registrierung
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
@@ -72,7 +72,7 @@ export default function AGB() {
 
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                <Image className="w-5 h-5 text-slate-600" />
+            <Image className="w-5 h-5 text-brand-600" />
                 3. Nutzerinhalte (Touren, Fotos, Kommentare)
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
@@ -109,7 +109,7 @@ export default function AGB() {
 
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                <Star className="w-5 h-5 text-slate-600" />
+            <Star className="w-5 h-5 text-brand-600" />
                 4. Bewertungen & Kommentare
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
@@ -124,7 +124,7 @@ export default function AGB() {
 
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                <CreditCard className="w-5 h-5 text-slate-600" />
+            <CreditCard className="w-5 h-5 text-brand-600" />
                 5. Premium-Mitgliedschaft (falls aktiviert)
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
@@ -153,7 +153,7 @@ export default function AGB() {
                   <li>
                     Toureninformationen dienen nur zur Orientierung. Eine Haftung für leichte Fahrlässigkeit bei
                     unzutreffenden oder veralteten Tourangaben wird - soweit gesetzlich zulässig - ausgeschlossen.
-                    Details: <Link to={createPageUrl("Legal")} className="text-blue-600 underline">Rechtliche Hinweise</Link>.
+            Details: <Link to={createPageUrl("Legal")} className="text-brand-600 underline">Rechtliche Hinweise</Link>.
                   </li>
                 </ul>
               </div>
@@ -176,7 +176,7 @@ export default function AGB() {
 
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                <FileText className="w-5 h-5 text-slate-600" />
+            <FileText className="w-5 h-5 text-brand-600" />
                 8. Änderungen der Nutzungsbedingungen
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
@@ -189,12 +189,12 @@ export default function AGB() {
 
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                <Mail className="w-5 h-5 text-slate-600" />
+            <Mail className="w-5 h-5 text-brand-600" />
                 9. Kontakt & Beschwerden
               </h2>
-              <div className="bg-slate-800 text-white rounded-xl p-4 text-sm">
+          <div className="rounded-xl bg-gradient-to-br from-brand-700 to-[#c46f52] p-4 text-sm text-white shadow-[0_12px_24px_rgba(124,77,52,0.16)]">
                 <p className="font-semibold mb-1">Betreiberin: Julia Schwärzer</p>
-                <p className="text-slate-300">E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-brand-400 underline">suedtirolmithund@gmail.com</a></p>
+            <p className="text-brand-50">E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-white underline">suedtirolmithund@gmail.com</a></p>
               </div>
             </section>
 
@@ -202,9 +202,9 @@ export default function AGB() {
               <div className="flex flex-wrap gap-4 text-xs text-stone-400">
                 <span>Letzte Aktualisierung: April 2026</span>
                 <span>·</span>
-                <Link to={createPageUrl("Datenschutz")} className="text-blue-500 underline">Datenschutz</Link>
-                <Link to={createPageUrl("Impressum")} className="text-blue-500 underline">Impressum</Link>
-                <Link to={createPageUrl("Legal")} className="text-blue-500 underline">Rechtliche Hinweise</Link>
+            <Link to={createPageUrl("Datenschutz")} className="text-brand-600 underline">Datenschutz</Link>
+            <Link to={createPageUrl("Impressum")} className="text-brand-600 underline">Impressum</Link>
+            <Link to={createPageUrl("Legal")} className="text-brand-600 underline">Rechtliche Hinweise</Link>
               </div>
             </section>
           </div>

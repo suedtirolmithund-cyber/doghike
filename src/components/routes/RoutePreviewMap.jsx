@@ -21,7 +21,7 @@ export default function RoutePreviewMap({ coordinates }) {
   ];
 
   return (
-    <div className="bg-white rounded-xl border border-stone-200/50 overflow-hidden">
+    <div className="doghike-glass-card rounded-xl overflow-hidden">
       <div className="h-64 md:h-80 w-full">
         <MapContainer center={center} zoom={11} style={{ height: "100%", width: "100%" }}>
           <TileLayer

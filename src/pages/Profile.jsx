@@ -239,9 +239,9 @@ export default function Profile() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-md w-full mx-4">
-          <div className="bg-white rounded-2xl p-8 border border-stone-200/50 shadow-lg text-center">
+          <div className="doghike-glass-card p-8 text-center">
             <div className="text-6xl mb-4">Hund</div>
             <h2 className="text-2xl font-light text-stone-800 mb-2">Willkommen!</h2>
             <p className="text-stone-500 mb-6">
@@ -260,12 +260,12 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl border border-stone-200/50 shadow-sm p-6 mb-6 md:mb-8"
+          className="doghike-glass-card p-6 mb-6 md:mb-8"
         >
           <div className="flex items-start gap-5">
             <div className="relative shrink-0">
@@ -348,13 +348,13 @@ export default function Profile() {
 
         <Tabs defaultValue="dogs" className="space-y-4 md:space-y-6">
           <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
-            <TabsList className="bg-white border border-stone-200/50 gap-1 inline-flex min-w-full justify-start md:justify-center">
+            <TabsList className="border border-white/70 bg-white/65 backdrop-blur-xl gap-1 inline-flex min-w-full justify-start md:justify-center">
               <TabsTrigger value="dogs" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">Hunde</TabsTrigger>
               <TabsTrigger value="routes" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0 flex items-center gap-1">
                 <Navigation className="w-3.5 h-3.5" />
                 Routen
                 {userRoutes.length > 0 && (
-                  <span className="bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full px-1.5 py-0.5 leading-none">
+                  <span className="bg-brand-100 text-brand-700 text-[10px] font-bold rounded-full px-1.5 py-0.5 leading-none">
                     {userRoutes.length}
                   </span>
                 )}
@@ -380,7 +380,7 @@ export default function Profile() {
                   setEditingDog(null);
                   setDialogOpen(true);
                 }}
-                className="bg-slate-800 hover:bg-slate-700 text-sm"
+                className="bg-brand-400 hover:bg-brand-600 text-sm"
                 size="sm"
               >
                 <Plus className="w-4 h-4 md:mr-2" />
@@ -402,7 +402,7 @@ export default function Profile() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ delay: index * 0.05 }}
-                      className="bg-white rounded-2xl overflow-hidden border border-stone-200/50 shadow-sm hover:shadow-md transition-shadow"
+                      className="doghike-glass-card-hover overflow-hidden"
                     >
                       <div className="relative h-44 bg-gradient-to-br from-slate-100 to-stone-100">
                         <img
@@ -454,7 +454,7 @@ export default function Profile() {
                         <div className="flex items-center justify-between mb-1">
                           <h2 className="text-xl font-semibold text-stone-800">{dog.name}</h2>
                           {dog.breed && (
-                            <span className="text-xs text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full">{dog.breed}</span>
+                          <span className="text-xs text-brand-700 bg-brand-50 border border-brand-100 px-2 py-0.5 rounded-full">{dog.breed}</span>
                           )}
                         </div>
                         {getAge(dog.birth_date) && (
@@ -472,7 +472,7 @@ export default function Profile() {
                 </AnimatePresence>
               </div>
             ) : (
-              <div className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
+              <div className="doghike-glass-card text-center py-20">
                 <div className="text-6xl mb-4">Hund</div>
                 <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Hunde</h3>
                   <p className="text-stone-500 mb-6">Füge deinen ersten Wanderbegleiter hinzu!</p>
@@ -481,7 +481,7 @@ export default function Profile() {
                     setEditingDog(null);
                     setDialogOpen(true);
                   }}
-                  className="bg-slate-800 hover:bg-slate-700"
+                  className="bg-brand-400 hover:bg-brand-600"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Hund hinzufügen
@@ -500,7 +500,7 @@ export default function Profile() {
                 <p className="text-stone-500 text-sm">Geplante und aufgezeichnete Wanderrouten</p>
               </div>
               <Link to={createPageUrl("RoutePlanner")}>
-                <Button className="bg-slate-800 hover:bg-slate-700" size="sm">
+                <Button className="bg-brand-400 hover:bg-brand-600" size="sm">
                   <Plus className="w-4 h-4 mr-1" />
                   <span className="hidden md:inline">Neue Route</span>
                 </Button>
@@ -521,7 +521,7 @@ export default function Profile() {
                       : "Geplant";
 
                   return (
-                    <div key={route.id} className="flex items-center gap-4 rounded-2xl border border-stone-200/70 bg-white/70 p-4 shadow-sm backdrop-blur-sm">
+                    <div key={route.id} className="doghike-glass-card-hover flex items-center gap-4 p-4">
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
                         {route.completed
                           ? <Route className="w-5 h-5" />
@@ -562,12 +562,12 @@ export default function Profile() {
                 })}
               </div>
             ) : (
-              <div className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
+              <div className="doghike-glass-card text-center py-20">
                 <Navigation className="w-14 h-14 text-stone-200 mx-auto mb-4" />
                 <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Routen</h3>
                 <p className="text-stone-500 text-sm mb-6">Plane deine erste Tour oder zeichne eine Wanderung auf</p>
                 <Link to={createPageUrl("RoutePlanner")}>
-                  <Button className="bg-slate-800 hover:bg-slate-700">
+                  <Button className="bg-brand-400 hover:bg-brand-600">
                     <Plus className="w-4 h-4 mr-2" />
                     Route erstellen
                   </Button>
@@ -596,7 +596,7 @@ export default function Profile() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
+              <div className="doghike-glass-card text-center py-20">
                 <Heart className="w-14 h-14 text-stone-200 mx-auto mb-4" />
                 <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Touren gespeichert</h3>
                 <p className="text-stone-500 text-sm mb-6 max-w-xs mx-auto">

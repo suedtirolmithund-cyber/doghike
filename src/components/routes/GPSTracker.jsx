@@ -75,13 +75,6 @@ function haversineDistance(p1, p2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-function formatDuration(minutes) {
-  if (minutes < 60) return `${minutes} min`;
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  return m > 0 ? `${h}h ${m}min` : `${h}h`;
-}
-
 function getInitialRestoreState() {
   if (typeof window === "undefined") {
     return {
@@ -574,7 +567,7 @@ export default function GPSTracker({ onSave }) {
               isTracking && !isPaused ? "border border-green-300 bg-white" : "border border-stone-200 bg-white"
             }`}
           >
-            <p className="text-sm font-bold leading-tight text-slate-800 md:text-xl">
+            <p className="text-sm font-bold leading-tight text-stone-800 md:text-xl">
               {item.value}
               <span className="ml-0.5 text-xs font-normal text-stone-500 md:text-sm">
                 {item.unit}
@@ -640,9 +633,9 @@ export default function GPSTracker({ onSave }) {
           className="absolute bottom-3 right-3 z-[1000] flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-stone-200 bg-white p-3 shadow-md hover:bg-stone-50"
         >
           {locating ? (
-            <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
+          <Loader2 className="h-5 w-5 animate-spin text-brand-600" />
           ) : (
-            <Crosshair className="h-5 w-5 text-blue-600" />
+          <Crosshair className="h-5 w-5 text-brand-600" />
           )}
         </button>
       </div>
@@ -679,7 +672,7 @@ export default function GPSTracker({ onSave }) {
       </div>
 
       {!isTracking && routePoints.length === 0 && (
-        <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 text-xs text-blue-800 md:p-4 md:text-sm">
+        <div className="doghike-soft-panel p-3 text-xs text-brand-800 md:p-4 md:text-sm">
           <p className="mb-2 font-medium">GPS-Aufzeichnung:</p>
           <ul className="list-disc space-y-1 pl-4">
             <li>Aktiviere GPS auf deinem Geraet.</li>

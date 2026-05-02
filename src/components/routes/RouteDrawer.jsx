@@ -121,7 +121,7 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
 
   return (
     <div className="space-y-3 md:space-y-4">
-      <div className="bg-slate-100 rounded-lg p-3 md:p-4 text-xs md:text-sm text-stone-700">
+        <div className="doghike-soft-panel p-3 md:p-4 text-xs md:text-sm text-stone-700">
         <p className="font-medium mb-2">📍 So funktioniert's:</p>
         <ol className="list-decimal pl-4 md:pl-5 space-y-1">
           <li>Klicke auf die Karte, um Wegpunkte zu setzen</li>
@@ -129,13 +129,13 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
           <li>Nutze die Buttons unten zum Bearbeiten</li>
         </ol>
         {isCalculating && (
-          <div className="mt-3 flex items-center gap-2 text-blue-600 text-xs md:text-sm">
+        <div className="mt-3 flex items-center gap-2 text-brand-600 text-xs md:text-sm">
             <Loader2 className="w-3 h-3 md:w-4 md:h-4 animate-spin" />
             <span>Route wird berechnet...</span>
           </div>
         )}
         {waypoints.length > 0 && !isCalculating && (
-          <p className="mt-3 font-semibold text-slate-800 text-xs md:text-sm">
+        <p className="mt-3 font-semibold text-stone-800 text-xs md:text-sm">
             Wegpunkte: {waypoints.length} • Distanz: {routeDistance} km
           </p>
         )}
@@ -183,7 +183,7 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
         <Button
           onClick={handleSave}
           disabled={waypoints.length < 2 || isCalculating}
-          className="bg-slate-800 hover:bg-slate-900 ml-auto"
+            className="bg-brand-400 hover:bg-brand-600 ml-auto"
           size="sm"
         >
           {isCalculating ? (

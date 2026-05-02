@@ -51,7 +51,7 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: -40 }}
-      className="bg-white rounded-2xl border border-stone-200/60 shadow-sm overflow-hidden"
+      className="doghike-glass-card-hover overflow-hidden"
     >
       <div className="p-5">
         <div className="flex items-start justify-between gap-3">
@@ -243,7 +243,7 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: -40 }}
-      className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-4"
+      className="doghike-glass-card p-4"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
@@ -461,11 +461,11 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50/30 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 md:py-10">
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex items-center gap-3 mb-1">
-            <div className="bg-slate-800 rounded-xl p-2">
+            <div className="rounded-xl bg-gradient-to-br from-brand-700 to-[#c46f52] p-2 shadow-[0_12px_24px_rgba(124,77,52,0.16)]">
               <ShieldCheck className="w-5 h-5 text-white" />
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Admin Dashboard</h1>
@@ -476,7 +476,7 @@ export default function AdminDashboard() {
         </motion.div>
 
         <Tabs defaultValue="entries">
-          <TabsList className="bg-white border border-stone-200/60 mb-6 w-full">
+          <TabsList className="mb-6 w-full border border-white/70 bg-white/65 backdrop-blur-xl">
             <TabsTrigger value="entries" className="flex-1 flex items-center gap-2 relative">
               <Clock className="w-4 h-4" />
               Touren prüfen
@@ -499,7 +499,7 @@ export default function AdminDashboard() {
           </TabsList>
 
           <TabsContent value="entries">
-            <div className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-4 mb-6 flex items-center gap-4">
+            <div className="doghike-glass-card p-4 mb-6 flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <div className="w-9 h-9 rounded-xl bg-yellow-100 flex items-center justify-center">
                   <Clock className="w-5 h-5 text-yellow-600" />
@@ -519,7 +519,7 @@ export default function AdminDashboard() {
                 <Loader2 className="w-8 h-8 text-stone-400 animate-spin" />
               </div>
             ) : entries.length === 0 ? (
-              <div className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
+              <div className="doghike-glass-card text-center py-20">
                 <CheckCircle2 className="w-14 h-14 text-brand-400 mx-auto mb-4" />
                 <h3 className="text-xl font-medium text-stone-700 mb-2">Keine offenen Einträge</h3>
                 <p className="text-stone-500 text-sm">Alle Einträge wurden geprüft.</p>
@@ -543,7 +543,7 @@ export default function AdminDashboard() {
           </TabsContent>
 
           <TabsContent value="comments">
-            <div className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-4 mb-4 flex items-center gap-4">
+            <div className="doghike-glass-card p-4 mb-4 flex items-center gap-4">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-red-100 flex items-center justify-center">
                   <MessageSquare className="w-5 h-5 text-red-600" />
@@ -564,7 +564,7 @@ export default function AdminDashboard() {
                 <Loader2 className="w-8 h-8 text-stone-400 animate-spin" />
               </div>
             ) : comments.length === 0 ? (
-              <div className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
+              <div className="doghike-glass-card text-center py-20">
                 <CheckCircle2 className="w-14 h-14 text-brand-400 mx-auto mb-4" />
                 <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Kommentare</h3>
               </div>

@@ -42,7 +42,7 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
   });
 
   return (
-    <div className="bg-white rounded-xl p-4 md:p-6 border border-stone-200">
+    <div className="doghike-glass-card p-4 md:p-6">
       <div className="mb-4 md:mb-6">
         <div className="flex items-baseline gap-2 mb-2">
           <span className="text-3xl md:text-4xl font-bold text-stone-800">{averageRating}</span>
@@ -92,7 +92,7 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
             ))}
           </div>
 
-          <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200 mb-4">
+          <div className="doghike-soft-panel flex items-center gap-3 p-3 mb-4">
             <Checkbox
               id="rating-consent"
               checked={consentPublic}
@@ -106,7 +106,7 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
           <Button
             onClick={() => ratingMutation.mutate()}
             disabled={selectedRating === 0 || ratingMutation.isPending || !consentPublic}
-            className="w-full bg-slate-800 hover:bg-slate-900"
+            className="w-full bg-brand-400 hover:bg-brand-600"
           >
             {ratingMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
             {userRating ? "Bewertung aktualisieren" : "Bewertung abgeben"}

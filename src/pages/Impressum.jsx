@@ -137,43 +137,43 @@ export default function Impressum() {
               <div className="space-y-2 text-sm md:text-base text-stone-600">
                 <p>
                   Kartenkacheln:{" "}
-                  <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+          <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">
                     OpenStreetMap
                   </a>{" "}
                   sowie{" "}
-                  <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+          <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">
                     CARTO
                   </a>.
                 </p>
                 <p>
                   Routing & Höhenprofile:{" "}
-                  <a href="https://brouter.de/brouter-web/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+          <a href="https://brouter.de/brouter-web/" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">
                     BRouter
                   </a>{" "}
                   (primär) und{" "}
-                  <a href="https://www.graphhopper.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+          <a href="https://www.graphhopper.com" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">
                     GraphHopper GmbH
                   </a>{" "}
                   (technischer Fallback). Ortsnamensuche:{" "}
-                  <a href="https://nominatim.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+          <a href="https://nominatim.org" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">
                     Nominatim / OpenStreetMap
                   </a>.
                 </p>
                 <p>
                   Wetterdaten:{" "}
-                  <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+          <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">
                     Open-Meteo
                   </a>.
                 </p>
                 <p>
                   Authentifizierung: Google Sign-In über{" "}
-                  <a href="https://supabase.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+          <a href="https://supabase.com" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">
                     Supabase Auth
                   </a>.
                 </p>
                 <p>
                   Hosting:{" "}
-                  <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+          <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">
                     Vercel Inc.
                   </a>
                   .

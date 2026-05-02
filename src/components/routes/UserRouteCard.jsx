@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 import { format } from "date-fns";
 import "leaflet/dist/leaflet.css";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
+import { formatDurationHours } from "@/lib/duration";
 
 function getRouteTypeLabel(routeType) {
   if (routeType === "recorded") return "GPS-Aufzeichnung";
@@ -31,7 +32,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className="bg-white rounded-xl overflow-hidden border border-stone-200 hover:shadow-lg transition-shadow"
+    className="doghike-glass-card-hover rounded-xl overflow-hidden"
     >
       <div className="h-48 relative">
         <MapContainer
@@ -79,7 +80,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
           {effectiveDurationMinutes && (
             <div className="flex items-center gap-1">
               <span className="text-sm leading-none">{TOUR_ICONS.duration}</span>
-              <span>{effectiveDurationMinutes} min</span>
+              <span>{formatDurationHours(effectiveDurationMinutes)}</span>
             </div>
           )}
           {route.avg_speed_kmh && (

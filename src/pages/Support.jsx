@@ -113,7 +113,7 @@ export default function Support() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <Link to={createPageUrl("Dashboard")}>
           <Button variant="ghost" className="mb-6">
@@ -122,7 +122,7 @@ export default function Support() {
         </Link>
 
         <div className="space-y-6">
-          <div className="bg-white rounded-2xl p-6 md:p-8 border border-stone-200/50 shadow-sm">
+          <div className="doghike-glass-card p-6 md:p-8">
             <div className="flex items-center gap-3 mb-2">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
                 <MessageCircle className="h-5 w-5" />
@@ -130,20 +130,20 @@ export default function Support() {
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Hilfe & Support</h1>
                 <p className="mt-1 text-sm text-stone-500">
-                  Schreib uns direkt: <a href={`mailto:${SUPPORT_EMAIL}`} className="text-blue-600 underline font-medium">{SUPPORT_EMAIL}</a>
+                  Schreib uns direkt: <a href={`mailto:${SUPPORT_EMAIL}`} className="text-brand-600 underline font-medium">{SUPPORT_EMAIL}</a>
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 md:p-8 border border-stone-200/50 shadow-sm">
+          <div className="doghike-glass-card p-6 md:p-8">
             <h2 className="text-xl font-semibold text-stone-800 mb-6">Häufig gestellte Fragen (FAQ)</h2>
             {faqs.map((category, index) => {
               const Icon = category.icon;
               return (
                 <div key={index} className="mb-6 last:mb-0">
                   <div className="flex items-center gap-2 mb-3">
-                    <Icon className="w-5 h-5 text-slate-600" />
+                    <Icon className="w-5 h-5 text-brand-600" />
                     <h3 className="font-medium text-stone-800">{category.category}</h3>
                   </div>
                   <Accordion type="single" collapsible className="space-y-2">
@@ -151,7 +151,7 @@ export default function Support() {
                       <AccordionItem
                         key={questionIndex}
                         value={`${index}-${questionIndex}`}
-                        className="border border-stone-200 rounded-lg px-4"
+                        className="rounded-lg border border-brand-100/80 bg-white/50 px-4"
                       >
                         <AccordionTrigger className="text-left hover:no-underline">
                           <span className="text-sm md:text-base font-medium text-stone-700">{item.q}</span>
@@ -167,9 +167,9 @@ export default function Support() {
             })}
           </div>
 
-          <div className="bg-white rounded-2xl p-6 md:p-8 border border-stone-200/50 shadow-sm">
+          <div className="doghike-glass-card p-6 md:p-8">
             <div className="flex items-center gap-2 mb-6">
-              <Mail className="w-6 h-6 text-slate-700" />
+              <Mail className="w-6 h-6 text-brand-700" />
               <h2 className="text-xl font-semibold text-stone-800">Nachricht senden</h2>
             </div>
 
@@ -179,7 +179,7 @@ export default function Support() {
                 <h3 className="text-xl font-semibold text-stone-800 mb-2">E-Mail-Programm geöffnet!</h3>
                 <p className="text-stone-500 text-sm mb-6">
                   Falls es nicht geklappt hat, schreib direkt an{" "}
-                  <a href={`mailto:${SUPPORT_EMAIL}`} className="text-blue-600 underline">{SUPPORT_EMAIL}</a>.
+                  <a href={`mailto:${SUPPORT_EMAIL}`} className="text-brand-600 underline">{SUPPORT_EMAIL}</a>.
                 </p>
                 <Button
                   variant="outline"
@@ -203,18 +203,18 @@ export default function Support() {
                   <Textarea value={message} onChange={(event) => setMessage(event.target.value)} placeholder="Beschreibe dein Anliegen..." rows={5} required />
                 </div>
                 {user && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800">
+                  <div className="doghike-soft-panel p-3 text-sm text-brand-800">
                     Antwort kommt an: <strong>{user.email}</strong>
                   </div>
                 )}
-                <Button type="submit" className="w-full bg-slate-800 hover:bg-slate-900">
+                <Button type="submit" className="w-full bg-brand-400 hover:bg-brand-600">
                   <Send className="w-4 h-4 mr-2" /> Nachricht senden
                 </Button>
               </form>
             )}
           </div>
 
-          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 md:p-8 text-white shadow-lg">
+          <div className="rounded-2xl bg-gradient-to-br from-brand-700 via-brand-600 to-[#c46f52] p-6 md:p-8 text-white shadow-[0_18px_42px_rgba(124,77,52,0.18)]">
             <h2 className="text-xl font-semibold mb-4">Weitere Ressourcen</h2>
             <div className="grid md:grid-cols-3 gap-4">
               {[

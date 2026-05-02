@@ -47,7 +47,7 @@ export default function Legal() {
           <div className="space-y-6 md:space-y-8">
             <section>
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                <Info className="w-5 h-5 text-slate-600" />
+            <Info className="w-5 h-5 text-brand-600" />
                 1. App nur zur Information
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
@@ -64,7 +64,7 @@ export default function Legal() {
 
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                <FileText className="w-5 h-5 text-slate-600" />
+            <FileText className="w-5 h-5 text-brand-600" />
                 2. Keine Gewähr für die Richtigkeit der Touren
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
@@ -104,7 +104,7 @@ export default function Legal() {
 
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                <User className="w-5 h-5 text-slate-600" />
+            <User className="w-5 h-5 text-brand-600" />
                 4. Eigenverantwortung der Nutzer
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
@@ -123,7 +123,7 @@ export default function Legal() {
 
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                <PawPrint className="w-5 h-5 text-slate-600" />
+            <PawPrint className="w-5 h-5 text-brand-600" />
                 5. Kein Ersatz für alpine Erfahrung
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
@@ -135,7 +135,7 @@ export default function Legal() {
 
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                <CloudRain className="w-5 h-5 text-slate-600" />
+            <CloudRain className="w-5 h-5 text-brand-600" />
                 6. Wetter- & Gefahrenhinweise
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
@@ -158,7 +158,7 @@ export default function Legal() {
 
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                <Shield className="w-5 h-5 text-slate-600" />
+            <Shield className="w-5 h-5 text-brand-600" />
                 7. Moderation & Veröffentlichung
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
@@ -171,7 +171,7 @@ export default function Legal() {
 
             <section className="border-t border-stone-200 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                <FileText className="w-5 h-5 text-slate-600" />
+            <FileText className="w-5 h-5 text-brand-600" />
                 8. Urheberrecht & Rechteübertragung bei Fotos
               </h2>
               <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">

@@ -30,6 +30,7 @@ import { toast } from "sonner";
 import ExpandableText from "@/components/ExpandableText";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
+import { formatDurationHours, hoursInputToMinutes } from "@/lib/duration";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -190,7 +191,7 @@ export default function RouteDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center">
         <p className="text-stone-600">Lade Route...</p>
       </div>
     );
@@ -198,7 +199,7 @@ export default function RouteDetail() {
 
   if (!route) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center">
         <div className="text-center">
           <p className="text-xl text-stone-700 mb-4">Route nicht gefunden</p>
           <Link to={createPageUrl("Profile")}>
@@ -227,7 +228,11 @@ export default function RouteDetail() {
     date: completeData.completed_date || route.completed_date || "",
     distance_km: route.distance_km ?? "",
     elevation_m: route.elevation_gain_m ?? "",
-    duration_minutes: completeData.completed_duration_minutes || route.completed_duration_minutes || route.duration_minutes || "",
+    duration_minutes:
+      hoursInputToMinutes(completeData.completed_duration_minutes) ??
+      route.completed_duration_minutes ??
+      route.duration_minutes ??
+      "",
     description: [
       completeData.completed_notes,
       route.completed_notes,
@@ -258,7 +263,7 @@ export default function RouteDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
         <Link to={createPageUrl("Profile")}>
           <Button variant="ghost" className="mb-4">
@@ -272,12 +277,12 @@ export default function RouteDetail() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-2xl p-6 border border-stone-200/50 shadow-sm"
+            className="doghike-glass-card p-6"
           >
             <div className="flex items-start justify-between gap-4 mb-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <RouteIcon className="w-5 h-5 text-slate-700" />
+                  <RouteIcon className="w-5 h-5 text-brand-700" />
                   <span className="text-sm text-stone-500">
                     {routeTypeLabel}
                   </span>
@@ -360,7 +365,7 @@ export default function RouteDetail() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white rounded-2xl p-6 border border-stone-200/50 shadow-sm"
+            className="doghike-glass-card p-4 md:p-5"
           >
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-stone-800">Routenverlauf</h2>
@@ -422,44 +427,40 @@ export default function RouteDetail() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white rounded-2xl p-6 border border-stone-200/50 shadow-sm"
+            className="doghike-glass-card p-5"
           >
             <h2 className="text-lg font-semibold text-stone-800 mb-4">Details</h2>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <div className="text-center p-4 bg-slate-50 rounded-lg">
+              <div className="doghike-soft-panel text-center p-3">
                 <span className="mb-2 block text-xl">{TOUR_ICONS.distance}</span>
-                <p className="text-2xl font-bold text-slate-800">{route.distance_km ?? "–"}</p>
+                <p className="text-xl font-bold text-stone-800">{route.distance_km ?? "–"}</p>
                 <p className="text-xs text-stone-500">Kilometer</p>
               </div>
-              <div className="text-center p-4 bg-slate-50 rounded-lg">
+              <div className="doghike-soft-panel text-center p-3">
                 <span className="mb-2 block text-xl">{TOUR_ICONS.duration}</span>
-                <p className="text-2xl font-bold text-slate-800">
-                  {effectiveDurationMinutes
-                    ? Math.floor(effectiveDurationMinutes / 60) > 0
-                      ? `${Math.floor(effectiveDurationMinutes / 60)}h ${effectiveDurationMinutes % 60}min`
-                      : `${effectiveDurationMinutes}min`
-                    : "–"}
+                <p className="text-xl font-bold text-stone-800">
+                  {formatDurationHours(effectiveDurationMinutes) || "–"}
                 </p>
                 <p className="text-xs text-stone-500">Gehzeit</p>
               </div>
-              <div className="text-center p-4 bg-slate-50 rounded-lg">
+              <div className="doghike-soft-panel text-center p-3">
                 <span className="mb-2 block text-xl">{TOUR_ICONS.elevation}</span>
-                <p className="text-2xl font-bold text-slate-800">
+                <p className="text-xl font-bold text-stone-800">
                   {route.elevation_gain_m ? `+${route.elevation_gain_m}` : "–"}
                 </p>
                 <p className="text-xs text-stone-500">Höhenmeter</p>
               </div>
               {route.avg_speed_kmh && (
-                <div className="text-center p-4 bg-slate-50 rounded-lg">
+                <div className="doghike-soft-panel text-center p-3">
                   <span className="mb-2 block text-xl">{TOUR_ICONS.speed}</span>
-                  <p className="text-2xl font-bold text-slate-800">{route.avg_speed_kmh}</p>
+                  <p className="text-xl font-bold text-stone-800">{route.avg_speed_kmh}</p>
                   <p className="text-xs text-stone-500">km/h</p>
                 </div>
               )}
-              <div className="text-center p-4 bg-slate-50 rounded-lg">
-                <Map className="w-5 h-5 mx-auto mb-2 text-slate-700" />
-                <p className="text-2xl font-bold text-slate-800">{route.waypoints?.length ?? 0}</p>
+              <div className="doghike-soft-panel text-center p-3">
+                <Map className="w-5 h-5 mx-auto mb-2 text-brand-700" />
+                <p className="text-xl font-bold text-stone-800">{route.waypoints?.length ?? 0}</p>
                 <p className="text-xs text-stone-500">Wegpunkte</p>
               </div>
             </div>
@@ -485,11 +486,11 @@ export default function RouteDetail() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-white rounded-2xl p-6 border border-stone-200/50 shadow-sm"
+              className="doghike-glass-card p-5"
             >
               {route.completed ? (
                 <div className="flex items-center gap-3">
-                  <div className="bg-brand-100 rounded-full p-2">
+                <div className="bg-brand-100 rounded-full p-2">
                     <CheckCircle2 className="w-6 h-6 text-brand-400" />
                   </div>
                   <div className="flex-1">
@@ -556,12 +557,13 @@ export default function RouteDetail() {
 
                       {/* Duration */}
                       <div>
-                        <label className="text-sm font-medium text-stone-700 mb-1 block">Tatsächliche Gehzeit (Minuten)</label>
+                        <label className="text-sm font-medium text-stone-700 mb-1 block">Tatsächliche Gehzeit (Stunden)</label>
                         <Input
                           type="number"
-                          placeholder="z.B. 150"
+                          step="0.1"
+                          placeholder="z.B. 2,5"
                           value={completeData.completed_duration_minutes}
-                          onChange={(e) => setCompleteData({ ...completeData, completed_duration_minutes: Number(e.target.value) })}
+                          onChange={(e) => setCompleteData({ ...completeData, completed_duration_minutes: e.target.value })}
                         />
                       </div>
 
@@ -655,7 +657,7 @@ export default function RouteDetail() {
                             {myDogs.map((dog) => (
                               <div
                                 key={dog.id}
-                                className="flex items-center gap-3 p-3 rounded-lg border border-stone-200 hover:bg-stone-50 cursor-pointer"
+                                className="doghike-soft-panel flex items-center gap-3 p-3 cursor-pointer hover:bg-brand-50/80"
                                 onClick={() => toggleDog(dog.id)}
                               >
                                 <Checkbox checked={completeData.dogs.includes(dog.id)} onCheckedChange={() => toggleDog(dog.id)} />
@@ -686,7 +688,7 @@ export default function RouteDetail() {
                               </button>
                             </div>
                           ))}
-                          <label className="w-20 h-20 flex flex-col items-center justify-center border-2 border-dashed border-stone-300 rounded-xl cursor-pointer hover:border-slate-500 transition-colors">
+                          <label className="w-20 h-20 flex flex-col items-center justify-center border-2 border-dashed border-brand-200 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/40 transition-colors">
                             <input type="file" accept="image/*" multiple onChange={handlePhotoUpload} className="hidden" disabled={uploading} />
                             {uploading ? <Loader2 className="w-5 h-5 text-stone-400 animate-spin" /> : <><Upload className="w-5 h-5 text-stone-400" /><span className="text-xs text-stone-400 mt-1">Fotos</span></>}
                           </label>
@@ -751,7 +753,7 @@ export default function RouteDetail() {
                         <Button
                           onClick={() => completeRouteMutation.mutate({
                             completed_date: completeData.completed_date || null,
-                            completed_duration_minutes: completeData.completed_duration_minutes || null,
+                            completed_duration_minutes: hoursInputToMinutes(completeData.completed_duration_minutes),
                             completed_notes: [
                               completeData.completed_notes,
                               completeData.parking_info ? `🅿️ ${completeData.parking_info}` : null,
@@ -790,7 +792,7 @@ export default function RouteDetail() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full"
+              className="doghike-glass-card p-6 max-w-sm w-full"
             >
               <div className="text-center mb-5">
                 <div className="text-4xl mb-3">🎉</div>

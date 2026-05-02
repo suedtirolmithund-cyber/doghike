@@ -125,7 +125,7 @@ export default function Dogs() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="text-center">
           <div className="text-6xl mb-4">Hund</div>
           <p className="text-stone-600 mb-4">Bitte melde dich an, um deine Hunde zu verwalten.</p>
@@ -140,7 +140,7 @@ export default function Dogs() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -161,7 +161,7 @@ export default function Dogs() {
               setEditingDog(null);
               setDialogOpen(true);
             }}
-            className="bg-slate-800 hover:bg-slate-700"
+            className="bg-brand-400 hover:bg-brand-600"
           >
             <Plus className="w-4 h-4 mr-2" /> Hund hinzufügen
           </Button>
@@ -184,7 +184,7 @@ export default function Dogs() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ delay: index * 0.06 }}
-                    className="bg-white rounded-2xl overflow-hidden border border-stone-200/50 shadow-sm hover:shadow-md transition-shadow"
+                    className="doghike-glass-card-hover overflow-hidden"
                   >
                     <div className="relative h-48 bg-gradient-to-br from-slate-100 to-stone-100">
                       <img
@@ -242,7 +242,7 @@ export default function Dogs() {
                       <div className="flex items-center justify-between mb-2">
                         <h2 className="text-xl font-semibold text-stone-800">{dog.name}</h2>
                         {dog.breed && (
-                          <span className="text-xs text-stone-500 bg-stone-100 px-2.5 py-1 rounded-full">
+                          <span className="text-xs text-brand-700 bg-brand-50 border border-brand-100 px-2.5 py-1 rounded-full">
                             {dog.breed}
                           </span>
                         )}
@@ -281,7 +281,7 @@ export default function Dogs() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-20 bg-white rounded-2xl border border-stone-200/50"
+            className="doghike-glass-card text-center py-20"
           >
             <div className="text-6xl mb-4">Hund</div>
             <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Hunde</h3>
@@ -291,7 +291,7 @@ export default function Dogs() {
                 setEditingDog(null);
                 setDialogOpen(true);
               }}
-              className="bg-slate-800 hover:bg-slate-700"
+              className="bg-brand-400 hover:bg-brand-600"
             >
               <Plus className="w-4 h-4 mr-2" /> Hund hinzufügen
             </Button>

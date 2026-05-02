@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import RouteElevationProfile from "./RouteElevationProfile";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
+import { formatDurationHours } from "@/lib/duration";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -167,20 +168,14 @@ export default function GPXUploader({ onSave }) {
       ]
     : [46.5, 11.9];
 
-  const formatDuration = (min) => {
-    const h = Math.floor(min / 60);
-    const m = min % 60;
-    return h > 0 ? `${h}h ${m}min` : `${m}min`;
-  };
-
   return (
     <div className="space-y-4">
       {!gpxData && (
         <div
           className={`border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer ${
             isDragging
-              ? "border-slate-500 bg-slate-50"
-              : "border-stone-300 hover:border-slate-400 hover:bg-stone-50"
+              ? "border-brand-400 bg-brand-50"
+              : "border-stone-300 hover:border-brand-300 hover:bg-brand-50/40"
           }`}
           onDragOver={(e) => {
             e.preventDefault();
@@ -227,7 +222,7 @@ export default function GPXUploader({ onSave }) {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div className="bg-slate-800 text-white rounded-xl p-4 text-center">
+        <div className="rounded-xl bg-gradient-to-br from-brand-700 to-[#c46f52] p-4 text-center text-white">
               <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.distance}</span>
               <p className="text-2xl font-bold">{gpxData.distance_km}</p>
               <p className="text-xs opacity-70">km Distanz</p>
@@ -239,7 +234,7 @@ export default function GPXUploader({ onSave }) {
             </div>
             <div className="bg-blue-700 text-white rounded-xl p-4 text-center">
               <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.duration}</span>
-              <p className="text-2xl font-bold">{formatDuration(gpxData.duration_minutes)}</p>
+              <p className="text-2xl font-bold">{formatDurationHours(gpxData.duration_minutes)}</p>
               <p className="text-xs opacity-70">gesch. Dauer</p>
             </div>
             <div className="bg-amber-700 text-white rounded-xl p-4 text-center">
@@ -282,7 +277,7 @@ export default function GPXUploader({ onSave }) {
             distance={gpxData.distance_km}
           />
 
-          <Button onClick={handleSave} className="w-full bg-slate-800 hover:bg-slate-900">
+      <Button onClick={handleSave} className="w-full bg-brand-400 hover:bg-brand-600">
             <Upload className="w-4 h-4 mr-2" />
             GPX-Route übernehmen und speichern
           </Button>
