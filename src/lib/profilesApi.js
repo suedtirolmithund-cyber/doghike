@@ -51,6 +51,26 @@ export async function upsertProfile(userId, updates) {
     nextUpdates.username = sanitizeUsername(nextUpdates.username);
 
     if (nextUpdates.username) {
+      const { data: currentProfile, error: currentProfileError } = await supabase
+        .from("profiles")
+        .select("username")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+      if (currentProfileError) throw currentProfileError;
+
+      const currentUsername = sanitizeUsername(currentProfile?.username);
+
+      if (currentUsername === nextUpdates.username) {
+        const { data, error } = await supabase
+          .from("profiles")
+          .upsert({ user_id: userId, ...nextUpdates }, { onConflict: "user_id" })
+          .select()
+          .single();
+        if (error) throw error;
+        return data;
+      }
+
       const { data: existingProfiles, error: usernameError } = await supabase
         .from("profiles")
         .select("user_id, username")

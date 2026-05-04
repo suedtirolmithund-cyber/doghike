@@ -14,6 +14,34 @@ create table if not exists public.profiles (
   created_at   timestamptz default now()
 );
 
+create or replace function public.normalize_username(value text)
+returns text
+language sql
+immutable
+as $$
+  select nullif(lower(regexp_replace(btrim(coalesce(value, '')), '^@+', '')), '');
+$$;
+
+create or replace function public.apply_profile_username_normalization()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.username := public.normalize_username(new.username);
+  return new;
+end;
+$$;
+
+drop trigger if exists profiles_normalize_username on public.profiles;
+create trigger profiles_normalize_username
+before insert or update on public.profiles
+for each row
+execute function public.apply_profile_username_normalization();
+
+create unique index if not exists profiles_username_normalized_unique
+  on public.profiles ((public.normalize_username(username)))
+  where public.normalize_username(username) is not null;
+
 -- Falls die Tabelle bereits existiert:
 -- alter table public.profiles
 --   add column if not exists role text default 'user' check (role in ('user','admin'));

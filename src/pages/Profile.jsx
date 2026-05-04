@@ -117,7 +117,12 @@ export default function Profile() {
       toast.success("Profil gespeichert");
     },
     onError: (error) => {
-      if (error?.code === "USERNAME_TAKEN" || error?.message === "username_taken") {
+      if (
+        error?.code === "USERNAME_TAKEN" ||
+        error?.message === "username_taken" ||
+        error?.code === "23505" ||
+        error?.message?.includes("profiles_username_normalized_unique")
+      ) {
         toast.error("Dieser Username ist bereits vergeben. Bitte wähle einen anderen.");
         return;
       }
