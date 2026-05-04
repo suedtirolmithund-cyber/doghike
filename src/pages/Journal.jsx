@@ -180,25 +180,25 @@ export default function Journal() {
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between mb-6 md:mb-8 gap-4"
+          className="mb-6 md:mb-8"
         >
-          <div className="flex min-w-0 items-center gap-3">
+          <div className="flex min-w-0 items-start gap-3">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
               <BookOpen className="h-5 w-5" />
             </div>
             <div className="min-w-0">
               <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Wandertagebuch</h1>
               <p className="mt-1 text-sm text-stone-500">Deine persönlichen Wandererlebnisse</p>
+              {entries.length > 0 && (
+                <Link to={createPageUrl("AddJournalEntry")} className="mt-4 inline-flex">
+                  <Button className="bg-brand-400 hover:bg-brand-600">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Wanderung
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
-          {entries.length > 0 && (
-            <Link to={createPageUrl("AddJournalEntry")}>
-              <Button className="bg-brand-400 hover:bg-brand-600 shrink-0">
-                <Plus className="w-4 h-4 mr-2" />
-                Wanderung
-              </Button>
-            </Link>
-          )}
         </motion.div>
 
         {entries.length > 0 && (
