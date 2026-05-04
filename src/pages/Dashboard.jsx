@@ -15,6 +15,7 @@ import { getDogs } from "@/lib/profilesApi";
 
 const PAGE_SIZE = 10;
 const FIRST_DASHBOARD_WITHOUT_DOG_KEY = "doghike:first-dashboard-without-dog";
+const DOG_NUDGE_COMPLETED_KEY = "doghike:dog-nudge-completed";
 
 function getCurrentSeason() {
   const m = new Date().getMonth() + 1;
@@ -66,12 +67,18 @@ export default function Dashboard() {
     if (typeof window === "undefined") return;
 
     const firstVisitKey = `${FIRST_DASHBOARD_WITHOUT_DOG_KEY}:${user.id}`;
+    const nudgeCompletedKey = `${DOG_NUDGE_COMPLETED_KEY}:${user.id}`;
     const hasSeenDashboardWithoutDog = window.localStorage.getItem(firstVisitKey);
+    const hasCompletedDogNudge = window.localStorage.getItem(nudgeCompletedKey);
 
     if (!hasSeenDashboardWithoutDog) {
       window.localStorage.setItem(firstVisitKey, new Date().toISOString());
       return;
     }
+
+    if (hasCompletedDogNudge) return;
+
+    window.localStorage.setItem(nudgeCompletedKey, new Date().toISOString());
     navigate(createPageUrl("Dogs"), { replace: true });
   }, [dogs.length, isAuthenticated, isLoadingAuth, isLoadingDogs, navigate, user?.id]);
 
