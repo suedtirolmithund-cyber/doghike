@@ -191,13 +191,14 @@ export default function Journal() {
               <p className="mt-1 text-sm text-stone-500">Deine persönlichen Wandererlebnisse</p>
             </div>
           </div>
-          <Link to={createPageUrl("AddJournalEntry")}>
-            <Button className="bg-brand-400 hover:bg-brand-600 shrink-0">
-              <Plus className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Neue Wanderung</span>
-              <span className="sm:hidden">Neu</span>
-            </Button>
-          </Link>
+          {entries.length > 0 && (
+            <Link to={createPageUrl("AddJournalEntry")}>
+              <Button className="bg-brand-400 hover:bg-brand-600 shrink-0">
+                <Plus className="w-4 h-4 mr-2" />
+                Wanderung
+              </Button>
+            </Link>
+          )}
         </motion.div>
 
         {entries.length > 0 && (
@@ -394,7 +395,7 @@ export default function Journal() {
             </p>
             <Link to={createPageUrl("AddJournalEntry")}>
               <Button className="bg-brand-400 hover:bg-brand-600">
-                <Plus className="w-4 h-4 mr-2" /> Erste Wanderung eintragen
+                <Plus className="w-4 h-4 mr-2" /> Erste Wanderung
               </Button>
             </Link>
           </motion.div>
