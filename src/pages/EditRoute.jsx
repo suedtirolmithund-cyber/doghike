@@ -102,7 +102,7 @@ export default function EditRoute() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
         <Link to={`${createPageUrl("RouteDetail")}?id=${routeId}`}>
           <Button variant="ghost" className="mb-3 md:mb-4" size="sm">
@@ -113,10 +113,10 @@ export default function EditRoute() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl p-4 md:p-8 border border-stone-200/50 shadow-sm"
+          className="doghike-glass-card p-4 md:p-8"
         >
           <div className="flex items-start gap-3 mb-6">
-            <Map className="w-6 h-6 text-slate-700 flex-shrink-0 mt-1" />
+            <Map className="w-6 h-6 text-brand-700 flex-shrink-0 mt-1" />
             <div>
               <h1 className="text-xl md:text-2xl font-bold text-stone-800">Route bearbeiten</h1>
               <p className="text-xs text-stone-500 mt-0.5">Ändere den Streckenverlauf oder die Details</p>
@@ -150,26 +150,26 @@ export default function EditRoute() {
           )}
 
           {routeGeometry && (
-            <div className="bg-slate-50 rounded-lg p-3 mb-6 grid grid-cols-2 md:grid-cols-4 gap-2 text-xs md:text-sm">
+            <div className="doghike-soft-panel p-3 mb-6 grid grid-cols-2 md:grid-cols-4 gap-2 text-xs md:text-sm">
               <div>
                 <p className="text-stone-500">Distanz</p>
-                <p className="font-bold text-slate-800">{routeGeometry.distance_km} km</p>
+                <p className="font-bold text-stone-800">{routeGeometry.distance_km} km</p>
               </div>
               {routeGeometry.duration_minutes && (
                 <div>
                   <p className="text-stone-500">Dauer</p>
-                  <p className="font-bold text-slate-800">{formatDurationHours(routeGeometry.duration_minutes)}</p>
+                  <p className="font-bold text-stone-800">{formatDurationHours(routeGeometry.duration_minutes)}</p>
                 </div>
               )}
               {routeGeometry.elevation_gain_m && (
                 <div>
                   <p className="text-stone-500">Aufstieg</p>
-                  <p className="font-bold text-slate-800">+{routeGeometry.elevation_gain_m} m</p>
+                  <p className="font-bold text-stone-800">+{routeGeometry.elevation_gain_m} m</p>
                 </div>
               )}
               <div>
                 <p className="text-stone-500">Wegpunkte</p>
-                <p className="font-bold text-slate-800">{routeGeometry.coordinates?.length ?? 0}</p>
+                <p className="font-bold text-stone-800">{routeGeometry.coordinates?.length ?? 0}</p>
               </div>
             </div>
           )}
@@ -222,7 +222,7 @@ export default function EditRoute() {
               <Button
                 type="submit"
                 disabled={updateMutation.isPending}
-                className="bg-slate-800 hover:bg-slate-900 flex-1"
+                className="bg-brand-400 hover:bg-brand-600 flex-1"
                 size="sm"
               >
                 {updateMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}

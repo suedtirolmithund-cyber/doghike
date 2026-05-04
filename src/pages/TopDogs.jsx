@@ -100,9 +100,9 @@ async function loadLeaderboard() {
 
 // Hilfsfunktionen UI
 const RANK_STYLE = [
-  { ring: "ring-2 ring-yellow-400", bg: "bg-gradient-to-br from-yellow-50 to-amber-50", border: "border-yellow-300", medal: "🥇", num: "text-yellow-600" },
-  { ring: "ring-2 ring-slate-400",  bg: "bg-gradient-to-br from-slate-50 to-stone-50",  border: "border-slate-300",  medal: "🥈", num: "text-slate-500"  },
-  { ring: "ring-2 ring-orange-400", bg: "bg-gradient-to-br from-orange-50 to-amber-50", border: "border-orange-300", medal: "🥉", num: "text-orange-600" },
+  { ring: "ring-2 ring-brand-300", bg: "bg-gradient-to-br from-brand-100 to-[#c46f52]/20", border: "border-brand-300", medal: "🥇", num: "text-brand-700" },
+  { ring: "ring-2 ring-stone-300",  bg: "bg-gradient-to-br from-white/80 to-brand-50",  border: "border-brand-100",  medal: "🥈", num: "text-stone-600"  },
+  { ring: "ring-2 ring-orange-300", bg: "bg-gradient-to-br from-orange-50 to-brand-50", border: "border-orange-200", medal: "🥉", num: "text-orange-700" },
 ];
 
 function dogPhoto(dog) {
@@ -178,7 +178,7 @@ function RankRow({ entry, rank, metric, isMyDog }) {
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: (rank - 4) * 0.04 }}
       className={`flex items-center gap-3 p-3 rounded-xl border ${
-        isMyDog ? "border-brand-300 bg-brand-50/60 shadow-sm" : "border-stone-200 bg-white"
+        isMyDog ? "border-brand-300 bg-brand-50/60 shadow-sm" : "border-white/70 bg-white/70 shadow-sm backdrop-blur-xl"
       }`}
     >
       {/* Rang */}
@@ -233,7 +233,7 @@ function MyDogCard({ entry, rank, metric }) {
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mt-4 p-4 rounded-2xl border-2 border-brand-300 bg-brand-50 flex items-center gap-4"
+      className="mt-4 p-4 rounded-2xl border-2 border-brand-300 bg-brand-50/70 flex items-center gap-4 shadow-sm backdrop-blur-xl"
     >
       <img src={dogPhoto(entry.dog)} alt={entry.dog.name}
         className="w-12 h-12 rounded-full object-cover border-2 border-white shadow" />
@@ -265,7 +265,7 @@ function CommunityStats({ rows }) {
     <div className="grid grid-cols-3 gap-3 mb-6">
       {[
         { icon: Dog,       value: rows.length, label: "Hunde", color: "bg-amber-50 text-amber-700 border-amber-200" },
-        { icon: Ruler,     value: `${totalKm.toFixed(0)} km`, label: "gesamt", color: "bg-blue-50 text-blue-700 border-blue-200" },
+        { icon: Ruler,     value: `${totalKm.toFixed(0)} km`, label: "gesamt", color: "bg-brand-50 text-brand-700 border-brand-200" },
         { icon: TrendingUp,value: `${(totalHm/1000).toFixed(1)}k`, label: "Höhenmeter", color: "bg-brand-50 text-brand-600 border-brand-200" },
       ].map(({ icon: Icon, value, label, color }) => (
         <div key={label} className={`rounded-xl border p-3 text-center ${color}`}>
@@ -281,7 +281,7 @@ function CommunityStats({ rows }) {
 // Legende der Badges
 function BadgeLegend() {
   return (
-    <details className="mt-6 bg-white rounded-xl border border-stone-200 overflow-hidden">
+    <details className="doghike-glass-card mt-6 rounded-xl overflow-hidden">
       <summary className="px-4 py-3 text-sm font-semibold text-stone-600 cursor-pointer flex items-center gap-2">
         <Sparkles className="w-4 h-4 text-amber-500" /> Abzeichen-Legende
       </summary>
@@ -313,7 +313,7 @@ function RankingTab({ rows, metric, myDogIds }) {
 
   if (!sorted.length) {
     return (
-      <div className="text-center py-20 bg-white rounded-2xl border border-stone-200">
+      <div className="doghike-glass-card text-center py-20">
         <Dog className="w-12 h-12 text-stone-200 mx-auto mb-3" />
         <p className="text-stone-500 font-medium">Noch keine Daten</p>
         <p className="text-stone-400 text-sm mt-1">Trage deine erste Wanderung mit deinem Hund ein!</p>
@@ -365,7 +365,7 @@ export default function TopDogs() {
   const myDogIds = myDogs.map((dog) => dog.id);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-amber-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
 
         {/* Header */}
@@ -401,7 +401,7 @@ export default function TopDogs() {
             {rows.length > 0 && <CommunityStats rows={rows} />}
 
             <Tabs defaultValue="tours">
-              <TabsList className="grid w-full grid-cols-3 bg-white border border-stone-200 mb-4">
+              <TabsList className="grid w-full grid-cols-3 border border-white/70 bg-white/65 backdrop-blur-xl mb-4">
                 <TabsTrigger value="tours" className="text-xs md:text-sm">
                   🎯 <span className="hidden sm:inline ml-1">Meiste</span> Touren
                 </TabsTrigger>

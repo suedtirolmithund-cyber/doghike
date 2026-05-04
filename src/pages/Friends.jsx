@@ -28,7 +28,7 @@ function FeedCard({ entry }) {
   return (
     <Link to={createPageUrl("JournalDetail") + `?id=${entry.id}`}>
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-2xl border border-stone-200/60 shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+      className="doghike-glass-card-hover overflow-hidden cursor-pointer"
     >
       {entry.photos?.[0] && (
         <img src={entry.photos[0]} alt={entry.title} className="w-full h-44 object-cover" />
@@ -259,7 +259,7 @@ export default function Friends() {
 
         {/* Search */}
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl border border-stone-200/60 shadow-sm p-4 mb-6"
+          className="doghike-glass-card p-4 mb-6"
         >
           <h2 className="text-sm font-semibold text-stone-700 mb-3 flex items-center gap-2">
             <Search className="w-4 h-4" /> Freunde suchen
@@ -300,7 +300,7 @@ export default function Friends() {
                     existing?.receiver_id === profile.user_id;
 
                   return (
-                    <div key={profile.user_id} className="flex items-center gap-3 p-2 rounded-xl hover:bg-stone-50">
+                    <div key={profile.user_id} className="flex items-center gap-3 p-2 rounded-xl hover:bg-brand-50/50">
                       <Avatar profile={profile} />
                       <ProfileName profile={profile} />
                       <div className="ml-auto shrink-0">
@@ -337,7 +337,7 @@ export default function Friends() {
         </motion.div>
 
         <Tabs defaultValue={incoming.length > 0 ? "requests" : "friends"}>
-          <TabsList className="grid w-full grid-cols-4 bg-white border border-stone-200/60 mb-4">
+          <TabsList className="grid w-full grid-cols-4 border border-white/70 bg-white/65 backdrop-blur-xl mb-4">
             <TabsTrigger value="friends" className="px-1 text-[11px] sm:text-sm">
               <span className="sm:hidden">Freunde</span>
               <span className="hidden sm:inline">Freunde ({accepted.length})</span>
@@ -371,7 +371,7 @@ export default function Friends() {
                   const profile = friendOf(f);
                   return (
                     <motion.div key={f.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                      className="bg-white rounded-xl border border-stone-200/60 shadow-sm p-3 flex items-center gap-3"
+                      className="doghike-glass-card rounded-xl p-3 flex items-center gap-3"
                     >
                       <Avatar profile={profile} />
                       <ProfileName profile={profile} />
@@ -387,7 +387,7 @@ export default function Friends() {
                 })}
               </div>
             ) : (
-              <div className="text-center py-16 bg-white rounded-2xl border border-stone-200/50">
+              <div className="doghike-glass-card text-center py-16">
                 <Users className="w-12 h-12 text-stone-200 mx-auto mb-3" />
                 <p className="text-stone-600 font-medium mb-1">Noch keine Freunde</p>
                 <p className="text-stone-400 text-sm">Suche nach Nutzern und schick eine Anfrage!</p>
@@ -403,7 +403,7 @@ export default function Friends() {
                   const profile = profileMap[f.requester_id] ?? { user_id: f.requester_id, full_name: "Nutzer", username: null, avatar_url: null };
                   return (
                     <motion.div key={f.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                      className="bg-white rounded-xl border border-amber-200 shadow-sm p-3 flex items-center gap-3"
+                      className="rounded-xl border border-amber-200 bg-amber-50/70 p-3 flex items-center gap-3 shadow-sm backdrop-blur-xl"
                     >
                       <Avatar profile={profile} />
                       <div className="flex-1 min-w-0">
@@ -429,7 +429,7 @@ export default function Friends() {
                 })}
               </div>
             ) : (
-              <div className="text-center py-16 bg-white rounded-2xl border border-stone-200/50">
+              <div className="doghike-glass-card text-center py-16">
                 <Clock className="w-12 h-12 text-stone-200 mx-auto mb-3" />
                 <p className="text-stone-500 text-sm">Keine offenen Anfragen</p>
               </div>
@@ -444,7 +444,7 @@ export default function Friends() {
                   const profile = profileMap[f.receiver_id];
                   return (
                     <motion.div key={f.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                      className="bg-white rounded-xl border border-stone-200/60 shadow-sm p-3 flex items-center gap-3"
+                      className="doghike-glass-card rounded-xl p-3 flex items-center gap-3"
                     >
                       <Avatar profile={profile} />
                       <div className="flex-1 min-w-0">
@@ -464,7 +464,7 @@ export default function Friends() {
                 })}
               </div>
             ) : (
-              <div className="text-center py-16 bg-white rounded-2xl border border-stone-200/50">
+              <div className="doghike-glass-card text-center py-16">
                 <p className="text-stone-500 text-sm">Keine gesendeten Anfragen</p>
               </div>
             )}
@@ -474,13 +474,13 @@ export default function Friends() {
             {feedLoading ? (
               <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 text-stone-400 animate-spin" /></div>
             ) : friendIds.length === 0 ? (
-              <div className="text-center py-16 bg-white rounded-2xl border border-stone-200/50">
+              <div className="doghike-glass-card text-center py-16">
                 <Users className="w-12 h-12 text-stone-200 mx-auto mb-3" />
                 <p className="text-stone-600 font-medium mb-1">Noch keine Freunde</p>
                 <p className="text-stone-400 text-sm">Füge Freunde hinzu, um ihre Wanderungen zu sehen.</p>
               </div>
             ) : feedEntries.length === 0 ? (
-              <div className="text-center py-16 bg-white rounded-2xl border border-stone-200/50">
+              <div className="doghike-glass-card text-center py-16">
                 <BookOpen className="w-12 h-12 text-stone-200 mx-auto mb-3" />
                 <p className="text-stone-600 font-medium mb-1">Noch keine Touren von Freunden</p>
                 <p className="text-stone-400 text-sm">Deine Freunde haben noch keine Wanderungen geteilt.</p>

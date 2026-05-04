@@ -130,11 +130,11 @@ export default function DifficultyHelp() {
           </div>
         </div>
 
-        <div className="flex gap-2 mb-8 bg-white rounded-xl p-1 border border-stone-200 shadow-sm">
+        <div className="flex gap-2 mb-8 rounded-xl border border-white/70 bg-white/65 p-1 shadow-sm backdrop-blur-xl">
           <button
             onClick={() => setActiveTab("human")}
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all ${
-              activeTab === "human" ? "bg-slate-800 text-white shadow" : "text-stone-600 hover:bg-stone-50"
+              activeTab === "human" ? "bg-brand-400 text-white shadow" : "text-stone-600 hover:bg-brand-50/50"
             }`}
           >
             <Mountain className="w-4 h-4" />
@@ -143,7 +143,7 @@ export default function DifficultyHelp() {
           <button
             onClick={() => setActiveTab("dog")}
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all ${
-              activeTab === "dog" ? "bg-slate-800 text-white shadow" : "text-stone-600 hover:bg-stone-50"
+              activeTab === "dog" ? "bg-brand-400 text-white shadow" : "text-stone-600 hover:bg-brand-50/50"
             }`}
           >
             <PawPrint className="w-4 h-4" />

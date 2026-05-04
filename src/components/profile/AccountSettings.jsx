@@ -52,7 +52,7 @@ export default function AccountSettings({ user }) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-2xl p-5 border border-stone-200/50 shadow-sm">
+      <div className="doghike-glass-card p-5">
         <h3 className="text-base font-semibold text-stone-800 mb-4 flex items-center gap-2">
           <User className="w-4 h-4" /> Profildaten
         </h3>
@@ -72,7 +72,7 @@ export default function AccountSettings({ user }) {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl p-5 border border-stone-200/50 shadow-sm">
+      <div className="doghike-glass-card p-5">
         <h3 className="text-base font-semibold text-stone-800 mb-3 flex items-center gap-2">
           <Shield className="w-4 h-4" /> Datenschutz & deine Rechte
         </h3>
@@ -98,7 +98,7 @@ export default function AccountSettings({ user }) {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl p-5 border border-red-200 shadow-sm">
+      <div className="rounded-2xl border border-red-200 bg-red-50/50 p-5 shadow-[0_14px_35px_rgba(80,56,38,0.08)] backdrop-blur-xl">
         <h3 className="text-base font-semibold text-red-700 mb-2 flex items-center gap-2">
           <Trash2 className="w-4 h-4" /> Konto & alle Daten loeschen
         </h3>

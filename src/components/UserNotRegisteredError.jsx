@@ -1,22 +1,20 @@
-import React from 'react';
-
 const UserNotRegisteredError = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-slate-50">
-      <div className="max-w-md w-full p-8 bg-white rounded-lg shadow-lg border border-slate-100">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-stone-50 via-white to-brand-50/20 px-4">
+      <div className="w-full max-w-md rounded-2xl border border-brand-400/30 bg-gradient-to-br from-brand-700 via-brand-600 to-[#c46f52] p-8 text-white shadow-[0_18px_42px_rgba(124,77,52,0.2)]">
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-orange-100">
-            <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-white/16">
+            <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-4">Zugriff eingeschränkt</h1>
-          <p className="text-slate-600 mb-8">
+          <h1 className="mb-4 text-3xl font-bold text-white">Zugriff eingeschränkt</h1>
+          <p className="mb-8 text-brand-50">
             Dein Konto ist aktuell nicht für diese App freigeschaltet. Bitte wende dich an den Administrator, wenn du Zugriff benötigst.
           </p>
-          <div className="p-4 bg-slate-50 rounded-md text-sm text-slate-600">
+          <div className="rounded-xl bg-white/12 p-4 text-left text-sm text-brand-50">
             <p>Wenn das ein Fehler sein sollte, kannst du Folgendes prüfen:</p>
-            <ul className="list-disc list-inside mt-2 space-y-1">
+            <ul className="mt-2 list-inside list-disc space-y-1">
               <li>Prüfe, ob du mit dem richtigen Konto angemeldet bist</li>
               <li>Bitte den Administrator um Freischaltung</li>
               <li>Melde dich ab und erneut an</li>

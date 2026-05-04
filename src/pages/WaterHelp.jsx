@@ -24,7 +24,7 @@ const waterLevels = [
     value: "moderate",
     label: "Etwas Wasser",
     icon: "💧💧",
-    color: "bg-blue-50 border-blue-200 text-blue-800",
+    color: "bg-brand-50 border-brand-200 text-brand-800",
     desc: "Mehrere Bachläufe oder Quellen entlang des Weges, aber nicht in sehr kurzem Abstand.",
     examples: "Typische Alpentouren im Frühling oder Sommer",
     tip: "Für Hunde meist gut geeignet. Für längere trockene Abschnitte trotzdem eigenes Wasser mitnehmen.",

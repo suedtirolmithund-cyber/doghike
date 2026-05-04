@@ -186,7 +186,7 @@ function ElevationChart({ profile }) {
   const maxEle = Math.max(...profile.map((p) => p.ele));
 
   return (
-    <div className="mt-4 bg-slate-50 rounded-xl p-3 border border-slate-200">
+    <div className="doghike-glass-card mt-4 rounded-xl p-3">
       <div className="flex items-center justify-between mb-2">
         <h4 className="text-xs font-semibold text-stone-600 uppercase tracking-wide flex items-center gap-1">
           <Mountain className="w-3.5 h-3.5" /> Höhenprofil
@@ -201,15 +201,15 @@ function ElevationChart({ profile }) {
         <AreaChart data={profile} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
           <defs>
             <linearGradient id="eleGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#1e293b" stopOpacity={0.3} />
-              <stop offset="95%" stopColor="#1e293b" stopOpacity={0.05} />
+              <stop offset="5%" stopColor="#c46f52" stopOpacity={0.34} />
+              <stop offset="95%" stopColor="#c46f52" stopOpacity={0.06} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
           <XAxis dataKey="dist" tickFormatter={(v) => `${v} km`} tick={{ fontSize: 9 }} />
           <YAxis domain={[minEle - 20, maxEle + 20]} tick={{ fontSize: 9 }} unit=" m" />
           <Tooltip formatter={(v) => [`${Math.round(v)} m`, "Höhe"]} labelFormatter={(v) => `${v} km`} />
-          <Area type="monotone" dataKey="ele" stroke="#1e293b" strokeWidth={2}
+          <Area type="monotone" dataKey="ele" stroke="#c46f52" strokeWidth={2}
             fill="url(#eleGrad)" dot={false} />
         </AreaChart>
       </ResponsiveContainer>
@@ -346,11 +346,11 @@ function SmartRoutePlanner({ onRouteReady }) {
   return (
     <div className="space-y-3">
       {/* Routing mode selector */}
-      <div className="bg-stone-100 p-1 rounded-xl flex gap-1">
+      <div className="border border-white/70 bg-white/65 backdrop-blur-xl p-1 rounded-xl flex gap-1">
         {ROUTING_MODES.map((m) => (
           <button key={m.id} onClick={() => setRoutingMode(m.id)}
             className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-medium transition-all text-center ${
-              routingMode === m.id ? "bg-white shadow-sm text-stone-800" : "text-stone-500 hover:text-stone-700"
+              routingMode === m.id ? "bg-brand-100 text-brand-800 shadow-sm" : "text-stone-500 hover:text-stone-700"
             }`}
           >
             <div>{m.label}</div>
@@ -371,7 +371,7 @@ function SmartRoutePlanner({ onRouteReady }) {
 
         <button
           onClick={() => setMapType((t) => t === "standard" ? "topo" : "standard")}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-stone-200 text-xs font-medium text-stone-600 hover:bg-stone-50 bg-white shrink-0 h-9"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-brand-100 text-xs font-medium text-stone-600 hover:bg-brand-50/40 bg-white/70 shrink-0 h-9"
         >
           <Layers className="w-3.5 h-3.5" />
           {mapType === "standard" ? "Topo" : "Standard"}
@@ -468,7 +468,7 @@ function SmartRoutePlanner({ onRouteReady }) {
           {waypoints.map((wp, i) => (
             <div key={i} className="flex items-center gap-2 text-xs bg-stone-50 rounded-lg px-2 py-1.5 group">
               <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-white text-[10px] shrink-0 ${
-                i === 0 ? "bg-brand-400" : i === waypoints.length - 1 && waypoints.length > 1 ? "bg-red-600" : "bg-slate-700"
+            i === 0 ? "bg-brand-400" : i === waypoints.length - 1 && waypoints.length > 1 ? "bg-red-600" : "bg-brand-700"
               }`}>
                 {i === 0 ? "S" : i === waypoints.length - 1 && waypoints.length > 1 ? "Z" : wp.label}
               </span>
@@ -502,10 +502,10 @@ function SmartRoutePlanner({ onRouteReady }) {
           </div>
           <div className="rounded-xl border border-stone-200/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
             <span className="block text-lg mb-1">{TOUR_ICONS.duration}</span>
-            <p className="text-lg font-bold text-slate-800">
+            <p className="text-lg font-bold text-stone-800">
               {formatDurationHours(route.duration_minutes)}
             </p>
-            <p className="text-xs text-slate-500">ca. Zeit</p>
+            <p className="text-xs text-stone-500">ca. Zeit</p>
           </div>
           <div className="rounded-xl border border-stone-200/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
             <span className="block text-lg mb-1">{TOUR_ICONS.elevation}</span>
@@ -619,7 +619,7 @@ export default function RoutePlanner() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 flex items-center justify-center p-6">
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center p-6">
         <div className="text-center">
           <p className="text-xl text-stone-700 mb-4">Bitte melde dich an, um Routen zu planen</p>
           <Link to={createPageUrl("Login")}>
@@ -631,7 +631,7 @@ export default function RoutePlanner() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
         <Link to={createPageUrl("Profile")}>
           <Button variant="ghost" className="mb-3 md:mb-4" size="sm">
@@ -652,7 +652,7 @@ export default function RoutePlanner() {
         </div>
 
         {/* Mode tabs */}
-        <div className="flex gap-2 mb-5 bg-stone-100 p-1 rounded-xl">
+        <div className="flex gap-2 mb-5 border border-white/70 bg-white/65 backdrop-blur-xl p-1 rounded-xl">
           {[
             { id: "plan", icon: Map, label: "Planen" },
             { id: "track", icon: Navigation, label: "Aufzeichnen" },
@@ -660,7 +660,7 @@ export default function RoutePlanner() {
           ].map(({ id, icon: Icon, label }) => (
             <button key={id} onClick={() => { setActiveTab(id); setRouteGeometry(null); }}
               className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium transition-all ${
-                activeTab === id ? "bg-white text-stone-800 shadow-sm" : "text-stone-500 hover:text-stone-700"
+                activeTab === id ? "bg-brand-100 text-brand-800 shadow-sm" : "text-stone-500 hover:text-stone-700"
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -688,7 +688,7 @@ export default function RoutePlanner() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
               onSubmit={handleSubmit}
-              className="mt-6 space-y-4 bg-white rounded-2xl border border-stone-200/60 shadow-sm p-5"
+              className="doghike-glass-card mt-6 space-y-4 p-5"
             >
               <h3 className="text-base font-semibold text-stone-800">
                 {activeTab === "track"

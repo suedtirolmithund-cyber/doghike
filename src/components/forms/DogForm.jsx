@@ -89,7 +89,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="doghike-glass-card space-y-6 p-4 sm:p-5">
       <div className="flex flex-col items-center gap-2">
         <div className="relative">
           <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-stone-100">
@@ -107,7 +107,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
               <div className="w-full h-full flex items-center justify-center text-4xl">Hund</div>
             )}
           </div>
-          <label className="absolute bottom-0 right-0 p-2 bg-slate-800 text-white rounded-full cursor-pointer hover:bg-slate-900 transition-colors shadow-lg">
+          <label className="absolute bottom-0 right-0 p-2 bg-brand-400 text-white rounded-full cursor-pointer hover:bg-brand-600 transition-colors shadow-lg">
             <input
               type="file"
               accept="image/*"
@@ -196,7 +196,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
         <Button
           type="submit"
           disabled={saving || uploading}
-          className="bg-slate-800 hover:bg-slate-900"
+          className="bg-brand-400 hover:bg-brand-600"
         >
           {saving ? (
             <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Speichern...</>
