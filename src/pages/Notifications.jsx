@@ -51,7 +51,7 @@ async function loadNotifications(userId) {
         id: `fr-${friendship.id}`,
         type: "friend_request",
         icon: UserPlus,
-        color: "text-blue-600 bg-blue-50 border-blue-200",
+        color: "text-brand-700 bg-brand-50 border-brand-200",
         title: `${profile?.full_name || profile?.username || "Jemand"} möchte dein Freund sein`,
         time: friendship.created_at,
         link: createPageUrl("Friends"),
@@ -165,8 +165,8 @@ export default function Notifications() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 flex items-center justify-center px-4">
-        <div className="text-center">
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center px-4">
+        <div className="doghike-glass-card p-8 text-center">
           <Bell className="w-12 h-12 text-stone-300 mx-auto mb-3" />
           <p className="text-stone-600 font-medium mb-4">Bitte anmelden</p>
           <Link to={createPageUrl("Login")} className="text-brand-400 underline text-sm">
@@ -178,7 +178,7 @@ export default function Notifications() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-6 flex items-center gap-3">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
@@ -200,7 +200,7 @@ export default function Notifications() {
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-brand-50 border border-brand-200 rounded-2xl p-4 mb-5 flex items-center gap-3"
+            className="doghike-glass-card mb-5 flex items-center gap-3 p-4"
           >
             <Bell className="w-5 h-5 text-brand-400 shrink-0" />
             <div className="flex-1">
@@ -218,7 +218,7 @@ export default function Notifications() {
         )}
 
         {notificationsSupported() && permission === "denied" && (
-          <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 mb-5 flex items-center gap-3">
+          <div className="doghike-glass-card mb-5 flex items-center gap-3 p-4">
             <BellOff className="w-5 h-5 text-stone-400 shrink-0" />
             <p className="text-xs text-stone-500">
               Benachrichtigungen sind blockiert. Bitte in den Browser-Einstellungen erlauben.
@@ -231,7 +231,7 @@ export default function Notifications() {
             <Loader2 className="w-8 h-8 text-stone-400 animate-spin" />
           </div>
         ) : notifications.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
+          <div className="doghike-glass-card text-center py-20">
             <Bell className="w-14 h-14 text-stone-200 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-stone-700 mb-1">Alles auf dem neuesten Stand</h3>
             <p className="text-stone-400 text-sm">Keine neuen Benachrichtigungen</p>
@@ -247,7 +247,7 @@ export default function Notifications() {
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.04 }}
-                    className={`bg-white rounded-2xl border p-4 flex items-start gap-4 shadow-sm ${notification.color}`}
+                    className="doghike-glass-card-hover flex items-start gap-4 p-4"
                   >
                     <div className={`rounded-xl p-2 shrink-0 ${notification.color}`}>
                       <Icon className="w-5 h-5" />

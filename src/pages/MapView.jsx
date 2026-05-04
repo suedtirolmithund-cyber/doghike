@@ -19,7 +19,7 @@ export default function MapView() {
   const hikesWithCoords = hikes.filter(h => h.latitude && h.longitude);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -56,7 +56,7 @@ export default function MapView() {
           {hikesWithCoords.length > 0 ? (
             <HikeMap hikes={hikesWithCoords} height="calc(100svh - 200px)" zoom={9} />
           ) : (
-            <div className="text-center py-20 bg-white rounded-2xl border border-stone-200/50">
+            <div className="doghike-glass-card text-center py-20">
               <MapPin className="w-16 h-16 text-stone-300 mx-auto mb-4" />
               <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Standorte</h3>
               <p className="text-stone-500">Aktuell sind noch keine Touren mit Karte verfügbar.</p>

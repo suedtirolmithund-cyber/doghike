@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
@@ -18,13 +18,17 @@ import {
   Image as ImageIcon,
   MessageSquare,
   Trash2,
+  Search,
+  Users,
+  Map,
+  Crown,
+  Pencil,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/AuthContext";
+import { createPageUrl } from "@/utils";
+import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import {
   getPendingEntries,
   approveEntry,
@@ -32,10 +36,74 @@ import {
   getAllComments,
   approveComment,
   adminDeleteComment,
+  getAdminPublicHikes,
+  getAdminUsers,
+  adminDeleteUserAccount,
 } from "@/lib/adminApi";
-import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
-import { TOUR_ICONS } from "@/lib/difficultyConfig";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
+function formatAdminDate(value) {
+  if (!value) return "Unbekannt";
+  return format(new Date(value), "d. MMM yyyy, HH:mm", { locale: de });
+}
+
+function FilterButton({ active, children, onClick }) {
+  return (
+    <Button
+      type="button"
+      variant={active ? "default" : "outline"}
+      size="sm"
+      onClick={onClick}
+      className={
+        active
+          ? "bg-brand-400 text-white hover:bg-brand-600"
+          : "border-stone-200 text-stone-600 hover:bg-stone-50"
+      }
+    >
+      {children}
+    </Button>
+  );
+}
+
+function StatusBadge({ status }) {
+  const normalized = (status ?? "").toLowerCase();
+  const config = {
+    approved: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    draft: "bg-amber-50 text-amber-700 border-amber-200",
+    archived: "bg-stone-100 text-stone-600 border-stone-200",
+  };
+
+  return (
+    <Badge
+      variant="outline"
+      className={config[normalized] ?? "bg-stone-100 text-stone-600 border-stone-200"}
+    >
+      {normalized === "approved"
+        ? "Freigegeben"
+        : normalized === "draft"
+          ? "Entwurf"
+          : normalized === "archived"
+            ? "Archiviert"
+            : status || "Unbekannt"}
+    </Badge>
+  );
+}
 
 function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
   const [expanded, setExpanded] = useState(false);
@@ -55,27 +123,27 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
     >
       <div className="p-5">
         <div className="flex items-start justify-between gap-3">
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap mb-1">
-              <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-200">
-                Wartet auf Prüfung
+          <div className="min-w-0 flex-1">
+            <div className="mb-1 flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1 rounded-full border border-yellow-200 bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-700">
+                Wartet auf Pruefung
               </span>
               <span className="text-xs text-stone-400">
-                {format(new Date(entry.created_at), "d. MMM yyyy, HH:mm", { locale: de })}
+                {formatAdminDate(entry.created_at)}
               </span>
             </div>
-            <h3 className="text-lg font-semibold text-stone-800 truncate">{entry.title}</h3>
-            <div className="flex flex-wrap items-center gap-3 mt-1 text-sm text-stone-500">
+            <h3 className="truncate text-lg font-semibold text-stone-800">{entry.title}</h3>
+            <div className="mt-1 flex flex-wrap items-center gap-3 text-sm text-stone-500">
               <span className="flex items-center gap-1">
-                <User className="w-3.5 h-3.5" /> {authorName}
+                <User className="h-3.5 w-3.5" /> {authorName}
               </span>
               {entry.location && (
                 <span className="flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5" /> {entry.location}
+                  <MapPin className="h-3.5 w-3.5" /> {entry.location}
                 </span>
               )}
             </div>
-            <div className="flex flex-wrap gap-3 mt-2 text-xs text-stone-500">
+            <div className="mt-2 flex flex-wrap gap-3 text-xs text-stone-500">
               {entry.distance_km && (
                 <span className="flex items-center gap-1">
                   <span className="text-sm leading-none">{TOUR_ICONS.distance}</span>
@@ -90,7 +158,7 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
               )}
               {entry.photos?.length > 0 && (
                 <span className="flex items-center gap-1">
-                  <ImageIcon className="w-3 h-3" />
+                  <ImageIcon className="h-3 w-3" />
                   {entry.photos.length} Foto{entry.photos.length !== 1 ? "s" : ""}
                 </span>
               )}
@@ -99,10 +167,11 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
         </div>
 
         <button
+          type="button"
           onClick={() => setExpanded((value) => !value)}
-          className="mt-3 flex items-center gap-1 text-xs text-stone-400 hover:text-stone-600 transition-colors"
+          className="mt-3 flex items-center gap-1 text-xs text-stone-400 transition-colors hover:text-stone-600"
         >
-          {expanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+          {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
           {expanded ? "Weniger" : "Details"}
         </button>
       </div>
@@ -115,31 +184,31 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="px-5 pb-4 space-y-4 border-t border-stone-100 pt-4">
+            <div className="space-y-4 border-t border-stone-100 px-5 pb-4 pt-4">
               {entry.description && (
                 <div>
-                  <Label className="text-xs text-stone-500 uppercase tracking-wide">
+                  <Label className="text-xs uppercase tracking-wide text-stone-500">
                     Beschreibung
                   </Label>
-                  <p className="text-sm text-stone-700 mt-1 whitespace-pre-wrap">
+                  <p className="mt-1 whitespace-pre-wrap text-sm text-stone-700">
                     {entry.description}
                   </p>
                 </div>
               )}
               {entry.hazard_notes && (
-                <div className="flex gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                  <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <div className="flex gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
                   <p className="text-sm text-amber-700">{entry.hazard_notes}</p>
                 </div>
               )}
               {entry.photos?.length > 0 && (
-                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                   {entry.photos.map((url, index) => (
                     <a key={index} href={url} target="_blank" rel="noopener noreferrer">
                       <img
                         src={url}
                         alt=""
-                        className="w-full aspect-square object-cover rounded-lg hover:opacity-90"
+                        className="aspect-square w-full rounded-lg object-cover hover:opacity-90"
                       />
                     </a>
                   ))}
@@ -152,26 +221,22 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
 
       <div className="px-5 pb-5">
         {!showRejectForm ? (
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex flex-wrap gap-2">
             <Link to={`${createPageUrl("AddJournalEntry")}?id=${entry.id}`}>
-              <Button
-                variant="outline"
-                disabled={approving || rejecting}
-                size="sm"
-              >
+              <Button variant="outline" disabled={approving || rejecting} size="sm">
                 Eintrag bearbeiten
               </Button>
             </Link>
             <Button
               onClick={() => onApprove(entry.id)}
               disabled={approving || rejecting}
-              className="bg-brand-400 hover:bg-brand-600 text-white"
+              className="bg-brand-400 text-white hover:bg-brand-600"
               size="sm"
             >
               {approving ? (
-                <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
+                <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
               ) : (
-                <CheckCircle2 className="w-4 h-4 mr-1.5" />
+                <CheckCircle2 className="mr-1.5 h-4 w-4" />
               )}
               Genehmigen
             </Button>
@@ -182,12 +247,12 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
               className="border-red-300 text-red-600 hover:bg-red-50"
               size="sm"
             >
-              <XCircle className="w-4 h-4 mr-1.5" />
+              <XCircle className="mr-1.5 h-4 w-4" />
               Ablehnen
             </Button>
           </div>
         ) : (
-          <div className="space-y-3 p-4 bg-red-50 border border-red-200 rounded-xl">
+          <div className="space-y-3 rounded-xl border border-red-200 bg-red-50 p-4">
             <Label className="text-sm font-medium text-red-700">
               Ablehnungsgrund (optional)
             </Label>
@@ -196,19 +261,19 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
               onChange={(e) => setReason(e.target.value)}
               placeholder="z.B. Inhalt nicht relevant, Fotos fehlen..."
               rows={2}
-              className="text-sm bg-white"
+              className="bg-white text-sm"
             />
             <div className="flex gap-2">
               <Button
                 onClick={() => onReject(entry.id, reason)}
                 disabled={rejecting}
                 size="sm"
-                className="bg-red-600 hover:bg-red-700 text-white"
+                className="bg-red-600 text-white hover:bg-red-700"
               >
                 {rejecting ? (
-                  <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
+                  <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
                 ) : (
-                  <XCircle className="w-4 h-4 mr-1.5" />
+                  <XCircle className="mr-1.5 h-4 w-4" />
                 )}
                 Ablehnen bestaetigen
               </Button>
@@ -246,41 +311,43 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
       className="doghike-glass-card p-4"
     >
       <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3 min-w-0">
+        <div className="min-w-0 flex items-center gap-3">
           {comment.profiles?.avatar_url && (
             <img
               src={comment.profiles.avatar_url}
               alt=""
-              className="w-8 h-8 rounded-full object-cover shrink-0"
+              className="h-8 w-8 shrink-0 rounded-full object-cover"
             />
           )}
           <div className="min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="text-sm font-semibold text-stone-800">{authorName}</span>
               {needsApproval && (
-                <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200">
-                  Triggerwort - Freigabe nötig
+                <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
+                  Freigabe noetig
                 </span>
               )}
             </div>
             <p className="text-xs text-stone-400">
-              {format(new Date(comment.created_at), "d. MMM yyyy, HH:mm", { locale: de })}
-              <span className="ml-2 text-stone-300">Tour: {comment.hike_id}</span>
+              {formatAdminDate(comment.created_at)}
+            </p>
+            <p className="mt-1 text-xs text-stone-500">
+              {comment.hike_title || `Tour-ID: ${comment.hike_id}`}
             </p>
           </div>
         </div>
-        <div className="flex gap-2 shrink-0">
+        <div className="flex shrink-0 gap-2">
           {needsApproval && (
             <Button
               size="sm"
               onClick={() => onApprove(comment.id)}
               disabled={approving || deleting}
-              className="bg-brand-400 hover:bg-brand-600 text-white"
+              className="bg-brand-400 text-white hover:bg-brand-600"
             >
               {approving ? (
-                <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
+                <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
               ) : (
-                <CheckCircle2 className="w-4 h-4 mr-1.5" />
+                <CheckCircle2 className="mr-1.5 h-4 w-4" />
               )}
               Freigeben
             </Button>
@@ -290,14 +357,14 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
             size="icon"
             onClick={() => onDelete(comment.id)}
             disabled={deleting || approving}
-            className="text-stone-400 hover:text-red-600 w-8 h-8"
+            className="h-8 w-8 text-stone-400 hover:text-red-600"
           >
-            {deleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+            {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
           </Button>
         </div>
       </div>
 
-      <p className="text-sm text-stone-700 mt-3 whitespace-pre-wrap">{comment.text}</p>
+      <p className="mt-3 whitespace-pre-wrap text-sm text-stone-700">{comment.text}</p>
 
       {comment.photo_preview_url && (
         <a href={comment.photo_preview_url} target="_blank" rel="noopener noreferrer">
@@ -313,9 +380,168 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
         <Link to={hikeDetailUrl}>
           <Button variant="outline" size="sm">
             Zur Tour
-            <ArrowRight className="w-4 h-4 ml-1.5" />
+            <ArrowRight className="ml-1.5 h-4 w-4" />
           </Button>
         </Link>
+      </div>
+    </motion.div>
+  );
+}
+
+function PublicHikeCard({ hike }) {
+  const detailId = hike.route_id ?? hike.id;
+  const hikeDetailUrl =
+    createPageUrl("HikeDetail") +
+    `?id=${encodeURIComponent(detailId)}&source=${encodeURIComponent(hike._source ?? "sheets")}`;
+  const editUrl =
+    createPageUrl("EditPublicHike") + `?id=${encodeURIComponent(hike._public_hike_id ?? hike.id)}`;
+
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, x: -40 }}
+      className="doghike-glass-card overflow-hidden"
+    >
+      <div className="flex flex-col gap-4 p-4 md:flex-row">
+        <div className="h-28 w-full shrink-0 overflow-hidden rounded-2xl bg-stone-100 md:w-44">
+          {hike.cover_photo ? (
+            <img src={hike.cover_photo} alt="" className="h-full w-full object-cover" />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-stone-100 to-stone-200 text-stone-400">
+              <ImageIcon className="h-6 w-6" />
+            </div>
+          )}
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="min-w-0">
+              <div className="mb-2 flex flex-wrap items-center gap-2">
+                <StatusBadge status={hike.status} />
+                {hike.is_premium && (
+                  <Badge
+                    variant="outline"
+                    className="border-[#e5c595] bg-[#fff4e2] text-[#a96b20]"
+                  >
+                    <Crown className="mr-1 h-3 w-3" />
+                    Premium
+                  </Badge>
+                )}
+              </div>
+              <h3 className="truncate text-lg font-semibold text-stone-800">
+                {hike.trail_name || hike.title || "Ohne Titel"}
+              </h3>
+              <p className="mt-1 text-sm text-stone-500">
+                {[hike.location, hike.country].filter(Boolean).join(", ") || "Ohne Ortsangabe"}
+              </p>
+            </div>
+            <div className="shrink-0 text-right text-xs text-stone-400">
+              <p>Zuletzt aktualisiert</p>
+              <p className="mt-1 font-medium text-stone-500">{formatAdminDate(hike.updated_at || hike.created_at)}</p>
+            </div>
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link to={editUrl}>
+              <Button size="sm" className="bg-brand-400 text-white hover:bg-brand-600">
+                <Pencil className="mr-1.5 h-4 w-4" />
+                Bearbeiten
+              </Button>
+            </Link>
+            <Link to={hikeDetailUrl}>
+              <Button variant="outline" size="sm">
+                Zur Tour
+                <ArrowRight className="ml-1.5 h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function UserCard({ profile, deleting, onDelete }) {
+  const displayName = profile.full_name || profile.username || "Unbenannter Nutzer";
+
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, x: -40 }}
+      className="doghike-glass-card p-4"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-3">
+          {profile.avatar_url ? (
+            <img
+              src={profile.avatar_url}
+              alt=""
+              className="h-11 w-11 shrink-0 rounded-2xl object-cover"
+            />
+          ) : (
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-stone-100 text-stone-400">
+              <User className="h-5 w-5" />
+            </div>
+          )}
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="truncate text-sm font-semibold text-stone-800">{displayName}</p>
+              {profile.role === "admin" && (
+                <Badge variant="outline" className="border-brand-200 bg-brand-50 text-brand-700">
+                  Admin
+                </Badge>
+              )}
+              {profile.is_premium && (
+                <Badge
+                  variant="outline"
+                  className="border-[#e5c595] bg-[#fff4e2] text-[#a96b20]"
+                >
+                  <Crown className="mr-1 h-3 w-3" />
+                  Premium
+                </Badge>
+              )}
+            </div>
+            {profile.username && (
+              <p className="mt-1 text-xs text-stone-500">@{profile.username}</p>
+            )}
+            <p className="mt-1 text-xs text-stone-400">
+              Registriert: {formatAdminDate(profile.created_at)}
+            </p>
+          </div>
+        </div>
+
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              disabled={deleting}
+              className="h-8 w-8 text-stone-400 hover:text-red-600"
+            >
+              {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Nutzerkonto wirklich loeschen?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Dabei werden Profil, Hunde, Kommentare, Bewertungen, Fotos und weitere Nutzerdaten endgueltig entfernt.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => onDelete(profile.user_id)}
+                className="bg-red-600 text-white hover:bg-red-700"
+              >
+                Endgueltig loeschen
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </motion.div>
   );
@@ -326,6 +552,12 @@ export default function AdminDashboard() {
   const queryClient = useQueryClient();
   const [processingId, setProcessingId] = useState(null);
   const [processingType, setProcessingType] = useState(null);
+  const [commentSearch, setCommentSearch] = useState("");
+  const [commentFilter, setCommentFilter] = useState("all");
+  const [publicHikeSearch, setPublicHikeSearch] = useState("");
+  const [publicHikeStatusFilter, setPublicHikeStatusFilter] = useState("all");
+  const [publicHikePremiumFilter, setPublicHikePremiumFilter] = useState("all");
+  const [userSearch, setUserSearch] = useState("");
 
   const { data: entries = [], isLoading: entriesLoading } = useQuery({
     queryKey: ["admin_pending"],
@@ -341,7 +573,83 @@ export default function AdminDashboard() {
     refetchInterval: 60_000,
   });
 
+  const { data: publicHikes = [], isLoading: publicHikesLoading } = useQuery({
+    queryKey: ["admin_public_hikes"],
+    queryFn: getAdminPublicHikes,
+    enabled: isAdmin,
+    refetchInterval: 60_000,
+  });
+
+  const { data: adminUsers = [], isLoading: usersLoading } = useQuery({
+    queryKey: ["admin_users"],
+    queryFn: getAdminUsers,
+    enabled: isAdmin,
+    refetchInterval: 60_000,
+  });
+
   const pendingCommentsCount = comments.filter((comment) => comment.reported).length;
+  const approvedPublicHikesCount = publicHikes.filter((hike) => hike.status === "approved").length;
+  const draftPublicHikesCount = publicHikes.filter((hike) => hike.status === "draft").length;
+  const premiumPublicHikesCount = publicHikes.filter((hike) => hike.is_premium).length;
+
+  const filteredComments = useMemo(() => {
+    const query = commentSearch.trim().toLowerCase();
+
+    return comments.filter((comment) => {
+      if (commentFilter === "pending" && !comment.reported) return false;
+
+      if (!query) return true;
+
+      const haystack = [
+        comment.text,
+        comment.profiles?.full_name,
+        comment.profiles?.username,
+        comment.hike_title,
+        comment.hike_id,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return haystack.includes(query);
+    });
+  }, [commentFilter, commentSearch, comments]);
+
+  const filteredPublicHikes = useMemo(() => {
+    const query = publicHikeSearch.trim().toLowerCase();
+
+    return publicHikes.filter((hike) => {
+      if (publicHikeStatusFilter !== "all" && hike.status !== publicHikeStatusFilter) {
+        return false;
+      }
+
+      if (publicHikePremiumFilter === "premium" && !hike.is_premium) return false;
+      if (publicHikePremiumFilter === "free" && hike.is_premium) return false;
+
+      if (!query) return true;
+
+      const haystack = [hike.title, hike.trail_name, hike.location, hike.country]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return haystack.includes(query);
+    });
+  }, [publicHikePremiumFilter, publicHikeSearch, publicHikeStatusFilter, publicHikes]);
+
+  const filteredUsers = useMemo(() => {
+    const query = userSearch.trim().toLowerCase();
+    if (!query) return adminUsers;
+
+    return adminUsers.filter((profile) => {
+      const haystack = [profile.full_name, profile.username, profile.role]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return haystack.includes(query);
+    });
+  }, [adminUsers, userSearch]);
 
   const approveMutation = useMutation({
     mutationFn: (id) => approveEntry(id),
@@ -357,7 +665,8 @@ export default function AdminDashboard() {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
       toast.success("Eintrag genehmigt");
     },
-    onError: () => toast.error("Der Eintrag konnte gerade nicht freigegeben werden. Bitte versuche es noch einmal."),
+    onError: () =>
+      toast.error("Der Eintrag konnte gerade nicht freigegeben werden. Bitte versuche es noch einmal."),
     onSettled: () => {
       setProcessingId(null);
       setProcessingType(null);
@@ -378,7 +687,8 @@ export default function AdminDashboard() {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
       toast.success("Eintrag abgelehnt");
     },
-    onError: () => toast.error("Der Eintrag konnte gerade nicht abgelehnt werden. Bitte versuche es noch einmal."),
+    onError: () =>
+      toast.error("Der Eintrag konnte gerade nicht abgelehnt werden. Bitte versuche es noch einmal."),
     onSettled: () => {
       setProcessingId(null);
       setProcessingType(null);
@@ -396,7 +706,8 @@ export default function AdminDashboard() {
       queryClient.invalidateQueries({ queryKey: ["comments"] });
       toast.success("Kommentar freigegeben");
     },
-    onError: () => toast.error("Der Kommentar konnte gerade nicht freigegeben werden. Bitte versuche es noch einmal."),
+    onError: () =>
+      toast.error("Der Kommentar konnte gerade nicht freigegeben werden. Bitte versuche es noch einmal."),
     onSettled: () => {
       setProcessingId(null);
       setProcessingType(null);
@@ -412,9 +723,28 @@ export default function AdminDashboard() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin_comments"] });
       queryClient.invalidateQueries({ queryKey: ["comments"] });
-      toast.success("Kommentar gelöscht");
+      toast.success("Kommentar geloescht");
     },
-    onError: () => toast.error("Der Kommentar konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal."),
+    onError: () =>
+      toast.error("Der Kommentar konnte gerade nicht geloescht werden. Bitte versuche es noch einmal."),
+    onSettled: () => {
+      setProcessingId(null);
+      setProcessingType(null);
+    },
+  });
+
+  const deleteUserMutation = useMutation({
+    mutationFn: (userId) => adminDeleteUserAccount(userId),
+    onMutate: (userId) => {
+      setProcessingId(userId);
+      setProcessingType("deleteUser");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin_users"] });
+      toast.success("Nutzerkonto geloescht");
+    },
+    onError: () =>
+      toast.error("Das Nutzerkonto konnte gerade nicht geloescht werden. Bitte versuche es noch einmal."),
     onSettled: () => {
       setProcessingId(null);
       setProcessingType(null);
@@ -423,18 +753,18 @@ export default function AdminDashboard() {
 
   if (isLoadingAuth) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-stone-400 animate-spin" />
+      <div className="flex min-h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
       </div>
     );
   }
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="flex min-h-screen items-center justify-center px-4">
         <div className="text-center">
-          <ShieldCheck className="w-12 h-12 text-stone-300 mx-auto mb-4" />
-          <p className="text-stone-600 font-medium">Bitte zuerst anmelden.</p>
+          <ShieldCheck className="mx-auto mb-4 h-12 w-12 text-stone-300" />
+          <p className="font-medium text-stone-600">Bitte zuerst anmelden.</p>
           <Link to={createPageUrl("Login")}>
             <Button className="mt-4 bg-brand-400 hover:bg-brand-600">Anmelden</Button>
           </Link>
@@ -445,14 +775,14 @@ export default function AdminDashboard() {
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="flex min-h-screen items-center justify-center px-4">
         <div className="text-center">
-          <ShieldCheck className="w-12 h-12 text-red-300 mx-auto mb-4" />
-          <p className="text-stone-700 font-semibold text-lg">Kein Zugriff</p>
-          <p className="text-stone-500 text-sm mt-1">Diese Seite ist nur für Administratoren.</p>
+          <ShieldCheck className="mx-auto mb-4 h-12 w-12 text-red-300" />
+          <p className="text-lg font-semibold text-stone-700">Kein Zugriff</p>
+          <p className="mt-1 text-sm text-stone-500">Diese Seite ist nur fuer Administratoren.</p>
           <Link to="/">
             <Button variant="outline" className="mt-4">
-              Zurück
+              Zurueck
             </Button>
           </Link>
         </div>
@@ -462,67 +792,77 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 md:py-10">
+      <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 md:py-10">
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <div className="flex items-center gap-3 mb-1">
+          <div className="mb-1 flex items-center gap-3">
             <div className="rounded-xl bg-gradient-to-br from-brand-700 to-[#c46f52] p-2 shadow-[0_12px_24px_rgba(124,77,52,0.16)]">
-              <ShieldCheck className="w-5 h-5 text-white" />
+              <ShieldCheck className="h-5 w-5 text-white" />
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Admin Dashboard</h1>
+            <h1 className="text-2xl font-bold text-stone-800 md:text-3xl">Admin Dashboard</h1>
           </div>
-          <p className="text-stone-500 text-sm mt-1 ml-12">
-            Einträge freigeben, Triggerwort-Kommentare prüfen und Kommentare löschen
+          <p className="ml-12 text-sm text-stone-500">
+            Touren pruefen, Kommentare moderieren, oeffentliche Touren pflegen und Nutzer verwalten.
           </p>
         </motion.div>
 
         <Tabs defaultValue="entries">
-          <TabsList className="mb-6 w-full border border-white/70 bg-white/65 backdrop-blur-xl">
-            <TabsTrigger value="entries" className="flex-1 flex items-center gap-2 relative">
-              <Clock className="w-4 h-4" />
-              Touren prüfen
+          <TabsList className="mb-6 grid h-auto w-full grid-cols-2 gap-2 border border-white/70 bg-white/65 p-2 backdrop-blur-xl md:grid-cols-4">
+            <TabsTrigger value="entries" className="relative flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              Touren pruefen
               {entries.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-yellow-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-yellow-500 text-[10px] font-bold text-white">
                   {entries.length > 9 ? "9+" : entries.length}
                 </span>
               )}
             </TabsTrigger>
 
-            <TabsTrigger value="comments" className="flex-1 flex items-center gap-2 relative">
-              <MessageSquare className="w-4 h-4" />
+            <TabsTrigger value="comments" className="relative flex items-center gap-2">
+              <MessageSquare className="h-4 w-4" />
               Kommentare
               {pendingCommentsCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
                   {pendingCommentsCount > 9 ? "9+" : pendingCommentsCount}
                 </span>
               )}
             </TabsTrigger>
+
+            <TabsTrigger value="public-hikes" className="flex items-center gap-2">
+              <Map className="h-4 w-4" />
+              Oeffentliche Touren
+            </TabsTrigger>
+
+            <TabsTrigger value="users" className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              Nutzer
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="entries">
-            <div className="doghike-glass-card p-4 mb-6 flex items-center gap-4">
+            <div className="mb-6 flex items-center gap-4 rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
               <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-xl bg-yellow-100 flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-yellow-600" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-yellow-100">
+                  <Clock className="h-5 w-5 text-yellow-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-stone-800 leading-none">{entries.length}</p>
-                  <p className="text-xs text-stone-500">Wartet auf Prüfung</p>
+                  <p className="text-2xl font-bold leading-none text-stone-800">{entries.length}</p>
+                  <p className="text-xs text-stone-500">Wartet auf Pruefung</p>
                 </div>
               </div>
               {entries.length === 0 && (
-                <p className="text-sm text-brand-400 font-medium ml-auto">Alles erledigt</p>
+                <p className="ml-auto text-sm font-medium text-brand-400">Alles erledigt</p>
               )}
             </div>
 
             {entriesLoading ? (
               <div className="flex justify-center py-20">
-                <Loader2 className="w-8 h-8 text-stone-400 animate-spin" />
+                <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
               </div>
             ) : entries.length === 0 ? (
-              <div className="doghike-glass-card text-center py-20">
-                <CheckCircle2 className="w-14 h-14 text-brand-400 mx-auto mb-4" />
-                <h3 className="text-xl font-medium text-stone-700 mb-2">Keine offenen Einträge</h3>
-                <p className="text-stone-500 text-sm">Alle Einträge wurden geprüft.</p>
+              <div className="doghike-glass-card py-20 text-center">
+                <CheckCircle2 className="mx-auto mb-4 h-14 w-14 text-brand-400" />
+                <h3 className="mb-2 text-xl font-medium text-stone-700">Keine offenen Eintraege</h3>
+                <p className="text-sm text-stone-500">Alle Eintraege wurden geprueft.</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -543,35 +883,60 @@ export default function AdminDashboard() {
           </TabsContent>
 
           <TabsContent value="comments">
-            <div className="doghike-glass-card p-4 mb-4 flex items-center gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-red-100 flex items-center justify-center">
-                  <MessageSquare className="w-5 h-5 text-red-600" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-stone-800 leading-none">{comments.length}</p>
-                  <p className="text-xs text-stone-500">Kommentare gesamt</p>
+            <div className="mb-4 grid gap-4 md:grid-cols-[1.1fr_0.9fr]">
+              <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-100">
+                      <MessageSquare className="h-5 w-5 text-red-600" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold leading-none text-stone-800">{comments.length}</p>
+                      <p className="text-xs text-stone-500">Kommentare gesamt</p>
+                    </div>
+                  </div>
+                  <div className="border-l border-stone-200 pl-4">
+                    <p className="text-2xl font-bold leading-none text-amber-700">{pendingCommentsCount}</p>
+                    <p className="text-xs text-stone-500">Freigaben noetig</p>
+                  </div>
                 </div>
               </div>
-              <div className="border-l border-stone-200 pl-4">
-                <p className="text-2xl font-bold text-amber-700 leading-none">{pendingCommentsCount}</p>
-                <p className="text-xs text-stone-500">Freigaben nötig</p>
+
+              <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+                  <Input
+                    value={commentSearch}
+                    onChange={(event) => setCommentSearch(event.target.value)}
+                    placeholder="Nach Text, Nutzer oder Tour suchen"
+                    className="pl-10"
+                  />
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <FilterButton active={commentFilter === "all"} onClick={() => setCommentFilter("all")}>
+                    Alle
+                  </FilterButton>
+                  <FilterButton active={commentFilter === "pending"} onClick={() => setCommentFilter("pending")}>
+                    Nur Freigaben
+                  </FilterButton>
+                </div>
               </div>
             </div>
 
             {commentsLoading ? (
               <div className="flex justify-center py-20">
-                <Loader2 className="w-8 h-8 text-stone-400 animate-spin" />
+                <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
               </div>
-            ) : comments.length === 0 ? (
-              <div className="doghike-glass-card text-center py-20">
-                <CheckCircle2 className="w-14 h-14 text-brand-400 mx-auto mb-4" />
-                <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Kommentare</h3>
+            ) : filteredComments.length === 0 ? (
+              <div className="doghike-glass-card py-20 text-center">
+                <CheckCircle2 className="mx-auto mb-4 h-14 w-14 text-brand-400" />
+                <h3 className="mb-2 text-xl font-medium text-stone-700">Keine passenden Kommentare</h3>
+                <p className="text-sm text-stone-500">Mit den aktuellen Filtern wurde nichts gefunden.</p>
               </div>
             ) : (
               <div className="space-y-3">
                 <AnimatePresence>
-                  {comments.map((comment) => (
+                  {filteredComments.map((comment) => (
                     <CommentCard
                       key={comment.id}
                       comment={comment}
@@ -585,11 +950,139 @@ export default function AdminDashboard() {
               </div>
             )}
           </TabsContent>
+
+          <TabsContent value="public-hikes">
+            <div className="mb-4 grid gap-4 md:grid-cols-[1.05fr_0.95fr]">
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
+                  <p className="text-2xl font-bold text-stone-800">{approvedPublicHikesCount}</p>
+                  <p className="mt-1 text-xs text-stone-500">Freigegeben</p>
+                </div>
+                <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
+                  <p className="text-2xl font-bold text-stone-800">{draftPublicHikesCount}</p>
+                  <p className="mt-1 text-xs text-stone-500">Entwuerfe</p>
+                </div>
+                <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
+                  <p className="text-2xl font-bold text-stone-800">{premiumPublicHikesCount}</p>
+                  <p className="mt-1 text-xs text-stone-500">Premium</p>
+                </div>
+              </div>
+
+              <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+                  <Input
+                    value={publicHikeSearch}
+                    onChange={(event) => setPublicHikeSearch(event.target.value)}
+                    placeholder="Nach Titel oder Ort suchen"
+                    className="pl-10"
+                  />
+                </div>
+                <div className="mt-3 space-y-3">
+                  <div className="flex flex-wrap gap-2">
+                    <FilterButton active={publicHikeStatusFilter === "all"} onClick={() => setPublicHikeStatusFilter("all")}>
+                      Alle Status
+                    </FilterButton>
+                    <FilterButton active={publicHikeStatusFilter === "approved"} onClick={() => setPublicHikeStatusFilter("approved")}>
+                      Freigegeben
+                    </FilterButton>
+                    <FilterButton active={publicHikeStatusFilter === "draft"} onClick={() => setPublicHikeStatusFilter("draft")}>
+                      Entwurf
+                    </FilterButton>
+                    <FilterButton active={publicHikeStatusFilter === "archived"} onClick={() => setPublicHikeStatusFilter("archived")}>
+                      Archiv
+                    </FilterButton>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <FilterButton active={publicHikePremiumFilter === "all"} onClick={() => setPublicHikePremiumFilter("all")}>
+                      Alle
+                    </FilterButton>
+                    <FilterButton active={publicHikePremiumFilter === "premium"} onClick={() => setPublicHikePremiumFilter("premium")}>
+                      Premium
+                    </FilterButton>
+                    <FilterButton active={publicHikePremiumFilter === "free"} onClick={() => setPublicHikePremiumFilter("free")}>
+                      Frei
+                    </FilterButton>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {publicHikesLoading ? (
+              <div className="flex justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
+              </div>
+            ) : filteredPublicHikes.length === 0 ? (
+              <div className="doghike-glass-card py-20 text-center">
+                <CheckCircle2 className="mx-auto mb-4 h-14 w-14 text-brand-400" />
+                <h3 className="mb-2 text-xl font-medium text-stone-700">Keine passenden Touren</h3>
+                <p className="text-sm text-stone-500">Mit den aktuellen Filtern wurde nichts gefunden.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <AnimatePresence>
+                  {filteredPublicHikes.map((hike) => (
+                    <PublicHikeCard key={hike.id} hike={hike} />
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="users">
+            <div className="mb-4 grid gap-4 md:grid-cols-[0.9fr_1.1fr]">
+              <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-stone-100">
+                    <Users className="h-5 w-5 text-stone-600" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-stone-800">{adminUsers.length}</p>
+                    <p className="mt-1 text-xs text-stone-500">Profile gesamt</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+                  <Input
+                    value={userSearch}
+                    onChange={(event) => setUserSearch(event.target.value)}
+                    placeholder="Nach Name oder Nutzername suchen"
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {usersLoading ? (
+              <div className="flex justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
+              </div>
+            ) : filteredUsers.length === 0 ? (
+              <div className="doghike-glass-card py-20 text-center">
+                <CheckCircle2 className="mx-auto mb-4 h-14 w-14 text-brand-400" />
+                <h3 className="mb-2 text-xl font-medium text-stone-700">Keine passenden Nutzer</h3>
+                <p className="text-sm text-stone-500">Mit der aktuellen Suche wurde nichts gefunden.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <AnimatePresence>
+                  {filteredUsers.map((profile) => (
+                    <UserCard
+                      key={profile.user_id}
+                      profile={profile}
+                      deleting={processingId === profile.user_id && processingType === "deleteUser"}
+                      onDelete={(userId) => deleteUserMutation.mutate(userId)}
+                    />
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
+          </TabsContent>
         </Tabs>
       </div>
     </div>
   );
 }
-
-
-

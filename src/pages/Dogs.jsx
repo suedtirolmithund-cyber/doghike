@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { getDogs, createDog, updateDog, deleteDog } from "@/lib/profilesApi";
 import { supabase } from "@/lib/supabaseClient";
 import { motion, AnimatePresence } from "framer-motion";
-import { Dog, Plus, Edit, Trash2, Loader2, LogIn } from "lucide-react";
+import { Dog, Plus, Edit, Trash2, Loader2, LogIn, Mountain } from "lucide-react";
 import { differenceInYears, differenceInMonths } from "date-fns";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -156,15 +156,17 @@ export default function Dogs() {
               <p className="mt-1 text-sm text-stone-500">Deine Wanderbegleiter</p>
             </div>
           </div>
-          <Button
-            onClick={() => {
-              setEditingDog(null);
-              setDialogOpen(true);
-            }}
-            className="bg-brand-400 hover:bg-brand-600"
-          >
-            <Plus className="w-4 h-4 mr-2" /> Hund hinzufügen
-          </Button>
+          {dogs.length > 0 && (
+            <Button
+              onClick={() => {
+                setEditingDog(null);
+                setDialogOpen(true);
+              }}
+              className="bg-brand-400 hover:bg-brand-600"
+            >
+              <Plus className="w-4 h-4 mr-2" /> Hund hinzufügen
+            </Button>
+          )}
         </motion.div>
 
         {isLoading ? (
@@ -279,22 +281,72 @@ export default function Dogs() {
           </div>
         ) : (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="doghike-glass-card text-center py-20"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="overflow-hidden rounded-[28px] border border-white/65 bg-white/72 shadow-[0_24px_60px_rgba(92,62,42,0.14)] backdrop-blur-xl"
           >
-            <div className="text-6xl mb-4">Hund</div>
-            <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Hunde</h3>
-            <p className="text-stone-500 mb-6 text-sm">Fuege deinen ersten Wanderbegleiter hinzu.</p>
-            <Button
-              onClick={() => {
-                setEditingDog(null);
-                setDialogOpen(true);
-              }}
-              className="bg-brand-400 hover:bg-brand-600"
-            >
-              <Plus className="w-4 h-4 mr-2" /> Hund hinzufügen
-            </Button>
+            <div className="relative overflow-hidden bg-gradient-to-br from-[#dcc8b6] via-[#baa18c] to-[#7f918d] px-6 py-12 text-center">
+              <div
+                className="absolute inset-0 bg-cover bg-center opacity-70"
+                style={{ backgroundImage: "url('/splash/autumn-hero.jpg')" }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
+              <div className="relative z-10">
+                <p className="text-sm uppercase tracking-[0.28em] text-white/70">Onboarding</p>
+                <h2 className="mt-3 text-3xl font-light tracking-[-0.03em] text-white md:text-4xl">
+                  Willkommen zurück
+                </h2>
+                <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-white/85 md:text-base">
+                  Richte zuerst deinen Hund ein, damit Touren, Tagebuch und spätere Auswertungen direkt zu deinem Wanderbegleiter passen.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-b from-[#fcf8f4] via-white to-[#f6ede5] px-5 py-6 md:px-8 md:py-8">
+              <div className="rounded-[24px] border border-white/80 bg-white/78 p-5 shadow-[0_18px_34px_rgba(120,90,66,0.10)] backdrop-blur-sm md:p-6">
+                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#b8785f]">Dein nächster Schritt</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingDog(null);
+                    setDialogOpen(true);
+                  }}
+                  className="mt-4 flex w-full items-center justify-between rounded-[22px] border border-[#e6d4c6] bg-gradient-to-r from-[#fff8f2] to-[#f7ede3] px-5 py-5 text-left shadow-[0_14px_26px_rgba(146,100,71,0.12)] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_30px_rgba(146,100,71,0.16)]"
+                >
+                  <div className="min-w-0">
+                    <p className="text-xl font-semibold text-stone-800">Hund anlegen</p>
+                    <p className="mt-1 text-sm leading-6 text-stone-500">Füge deinen ersten Wanderbegleiter hinzu.</p>
+                  </div>
+                  <div className="ml-4 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#b8785f] text-white shadow-[0_10px_22px_rgba(184,120,95,0.32)]">
+                    <Dog className="h-5 w-5" />
+                  </div>
+                </button>
+              </div>
+
+              <div className="mt-5 rounded-[24px] border border-white/80 bg-white/70 p-5 shadow-[0_16px_32px_rgba(120,90,66,0.08)] backdrop-blur-sm md:p-6">
+                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-stone-500">Danach</p>
+                <div className="mt-4 grid gap-3 md:grid-cols-2">
+                  <Link to={createPageUrl("Hikes")} className="block">
+                    <Button
+                      variant="outline"
+                      className="h-auto w-full justify-start gap-3 rounded-[20px] border-stone-200 bg-white/85 px-4 py-4 text-left text-stone-700 shadow-sm hover:bg-brand-50/50"
+                    >
+                      <Mountain className="h-4 w-4 shrink-0 text-[#b8785f]" />
+                      <span className="text-sm font-medium">Touren entdecken</span>
+                    </Button>
+                  </Link>
+                  <Link to={createPageUrl("AddJournalEntry")} className="block">
+                    <Button
+                      variant="outline"
+                      className="h-auto w-full justify-start gap-3 rounded-[20px] border-stone-200 bg-white/85 px-4 py-4 text-left text-stone-700 shadow-sm hover:bg-brand-50/50"
+                    >
+                      <Plus className="h-4 w-4 shrink-0 text-[#b8785f]" />
+                      <span className="text-sm font-medium">Wanderung eintragen</span>
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
           </motion.div>
         )}
       </div>

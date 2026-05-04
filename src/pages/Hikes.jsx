@@ -85,7 +85,7 @@ export default function Hikes() {
     });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -107,7 +107,7 @@ export default function Hikes() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white rounded-2xl p-6 border border-stone-200/50 shadow-sm mb-8"
+          className="doghike-glass-card mb-8 p-6"
         >
           <div className="flex flex-col gap-4">
             <div className="relative">

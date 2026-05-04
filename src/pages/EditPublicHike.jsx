@@ -255,19 +255,19 @@ export default function EditPublicHike() {
 
   if (isLoadingAuth || isLoading) {
     return (
-      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
-        <Loader2 className="w-6 h-6 animate-spin text-stone-400" />
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center">
+        <Loader2 className="w-6 h-6 animate-spin text-brand-500" />
       </div>
     );
   }
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
-        <div className="text-center">
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center px-4">
+        <div className="doghike-glass-card p-8 text-center">
           <p className="text-xl text-stone-700 mb-4">Nur Admins können öffentliche Touren bearbeiten.</p>
           <Link to={createPageUrl("Hikes")}>
-            <Button>Zurück zu den Touren</Button>
+            <Button className="bg-brand-400 text-white hover:bg-brand-600">Zurück zu den Touren</Button>
           </Link>
         </div>
       </div>
@@ -276,11 +276,11 @@ export default function EditPublicHike() {
 
   if (!hike || !formData) {
     return (
-      <div className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
-        <div className="text-center">
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center px-4">
+        <div className="doghike-glass-card p-8 text-center">
           <p className="text-xl text-stone-700 mb-4">Öffentliche Tour nicht gefunden</p>
           <Link to={createPageUrl("Hikes")}>
-            <Button>Zurück zu den Touren</Button>
+            <Button className="bg-brand-400 text-white hover:bg-brand-600">Zurück zu den Touren</Button>
           </Link>
         </div>
       </div>
@@ -288,7 +288,7 @@ export default function EditPublicHike() {
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
           <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`}>
@@ -299,7 +299,7 @@ export default function EditPublicHike() {
           </Link>
         </div>
 
-        <div className="bg-white rounded-2xl border border-stone-200 shadow-sm p-6 md:p-8">
+        <div className="doghike-glass-card p-6 md:p-8">
           <div className="mb-6">
             <h1 className="text-2xl font-semibold text-stone-800">Öffentliche Tour bearbeiten</h1>
             <p className="text-stone-500 mt-1">Änderungen werden direkt in Supabase gespeichert.</p>
@@ -575,7 +575,7 @@ export default function EditPublicHike() {
                   className="hidden"
                   disabled={isUploadingPhotos || saveMutation.isPending}
                 />
-                <Button type="button" variant="outline" asChild disabled={isUploadingPhotos || saveMutation.isPending}>
+                <Button type="button" variant="outline" asChild disabled={isUploadingPhotos || saveMutation.isPending} className="border-brand-200 bg-white/75 text-stone-700 hover:bg-brand-50/50">
                   <span className="cursor-pointer">
                     {isUploadingPhotos ? (
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -590,7 +590,7 @@ export default function EditPublicHike() {
               {Array.isArray(formData.photoUrls) && formData.photoUrls.length > 0 ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {formData.photoUrls.map((photoUrl, index) => (
-                    <div key={`${photoUrl}-${index}`} className="relative overflow-hidden rounded-xl border border-stone-200 bg-stone-50">
+                    <div key={`${photoUrl}-${index}`} className="relative overflow-hidden rounded-xl border border-white/70 bg-white/70 shadow-sm">
                       {photoPreviewUrls[index] ? (
                         <img
                           src={photoPreviewUrls[index]}
@@ -624,7 +624,7 @@ export default function EditPublicHike() {
                 Speichern
               </Button>
               <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`}>
-                <Button type="button" variant="outline">Abbrechen</Button>
+                <Button type="button" variant="outline" className="border-brand-200 bg-white/75 text-stone-700 hover:bg-brand-50/50">Abbrechen</Button>
               </Link>
             </div>
           </form>

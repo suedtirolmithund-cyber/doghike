@@ -72,6 +72,24 @@ export async function getPendingEntries() {
   }));
 }
 
+export async function getAdminPublicHikes() {
+  const { data, error } = await supabase
+    .from("public_hikes")
+    .select("id, title, location, country, status, is_premium, updated_at, created_at, image")
+    .order("updated_at", { ascending: false });
+
+  if (error) throw error;
+
+  return (data ?? []).map((hike) => ({
+    ...hike,
+    trail_name: hike.title,
+    route_id: String(hike.id),
+    _public_hike_id: hike.id,
+    _source: "sheets",
+    cover_photo: hike.image ?? null,
+  }));
+}
+
 export async function approveEntry(id) {
   const { data: entry, error: fetchError } = await supabase
     .from("journal_entries")
@@ -115,8 +133,42 @@ export async function getAllComments() {
     (profiles ?? []).map((p) => [p.user_id, p])
   );
 
+  const publicHikeIds = [...new Set(
+    data
+      .filter((comment) => (comment.hike_source ?? "sheets") === "sheets")
+      .map((comment) => comment.hike_id)
+      .filter(Boolean)
+  )];
+  const journalHikeIds = [...new Set(
+    data
+      .filter((comment) => comment.hike_source === "journal")
+      .map((comment) => comment.hike_id)
+      .filter(Boolean)
+  )];
+
+  const [{ data: publicHikes }, { data: journalEntries }] = await Promise.all([
+    publicHikeIds.length
+      ? supabase
+          .from("public_hikes")
+          .select("id, title")
+          .in("id", publicHikeIds)
+      : Promise.resolve({ data: [] }),
+    journalHikeIds.length
+      ? supabase
+          .from("journal_entries")
+          .select("id, title")
+          .in("id", journalHikeIds)
+      : Promise.resolve({ data: [] }),
+  ]);
+
+  const hikeTitleMap = Object.fromEntries([
+    ...(publicHikes ?? []).map((hike) => [`sheets:${hike.id}`, hike.title]),
+    ...(journalEntries ?? []).map((entry) => [`journal:${entry.id}`, entry.title]),
+  ]);
+
   const commentsWithPreview = await Promise.all(
     data.map(async (comment) => {
+      const commentSource = comment.hike_source ?? "sheets";
       const storageDescriptor = getStorageDescriptor(comment.photo_url);
 
       if (storageDescriptor?.bucket === "comments-pending") {
@@ -131,6 +183,7 @@ export async function getAllComments() {
         return {
           ...comment,
           photo_preview_url: signedUrlData?.signedUrl ?? null,
+          hike_title: hikeTitleMap[`${commentSource}:${comment.hike_id}`] ?? null,
           profiles: profileMap[comment.user_id] ?? null,
         };
       }
@@ -147,6 +200,7 @@ export async function getAllComments() {
         return {
           ...comment,
           photo_preview_url: signedUrlData?.signedUrl ?? null,
+          hike_title: hikeTitleMap[`${commentSource}:${comment.hike_id}`] ?? null,
           profiles: profileMap[comment.user_id] ?? null,
         };
       }
@@ -154,12 +208,23 @@ export async function getAllComments() {
       return {
         ...comment,
         photo_preview_url: comment.photo_url ?? null,
+        hike_title: hikeTitleMap[`${commentSource}:${comment.hike_id}`] ?? null,
         profiles: profileMap[comment.user_id] ?? null,
       };
     })
   );
 
   return commentsWithPreview;
+}
+
+export async function getAdminUsers() {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("user_id, username, full_name, avatar_url, role, is_premium, created_at")
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data ?? [];
 }
 
 export async function approveComment(id) {
@@ -203,4 +268,12 @@ export async function adminDeleteComment(id) {
       console.error("[adminDeleteComment] photo cleanup failed:", storageError.message);
     }
   }
+}
+
+export async function adminDeleteUserAccount(userId) {
+  const { error } = await supabase.rpc("admin_delete_user_account", {
+    target_user_id: userId,
+  });
+
+  if (error) throw error;
 }
