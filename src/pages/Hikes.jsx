@@ -31,7 +31,7 @@ export default function Hikes() {
   const [seasonFilter, setSeasonFilter] = useState("all");
   const [waterFilter, setWaterFilter] = useState("all");
 
-  const { data: hikes = [], isLoading } = useQuery({
+  const { data: hikes = [] } = useQuery({
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
     staleTime: 0,
@@ -39,15 +39,6 @@ export default function Hikes() {
     refetchOnWindowFocus: true,
   });
 
-  const getCurrentSeason = () => {
-    const month = new Date().getMonth() + 1;
-    if (month >= 12 || month <= 2) return "winter";
-    if (month >= 3 && month <= 5) return "spring";
-    if (month >= 6 && month <= 8) return "summer";
-    return "autumn";
-  };
-
-  const currentSeason = getCurrentSeason();
   const filteredHikes = hikes
     .filter((hike) => {
       const query = searchQuery.trim().toLowerCase();
@@ -85,21 +76,19 @@ export default function Hikes() {
     });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="doghike-page-shell">
+      <div className="doghike-content-shell">
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8"
+          className="doghike-page-header"
         >
-          <div className="doghike-page-header mb-0">
-            <div className="doghike-page-icon">
-              <Mountain className="h-5 w-5" />
-            </div>
-            <div>
-              <h1 className="doghike-page-title">Alle Wanderungen</h1>
-              <p className="doghike-page-subtitle">{hikes.length} hundefreundliche Touren</p>
-            </div>
+          <div className="doghike-page-icon">
+            <Mountain className="h-5 w-5" />
+          </div>
+          <div>
+            <h1 className="doghike-page-title">Alle Wanderungen</h1>
+            <p className="doghike-page-subtitle">{hikes.length} hundefreundliche Touren</p>
           </div>
         </motion.div>
 
@@ -107,22 +96,22 @@ export default function Hikes() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="doghike-glass-card mb-8 p-6"
+          className="doghike-filter-panel mb-8"
         >
           <div className="flex flex-col gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
               <Input
                 placeholder="Tour oder Ort suchen..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="border-brand-100 bg-white/78 pl-10 shadow-sm"
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
               <div>
-                <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.human} Schwierigkeit Mensch</label>
+                <label className="doghike-filter-label">{TOUR_ICONS.human} Schwierigkeit Mensch</label>
                 <Select value={humanDifficultyFilter} onValueChange={setHumanDifficultyFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Alle" />
@@ -131,7 +120,7 @@ export default function Hikes() {
                     <SelectItem value="all">Alle</SelectItem>
                     {DIFFICULTY_LEVELS.map((level) => (
                       <SelectItem key={level.value} value={level.value}>
-                        {level.short} · {level.label}
+                        {level.short} - {level.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -139,7 +128,7 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.dog} Schwierigkeit Hund</label>
+                <label className="doghike-filter-label">{TOUR_ICONS.dog} Schwierigkeit Hund</label>
                 <Select value={dogDifficultyFilter} onValueChange={setDogDifficultyFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Alle" />
@@ -148,7 +137,7 @@ export default function Hikes() {
                     <SelectItem value="all">Alle</SelectItem>
                     {DIFFICULTY_LEVELS.map((level) => (
                       <SelectItem key={level.value} value={level.value}>
-                        {level.short} · {level.label}
+                        {level.short} - {level.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -156,7 +145,7 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.season} Jahreszeit</label>
+                <label className="doghike-filter-label">{TOUR_ICONS.season} Jahreszeit</label>
                 <Select value={seasonFilter} onValueChange={setSeasonFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Alle" />
@@ -173,23 +162,7 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.distance} Distanz (km)</label>
-                <div className="flex gap-2">
-                  <Input type="number" placeholder="Min" value={distanceMin} onChange={(e) => setDistanceMin(e.target.value)} className="w-full" />
-                  <Input type="number" placeholder="Max" value={distanceMax} onChange={(e) => setDistanceMax(e.target.value)} className="w-full" />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.elevation} Höhenmeter (m)</label>
-                <div className="flex gap-2">
-                  <Input type="number" placeholder="Min" value={elevationMin} onChange={(e) => setElevationMin(e.target.value)} className="w-full" />
-                  <Input type="number" placeholder="Max" value={elevationMax} onChange={(e) => setElevationMax(e.target.value)} className="w-full" />
-                </div>
-              </div>
-
-              <div>
-                <label className="flex items-center gap-1 text-sm font-medium text-stone-700 mb-2">
+                <label className="doghike-filter-label">
                   <WaterIcon value="little" /> Wasser unterwegs
                 </label>
                 <Select value={waterFilter} onValueChange={setWaterFilter}>
@@ -210,13 +183,29 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-stone-700 mb-2 block">Sortieren</label>
+                <label className="doghike-filter-label">{TOUR_ICONS.distance} Distanz (km)</label>
+                <div className="flex gap-2">
+                  <Input type="number" placeholder="Min" value={distanceMin} onChange={(e) => setDistanceMin(e.target.value)} />
+                  <Input type="number" placeholder="Max" value={distanceMax} onChange={(e) => setDistanceMax(e.target.value)} />
+                </div>
+              </div>
+
+              <div>
+                <label className="doghike-filter-label">{TOUR_ICONS.elevation} Höhenmeter (m)</label>
+                <div className="flex gap-2">
+                  <Input type="number" placeholder="Min" value={elevationMin} onChange={(e) => setElevationMin(e.target.value)} />
+                  <Input type="number" placeholder="Max" value={elevationMax} onChange={(e) => setElevationMax(e.target.value)} />
+                </div>
+              </div>
+
+              <div>
+                <label className="doghike-filter-label">Sortieren</label>
                 <Select value={sortBy} onValueChange={(v) => { setSortBy(v); setLevelFilter("all"); }}>
                   <SelectTrigger>
                     <SelectValue placeholder="Neueste zuerst" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="none">🕐 Neueste zuerst</SelectItem>
+                    <SelectItem value="none">Neueste zuerst</SelectItem>
                     <SelectItem value="difficulty">{TOUR_ICONS.human} Schwierigkeit Mensch</SelectItem>
                     <SelectItem value="dog_difficulty">{TOUR_ICONS.dog} Schwierigkeit Hund</SelectItem>
                     <SelectItem value="distance">{TOUR_ICONS.distance} Kilometer</SelectItem>
@@ -235,7 +224,12 @@ export default function Hikes() {
             transition={{ delay: 0.2 }}
             className="mb-8"
           >
-            <h2 className="text-xl font-semibold text-stone-800 mb-4">📍 Touren auf der Karte</h2>
+            <div className="doghike-section-header">
+              <div>
+                <h2 className="doghike-section-title">Touren auf der Karte</h2>
+                <p className="doghike-section-subtitle">Alle passenden Wanderungen mit Startpunkt.</p>
+              </div>
+            </div>
             <HikeMap
               hikes={filteredHikes}
               height="500px"
@@ -248,7 +242,7 @@ export default function Hikes() {
         )}
 
         {filteredHikes.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="doghike-card-grid">
             {filteredHikes.map((hike, index) => (
               <HikeCard key={`${hike._source ?? "sheets"}-${hike.id}`} hike={hike} index={index} />
             ))}

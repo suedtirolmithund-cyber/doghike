@@ -141,14 +141,14 @@ export default function Layout({ children, currentPageName }) {
           )}
         </AnimatePresence>
 
-        <div className="flex items-center justify-around px-1 py-2 safe-area-pb">
+        <div className="grid grid-cols-6 px-1 py-2 safe-area-pb">
           {MAIN_NAV.map(({ name, icon: Icon, label }) => {
             const active = isActive(name);
             return (
               <Link
                 key={name}
                 to={createPageUrl(name)}
-                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all min-w-[52px] ${
+                className={`flex min-w-0 flex-col items-center gap-1 rounded-xl px-2 py-2 transition-all ${
                   active ? "bg-[#c46f52]/12 text-[#9b4f39] shadow-sm" : "text-[#9a6c58] hover:bg-[#c46f52]/7 hover:text-[#7d4f3f]"
                 }`}
               >
@@ -162,7 +162,7 @@ export default function Layout({ children, currentPageName }) {
 
           <button
             onClick={() => setMoreOpen((value) => !value)}
-            className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all min-w-[52px] ${
+            className={`flex min-w-0 flex-col items-center gap-1 rounded-xl px-2 py-2 transition-all ${
               moreOpen ? "bg-[#c46f52]/12 text-[#9b4f39] shadow-sm" : "text-[#9a6c58] hover:bg-[#c46f52]/7 hover:text-[#7d4f3f]"
             }`}
           >
@@ -195,7 +195,7 @@ export default function Layout({ children, currentPageName }) {
                   <Link
                     key={name}
                     to={createPageUrl(name)}
-                    className={`flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all whitespace-nowrap ${
+                    className={`flex min-w-[118px] items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-center transition-all whitespace-nowrap ${
                       active ? "bg-[#c46f52]/12 text-[#9b4f39] shadow-sm" : "text-[#7b6a58] hover:bg-[#c46f52]/7 hover:text-[#7d4f3f]"
                     }`}
                   >
@@ -207,7 +207,7 @@ export default function Layout({ children, currentPageName }) {
               {isAdmin && (
                 <Link
                   to={createPageUrl("AdminDashboard")}
-                  className={`flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all whitespace-nowrap ${
+                  className={`flex min-w-[118px] items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-center transition-all whitespace-nowrap ${
                     isActive("AdminDashboard") ? "bg-[#c46f52]/12 text-[#9b4f39] shadow-sm" : "text-[#9a6c58] hover:bg-[#c46f52]/7 hover:text-[#7d4f3f]"
                   }`}
                 >

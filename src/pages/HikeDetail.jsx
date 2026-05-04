@@ -384,10 +384,10 @@ export default function HikeDetail() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="flex flex-wrap gap-2 mb-10"
+          className="mb-10 flex flex-wrap gap-2"
         >
           {countryLabel && (
-            <div className="flex items-center gap-2 bg-brand-50 border border-brand-200 rounded-full px-4 py-2">
+            <div className="doghike-stat-chip">
               <span className="text-base">{TOUR_ICONS.country}</span>
               <div>
                 <div className="text-sm font-bold text-stone-900 leading-tight">{countryLabel}</div>
@@ -396,7 +396,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.date && (
-            <div className="flex items-center gap-2 bg-brand-50 border border-brand-200 rounded-full px-4 py-2">
+            <div className="doghike-stat-chip">
               <span className="text-base">{TOUR_ICONS.date}</span>
               <div>
                 <div className="text-sm font-bold text-stone-900 leading-tight">
@@ -407,7 +407,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.distance_km && (
-            <div className="flex items-center gap-2 bg-brand-50 border border-brand-200 rounded-full px-4 py-2">
+            <div className="doghike-stat-chip">
               <span className="text-base">{TOUR_ICONS.distance}</span>
               <div>
                 <div className="text-sm font-bold text-stone-900 leading-tight">{hike.distance_km} km</div>
@@ -416,7 +416,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.elevation_gain_m && (
-            <div className="flex items-center gap-2 bg-brand-50 border border-brand-200 rounded-full px-4 py-2">
+            <div className="doghike-stat-chip">
               <span className="text-base">{TOUR_ICONS.elevation}</span>
               <div>
                 <div className="text-sm font-bold text-stone-900 leading-tight">{hike.elevation_gain_m} m</div>
@@ -425,7 +425,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.duration_minutes && (
-            <div className="flex items-center gap-2 bg-brand-50 border border-brand-200 rounded-full px-4 py-2">
+            <div className="doghike-stat-chip">
               <span className="text-base">{TOUR_ICONS.duration}</span>
               <div>
                 <div className="text-sm font-bold text-stone-900 leading-tight">
@@ -436,7 +436,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.difficulty && (
-            <div className="flex items-center gap-2 bg-brand-100 border border-brand-400 rounded-full px-4 py-2">
+            <div className="doghike-stat-chip border-brand-200 bg-brand-50/75">
               <span className="text-base">{TOUR_ICONS.human}</span>
               <div>
                 <div className="flex gap-0.5 mb-0.5">
@@ -449,7 +449,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.dog_difficulty && (
-            <div className="flex items-center gap-2 bg-brand-100 border border-brand-400 rounded-full px-4 py-2">
+            <div className="doghike-stat-chip border-brand-200 bg-brand-50/75">
               <span className="text-base">{TOUR_ICONS.dog}</span>
               <div>
                 <div className="flex gap-0.5 mb-0.5">

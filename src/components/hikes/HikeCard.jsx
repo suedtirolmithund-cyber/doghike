@@ -13,9 +13,9 @@ function StatTile({ value, label, icon }) {
   if (!value) return null;
 
   return (
-    <div className="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-stone-200/70 bg-white/58 px-3 py-2 shadow-sm backdrop-blur-sm">
+    <div className="flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-stone-200/70 bg-white/62 px-2.5 py-2 shadow-sm backdrop-blur-sm">
       <span className="text-base leading-none">{icon}</span>
-      <span className="min-w-0 text-base font-semibold leading-none text-[#8c5f43]">{value}</span>
+      <span className="min-w-0 text-sm font-semibold leading-none text-[#8c5f43] md:text-base">{value}</span>
       {label ? <span className="text-xs font-medium leading-none text-stone-500">{label}</span> : null}
     </div>
   );
@@ -37,7 +37,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
     >
       <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=${hikeSource}`}>
         <div className="group overflow-hidden rounded-[22px] border border-stone-200/75 bg-white/76 shadow-[0_12px_28px_rgba(92,62,42,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(92,62,42,0.13)]">
-          <div className="relative h-52 overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a]">
+          <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a] sm:h-52">
             {coverPhoto && (
               <img
                 src={coverPhoto}
@@ -104,7 +104,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               )}
             </div>
 
-            <div className="mb-4 grid grid-cols-3 gap-2">
+            <div className="mb-4 grid grid-cols-3 gap-1.5 sm:gap-2">
               <StatTile value={hike.distance_km} label="km" icon={TOUR_ICONS.distance} />
               <StatTile value={hike.elevation_gain_m} label="Hm" icon={TOUR_ICONS.elevation} />
               <StatTile

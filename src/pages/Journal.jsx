@@ -175,8 +175,8 @@ export default function Journal() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/10 pb-24 md:pb-8">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+    <div className="doghike-page-shell">
+      <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 md:py-10 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -191,7 +191,7 @@ export default function Journal() {
               <p className="doghike-page-subtitle">Deine persönlichen Wandererlebnisse</p>
               {entries.length > 0 && (
                 <Link to={createPageUrl("AddJournalEntry")} className="mt-4 inline-flex">
-                  <Button className="bg-brand-400 hover:bg-brand-600">
+                  <Button className="doghike-primary-action doghike-compact-action">
                     <Plus className="w-4 h-4 mr-2" />
                     Wanderung
                   </Button>
@@ -213,7 +213,7 @@ export default function Journal() {
               { icon: TOUR_ICONS.distance, value: `${totalDistance.toFixed(0)} km`, label: "Gesamt", color: "text-brand-600" },
               { icon: TOUR_ICONS.elevation, value: `${Math.round(totalElevation).toLocaleString()} Hm`, label: "Aufstieg", color: "text-orange-600" },
             ].map(({ icon, value, label, color }) => (
-              <div key={label} className="doghike-glass-card rounded-xl p-3 md:p-4 text-center">
+              <div key={label} className="doghike-glass-card rounded-xl p-3 text-center md:p-4">
                 {typeof icon === "string" ? (
                   <span className={`block text-xl ${color} mb-1`}>{icon}</span>
                 ) : (
@@ -233,7 +233,7 @@ export default function Journal() {
               placeholder="Suche nach Titel oder Ort..."
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              className="pl-9 border-brand-100 bg-white/75 shadow-sm"
+              className="border-brand-100 bg-white/75 pl-9 shadow-sm"
             />
           </div>
         )}
