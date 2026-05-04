@@ -473,7 +473,9 @@ export default function Profile() {
               </div>
             ) : (
               <div className="doghike-glass-card text-center py-20">
-                <div className="text-6xl mb-4">Hund</div>
+                <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full border border-white/80 bg-gradient-to-br from-brand-50 via-white to-stone-100 text-5xl shadow-[0_16px_34px_rgba(120,90,66,0.14)]">
+                  🐕
+                </div>
                 <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Hunde</h3>
                   <p className="text-stone-500 mb-6">Füge deinen ersten Wanderbegleiter hinzu!</p>
                 <Button
