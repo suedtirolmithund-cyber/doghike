@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
 import { Mountain, Route, Map, ArrowRight, Search, LogIn, UserPlus, ChevronDown, Plus } from "lucide-react";
@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import StatsCard from "@/components/stats/StatsCard";
 import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
+import { getDogs } from "@/lib/profilesApi";
 
 const PAGE_SIZE = 10;
 
@@ -38,7 +39,8 @@ function sortBySeason(hikes, season) {
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user, isLoadingAuth } = useAuth();
+  const navigate = useNavigate();
 
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["allHikes"],
@@ -47,6 +49,22 @@ export default function Dashboard() {
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
   });
+
+  const { data: dogs = [], isLoading: isLoadingDogs } = useQuery({
+    queryKey: ["dogs", user?.id],
+    queryFn: () => getDogs(user.id),
+    enabled: !!user?.id,
+    staleTime: 0,
+    refetchOnMount: "always",
+  });
+
+  useEffect(() => {
+    if (isLoadingAuth || isLoadingDogs) return;
+    if (!isAuthenticated || !user?.id) return;
+    if (dogs.length > 0) return;
+
+    navigate(createPageUrl("Dogs"), { replace: true });
+  }, [dogs.length, isAuthenticated, isLoadingAuth, isLoadingDogs, navigate, user?.id]);
 
   const season = getCurrentSeason();
 
