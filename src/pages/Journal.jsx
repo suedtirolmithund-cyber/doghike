@@ -391,7 +391,7 @@ export default function Journal() {
             <BookOpen className="w-14 h-14 text-stone-300 mx-auto mb-4" />
             <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Einträge</h3>
             <p className="text-stone-500 mb-6 text-sm max-w-xs mx-auto">
-              Halte deine Wanderungen fest - mit Fotos, Daten und persönlichen Notizen.
+              Starte mit deiner ersten Wanderung und sammle hier Fotos, Daten und persönliche Erinnerungen.
             </p>
             <Link to={createPageUrl("AddJournalEntry")}>
               <Button className="bg-brand-400 hover:bg-brand-600">
@@ -400,8 +400,13 @@ export default function Journal() {
             </Link>
           </motion.div>
         ) : (
-          <div className="text-center py-12 text-stone-500 text-sm">
-            Keine Ergebnisse für "{search}"
+          <div className="doghike-glass-card text-center py-16">
+            <Search className="w-12 h-12 text-stone-200 mx-auto mb-3" />
+            <p className="text-stone-600 font-medium mb-1">Keine passenden Einträge</p>
+            <p className="text-stone-400 text-sm mb-4">Für „{search}“ wurde nichts gefunden.</p>
+            <Button variant="outline" onClick={() => setSearch("")}>
+              Suche zurücksetzen
+            </Button>
           </div>
         )}
       </div>

@@ -34,7 +34,7 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
       queryClient.invalidateQueries({ queryKey: ["ratings", hikeSource, normalizedHikeId] });
       setSelectedRating(0);
       setConsentPublic(false);
-      toast.success("Bewertung gespeichert");
+      toast.success("Danke, deine Bewertung wurde gespeichert.");
     },
     onError: () => {
       toast.error("Die Bewertung konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.");

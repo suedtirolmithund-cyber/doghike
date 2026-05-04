@@ -477,7 +477,7 @@ export default function Profile() {
                   🐕
                 </div>
                 <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Hunde</h3>
-                  <p className="text-stone-500 mb-6">Füge deinen ersten Wanderbegleiter hinzu!</p>
+                <p className="text-stone-500 mb-6">Lege deinen ersten Hund an, damit du gemeinsame Touren später leichter zuordnen kannst.</p>
                 <Button
                   onClick={() => {
                     setEditingDog(null);
@@ -567,7 +567,7 @@ export default function Profile() {
               <div className="doghike-glass-card text-center py-20">
                 <Navigation className="w-14 h-14 text-stone-200 mx-auto mb-4" />
                 <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Routen</h3>
-                <p className="text-stone-500 text-sm mb-6">Plane deine erste Tour oder zeichne eine Wanderung auf</p>
+                <p className="text-stone-500 text-sm mb-6">Plane deine erste Tour oder zeichne eine Wanderung auf, damit sie hier erscheint.</p>
                 <Link to={createPageUrl("RoutePlanner")}>
                   <Button className="bg-brand-400 hover:bg-brand-600">
                     <Plus className="w-4 h-4 mr-2" />
@@ -602,7 +602,7 @@ export default function Profile() {
                 <Heart className="w-14 h-14 text-stone-200 mx-auto mb-4" />
                 <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Touren gespeichert</h3>
                 <p className="text-stone-500 text-sm mb-6 max-w-xs mx-auto">
-                  Tippe das Herz bei einer Tour an, um sie hier zu speichern!
+                  Tippe bei einer Tour auf das Herz, damit du sie hier schnell wiederfindest.
                 </p>
                 <Link to={createPageUrl("Hikes")}>
                   <Button className="bg-brand-400 hover:bg-brand-600">

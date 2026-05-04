@@ -283,9 +283,10 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
         </AnimatePresence>
 
         {!isLoading && comments.length === 0 && (
-          <p className="text-center text-stone-500 py-8">
-            Noch keine Kommentare vorhanden.
-          </p>
+          <div className="py-8 text-center">
+            <p className="text-stone-600 font-medium">Noch keine Kommentare</p>
+            <p className="mt-1 text-sm text-stone-400">Teile den ersten Eindruck zu dieser Tour.</p>
+          </div>
         )}
       </div>
 

@@ -150,6 +150,9 @@ export default function Notifications() {
     try {
       const granted = await requestNotificationPermission();
       setPermission(granted ? "granted" : "denied");
+      if (granted) {
+        toast.success("Benachrichtigungen wurden aktiviert.");
+      }
     } catch {
       toast.error("Benachrichtigungen konnten gerade nicht aktiviert werden. Bitte versuche es noch einmal.");
     }
@@ -221,7 +224,7 @@ export default function Notifications() {
           <div className="doghike-glass-card mb-5 flex items-center gap-3 p-4">
             <BellOff className="w-5 h-5 text-stone-400 shrink-0" />
             <p className="text-xs text-stone-500">
-              Benachrichtigungen sind blockiert. Bitte in den Browser-Einstellungen erlauben.
+              Benachrichtigungen sind blockiert. Erlaube sie in den Browser-Einstellungen, wenn du Hinweise zu Anfragen und Freigaben erhalten möchtest.
             </p>
           </div>
         )}
@@ -234,7 +237,7 @@ export default function Notifications() {
           <div className="doghike-glass-card text-center py-20">
             <Bell className="w-14 h-14 text-stone-200 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-stone-700 mb-1">Alles auf dem neuesten Stand</h3>
-            <p className="text-stone-400 text-sm">Keine neuen Benachrichtigungen</p>
+            <p className="text-stone-400 text-sm">Sobald etwas Neues passiert, erscheint es hier.</p>
           </div>
         ) : (
           <div className="space-y-3">
