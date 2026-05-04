@@ -113,7 +113,7 @@ export default function Hikes() {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
               <Input
-                placeholder="Tour, Ort oder Tag suchen..."
+                placeholder="Tour oder Ort suchen..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
