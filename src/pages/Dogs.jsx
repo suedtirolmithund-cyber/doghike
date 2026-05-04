@@ -292,12 +292,11 @@ export default function Dogs() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
               <div className="relative z-10">
-                <p className="text-sm uppercase tracking-[0.28em] text-white/70">Onboarding</p>
-                <h2 className="mt-3 text-3xl font-light tracking-[-0.03em] text-white md:text-4xl">
+                <h2 className="text-3xl font-light tracking-[-0.03em] text-white md:text-4xl">
                   Willkommen zurück
                 </h2>
                 <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-white/85 md:text-base">
-                  Richte zuerst deinen Hund ein, damit Touren, Tagebuch und spätere Auswertungen direkt zu deinem Wanderbegleiter passen.
+                  Lege deinen Hund an und mache DogHike persönlicher. So kannst du deine gemeinsamen Wanderungen später viel schöner festhalten.
                 </p>
               </div>
             </div>

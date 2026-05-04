@@ -175,8 +175,8 @@ export default function HikeDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
-        <div className="animate-pulse text-stone-400">Lädt...</div>
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center">
+        <div className="animate-pulse text-brand-500">Lädt...</div>
       </div>
     );
   }
@@ -184,11 +184,11 @@ export default function HikeDetail() {
 
   if (!hike) {
     return (
-      <div className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
-        <div className="text-center">
+      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center px-4">
+        <div className="doghike-glass-card p-8 text-center">
           <p className="text-xl text-stone-700 mb-4">Tour nicht gefunden</p>
           <Link to={createPageUrl("Hikes")}>
-            <Button>Zurück zu den Touren</Button>
+            <Button className="bg-brand-400 text-white hover:bg-brand-600">Zurück zu den Touren</Button>
           </Link>
         </div>
       </div>

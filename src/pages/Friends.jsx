@@ -201,7 +201,7 @@ export default function Friends() {
       const results = await searchProfiles(searchQuery, user.id);
       setSearchResults(results);
       if (results.length === 0) {
-        toast.info("Keine Nutzer gefunden. Falls die Person neu registriert ist, muss sie sich einmal ab- und wieder anmelden.");
+        toast.info("Kein passender Nutzer gefunden. Prüfe den Namen oder versuche es später noch einmal.");
       }
     } catch {
       toast.error("Die Suche konnte gerade nicht ausgeführt werden. Bitte versuche es noch einmal.");
@@ -390,7 +390,7 @@ export default function Friends() {
               <div className="doghike-glass-card text-center py-16">
                 <Users className="w-12 h-12 text-stone-200 mx-auto mb-3" />
                 <p className="text-stone-600 font-medium mb-1">Noch keine Freunde</p>
-                <p className="text-stone-400 text-sm">Suche nach Nutzern und schick eine Anfrage!</p>
+                <p className="text-stone-400 text-sm">Suche nach anderen Nutzern und schicke deine erste Anfrage.</p>
               </div>
             )}
           </TabsContent>
@@ -431,7 +431,8 @@ export default function Friends() {
             ) : (
               <div className="doghike-glass-card text-center py-16">
                 <Clock className="w-12 h-12 text-stone-200 mx-auto mb-3" />
-                <p className="text-stone-500 text-sm">Keine offenen Anfragen</p>
+                <p className="text-stone-600 font-medium mb-1">Keine offenen Anfragen</p>
+                <p className="text-stone-400 text-sm">Sobald dir jemand schreibt, erscheint es hier.</p>
               </div>
             )}
           </TabsContent>
@@ -465,7 +466,9 @@ export default function Friends() {
               </div>
             ) : (
               <div className="doghike-glass-card text-center py-16">
-                <p className="text-stone-500 text-sm">Keine gesendeten Anfragen</p>
+                <Clock className="w-12 h-12 text-stone-200 mx-auto mb-3" />
+                <p className="text-stone-600 font-medium mb-1">Keine gesendeten Anfragen</p>
+                <p className="text-stone-400 text-sm">Suche nach einem Nutzer und sende deine erste Anfrage.</p>
               </div>
             )}
           </TabsContent>
