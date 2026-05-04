@@ -183,16 +183,16 @@ export default function Notifications() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
-        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-6 flex items-center gap-3">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="doghike-page-header">
+          <div className="doghike-page-icon">
             <Bell className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-stone-800">
+            <h1 className="doghike-page-title">
               Benachrichtigungen
             </h1>
             {notifications.length > 0 && (
-              <p className="mt-1 text-sm text-stone-500">
+              <p className="doghike-page-subtitle">
                 {notifications.length} Benachrichtigung{notifications.length !== 1 ? "en" : ""}
               </p>
             )}

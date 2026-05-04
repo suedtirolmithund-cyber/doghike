@@ -372,13 +372,13 @@ export default function TopDogs() {
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
-          className="mb-6 flex items-center gap-3">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+          className="doghike-page-header">
+          <div className="doghike-page-icon">
             <Trophy className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Top Dogs</h1>
-            <p className="mt-1 text-sm text-stone-500">Die fleißigsten Wanderhunde der Community</p>
+            <h1 className="doghike-page-title">Top Dogs</h1>
+            <p className="doghike-page-subtitle">Die fleißigsten Wanderhunde der Community</p>
           </div>
         </motion.div>
 

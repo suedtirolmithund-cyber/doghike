@@ -182,13 +182,13 @@ export default function Journal() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6 md:mb-8"
         >
-          <div className="flex min-w-0 items-start gap-3">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+          <div className="doghike-page-header mb-0">
+            <div className="doghike-page-icon">
               <BookOpen className="h-5 w-5" />
             </div>
             <div className="min-w-0">
-              <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Wandertagebuch</h1>
-              <p className="mt-1 text-sm text-stone-500">Deine persönlichen Wandererlebnisse</p>
+              <h1 className="doghike-page-title">Wandertagebuch</h1>
+              <p className="doghike-page-subtitle">Deine persönlichen Wandererlebnisse</p>
               {entries.length > 0 && (
                 <Link to={createPageUrl("AddJournalEntry")} className="mt-4 inline-flex">
                   <Button className="bg-brand-400 hover:bg-brand-600">

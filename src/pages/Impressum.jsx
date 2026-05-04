@@ -15,11 +15,11 @@ export default function Impressum() {
         </Link>
 
         <div className="rounded-2xl border border-stone-200/70 bg-white/70 p-4 shadow-[0_14px_34px_rgba(92,62,42,0.1)] backdrop-blur-sm md:p-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+          <div className="doghike-page-header mb-6">
+            <div className="doghike-page-icon">
               <Building2 className="h-5 w-5" />
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Impressum</h1>
+            <h1 className="doghike-page-title">Impressum</h1>
           </div>
 
           <div className="space-y-6 md:space-y-8">

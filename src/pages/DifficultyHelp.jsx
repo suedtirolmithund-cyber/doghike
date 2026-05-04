@@ -119,13 +119,13 @@ export default function DifficultyHelp() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 pt-4 md:pb-8 md:pt-20">
       <div className="mx-auto max-w-2xl px-4 py-8">
-        <div className="mb-8 flex items-center justify-center gap-3 text-center">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+        <div className="doghike-page-header justify-center text-center">
+          <div className="doghike-page-icon">
             <Mountain className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-stone-800 md:text-3xl">Schwierigkeitsskala</h1>
-            <p className="mt-1 text-sm text-stone-500">
+            <h1 className="doghike-page-title">Schwierigkeitsskala</h1>
+            <p className="doghike-page-subtitle">
               Einheitliche Orientierung für Mensch und Hund
             </p>
           </div>

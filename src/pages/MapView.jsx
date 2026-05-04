@@ -33,13 +33,13 @@ export default function MapView() {
                 Zurück
               </Button>
             </Link>
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+            <div className="doghike-page-header mb-0">
+              <div className="doghike-page-icon">
                 <Map className="h-5 w-5" />
               </div>
               <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Übersichtskarte</h1>
-                <p className="mt-1 flex items-center gap-2 text-sm text-stone-500 md:text-base">
+                <h1 className="doghike-page-title">Übersichtskarte</h1>
+                <p className="doghike-page-subtitle flex items-center gap-2">
                   <MapPin className="h-3 w-3 md:h-4 md:w-4" />
                   {hikesWithCoords.length} Ausgangspunkte
                 </p>

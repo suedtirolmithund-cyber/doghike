@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { getDogs, createDog, updateDog, deleteDog } from "@/lib/profilesApi";
 import { supabase } from "@/lib/supabaseClient";
 import { motion, AnimatePresence } from "framer-motion";
-import { Dog, Plus, Edit, Trash2, Loader2, LogIn, Mountain } from "lucide-react";
+import { Dog, Plus, Edit, Trash2, Loader2, LogIn, Mountain, Home } from "lucide-react";
 import { differenceInYears, differenceInMonths } from "date-fns";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -147,13 +147,13 @@ export default function Dogs() {
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center justify-between mb-8"
         >
-          <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+          <div className="doghike-page-header mb-0">
+            <div className="doghike-page-icon">
               <Dog className="h-5 w-5" />
             </div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Meine Hunde</h1>
-              <p className="mt-1 text-sm text-stone-500">Deine Wanderbegleiter</p>
+              <h1 className="doghike-page-title">Meine Hunde</h1>
+              <p className="doghike-page-subtitle">Deine Wanderbegleiter</p>
             </div>
           </div>
           {dogs.length > 0 && (
@@ -324,7 +324,16 @@ export default function Dogs() {
 
               <div className="mt-5 rounded-[24px] border border-white/80 bg-white/70 p-5 shadow-[0_16px_32px_rgba(120,90,66,0.08)] backdrop-blur-sm md:p-6">
                 <p className="text-sm font-semibold uppercase tracking-[0.22em] text-stone-500">Danach</p>
-                <div className="mt-4 grid gap-3 md:grid-cols-2">
+                <div className="mt-4 grid gap-3 md:grid-cols-3">
+                  <Link to={createPageUrl("Dashboard")} className="block">
+                    <Button
+                      variant="outline"
+                      className="h-auto w-full justify-start gap-3 rounded-[20px] border-stone-200 bg-white/85 px-4 py-4 text-left text-stone-700 shadow-sm hover:bg-brand-50/50"
+                    >
+                      <Home className="h-4 w-4 shrink-0 text-[#b8785f]" />
+                      <span className="text-sm font-medium">Zum Dashboard</span>
+                    </Button>
+                  </Link>
                   <Link to={createPageUrl("Hikes")} className="block">
                     <Button
                       variant="outline"

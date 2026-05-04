@@ -793,16 +793,16 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 md:py-10">
-        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <div className="mb-1 flex items-center gap-3">
-            <div className="rounded-xl bg-gradient-to-br from-brand-700 to-[#c46f52] p-2 shadow-[0_12px_24px_rgba(124,77,52,0.16)]">
+        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="doghike-page-header">
+          <div className="doghike-page-icon bg-gradient-to-br from-brand-700 to-[#c46f52] text-white shadow-[0_12px_24px_rgba(124,77,52,0.16)]">
               <ShieldCheck className="h-5 w-5 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold text-stone-800 md:text-3xl">Admin Dashboard</h1>
           </div>
-          <p className="ml-12 text-sm text-stone-500">
-            Touren prüfen, Kommentare moderieren, öffentliche Touren pflegen und Nutzer verwalten.
-          </p>
+          <div>
+            <h1 className="doghike-page-title">Admin Dashboard</h1>
+            <p className="doghike-page-subtitle">
+              Touren prüfen, Kommentare moderieren, öffentliche Touren pflegen und Nutzer verwalten.
+            </p>
+          </div>
         </motion.div>
 
         <Tabs defaultValue="entries">

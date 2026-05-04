@@ -14,11 +14,11 @@ export default function AGB() {
         </Link>
 
         <div className="rounded-2xl border border-stone-200/70 bg-white/70 p-4 shadow-[0_14px_34px_rgba(92,62,42,0.1)] backdrop-blur-sm md:p-8">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
+          <div className="doghike-page-header mb-2">
+            <div className="doghike-page-icon">
               <FileText className="h-5 w-5" />
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Nutzungsbedingungen</h1>
+            <h1 className="doghike-page-title">Nutzungsbedingungen</h1>
           </div>
           <p className="text-xs text-stone-400 mb-8">
             Letzte Aktualisierung: April 2026 · Gilt für doghike-suedtirol.vercel.app
