@@ -23,7 +23,7 @@ export async function getFriendIds(userId) {
 // Send a friend request
 export async function sendFriendRequest(requesterId, receiverId) {
   if (!requesterId || !receiverId) {
-    throw new Error("Freundschaftsanfrage unvollstaendig.");
+    throw new Error("Freundschaftsanfrage unvollständig.");
   }
 
   if (requesterId === receiverId) {

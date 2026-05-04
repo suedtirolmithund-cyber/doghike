@@ -24,7 +24,7 @@ import {
   getSignedJournalUrls,
   uploadJournalFile,
   deleteJournalFiles,
-  getMissingPublicJournalFields,
+  getMissingSharedJournalFields,
 } from "@/lib/journalApi";
 import { getDogs } from "@/lib/profilesApi";
 import { Link } from "react-router-dom";
@@ -143,7 +143,7 @@ const markerIcon = L.divIcon({
   popupAnchor: [0, -30],
 });
 
-// Fliegt zur neuen Position wenn sich center aendert
+// Fliegt zur neuen Position wenn sich center ändert
 function MapFlyTo({ center, zoom }) {
   const map = useMap();
   useEffect(() => {
@@ -670,12 +670,16 @@ export default function AddJournalEntry() {
       return;
     }
 
-    if (form.visibility === "public") {
-      const missing = getMissingPublicJournalFields(form);
+    if (form.visibility === "friends" || form.visibility === "public") {
+      const missing = getMissingSharedJournalFields(form);
       if (missing.length > 0) {
-        toast.error(`Bitte fülle für eine öffentliche Tour noch diese Felder aus:\n${missing.join(", ")}`, {
+        const targetLabel = form.visibility === "public" ? "öffentlich" : "mit Freunden geteilt";
+        toast.error(
+          `Um eine Tour ${targetLabel} zu speichern, müssen alle Pflichtfelder ausgefüllt sein: ${missing.join(", ")}`,
+          {
           duration: 6000,
-        });
+          }
+        );
         return;
       }
     }

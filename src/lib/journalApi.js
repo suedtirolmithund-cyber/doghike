@@ -2,11 +2,10 @@ import { supabase } from "./supabaseClient";
 
 const JOURNAL_SIGNED_URL_TTL_SECONDS = 60 * 60;
 
-export function getMissingPublicJournalFields(entry) {
+export function getMissingSharedJournalFields(entry) {
   const missing = [];
 
   if (!entry?.title?.trim()) missing.push("Titel");
-  if (!entry?.date) missing.push("Datum");
   if (!entry?.location?.trim()) missing.push("Ort");
   if (entry?.latitude === "" || entry?.latitude == null || entry?.longitude === "" || entry?.longitude == null) {
     missing.push("Startpunkt auf Karte");
@@ -23,8 +22,12 @@ export function getMissingPublicJournalFields(entry) {
   return missing;
 }
 
+export function getMissingPublicJournalFields(entry) {
+  return getMissingSharedJournalFields(entry);
+}
+
 export function validatePublicJournalEntry(entry) {
-  const missing = getMissingPublicJournalFields(entry);
+  const missing = getMissingSharedJournalFields(entry);
   if (missing.length > 0) {
     throw new Error(`Fehlende Pflichtfelder für öffentliche Touren: ${missing.join(", ")}`);
   }

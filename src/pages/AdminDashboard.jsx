@@ -126,7 +126,7 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
           <div className="min-w-0 flex-1">
             <div className="mb-1 flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1 rounded-full border border-yellow-200 bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-700">
-                Wartet auf Pruefung
+                Wartet auf Prüfung
               </span>
               <span className="text-xs text-stone-400">
                 {formatAdminDate(entry.created_at)}
@@ -275,7 +275,7 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
                 ) : (
                   <XCircle className="mr-1.5 h-4 w-4" />
                 )}
-                Ablehnen bestaetigen
+                Ablehnen bestätigen
               </Button>
               <Button
                 onClick={() => {
@@ -324,7 +324,7 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
               <span className="text-sm font-semibold text-stone-800">{authorName}</span>
               {needsApproval && (
                 <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
-                  Freigabe noetig
+                  Freigabe nötig
                 </span>
               )}
             </div>
@@ -526,9 +526,9 @@ function UserCard({ profile, deleting, onDelete }) {
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Nutzerkonto wirklich loeschen?</AlertDialogTitle>
+              <AlertDialogTitle>Nutzerkonto wirklich löschen?</AlertDialogTitle>
               <AlertDialogDescription>
-                Dabei werden Profil, Hunde, Kommentare, Bewertungen, Fotos und weitere Nutzerdaten endgueltig entfernt.
+                Dabei werden Profil, Hunde, Kommentare, Bewertungen, Fotos und weitere Nutzerdaten endgültig entfernt.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -537,7 +537,7 @@ function UserCard({ profile, deleting, onDelete }) {
                 onClick={() => onDelete(profile.user_id)}
                 className="bg-red-600 text-white hover:bg-red-700"
               >
-                Endgueltig loeschen
+                Endgültig löschen
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -723,10 +723,10 @@ export default function AdminDashboard() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin_comments"] });
       queryClient.invalidateQueries({ queryKey: ["comments"] });
-      toast.success("Kommentar geloescht");
+      toast.success("Kommentar gelöscht");
     },
     onError: () =>
-      toast.error("Der Kommentar konnte gerade nicht geloescht werden. Bitte versuche es noch einmal."),
+      toast.error("Der Kommentar konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal."),
     onSettled: () => {
       setProcessingId(null);
       setProcessingType(null);
@@ -741,10 +741,10 @@ export default function AdminDashboard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin_users"] });
-      toast.success("Nutzerkonto geloescht");
+      toast.success("Nutzerkonto gelöscht");
     },
     onError: () =>
-      toast.error("Das Nutzerkonto konnte gerade nicht geloescht werden. Bitte versuche es noch einmal."),
+      toast.error("Das Nutzerkonto konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal."),
     onSettled: () => {
       setProcessingId(null);
       setProcessingType(null);
@@ -779,10 +779,10 @@ export default function AdminDashboard() {
         <div className="text-center">
           <ShieldCheck className="mx-auto mb-4 h-12 w-12 text-red-300" />
           <p className="text-lg font-semibold text-stone-700">Kein Zugriff</p>
-          <p className="mt-1 text-sm text-stone-500">Diese Seite ist nur fuer Administratoren.</p>
+          <p className="mt-1 text-sm text-stone-500">Diese Seite ist nur für Administratoren.</p>
           <Link to="/">
             <Button variant="outline" className="mt-4">
-              Zurueck
+              Zurück
             </Button>
           </Link>
         </div>
@@ -801,7 +801,7 @@ export default function AdminDashboard() {
             <h1 className="text-2xl font-bold text-stone-800 md:text-3xl">Admin Dashboard</h1>
           </div>
           <p className="ml-12 text-sm text-stone-500">
-            Touren pruefen, Kommentare moderieren, oeffentliche Touren pflegen und Nutzer verwalten.
+            Touren prüfen, Kommentare moderieren, öffentliche Touren pflegen und Nutzer verwalten.
           </p>
         </motion.div>
 
@@ -809,7 +809,7 @@ export default function AdminDashboard() {
           <TabsList className="mb-6 grid h-auto w-full grid-cols-2 gap-2 border border-white/70 bg-white/65 p-2 backdrop-blur-xl md:grid-cols-4">
             <TabsTrigger value="entries" className="relative flex items-center gap-2">
               <Clock className="h-4 w-4" />
-              Touren pruefen
+              Touren prüfen
               {entries.length > 0 && (
                 <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-yellow-500 text-[10px] font-bold text-white">
                   {entries.length > 9 ? "9+" : entries.length}
@@ -829,7 +829,7 @@ export default function AdminDashboard() {
 
             <TabsTrigger value="public-hikes" className="flex items-center gap-2">
               <Map className="h-4 w-4" />
-              Oeffentliche Touren
+              Öffentliche Touren
             </TabsTrigger>
 
             <TabsTrigger value="users" className="flex items-center gap-2">
@@ -846,7 +846,7 @@ export default function AdminDashboard() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold leading-none text-stone-800">{entries.length}</p>
-                  <p className="text-xs text-stone-500">Wartet auf Pruefung</p>
+                  <p className="text-xs text-stone-500">Wartet auf Prüfung</p>
                 </div>
               </div>
               {entries.length === 0 && (
@@ -861,8 +861,8 @@ export default function AdminDashboard() {
             ) : entries.length === 0 ? (
               <div className="doghike-glass-card py-20 text-center">
                 <CheckCircle2 className="mx-auto mb-4 h-14 w-14 text-brand-400" />
-                <h3 className="mb-2 text-xl font-medium text-stone-700">Keine offenen Eintraege</h3>
-                <p className="text-sm text-stone-500">Alle Eintraege wurden geprueft.</p>
+                <h3 className="mb-2 text-xl font-medium text-stone-700">Keine offenen Einträge</h3>
+                <p className="text-sm text-stone-500">Alle Einträge wurden geprüft.</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -897,7 +897,7 @@ export default function AdminDashboard() {
                   </div>
                   <div className="border-l border-stone-200 pl-4">
                     <p className="text-2xl font-bold leading-none text-amber-700">{pendingCommentsCount}</p>
-                    <p className="text-xs text-stone-500">Freigaben noetig</p>
+                    <p className="text-xs text-stone-500">Freigaben nötig</p>
                   </div>
                 </div>
               </div>
