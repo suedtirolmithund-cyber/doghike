@@ -994,18 +994,19 @@ export default function AddJournalEntry() {
             )}
           </section>
 
-          {/* Jahreszeit (nur bei friends/public) */}
-          {(form.visibility === "friends" || form.visibility === "public") && (
-            <section className="doghike-glass-card p-5">
-              <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
-                {TOUR_ICONS.season} Jahreszeit
-              </h2>
-              <SeasonPicker
-                value={form.seasons}
-                onChange={(v) => set("seasons", v)}
-              />
-            </section>
-          )}
+          {/* Jahreszeit */}
+          <section className="doghike-glass-card p-5">
+            <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
+              {TOUR_ICONS.season} Jahreszeit
+            </h2>
+            <SeasonPicker
+              value={form.seasons}
+              onChange={(v) => set("seasons", v)}
+            />
+            <p className="mt-2 text-xs text-stone-400">
+              Bei privaten Einträgen optional. Für Einträge mit Freunden oder öffentlich bitte mindestens eine Jahreszeit auswählen.
+            </p>
+          </section>
 
           {/* Sichtbarkeit */}
           <section className="doghike-glass-card p-5">
