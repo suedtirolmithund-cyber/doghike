@@ -51,17 +51,19 @@ export async function upsertProfile(userId, updates) {
     nextUpdates.username = sanitizeUsername(nextUpdates.username);
 
     if (nextUpdates.username) {
-      const { data: existingUsername, error: usernameError } = await supabase
+      const { data: existingProfiles, error: usernameError } = await supabase
         .from("profiles")
-        .select("user_id")
-        .eq("username", nextUpdates.username)
+        .select("user_id, username")
         .neq("user_id", userId)
-        .limit(1)
-        .maybeSingle();
+        .not("username", "is", null);
 
       if (usernameError) throw usernameError;
 
-      if (existingUsername?.user_id) {
+      const conflictingProfile = (existingProfiles ?? []).find(
+        (profile) => sanitizeUsername(profile.username) === nextUpdates.username
+      );
+
+      if (conflictingProfile?.user_id) {
         const error = new Error("username_taken");
         error.code = "USERNAME_TAKEN";
         throw error;
