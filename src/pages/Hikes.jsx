@@ -257,9 +257,13 @@ export default function Hikes() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-20"
+            className="doghike-empty-state"
           >
-            <p className="text-stone-500">Keine Touren gefunden</p>
+            <Mountain className="doghike-empty-icon" />
+            <h3 className="mb-2 text-xl font-medium text-stone-700">Keine Touren gefunden</h3>
+            <p className="mx-auto max-w-xs text-sm text-stone-500">
+              Passe Suche oder Filter an, um wieder passende Wanderungen zu sehen.
+            </p>
           </motion.div>
         )}
       </div>

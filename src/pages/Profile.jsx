@@ -116,7 +116,14 @@ export default function Profile() {
       setEditingProfile(false);
       toast.success("Profil gespeichert");
     },
-    onError: () => toast.error("Dein Profil konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
+    onError: (error) => {
+      if (error?.code === "USERNAME_TAKEN" || error?.message === "username_taken") {
+        toast.error("Dieser Username ist bereits vergeben. Bitte wähle einen anderen.");
+        return;
+      }
+
+      toast.error("Dein Profil konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.");
+    },
   });
 
   const createDogMutation = useMutation({
@@ -404,7 +411,7 @@ export default function Profile() {
                       transition={{ delay: index * 0.05 }}
                       className="doghike-glass-card-hover overflow-hidden"
                     >
-                      <div className="relative h-44 bg-gradient-to-br from-slate-100 to-stone-100">
+                      <div className="relative h-44 bg-gradient-to-br from-brand-50 via-white to-stone-100">
                         <img
                           src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}&backgroundColor=f5f5f4`}
                           alt={dog.name}
@@ -472,7 +479,7 @@ export default function Profile() {
                 </AnimatePresence>
               </div>
             ) : (
-              <div className="doghike-glass-card text-center py-20">
+              <div className="doghike-empty-state">
                 <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full border border-white/80 bg-gradient-to-br from-brand-50 via-white to-stone-100 text-5xl shadow-[0_16px_34px_rgba(120,90,66,0.14)]">
                   🐕
                 </div>
@@ -483,7 +490,7 @@ export default function Profile() {
                     setEditingDog(null);
                     setDialogOpen(true);
                   }}
-                  className="bg-brand-400 hover:bg-brand-600"
+                  className="doghike-primary-action"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Hund hinzufügen
@@ -564,12 +571,12 @@ export default function Profile() {
                 })}
               </div>
             ) : (
-              <div className="doghike-glass-card text-center py-20">
-                <Navigation className="w-14 h-14 text-stone-200 mx-auto mb-4" />
+              <div className="doghike-empty-state">
+                <Navigation className="doghike-empty-icon" />
                 <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Routen</h3>
                 <p className="text-stone-500 text-sm mb-6">Plane deine erste Tour oder zeichne eine Wanderung auf, damit sie hier erscheint.</p>
                 <Link to={createPageUrl("RoutePlanner")}>
-                  <Button className="bg-brand-400 hover:bg-brand-600">
+                  <Button className="doghike-primary-action">
                     <Plus className="w-4 h-4 mr-2" />
                     Route erstellen
                   </Button>
@@ -598,14 +605,14 @@ export default function Profile() {
                 ))}
               </div>
             ) : (
-              <div className="doghike-glass-card text-center py-20">
-                <Heart className="w-14 h-14 text-stone-200 mx-auto mb-4" />
+              <div className="doghike-empty-state">
+                <Heart className="doghike-empty-icon" />
                 <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Touren gespeichert</h3>
                 <p className="text-stone-500 text-sm mb-6 max-w-xs mx-auto">
                   Tippe bei einer Tour auf das Herz, damit du sie hier schnell wiederfindest.
                 </p>
                 <Link to={createPageUrl("Hikes")}>
-                  <Button className="bg-brand-400 hover:bg-brand-600">
+                  <Button className="doghike-primary-action">
                     <Mountain className="w-4 h-4 mr-2" />
                     Touren entdecken
                   </Button>

@@ -313,10 +313,12 @@ function RankingTab({ rows, metric, myDogIds }) {
 
   if (!sorted.length) {
     return (
-      <div className="doghike-glass-card text-center py-20">
-        <Dog className="w-12 h-12 text-stone-200 mx-auto mb-3" />
-        <p className="text-stone-500 font-medium">Noch keine Daten</p>
-        <p className="text-stone-400 text-sm mt-1">Trage deine erste Wanderung mit deinem Hund ein!</p>
+      <div className="doghike-empty-state">
+        <Dog className="doghike-empty-icon" />
+        <p className="text-stone-600 font-medium">Noch keine Daten</p>
+        <p className="mx-auto mt-1 max-w-xs text-sm text-stone-500">
+          Trage deine erste Wanderung mit deinem Hund ein, dann erscheint ihr hier.
+        </p>
       </div>
     );
   }

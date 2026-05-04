@@ -234,8 +234,8 @@ export default function Notifications() {
             <Loader2 className="w-8 h-8 text-stone-400 animate-spin" />
           </div>
         ) : notifications.length === 0 ? (
-          <div className="doghike-glass-card text-center py-20">
-            <Bell className="w-14 h-14 text-stone-200 mx-auto mb-4" />
+          <div className="doghike-empty-state">
+            <Bell className="doghike-empty-icon" />
             <h3 className="text-lg font-medium text-stone-700 mb-1">Alles auf dem neuesten Stand</h3>
             <p className="text-stone-400 text-sm">Sobald etwas Neues passiert, erscheint es hier.</p>
           </div>

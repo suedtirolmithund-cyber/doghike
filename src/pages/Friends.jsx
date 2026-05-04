@@ -387,8 +387,8 @@ export default function Friends() {
                 })}
               </div>
             ) : (
-              <div className="doghike-glass-card text-center py-16">
-                <Users className="w-12 h-12 text-stone-200 mx-auto mb-3" />
+              <div className="doghike-empty-state">
+                <Users className="doghike-empty-icon" />
                 <p className="text-stone-600 font-medium mb-1">Noch keine Freunde</p>
                 <p className="text-stone-400 text-sm">Suche nach anderen Nutzern und schicke deine erste Anfrage.</p>
               </div>
@@ -429,8 +429,8 @@ export default function Friends() {
                 })}
               </div>
             ) : (
-              <div className="doghike-glass-card text-center py-16">
-                <Clock className="w-12 h-12 text-stone-200 mx-auto mb-3" />
+              <div className="doghike-empty-state">
+                <Clock className="doghike-empty-icon" />
                 <p className="text-stone-600 font-medium mb-1">Keine offenen Anfragen</p>
                 <p className="text-stone-400 text-sm">Sobald dir jemand schreibt, erscheint es hier.</p>
               </div>
@@ -465,8 +465,8 @@ export default function Friends() {
                 })}
               </div>
             ) : (
-              <div className="doghike-glass-card text-center py-16">
-                <Clock className="w-12 h-12 text-stone-200 mx-auto mb-3" />
+              <div className="doghike-empty-state">
+                <Clock className="doghike-empty-icon" />
                 <p className="text-stone-600 font-medium mb-1">Keine gesendeten Anfragen</p>
                 <p className="text-stone-400 text-sm">Suche nach einem Nutzer und sende deine erste Anfrage.</p>
               </div>
@@ -477,14 +477,14 @@ export default function Friends() {
             {feedLoading ? (
               <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 text-stone-400 animate-spin" /></div>
             ) : friendIds.length === 0 ? (
-              <div className="doghike-glass-card text-center py-16">
-                <Users className="w-12 h-12 text-stone-200 mx-auto mb-3" />
+              <div className="doghike-empty-state">
+                <Users className="doghike-empty-icon" />
                 <p className="text-stone-600 font-medium mb-1">Noch keine Freunde</p>
                 <p className="text-stone-400 text-sm">Füge Freunde hinzu, um ihre Wanderungen zu sehen.</p>
               </div>
             ) : feedEntries.length === 0 ? (
-              <div className="doghike-glass-card text-center py-16">
-                <BookOpen className="w-12 h-12 text-stone-200 mx-auto mb-3" />
+              <div className="doghike-empty-state">
+                <BookOpen className="doghike-empty-icon" />
                 <p className="text-stone-600 font-medium mb-1">Noch keine Touren von Freunden</p>
                 <p className="text-stone-400 text-sm">Deine Freunde haben noch keine Wanderungen geteilt.</p>
               </div>

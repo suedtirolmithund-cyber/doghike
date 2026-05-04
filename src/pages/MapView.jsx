@@ -56,10 +56,10 @@ export default function MapView() {
           {hikesWithCoords.length > 0 ? (
             <HikeMap hikes={hikesWithCoords} height="calc(100svh - 200px)" zoom={9} />
           ) : (
-            <div className="doghike-glass-card text-center py-20">
-              <MapPin className="w-16 h-16 text-stone-300 mx-auto mb-4" />
+            <div className="doghike-empty-state">
+              <MapPin className="doghike-empty-icon" />
               <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Standorte</h3>
-              <p className="text-stone-500">Aktuell sind noch keine Touren mit Karte verfügbar.</p>
+              <p className="mx-auto max-w-xs text-sm text-stone-500">Aktuell sind noch keine Touren mit Karte verfügbar.</p>
             </div>
           )}
         </motion.div>

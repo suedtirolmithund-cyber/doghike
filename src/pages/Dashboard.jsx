@@ -15,7 +15,6 @@ import { getDogs } from "@/lib/profilesApi";
 
 const PAGE_SIZE = 10;
 const FIRST_DASHBOARD_WITHOUT_DOG_KEY = "doghike:first-dashboard-without-dog";
-const DOG_NUDGE_SESSION_KEY = "doghike:dog-nudge-session";
 
 function getCurrentSeason() {
   const m = new Date().getMonth() + 1;
@@ -67,18 +66,12 @@ export default function Dashboard() {
     if (typeof window === "undefined") return;
 
     const firstVisitKey = `${FIRST_DASHBOARD_WITHOUT_DOG_KEY}:${user.id}`;
-    const nudgeSessionKey = `${DOG_NUDGE_SESSION_KEY}:${user.id}`;
     const hasSeenDashboardWithoutDog = window.localStorage.getItem(firstVisitKey);
-    const alreadyNudgedThisSession = window.sessionStorage.getItem(nudgeSessionKey);
 
     if (!hasSeenDashboardWithoutDog) {
       window.localStorage.setItem(firstVisitKey, new Date().toISOString());
       return;
     }
-
-    if (alreadyNudgedThisSession) return;
-
-    window.sessionStorage.setItem(nudgeSessionKey, "true");
     navigate(createPageUrl("Dogs"), { replace: true });
   }, [dogs.length, isAuthenticated, isLoadingAuth, isLoadingDogs, navigate, user?.id]);
 
@@ -276,13 +269,16 @@ export default function Dashboard() {
             </>
           ) : (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              className="doghike-glass-card text-center py-20">
-              <Mountain className="w-16 h-16 text-stone-300 mx-auto mb-4" />
+              className="doghike-empty-state">
+              <Mountain className="doghike-empty-icon" />
               <h3 className="text-xl font-medium text-stone-700 mb-2">
                 {searchQuery ? "Keine Touren gefunden" : "Noch keine Touren"}
               </h3>
+              <p className="mx-auto max-w-xs text-sm text-stone-500">
+                {searchQuery ? "Passe deine Suche an, um weitere Wanderungen zu entdecken." : "Sobald Touren verfügbar sind, erscheinen sie hier."}
+              </p>
               {searchQuery && (
-                <Button variant="ghost" onClick={() => setSearchQuery("")} className="mt-2">
+                <Button variant="outline" onClick={() => setSearchQuery("")} className="doghike-secondary-action mt-4">
                   Suche zurücksetzen
                 </Button>
               )}

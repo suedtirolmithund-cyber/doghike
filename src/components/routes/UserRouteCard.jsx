@@ -32,7 +32,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-    className="doghike-glass-card-hover rounded-xl overflow-hidden"
+      className="doghike-glass-card-hover overflow-hidden"
     >
       <div className="h-48 relative">
         <MapContainer
@@ -45,16 +45,16 @@ export default function UserRouteCard({ route, index, onDelete }) {
           attributionControl={false}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <Polyline positions={coordinates} color="#1e293b" weight={3} />
+          <Polyline positions={coordinates} color="#b8785f" weight={4} />
         </MapContainer>
 
-        <div className="absolute top-3 left-3 z-[1000] bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-stone-700 flex items-center gap-1">
+        <div className="absolute left-3 top-3 z-[1000] flex items-center gap-1 rounded-full border border-white/70 bg-white/82 px-3 py-1 text-xs font-medium text-stone-700 shadow-sm backdrop-blur-sm">
           <RouteIcon className="w-3 h-3" />
           {getRouteTypeLabel(route.route_type)}
         </div>
 
         {route.completed && (
-          <div className="absolute top-3 right-3 z-[1000] bg-brand-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+          <div className="absolute right-3 top-3 z-[1000] flex items-center gap-1 rounded-full bg-brand-500 px-2 py-1 text-xs font-medium text-white shadow-sm">
             <CheckCircle2 className="w-3 h-3" />
             Erledigt
           </div>
@@ -97,7 +97,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
 
         <div className="flex gap-2">
           <Link to={`${createPageUrl("RouteDetail")}?id=${route.id}`} className="flex-1">
-            <Button variant="outline" className="w-full" size="sm">
+            <Button variant="outline" className="doghike-secondary-action w-full" size="sm">
               Details
             </Button>
           </Link>

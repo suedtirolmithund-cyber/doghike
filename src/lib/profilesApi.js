@@ -1,5 +1,11 @@
 import { supabase } from "./supabaseClient";
 
+function sanitizeUsername(username) {
+  if (typeof username !== "string") return null;
+  const normalized = username.trim().replace(/^@+/, "").toLowerCase();
+  return normalized || null;
+}
+
 function getStorageDescriptor(fileUrl, bucket) {
   if (!fileUrl || typeof fileUrl !== "string") return null;
   const marker = `/storage/v1/object/public/${bucket}/`;
@@ -39,9 +45,33 @@ export async function getProfile(userId) {
 }
 
 export async function upsertProfile(userId, updates) {
+  const nextUpdates = { ...updates };
+
+  if (Object.prototype.hasOwnProperty.call(nextUpdates, "username")) {
+    nextUpdates.username = sanitizeUsername(nextUpdates.username);
+
+    if (nextUpdates.username) {
+      const { data: existingUsername, error: usernameError } = await supabase
+        .from("profiles")
+        .select("user_id")
+        .eq("username", nextUpdates.username)
+        .neq("user_id", userId)
+        .limit(1)
+        .maybeSingle();
+
+      if (usernameError) throw usernameError;
+
+      if (existingUsername?.user_id) {
+        const error = new Error("username_taken");
+        error.code = "USERNAME_TAKEN";
+        throw error;
+      }
+    }
+  }
+
   const { data, error } = await supabase
     .from("profiles")
-    .upsert({ user_id: userId, ...updates }, { onConflict: "user_id" })
+    .upsert({ user_id: userId, ...nextUpdates }, { onConflict: "user_id" })
     .select()
     .single();
   if (error) throw error;

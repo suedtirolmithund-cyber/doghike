@@ -151,16 +151,13 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const missing = [];
+    if (!formData.trail_name?.trim()) missing.push("Name der Tour");
     
-    if (!formData.latitude || !formData.longitude) {
-      toast.error("Bitte wähle einen Ausgangspunkt auf der Karte aus.");
-      return;
-    }
+    if (!formData.latitude || !formData.longitude) missing.push("Ausgangspunkt");
 
-    // For friends/public visibility, all key fields must be filled
     if (formData.visibility === "friends" || formData.visibility === "public") {
-      const missing = [];
-      if (!formData.location) missing.push("Ort / Region");
+      if (!formData.location?.trim()) missing.push("Ort / Region");
       if (!formData.distance_km) missing.push("Strecke (km)");
       if (!formData.elevation_gain_m) missing.push("Höhenmeter");
       if (!formData.duration_minutes) missing.push("Gehzeit");
@@ -168,12 +165,29 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       if (!formData.dog_difficulty) missing.push("Schwierigkeit (Hund)");
       if (!formData.water_availability) missing.push("Wasser unterwegs");
       if (!formData.season) missing.push("Beste Jahreszeit");
-      if (missing.length > 0) {
-        toast.error(`Für das Teilen mit Freunden oder öffentlich müssen alle Angaben vollständig sein: ${missing.join(", ")}`, {
+      if (!formData.notes?.trim()) missing.push("Beschreibung & Tipps");
+      if (!Array.isArray(formData.photos) || formData.photos.length === 0) missing.push("Mindestens 1 Foto");
+    }
+
+    if (missing.length > 0) {
+      if (formData.visibility === "private") {
+        toast.error(`Bitte fülle noch diese Pflichtfelder aus: ${missing.join(", ")}`, {
           duration: 7000,
         });
         return;
       }
+
+      if (formData.visibility === "public") {
+        toast.error(`Um eine Tour öffentlich zu machen, müssen alle Pflichtfelder ausgefüllt sein: ${missing.join(", ")}`, {
+          duration: 7000,
+        });
+        return;
+      }
+
+      toast.error(`Um eine Tour mit Freunden zu teilen, müssen alle Pflichtfelder ausgefüllt sein: ${missing.join(", ")}`, {
+        duration: 7000,
+      });
+      return;
     }
     
     setSaving(true);
@@ -723,9 +737,9 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
           </SelectContent>
         </Select>
         <p className="text-xs text-stone-600 mt-2 bg-white p-2 rounded border border-amber-300">
-          {formData.visibility === "private" && "🔒 Nur du kannst diese Tour sehen – optionale Felder dürfen leer bleiben."}
-          {formData.visibility === "friends" && "👥 Nur Freunde können diese Tour sehen – alle Felder müssen ausgefüllt sein."}
-          {formData.visibility === "public" && "🌍 Alle Nutzer können diese Tour sehen – alle Felder müssen ausgefüllt sein."}
+          {formData.visibility === "private" && "🔒 Nur du kannst diese Tour sehen – nur die Grundangaben sind Pflicht, weitere Felder bleiben optional."}
+          {formData.visibility === "friends" && "👥 Nur Freunde können diese Tour sehen – für das Teilen müssen alle Pflichtfelder ausgefüllt sein."}
+          {formData.visibility === "public" && "🌍 Alle Nutzer können diese Tour sehen – für eine öffentliche Tour müssen alle Pflichtfelder ausgefüllt sein."}
         </p>
         {hike && hike.visibility === "public" && formData.visibility !== "public" && (
           <p className="text-xs text-red-600 font-medium mt-2">

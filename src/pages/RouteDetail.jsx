@@ -414,7 +414,7 @@ export default function RouteDetail() {
                     )}
                   </MapContainer>
                 ) : (
-                  <div className="h-full flex items-center justify-center bg-stone-50 text-stone-400 text-sm">
+                  <div className="flex h-full items-center justify-center bg-brand-50/35 text-sm text-stone-500">
                     Keine Wegpunkte vorhanden
                   </div>
                 )}

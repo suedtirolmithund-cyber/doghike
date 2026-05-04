@@ -6,10 +6,10 @@ export default function StatsCard({ icon: Icon, label, value, unit, delay = 0 })
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.5 }}
-      className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-stone-200/50 shadow-sm hover:shadow-md transition-shadow"
+      className="doghike-glass-card-hover p-5 md:p-6"
     >
       <div className="flex items-center gap-3 mb-3">
-        <div className="p-2.5 bg-gradient-to-br from-slate-700 to-slate-900 rounded-xl">
+        <div className="rounded-xl bg-gradient-to-br from-brand-500 to-[#c46f52] p-2.5 shadow-sm">
           <Icon className="w-5 h-5 text-white" />
         </div>
         <span className="text-sm font-medium text-stone-500 uppercase tracking-wide">{label}</span>

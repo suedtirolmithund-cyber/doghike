@@ -859,8 +859,8 @@ export default function AdminDashboard() {
                 <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
               </div>
             ) : entries.length === 0 ? (
-              <div className="doghike-glass-card py-20 text-center">
-                <CheckCircle2 className="mx-auto mb-4 h-14 w-14 text-brand-400" />
+              <div className="doghike-empty-state">
+                <CheckCircle2 className="doghike-empty-icon text-brand-400" />
                 <h3 className="mb-2 text-xl font-medium text-stone-700">Keine offenen Einträge</h3>
                 <p className="text-sm text-stone-500">Alle Einträge wurden geprüft.</p>
               </div>
@@ -928,8 +928,8 @@ export default function AdminDashboard() {
                 <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
               </div>
             ) : filteredComments.length === 0 ? (
-              <div className="doghike-glass-card py-20 text-center">
-                <CheckCircle2 className="mx-auto mb-4 h-14 w-14 text-brand-400" />
+              <div className="doghike-empty-state">
+                <CheckCircle2 className="doghike-empty-icon text-brand-400" />
                 <h3 className="mb-2 text-xl font-medium text-stone-700">Keine passenden Kommentare</h3>
                 <p className="text-sm text-stone-500">Mit den aktuellen Filtern wurde nichts gefunden.</p>
               </div>
@@ -960,7 +960,7 @@ export default function AdminDashboard() {
                 </div>
                 <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
                   <p className="text-2xl font-bold text-stone-800">{draftPublicHikesCount}</p>
-                  <p className="mt-1 text-xs text-stone-500">Entwuerfe</p>
+                  <p className="mt-1 text-xs text-stone-500">Entwürfe</p>
                 </div>
                 <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
                   <p className="text-2xl font-bold text-stone-800">{premiumPublicHikesCount}</p>
@@ -1013,8 +1013,8 @@ export default function AdminDashboard() {
                 <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
               </div>
             ) : filteredPublicHikes.length === 0 ? (
-              <div className="doghike-glass-card py-20 text-center">
-                <CheckCircle2 className="mx-auto mb-4 h-14 w-14 text-brand-400" />
+              <div className="doghike-empty-state">
+                <CheckCircle2 className="doghike-empty-icon text-brand-400" />
                 <h3 className="mb-2 text-xl font-medium text-stone-700">Keine passenden Touren</h3>
                 <p className="text-sm text-stone-500">Mit den aktuellen Filtern wurde nichts gefunden.</p>
               </div>
@@ -1061,8 +1061,8 @@ export default function AdminDashboard() {
                 <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
               </div>
             ) : filteredUsers.length === 0 ? (
-              <div className="doghike-glass-card py-20 text-center">
-                <CheckCircle2 className="mx-auto mb-4 h-14 w-14 text-brand-400" />
+              <div className="doghike-empty-state">
+                <CheckCircle2 className="doghike-empty-icon text-brand-400" />
                 <h3 className="mb-2 text-xl font-medium text-stone-700">Keine passenden Nutzer</h3>
                 <p className="text-sm text-stone-500">Mit der aktuellen Suche wurde nichts gefunden.</p>
               </div>

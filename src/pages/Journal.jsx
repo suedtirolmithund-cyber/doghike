@@ -386,9 +386,9 @@ export default function Journal() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="doghike-glass-card text-center py-24"
+            className="doghike-empty-state py-24"
           >
-            <BookOpen className="w-14 h-14 text-stone-300 mx-auto mb-4" />
+            <BookOpen className="doghike-empty-icon" />
             <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Einträge</h3>
             <p className="text-stone-500 mb-6 text-sm max-w-xs mx-auto">
               Starte mit deiner ersten Wanderung und sammle hier Fotos, Daten und persönliche Erinnerungen.
@@ -400,8 +400,8 @@ export default function Journal() {
             </Link>
           </motion.div>
         ) : (
-          <div className="doghike-glass-card text-center py-16">
-            <Search className="w-12 h-12 text-stone-200 mx-auto mb-3" />
+          <div className="doghike-empty-state">
+            <Search className="doghike-empty-icon" />
             <p className="text-stone-600 font-medium mb-1">Keine passenden Einträge</p>
             <p className="text-stone-400 text-sm mb-4">Für „{search}“ wurde nichts gefunden.</p>
             <Button variant="outline" onClick={() => setSearch("")}>
