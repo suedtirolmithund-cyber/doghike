@@ -10,6 +10,7 @@ create table if not exists public.profiles (
   username     text,
   full_name    text,
   avatar_url   text,
+  is_premium   boolean default false,
   role         text default 'user' check (role in ('user', 'admin')),
   created_at   timestamptz default now()
 );

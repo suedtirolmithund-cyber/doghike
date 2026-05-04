@@ -404,10 +404,15 @@ export default function GPSTracker({ onSave }) {
     setCurrentPosition(null);
     setStats(DEFAULT_STATS);
     setElapsedSeconds(0);
+
+    const trackingStarted = startWatchers();
+    if (!trackingStarted) {
+      resetTrackingState();
+      return;
+    }
+
     setIsTracking(true);
     setIsPaused(false);
-
-    startWatchers();
   };
 
   const pauseTracking = () => {
@@ -481,6 +486,7 @@ export default function GPSTracker({ onSave }) {
       resetTrackingState();
     } else {
       toast.error("Zu wenige GPS-Punkte aufgezeichnet.");
+      resetTrackingState();
     }
   };
 
