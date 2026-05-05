@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
-  ArrowLeft, Map, Navigation, Loader2, Upload, Search, RotateCcw, Layers, Mountain, X
+  ArrowLeft, Map, Navigation, Loader2, Upload, Search, RotateCcw, Layers, Mountain, X, Info
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { motion, AnimatePresence } from "framer-motion";
@@ -674,7 +674,18 @@ export default function RoutePlanner() {
           <SmartRoutePlanner onRouteReady={setRouteGeometry} />
         )}
         {activeTab === "track" && (
-          <GPSTracker onSave={(g) => setRouteGeometry(g)} />
+          <div className="space-y-3">
+            <div className="inline-flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50/80 px-3 py-2 text-xs font-medium text-amber-800 shadow-sm">
+              <span className="inline-flex h-5 shrink-0 items-center gap-1 rounded-full bg-amber-100 px-2 text-[10px] font-bold uppercase tracking-wide text-amber-800">
+                <Info className="h-3 w-3" />
+                Beta
+              </span>
+              <span>
+                Die Aufzeichnung ist noch in der Beta-Phase und funktioniert in der Web-App noch nicht fehlerfrei.
+              </span>
+            </div>
+            <GPSTracker onSave={(g) => setRouteGeometry(g)} />
+          </div>
         )}
         {activeTab === "gpx" && (
           <GPXUploader onSave={(g) => setRouteGeometry(g)} />
