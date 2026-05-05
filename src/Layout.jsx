@@ -4,7 +4,7 @@ import { createPageUrl } from "@/utils";
 import {
   Mountain,
   Home,
-  Map,
+  Route,
   Dog,
   LogIn,
   LogOut,
@@ -25,7 +25,7 @@ const MAIN_NAV = [
   { name: "Dashboard", icon: Home, label: "Home" },
   { name: "Hikes", icon: Mountain, label: "Touren" },
   { name: "Journal", icon: BookOpen, label: "Tagebuch" },
-  { name: "RoutePlanner", icon: Map, label: "Planen" },
+  { name: "RoutePlanner", icon: Route, label: "Planen" },
   { name: "Profile", icon: Dog, label: "Profil" },
 ];
 
@@ -38,7 +38,7 @@ const DESKTOP_NAV = [
   { name: "Dashboard", icon: Home, label: "Startseite" },
   { name: "Hikes", icon: Mountain, label: "Alle Touren" },
   { name: "Journal", icon: BookOpen, label: "Tagebuch" },
-  { name: "RoutePlanner", icon: Map, label: "Routenplaner" },
+  { name: "RoutePlanner", icon: Route, label: "Routenplaner" },
   { name: "Friends", icon: Users, label: "Freunde" },
   { name: "TopDogs", icon: Trophy, label: "Top Dogs" },
   { name: "Profile", icon: Dog, label: "Mein Profil" },
@@ -161,7 +161,7 @@ export default function Layout({ children, currentPageName }) {
                   active ? "bg-[#c46f52]/12 text-[#9b4f39] shadow-sm" : "text-[#9a6c58] hover:bg-[#c46f52]/7 hover:text-[#7d4f3f]"
                 }`}
               >
-                <Icon className={`w-5 h-5 ${active ? "stroke-[2.5]" : "stroke-[2]"}`} />
+                <Icon className={`h-5 w-5 shrink-0 text-current ${active ? "stroke-[2.5]" : "stroke-[2]"}`} />
                 <span className={`text-[10px] font-medium leading-none ${active ? "" : "opacity-80"}`}>
                   {label}
                 </span>
@@ -208,7 +208,7 @@ export default function Layout({ children, currentPageName }) {
                       active ? "bg-[#c46f52]/12 text-[#9b4f39] shadow-sm" : "text-[#7b6a58] hover:bg-[#c46f52]/7 hover:text-[#7d4f3f]"
                     }`}
                   >
-                    <Icon className={`w-4 h-4 ${active ? "stroke-[2.5]" : ""}`} />
+                    <Icon className={`h-4 w-4 shrink-0 text-current ${active ? "stroke-[2.5]" : ""}`} />
                     <span className="text-sm font-medium">{label}</span>
                   </Link>
                 );
