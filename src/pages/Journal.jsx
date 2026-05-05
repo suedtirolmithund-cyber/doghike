@@ -103,7 +103,7 @@ function StatsChip({ icon, value, unit, color = "text-stone-600" }) {
   if (!value) return null;
 
   return (
-    <div className={`flex items-center gap-1 text-xs ${color}`}>
+    <div className={`flex items-center gap-1.5 text-xs ${color}`}>
       <span className="text-sm leading-none shrink-0">{icon}</span>
       <span className="font-medium">{value}</span>
       {unit && <span className="text-stone-400">{unit}</span>}
@@ -176,11 +176,11 @@ export default function Journal() {
 
   return (
     <div className="doghike-page-shell">
-      <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 md:py-10 lg:px-8">
+      <div className="mx-auto w-full max-w-5xl px-4 pb-32 pt-6 sm:px-6 md:py-10 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 md:mb-8"
+          className="mb-5 md:mb-8"
         >
           <div className="doghike-page-header mb-0">
             <div className="doghike-page-icon">
@@ -190,7 +190,7 @@ export default function Journal() {
               <h1 className="doghike-page-title">Wandertagebuch</h1>
               <p className="doghike-page-subtitle">Deine persönlichen Wandererlebnisse</p>
               {entries.length > 0 && (
-                <Link to={createPageUrl("AddJournalEntry")} className="mt-4 inline-flex">
+                <Link to={createPageUrl("AddJournalEntry")} className="mt-3 inline-flex">
                   <Button className="doghike-primary-action doghike-compact-action">
                     <Plus className="w-4 h-4 mr-2" />
                     Wanderung
@@ -206,20 +206,20 @@ export default function Journal() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="grid grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8"
+            className="mb-6 grid grid-cols-3 gap-2.5 md:mb-8 md:gap-4"
           >
             {[
-              { icon: Mountain, value: entries.length, label: "Wanderungen", color: "text-brand-400" },
+              { icon: TOUR_ICONS.map, value: entries.length, label: "Wanderungen", color: "text-brand-400" },
               { icon: TOUR_ICONS.distance, value: `${totalDistance.toFixed(0)} km`, label: "Gesamt", color: "text-brand-600" },
               { icon: TOUR_ICONS.elevation, value: `${Math.round(totalElevation).toLocaleString()} Hm`, label: "Aufstieg", color: "text-orange-600" },
             ].map(({ icon, value, label, color }) => (
               <div key={label} className="doghike-glass-card rounded-xl p-3 text-center md:p-4">
                 {typeof icon === "string" ? (
-                  <span className={`block text-xl ${color} mb-1`}>{icon}</span>
+                  <span className={`mb-1 block text-lg ${color} md:text-xl`}>{icon}</span>
                 ) : (
                   <Mountain className={`w-5 h-5 ${color} mx-auto mb-1`} />
                 )}
-                <p className="text-lg md:text-xl font-bold text-stone-800">{value}</p>
+                <p className="text-lg font-bold leading-tight text-stone-800 md:text-xl">{value}</p>
                 <p className="text-xs text-stone-500">{label}</p>
               </div>
             ))}
@@ -287,7 +287,7 @@ export default function Journal() {
                           {entry.rating && <StarRating rating={entry.rating} />}
                         </div>
 
-                        <div className="flex flex-wrap gap-3 my-2">
+                        <div className="my-2 flex flex-wrap gap-x-3 gap-y-1.5">
                           <StatsChip icon={TOUR_ICONS.distance} value={entry.distance_km} unit="km" />
                           <StatsChip icon={TOUR_ICONS.elevation} value={entry.elevation_m} unit="Hm" color="text-orange-600" />
                           <StatsChip
@@ -331,9 +331,9 @@ export default function Journal() {
                     </div>
                   </Link>
                   <div className="px-4 md:px-5 pb-4 md:pb-5">
-                    <div className="flex gap-2 mt-3">
+                    <div className="mt-3 flex gap-2">
                       <Link to={`${createPageUrl("AddJournalEntry")}?id=${entry.id}`}>
-                        <Button size="sm" variant="outline" className="h-7 text-xs">
+                        <Button size="sm" variant="outline" className="doghike-secondary-action h-8 rounded-xl px-3 text-xs">
                           Bearbeiten
                         </Button>
                       </Link>
