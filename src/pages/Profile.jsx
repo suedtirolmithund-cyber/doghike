@@ -350,7 +350,7 @@ export default function Profile() {
               variant="outline"
               size="sm"
               onClick={logout}
-              className="shrink-0 text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
+              className="h-10 w-10 shrink-0 rounded-xl border-brand-100 bg-white/70 p-0 text-brand-600 shadow-sm hover:border-red-200 hover:bg-red-50 hover:text-red-600 md:w-auto md:px-3"
             >
               <LogOut className="w-4 h-4 md:mr-2" />
               <span className="hidden md:inline">Abmelden</span>
@@ -359,10 +359,10 @@ export default function Profile() {
         </motion.div>
 
         <Tabs defaultValue="dogs" className="space-y-4 md:space-y-6">
-          <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
-            <TabsList className="border border-white/70 bg-white/65 backdrop-blur-xl gap-1 inline-flex min-w-full justify-start md:justify-center">
-              <TabsTrigger value="dogs" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">Hunde</TabsTrigger>
-              <TabsTrigger value="routes" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0 flex items-center gap-1">
+          <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+            <TabsList className="inline-flex min-w-full justify-start gap-0.5 border border-white/70 bg-white/65 backdrop-blur-xl md:justify-center md:gap-1">
+              <TabsTrigger value="dogs" className="h-9 flex-shrink-0 whitespace-nowrap px-3 text-xs md:text-sm">Hunde</TabsTrigger>
+              <TabsTrigger value="routes" className="flex h-9 flex-shrink-0 items-center gap-1 whitespace-nowrap px-3 text-xs md:text-sm">
                 <Navigation className="w-3.5 h-3.5" />
                 Routen
                 {userRoutes.length > 0 && (
@@ -371,7 +371,7 @@ export default function Profile() {
                   </span>
                 )}
               </TabsTrigger>
-              <TabsTrigger value="saved" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0 flex items-center gap-1">
+              <TabsTrigger value="saved" className="flex h-9 flex-shrink-0 items-center gap-1 whitespace-nowrap px-3 text-xs md:text-sm">
                 <Heart className="w-3.5 h-3.5" />
                 Gespeichert
                 {savedHikes.length > 0 && (
@@ -380,7 +380,7 @@ export default function Profile() {
                   </span>
                 )}
               </TabsTrigger>
-              <TabsTrigger value="settings" className="text-xs md:text-sm whitespace-nowrap flex-shrink-0">Konto</TabsTrigger>
+              <TabsTrigger value="settings" className="h-9 flex-shrink-0 whitespace-nowrap px-3 text-xs md:text-sm">Konto</TabsTrigger>
             </TabsList>
           </div>
 
@@ -416,7 +416,7 @@ export default function Profile() {
                       transition={{ delay: index * 0.05 }}
                       className="doghike-glass-card-hover overflow-hidden"
                     >
-                      <div className="relative h-44 bg-gradient-to-br from-brand-50 via-white to-stone-100">
+                      <div className="relative h-40 bg-gradient-to-br from-brand-50 via-white to-stone-100 md:h-44">
                         <img
                           src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}&backgroundColor=f5f5f4`}
                           alt={dog.name}
@@ -462,7 +462,7 @@ export default function Profile() {
                         </div>
                       </div>
 
-                      <div className="p-5">
+                      <div className="p-4 md:p-5">
                         <div className="flex items-center justify-between mb-1">
                           <h2 className="text-xl font-semibold text-stone-800">{dog.name}</h2>
                           {dog.breed && (
