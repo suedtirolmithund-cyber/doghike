@@ -60,9 +60,9 @@ export default function AccountSettings({ user }) {
           <Label className="text-sm text-stone-600 mb-1 block">E-Mail-Adresse</Label>
           <Input value={user?.email || ""} disabled className="bg-stone-50 text-stone-500" />
           <p className="text-xs text-stone-400 mt-1">
-            E-Mail-Aenderungen koennen ueber{" "}
+            E-Mail-Änderungen können über{" "}
             <a
-              href={`mailto:${SUPPORT_EMAIL}?subject=E-Mail-Aenderung`}
+              href={`mailto:${SUPPORT_EMAIL}?subject=E-Mail-Änderung`}
               className="text-brand-400 hover:underline"
             >
               Kontaktanfrage
@@ -100,7 +100,7 @@ export default function AccountSettings({ user }) {
 
       <div className="rounded-2xl border border-red-200 bg-red-50/50 p-5 shadow-[0_14px_35px_rgba(80,56,38,0.08)] backdrop-blur-xl">
         <h3 className="text-base font-semibold text-red-700 mb-2 flex items-center gap-2">
-          <Trash2 className="w-4 h-4" /> Konto & alle Daten loeschen
+          <Trash2 className="w-4 h-4" /> Konto & alle Daten löschen
         </h3>
         <p className="text-sm text-stone-600 mb-4">
           Du kannst die vollstaendige Loeschung deines Kontos und <strong>aller deiner Daten</strong>{" "}
@@ -114,12 +114,12 @@ export default function AccountSettings({ user }) {
               className="border-red-300 text-red-600 hover:bg-red-50 hover:border-red-400"
             >
               <AlertTriangle className="w-4 h-4 mr-2" />
-              {isDeleting ? "Konto wird geloescht..." : "Konto loeschen"}
+              {isDeleting ? "Konto wird gelöscht..." : "Konto löschen"}
             </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Konto endgueltig loeschen?</AlertDialogTitle>
+              <AlertDialogTitle>Konto endgültig löschen?</AlertDialogTitle>
               <AlertDialogDescription asChild>
                 <div className="space-y-2 text-sm text-stone-600">
                   <p>
@@ -134,7 +134,7 @@ export default function AccountSettings({ user }) {
                     <li>Routen & GPS-Daten</li>
                   </ul>
                   <p className="font-medium text-red-600">
-                    Diese Loeschung ist endgueltig und kann nicht rueckgaengig gemacht werden.
+                    Diese Löschung ist endgültig und kann nicht rückgängig gemacht werden.
                   </p>
                 </div>
               </AlertDialogDescription>
@@ -146,7 +146,7 @@ export default function AccountSettings({ user }) {
                 disabled={isDeleting}
                 className="bg-red-600 hover:bg-red-700 text-white"
               >
-                {isDeleting ? "Wird geloescht..." : "Jetzt endgueltig loeschen"}
+                {isDeleting ? "Wird gelöscht..." : "Jetzt endgültig löschen"}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

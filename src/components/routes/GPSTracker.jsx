@@ -691,11 +691,11 @@ export default function GPSTracker({ onSave }) {
 
       {isTracking && (
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800 md:text-sm">
-          <p className="mb-1 font-medium">Bestmoeglich fuer die Web-Version:</p>
+          <p className="mb-1 font-medium">Bestmöglich für die Web-Version:</p>
           <ul className="list-disc space-y-1 pl-4">
-            <li>Lass die App moeglichst geoeffnet oder den Bildschirm aktiv.</li>
+            <li>Lass die App möglichst geöffnet oder den Bildschirm aktiv.</li>
             <li>Die laufende Aufzeichnung wird lokal zwischengespeichert und nach Unterbrechungen wiederhergestellt.</li>
-            <li>Bei gesperrtem Handy kann der Browser GPS trotzdem drosseln, dadurch koennen Punkte ungenauer werden.</li>
+            <li>Bei gesperrtem Handy kann der Browser GPS trotzdem drosseln, dadurch können Punkte ungenauer werden.</li>
           </ul>
         </div>
       )}
