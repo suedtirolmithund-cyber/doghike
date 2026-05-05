@@ -259,12 +259,12 @@ export default function Friends() {
 
         {/* Search */}
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-          className="doghike-glass-card p-4 mb-6"
+          className="doghike-glass-card mb-5 p-3.5 sm:p-4"
         >
-          <h2 className="text-sm font-semibold text-stone-700 mb-3 flex items-center gap-2">
+          <h2 className="mb-2.5 flex items-center gap-2 text-sm font-semibold text-stone-700">
             <Search className="w-4 h-4" /> Freunde suchen
           </h2>
-          <form onSubmit={handleSearch} className="flex gap-2">
+          <form onSubmit={handleSearch} className="grid grid-cols-[1fr_auto] gap-2">
             <Input
               value={searchQuery}
               onChange={(e) => {
@@ -275,9 +275,9 @@ export default function Friends() {
                 }
               }}
               placeholder="Username oder Name suchen..."
-              className="flex-1"
+              className="h-11 rounded-xl text-sm"
             />
-            <Button type="submit" disabled={searching} className="bg-brand-400 hover:bg-brand-600 shrink-0">
+            <Button type="submit" disabled={searching} className="h-11 w-12 shrink-0 rounded-xl bg-brand-400 px-0 hover:bg-brand-600">
               {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
             </Button>
           </form>
@@ -371,14 +371,16 @@ export default function Friends() {
                   const profile = friendOf(f);
                   return (
                     <motion.div key={f.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                      className="doghike-glass-card rounded-xl p-3 flex items-center gap-3"
+                      className="doghike-glass-card flex items-center gap-3 rounded-2xl px-3.5 py-3.5"
                     >
                       <Avatar profile={profile} />
-                      <ProfileName profile={profile} />
+                      <div className="min-w-0 flex-1">
+                        <ProfileName profile={profile} />
+                      </div>
                       <Button size="sm" variant="ghost"
                         onClick={() => removeMutation.mutate(f.id)}
                         disabled={removeMutation.isPending}
-                        className="ml-auto text-stone-400 hover:text-red-500 hover:bg-red-50 h-8"
+                        className="ml-auto h-9 w-9 rounded-xl p-0 text-stone-400 hover:bg-red-50 hover:text-red-500"
                       >
                         <UserMinus className="w-3.5 h-3.5" />
                       </Button>
@@ -445,7 +447,7 @@ export default function Friends() {
                   const profile = profileMap[f.receiver_id];
                   return (
                     <motion.div key={f.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                      className="doghike-glass-card rounded-xl p-3 flex items-center gap-3"
+                      className="doghike-glass-card flex items-center gap-3 rounded-2xl px-3.5 py-3.5"
                     >
                       <Avatar profile={profile} />
                       <div className="flex-1 min-w-0">
@@ -456,7 +458,7 @@ export default function Friends() {
                       </div>
                       <Button size="sm" variant="ghost"
                         onClick={() => removeMutation.mutate(f.id)}
-                        className="text-stone-400 hover:text-red-500 h-8 ml-auto"
+                        className="ml-auto h-9 w-9 rounded-xl p-0 text-stone-400 hover:text-red-500"
                       >
                         <X className="w-3.5 h-3.5" />
                       </Button>
