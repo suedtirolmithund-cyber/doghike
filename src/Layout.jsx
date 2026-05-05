@@ -4,7 +4,7 @@ import { createPageUrl } from "@/utils";
 import {
   Mountain,
   Home,
-  Navigation,
+  Map,
   Dog,
   LogIn,
   LogOut,
@@ -25,7 +25,7 @@ const MAIN_NAV = [
   { name: "Dashboard", icon: Home, label: "Home" },
   { name: "Hikes", icon: Mountain, label: "Touren" },
   { name: "Journal", icon: BookOpen, label: "Tagebuch" },
-  { name: "RoutePlanner", icon: Navigation, label: "Planen" },
+  { name: "RoutePlanner", icon: Map, label: "Planen" },
   { name: "Profile", icon: Dog, label: "Profil" },
 ];
 
@@ -38,7 +38,7 @@ const DESKTOP_NAV = [
   { name: "Dashboard", icon: Home, label: "Startseite" },
   { name: "Hikes", icon: Mountain, label: "Alle Touren" },
   { name: "Journal", icon: BookOpen, label: "Tagebuch" },
-  { name: "RoutePlanner", icon: Navigation, label: "Routenplaner" },
+  { name: "RoutePlanner", icon: Map, label: "Routenplaner" },
   { name: "Friends", icon: Users, label: "Freunde" },
   { name: "TopDogs", icon: Trophy, label: "Top Dogs" },
   { name: "Profile", icon: Dog, label: "Mein Profil" },
