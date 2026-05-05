@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -9,28 +8,9 @@ import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
-
-function getSeasonValues(hike) {
-  if (Array.isArray(hike.seasons) && hike.seasons.length > 0) {
-    return hike.seasons;
-  }
-
-  return hike.season ? [hike.season] : [];
-}
+import { useHikeFilters } from "@/hooks/useHikeFilters";
 
 export default function Hikes() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState("none");
-  const [levelFilter, setLevelFilter] = useState("all");
-  const [humanDifficultyFilter, setHumanDifficultyFilter] = useState("all");
-  const [dogDifficultyFilter, setDogDifficultyFilter] = useState("all");
-  const [distanceMin, setDistanceMin] = useState("");
-  const [distanceMax, setDistanceMax] = useState("");
-  const [elevationMin, setElevationMin] = useState("");
-  const [elevationMax, setElevationMax] = useState("");
-  const [seasonFilter, setSeasonFilter] = useState("all");
-  const [waterFilter, setWaterFilter] = useState("all");
-
   const { data: hikes = [] } = useQuery({
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
@@ -38,46 +18,35 @@ export default function Hikes() {
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
   });
-
-  const filteredHikes = hikes
-    .filter((hike) => {
-      const query = searchQuery.trim().toLowerCase();
-      const matchesSearch = !query ||
-        hike.trail_name?.toLowerCase().includes(query) ||
-        hike.location?.toLowerCase().includes(query) ||
-        hike.tags?.some((tag) => tag.toLowerCase().includes(query));
-      if (!matchesSearch) return false;
-
-      if (humanDifficultyFilter !== "all" && hike.difficulty !== humanDifficultyFilter) return false;
-      if (dogDifficultyFilter !== "all" && hike.dog_difficulty !== dogDifficultyFilter) return false;
-      if (distanceMin && (hike.distance_km || 0) < parseFloat(distanceMin)) return false;
-      if (distanceMax && (hike.distance_km || 0) > parseFloat(distanceMax)) return false;
-      if (elevationMin && (hike.elevation_gain_m || 0) < parseFloat(elevationMin)) return false;
-      if (elevationMax && (hike.elevation_gain_m || 0) > parseFloat(elevationMax)) return false;
-      if (seasonFilter !== "all") {
-        const seasons = getSeasonValues(hike);
-        if (!seasons.includes(seasonFilter) && !seasons.includes("all_year")) return false;
-      }
-      if (waterFilter !== "all" && hike.water_availability !== waterFilter) return false;
-
-      if (levelFilter === "all") return true;
-      if (sortBy === "difficulty") return hike.difficulty === levelFilter;
-      if (sortBy === "dog_difficulty") return hike.dog_difficulty === levelFilter;
-      return true;
-    })
-    .sort((a, b) => {
-      if (sortBy === "difficulty") return (a.difficulty || "9").localeCompare(b.difficulty || "9");
-      if (sortBy === "dog_difficulty") return (a.dog_difficulty || "9").localeCompare(b.dog_difficulty || "9");
-      if (sortBy === "distance") return (b.distance_km || 0) - (a.distance_km || 0);
-      if (sortBy === "elevation") return (b.elevation_gain_m || 0) - (a.elevation_gain_m || 0);
-      const bTime = b.date ? new Date(b.date).getTime() : 0;
-      const aTime = a.date ? new Date(a.date).getTime() : 0;
-      return bTime - aTime || (a.trail_name || "").localeCompare(b.trail_name || "");
-    });
+  const {
+    searchQuery,
+    setSearchQuery,
+    sortBy,
+    setSortBy,
+    levelFilter,
+    setLevelFilter,
+    humanDifficultyFilter,
+    setHumanDifficultyFilter,
+    dogDifficultyFilter,
+    setDogDifficultyFilter,
+    distanceMin,
+    setDistanceMin,
+    distanceMax,
+    setDistanceMax,
+    elevationMin,
+    setElevationMin,
+    elevationMax,
+    setElevationMax,
+    seasonFilter,
+    setSeasonFilter,
+    waterFilter,
+    setWaterFilter,
+    filteredHikes,
+  } = useHikeFilters(hikes);
 
   return (
     <div className="doghike-page-shell">
-      <div className="doghike-content-shell">
+      <div className="doghike-content-shell pb-32 md:pb-10">
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -96,9 +65,9 @@ export default function Hikes() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="doghike-filter-panel mb-8"
+          className="doghike-filter-panel mb-7"
         >
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
               <Input
@@ -109,9 +78,9 @@ export default function Hikes() {
               />
             </div>
 
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-4">
               <div>
-                <label className="doghike-filter-label">{TOUR_ICONS.human} Schwierigkeit Mensch</label>
+                <label className="doghike-filter-label text-xs sm:text-sm">{TOUR_ICONS.human} Mensch</label>
                 <Select value={humanDifficultyFilter} onValueChange={setHumanDifficultyFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Alle" />
@@ -128,7 +97,7 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="doghike-filter-label">{TOUR_ICONS.dog} Schwierigkeit Hund</label>
+                <label className="doghike-filter-label text-xs sm:text-sm">{TOUR_ICONS.dog} Hund</label>
                 <Select value={dogDifficultyFilter} onValueChange={setDogDifficultyFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Alle" />
@@ -145,7 +114,7 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="doghike-filter-label">{TOUR_ICONS.season} Jahreszeit</label>
+                <label className="doghike-filter-label text-xs sm:text-sm">{TOUR_ICONS.season} Jahreszeit</label>
                 <Select value={seasonFilter} onValueChange={setSeasonFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Alle" />
@@ -162,8 +131,8 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="doghike-filter-label">
-                  <WaterIcon value="little" /> Wasser unterwegs
+                <label className="doghike-filter-label text-xs sm:text-sm">
+                  <WaterIcon value="little" /> Wasser
                 </label>
                 <Select value={waterFilter} onValueChange={setWaterFilter}>
                   <SelectTrigger>
@@ -182,24 +151,24 @@ export default function Hikes() {
                 </Select>
               </div>
 
-              <div>
-                <label className="doghike-filter-label">{TOUR_ICONS.distance} Distanz (km)</label>
+              <div className="col-span-2 sm:col-span-1">
+                <label className="doghike-filter-label text-xs sm:text-sm">{TOUR_ICONS.distance} Distanz (km)</label>
                 <div className="flex gap-2">
                   <Input type="number" placeholder="Min" value={distanceMin} onChange={(e) => setDistanceMin(e.target.value)} />
                   <Input type="number" placeholder="Max" value={distanceMax} onChange={(e) => setDistanceMax(e.target.value)} />
                 </div>
               </div>
 
-              <div>
-                <label className="doghike-filter-label">{TOUR_ICONS.elevation} Höhenmeter (m)</label>
+              <div className="col-span-2 sm:col-span-1">
+                <label className="doghike-filter-label text-xs sm:text-sm">{TOUR_ICONS.elevation} Höhenmeter (m)</label>
                 <div className="flex gap-2">
                   <Input type="number" placeholder="Min" value={elevationMin} onChange={(e) => setElevationMin(e.target.value)} />
                   <Input type="number" placeholder="Max" value={elevationMax} onChange={(e) => setElevationMax(e.target.value)} />
                 </div>
               </div>
 
-              <div>
-                <label className="doghike-filter-label">Sortieren</label>
+              <div className="col-span-2 lg:col-span-1">
+                <label className="doghike-filter-label text-xs sm:text-sm">Sortieren</label>
                 <Select value={sortBy} onValueChange={(v) => { setSortBy(v); setLevelFilter("all"); }}>
                   <SelectTrigger>
                     <SelectValue placeholder="Neueste zuerst" />
@@ -222,7 +191,7 @@ export default function Hikes() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="mb-8"
+            className="mb-10"
           >
             <div className="doghike-section-header">
               <div>
@@ -242,7 +211,7 @@ export default function Hikes() {
         )}
 
         {filteredHikes.length > 0 ? (
-          <div className="doghike-card-grid">
+          <div className="doghike-card-grid pb-20 md:pb-0">
             {filteredHikes.map((hike, index) => (
               <HikeCard key={`${hike._source ?? "sheets"}-${hike.id}`} hike={hike} index={index} />
             ))}
