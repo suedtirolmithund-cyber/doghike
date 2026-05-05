@@ -7,7 +7,7 @@ import { createPageUrl } from "@/utils";
 import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowLeft, Edit, Trash2, ChevronLeft, ChevronRight, X, Share2, Check
+  ArrowLeft, Edit, Trash2, ChevronLeft, ChevronRight, X, Share2, Check, MapPin
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -366,15 +366,28 @@ export default function HikeDetail() {
             transition={{ delay: 0.11 }}
             className="mb-10"
           >
-            <h2 className="text-2xl font-semibold text-stone-800 mb-4">
-              {hike.route_coordinates?.length > 0 ? "🗺️ Interaktive Karte & Routenverlauf" : "📍 Ausgangspunkt"}
-            </h2>
+            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-brand-100 bg-brand-50/80 px-3 py-1.5 text-sm font-semibold text-brand-800">
+                  <MapPin className="h-4 w-4" />
+                  Ausgangspunkt: {hike.location || hike.trail_name}
+                </div>
+                <h2 className="text-2xl font-semibold text-stone-800">
+                  {hike.route_coordinates?.length > 0 ? "Interaktive Karte & Routenverlauf" : "Ausgangspunkt auf der Karte"}
+                </h2>
+              </div>
+            </div>
             <InteractiveHikeMap
               latitude={hike.latitude}
               longitude={hike.longitude}
               routeCoordinates={hike.route_coordinates}
               trailName={hike.trail_name}
               location={hike.location}
+              stats={[
+                hike.distance_km && { label: "Strecke", icon: TOUR_ICONS.distance, value: `${hike.distance_km} km` },
+                hike.elevation_gain_m && { label: "Aufstieg", icon: TOUR_ICONS.elevation, value: `${hike.elevation_gain_m} Hm` },
+                hike.duration_minutes && { label: "Gehzeit", icon: TOUR_ICONS.duration, value: formatDurationHours(hike.duration_minutes) },
+              ].filter(Boolean)}
             />
           </motion.div>
         )}
