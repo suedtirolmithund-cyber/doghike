@@ -216,7 +216,7 @@ export default function Login() {
   return (
     <div className="min-h-screen relative flex items-end justify-center overflow-hidden">
       <div className="absolute inset-0">
-        <img src={BG_IMAGE} alt="" className="w-full h-full object-cover object-center md:object-contain" />
+        <img src={BG_IMAGE} alt="" className="w-full h-full object-cover object-center" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
       </div>
 
