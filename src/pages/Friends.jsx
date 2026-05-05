@@ -289,6 +289,7 @@ export default function Friends() {
               >
                 {searchResults.map((profile) => {
                   const existing = existingFriendship(profile.user_id);
+                  const isAccepted = existing?.status === "accepted";
                   const isIncomingPending =
                     existing?.status === "pending" &&
                     existing?.requester_id === profile.user_id &&
@@ -304,7 +305,7 @@ export default function Friends() {
                       <Avatar profile={profile} />
                       <ProfileName profile={profile} />
                       <div className="ml-auto shrink-0">
-                        {!existing ? (
+                        {!existing || existing?.status === "rejected" ? (
                           <Button size="sm" onClick={() => sendMutation.mutate(profile.user_id)}
                             disabled={sendMutation.isPending}
                             className="bg-brand-400 hover:bg-brand-600 h-8"
@@ -319,10 +320,17 @@ export default function Friends() {
                           <span className="text-xs text-amber-600 font-medium flex items-center gap-1">
                             <Clock className="w-3.5 h-3.5" /> Gesendet
                           </span>
-                        ) : (
+                        ) : isAccepted ? (
                           <span className="text-xs text-brand-400 font-medium flex items-center gap-1">
                             <Check className="w-3.5 h-3.5" /> Freund
                           </span>
+                        ) : (
+                          <Button size="sm" onClick={() => sendMutation.mutate(profile.user_id)}
+                            disabled={sendMutation.isPending}
+                            className="bg-brand-400 hover:bg-brand-600 h-8"
+                          >
+                            <UserPlus className="w-3.5 h-3.5 mr-1" /> Anfrage senden
+                          </Button>
                         )}
                       </div>
                     </div>
