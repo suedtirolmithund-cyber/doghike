@@ -50,6 +50,9 @@ function createMissingConfigClient() {
         getPublicUrl: () => ({ data: { publicUrl: "" } }),
       }),
     },
+    functions: {
+      invoke: async () => failingResult,
+    },
   };
 }
 

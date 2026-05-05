@@ -1,6 +1,21 @@
 import { supabase } from "./supabaseClient";
 import { hydrateJournalEntriesMedia } from "./journalApi";
 
+async function triggerFriendshipWebPush(eventType, friendshipId) {
+  if (!friendshipId) return;
+
+  try {
+    await supabase.functions.invoke("send-web-push", {
+      body: {
+        type: eventType,
+        friendshipId,
+      },
+    });
+  } catch (error) {
+    console.error("[WebPush] Versand fehlgeschlagen:", error);
+  }
+}
+
 // Returns all friendships involving the current user (pending + accepted)
 export async function getFriendships(userId) {
   const { data, error } = await supabase
@@ -60,6 +75,7 @@ export async function sendFriendRequest(requesterId, receiverId) {
     .select()
     .single();
   if (error) throw error;
+  await triggerFriendshipWebPush("friend_request", data.id);
   return data;
 }
 
@@ -70,6 +86,7 @@ export async function acceptFriendRequest(friendshipId) {
     .update({ status: "accepted" })
     .eq("id", friendshipId);
   if (error) throw error;
+  await triggerFriendshipWebPush("friend_accepted", friendshipId);
 }
 
 // Reject a request

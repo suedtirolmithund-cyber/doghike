@@ -213,6 +213,27 @@ create policy "Freundschaft verwalten" on public.friendships for update
 create policy "Freundschaft löschen" on public.friendships for delete
   using (auth.uid() = requester_id or auth.uid() = receiver_id);
 
+-- WEB PUSH SUBSCRIPTIONS
+create table if not exists public.push_subscriptions (
+  id           uuid default gen_random_uuid() primary key,
+  user_id      uuid references auth.users(id) on delete cascade not null,
+  endpoint     text not null unique,
+  p256dh_key   text not null,
+  auth_key     text not null,
+  user_agent   text,
+  last_seen_at timestamptz default now(),
+  created_at   timestamptz default now()
+);
+alter table public.push_subscriptions enable row level security;
+create policy "Eigene Push-Subscriptions lesen" on public.push_subscriptions
+  for select using (auth.uid() = user_id);
+create policy "Eigene Push-Subscriptions anlegen" on public.push_subscriptions
+  for insert with check (auth.uid() = user_id);
+create policy "Eigene Push-Subscriptions bearbeiten" on public.push_subscriptions
+  for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "Eigene Push-Subscriptions löschen" on public.push_subscriptions
+  for delete using (auth.uid() = user_id);
+
 -- SAVED HIKES
 create table if not exists public.saved_hikes (
   id          uuid default gen_random_uuid() primary key,

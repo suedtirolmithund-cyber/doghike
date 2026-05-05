@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { supabase } from "@/lib/supabaseClient";
@@ -20,9 +20,13 @@ import { de } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import {
-  notificationsSupported,
+  disableWebPushSubscription,
+  ensureWebPushSubscription,
+  getExistingPushSubscription,
+  hasWebPushConfig,
   notificationPermission,
   requestNotificationPermission,
+  webPushSupported,
 } from "@/lib/browserNotifications";
 
 async function loadNotifications(userId) {
@@ -145,16 +149,61 @@ async function loadNotifications(userId) {
 export default function Notifications() {
   const { user, isAuthenticated } = useAuth();
   const [permission, setPermission] = useState(() => notificationPermission());
+  const [subscriptionEnabled, setSubscriptionEnabled] = useState(false);
+  const [subscriptionLoading, setSubscriptionLoading] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function syncSubscriptionState() {
+      if (!user?.id || !webPushSupported()) {
+        if (!cancelled) setSubscriptionEnabled(false);
+        return;
+      }
+
+      const subscription = await getExistingPushSubscription();
+      if (!cancelled) setSubscriptionEnabled(Boolean(subscription));
+    }
+
+    syncSubscriptionState();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id, permission]);
 
   const handleActivate = async () => {
     try {
+      setSubscriptionLoading(true);
       const granted = await requestNotificationPermission();
       setPermission(granted ? "granted" : "denied");
-      if (granted) {
-        toast.success("Benachrichtigungen wurden aktiviert.");
+      if (!granted) return;
+
+      if (!user?.id) {
+        toast.error("Bitte melde dich an, um Push-Benachrichtigungen zu aktivieren.");
+        return;
       }
+
+      await ensureWebPushSubscription(user.id);
+      setSubscriptionEnabled(true);
+      toast.success("Push-Benachrichtigungen wurden aktiviert.");
     } catch {
-      toast.error("Benachrichtigungen konnten gerade nicht aktiviert werden. Bitte versuche es noch einmal.");
+      toast.error("Push-Benachrichtigungen konnten gerade nicht aktiviert werden. Bitte versuche es noch einmal.");
+    } finally {
+      setSubscriptionLoading(false);
+    }
+  };
+
+  const handleDeactivate = async () => {
+    try {
+      setSubscriptionLoading(true);
+      await disableWebPushSubscription();
+      setSubscriptionEnabled(false);
+      toast.success("Push-Benachrichtigungen wurden deaktiviert.");
+    } catch {
+      toast.error("Push-Benachrichtigungen konnten gerade nicht deaktiviert werden.");
+    } finally {
+      setSubscriptionLoading(false);
     }
   };
 
@@ -199,7 +248,7 @@ export default function Notifications() {
           </div>
         </motion.div>
 
-        {notificationsSupported() && permission !== "granted" && permission !== "denied" && (
+        {webPushSupported() && hasWebPushConfig() && permission !== "granted" && permission !== "denied" && (
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -207,20 +256,34 @@ export default function Notifications() {
           >
             <Bell className="w-5 h-5 text-brand-400 shrink-0" />
             <div className="flex-1">
-              <p className="text-sm font-medium text-brand-700">Push-Benachrichtigungen aktivieren</p>
-              <p className="text-xs text-brand-400">Erhalte Benachrichtigungen bei neuen Freundschaftsanfragen.</p>
+              <p className="text-sm font-medium text-brand-700">Web-Push aktivieren</p>
+              <p className="text-xs text-brand-400">Erhalte Hinweise auch dann, wenn DogHike gerade nicht geöffnet ist.</p>
             </div>
             <Button
               size="sm"
               onClick={handleActivate}
+              disabled={subscriptionLoading}
               className="bg-brand-400 hover:bg-brand-600 text-white shrink-0"
             >
-              Aktivieren
+              {subscriptionLoading ? "Aktiviert..." : "Aktivieren"}
             </Button>
           </motion.div>
         )}
 
-        {notificationsSupported() && permission === "denied" && (
+        {webPushSupported() && hasWebPushConfig() && permission === "granted" && subscriptionEnabled && (
+          <div className="doghike-glass-card mb-5 flex items-center gap-3 p-4">
+            <CheckCircle2 className="w-5 h-5 text-brand-500 shrink-0" />
+            <div className="flex-1">
+              <p className="text-sm font-medium text-stone-700">Web-Push ist aktiv</p>
+              <p className="text-xs text-stone-500">Freundschaftsanfragen und Bestätigungen können jetzt auch bei geschlossener App ankommen.</p>
+            </div>
+            <Button size="sm" variant="outline" disabled={subscriptionLoading} onClick={handleDeactivate} className="shrink-0">
+              Deaktivieren
+            </Button>
+          </div>
+        )}
+
+        {webPushSupported() && hasWebPushConfig() && permission === "denied" && (
           <div className="doghike-glass-card mb-5 flex items-center gap-3 p-4">
             <BellOff className="w-5 h-5 text-stone-400 shrink-0" />
             <p className="text-xs text-stone-500">

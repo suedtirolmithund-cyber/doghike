@@ -18,7 +18,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
-import { registerServiceWorker } from "@/lib/browserNotifications";
+import { ensureWebPushSubscription, notificationPermission, registerServiceWorker } from "@/lib/browserNotifications";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 
 const MAIN_NAV = [
@@ -56,6 +56,15 @@ export default function Layout({ children, currentPageName }) {
   useEffect(() => {
     registerServiceWorker();
   }, []);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    if (notificationPermission() !== "granted") return;
+
+    ensureWebPushSubscription(user.id).catch((error) => {
+      console.error("[WebPush] Subscription-Sync fehlgeschlagen:", error);
+    });
+  }, [user?.id]);
 
   useRealtimeNotifications(user?.id);
 
