@@ -12,6 +12,7 @@ import {
   Camera,
   Check,
   X,
+  Bell,
   Mountain,
   Navigation,
   BookOpen,
@@ -339,9 +340,16 @@ export default function Profile() {
                     <p className="text-sm text-stone-400">@{profile.username}</p>
                   )}
                   <p className="text-xs text-stone-400 mt-0.5 truncate">{user?.email}</p>
-                  <Button size="sm" variant="outline" className="mt-2 h-7 text-xs" onClick={startEditProfile}>
-                    <Edit className="w-3 h-3 mr-1" /> Profil bearbeiten
-                  </Button>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={startEditProfile}>
+                      <Edit className="w-3 h-3 mr-1" /> Profil bearbeiten
+                    </Button>
+                    <Link to={createPageUrl("Notifications")}>
+                      <Button size="sm" variant="outline" className="h-7 text-xs">
+                        <Bell className="w-3 h-3 mr-1" /> Benachrichtigungen
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               )}
             </div>
