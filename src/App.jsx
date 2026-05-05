@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-route
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import AppLoadingScreen from '@/components/AppLoadingScreen';
+import { Loader2 } from 'lucide-react';
 import GuestWelcomeScreen from '@/components/GuestWelcomeScreen';
 import React from 'react';
 import { useEffect, useState } from 'react';
@@ -44,8 +45,8 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
   : <>{children}</>;
 
 const PageFallback = () => (
-  <div className="flex min-h-[40vh] items-center justify-center">
-    <AppLoadingScreen />
+  <div className="flex min-h-[40vh] items-center justify-center bg-gradient-to-br from-stone-50 via-white to-brand-50/10">
+    <Loader2 className="h-6 w-6 animate-spin text-brand-500" />
   </div>
 );
 
