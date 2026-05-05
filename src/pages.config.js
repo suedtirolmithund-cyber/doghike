@@ -1,118 +1,42 @@
-/**
- * pages.config.js - Page routing configuration
- * 
- * This file is AUTO-GENERATED. Do not add imports or modify PAGES manually.
- * Pages are auto-registered when you create files in the ./pages/ folder.
- * 
- * THE ONLY EDITABLE VALUE: mainPage
- * This controls which page is the landing page (shown when users visit the app).
- * 
- * Example file structure:
- * 
- *   import HomePage from './pages/HomePage';
- *   import Dashboard from './pages/Dashboard';
- *   import Settings from './pages/Settings';
- *   
- *   export const PAGES = {
- *       "HomePage": HomePage,
- *       "Dashboard": Dashboard,
- *       "Settings": Settings,
- *   }
- *   
- *   export const pagesConfig = {
- *       mainPage: "HomePage",
- *       Pages: PAGES,
- *   };
- * 
- * Example with Layout (wraps all pages):
- *
- *   import Home from './pages/Home';
- *   import Settings from './pages/Settings';
- *   import __Layout from './Layout.jsx';
- *
- *   export const PAGES = {
- *       "Home": Home,
- *       "Settings": Settings,
- *   }
- *
- *   export const pagesConfig = {
- *       mainPage: "Home",
- *       Pages: PAGES,
- *       Layout: __Layout,
- *   };
- *
- * To change the main page from HomePage to Dashboard, use find_replace:
- *   Old: mainPage: "HomePage",
- *   New: mainPage: "Dashboard",
- *
- * The mainPage value must match a key in the PAGES object exactly.
- */
-import AGB from './pages/AGB';
-import AddHike from './pages/AddHike';
-import AddJournalEntry from './pages/AddJournalEntry';
-import AdminDashboard from './pages/AdminDashboard';
-import AdminReview from './pages/AdminReview';
-import Dashboard from './pages/Dashboard';
-import Datenschutz from './pages/Datenschutz';
-import DifficultyHelp from './pages/DifficultyHelp';
-import Dogs from './pages/Dogs';
-import EditHike from './pages/EditHike';
-import EditPublicHike from './pages/EditPublicHike';
-import EditRoute from './pages/EditRoute';
-import Friends from './pages/Friends';
-import HikeDetail from './pages/HikeDetail';
-import Hikes from './pages/Hikes';
-import Journal from './pages/Journal';
-import JournalDetail from './pages/JournalDetail';
-import Impressum from './pages/Impressum';
-import Legal from './pages/Legal';
-import Login from './pages/Login';
-import MapView from './pages/MapView';
-import Notifications from './pages/Notifications';
-import Profile from './pages/Profile';
-import RouteDetail from './pages/RouteDetail';
-import RoutePlanner from './pages/RoutePlanner';
-import SubmitHike from './pages/SubmitHike';
-import Support from './pages/Support';
-import TopDogs from './pages/TopDogs';
-import WaterHelp from './pages/WaterHelp';
-import __Layout from './Layout.jsx';
+import { lazy } from "react";
+import __Layout from "./Layout.jsx";
 
+const lazyPage = (loader) => lazy(loader);
 
 export const PAGES = {
-    "AGB": AGB,
-    "AddHike": AddHike,
-    "AddJournalEntry": AddJournalEntry,
-    "AdminDashboard": AdminDashboard,
-    "AdminReview": AdminReview,
-    "Dashboard": Dashboard,
-    "Datenschutz": Datenschutz,
-    "DifficultyHelp": DifficultyHelp,
-    "Dogs": Dogs,
-    "EditHike": EditHike,
-    "EditPublicHike": EditPublicHike,
-    "EditRoute": EditRoute,
-    "Friends": Friends,
-    "HikeDetail": HikeDetail,
-    "Hikes": Hikes,
-    "Journal": Journal,
-    "JournalDetail": JournalDetail,
-    "Impressum": Impressum,
-    "Legal": Legal,
-    "Login": Login,
-    "MapView": MapView,
-    "Notifications": Notifications,
-    "Profile": Profile,
-    "RouteDetail": RouteDetail,
-    "RoutePlanner": RoutePlanner,
-    "SubmitHike": SubmitHike,
-    "Support": Support,
-    "TopDogs": TopDogs,
-    "WaterHelp": WaterHelp,
-}
+  AGB: lazyPage(() => import("./pages/AGB")),
+  AddHike: lazyPage(() => import("./pages/AddHike")),
+  AddJournalEntry: lazyPage(() => import("./pages/AddJournalEntry")),
+  AdminDashboard: lazyPage(() => import("./pages/AdminDashboard")),
+  AdminReview: lazyPage(() => import("./pages/AdminReview")),
+  Dashboard: lazyPage(() => import("./pages/Dashboard")),
+  Datenschutz: lazyPage(() => import("./pages/Datenschutz")),
+  DifficultyHelp: lazyPage(() => import("./pages/DifficultyHelp")),
+  Dogs: lazyPage(() => import("./pages/Dogs")),
+  EditHike: lazyPage(() => import("./pages/EditHike")),
+  EditPublicHike: lazyPage(() => import("./pages/EditPublicHike")),
+  EditRoute: lazyPage(() => import("./pages/EditRoute")),
+  Friends: lazyPage(() => import("./pages/Friends")),
+  HikeDetail: lazyPage(() => import("./pages/HikeDetail")),
+  Hikes: lazyPage(() => import("./pages/Hikes")),
+  Impressum: lazyPage(() => import("./pages/Impressum")),
+  Journal: lazyPage(() => import("./pages/Journal")),
+  JournalDetail: lazyPage(() => import("./pages/JournalDetail")),
+  Legal: lazyPage(() => import("./pages/Legal")),
+  Login: lazyPage(() => import("./pages/Login")),
+  MapView: lazyPage(() => import("./pages/MapView")),
+  Notifications: lazyPage(() => import("./pages/Notifications")),
+  Profile: lazyPage(() => import("./pages/Profile")),
+  RouteDetail: lazyPage(() => import("./pages/RouteDetail")),
+  RoutePlanner: lazyPage(() => import("./pages/RoutePlanner")),
+  SubmitHike: lazyPage(() => import("./pages/SubmitHike")),
+  Support: lazyPage(() => import("./pages/Support")),
+  TopDogs: lazyPage(() => import("./pages/TopDogs")),
+  WaterHelp: lazyPage(() => import("./pages/WaterHelp")),
+};
 
 export const pagesConfig = {
-    mainPage: "Dashboard",
-    Pages: PAGES,
-    Layout: __Layout,
+  mainPage: "Dashboard",
+  Pages: PAGES,
+  Layout: __Layout,
 };

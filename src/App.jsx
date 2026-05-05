@@ -1,5 +1,4 @@
 import { Toaster } from "@/components/ui/toaster"
-import Premium from './pages/Premium';
 import CookieBanner from '@/components/CookieBanner';
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
@@ -12,6 +11,7 @@ import AppLoadingScreen from '@/components/AppLoadingScreen';
 import GuestWelcomeScreen from '@/components/GuestWelcomeScreen';
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { Suspense, lazy } from 'react';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -34,6 +34,7 @@ class ErrorBoundary extends React.Component {
   }
 }
 
+const PremiumPage = lazy(() => import("./pages/Premium"));
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
@@ -41,6 +42,18 @@ const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
 const LayoutWrapper = ({ children, currentPageName }) => Layout ?
   <Layout currentPageName={currentPageName}>{children}</Layout>
   : <>{children}</>;
+
+const PageFallback = () => (
+  <div className="flex min-h-[40vh] items-center justify-center">
+    <AppLoadingScreen />
+  </div>
+);
+
+const PageShell = ({ children, currentPageName }) => (
+  <LayoutWrapper currentPageName={currentPageName}>
+    <Suspense fallback={<PageFallback />}>{children}</Suspense>
+  </LayoutWrapper>
+);
 
 const ScrollToTop = () => {
   const location = useLocation();
@@ -83,22 +96,22 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={
-        <LayoutWrapper currentPageName={mainPageKey}>
+        <PageShell currentPageName={mainPageKey}>
           <MainPage />
-        </LayoutWrapper>
+        </PageShell>
       } />
       {Object.entries(Pages).map(([path, Page]) => (
         <Route
           key={path}
           path={`/${path}`}
           element={
-            <LayoutWrapper currentPageName={path}>
+            <PageShell currentPageName={path}>
               <Page />
-            </LayoutWrapper>
+            </PageShell>
           }
         />
       ))}
-      <Route path="/Premium" element={<LayoutWrapper currentPageName="Premium"><Premium /></LayoutWrapper>} />
+      <Route path="/Premium" element={<PageShell currentPageName="Premium"><PremiumPage /></PageShell>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
