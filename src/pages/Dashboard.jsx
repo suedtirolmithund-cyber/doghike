@@ -105,7 +105,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       {/* Hero */}
-      <div className="relative h-[560px] overflow-hidden bg-gradient-to-br from-[#d8c6b7] via-[#b9a48f] to-[#6f8583] md:h-[507px]">
+      <div className="relative h-[520px] overflow-hidden bg-gradient-to-br from-[#d8c6b7] via-[#b9a48f] to-[#6f8583] sm:h-[560px] md:h-[507px]">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
@@ -196,7 +196,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pb-20 pt-10">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 pb-32 pt-8 sm:px-6 sm:pt-10 md:pb-20 lg:px-8">
         {/* Stats */}
         <div className="mb-12 text-center">
           <StatsCard icon={Route} label="Wanderungen" value={filteredHikes.length} delay={0} />
@@ -226,7 +226,7 @@ export default function Dashboard() {
               </h2>
               {!searchQuery && (
                 <p className="text-sm text-stone-400 mt-0.5">
-                  Passend zur aktuellen Jahreszeit – {seasonLabel} & Ganzjährig
+                  Passend zur aktuellen Jahreszeit - {seasonLabel} & Ganzjährig
                 </p>
               )}
             </div>
