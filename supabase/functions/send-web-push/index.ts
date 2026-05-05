@@ -30,9 +30,18 @@ Deno.serve(async (request) => {
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
-    const vapidPublicKey = Deno.env.get("WEB_PUSH_VAPID_PUBLIC_KEY") || "";
-    const vapidPrivateKey = Deno.env.get("WEB_PUSH_VAPID_PRIVATE_KEY") || "";
-    const contactEmail = Deno.env.get("WEB_PUSH_CONTACT_EMAIL") || "mailto:hello@doghike.app";
+    const vapidPublicKey =
+      Deno.env.get("WEB_PUSH_VAPID_PUBLIC_KEY")
+      || Deno.env.get("web_push_vapid_public_key")
+      || "";
+    const vapidPrivateKey =
+      Deno.env.get("WEB_PUSH_VAPID_PRIVATE_KEY")
+      || Deno.env.get("web_push_vapid_private_key")
+      || "";
+    const contactEmail =
+      Deno.env.get("WEB_PUSH_CONTACT_EMAIL")
+      || Deno.env.get("web_push_contact_email")
+      || "mailto:hello@doghike.app";
 
     if (!supabaseUrl || !serviceRoleKey || !vapidPublicKey || !vapidPrivateKey) {
       return json({ error: "web_push_not_configured" }, 500);
