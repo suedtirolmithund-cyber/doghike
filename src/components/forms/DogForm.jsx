@@ -22,6 +22,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [uploadError, setUploadError] = useState(null);
+  const [validationError, setValidationError] = useState("");
   const [temporaryUploadedPhotoUrl, setTemporaryUploadedPhotoUrl] = useState(null);
 
   const handlePhotoUpload = async (event) => {
@@ -54,9 +55,17 @@ export default function DogForm({ dog, onSave, onCancel }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const trimmedName = formData.name.trim();
+
+    if (!trimmedName) {
+      setValidationError("Bitte gib einen Namen für deinen Hund ein.");
+      return;
+    }
+
+    setValidationError("");
     setSaving(true);
     try {
-      await onSave(formData);
+      await onSave({ ...formData, name: trimmedName });
 
       if (
         originalPhotoUrl &&
@@ -129,9 +138,13 @@ export default function DogForm({ dog, onSave, onCancel }) {
           <Input
             id="name"
             value={formData.name}
-            onChange={(event) => setFormData({ ...formData, name: event.target.value })}
+            onChange={(event) => {
+              setFormData({ ...formData, name: event.target.value });
+              if (validationError) {
+                setValidationError("");
+              }
+            }}
             placeholder="z.B. Luna"
-            required
           />
         </div>
 
@@ -186,6 +199,10 @@ export default function DogForm({ dog, onSave, onCancel }) {
           rows={3}
         />
       </div>
+
+      {validationError && (
+        <p className="text-sm text-red-600">{validationError}</p>
+      )}
 
       <div className="flex gap-3 justify-end pt-2">
         {onCancel && (
