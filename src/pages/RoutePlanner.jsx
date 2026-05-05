@@ -346,10 +346,10 @@ function SmartRoutePlanner({ onRouteReady }) {
   return (
     <div className="space-y-3">
       {/* Routing mode selector */}
-      <div className="border border-white/70 bg-white/65 backdrop-blur-xl p-1 rounded-xl flex gap-1">
+      <div className="flex gap-1 rounded-xl border border-white/70 bg-white/65 p-1 backdrop-blur-xl">
         {ROUTING_MODES.map((m) => (
           <button key={m.id} onClick={() => setRoutingMode(m.id)}
-            className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-medium transition-all text-center ${
+            className={`flex-1 rounded-lg px-2 py-2 text-center text-xs font-medium transition-all ${
               routingMode === m.id ? "bg-brand-100 text-brand-800 shadow-sm" : "text-stone-500 hover:text-stone-700"
             }`}
           >
@@ -360,25 +360,25 @@ function SmartRoutePlanner({ onRouteReady }) {
       </div>
 
       {/* Toolbar */}
-      <div className="flex gap-2 flex-wrap items-center">
-        <form onSubmit={handleSearch} className="flex gap-1.5 flex-1 min-w-0">
+      <div className="grid grid-cols-[1fr_auto] items-center gap-2">
+        <form onSubmit={handleSearch} className="grid min-w-0 grid-cols-[1fr_auto] gap-1.5">
           <Input value={searchText} onChange={(e) => setSearchText(e.target.value)}
-            placeholder="Ort als Wegpunkt suchen..." className="flex-1 h-9 text-sm" />
-          <Button type="submit" size="sm" variant="outline" disabled={searching} className="h-9 px-3 shrink-0">
+            placeholder="Ort als Wegpunkt suchen..." className="h-10 text-sm" />
+          <Button type="submit" size="sm" variant="outline" disabled={searching} className="h-10 w-10 shrink-0 rounded-xl px-0">
             {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
           </Button>
         </form>
 
         <button
           onClick={() => setMapType((t) => t === "standard" ? "topo" : "standard")}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-brand-100 text-xs font-medium text-stone-600 hover:bg-brand-50/40 bg-white/70 shrink-0 h-9"
+          className="flex h-10 shrink-0 items-center gap-1.5 rounded-xl border border-brand-100 bg-white/70 px-3 text-xs font-medium text-stone-600 hover:bg-brand-50/40"
         >
           <Layers className="w-3.5 h-3.5" />
           {mapType === "standard" ? "Topo" : "Standard"}
         </button>
 
         {waypoints.length > 0 && (
-          <Button size="sm" variant="outline" onClick={reset} className="h-9 text-red-500 hover:text-red-600 shrink-0">
+          <Button size="sm" variant="outline" onClick={reset} className="col-span-2 h-9 text-red-500 hover:text-red-600 sm:col-span-1">
             <RotateCcw className="w-3.5 h-3.5 mr-1" /> Reset
           </Button>
         )}
@@ -387,7 +387,7 @@ function SmartRoutePlanner({ onRouteReady }) {
       {searchError && <p className="text-xs text-red-500">{searchError}</p>}
 
       {/* Map */}
-      <div className="relative rounded-xl overflow-hidden border border-stone-200 shadow-sm h-[60vw] min-h-[260px] max-h-[450px] md:h-[440px] md:max-h-none">
+      <div className="relative h-[68vw] min-h-[310px] max-h-[500px] overflow-hidden rounded-xl border border-stone-200 shadow-sm md:h-[440px] md:max-h-none">
         <MapContainer center={[46.5, 11.3]} zoom={10} style={{ height: "100%", width: "100%" }} scrollWheelZoom={false}>
           <TileLayer url={tile.url} attribution={tile.attribution} />
           <MapClickHandler onMapClick={handleMapClick} />
@@ -634,8 +634,8 @@ export default function RoutePlanner() {
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
         <Link to={createPageUrl("Profile")}>
-          <Button variant="ghost" className="mb-3 md:mb-4" size="sm">
-            <ArrowLeft className="w-4 h-4 mr-2" />
+          <Button variant="ghost" className="mb-3 h-8 rounded-xl px-2 text-stone-600 hover:bg-brand-50/60 hover:text-stone-800 md:mb-4" size="sm">
+            <ArrowLeft className="w-4 h-4 mr-1.5" />
             <span className="hidden sm:inline">Zurück zum Profil</span>
             <span className="sm:hidden">Zurück</span>
           </Button>
@@ -652,19 +652,19 @@ export default function RoutePlanner() {
         </div>
 
         {/* Mode tabs */}
-        <div className="flex gap-2 mb-5 border border-white/70 bg-white/65 backdrop-blur-xl p-1 rounded-xl">
+        <div className="mb-5 grid grid-cols-3 gap-1 rounded-xl border border-white/70 bg-white/65 p-1 backdrop-blur-xl">
           {[
             { id: "plan", icon: Map, label: "Planen" },
             { id: "track", icon: Navigation, label: "Aufzeichnen" },
             { id: "gpx", icon: Upload, label: "GPX" },
           ].map(({ id, icon: Icon, label }) => (
             <button key={id} onClick={() => { setActiveTab(id); setRouteGeometry(null); }}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`flex min-w-0 items-center justify-center gap-1 rounded-lg px-2 py-2 text-xs font-medium transition-all sm:text-sm ${
                 activeTab === id ? "bg-brand-100 text-brand-800 shadow-sm" : "text-stone-500 hover:text-stone-700"
               }`}
             >
-              <Icon className="w-4 h-4" />
-              {label}
+              <Icon className="h-4 w-4 shrink-0" />
+              <span className="truncate">{label}</span>
             </button>
           ))}
         </div>
