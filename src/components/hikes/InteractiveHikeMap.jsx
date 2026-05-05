@@ -62,7 +62,6 @@ export default function InteractiveHikeMap({
 
   const center = [latitude, longitude];
   const hasRoute = routeCoordinates && routeCoordinates.length > 1;
-  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
 
   return (
     <div className="doghike-glass-card overflow-hidden rounded-2xl p-2 shadow-sm">
@@ -100,11 +99,6 @@ export default function InteractiveHikeMap({
           )}
         </MapContainer>
 
-        <div className="absolute left-3 top-3 z-[1000] rounded-xl border border-white/70 bg-white/90 px-3 py-2 shadow-sm backdrop-blur-md">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-stone-400">Ausgangspunkt</p>
-          <p className="max-w-[220px] truncate text-sm font-semibold text-stone-800">{location || trailName}</p>
-        </div>
-
         {hasRoute && (
           <div className="absolute right-3 top-3 z-[1000] rounded-xl border border-white/70 bg-white/90 px-3 py-2 shadow-sm backdrop-blur-md">
             <p className="text-xs font-medium text-stone-700">{routeCoordinates.length} Wegpunkte</p>
@@ -112,7 +106,8 @@ export default function InteractiveHikeMap({
         )}
       </div>
 
-      <div className="flex flex-col gap-3 px-1 pb-1 pt-3 sm:flex-row sm:items-center sm:justify-between">
+      {stats.length > 0 && (
+      <div className="px-1 pb-1 pt-3">
         <div className="flex flex-wrap gap-2">
           {stats.map((item) => (
             <span
@@ -124,15 +119,8 @@ export default function InteractiveHikeMap({
             </span>
           ))}
         </div>
-        <a
-          href={mapUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex h-10 items-center justify-center rounded-xl bg-[#b8785f] px-4 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#a4644d]"
-        >
-          Route öffnen
-        </a>
       </div>
+      )}
     </div>
   );
 }

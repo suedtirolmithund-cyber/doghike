@@ -373,7 +373,7 @@ export default function HikeDetail() {
                   Ausgangspunkt: {hike.location || hike.trail_name}
                 </div>
                 <h2 className="text-2xl font-semibold text-stone-800">
-                  {hike.route_coordinates?.length > 0 ? "Interaktive Karte & Routenverlauf" : "Ausgangspunkt auf der Karte"}
+                  {hike.route_coordinates?.length > 0 ? "Karte & Routenverlauf" : "Karte"}
                 </h2>
               </div>
             </div>
