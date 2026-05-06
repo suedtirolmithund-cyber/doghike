@@ -36,7 +36,7 @@ function StarPicker({ label, value, onChange }) {
   const [hover, setHover] = useState(0);
   return (
     <div>
-      <Label className="text-sm text-stone-600 mb-1 block">{label}</Label>
+      <Label className="text-sm text-slate-600 mb-1 block">{label}</Label>
       <div className="flex gap-1">
         {[1, 2, 3, 4, 5].map((s) => (
           <button key={s} type="button"
@@ -46,12 +46,12 @@ function StarPicker({ label, value, onChange }) {
             className="focus:outline-none"
           >
             <Star className={`w-7 h-7 transition-colors ${
-              s <= (hover || value) ? "fill-yellow-400 text-yellow-400" : "text-stone-300"
+              s <= (hover || value) ? "fill-yellow-400 text-yellow-400" : "text-slate-300"
             }`} />
           </button>
         ))}
         {value > 0 && (
-          <button type="button" onClick={() => onChange(0)} className="ml-1 text-stone-400 hover:text-stone-600">
+          <button type="button" onClick={() => onChange(0)} className="ml-1 text-slate-400 hover:text-slate-600">
             <X className="w-4 h-4" />
           </button>
         )}
@@ -66,7 +66,7 @@ function MountainPicker({ label, value, onChange }) {
   const active = hover || value;
   return (
     <div>
-      <Label className="text-sm text-stone-600 mb-1 block">{label}</Label>
+      <Label className="text-sm text-slate-600 mb-1 block">{label}</Label>
       <div className="flex items-center gap-1">
         {DIFFICULTY_LEVELS.map(({ value: levelValue }) => {
           const s = Number(levelValue);
@@ -81,13 +81,13 @@ function MountainPicker({ label, value, onChange }) {
             <Mountain className={`w-7 h-7 transition-colors ${
               s <= active
                 ? `${getDifficultyTextColor(active)} fill-current`
-                : "text-stone-300"
+                : "text-slate-300"
             }`} />
           </button>
         )})}
         {value > 0 && (
           <>
-            <button type="button" onClick={() => onChange(0)} className="ml-1 text-stone-400 hover:text-stone-600">
+            <button type="button" onClick={() => onChange(0)} className="ml-1 text-slate-400 hover:text-slate-600">
               <X className="w-4 h-4" />
             </button>
             <span className={`text-xs font-medium ml-1 ${getDifficultyTextColor(value)}`}>{getDifficultyLabel(value)}</span>
@@ -104,7 +104,7 @@ function BonePicker({ label, value, onChange }) {
   const active = hover || value;
   return (
     <div>
-      <Label className="text-sm text-stone-600 mb-1 block">{label}</Label>
+      <Label className="text-sm text-slate-600 mb-1 block">{label}</Label>
       <div className="flex items-center gap-1">
         {DIFFICULTY_LEVELS.map(({ value: levelValue }) => {
           const s = Number(levelValue);
@@ -123,7 +123,7 @@ function BonePicker({ label, value, onChange }) {
         )})}
         {value > 0 && (
           <>
-            <button type="button" onClick={() => onChange(0)} className="ml-1 text-stone-400 hover:text-stone-600">
+            <button type="button" onClick={() => onChange(0)} className="ml-1 text-slate-400 hover:text-slate-600">
               <X className="w-4 h-4" />
             </button>
             <span className={`text-xs font-medium ml-1 ${getDifficultyTextColor(value)}`}>{getDifficultyLabel(value)}</span>
@@ -219,7 +219,7 @@ function LocationPicker({ lat, lng, onChange }) {
       )}
 
       {/* Map */}
-      <div className="rounded-xl overflow-hidden border border-stone-200 shadow-sm" style={{ height: 260 }}>
+      <div className="rounded-xl overflow-hidden border border-sky-200 shadow-sm" style={{ height: 260 }}>
         <MapContainer
           center={[46.5, 11.3]}
           zoom={9}
@@ -236,7 +236,7 @@ function LocationPicker({ lat, lng, onChange }) {
         </MapContainer>
       </div>
 
-      <p className="text-xs text-stone-400">
+      <p className="text-xs text-slate-400">
         Tippe auf die Karte um den Startpunkt der Tour zu markieren
         {markerPos && (
           <span className="ml-2 text-brand-400 font-medium">
@@ -252,7 +252,7 @@ function LocationPicker({ lat, lng, onChange }) {
 function WaterPicker({ label, value, onChange }) {
   return (
     <div>
-      <Label className="text-sm text-stone-600 mb-1 block">{label}</Label>
+      <Label className="text-sm text-slate-600 mb-1 block">{label}</Label>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {WATER_LEVELS.map((option) => {
           const level = option.numeric;
@@ -262,7 +262,7 @@ function WaterPicker({ label, value, onChange }) {
             className={`flex min-h-[70px] min-w-0 flex-col items-center justify-center gap-1 rounded-xl border px-2 py-2 text-center transition-all focus:outline-none ${
               value === level
                 ? "border-brand-400 bg-brand-50 text-brand-700"
-                : "border-stone-200 bg-white/70 text-stone-500 hover:border-brand-200 hover:bg-brand-50/40"
+                : "border-sky-200 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/40"
             }`}
             title={getWaterLabel(level)}
             >
@@ -302,7 +302,7 @@ function SeasonPicker({ value = [], onChange }) {
   };
   return (
     <div>
-      <Label className="text-sm text-stone-600 mb-2 block">{TOUR_ICONS.season} Empfohlene Jahreszeit</Label>
+      <Label className="text-sm text-slate-600 mb-2 block">{TOUR_ICONS.season} Empfohlene Jahreszeit</Label>
       <div className="flex flex-wrap gap-2">
         {SEASON_OPTIONS.map((opt) => {
           const active = value.includes(opt.value);
@@ -319,7 +319,7 @@ function SeasonPicker({ value = [], onChange }) {
               className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 text-sm font-medium transition-all focus:outline-none ${
                 active
                   ? "shadow-sm"
-                  : "border-stone-200 bg-white text-stone-500 hover:border-stone-300"
+                  : "border-sky-200 bg-white text-slate-500 hover:border-sky-300"
               }`}
             >
               <span>{opt.emoji}</span>
@@ -329,7 +329,7 @@ function SeasonPicker({ value = [], onChange }) {
         })}
       </div>
       {value.length === 0 && (
-        <p className="text-xs text-stone-400 mt-1">Keine Auswahl = wird nicht angezeigt</p>
+        <p className="text-xs text-slate-400 mt-1">Keine Auswahl = wird nicht angezeigt</p>
       )}
     </div>
   );
@@ -342,8 +342,8 @@ const VISIBILITY_OPTIONS = [
     emoji: "👤",
     label: "Privat",
     desc: "Nur ich sehe diesen Eintrag",
-    active: "border-stone-400 bg-stone-100 text-stone-800",
-    idle: "border-stone-200 hover:border-stone-300",
+    active: "border-stone-400 bg-sky-100 text-slate-900",
+    idle: "border-sky-200 hover:border-sky-300",
   },
   {
     value: "friends",
@@ -351,7 +351,7 @@ const VISIBILITY_OPTIONS = [
     label: "Freunde",
     desc: "Nur bestätigte Freunde",
     active: "border-brand-300 bg-brand-50 text-brand-800",
-    idle: "border-stone-200 hover:border-brand-200 hover:bg-brand-50/40",
+    idle: "border-sky-200 hover:border-brand-200 hover:bg-brand-50/40",
   },
   {
     value: "public",
@@ -359,14 +359,14 @@ const VISIBILITY_OPTIONS = [
     label: "Öffentlich",
     desc: "Wird an Admin zur Prüfung geschickt",
     active: "border-brand-400 bg-brand-50 text-brand-700",
-    idle: "border-stone-200 hover:border-brand-300",
+    idle: "border-sky-200 hover:border-brand-300",
   },
 ];
 
 function VisibilityPicker({ value, onChange }) {
   return (
     <div>
-      <Label className="text-sm text-stone-600 mb-2 block">Sichtbarkeit</Label>
+      <Label className="text-sm text-slate-600 mb-2 block">Sichtbarkeit</Label>
       <div className="grid grid-cols-3 gap-2">
         {VISIBILITY_OPTIONS.map((opt) => (
           <button
@@ -374,7 +374,7 @@ function VisibilityPicker({ value, onChange }) {
             type="button"
             onClick={() => onChange(opt.value)}
             className={`flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition-all focus:outline-none text-center ${
-              value === opt.value ? opt.active : `border-stone-200 bg-white text-stone-500 ${opt.idle}`
+              value === opt.value ? opt.active : `border-sky-200 bg-white text-slate-500 ${opt.idle}`
             }`}
           >
             <span className="text-xl">{opt.emoji}</span>
@@ -720,7 +720,7 @@ export default function AddJournalEntry() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-stone-500 mb-4">Bitte zuerst anmelden.</p>
+          <p className="text-slate-500 mb-4">Bitte zuerst anmelden.</p>
           <Link to={createPageUrl("Login")}>
             <Button className="bg-brand-400 hover:bg-brand-600">Anmelden</Button>
           </Link>
@@ -732,7 +732,7 @@ export default function AddJournalEntry() {
   if (loadingEntry) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-stone-400 animate-spin" />
+        <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
       </div>
     );
   }
@@ -741,7 +741,7 @@ export default function AddJournalEntry() {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
         <div className="text-center">
-          <p className="text-xl text-stone-700 mb-4">Eintrag nicht gefunden</p>
+          <p className="text-xl text-slate-700 mb-4">Eintrag nicht gefunden</p>
           <Link to={createPageUrl("Journal")}>
             <Button variant="outline">Zurück zum Tagebuch</Button>
           </Link>
@@ -751,13 +751,13 @@ export default function AddJournalEntry() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/10 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/10 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <Link to={createPageUrl("Journal")}>
-            <Button variant="ghost" size="sm" className="mb-4 -ml-2 text-stone-600">
+            <Button variant="ghost" size="sm" className="mb-4 -ml-2 text-slate-600">
               <ArrowLeft className="w-4 h-4 mr-1" /> Zurück
             </Button>
           </Link>
@@ -780,7 +780,7 @@ export default function AddJournalEntry() {
 
           {/* Basis-Infos */}
           <section className="doghike-glass-card p-5 space-y-4">
-            <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide flex items-center gap-2">
+            <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide flex items-center gap-2">
               <FileText className="w-4 h-4" /> Allgemein
             </h2>
 
@@ -827,7 +827,7 @@ export default function AddJournalEntry() {
 
           {/* Stats */}
           <section className="doghike-glass-card p-5 space-y-4">
-            <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide flex items-center gap-2">
+            <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide flex items-center gap-2">
               <TrendingUp className="w-4 h-4" /> Statistiken
             </h2>
 
@@ -857,7 +857,7 @@ export default function AddJournalEntry() {
 
           {/* Hund */}
           <section className="doghike-glass-card p-5 space-y-4">
-            <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide flex items-center gap-2">
+            <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide flex items-center gap-2">
               <Dog className="w-4 h-4" /> Mit dem Hund
             </h2>
 
@@ -881,15 +881,15 @@ export default function AddJournalEntry() {
             {/* Dog picker */}
             {userDogs.length > 0 && (
               <div>
-                <Label className="text-sm text-stone-600 mb-2 block">Welcher Hund war dabei?</Label>
+                <Label className="text-sm text-slate-600 mb-2 block">Welcher Hund war dabei?</Label>
                 <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
                     onClick={() => set("dog_id", null)}
                     className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 text-sm transition-all focus:outline-none ${
                       form.dog_id === null
-                        ? "border-stone-400 bg-stone-100 text-stone-700 font-medium"
-                        : "border-stone-200 text-stone-400 hover:border-stone-300"
+                        ? "border-stone-400 bg-sky-100 text-slate-700 font-medium"
+                        : "border-sky-200 text-slate-400 hover:border-sky-300"
                     }`}
                   >
                     Kein / unbekannt
@@ -902,10 +902,10 @@ export default function AddJournalEntry() {
                       className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 text-sm transition-all focus:outline-none ${
                         form.dog_id === dog.id
                           ? "border-brand-400 bg-brand-50 text-brand-700 font-medium"
-                          : "border-stone-200 text-stone-600 hover:border-brand-300"
+                          : "border-sky-200 text-slate-600 hover:border-brand-300"
                       }`}
                     >
-                      <div className="w-6 h-6 rounded-full overflow-hidden bg-stone-100 shrink-0">
+                      <div className="w-6 h-6 rounded-full overflow-hidden bg-sky-100 shrink-0">
                         <img
                           src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
                           alt={dog.name}
@@ -921,7 +921,7 @@ export default function AddJournalEntry() {
 
             <div>
               <Label htmlFor="hazard_notes" className="flex items-center gap-1">
-                <AlertTriangle className="w-3.5 h-3.5 text-amber-500" /> Gefahrenhinweise
+                <AlertTriangle className="w-3.5 h-3.5 text-yellow-500" /> Gefahrenhinweise
               </Label>
               <Textarea id="hazard_notes" value={form.hazard_notes} onChange={(e) => set("hazard_notes", e.target.value)}
                 placeholder="z.B. Steinschlaggefahr, steile Abschnitte, kein Schatten..." rows={2} className="mt-1" />
@@ -930,7 +930,7 @@ export default function AddJournalEntry() {
 
           {/* Bewertung */}
           <section className="doghike-glass-card p-5">
-            <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
+            <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
               <Star className="w-4 h-4" /> Gesamtbewertung
             </h2>
             <StarPicker label="Wie hat dir die Wanderung gefallen?" value={form.rating} onChange={(v) => set("rating", v)} />
@@ -938,7 +938,7 @@ export default function AddJournalEntry() {
 
           {/* Fotos */}
           <section className="doghike-glass-card p-5 space-y-4">
-            <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide flex items-center gap-2">
+            <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide flex items-center gap-2">
               <Upload className="w-4 h-4" /> Fotos
             </h2>
 
@@ -958,19 +958,19 @@ export default function AddJournalEntry() {
               </div>
             )}
 
-            <label className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-stone-300 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
+            <label className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-sky-300 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
               <input type="file" accept="image/*" multiple onChange={handlePhotoUpload} className="hidden" disabled={photoUploading} />
               {photoUploading ? (
-                <><Loader2 className="w-6 h-6 text-stone-400 animate-spin" /><span className="text-sm text-stone-400">Lade hoch...</span></>
+                <><Loader2 className="w-6 h-6 text-slate-400 animate-spin" /><span className="text-sm text-slate-400">Lade hoch...</span></>
               ) : (
-                <><Upload className="w-6 h-6 text-stone-400" /><span className="text-sm text-stone-500">Fotos hochladen</span><span className="text-xs text-stone-400">JPG, PNG, WEBP</span></>
+                <><Upload className="w-6 h-6 text-slate-400" /><span className="text-sm text-slate-500">Fotos hochladen</span><span className="text-xs text-slate-400">JPG, PNG, WEBP</span></>
               )}
             </label>
           </section>
 
           {/* GPX */}
           <section className="doghike-glass-card p-5 space-y-3">
-            <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide flex items-center gap-2">
+            <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide flex items-center gap-2">
               <MapPin className="w-4 h-4" /> GPX-Route (optional)
             </h2>
 
@@ -978,17 +978,17 @@ export default function AddJournalEntry() {
               <div className="flex items-center gap-3 p-3 bg-brand-50 border border-brand-200 rounded-lg">
                 <MapPin className="w-4 h-4 text-brand-400 shrink-0" />
                 <span className="text-sm text-brand-600 flex-1 truncate">GPX-Datei gespeichert</span>
-                <button type="button" onClick={() => void removeUploadedGpx()} className="text-stone-400 hover:text-red-500">
+                <button type="button" onClick={() => void removeUploadedGpx()} className="text-slate-400 hover:text-red-500">
                   <X className="w-4 h-4" />
                 </button>
               </div>
             ) : (
-              <label className="flex items-center gap-3 p-4 border-2 border-dashed border-stone-300 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
+              <label className="flex items-center gap-3 p-4 border-2 border-dashed border-sky-300 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
                 <input type="file" accept=".gpx" onChange={handleGpxUpload} className="hidden" disabled={gpxUploading} />
                 {gpxUploading ? (
-                  <><Loader2 className="w-5 h-5 text-stone-400 animate-spin" /><span className="text-sm text-stone-400">Lade hoch...</span></>
+                  <><Loader2 className="w-5 h-5 text-slate-400 animate-spin" /><span className="text-sm text-slate-400">Lade hoch...</span></>
                 ) : (
-                  <><Upload className="w-5 h-5 text-stone-400" /><span className="text-sm text-stone-500">.gpx Datei hochladen</span></>
+                  <><Upload className="w-5 h-5 text-slate-400" /><span className="text-sm text-slate-500">.gpx Datei hochladen</span></>
                 )}
               </label>
             )}
@@ -996,27 +996,27 @@ export default function AddJournalEntry() {
 
           {/* Jahreszeit */}
           <section className="doghike-glass-card p-5">
-            <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
+            <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
               {TOUR_ICONS.season} Jahreszeit
             </h2>
             <SeasonPicker
               value={form.seasons}
               onChange={(v) => set("seasons", v)}
             />
-            <p className="mt-2 text-xs text-stone-400">
+            <p className="mt-2 text-xs text-slate-400">
               Bei privaten Einträgen optional. Für Einträge mit Freunden oder öffentlich bitte mindestens eine Jahreszeit auswählen.
             </p>
           </section>
 
           {/* Sichtbarkeit */}
           <section className="doghike-glass-card p-5">
-            <h2 className="font-semibold text-stone-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
+            <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
               Sichtbarkeit
             </h2>
             <VisibilityPicker value={form.visibility} onChange={(v) => { set("visibility", v); }} />
             {form.visibility === "public" && (
               <div className="mt-3 space-y-2">
-                <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                <p className="text-xs text-yellow-700 bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-2">
                   Nach dem Speichern wird dieser Eintrag an einen Admin zur Prüfung geschickt und erst danach öffentlich sichtbar.
                 </p>
                 <div className="text-xs rounded-lg border border-brand-200 bg-brand-50/70 px-3 py-2 text-brand-800">
@@ -1030,7 +1030,7 @@ export default function AddJournalEntry() {
 
           {/* Foto-Einverständnis (nur wenn Fotos + nicht privat) */}
           {form.photos.length > 0 && form.visibility !== "private" && (
-            <section className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+            <section className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4">
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -1038,7 +1038,7 @@ export default function AddJournalEntry() {
                   onChange={(e) => setPhotoConsent(e.target.checked)}
                   className="mt-1 w-4 h-4 rounded accent-brand-400 shrink-0 cursor-pointer"
                 />
-                <span className="text-sm text-amber-800 leading-relaxed">
+                <span className="text-sm text-yellow-800 leading-relaxed">
                   <strong>Einverständnis Fotos:</strong> Ich bestätige, dass ich die Nutzungsrechte
                   an den hochgeladenen Fotos besitze und dass abgebildete Personen der
                   Veröffentlichung zugestimmt haben. Mir ist bewusst, dass diese Fotos für{" "}

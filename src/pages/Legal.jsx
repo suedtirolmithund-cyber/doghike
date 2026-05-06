@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Legal() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-[#edf7ff] pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-[#edf7ff] pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <Link to={createPageUrl("Dashboard")}>
           <Button variant="ghost" className="mb-6">
@@ -14,16 +14,16 @@ export default function Legal() {
           </Button>
         </Link>
 
-        <div className="rounded-2xl border border-stone-200/70 bg-white/70 p-4 shadow-[0_14px_34px_rgba(92,62,42,0.1)] backdrop-blur-sm md:p-8">
+        <div className="rounded-2xl border border-sky-200/70 bg-white/70 p-4 shadow-[0_14px_34px_rgba(16,47,74,0.1)] backdrop-blur-sm md:p-8">
           <div className="doghike-page-header mb-2">
             <div className="doghike-page-icon">
               <Shield className="h-5 w-5" />
             </div>
             <h1 className="doghike-page-title">Rechtliche Hinweise</h1>
           </div>
-          <p className="text-xs text-stone-400 mb-8">Letzte Aktualisierung: April 2026</p>
+          <p className="text-xs text-slate-400 mb-8">Letzte Aktualisierung: April 2026</p>
 
-          <div className="mb-6 rounded-2xl border border-brand-200/70 bg-brand-50/60 p-5 text-stone-700">
+          <div className="mb-6 rounded-2xl border border-brand-200/70 bg-brand-50/60 p-5 text-slate-700">
             <div className="flex gap-3 items-start">
               <AlertTriangle className="w-5 h-5 text-brand-600 shrink-0 mt-0.5" />
               <p className="text-sm md:text-base leading-relaxed">
@@ -32,11 +32,11 @@ export default function Legal() {
             </div>
           </div>
 
-          <div className="mb-8 rounded-2xl border border-stone-200/70 bg-white/58 p-4">
-            <p className="font-semibold text-amber-800 mb-3 flex items-center gap-2">
+          <div className="mb-8 rounded-2xl border border-sky-200/70 bg-white/58 p-4">
+            <p className="font-semibold text-yellow-800 mb-3 flex items-center gap-2">
               <AlertTriangle className="w-4 h-4" /> Bedingungen können sich jederzeit ändern
             </p>
-            <ul className="space-y-2 text-sm text-amber-800">
+            <ul className="space-y-2 text-sm text-yellow-800">
               <li><strong>Lawinengefahr:</strong> Immer den aktuellen Lawinenlagebericht prüfen.</li>
               <li><strong>Sperrungen:</strong> Wege können gesperrt sein. Hinweisschilder vor Ort beachten.</li>
               <li><strong>Wetterwechsel:</strong> Bergwetter kann sich innerhalb von Minuten ändern.</li>
@@ -46,11 +46,11 @@ export default function Legal() {
 
           <div className="space-y-6 md:space-y-8">
             <section>
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <Info className="w-5 h-5 text-brand-600" />
                 1. App nur zur Information
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
                   <strong>DogHike</strong> ist eine Informationsplattform. Alle Inhalte – Tourenberichte,
                   GPS-Koordinaten, Fotos, Schwierigkeitsbewertungen und Empfehlungen – dienen ausschließlich
@@ -62,12 +62,12 @@ export default function Legal() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <FileText className="w-5 h-5 text-brand-600" />
                 2. Keine Gewähr für die Richtigkeit der Touren
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
                   Alle Touren und Inhalte auf dieser Plattform werden von Nutzern erstellt oder aus externen Quellen übernommen.
                   Der Betreiber kann <strong>keine Gewähr für Richtigkeit, Vollständigkeit oder Aktualität</strong> übernehmen.
@@ -81,12 +81,12 @@ export default function Legal() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-amber-600" />
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-yellow-600" />
                 3. Haftung
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
                   Der Betreiber dieser Plattform übernimmt keine Gewähr für die Richtigkeit, Vollständigkeit oder ständige Verfügbarkeit aller Tourenangaben.
                 </p>
@@ -102,12 +102,12 @@ export default function Legal() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <User className="w-5 h-5 text-brand-600" />
                 4. Eigenverantwortung der Nutzer
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
                   Jeder Nutzer trägt die alleinige Verantwortung für Entscheidungen beim Wandern.
                 </p>
@@ -121,24 +121,24 @@ export default function Legal() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <PawPrint className="w-5 h-5 text-brand-600" />
                 5. Kein Ersatz für alpine Erfahrung
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
                   Das Wandern im Alpenraum erfordert alpine Grundkenntnisse und Erfahrung. Diese App ersetzt diese Erfahrung nicht.
                 </p>
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <CloudRain className="w-5 h-5 text-brand-600" />
                 6. Wetter- & Gefahrenhinweise
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
                   Das Bergwetter in Südtirol kann sich innerhalb von Minuten drastisch ändern.
                 </p>
@@ -156,12 +156,12 @@ export default function Legal() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <Shield className="w-5 h-5 text-brand-600" />
                 7. Moderation & Veröffentlichung
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
                   Der Betreiber behält sich das Recht vor, eingereichte Inhalte zu prüfen und bei Rechtsverstößen,
                   Gefährdungen oder Regelverstößen zu entfernen.
@@ -169,12 +169,12 @@ export default function Legal() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <FileText className="w-5 h-5 text-brand-600" />
                 8. Urheberrecht & Rechteübertragung bei Fotos
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
                   Mit dem Hochladen von Fotos bestätigt der Nutzer, dass er die erforderlichen Rechte besitzt.
                 </p>

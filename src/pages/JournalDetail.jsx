@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -37,7 +37,7 @@ L.Icon.Default.mergeOptions({
 });
 
 const VISIBILITY_INFO = {
-  private: { icon: User,  label: "Privat",       color: "text-stone-500" },
+  private: { icon: User,  label: "Privat",       color: "text-slate-500" },
   friends: { icon: Users, label: "Freunde",       color: "text-brand-600"  },
   public:  { icon: Globe, label: "Öffentlich",    color: "text-brand-400" },
 };
@@ -67,7 +67,7 @@ function PublicStatusBadge({ status, rejectionReason }) {
   }
 
   return (
-    <Badge className="bg-amber-100 text-amber-700 border border-amber-200 hover:bg-amber-100">
+    <Badge className="bg-yellow-100 text-yellow-700 border border-yellow-200 hover:bg-yellow-100">
       Wartet auf Prüfung
     </Badge>
   );
@@ -78,7 +78,7 @@ function PhotoGallery({ photos }) {
   const [idx, setIdx] = useState(0);
   if (!photos?.length) return null;
   return (
-    <div className="relative rounded-2xl overflow-hidden bg-stone-100">
+    <div className="relative rounded-2xl overflow-hidden bg-sky-100">
       <img src={photos[idx]} alt="" className="w-full h-64 md:h-96 object-cover" />
       {photos.length > 1 && (
         <>
@@ -165,7 +165,7 @@ export default function JournalDetail() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-stone-400" />
+        <Loader2 className="w-8 h-8 animate-spin text-slate-400" />
       </div>
     );
   }
@@ -174,9 +174,9 @@ export default function JournalDetail() {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
         <div className="text-center">
-          <ShieldOff className="w-12 h-12 text-stone-300 mx-auto mb-4" />
-          <p className="text-stone-600 font-medium mb-2">Eintrag nicht gefunden</p>
-          <p className="text-stone-400 text-sm mb-4">Dieser Eintrag existiert nicht oder du hast keinen Zugriff.</p>
+          <ShieldOff className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+          <p className="text-slate-600 font-medium mb-2">Eintrag nicht gefunden</p>
+          <p className="text-slate-400 text-sm mb-4">Dieser Eintrag existiert nicht oder du hast keinen Zugriff.</p>
           <Link to={createPageUrl("Journal")}>
             <Button variant="outline">Zurück zum Tagebuch</Button>
           </Link>
@@ -186,7 +186,7 @@ export default function JournalDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/10 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/10 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-8">
 
         {/* Back button */}
@@ -214,8 +214,8 @@ export default function JournalDetail() {
                 alt="" className="w-9 h-9 rounded-full object-cover"
               />
               <div>
-                <p className="text-sm font-medium text-stone-800">{author?.full_name || author?.username || "Nutzer"}</p>
-                <p className="text-xs text-stone-400">
+                <p className="text-sm font-medium text-slate-900">{author?.full_name || author?.username || "Nutzer"}</p>
+                <p className="text-xs text-slate-400">
                   {format(new Date(entry.date || entry.created_at), "d. MMMM yyyy", { locale: de })}
                 </p>
               </div>
@@ -234,10 +234,10 @@ export default function JournalDetail() {
               </div>
             )}
 
-            <h1 className="text-xl md:text-2xl font-bold text-stone-800 mb-2">{entry.title}</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">{entry.title}</h1>
 
             {entry.location && (
-              <p className="flex items-center gap-1.5 text-stone-500 text-sm mb-3">
+              <p className="flex items-center gap-1.5 text-slate-500 text-sm mb-3">
                 <span className="text-sm leading-none shrink-0">{TOUR_ICONS.location}</span> {entry.location}
               </p>
             )}
@@ -255,7 +255,7 @@ export default function JournalDetail() {
                 </span>
               )}
               {entry.duration_minutes && (
-                <span className="flex items-center gap-1 text-stone-600 bg-stone-100 px-2.5 py-1 rounded-full">
+                <span className="flex items-center gap-1 text-slate-600 bg-sky-100 px-2.5 py-1 rounded-full">
                   <span className="text-sm leading-none">{TOUR_ICONS.duration}</span>
                   {formatDurationHours(entry.duration_minutes)}
                 </span>
@@ -269,28 +269,28 @@ export default function JournalDetail() {
           {/* Description */}
           {entry.description && (
             <div className="doghike-glass-card p-5">
-              <h2 className="text-sm font-semibold text-stone-600 uppercase tracking-wide mb-3">Beschreibung</h2>
-              <p className="text-stone-700 text-sm leading-relaxed whitespace-pre-wrap">{entry.description}</p>
+              <h2 className="text-sm font-semibold text-slate-600 uppercase tracking-wide mb-3">Beschreibung</h2>
+              <p className="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap">{entry.description}</p>
             </div>
           )}
 
           {/* Details */}
           <div className="doghike-glass-card p-5 space-y-3">
-            <h2 className="text-sm font-semibold text-stone-600 uppercase tracking-wide">Details</h2>
+            <h2 className="text-sm font-semibold text-slate-600 uppercase tracking-wide">Details</h2>
 
             {entry.rating > 0 && (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-stone-500 w-28">Bewertung</span>
+                <span className="text-xs text-slate-500 w-28">Bewertung</span>
                 <div className="flex gap-0.5">
                   {[1,2,3,4,5].map((s) => (
-                    <Star key={s} className={`w-4 h-4 ${s <= entry.rating ? "fill-yellow-400 text-yellow-400" : "text-stone-200"}`} />
+                    <Star key={s} className={`w-4 h-4 ${s <= entry.rating ? "fill-yellow-400 text-yellow-400" : "text-sky-200"}`} />
                   ))}
                 </div>
               </div>
             )}
             {entry.difficulty && (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-stone-500 w-28">{TOUR_ICONS.human} Mensch</span>
+                <span className="text-xs text-slate-500 w-28">{TOUR_ICONS.human} Mensch</span>
                 <span className={`text-sm font-medium ${getDifficultyTextColor(entry.difficulty)}`}>
                   {getDifficultyLabel(entry.difficulty)}
                 </span>
@@ -298,7 +298,7 @@ export default function JournalDetail() {
             )}
             {entry.dog_difficulty && (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-stone-500 w-28">{TOUR_ICONS.dog} Hund</span>
+                <span className="text-xs text-slate-500 w-28">{TOUR_ICONS.dog} Hund</span>
                 <span className={`text-sm font-medium ${getDifficultyTextColor(entry.dog_difficulty)}`}>
                   {getDifficultyLabel(entry.dog_difficulty)}
                 </span>
@@ -306,7 +306,7 @@ export default function JournalDetail() {
             )}
             {entry.water_available !== null && entry.water_available !== undefined && (
               <div className="flex items-center gap-2">
-                <span className="flex w-28 items-center gap-1 text-xs text-stone-500">
+                <span className="flex w-28 items-center gap-1 text-xs text-slate-500">
                   <WaterIcon value="little" /> Wasser
                 </span>
                 <span className={`text-sm font-medium ${getWaterTextColor(entry.water_available)}`}>
@@ -316,7 +316,7 @@ export default function JournalDetail() {
             )}
             {entry.seasons?.length > 0 && (
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs text-stone-500 w-28">{TOUR_ICONS.season} Jahreszeit</span>
+                <span className="text-xs text-slate-500 w-28">{TOUR_ICONS.season} Jahreszeit</span>
                 <div className="flex gap-1.5 flex-wrap">
                   {entry.seasons.map((s) => (
                     <Badge key={s} variant="secondary" className="border border-brand-100 bg-brand-50/70 text-brand-700 text-xs">
@@ -328,14 +328,14 @@ export default function JournalDetail() {
             )}
             {entry.dog_suitable && (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-stone-500 w-28">Hundefreundlich</span>
+                <span className="text-xs text-slate-500 w-28">Hundefreundlich</span>
                 <span className="text-sm text-brand-400 font-medium">{TOUR_ICONS.dog} Ja</span>
               </div>
             )}
             {entry.hazard_notes && (
               <div className="flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-                <p className="text-sm text-stone-600">{entry.hazard_notes}</p>
+                <AlertTriangle className="w-4 h-4 text-yellow-500 shrink-0 mt-0.5" />
+                <p className="text-sm text-slate-600">{entry.hazard_notes}</p>
               </div>
             )}
           </div>
@@ -348,17 +348,17 @@ export default function JournalDetail() {
                 alt={dog.name} className="w-12 h-12 rounded-full object-cover border-2 border-white shadow"
               />
               <div>
-                <p className="font-semibold text-stone-800">{dog.name}</p>
-                {dog.breed && <p className="text-xs text-stone-400">{dog.breed}</p>}
+                <p className="font-semibold text-slate-900">{dog.name}</p>
+                {dog.breed && <p className="text-xs text-slate-400">{dog.breed}</p>}
               </div>
-              <Dog className="w-5 h-5 text-stone-300 ml-auto" />
+              <Dog className="w-5 h-5 text-slate-300 ml-auto" />
             </div>
           )}
 
           {/* Map */}
           {entry.latitude && entry.longitude && (
             <div className="doghike-glass-card p-4">
-              <h2 className="text-sm font-semibold text-stone-600 uppercase tracking-wide mb-3">Standort</h2>
+              <h2 className="text-sm font-semibold text-slate-600 uppercase tracking-wide mb-3">Standort</h2>
               <div className="h-48 rounded-xl overflow-hidden">
                 <MapContainer
                   center={[entry.latitude, entry.longitude]}

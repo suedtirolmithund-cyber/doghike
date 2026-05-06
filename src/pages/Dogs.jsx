@@ -125,10 +125,10 @@ export default function Dogs() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="text-center">
           <div className="text-6xl mb-4">Hund</div>
-          <p className="text-stone-600 mb-4">Bitte melde dich an, um deine Hunde zu verwalten.</p>
+          <p className="text-slate-600 mb-4">Bitte melde dich an, um deine Hunde zu verwalten.</p>
           <Link to={createPageUrl("Login")}>
             <Button className="bg-brand-400 hover:bg-brand-600">
               <LogIn className="w-4 h-4 mr-2" /> Anmelden
@@ -140,7 +140,7 @@ export default function Dogs() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -171,7 +171,7 @@ export default function Dogs() {
 
         {isLoading ? (
           <div className="flex justify-center py-20">
-            <Loader2 className="w-8 h-8 text-stone-400 animate-spin" />
+            <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
           </div>
         ) : dogs.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -207,7 +207,7 @@ export default function Dogs() {
                           }}
                           className="bg-white/80 backdrop-blur-sm hover:bg-white w-8 h-8"
                         >
-                          <Edit className="w-3.5 h-3.5 text-stone-600" />
+                          <Edit className="w-3.5 h-3.5 text-slate-600" />
                         </Button>
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
@@ -242,7 +242,7 @@ export default function Dogs() {
 
                     <div className="p-5">
                       <div className="flex items-center justify-between mb-2">
-                        <h2 className="text-xl font-semibold text-stone-800">{dog.name}</h2>
+                        <h2 className="text-xl font-semibold text-slate-900">{dog.name}</h2>
                         {dog.breed && (
                           <span className="text-xs text-brand-700 bg-brand-50 border border-brand-100 px-2.5 py-1 rounded-full">
                             {dog.breed}
@@ -250,27 +250,27 @@ export default function Dogs() {
                         )}
                       </div>
                       {getAge(dog.birth_date) && (
-                        <p className="text-stone-500 text-sm mb-1">{getAge(dog.birth_date)}</p>
+                        <p className="text-slate-500 text-sm mb-1">{getAge(dog.birth_date)}</p>
                       )}
                       {dog.character && (
-                        <p className="text-stone-500 text-sm mb-3">{dog.character}</p>
+                        <p className="text-slate-500 text-sm mb-3">{dog.character}</p>
                       )}
                       {dog.notes && (
-                        <p className="text-stone-400 text-xs mb-3 line-clamp-2">{dog.notes}</p>
+                        <p className="text-slate-400 text-xs mb-3 line-clamp-2">{dog.notes}</p>
                       )}
 
-                      <div className="grid grid-cols-3 gap-2 pt-3 border-t border-stone-100">
+                      <div className="grid grid-cols-3 gap-2 pt-3 border-t border-sky-100">
                         <div className="text-center">
-                          <p className="text-lg font-bold text-stone-800">{stats.tourCount}</p>
-                          <p className="text-xs text-stone-400">Touren</p>
+                          <p className="text-lg font-bold text-slate-900">{stats.tourCount}</p>
+                          <p className="text-xs text-slate-400">Touren</p>
                         </div>
                         <div className="text-center">
-                          <p className="text-lg font-bold text-stone-800">{stats.totalDistance.toFixed(1)}</p>
-                          <p className="text-xs text-stone-400">km</p>
+                          <p className="text-lg font-bold text-slate-900">{stats.totalDistance.toFixed(1)}</p>
+                          <p className="text-xs text-slate-400">km</p>
                         </div>
                         <div className="text-center">
-                          <p className="text-lg font-bold text-stone-800">{Math.round(stats.totalElevation).toLocaleString()}</p>
-                          <p className="text-xs text-stone-400">Hm</p>
+                          <p className="text-lg font-bold text-slate-900">{Math.round(stats.totalElevation).toLocaleString()}</p>
+                          <p className="text-xs text-slate-400">Hm</p>
                         </div>
                       </div>
                     </div>
@@ -283,7 +283,7 @@ export default function Dogs() {
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            className="overflow-hidden rounded-[28px] border border-white/65 bg-white/72 shadow-[0_24px_60px_rgba(92,62,42,0.14)] backdrop-blur-xl"
+            className="overflow-hidden rounded-[28px] border border-white/65 bg-white/72 shadow-[0_24px_60px_rgba(16,47,74,0.14)] backdrop-blur-xl"
           >
             <div className="relative overflow-hidden bg-gradient-to-br from-[#dcc8b6] via-[#baa18c] to-[#7f918d] px-6 py-12 text-center">
               <div
@@ -313,8 +313,8 @@ export default function Dogs() {
                   className="mt-4 flex w-full items-center justify-between rounded-[22px] border border-[#e6d4c6] bg-gradient-to-r from-[#fff8f2] to-[#f7ede3] px-5 py-5 text-left shadow-[0_14px_26px_rgba(146,100,71,0.12)] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_30px_rgba(146,100,71,0.16)]"
                 >
                   <div className="min-w-0">
-                    <p className="text-xl font-semibold text-stone-800">Hund anlegen</p>
-                    <p className="mt-1 text-sm leading-6 text-stone-500">Füge deinen ersten Wanderbegleiter hinzu.</p>
+                    <p className="text-xl font-semibold text-slate-900">Hund anlegen</p>
+                    <p className="mt-1 text-sm leading-6 text-slate-500">Füge deinen ersten Wanderbegleiter hinzu.</p>
                   </div>
                   <div className="ml-4 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#d94a3a] text-white shadow-[0_10px_22px_rgba(184,120,95,0.32)]">
                     <Dog className="h-5 w-5" />
@@ -323,12 +323,12 @@ export default function Dogs() {
               </div>
 
               <div className="mt-5 rounded-[24px] border border-white/80 bg-white/70 p-5 shadow-[0_16px_32px_rgba(120,90,66,0.08)] backdrop-blur-sm md:p-6">
-                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-stone-500">Danach</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">Danach</p>
                 <div className="mt-4 grid gap-3 md:grid-cols-3">
                   <Link to={createPageUrl("Dashboard")} className="block">
                     <Button
                       variant="outline"
-                      className="h-auto w-full justify-start gap-3 rounded-[20px] border-stone-200 bg-white/85 px-4 py-4 text-left text-stone-700 shadow-sm hover:bg-brand-50/50"
+                      className="h-auto w-full justify-start gap-3 rounded-[20px] border-sky-200 bg-white/85 px-4 py-4 text-left text-slate-700 shadow-sm hover:bg-brand-50/50"
                     >
                       <Home className="h-4 w-4 shrink-0 text-[#d94a3a]" />
                       <span className="text-sm font-medium">Zum Dashboard</span>
@@ -337,7 +337,7 @@ export default function Dogs() {
                   <Link to={createPageUrl("Hikes")} className="block">
                     <Button
                       variant="outline"
-                      className="h-auto w-full justify-start gap-3 rounded-[20px] border-stone-200 bg-white/85 px-4 py-4 text-left text-stone-700 shadow-sm hover:bg-brand-50/50"
+                      className="h-auto w-full justify-start gap-3 rounded-[20px] border-sky-200 bg-white/85 px-4 py-4 text-left text-slate-700 shadow-sm hover:bg-brand-50/50"
                     >
                       <Mountain className="h-4 w-4 shrink-0 text-[#d94a3a]" />
                       <span className="text-sm font-medium">Touren entdecken</span>
@@ -346,7 +346,7 @@ export default function Dogs() {
                   <Link to={createPageUrl("AddJournalEntry")} className="block">
                     <Button
                       variant="outline"
-                      className="h-auto w-full justify-start gap-3 rounded-[20px] border-stone-200 bg-white/85 px-4 py-4 text-left text-stone-700 shadow-sm hover:bg-brand-50/50"
+                      className="h-auto w-full justify-start gap-3 rounded-[20px] border-sky-200 bg-white/85 px-4 py-4 text-left text-slate-700 shadow-sm hover:bg-brand-50/50"
                     >
                       <Plus className="h-4 w-4 shrink-0 text-[#d94a3a]" />
                       <span className="text-sm font-medium">Wanderung eintragen</span>

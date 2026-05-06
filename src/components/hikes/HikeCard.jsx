@@ -13,10 +13,10 @@ function StatTile({ value, label, icon }) {
   if (!value) return null;
 
   return (
-    <div className="flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-stone-200/70 bg-white/62 px-2.5 py-2 shadow-sm backdrop-blur-sm">
+    <div className="flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-sky-200/70 bg-white/62 px-2.5 py-2 shadow-sm backdrop-blur-sm">
       <span className="text-base leading-none">{icon}</span>
       <span className="min-w-0 text-sm font-semibold leading-none text-[#164d79] md:text-base">{value}</span>
-      {label ? <span className="text-xs font-medium leading-none text-stone-500">{label}</span> : null}
+      {label ? <span className="text-xs font-medium leading-none text-slate-500">{label}</span> : null}
     </div>
   );
 }
@@ -36,7 +36,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
       transition={{ delay: index * 0.08, duration: 0.42 }}
     >
       <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=${hikeSource}`}>
-        <div className="group overflow-hidden rounded-[22px] border border-stone-200/75 bg-white/76 shadow-[0_12px_28px_rgba(92,62,42,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(92,62,42,0.13)]">
+        <div className="group overflow-hidden rounded-[22px] border border-sky-200/75 bg-white/76 shadow-[0_12px_28px_rgba(16,47,74,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(16,47,74,0.13)]">
           <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a] sm:h-52">
             {coverPhoto && (
               <img
@@ -45,7 +45,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-stone-950/10 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/10 to-transparent" />
 
             {PREMIUM_FEATURES_ENABLED && hike.is_premium && (
               <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/74 px-2.5 py-1 text-xs font-semibold text-[#164d79] shadow-sm backdrop-blur-sm">
@@ -119,7 +119,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                 <ExpandableText
                   text={hike.notes}
                   lines={6}
-                  className="text-sm leading-relaxed text-stone-600"
+                  className="text-sm leading-relaxed text-slate-600"
                 />
               </div>
             )}
@@ -129,7 +129,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                 {hike._source === "journal" ? (
                   <div className="flex min-w-0 items-center gap-2">
                     {(hike.dog_photo_url || hike.author_avatar) && (
-                      <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-white bg-stone-100 shadow-sm">
+                      <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-white bg-sky-100 shadow-sm">
                         <img
                           src={hike.dog_photo_url || hike.author_avatar}
                           alt={hike.dog_name || hike.author_username || ""}
@@ -138,7 +138,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                       </div>
                     )}
                     {(hike.dog_name || hike.author_username) && (
-                      <span className="truncate text-xs text-stone-500">
+                      <span className="truncate text-xs text-slate-500">
                         {hike.dog_name && <span>{hike.dog_name}</span>}
                         {hike.dog_name && hike.author_username && " · "}
                         {hike.author_username && <span>@{hike.author_username}</span>}
@@ -150,7 +150,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                     {hikeDogs.slice(0, 3).map((dog, dogIndex) => (
                       <div
                         key={dog.id}
-                        className="h-8 w-8 overflow-hidden rounded-full border-2 border-white bg-stone-100 shadow-sm"
+                        className="h-8 w-8 overflow-hidden rounded-full border-2 border-white bg-sky-100 shadow-sm"
                         style={{ marginLeft: dogIndex > 0 ? "-8px" : 0 }}
                       >
                         <img
@@ -161,7 +161,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                       </div>
                     ))}
                     {hikeDogs.length > 0 && (
-                      <span className="ml-1 truncate text-sm text-stone-500">
+                      <span className="ml-1 truncate text-sm text-slate-500">
                         {hikeDogs.map((dog) => dog.name).join(", ")}
                       </span>
                     )}
@@ -172,7 +172,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               {hike.rating && (
                 <div className="flex shrink-0 items-center gap-1">
                   <Star className="h-4 w-4 fill-[#d94a3a] text-[#d94a3a]" />
-                  <span className="text-sm font-medium text-stone-700">{hike.rating}</span>
+                  <span className="text-sm font-medium text-slate-700">{hike.rating}</span>
                 </div>
               )}
             </div>

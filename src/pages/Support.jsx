@@ -113,7 +113,7 @@ export default function Support() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <Link to={createPageUrl("Dashboard")}>
           <Button variant="ghost" className="mb-6">
@@ -137,14 +137,14 @@ export default function Support() {
           </div>
 
           <div className="doghike-glass-card p-6 md:p-8">
-            <h2 className="text-xl font-semibold text-stone-800 mb-6">Häufig gestellte Fragen (FAQ)</h2>
+            <h2 className="text-xl font-semibold text-slate-900 mb-6">Häufig gestellte Fragen (FAQ)</h2>
             {faqs.map((category, index) => {
               const Icon = category.icon;
               return (
                 <div key={index} className="mb-6 last:mb-0">
                   <div className="flex items-center gap-2 mb-3">
                     <Icon className="w-5 h-5 text-brand-600" />
-                    <h3 className="font-medium text-stone-800">{category.category}</h3>
+                    <h3 className="font-medium text-slate-900">{category.category}</h3>
                   </div>
                   <Accordion type="single" collapsible className="space-y-2">
                     {category.questions.map((item, questionIndex) => (
@@ -154,9 +154,9 @@ export default function Support() {
                         className="rounded-lg border border-brand-100/80 bg-white/50 px-4"
                       >
                         <AccordionTrigger className="text-left hover:no-underline">
-                          <span className="text-sm md:text-base font-medium text-stone-700">{item.q}</span>
+                          <span className="text-sm md:text-base font-medium text-slate-700">{item.q}</span>
                         </AccordionTrigger>
-                        <AccordionContent className="text-sm md:text-base text-stone-600 pb-4">
+                        <AccordionContent className="text-sm md:text-base text-slate-600 pb-4">
                           {item.a}
                         </AccordionContent>
                       </AccordionItem>
@@ -170,14 +170,14 @@ export default function Support() {
           <div className="doghike-glass-card p-6 md:p-8">
             <div className="flex items-center gap-2 mb-6">
               <Mail className="w-6 h-6 text-brand-700" />
-              <h2 className="text-xl font-semibold text-stone-800">Nachricht senden</h2>
+              <h2 className="text-xl font-semibold text-slate-900">Nachricht senden</h2>
             </div>
 
             {submitted ? (
               <div className="text-center py-12">
                 <CheckCircle2 className="w-16 h-16 text-brand-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-stone-800 mb-2">E-Mail-Programm geöffnet!</h3>
-                <p className="text-stone-500 text-sm mb-6">
+                <h3 className="text-xl font-semibold text-slate-900 mb-2">E-Mail-Programm geöffnet!</h3>
+                <p className="text-slate-500 text-sm mb-6">
                   Falls es nicht geklappt hat, schreib direkt an{" "}
                   <a href={`mailto:${SUPPORT_EMAIL}`} className="text-brand-600 underline">{SUPPORT_EMAIL}</a>.
                 </p>
@@ -195,11 +195,11 @@ export default function Support() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">Betreff</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Betreff</label>
                   <Input value={subject} onChange={(event) => setSubject(event.target.value)} placeholder="Worum geht es?" required />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">Nachricht</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Nachricht</label>
                   <Textarea value={message} onChange={(event) => setMessage(event.target.value)} placeholder="Beschreibe dein Anliegen..." rows={5} required />
                 </div>
                 {user && (
@@ -214,7 +214,7 @@ export default function Support() {
             )}
           </div>
 
-          <div className="rounded-2xl bg-gradient-to-br from-brand-700 via-brand-600 to-[#2777b8] p-6 md:p-8 text-white shadow-[0_18px_42px_rgba(124,77,52,0.18)]">
+          <div className="rounded-2xl bg-gradient-to-br from-brand-700 via-brand-600 to-[#2777b8] p-6 md:p-8 text-white shadow-[0_18px_42px_rgba(16,47,74,0.18)]">
             <h2 className="text-xl font-semibold mb-4">Weitere Ressourcen</h2>
             <div className="grid md:grid-cols-3 gap-4">
               {[

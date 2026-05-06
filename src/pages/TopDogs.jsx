@@ -101,8 +101,8 @@ async function loadLeaderboard() {
 // Hilfsfunktionen UI
 const RANK_STYLE = [
   { ring: "ring-2 ring-brand-300", bg: "bg-gradient-to-br from-brand-100 to-[#2777b8]/20", border: "border-brand-300", medal: "🥇", num: "text-brand-700" },
-  { ring: "ring-2 ring-stone-300",  bg: "bg-gradient-to-br from-white/80 to-brand-50",  border: "border-brand-100",  medal: "🥈", num: "text-stone-600"  },
-  { ring: "ring-2 ring-orange-300", bg: "bg-gradient-to-br from-orange-50 to-brand-50", border: "border-orange-200", medal: "🥉", num: "text-orange-700" },
+  { ring: "ring-2 ring-sky-300",  bg: "bg-gradient-to-br from-white/80 to-brand-50",  border: "border-brand-100",  medal: "🥈", num: "text-slate-600"  },
+  { ring: "ring-2 ring-red-300", bg: "bg-gradient-to-br from-orange-50 to-brand-50", border: "border-red-200", medal: "🥉", num: "text-red-600" },
 ];
 
 function dogPhoto(dog) {
@@ -141,11 +141,11 @@ function Podium({ top3, metric }) {
             </div>
 
             {/* Name */}
-            <p className={`font-bold text-stone-800 text-center leading-tight ${isFirst ? "text-sm" : "text-xs"} line-clamp-1 max-w-full px-1`}>
+            <p className={`font-bold text-slate-900 text-center leading-tight ${isFirst ? "text-sm" : "text-xs"} line-clamp-1 max-w-full px-1`}>
               {entry.dog.name}
             </p>
             {entry.dog.breed && (
-              <p className="text-[10px] text-stone-400 text-center line-clamp-1">{entry.dog.breed}</p>
+              <p className="text-[10px] text-slate-400 text-center line-clamp-1">{entry.dog.breed}</p>
             )}
 
             {/* Value */}
@@ -154,7 +154,7 @@ function Podium({ top3, metric }) {
               {metric === "distance"  && `${entry.totalDistance}`}
               {metric === "elevation" && entry.totalElevation.toLocaleString()}
             </p>
-            <p className="text-[10px] text-stone-400">
+            <p className="text-[10px] text-slate-400">
               {metric === "tours" ? "Touren" : metric === "distance" ? "km" : "Hm"}
             </p>
 
@@ -182,7 +182,7 @@ function RankRow({ entry, rank, metric, isMyDog }) {
       }`}
     >
       {/* Rang */}
-      <span className="w-7 text-center text-sm font-bold text-stone-500 shrink-0">#{rank}</span>
+      <span className="w-7 text-center text-sm font-bold text-slate-500 shrink-0">#{rank}</span>
 
       {/* Avatar */}
       <img
@@ -194,10 +194,10 @@ function RankRow({ entry, rank, metric, isMyDog }) {
       {/* Info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5 flex-wrap">
-          <p className="font-semibold text-stone-800 text-sm truncate">{entry.dog.name}</p>
+          <p className="font-semibold text-slate-900 text-sm truncate">{entry.dog.name}</p>
           {isMyDog && <span className="text-[10px] bg-brand-100 text-brand-600 px-1.5 py-0.5 rounded-full font-medium shrink-0">Dein Hund</span>}
         </div>
-        {entry.dog.breed && <p className="text-xs text-stone-400 truncate">{entry.dog.breed}</p>}
+        {entry.dog.breed && <p className="text-xs text-slate-400 truncate">{entry.dog.breed}</p>}
         {/* Badges */}
         {badges.length > 0 && (
           <div className="flex gap-1 flex-wrap mt-0.5">
@@ -213,12 +213,12 @@ function RankRow({ entry, rank, metric, isMyDog }) {
 
       {/* Wert */}
       <div className="text-right shrink-0">
-        <p className="text-base font-bold text-stone-800">
+        <p className="text-base font-bold text-slate-900">
           {metric === "tours"     && entry.tourCount}
           {metric === "distance"  && entry.totalDistance}
           {metric === "elevation" && entry.totalElevation.toLocaleString()}
         </p>
-        <p className="text-[10px] text-stone-400">
+        <p className="text-[10px] text-slate-400">
           {metric === "tours" ? "Touren" : metric === "distance" ? "km" : "Hm"}
         </p>
       </div>
@@ -238,8 +238,8 @@ function MyDogCard({ entry, rank, metric }) {
       <img src={dogPhoto(entry.dog)} alt={entry.dog.name}
         className="w-12 h-12 rounded-full object-cover border-2 border-white shadow" />
       <div className="flex-1 min-w-0">
-        <p className="font-bold text-stone-800">{entry.dog.name}</p>
-        <p className="text-xs text-stone-500">Aktuell Platz <strong>#{rank}</strong> in dieser Kategorie</p>
+        <p className="font-bold text-slate-900">{entry.dog.name}</p>
+        <p className="text-xs text-slate-500">Aktuell Platz <strong>#{rank}</strong> in dieser Kategorie</p>
       </div>
       <div className="text-right shrink-0">
         <p className="text-lg font-extrabold text-brand-600">
@@ -247,7 +247,7 @@ function MyDogCard({ entry, rank, metric }) {
           {metric === "distance"  && entry.totalDistance}
           {metric === "elevation" && entry.totalElevation.toLocaleString()}
         </p>
-        <p className="text-xs text-stone-400">
+        <p className="text-xs text-slate-400">
           {metric === "tours" ? "Touren" : metric === "distance" ? "km" : "Hm"}
         </p>
       </div>
@@ -264,7 +264,7 @@ function CommunityStats({ rows }) {
   return (
     <div className="grid grid-cols-3 gap-3 mb-6">
       {[
-        { icon: Dog,       value: rows.length, label: "Hunde", color: "bg-amber-50 text-amber-700 border-amber-200" },
+        { icon: Dog,       value: rows.length, label: "Hunde", color: "bg-yellow-50 text-yellow-700 border-yellow-200" },
         { icon: Ruler,     value: `${totalKm.toFixed(0)} km`, label: "gesamt", color: "bg-brand-50 text-brand-700 border-brand-200" },
         { icon: TrendingUp,value: `${(totalHm/1000).toFixed(1)}k`, label: "Höhenmeter", color: "bg-brand-50 text-brand-600 border-brand-200" },
       ].map(({ icon: Icon, value, label, color }) => (
@@ -282,12 +282,12 @@ function CommunityStats({ rows }) {
 function BadgeLegend() {
   return (
     <details className="doghike-glass-card mt-6 rounded-xl overflow-hidden">
-      <summary className="px-4 py-3 text-sm font-semibold text-stone-600 cursor-pointer flex items-center gap-2">
-        <Sparkles className="w-4 h-4 text-amber-500" /> Abzeichen-Legende
+      <summary className="px-4 py-3 text-sm font-semibold text-slate-600 cursor-pointer flex items-center gap-2">
+        <Sparkles className="w-4 h-4 text-yellow-500" /> Abzeichen-Legende
       </summary>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-4 pt-2">
         {Object.values(BADGE_DEFS).map((b) => (
-          <div key={b.label} className="flex items-center gap-2 text-sm text-stone-600">
+          <div key={b.label} className="flex items-center gap-2 text-sm text-slate-600">
             <span className="text-lg">{b.emoji}</span>
             <span><strong>{b.label}</strong> – {b.desc}</span>
           </div>
@@ -315,8 +315,8 @@ function RankingTab({ rows, metric, myDogIds }) {
     return (
       <div className="doghike-empty-state">
         <Dog className="doghike-empty-icon" />
-        <p className="text-stone-600 font-medium">Noch keine Daten</p>
-        <p className="mx-auto mt-1 max-w-xs text-sm text-stone-500">
+        <p className="text-slate-600 font-medium">Noch keine Daten</p>
+        <p className="mx-auto mt-1 max-w-xs text-sm text-slate-500">
           Trage deine erste Wanderung mit deinem Hund ein, dann erscheint ihr hier.
         </p>
       </div>
@@ -367,7 +367,7 @@ export default function TopDogs() {
   const myDogIds = myDogs.map((dog) => dog.id);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
 
         {/* Header */}
@@ -384,7 +384,7 @@ export default function TopDogs() {
 
         {/* Loading */}
         {isLoading && (
-          <div className="flex items-center justify-center py-20 gap-2 text-stone-400">
+          <div className="flex items-center justify-center py-20 gap-2 text-slate-400">
             <Loader2 className="w-6 h-6 animate-spin" />
             <span className="text-sm">Lade Ranking...</span>
           </div>

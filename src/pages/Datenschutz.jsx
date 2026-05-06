@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Datenschutz() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-[#edf7ff] pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-[#edf7ff] pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <Link to={createPageUrl("Dashboard")}>
           <Button variant="ghost" className="mb-6">
@@ -14,18 +14,18 @@ export default function Datenschutz() {
           </Button>
         </Link>
 
-        <div className="rounded-2xl border border-stone-200/70 bg-white/70 p-4 shadow-[0_14px_34px_rgba(92,62,42,0.1)] backdrop-blur-sm md:p-8">
+        <div className="rounded-2xl border border-sky-200/70 bg-white/70 p-4 shadow-[0_14px_34px_rgba(16,47,74,0.1)] backdrop-blur-sm md:p-8">
           <div className="doghike-page-header mb-2">
             <div className="doghike-page-icon">
               <Shield className="h-5 w-5" />
             </div>
             <h1 className="doghike-page-title">Datenschutzerklärung</h1>
           </div>
-          <p className="text-xs text-stone-400 mb-8">Letzte Aktualisierung: April 2026</p>
+          <p className="text-xs text-slate-400 mb-8">Letzte Aktualisierung: April 2026</p>
 
           <div className="space-y-6 md:space-y-8">
             <section>
-              <p className="text-sm md:text-base text-stone-600 leading-relaxed">
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Der Schutz Ihrer persönlichen Daten ist uns ein besonderes Anliegen. Wir verarbeiten
                 Ihre Daten ausschließlich auf Grundlage der gesetzlichen Bestimmungen der
                 EU-Datenschutz-Grundverordnung (DSGVO / Verordnung (EU) 2016/679) sowie des
@@ -35,12 +35,12 @@ export default function Datenschutz() {
               </p>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
                 <Building2 className="w-5 h-5" />
                 Verantwortlicher (Titolare del trattamento)
               </h2>
-              <div className="space-y-2 text-sm md:text-base text-stone-600 bg-stone-50 rounded-xl p-4">
+              <div className="space-y-2 text-sm md:text-base text-slate-600 bg-sky-50 rounded-xl p-4">
                 <p><strong>Julia Schwärzer</strong></p>
                 <p>Südtirol, Italien</p>
                 <p>E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-brand-600 underline"><strong>suedtirolmithund@gmail.com</strong></a></p>
@@ -49,14 +49,14 @@ export default function Datenschutz() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
                 <Database className="w-5 h-5" />
                 1. Welche Daten wir speichern
               </h2>
-              <div className="space-y-4 text-sm md:text-base text-stone-600 leading-relaxed">
-                <div className="bg-stone-50 rounded-xl p-4">
-                  <p className="font-medium text-stone-800 mb-2">Bei der Registrierung:</p>
+              <div className="space-y-4 text-sm md:text-base text-slate-600 leading-relaxed">
+                <div className="bg-sky-50 rounded-xl p-4">
+                  <p className="font-medium text-slate-900 mb-2">Bei der Registrierung:</p>
                   <ul className="list-disc pl-6 space-y-1">
                     <li><strong>E-Mail-Adresse</strong> (Pflichtfeld)</li>
                     <li><strong>Passwort</strong> (verschlüsselt gehasht, nie im Klartext gespeichert)</li>
@@ -65,8 +65,8 @@ export default function Datenschutz() {
                   </ul>
                 </div>
 
-                <div className="bg-stone-50 rounded-xl p-4">
-                  <p className="font-medium text-stone-800 mb-2">Bei der Nutzung der App:</p>
+                <div className="bg-sky-50 rounded-xl p-4">
+                  <p className="font-medium text-slate-900 mb-2">Bei der Nutzung der App:</p>
                   <ul className="list-disc pl-6 space-y-1">
                     <li><strong>Wanderungsdaten:</strong> Trailname, Ort, Datum, Distanz, Höhenmeter, Dauer, Schwierigkeit, Saison, Wasserverfügbarkeit, Notizen, Parkplatzinfos</li>
                     <li><strong>GPS-Koordinaten:</strong> Startpunkt und optionale Routenpunkte, die Sie selbst eingeben oder aufzeichnen</li>
@@ -76,8 +76,8 @@ export default function Datenschutz() {
                   </ul>
                 </div>
 
-                <div className="bg-stone-50 rounded-xl p-4">
-                  <p className="font-medium text-stone-800 mb-2">Technische Daten (automatisch):</p>
+                <div className="bg-sky-50 rounded-xl p-4">
+                  <p className="font-medium text-slate-900 mb-2">Technische Daten (automatisch):</p>
                   <ul className="list-disc pl-6 space-y-1">
                     <li>Session-Token und technisch notwendige Browser-Speicher-Einträge</li>
                     <li>IP-Adresse (wird von Vercel- und Supabase-Infrastruktur protokolliert)</li>
@@ -87,18 +87,18 @@ export default function Datenschutz() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
                 <Eye className="w-5 h-5" />
                 2. Rechtsgrundlagen der Verarbeitung
               </h2>
               <div className="overflow-x-auto">
-                <table className="w-full text-sm text-stone-600 border-collapse">
+                <table className="w-full text-sm text-slate-600 border-collapse">
                   <thead>
-                    <tr className="bg-stone-100">
-                      <th className="text-left p-3 font-semibold text-stone-800 rounded-tl-lg">Datenart</th>
-                      <th className="text-left p-3 font-semibold text-stone-800">Zweck</th>
-                      <th className="text-left p-3 font-semibold text-stone-800 rounded-tr-lg">Rechtsgrundlage</th>
+                    <tr className="bg-sky-100">
+                      <th className="text-left p-3 font-semibold text-slate-900 rounded-tl-lg">Datenart</th>
+                      <th className="text-left p-3 font-semibold text-slate-900">Zweck</th>
+                      <th className="text-left p-3 font-semibold text-slate-900 rounded-tr-lg">Rechtsgrundlage</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-stone-100">
@@ -107,7 +107,7 @@ export default function Datenschutz() {
                       <td className="p-3">Authentifizierung, Kontoverwaltung</td>
                       <td className="p-3">Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung)</td>
                     </tr>
-                    <tr className="bg-stone-50">
+                    <tr className="bg-sky-50">
                       <td className="p-3">GPS-Koordinaten & Routendaten</td>
                       <td className="p-3">Kartendarstellung, Routenplanung, Journal</td>
                       <td className="p-3">Art. 6 Abs. 1 lit. b DSGVO</td>
@@ -117,7 +117,7 @@ export default function Datenschutz() {
                       <td className="p-3">Bebilderung von Touren und Profilen</td>
                       <td className="p-3">Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)</td>
                     </tr>
-                    <tr className="bg-stone-50">
+                    <tr className="bg-sky-50">
                       <td className="p-3">Hundedaten</td>
                       <td className="p-3">Persönliches Profil</td>
                       <td className="p-3">Art. 6 Abs. 1 lit. a DSGVO (freiwillig)</td>
@@ -127,7 +127,7 @@ export default function Datenschutz() {
                       <td className="p-3">Community-Funktion</td>
                       <td className="p-3">Art. 6 Abs. 1 lit. b DSGVO bzw. lit. a DSGVO für freiwillige Inhalte</td>
                     </tr>
-                    <tr className="bg-stone-50">
+                    <tr className="bg-sky-50">
                       <td className="p-3">Session-Token</td>
                       <td className="p-3">Technisch notwendige Anmeldung</td>
                       <td className="p-3">Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung)</td>
@@ -142,12 +142,12 @@ export default function Datenschutz() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
                 <Clock className="w-5 h-5" />
                 3. Speicherdauer
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <ul className="list-disc pl-6 space-y-3">
                   <li><strong>Kontodaten (E-Mail):</strong> Bis zur Kontolöschung; danach Löschung innerhalb angemessener Bearbeitungsfrist.</li>
                   <li><strong>Wanderungen, Fotos, GPS-Daten:</strong> Bis zur manuellen Löschung durch Sie oder nach Bearbeitung einer Kontolöschung.</li>
@@ -155,8 +155,8 @@ export default function Datenschutz() {
                   <li><strong>Technische Logs:</strong> Vercel speichert Zugriffslogs typischerweise bis zu 30 Tage; Supabase Auth-Logs nach deren jeweiliger Standardaufbewahrung.</li>
                   <li><strong>Einwilligungsnachweis:</strong> Datum der Zustimmung zur Datenschutzerklärung wird gespeichert, soweit dies zum Nachweis erforderlich ist.</li>
                 </ul>
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mt-4">
-                  <p className="text-amber-800 text-sm">
+                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mt-4">
+                  <p className="text-yellow-800 text-sm">
                     <strong>Recht auf Vergessenwerden:</strong> Sie können Ihr Konto und alle Ihre Daten jederzeit
                     in den Profileinstellungen unter "Konto löschen" zur Löschung anfragen.
                     Die Anfrage wird per E-Mail vorbereitet und danach manuell bearbeitet.
@@ -165,14 +165,14 @@ export default function Datenschutz() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
                 <Users className="w-5 h-5" />
                 4. Wer Zugriff auf Ihre Daten hat
               </h2>
-              <div className="space-y-4 text-sm md:text-base text-stone-600 leading-relaxed">
-                <div className="bg-stone-50 rounded-xl p-4">
-                  <p className="font-medium text-stone-800 mb-2">Innerhalb der App:</p>
+              <div className="space-y-4 text-sm md:text-base text-slate-600 leading-relaxed">
+                <div className="bg-sky-50 rounded-xl p-4">
+                  <p className="font-medium text-slate-900 mb-2">Innerhalb der App:</p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li><strong>Nur Sie</strong> sehen Ihre privaten Wanderungen und Kontoinformationen.</li>
                     <li><strong>Freunde</strong> sehen nur Inhalte, die Sie ausdrücklich für Freunde freigeben.</li>
@@ -183,61 +183,61 @@ export default function Datenschutz() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
                 <Share2 className="w-5 h-5" />
                 5. Auftragsverarbeiter & externe Dienste
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600">
+              <div className="space-y-3 text-sm md:text-base text-slate-600">
                 <p>Wir geben Ihre Daten <strong>nur an folgende Auftragsverarbeiter oder technische Dienste</strong> weiter:</p>
 
                 <div className="space-y-3">
-                  <div className="border border-stone-200 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">Supabase Inc. (Authentifizierung, Datenbank, Storage)</p>
+                  <div className="border border-sky-200 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">Supabase Inc. (Authentifizierung, Datenbank, Storage)</p>
                     <p>Speichert Nutzerkonten, Session-Tokens und App-Daten. Journal-Dateien werden in einem privaten Storage-Bucket gespeichert und in der App bei Bedarf über zeitlich begrenzte Links ausgeliefert.</p>
-              <p className="mt-1 text-stone-500">Datenschutz: <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">supabase.com/privacy</a></p>
+              <p className="mt-1 text-slate-500">Datenschutz: <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">supabase.com/privacy</a></p>
                   </div>
 
-                  <div className="border border-stone-200 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">Vercel Inc. (Hosting & CDN)</p>
+                  <div className="border border-sky-200 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">Vercel Inc. (Hosting & CDN)</p>
                     <p>Hostet die Web-App und verarbeitet technische Zugriffsdaten wie IP-Adresse und HTTP-Logs.</p>
-              <p className="mt-1 text-stone-500">Datenschutz: <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">vercel.com/legal/privacy-policy</a></p>
+              <p className="mt-1 text-slate-500">Datenschutz: <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">vercel.com/legal/privacy-policy</a></p>
                   </div>
 
-                  <div className="border border-stone-200 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">Google LLC (Sign-in mit Google / OAuth)</p>
+                  <div className="border border-sky-200 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">Google LLC (Sign-in mit Google / OAuth)</p>
                     <p>Wenn Sie sich über "Mit Google anmelden" registrieren oder einloggen, überträgt Google Ihre E-Mail-Adresse, Ihren Namen und Ihr Profilbild an Supabase Auth.</p>
-              <p className="mt-1 text-stone-500">Datenschutz: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">policies.google.com/privacy</a></p>
+              <p className="mt-1 text-slate-500">Datenschutz: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">policies.google.com/privacy</a></p>
                   </div>
 
-                  <div className="border border-stone-200 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">OpenStreetMap / CARTO (Kartenkacheln)</p>
+                  <div className="border border-sky-200 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">OpenStreetMap / CARTO (Kartenkacheln)</p>
                     <p>Lädt Kartenkacheln. Dabei wird Ihre IP-Adresse technisch bedingt an diese Dienste übertragen.</p>
-              <p className="mt-1 text-stone-500"><a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">OSM Datenschutzrichtlinie</a></p>
+              <p className="mt-1 text-slate-500"><a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">OSM Datenschutzrichtlinie</a></p>
                   </div>
 
-                  <div className="border border-stone-200 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">Nominatim / OpenStreetMap (Ortssuche)</p>
+                  <div className="border border-sky-200 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">Nominatim / OpenStreetMap (Ortssuche)</p>
                     <p>Wenn Sie im Routenplaner oder im Tagebuch einen Ort suchen, werden Suchtext und IP-Adresse kurzzeitig an Nominatim übertragen.</p>
-              <p className="mt-1 text-stone-500"><a href="https://nominatim.org/privacy.html" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">nominatim.org/privacy.html</a></p>
+              <p className="mt-1 text-slate-500"><a href="https://nominatim.org/privacy.html" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">nominatim.org/privacy.html</a></p>
                   </div>
 
-                  <div className="border border-stone-200 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">BRouter und GraphHopper GmbH (Routenberechnung)</p>
+                  <div className="border border-sky-200 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">BRouter und GraphHopper GmbH (Routenberechnung)</p>
                     <p>Beim Planen einer Route werden die von Ihnen gesetzten Wegpunkt-Koordinaten an externe Routing-Dienste übertragen. Aktuell verwendet die App BRouter als primären Dienst und GraphHopper als technischen Fallback. Es werden dabei keine Kontodaten oder Inhaltsdaten Ihrer App-Beiträge an diese Dienste übermittelt.</p>
-              <p className="mt-1 text-stone-500"><a href="https://www.graphhopper.com/privacy/" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">graphhopper.com/privacy</a></p>
+              <p className="mt-1 text-slate-500"><a href="https://www.graphhopper.com/privacy/" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">graphhopper.com/privacy</a></p>
                   </div>
 
-                  <div className="border border-stone-200 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">Open-Meteo (Wetterdaten)</p>
+                  <div className="border border-sky-200 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">Open-Meteo (Wetterdaten)</p>
                     <p>Wenn Sie eine Tourendetailseite aufrufen, die einen Startpunkt hat, werden die GPS-Koordinaten des Startpunkts an Open-Meteo gesendet, um Wetterdaten zu laden.</p>
-              <p className="mt-1 text-stone-500"><a href="https://open-meteo.com/en/terms" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">open-meteo.com/en/terms</a></p>
+              <p className="mt-1 text-slate-500"><a href="https://open-meteo.com/en/terms" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">open-meteo.com/en/terms</a></p>
                   </div>
 
-                  <div className="border border-stone-200 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">Stripe Inc. (Zahlungen, nur falls Premium-Zahlungen aktiviert werden)</p>
+                  <div className="border border-sky-200 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">Stripe Inc. (Zahlungen, nur falls Premium-Zahlungen aktiviert werden)</p>
                     <p>Stripe wird erst dann eingesetzt, wenn Online-Zahlungen für Premium technisch aktiviert werden. Sobald das der Fall ist, verarbeitet Stripe Zahlungsdaten direkt; wir speichern keine Kreditkartendaten selbst.</p>
-              <p className="mt-1 text-stone-500"><a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">stripe.com/privacy</a></p>
+              <p className="mt-1 text-slate-500"><a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">stripe.com/privacy</a></p>
                   </div>
 
                   <div className="border border-brand-200 rounded-xl p-4 bg-brand-50">
@@ -251,11 +251,11 @@ export default function Datenschutz() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
                 6. Hochgeladene Fotos & Urheberrecht
               </h2>
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800 leading-relaxed">
+              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-sm text-yellow-800 leading-relaxed">
                 <p><strong>Beim Hochladen von Fotos bestätigen Sie:</strong></p>
                 <ul className="list-disc pl-5 mt-2 space-y-1">
                   <li>Sie sind der Urheber oder besitzen die Nutzungsrechte an den Fotos.</li>
@@ -266,19 +266,19 @@ export default function Datenschutz() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
                 7. Technisch notwendige Cookies & LocalStorage
               </h2>
-              <div className="space-y-3 text-sm text-stone-600">
+              <div className="space-y-3 text-sm text-slate-600">
                 <p>Diese App verwendet <strong>ausschließlich technisch notwendige</strong> Browser-Speicher-Einträge und ein einzelnes technisch notwendiges Cookie:</p>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm border-collapse">
                     <thead>
-                      <tr className="bg-stone-100">
-                        <th className="text-left p-2 font-semibold text-stone-800">Name</th>
-                        <th className="text-left p-2 font-semibold text-stone-800">Zweck</th>
-                        <th className="text-left p-2 font-semibold text-stone-800">Dauer</th>
+                      <tr className="bg-sky-100">
+                        <th className="text-left p-2 font-semibold text-slate-900">Name</th>
+                        <th className="text-left p-2 font-semibold text-slate-900">Zweck</th>
+                        <th className="text-left p-2 font-semibold text-slate-900">Dauer</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-stone-100">
@@ -287,7 +287,7 @@ export default function Datenschutz() {
                         <td className="p-2">LocalStorage: Supabase Session (Anmeldung aufrecht erhalten)</td>
                         <td className="p-2">Bis zum Abmelden oder Ablauf der Session</td>
                       </tr>
-                      <tr className="bg-stone-50">
+                      <tr className="bg-sky-50">
                         <td className="p-2 font-mono text-xs">doghike_cookie_consent</td>
                         <td className="p-2">LocalStorage: Speichert Ihre Auswahl zum Hinweis auf technisch notwendige Speicher</td>
                         <td className="p-2">Dauerhaft (bis Sie den Browser-Speicher löschen)</td>
@@ -304,39 +304,39 @@ export default function Datenschutz() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
                 <Lock className="w-5 h-5" />
                 8. Ihre Rechte (Art. 15-21 DSGVO)
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
-                  <div className="bg-stone-50 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">Auskunft (Art. 15)</p>
+                  <div className="bg-sky-50 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">Auskunft (Art. 15)</p>
                     <p className="text-sm">Welche Daten wir über Sie gespeichert haben.</p>
                   </div>
-                  <div className="bg-stone-50 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">Berichtigung (Art. 16)</p>
+                  <div className="bg-sky-50 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">Berichtigung (Art. 16)</p>
                     <p className="text-sm">Falsche Daten korrigieren lassen.</p>
                   </div>
-                  <div className="bg-stone-50 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">Löschung (Art. 17)</p>
+                  <div className="bg-sky-50 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">Löschung (Art. 17)</p>
                     <p className="text-sm">Vollständige Datenlöschung per Anfrage über die Profileinstellungen oder per E-Mail.</p>
                   </div>
-                  <div className="bg-stone-50 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">Datenportabilität (Art. 20)</p>
+                  <div className="bg-sky-50 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">Datenportabilität (Art. 20)</p>
                     <p className="text-sm">Ihre Daten in einem gängigen Format anfordern.</p>
                   </div>
-                  <div className="bg-stone-50 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">Einschränkung (Art. 18)</p>
+                  <div className="bg-sky-50 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">Einschränkung (Art. 18)</p>
                     <p className="text-sm">Eingeschränkte Verarbeitung verlangen.</p>
                   </div>
-                  <div className="bg-stone-50 rounded-xl p-4">
-                    <p className="font-semibold text-stone-800 mb-1">Widerspruch (Art. 21)</p>
+                  <div className="bg-sky-50 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">Widerspruch (Art. 21)</p>
                     <p className="text-sm">Der Verarbeitung widersprechen.</p>
                   </div>
-                  <div className="bg-stone-50 rounded-xl p-4 sm:col-span-2">
-                    <p className="font-semibold text-stone-800 mb-1">Beschwerde bei Aufsichtsbehörde</p>
+                  <div className="bg-sky-50 rounded-xl p-4 sm:col-span-2">
+                    <p className="font-semibold text-slate-900 mb-1">Beschwerde bei Aufsichtsbehörde</p>
                     <p className="text-sm">
                       In Italien:{" "}
               <a href="https://www.garanteprivacy.it" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">
@@ -346,7 +346,7 @@ export default function Datenschutz() {
                   </div>
                 </div>
 
-          <div className="mt-4 rounded-xl bg-gradient-to-br from-brand-700 to-[#2777b8] p-4 text-white shadow-[0_12px_24px_rgba(124,77,52,0.16)]">
+          <div className="mt-4 rounded-xl bg-gradient-to-br from-brand-700 to-[#2777b8] p-4 text-white shadow-[0_12px_24px_rgba(16,47,74,0.16)]">
                   <p className="font-semibold mb-1">Anfragen stellen:</p>
             <p className="text-brand-50 text-sm">
                     Schreiben Sie an <strong>suedtirolmithund@gmail.com</strong> - wir antworten innerhalb von 30 Tagen.
@@ -356,11 +356,11 @@ export default function Datenschutz() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-4">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
                 9. Datensicherheit
               </h2>
-              <ul className="list-disc pl-6 space-y-2 text-sm md:text-base text-stone-600">
+              <ul className="list-disc pl-6 space-y-2 text-sm md:text-base text-slate-600">
                 <li>Alle Übertragungen verschlüsselt über HTTPS/TLS</li>
                 <li>Passwörter werden gehasht gespeichert</li>
                 <li>Supabase Row-Level-Security (RLS) schützt private Datenbereiche</li>
@@ -368,9 +368,9 @@ export default function Datenschutz() {
               </ul>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                <p className="text-amber-800 text-sm md:text-base leading-relaxed">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                <p className="text-yellow-800 text-sm md:text-base leading-relaxed">
                   <strong>Öffentliche Inhalte:</strong> Kommentare und Bewertungen, die Sie abgeben,
                   sind für alle App-Nutzer sichtbar. Fotos, die Sie zu öffentlichen Touren hochladen,
                   können für andere Nutzer der App sichtbar werden. Bitte teilen Sie keine sensiblen

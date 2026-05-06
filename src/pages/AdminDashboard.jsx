@@ -74,7 +74,7 @@ function FilterButton({ active, children, onClick }) {
       className={
         active
           ? "bg-brand-400 text-white hover:bg-brand-600"
-          : "border-stone-200 text-stone-600 hover:bg-stone-50"
+          : "border-sky-200 text-slate-600 hover:bg-sky-50"
       }
     >
       {children}
@@ -86,14 +86,14 @@ function StatusBadge({ status }) {
   const normalized = (status ?? "").toLowerCase();
   const config = {
     approved: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    draft: "bg-amber-50 text-amber-700 border-amber-200",
-    archived: "bg-stone-100 text-stone-600 border-stone-200",
+    draft: "bg-yellow-50 text-yellow-700 border-yellow-200",
+    archived: "bg-sky-100 text-slate-600 border-sky-200",
   };
 
   return (
     <Badge
       variant="outline"
-      className={config[normalized] ?? "bg-stone-100 text-stone-600 border-stone-200"}
+      className={config[normalized] ?? "bg-sky-100 text-slate-600 border-sky-200"}
     >
       {normalized === "approved"
         ? "Freigegeben"
@@ -129,12 +129,12 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
               <span className="inline-flex items-center gap-1 rounded-full border border-yellow-200 bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-700">
                 Wartet auf Prüfung
               </span>
-              <span className="text-xs text-stone-400">
+              <span className="text-xs text-slate-400">
                 {formatAdminDate(entry.created_at)}
               </span>
             </div>
-            <h3 className="truncate text-lg font-semibold text-stone-800">{entry.title}</h3>
-            <div className="mt-1 flex flex-wrap items-center gap-3 text-sm text-stone-500">
+            <h3 className="truncate text-lg font-semibold text-slate-900">{entry.title}</h3>
+            <div className="mt-1 flex flex-wrap items-center gap-3 text-sm text-slate-500">
               <span className="flex items-center gap-1">
                 <User className="h-3.5 w-3.5" /> {authorName}
               </span>
@@ -144,7 +144,7 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
                 </span>
               )}
             </div>
-            <div className="mt-2 flex flex-wrap gap-3 text-xs text-stone-500">
+            <div className="mt-2 flex flex-wrap gap-3 text-xs text-slate-500">
               {entry.distance_km && (
                 <span className="flex items-center gap-1">
                   <span className="text-sm leading-none">{TOUR_ICONS.distance}</span>
@@ -170,7 +170,7 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
         <button
           type="button"
           onClick={() => setExpanded((value) => !value)}
-          className="mt-3 flex items-center gap-1 text-xs text-stone-400 transition-colors hover:text-stone-600"
+          className="mt-3 flex items-center gap-1 text-xs text-slate-400 transition-colors hover:text-slate-600"
         >
           {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
           {expanded ? "Weniger" : "Details"}
@@ -185,21 +185,21 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="space-y-4 border-t border-stone-100 px-5 pb-4 pt-4">
+            <div className="space-y-4 border-t border-sky-100 px-5 pb-4 pt-4">
               {entry.description && (
                 <div>
-                  <Label className="text-xs uppercase tracking-wide text-stone-500">
+                  <Label className="text-xs uppercase tracking-wide text-slate-500">
                     Beschreibung
                   </Label>
-                  <p className="mt-1 whitespace-pre-wrap text-sm text-stone-700">
+                  <p className="mt-1 whitespace-pre-wrap text-sm text-slate-700">
                     {entry.description}
                   </p>
                 </div>
               )}
               {entry.hazard_notes && (
-                <div className="flex gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3">
-                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
-                  <p className="text-sm text-amber-700">{entry.hazard_notes}</p>
+                <div className="flex gap-2 rounded-lg border border-yellow-200 bg-yellow-50 p-3">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-yellow-600" />
+                  <p className="text-sm text-yellow-700">{entry.hazard_notes}</p>
                 </div>
               )}
               {entry.photos?.length > 0 && (
@@ -322,17 +322,17 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
           )}
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-sm font-semibold text-stone-800">{authorName}</span>
+              <span className="text-sm font-semibold text-slate-900">{authorName}</span>
               {needsApproval && (
-                <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
+                <span className="inline-flex items-center gap-1 rounded-full border border-yellow-200 bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-700">
                   Freigabe nötig
                 </span>
               )}
             </div>
-            <p className="text-xs text-stone-400">
+            <p className="text-xs text-slate-400">
               {formatAdminDate(comment.created_at)}
             </p>
-            <p className="mt-1 text-xs text-stone-500">
+            <p className="mt-1 text-xs text-slate-500">
               {comment.hike_title || `Tour-ID: ${comment.hike_id}`}
             </p>
           </div>
@@ -358,14 +358,14 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
             size="icon"
             onClick={() => onDelete(comment.id)}
             disabled={deleting || approving}
-            className="h-8 w-8 text-stone-400 hover:text-red-600"
+            className="h-8 w-8 text-slate-400 hover:text-red-600"
           >
             {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
           </Button>
         </div>
       </div>
 
-      <p className="mt-3 whitespace-pre-wrap text-sm text-stone-700">{comment.text}</p>
+      <p className="mt-3 whitespace-pre-wrap text-sm text-slate-700">{comment.text}</p>
 
       {comment.photo_preview_url && (
         <a href={comment.photo_preview_url} target="_blank" rel="noopener noreferrer">
@@ -406,11 +406,11 @@ function PublicHikeCard({ hike }) {
       className="doghike-glass-card overflow-hidden"
     >
       <div className="flex flex-col gap-4 p-4 md:flex-row">
-        <div className="h-28 w-full shrink-0 overflow-hidden rounded-2xl bg-stone-100 md:w-44">
+        <div className="h-28 w-full shrink-0 overflow-hidden rounded-2xl bg-sky-100 md:w-44">
           {hike.cover_photo ? (
             <img src={hike.cover_photo} alt="" className="h-full w-full object-cover" />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-stone-100 to-stone-200 text-stone-400">
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-stone-100 to-stone-200 text-slate-400">
               <ImageIcon className="h-6 w-6" />
             </div>
           )}
@@ -430,16 +430,16 @@ function PublicHikeCard({ hike }) {
                   </Badge>
                 )}
               </div>
-              <h3 className="truncate text-lg font-semibold text-stone-800">
+              <h3 className="truncate text-lg font-semibold text-slate-900">
                 {hike.trail_name || hike.title || "Ohne Titel"}
               </h3>
-              <p className="mt-1 text-sm text-stone-500">
+              <p className="mt-1 text-sm text-slate-500">
                 {[hike.location, hike.country].filter(Boolean).join(", ") || "Ohne Ortsangabe"}
               </p>
             </div>
-            <div className="shrink-0 text-right text-xs text-stone-400">
+            <div className="shrink-0 text-right text-xs text-slate-400">
               <p>Zuletzt aktualisiert</p>
-              <p className="mt-1 font-medium text-stone-500">{formatAdminDate(hike.updated_at || hike.created_at)}</p>
+              <p className="mt-1 font-medium text-slate-500">{formatAdminDate(hike.updated_at || hike.created_at)}</p>
             </div>
           </div>
 
@@ -483,13 +483,13 @@ function UserCard({ profile, deleting, onDelete }) {
               className="h-11 w-11 shrink-0 rounded-2xl object-cover"
             />
           ) : (
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-stone-100 text-stone-400">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-sky-100 text-slate-400">
               <User className="h-5 w-5" />
             </div>
           )}
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <p className="truncate text-sm font-semibold text-stone-800">{displayName}</p>
+              <p className="truncate text-sm font-semibold text-slate-900">{displayName}</p>
               {profile.role === "admin" && (
                 <Badge variant="outline" className="border-brand-200 bg-brand-50 text-brand-700">
                   Admin
@@ -506,9 +506,9 @@ function UserCard({ profile, deleting, onDelete }) {
               )}
             </div>
             {profile.username && (
-              <p className="mt-1 text-xs text-stone-500">@{profile.username}</p>
+              <p className="mt-1 text-xs text-slate-500">@{profile.username}</p>
             )}
-            <p className="mt-1 text-xs text-stone-400">
+            <p className="mt-1 text-xs text-slate-400">
               Registriert: {formatAdminDate(profile.created_at)}
             </p>
           </div>
@@ -520,7 +520,7 @@ function UserCard({ profile, deleting, onDelete }) {
               variant="ghost"
               size="icon"
               disabled={deleting}
-              className="h-8 w-8 text-stone-400 hover:text-red-600"
+              className="h-8 w-8 text-slate-400 hover:text-red-600"
             >
               {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
             </Button>
@@ -737,7 +737,7 @@ export default function AdminDashboard() {
   if (isLoadingAuth) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
+        <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
       </div>
     );
   }
@@ -746,8 +746,8 @@ export default function AdminDashboard() {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
         <div className="text-center">
-          <ShieldCheck className="mx-auto mb-4 h-12 w-12 text-stone-300" />
-          <p className="font-medium text-stone-600">Bitte zuerst anmelden.</p>
+          <ShieldCheck className="mx-auto mb-4 h-12 w-12 text-slate-300" />
+          <p className="font-medium text-slate-600">Bitte zuerst anmelden.</p>
           <Link to={createPageUrl("Login")}>
             <Button className="mt-4 bg-brand-400 hover:bg-brand-600">Anmelden</Button>
           </Link>
@@ -761,8 +761,8 @@ export default function AdminDashboard() {
       <div className="flex min-h-screen items-center justify-center px-4">
         <div className="text-center">
           <ShieldCheck className="mx-auto mb-4 h-12 w-12 text-red-300" />
-          <p className="text-lg font-semibold text-stone-700">Kein Zugriff</p>
-          <p className="mt-1 text-sm text-stone-500">Diese Seite ist nur für Administratoren.</p>
+          <p className="text-lg font-semibold text-slate-700">Kein Zugriff</p>
+          <p className="mt-1 text-sm text-slate-500">Diese Seite ist nur für Administratoren.</p>
           <Link to="/">
             <Button variant="outline" className="mt-4">
               Zurück
@@ -774,10 +774,10 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 md:py-10">
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="doghike-page-header">
-          <div className="doghike-page-icon bg-gradient-to-br from-brand-700 to-[#2777b8] text-white shadow-[0_12px_24px_rgba(124,77,52,0.16)]">
+          <div className="doghike-page-icon bg-gradient-to-br from-brand-700 to-[#2777b8] text-white shadow-[0_12px_24px_rgba(16,47,74,0.16)]">
               <ShieldCheck className="h-5 w-5 text-white" />
           </div>
           <div>
@@ -828,8 +828,8 @@ export default function AdminDashboard() {
                   <Clock className="h-5 w-5 text-yellow-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold leading-none text-stone-800">{entries.length}</p>
-                  <p className="text-xs text-stone-500">Wartet auf Prüfung</p>
+                  <p className="text-2xl font-bold leading-none text-slate-900">{entries.length}</p>
+                  <p className="text-xs text-slate-500">Wartet auf Prüfung</p>
                 </div>
               </div>
               {entries.length === 0 && (
@@ -839,13 +839,13 @@ export default function AdminDashboard() {
 
             {entriesLoading ? (
               <div className="flex justify-center py-20">
-                <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
+                <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
               </div>
             ) : entries.length === 0 ? (
               <div className="doghike-empty-state">
                 <CheckCircle2 className="doghike-empty-icon text-brand-400" />
-                <h3 className="mb-2 text-xl font-medium text-stone-700">Keine offenen Einträge</h3>
-                <p className="text-sm text-stone-500">Alle Einträge wurden geprüft.</p>
+                <h3 className="mb-2 text-xl font-medium text-slate-700">Keine offenen Einträge</h3>
+                <p className="text-sm text-slate-500">Alle Einträge wurden geprüft.</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -874,20 +874,20 @@ export default function AdminDashboard() {
                       <MessageSquare className="h-5 w-5 text-red-600" />
                     </div>
                     <div>
-                      <p className="text-2xl font-bold leading-none text-stone-800">{comments.length}</p>
-                      <p className="text-xs text-stone-500">Kommentare gesamt</p>
+                      <p className="text-2xl font-bold leading-none text-slate-900">{comments.length}</p>
+                      <p className="text-xs text-slate-500">Kommentare gesamt</p>
                     </div>
                   </div>
-                  <div className="border-l border-stone-200 pl-4">
-                    <p className="text-2xl font-bold leading-none text-amber-700">{pendingCommentsCount}</p>
-                    <p className="text-xs text-stone-500">Freigaben nötig</p>
+                  <div className="border-l border-sky-200 pl-4">
+                    <p className="text-2xl font-bold leading-none text-yellow-700">{pendingCommentsCount}</p>
+                    <p className="text-xs text-slate-500">Freigaben nötig</p>
                   </div>
                 </div>
               </div>
 
               <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                   <Input
                     value={commentSearch}
                     onChange={(event) => setCommentSearch(event.target.value)}
@@ -908,13 +908,13 @@ export default function AdminDashboard() {
 
             {commentsLoading ? (
               <div className="flex justify-center py-20">
-                <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
+                <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
               </div>
             ) : filteredComments.length === 0 ? (
               <div className="doghike-empty-state">
                 <CheckCircle2 className="doghike-empty-icon text-brand-400" />
-                <h3 className="mb-2 text-xl font-medium text-stone-700">Keine passenden Kommentare</h3>
-                <p className="text-sm text-stone-500">Mit den aktuellen Filtern wurde nichts gefunden.</p>
+                <h3 className="mb-2 text-xl font-medium text-slate-700">Keine passenden Kommentare</h3>
+                <p className="text-sm text-slate-500">Mit den aktuellen Filtern wurde nichts gefunden.</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -938,22 +938,22 @@ export default function AdminDashboard() {
             <div className="mb-4 grid gap-4 md:grid-cols-[1.05fr_0.95fr]">
               <div className="grid gap-3 sm:grid-cols-3">
                 <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
-                  <p className="text-2xl font-bold text-stone-800">{approvedPublicHikesCount}</p>
-                  <p className="mt-1 text-xs text-stone-500">Freigegeben</p>
+                  <p className="text-2xl font-bold text-slate-900">{approvedPublicHikesCount}</p>
+                  <p className="mt-1 text-xs text-slate-500">Freigegeben</p>
                 </div>
                 <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
-                  <p className="text-2xl font-bold text-stone-800">{draftPublicHikesCount}</p>
-                  <p className="mt-1 text-xs text-stone-500">Entwürfe</p>
+                  <p className="text-2xl font-bold text-slate-900">{draftPublicHikesCount}</p>
+                  <p className="mt-1 text-xs text-slate-500">Entwürfe</p>
                 </div>
                 <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
-                  <p className="text-2xl font-bold text-stone-800">{premiumPublicHikesCount}</p>
-                  <p className="mt-1 text-xs text-stone-500">Premium</p>
+                  <p className="text-2xl font-bold text-slate-900">{premiumPublicHikesCount}</p>
+                  <p className="mt-1 text-xs text-slate-500">Premium</p>
                 </div>
               </div>
 
               <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                   <Input
                     value={publicHikeSearch}
                     onChange={(event) => setPublicHikeSearch(event.target.value)}
@@ -993,13 +993,13 @@ export default function AdminDashboard() {
 
             {publicHikesLoading ? (
               <div className="flex justify-center py-20">
-                <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
+                <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
               </div>
             ) : filteredPublicHikes.length === 0 ? (
               <div className="doghike-empty-state">
                 <CheckCircle2 className="doghike-empty-icon text-brand-400" />
-                <h3 className="mb-2 text-xl font-medium text-stone-700">Keine passenden Touren</h3>
-                <p className="text-sm text-stone-500">Mit den aktuellen Filtern wurde nichts gefunden.</p>
+                <h3 className="mb-2 text-xl font-medium text-slate-700">Keine passenden Touren</h3>
+                <p className="text-sm text-slate-500">Mit den aktuellen Filtern wurde nichts gefunden.</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -1016,19 +1016,19 @@ export default function AdminDashboard() {
             <div className="mb-4 grid gap-4 md:grid-cols-[0.9fr_1.1fr]">
               <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-stone-100">
-                    <Users className="h-5 w-5 text-stone-600" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-100">
+                    <Users className="h-5 w-5 text-slate-600" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-stone-800">{adminUsers.length}</p>
-                    <p className="mt-1 text-xs text-stone-500">Profile gesamt</p>
+                    <p className="text-2xl font-bold text-slate-900">{adminUsers.length}</p>
+                    <p className="mt-1 text-xs text-slate-500">Profile gesamt</p>
                   </div>
                 </div>
               </div>
 
               <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                   <Input
                     value={userSearch}
                     onChange={(event) => setUserSearch(event.target.value)}
@@ -1041,13 +1041,13 @@ export default function AdminDashboard() {
 
             {usersLoading ? (
               <div className="flex justify-center py-20">
-                <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
+                <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
               </div>
             ) : filteredUsers.length === 0 ? (
               <div className="doghike-empty-state">
                 <CheckCircle2 className="doghike-empty-icon text-brand-400" />
-                <h3 className="mb-2 text-xl font-medium text-stone-700">Keine passenden Nutzer</h3>
-                <p className="text-sm text-stone-500">Mit der aktuellen Suche wurde nichts gefunden.</p>
+                <h3 className="mb-2 text-xl font-medium text-slate-700">Keine passenden Nutzer</h3>
+                <p className="text-sm text-slate-500">Mit der aktuellen Suche wurde nichts gefunden.</p>
               </div>
             ) : (
               <div className="space-y-3">

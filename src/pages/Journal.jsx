@@ -80,7 +80,7 @@ function VisibilityStatusBadge({ visibility, status }) {
   }
 
   return (
-    <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-stone-100 text-stone-500 border border-stone-200">
+    <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-sky-100 text-slate-500 border border-sky-200">
       <User className="w-3 h-3" />
       Privat
     </span>
@@ -93,21 +93,21 @@ function StarRating({ rating }) {
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
-          className={`w-3.5 h-3.5 ${star <= rating ? "fill-yellow-400 text-yellow-400" : "text-stone-300"}`}
+          className={`w-3.5 h-3.5 ${star <= rating ? "fill-yellow-400 text-yellow-400" : "text-slate-300"}`}
         />
       ))}
     </div>
   );
 }
 
-function StatsChip({ icon, value, unit, color = "text-stone-600" }) {
+function StatsChip({ icon, value, unit, color = "text-slate-600" }) {
   if (!value) return null;
 
   return (
     <div className={`flex items-center gap-1.5 text-xs ${color}`}>
       <span className="text-sm leading-none shrink-0">{icon}</span>
       <span className="font-medium">{value}</span>
-      {unit && <span className="text-stone-400">{unit}</span>}
+      {unit && <span className="text-slate-400">{unit}</span>}
     </div>
   );
 }
@@ -156,15 +156,15 @@ export default function Journal() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 to-brand-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-sky-50 to-brand-50/20 flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="doghike-glass-card p-8 text-center max-w-md w-full"
         >
           <BookOpen className="w-12 h-12 text-brand-400 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-stone-800 mb-2">Wandertagebuch</h2>
-          <p className="text-stone-500 mb-6 text-sm">
+          <h2 className="text-xl font-semibold text-slate-900 mb-2">Wandertagebuch</h2>
+          <p className="text-slate-500 mb-6 text-sm">
             Melde dich an, um deine persönlichen Wandererlebnisse festzuhalten.
           </p>
           <Link to={createPageUrl("Login")}>
@@ -214,7 +214,7 @@ export default function Journal() {
             {[
               { icon: TOUR_ICONS.map, value: entries.length, label: "Wanderungen", color: "text-brand-400" },
               { icon: TOUR_ICONS.distance, value: `${totalDistance.toFixed(0)} km`, label: "Gesamt", color: "text-brand-600" },
-              { icon: TOUR_ICONS.elevation, value: `${Math.round(totalElevation).toLocaleString()} Hm`, label: "Aufstieg", color: "text-orange-600" },
+              { icon: TOUR_ICONS.elevation, value: `${Math.round(totalElevation).toLocaleString()} Hm`, label: "Aufstieg", color: "text-red-500" },
             ].map(({ icon, value, label, color }) => (
               <div key={label} className="doghike-glass-card rounded-xl p-3 text-center md:p-4">
                 {typeof icon === "string" ? (
@@ -222,8 +222,8 @@ export default function Journal() {
                 ) : (
                   <Mountain className={`w-5 h-5 ${color} mx-auto mb-1`} />
                 )}
-                <p className="text-lg font-bold leading-tight text-stone-800 md:text-xl">{value}</p>
-                <p className="text-xs text-stone-500">{label}</p>
+                <p className="text-lg font-bold leading-tight text-slate-900 md:text-xl">{value}</p>
+                <p className="text-xs text-slate-500">{label}</p>
               </div>
             ))}
           </motion.div>
@@ -231,7 +231,7 @@ export default function Journal() {
 
         {entries.length > 3 && (
           <div className="relative mb-5">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <Input
               placeholder="Suche nach Titel oder Ort..."
               value={search}
@@ -243,7 +243,7 @@ export default function Journal() {
 
         {isLoading ? (
           <div className="flex justify-center py-20">
-            <Loader2 className="w-8 h-8 text-stone-400 animate-spin" />
+            <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
           </div>
         ) : filtered.length > 0 ? (
           <div className="space-y-4">
@@ -273,13 +273,13 @@ export default function Journal() {
                       <div className="flex-1 p-4 md:p-5 min-w-0">
                         <div className="flex items-start justify-between gap-2 mb-1">
                           <div className="min-w-0 flex-1">
-                            <h3 className="font-semibold text-stone-800 text-base md:text-lg truncate">{entry.title}</h3>
+                            <h3 className="font-semibold text-slate-900 text-base md:text-lg truncate">{entry.title}</h3>
                             <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                              <span className="text-xs text-stone-400">
+                              <span className="text-xs text-slate-400">
                                 {format(new Date(entry.date), "d. MMMM yyyy", { locale: de })}
                               </span>
                               {entry.location && (
-                                <span className="text-xs text-stone-500 truncate">{entry.location}</span>
+                                <span className="text-xs text-slate-500 truncate">{entry.location}</span>
                               )}
                               <VisibilityStatusBadge
                                 visibility={entry.visibility ?? "private"}
@@ -292,7 +292,7 @@ export default function Journal() {
 
                         <div className="my-2 flex flex-wrap gap-x-3 gap-y-1.5">
                           <StatsChip icon={TOUR_ICONS.distance} value={entry.distance_km} unit="km" />
-                          <StatsChip icon={TOUR_ICONS.elevation} value={entry.elevation_m} unit="Hm" color="text-orange-600" />
+                          <StatsChip icon={TOUR_ICONS.elevation} value={entry.elevation_m} unit="Hm" color="text-red-500" />
                           <StatsChip
                             icon={TOUR_ICONS.duration}
                             value={formatDurationHours(entry.duration_minutes)}
@@ -321,14 +321,14 @@ export default function Journal() {
                               </Badge>
                           )}
                           {entry.gpx_url && (
-                            <Badge variant="secondary" className="text-xs bg-stone-100 text-stone-600">
+                            <Badge variant="secondary" className="text-xs bg-sky-100 text-slate-600">
                               GPX
                             </Badge>
                           )}
                         </div>
 
                         {entry.description && (
-                          <p className="text-xs text-stone-500 line-clamp-2">{entry.description}</p>
+                          <p className="text-xs text-slate-500 line-clamp-2">{entry.description}</p>
                         )}
                       </div>
                     </div>
@@ -392,8 +392,8 @@ export default function Journal() {
             className="doghike-empty-state py-24"
           >
             <BookOpen className="doghike-empty-icon" />
-            <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Einträge</h3>
-            <p className="text-stone-500 mb-6 text-sm max-w-xs mx-auto">
+            <h3 className="text-xl font-medium text-slate-700 mb-2">Noch keine Einträge</h3>
+            <p className="text-slate-500 mb-6 text-sm max-w-xs mx-auto">
               Starte mit deiner ersten Wanderung und sammle hier Fotos, Daten und persönliche Erinnerungen.
             </p>
             <Link to={createPageUrl("AddJournalEntry")}>
@@ -405,8 +405,8 @@ export default function Journal() {
         ) : (
           <div className="doghike-empty-state">
             <Search className="doghike-empty-icon" />
-            <p className="text-stone-600 font-medium mb-1">Keine passenden Einträge</p>
-            <p className="text-stone-400 text-sm mb-4">Für „{search}“ wurde nichts gefunden.</p>
+            <p className="text-slate-600 font-medium mb-1">Keine passenden Einträge</p>
+            <p className="text-slate-400 text-sm mb-4">Für „{search}“ wurde nichts gefunden.</p>
             <Button variant="outline" onClick={() => setSearch("")}>
               Suche zurücksetzen
             </Button>

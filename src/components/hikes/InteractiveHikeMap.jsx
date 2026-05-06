@@ -54,8 +54,8 @@ export default function InteractiveHikeMap({
 }) {
   if (!latitude || !longitude) {
     return (
-      <div className="rounded-2xl border border-stone-200 bg-stone-100 p-8 text-center">
-        <p className="text-stone-500">Keine Karteninformationen verfügbar</p>
+      <div className="rounded-2xl border border-sky-200 bg-sky-100 p-8 text-center">
+        <p className="text-slate-500">Keine Karteninformationen verfügbar</p>
       </div>
     );
   }
@@ -83,8 +83,8 @@ export default function InteractiveHikeMap({
             <Popup>
               <div className="text-center">
                 <p className="font-semibold text-[#9a604b]">Ausgangspunkt</p>
-                <p className="text-sm text-stone-600">{trailName}</p>
-                {location && <p className="mt-1 text-xs text-stone-500">{location}</p>}
+                <p className="text-sm text-slate-600">{trailName}</p>
+                {location && <p className="mt-1 text-xs text-slate-500">{location}</p>}
               </div>
             </Popup>
           </Marker>
@@ -101,7 +101,7 @@ export default function InteractiveHikeMap({
 
         {hasRoute && (
           <div className="absolute right-3 top-3 z-[1000] rounded-xl border border-white/70 bg-white/90 px-3 py-2 shadow-sm backdrop-blur-md">
-            <p className="text-xs font-medium text-stone-700">{routeCoordinates.length} Wegpunkte</p>
+            <p className="text-xs font-medium text-slate-700">{routeCoordinates.length} Wegpunkte</p>
           </div>
         )}
       </div>
@@ -112,7 +112,7 @@ export default function InteractiveHikeMap({
           {stats.map((item) => (
             <span
               key={item.label}
-              className="inline-flex items-center gap-1.5 rounded-full border border-brand-100 bg-brand-50/70 px-3 py-1.5 text-xs font-medium text-stone-700"
+              className="inline-flex items-center gap-1.5 rounded-full border border-brand-100 bg-brand-50/70 px-3 py-1.5 text-xs font-medium text-slate-700"
             >
               <span className="text-sm leading-none">{item.icon}</span>
               {item.value}

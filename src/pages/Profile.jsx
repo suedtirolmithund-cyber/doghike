@@ -263,12 +263,12 @@ export default function Profile() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-md w-full mx-4">
           <div className="doghike-glass-card p-8 text-center">
             <div className="text-6xl mb-4">Hund</div>
-            <h2 className="text-2xl font-light text-stone-800 mb-2">Willkommen!</h2>
-            <p className="text-stone-500 mb-6">
+            <h2 className="text-2xl font-light text-slate-900 mb-2">Willkommen!</h2>
+            <p className="text-slate-500 mb-6">
               Melde dich an, um deine Hunde zu verwalten und dein Profil zu pflegen.
             </p>
             <Link to={createPageUrl("Login")}>
@@ -284,7 +284,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -293,10 +293,10 @@ export default function Profile() {
         >
           <div className="flex items-start gap-5">
             <div className="relative shrink-0">
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-white shadow-md bg-stone-100">
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-white shadow-md bg-sky-100">
                 {avatarUploading ? (
-                  <div className="w-full h-full flex items-center justify-center bg-stone-100">
-                    <Loader2 className="w-6 h-6 text-stone-400 animate-spin" />
+                  <div className="w-full h-full flex items-center justify-center bg-sky-100">
+                    <Loader2 className="w-6 h-6 text-slate-400 animate-spin" />
                   </div>
                 ) : (
                   <img src={avatarUrl} alt={displayName} className="w-full h-full object-cover" />
@@ -312,7 +312,7 @@ export default function Profile() {
               {editingProfile ? (
                 <div className="space-y-2">
                   <div>
-                    <Label className="text-xs text-stone-500">Anzeigename</Label>
+                    <Label className="text-xs text-slate-500">Anzeigename</Label>
                     <Input
                       value={profileDraft.full_name}
                       onChange={(event) => setProfileDraft((draft) => ({ ...draft, full_name: event.target.value }))}
@@ -321,7 +321,7 @@ export default function Profile() {
                     />
                   </div>
                   <div>
-                    <Label className="text-xs text-stone-500">Username</Label>
+                    <Label className="text-xs text-slate-500">Username</Label>
                     <Input
                       value={profileDraft.username}
                       onChange={(event) => setProfileDraft((draft) => ({ ...draft, username: event.target.value }))}
@@ -346,11 +346,11 @@ export default function Profile() {
                 </div>
               ) : (
                 <div>
-                  <h1 className="text-2xl md:text-3xl font-bold text-stone-800 truncate">{displayName}</h1>
+                  <h1 className="text-2xl md:text-3xl font-bold text-slate-900 truncate">{displayName}</h1>
                   {profile?.username && (
-                    <p className="text-sm text-stone-400">@{profile.username}</p>
+                    <p className="text-sm text-slate-400">@{profile.username}</p>
                   )}
-                  <p className="text-xs text-stone-400 mt-0.5 truncate">{user?.email}</p>
+                  <p className="text-xs text-slate-400 mt-0.5 truncate">{user?.email}</p>
                   <div className="mt-2 flex flex-wrap gap-2">
                     <Button size="sm" variant="outline" className="h-7 text-xs" onClick={startEditProfile}>
                       <Edit className="w-3 h-3 mr-1" /> Profil bearbeiten
@@ -418,7 +418,7 @@ export default function Profile() {
 
           <TabsContent value="dogs">
             <div className="flex items-center justify-between mb-4 md:mb-6">
-              <h2 className="text-lg md:text-xl font-medium text-stone-800">Meine Hunde</h2>
+              <h2 className="text-lg md:text-xl font-medium text-slate-900">Meine Hunde</h2>
               <Button
                 onClick={() => {
                   setEditingDog(null);
@@ -434,7 +434,7 @@ export default function Profile() {
 
             {dogsLoading ? (
               <div className="flex justify-center py-16">
-                <Loader2 className="w-8 h-8 text-stone-400 animate-spin" />
+                <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
               </div>
             ) : dogs.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -468,7 +468,7 @@ export default function Profile() {
                             }}
                             className="bg-white/80 backdrop-blur-sm hover:bg-white w-8 h-8"
                           >
-                            <Edit className="w-3.5 h-3.5 text-stone-600" />
+                            <Edit className="w-3.5 h-3.5 text-slate-600" />
                           </Button>
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
@@ -496,19 +496,19 @@ export default function Profile() {
 
                       <div className="p-4 md:p-5">
                         <div className="flex items-center justify-between mb-1">
-                          <h2 className="text-xl font-semibold text-stone-800">{dog.name}</h2>
+                          <h2 className="text-xl font-semibold text-slate-900">{dog.name}</h2>
                           {dog.breed && (
                           <span className="text-xs text-brand-700 bg-brand-50 border border-brand-100 px-2 py-0.5 rounded-full">{dog.breed}</span>
                           )}
                         </div>
                         {getAge(dog.birth_date) && (
-                          <p className="text-sm text-stone-500 mb-2">{getAge(dog.birth_date)}</p>
+                          <p className="text-sm text-slate-500 mb-2">{getAge(dog.birth_date)}</p>
                         )}
                         {dog.character && (
-                          <p className="text-sm text-stone-500 mb-1">{dog.character}</p>
+                          <p className="text-sm text-slate-500 mb-1">{dog.character}</p>
                         )}
                         {dog.notes && (
-                          <p className="text-xs text-stone-400 line-clamp-2">{dog.notes}</p>
+                          <p className="text-xs text-slate-400 line-clamp-2">{dog.notes}</p>
                         )}
                       </div>
                     </motion.div>
@@ -520,8 +520,8 @@ export default function Profile() {
                 <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full border border-white/80 bg-gradient-to-br from-brand-50 via-white to-stone-100 text-5xl shadow-[0_16px_34px_rgba(120,90,66,0.14)]">
                   🐕
                 </div>
-                <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Hunde</h3>
-                <p className="text-stone-500 mb-6">Lege deinen ersten Hund an, damit du gemeinsame Touren später leichter zuordnen kannst.</p>
+                <h3 className="text-xl font-medium text-slate-700 mb-2">Noch keine Hunde</h3>
+                <p className="text-slate-500 mb-6">Lege deinen ersten Hund an, damit du gemeinsame Touren später leichter zuordnen kannst.</p>
                 <Button
                   onClick={() => {
                     setEditingDog(null);
@@ -539,11 +539,11 @@ export default function Profile() {
           <TabsContent value="routes">
             <div className="flex items-center justify-between mb-4 md:mb-6">
               <div>
-                <h2 className="text-lg md:text-xl font-medium text-stone-800 mb-1 flex items-center gap-2">
+                <h2 className="text-lg md:text-xl font-medium text-slate-900 mb-1 flex items-center gap-2">
                   <Navigation className="w-5 h-5 text-brand-600" />
                   Meine Routen
                 </h2>
-                <p className="text-stone-500 text-sm">Geplante und aufgezeichnete Wanderrouten</p>
+                <p className="text-slate-500 text-sm">Geplante und aufgezeichnete Wanderrouten</p>
               </div>
               <Link to={createPageUrl("RoutePlanner")}>
                 <Button className="bg-brand-400 hover:bg-brand-600" size="sm">
@@ -555,7 +555,7 @@ export default function Profile() {
 
             {routesLoading ? (
               <div className="flex justify-center py-16">
-                <Loader2 className="w-8 h-8 text-stone-400 animate-spin" />
+                <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
               </div>
             ) : userRoutes.length > 0 ? (
               <div className="space-y-3">
@@ -575,7 +575,7 @@ export default function Profile() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <p className="font-semibold text-stone-800 truncate">{route.name}</p>
+                          <p className="font-semibold text-slate-900 truncate">{route.name}</p>
                           <span
                             className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${
                               "bg-brand-100 text-brand-600"
@@ -584,7 +584,7 @@ export default function Profile() {
                             {statusLabel}
                           </span>
                         </div>
-                        <div className="flex items-center gap-3 mt-0.5 text-xs text-stone-400 flex-wrap">
+                        <div className="flex items-center gap-3 mt-0.5 text-xs text-slate-400 flex-wrap">
                           {route.distance_km && <span>{route.distance_km} km</span>}
                           {route.elevation_gain_m && <span>+{route.elevation_gain_m} Hm</span>}
                           {route.start_location && <span>{route.start_location}</span>}
@@ -610,8 +610,8 @@ export default function Profile() {
             ) : (
               <div className="doghike-empty-state">
                 <Navigation className="doghike-empty-icon" />
-                <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Routen</h3>
-                <p className="text-stone-500 text-sm mb-6">Plane deine erste Tour oder zeichne eine Wanderung auf, damit sie hier erscheint.</p>
+                <h3 className="text-xl font-medium text-slate-700 mb-2">Noch keine Routen</h3>
+                <p className="text-slate-500 text-sm mb-6">Plane deine erste Tour oder zeichne eine Wanderung auf, damit sie hier erscheint.</p>
                 <Link to={createPageUrl("RoutePlanner")}>
                   <Button className="doghike-primary-action">
                     <Plus className="w-4 h-4 mr-2" />
@@ -624,16 +624,16 @@ export default function Profile() {
 
           <TabsContent value="saved">
             <div className="mb-4 md:mb-6">
-              <h2 className="text-lg md:text-xl font-medium text-stone-800 mb-1 flex items-center gap-2">
+              <h2 className="text-lg md:text-xl font-medium text-slate-900 mb-1 flex items-center gap-2">
                 <Heart className="w-5 h-5 text-brand-400" />
                 Gespeicherte Touren
               </h2>
-              <p className="text-stone-500 text-sm">Touren die du mit dem Herz-Button markiert hast</p>
+              <p className="text-slate-500 text-sm">Touren die du mit dem Herz-Button markiert hast</p>
             </div>
 
             {(savedLoading || (savedHikes.length > 0 && allHikesLoading)) ? (
               <div className="flex justify-center py-16">
-                <Loader2 className="w-8 h-8 text-stone-400 animate-spin" />
+                <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
               </div>
             ) : savedHikeObjects.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -644,8 +644,8 @@ export default function Profile() {
             ) : (
               <div className="doghike-empty-state">
                 <Heart className="doghike-empty-icon" />
-                <h3 className="text-xl font-medium text-stone-700 mb-2">Noch keine Touren gespeichert</h3>
-                <p className="text-stone-500 text-sm mb-6 max-w-xs mx-auto">
+                <h3 className="text-xl font-medium text-slate-700 mb-2">Noch keine Touren gespeichert</h3>
+                <p className="text-slate-500 text-sm mb-6 max-w-xs mx-auto">
                   Tippe bei einer Tour auf das Herz, damit du sie hier schnell wiederfindest.
                 </p>
                 <Link to={createPageUrl("Hikes")}>
@@ -660,8 +660,8 @@ export default function Profile() {
 
           <TabsContent value="settings">
             <div className="mb-4 md:mb-6">
-              <h2 className="text-lg md:text-xl font-medium text-stone-800 mb-1">Kontoeinstellungen</h2>
-              <p className="text-stone-500 text-sm">Datenschutz und Konto löschen</p>
+              <h2 className="text-lg md:text-xl font-medium text-slate-900 mb-1">Kontoeinstellungen</h2>
+              <p className="text-slate-500 text-sm">Datenschutz und Konto löschen</p>
             </div>
             <AccountSettings user={user} />
           </TabsContent>

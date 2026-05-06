@@ -21,8 +21,8 @@ function formatPace(paceMinPerKm) {
 function getIntensity(distKm, elevM) {
   const score = (distKm || 0) * 1.5 + (elevM || 0) * 0.02;
   if (score < 10) return { label: "Leicht", icon: "🟢", bg: "bg-brand-50 border-brand-200 text-brand-700" };
-  if (score < 22) return { label: "Mittel", icon: "🟡", bg: "bg-amber-50 border-amber-200 text-amber-800" };
-  if (score < 40) return { label: "Anspruchsvoll", icon: "🟠", bg: "bg-orange-50 border-orange-200 text-orange-800" };
+  if (score < 22) return { label: "Mittel", icon: "🟡", bg: "bg-yellow-50 border-yellow-200 text-yellow-800" };
+  if (score < 40) return { label: "Anspruchsvoll", icon: "🟠", bg: "bg-red-50 border-red-200 text-red-700" };
   return { label: "Sehr schwer", icon: "🔴", bg: "bg-red-50 border-red-200 text-red-800" };
 }
 
@@ -70,18 +70,18 @@ export default function RouteProfile({ hike }) {
               <span className="text-sm leading-none">{TOUR_ICONS.distance}</span>
               <span className="text-xs font-medium">Strecke</span>
             </div>
-            <p className="text-2xl font-bold text-stone-900">
+            <p className="text-2xl font-bold text-slate-950">
               {hike.distance_km} <span className="text-sm font-normal">km</span>
             </p>
           </div>
         )}
         {hike.elevation_gain_m && (
-          <div className="rounded-xl border border-orange-200 bg-orange-50/80 p-4">
-            <div className="flex items-center gap-1.5 text-orange-600 mb-1">
+          <div className="rounded-xl border border-red-200 bg-red-50/80 p-4">
+            <div className="flex items-center gap-1.5 text-red-500 mb-1">
               <span className="text-sm leading-none">{TOUR_ICONS.elevation}</span>
               <span className="text-xs font-medium">Aufstieg</span>
             </div>
-            <p className="text-2xl font-bold text-orange-900">
+            <p className="text-2xl font-bold text-red-800">
               +{hike.elevation_gain_m} <span className="text-sm font-normal">m</span>
             </p>
           </div>
@@ -92,7 +92,7 @@ export default function RouteProfile({ hike }) {
               <span className="text-sm leading-none">{TOUR_ICONS.duration}</span>
               <span className="text-xs font-medium">Gehzeit</span>
             </div>
-            <p className="text-xl font-bold text-stone-900">
+            <p className="text-xl font-bold text-slate-950">
               {formatDurationHours(hike.duration_minutes)}
             </p>
           </div>
@@ -103,7 +103,7 @@ export default function RouteProfile({ hike }) {
               <span className="text-sm leading-none">{TOUR_ICONS.speed}</span>
               <span className="text-xs font-medium">Tempo</span>
             </div>
-            <p className="text-xl font-bold text-stone-900">
+            <p className="text-xl font-bold text-slate-950">
               {formatPace(pace)} <span className="text-xs font-normal">min/km</span>
             </p>
           </div>
@@ -114,14 +114,14 @@ export default function RouteProfile({ hike }) {
       <div className="flex flex-wrap gap-3">
         {gradient && (
           <div className="doghike-glass-card flex-1 min-w-[110px] rounded-xl p-3 text-center">
-            <p className="text-xs text-stone-500 mb-1">{TOUR_ICONS.elevation} Ø Steigung</p>
-            <p className="text-lg font-bold text-stone-800">{gradient}%</p>
+            <p className="text-xs text-slate-500 mb-1">{TOUR_ICONS.elevation} Ø Steigung</p>
+            <p className="text-lg font-bold text-slate-900">{gradient}%</p>
           </div>
         )}
         {calories && (
           <div className="doghike-glass-card flex-1 min-w-[110px] rounded-xl p-3 text-center">
-            <p className="text-xs text-stone-500 mb-1">🔥 Kalorien (ca.)</p>
-            <p className="text-lg font-bold text-stone-800">{calories} kcal</p>
+            <p className="text-xs text-slate-500 mb-1">🔥 Kalorien (ca.)</p>
+            <p className="text-lg font-bold text-slate-900">{calories} kcal</p>
           </div>
         )}
         <div className={`flex-1 min-w-[110px] rounded-xl p-3 border text-center ${intensity.bg}`}>
@@ -133,7 +133,7 @@ export default function RouteProfile({ hike }) {
       {/* Elevation Profile */}
       {profileData && hike.elevation_gain_m && hike.elevation_gain_m > 0 && (
         <div className="doghike-glass-card p-5">
-          <h3 className="text-base font-medium text-stone-800 mb-4 flex items-center gap-2">
+          <h3 className="text-base font-medium text-slate-900 mb-4 flex items-center gap-2">
             <Mountain className="w-4 h-4 text-brand-600" />
             Höhenprofil
           </h3>
@@ -165,7 +165,7 @@ export default function RouteProfile({ hike }) {
               <Area type="monotone" dataKey="elevation" stroke="#2777b8" strokeWidth={2.5} fill="url(#elevGrad)" />
             </AreaChart>
           </ResponsiveContainer>
-          <p className="text-xs text-stone-400 mt-1 text-center italic">
+          <p className="text-xs text-slate-400 mt-1 text-center italic">
             * Approximiertes Höhenprofil basierend auf Gesamthöhenmetern
           </p>
         </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -45,8 +45,8 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
     <div className="doghike-glass-card p-4 md:p-6">
       <div className="mb-4 md:mb-6">
         <div className="flex items-baseline gap-2 mb-2">
-          <span className="text-3xl md:text-4xl font-bold text-stone-800">{averageRating}</span>
-          <span className="text-stone-500 text-sm md:text-base">/ 5</span>
+          <span className="text-3xl md:text-4xl font-bold text-slate-900">{averageRating}</span>
+          <span className="text-slate-500 text-sm md:text-base">/ 5</span>
         </div>
         <div className="flex items-center gap-1 mb-1">
           {[1, 2, 3, 4, 5].map((star) => (
@@ -55,19 +55,19 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
               className={`w-5 h-5 ${
                 star <= Math.round(averageRating)
                   ? "fill-yellow-400 text-yellow-400"
-                  : "text-stone-300"
+                  : "text-slate-300"
               }`}
             />
           ))}
         </div>
-        <p className="text-sm text-stone-500">
+        <p className="text-sm text-slate-500">
           {ratings.length} Bewertung{ratings.length !== 1 ? "en" : ""}
         </p>
       </div>
 
       {isAuthenticated && (
-        <div className="border-t border-stone-200 pt-4 md:pt-6">
-          <p className="font-semibold text-stone-800 mb-3 text-sm md:text-base">
+        <div className="border-t border-sky-200 pt-4 md:pt-6">
+          <p className="font-semibold text-slate-900 mb-3 text-sm md:text-base">
             {userRating ? "Deine Bewertung ändern" : "Wanderung bewerten"}
           </p>
           <div className="flex items-center justify-center gap-1 mb-4">
@@ -85,7 +85,7 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
                   className={`w-10 h-10 md:w-8 md:h-8 transition-colors ${
                     star <= (hoverRating || selectedRating || userRating?.rating || 0)
                       ? "fill-yellow-400 text-yellow-400"
-                      : "text-stone-300 hover:text-yellow-200"
+                      : "text-slate-300 hover:text-yellow-200"
                   }`}
                 />
               </motion.button>
@@ -98,7 +98,7 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
               checked={consentPublic}
               onCheckedChange={setConsentPublic}
             />
-            <label htmlFor="rating-consent" className="text-sm text-stone-700 cursor-pointer flex-1">
+            <label htmlFor="rating-consent" className="text-sm text-slate-700 cursor-pointer flex-1">
               Ich akzeptiere, dass meine Bewertung öffentlich sichtbar ist.
             </label>
           </div>

@@ -12,11 +12,11 @@ export default function StatsCard({ icon: Icon, label, value, unit, delay = 0 })
         <div className="rounded-xl bg-gradient-to-br from-brand-500 to-[#2777b8] p-2.5 shadow-sm">
           <Icon className="w-5 h-5 text-white" />
         </div>
-        <span className="text-sm font-medium text-stone-500 uppercase tracking-wide">{label}</span>
+        <span className="text-sm font-medium text-slate-500 uppercase tracking-wide">{label}</span>
       </div>
       <div className="flex items-baseline gap-1.5">
-        <span className="text-3xl font-light text-stone-800">{value}</span>
-        {unit && <span className="text-sm text-stone-400">{unit}</span>}
+        <span className="text-3xl font-light text-slate-900">{value}</span>
+        {unit && <span className="text-sm text-slate-400">{unit}</span>}
       </div>
     </motion.div>
   );

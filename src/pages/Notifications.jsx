@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { supabase } from "@/lib/supabaseClient";
@@ -81,7 +81,7 @@ async function loadNotifications(userId) {
       type: pending ? "pending" : approved ? "approved" : "rejected",
       icon: pending ? Clock3 : approved ? CheckCircle2 : XCircle,
       color: pending
-        ? "text-amber-600 bg-amber-50 border-amber-200"
+        ? "text-yellow-600 bg-yellow-50 border-yellow-200"
         : approved
           ? "text-brand-400 bg-brand-50 border-brand-200"
           : "text-red-600 bg-red-50 border-red-200",
@@ -134,7 +134,7 @@ async function loadNotifications(userId) {
           id: `fe-${entry.id}`,
           type: "friend_entry",
           icon: BookOpen,
-          color: "text-stone-600 bg-stone-50 border-stone-200",
+          color: "text-slate-600 bg-sky-50 border-sky-200",
           title: `${profile?.full_name || profile?.username || "Freund"} hat "${entry.title}" geteilt`,
           time: entry.created_at,
           link: `${createPageUrl("JournalDetail")}?id=${entry.id}`,
@@ -217,10 +217,10 @@ export default function Notifications() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="doghike-glass-card p-8 text-center">
-          <Bell className="w-12 h-12 text-stone-300 mx-auto mb-3" />
-          <p className="text-stone-600 font-medium mb-4">Bitte anmelden</p>
+          <Bell className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+          <p className="text-slate-600 font-medium mb-4">Bitte anmelden</p>
           <Link to={createPageUrl("Login")} className="text-brand-400 underline text-sm">
             Zur Anmeldung
           </Link>
@@ -230,7 +230,7 @@ export default function Notifications() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="doghike-page-header">
           <div className="doghike-page-icon">
@@ -274,8 +274,8 @@ export default function Notifications() {
           <div className="doghike-glass-card mb-5 flex items-center gap-3 p-4">
             <CheckCircle2 className="w-5 h-5 text-brand-500 shrink-0" />
             <div className="flex-1">
-              <p className="text-sm font-medium text-stone-700">Web-Push ist aktiv</p>
-              <p className="text-xs text-stone-500">Freundschaftsanfragen und Bestätigungen können jetzt auch bei geschlossener App ankommen.</p>
+              <p className="text-sm font-medium text-slate-700">Web-Push ist aktiv</p>
+              <p className="text-xs text-slate-500">Freundschaftsanfragen und Bestätigungen können jetzt auch bei geschlossener App ankommen.</p>
             </div>
             <Button size="sm" variant="outline" disabled={subscriptionLoading} onClick={handleDeactivate} className="shrink-0">
               Deaktivieren
@@ -285,8 +285,8 @@ export default function Notifications() {
 
         {webPushSupported() && hasWebPushConfig() && permission === "denied" && (
           <div className="doghike-glass-card mb-5 flex items-center gap-3 p-4">
-            <BellOff className="w-5 h-5 text-stone-400 shrink-0" />
-            <p className="text-xs text-stone-500">
+            <BellOff className="w-5 h-5 text-slate-400 shrink-0" />
+            <p className="text-xs text-slate-500">
               Benachrichtigungen sind blockiert. Erlaube sie in den Browser-Einstellungen, wenn du Hinweise zu Anfragen und Freigaben erhalten möchtest.
             </p>
           </div>
@@ -294,13 +294,13 @@ export default function Notifications() {
 
         {isLoading ? (
           <div className="flex justify-center py-20">
-            <Loader2 className="w-8 h-8 text-stone-400 animate-spin" />
+            <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
           </div>
         ) : notifications.length === 0 ? (
           <div className="doghike-empty-state">
             <Bell className="doghike-empty-icon" />
-            <h3 className="text-lg font-medium text-stone-700 mb-1">Alles auf dem neuesten Stand</h3>
-            <p className="text-stone-400 text-sm">Sobald etwas Neues passiert, erscheint es hier.</p>
+            <h3 className="text-lg font-medium text-slate-700 mb-1">Alles auf dem neuesten Stand</h3>
+            <p className="text-slate-400 text-sm">Sobald etwas Neues passiert, erscheint es hier.</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -319,8 +319,8 @@ export default function Notifications() {
                       <Icon className="w-5 h-5" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-stone-800 leading-snug">{notification.title}</p>
-                      <p className="text-xs text-stone-400 mt-1">
+                      <p className="text-sm font-medium text-slate-900 leading-snug">{notification.title}</p>
+                      <p className="text-xs text-slate-400 mt-1">
                         {format(new Date(notification.time), "d. MMM, HH:mm", { locale: de })}
                       </p>
                     </div>

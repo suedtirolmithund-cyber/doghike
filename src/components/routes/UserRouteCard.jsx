@@ -48,7 +48,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
           <Polyline positions={coordinates} color="#d94a3a" weight={4} />
         </MapContainer>
 
-        <div className="absolute left-3 top-3 z-[1000] flex items-center gap-1 rounded-full border border-white/70 bg-white/82 px-3 py-1 text-xs font-medium text-stone-700 shadow-sm backdrop-blur-sm">
+        <div className="absolute left-3 top-3 z-[1000] flex items-center gap-1 rounded-full border border-white/70 bg-white/82 px-3 py-1 text-xs font-medium text-slate-700 shadow-sm backdrop-blur-sm">
           <RouteIcon className="w-3 h-3" />
           {getRouteTypeLabel(route.route_type)}
         </div>
@@ -62,17 +62,17 @@ export default function UserRouteCard({ route, index, onDelete }) {
       </div>
 
       <div className="p-4">
-        <h3 className="text-lg font-semibold text-stone-800 mb-2">{route.name}</h3>
+        <h3 className="text-lg font-semibold text-slate-900 mb-2">{route.name}</h3>
 
         {route.description && (
-          <p className="text-sm text-stone-600 mb-3 line-clamp-2">{route.description}</p>
+          <p className="text-sm text-slate-600 mb-3 line-clamp-2">{route.description}</p>
         )}
 
         {route.start_location && (
-          <p className="text-xs text-stone-500 mb-3">Ort: {route.start_location}</p>
+          <p className="text-xs text-slate-500 mb-3">Ort: {route.start_location}</p>
         )}
 
-        <div className="flex flex-wrap gap-3 mb-3 text-xs text-stone-600">
+        <div className="flex flex-wrap gap-3 mb-3 text-xs text-slate-600">
           <div className="flex items-center gap-1">
             <span className="text-sm leading-none">{TOUR_ICONS.distance}</span>
             <span>{route.distance_km} km</span>
@@ -91,7 +91,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
           )}
         </div>
 
-        <div className="text-xs text-stone-400 mb-3">
+        <div className="text-xs text-slate-400 mb-3">
           Erstellt am {createdAt ? format(new Date(createdAt), "dd.MM.yyyy") : "-"}
         </div>
 
@@ -102,7 +102,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
             </Button>
           </Link>
           <Link to={`${createPageUrl("EditRoute")}?id=${route.id}`}>
-            <Button variant="ghost" size="icon" className="text-stone-600 hover:bg-stone-100">
+            <Button variant="ghost" size="icon" className="text-slate-600 hover:bg-sky-100">
               <Edit className="w-4 h-4" />
             </Button>
           </Link>
