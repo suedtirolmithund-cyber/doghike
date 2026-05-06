@@ -6,6 +6,7 @@ export default function NavigationTracker() {
   const location = useLocation();
   const { Pages, mainPage } = pagesConfig;
   const mainPageKey = mainPage ?? Object.keys(Pages)[0];
+  const currentPath = `${location.pathname}${location.search}${location.hash}`;
 
   useEffect(() => {
     const pathname = location.pathname;
@@ -23,7 +24,16 @@ export default function NavigationTracker() {
     if (pageName) {
       document.title = `${pageName} · DogHike`;
     }
-  }, [location, Pages, mainPageKey]);
+    if (typeof window !== "undefined") {
+      const previousPath = window.sessionStorage.getItem("doghike:current-path");
+
+      if (previousPath && previousPath !== currentPath) {
+        window.sessionStorage.setItem("doghike:last-path", previousPath);
+      }
+
+      window.sessionStorage.setItem("doghike:current-path", currentPath);
+    }
+  }, [currentPath, location, Pages, mainPageKey]);
 
   return null;
 }
