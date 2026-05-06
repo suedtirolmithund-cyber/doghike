@@ -181,10 +181,20 @@ function LocationPicker({ lat, lng, onChange }) {
   const [searchText, setSearchText] = useState("");
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
   const tile = LOCATION_PICKER_TILES[mapType];
+
+  useEffect(() => {
+    if (lat && lng) {
+      setMarkerPos([Number(lat), Number(lng)]);
+      return;
+    }
+    setMarkerPos(null);
+  }, [lat, lng]);
 
   const handleMapClick = ({ lat: clickLat, lng: clickLng }) => {
     setMarkerPos([clickLat, clickLng]);
+    setSearchResults([]);
     onChange(clickLat, clickLng);
   };
 
@@ -194,16 +204,21 @@ function LocationPicker({ lat, lng, onChange }) {
     if (!query) return;
     setSearching(true);
     setSearchError(null);
+    setSearchResults([]);
     try {
-      const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1&accept-language=de`;
+      const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&accept-language=de&addressdetails=1`;
       const resp = await fetch(url, { headers: { "Accept-Language": "de" } });
       const results = await resp.json();
       if (results.length > 0) {
-        const { lat: rLat, lon: rLon } = results[0];
-        const pos = [parseFloat(rLat), parseFloat(rLon)];
-        setMarkerPos(pos);
-        setFlyTarget({ center: pos, zoom: 13 });
-        onChange(pos[0], pos[1]);
+        if (results.length === 1) {
+          const { lat: rLat, lon: rLon } = results[0];
+          const pos = [parseFloat(rLat), parseFloat(rLon)];
+          setMarkerPos(pos);
+          setFlyTarget({ center: pos, zoom: 13 });
+          onChange(pos[0], pos[1]);
+        } else {
+          setSearchResults(results);
+        }
       } else {
         setSearchError("Ort nicht gefunden. Bitte genauere Suche eingeben.");
       }
@@ -212,6 +227,20 @@ function LocationPicker({ lat, lng, onChange }) {
     } finally {
       setSearching(false);
     }
+  };
+
+  const handleSelectSearchResult = (result) => {
+    const pos = [parseFloat(result.lat), parseFloat(result.lon)];
+    setMarkerPos(pos);
+    setFlyTarget({ center: pos, zoom: 13 });
+    setSearchResults([]);
+    setSearchError(null);
+    setSearchText(result.display_name ?? searchText);
+    onChange(pos[0], pos[1]);
+  };
+
+  const dismissSearchResults = () => {
+    setSearchResults([]);
   };
 
   return (
@@ -231,6 +260,40 @@ function LocationPicker({ lat, lng, onChange }) {
 
       {searchError && (
         <p className="text-xs text-red-500">{searchError}</p>
+      )}
+
+      {searchResults.length > 0 && (
+        <div className="overflow-hidden rounded-xl border border-sky-200 bg-white shadow-sm">
+          <div className="flex items-center justify-between border-b border-sky-100 px-3 py-2">
+            <p className="text-xs font-medium text-slate-500">
+              Mehrere Orte gefunden. Bitte den richtigen auswählen.
+            </p>
+            <button
+              type="button"
+              onClick={dismissSearchResults}
+              className="rounded-md p-1 text-slate-400 transition-colors hover:bg-sky-50 hover:text-slate-600"
+              aria-label="Trefferliste schließen"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          <div className="max-h-64 overflow-y-auto">
+            {searchResults.map((result, index) => (
+              <button
+                key={`${result.place_id ?? result.osm_id ?? index}`}
+                type="button"
+                onClick={() => handleSelectSearchResult(result)}
+                className="flex w-full items-start gap-3 border-b border-sky-100 px-3 py-3 text-left transition-colors last:border-b-0 hover:bg-sky-50"
+              >
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-400" />
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-slate-700">{result.name || result.display_name}</p>
+                  <p className="text-xs leading-relaxed text-slate-500">{result.display_name}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
       )}
 
       {/* Map */}
