@@ -1,5 +1,6 @@
 import { supabase } from "./supabaseClient";
 import { hydrateJournalEntriesMedia } from "./journalApi";
+import { normalizeSearchQuery } from "@/lib/hikeSearch";
 
 async function triggerFriendshipWebPush(eventType, friendshipId) {
   if (!friendshipId) return;
@@ -109,7 +110,8 @@ export async function removeFriend(friendshipId) {
 
 // Search profiles by username or full_name (excludes self)
 export async function searchProfiles(query, currentUserId) {
-  const q = query.trim().replace(/[,%()]/g, " ").replace(/\s+/g, " ");
+  const normalizedQuery = normalizeSearchQuery(query);
+  const q = normalizedQuery.replace(/[,%()]/g, " ").replace(/\s+/g, " ");
   if (!q) return [];
 
   const { data, error } = await supabase

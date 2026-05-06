@@ -38,6 +38,7 @@ import { getJournalEntriesForDisplay, deleteJournalEntry } from "@/lib/journalAp
 import WaterIcon from "@/components/icons/WaterIcon";
 import { getDifficultyLabel, getDifficultyTextColor, getWaterBadgeClass, getWaterLabel, TOUR_ICONS } from "@/lib/difficultyConfig";
 import { formatDurationHours } from "@/lib/duration";
+import { matchesTextSearch } from "@/lib/hikeSearch";
 
 const PAGE_SIZE = 20;
 
@@ -142,12 +143,14 @@ export default function Journal() {
   const totalElevation = entries.reduce((sum, entry) => sum + (entry.elevation_m || 0), 0);
 
   const filtered = entries.filter((entry) => {
-    const query = search.trim().toLowerCase();
-    if (!query) return true;
-
-    return (
-      entry.title?.toLowerCase().includes(query) ||
-      entry.location?.toLowerCase().includes(query)
+    return matchesTextSearch(
+      [
+        entry.title,
+        entry.location,
+        entry.description,
+        entry.visibility,
+      ],
+      search
     );
   });
 
