@@ -22,7 +22,7 @@ export default function NavigationTracker() {
     }
 
     if (pageName) {
-      document.title = `${pageName} · DogHike`;
+      document.title = `${pageName} · DogTrails`;
     }
     if (typeof window !== "undefined") {
       const previousPath = window.sessionStorage.getItem("doghike:current-path");

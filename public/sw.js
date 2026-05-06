@@ -1,6 +1,6 @@
 self.addEventListener("push", (event) => {
   let payload = {
-    title: "DogHike",
+    title: "DogTrails",
     body: "Es gibt eine neue Benachrichtigung.",
     url: "/Notifications",
   };
