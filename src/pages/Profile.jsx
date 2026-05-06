@@ -50,6 +50,7 @@ import {
   deleteStoredFile,
 } from "@/lib/profilesApi";
 import { getSavedHikes } from "@/lib/communityApi";
+import { loadNotifications } from "@/lib/notificationsApi";
 import { getAllHikes } from "@/api/sheetsClient";
 import { getUserRoutes } from "@/lib/routesApi";
 import DogForm from "@/components/forms/DogForm";
@@ -98,6 +99,16 @@ export default function Profile() {
     queryFn: () => getUserRoutes(user.id),
     enabled: !!user?.id,
   });
+
+  const { data: notifications = [] } = useQuery({
+    queryKey: ["notifications", user?.id],
+    queryFn: () => loadNotifications(user.id),
+    enabled: !!user?.id,
+    staleTime: 2 * 60_000,
+    refetchInterval: 5 * 60_000,
+  });
+
+  const notificationCount = notifications.length;
 
   const savedHikeObjects = savedHikes
     .map((saved) =>
@@ -345,8 +356,21 @@ export default function Profile() {
                       <Edit className="w-3 h-3 mr-1" /> Profil bearbeiten
                     </Button>
                     <Link to={createPageUrl("Notifications")}>
-                      <Button size="sm" variant="outline" className="h-7 text-xs">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className={`relative h-7 text-xs ${
+                          notificationCount > 0
+                            ? "border-brand-300 bg-brand-50 text-brand-700 hover:bg-brand-100"
+                            : ""
+                        }`}
+                      >
                         <Bell className="w-3 h-3 mr-1" /> Benachrichtigungen
+                        {notificationCount > 0 && (
+                          <span className="ml-1 inline-flex min-w-5 items-center justify-center rounded-full bg-brand-500 px-1.5 py-0.5 text-[10px] font-semibold leading-none text-white">
+                            {notificationCount > 99 ? "99+" : notificationCount}
+                          </span>
+                        )}
                       </Button>
                     </Link>
                   </div>
