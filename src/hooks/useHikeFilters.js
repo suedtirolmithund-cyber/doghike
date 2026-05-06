@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { matchesHikeSearch } from "@/lib/hikeSearch";
 
 function getSeasonValues(hike) {
   if (Array.isArray(hike.seasons) && hike.seasons.length > 0) {
@@ -24,11 +25,7 @@ export function useHikeFilters(hikes = []) {
   const filteredHikes = useMemo(() => {
     return hikes
       .filter((hike) => {
-        const query = searchQuery.trim().toLowerCase();
-        const matchesSearch = !query ||
-          hike.trail_name?.toLowerCase().includes(query) ||
-          hike.location?.toLowerCase().includes(query) ||
-          hike.tags?.some((tag) => tag.toLowerCase().includes(query));
+        const matchesSearch = matchesHikeSearch(hike, searchQuery);
         if (!matchesSearch) return false;
 
         if (humanDifficultyFilter !== "all" && hike.difficulty !== humanDifficultyFilter) return false;

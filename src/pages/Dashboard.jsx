@@ -12,6 +12,7 @@ import StatsCard from "@/components/stats/StatsCard";
 import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
 import { getDogs } from "@/lib/profilesApi";
+import { matchesHikeSearch } from "@/lib/hikeSearch";
 
 const PAGE_SIZE = 10;
 const FIRST_DASHBOARD_WITHOUT_DOG_KEY = "doghike:first-dashboard-without-dog";
@@ -85,14 +86,7 @@ export default function Dashboard() {
   const season = getCurrentSeason();
 
   const filteredHikes = sortBySeason(
-    hikes.filter((h) => {
-      const query = searchQuery.trim().toLowerCase();
-      if (!query) return true;
-      return (
-        h.trail_name?.toLowerCase().includes(query) ||
-        h.location?.toLowerCase().includes(query)
-      );
-    }),
+    hikes.filter((h) => matchesHikeSearch(h, searchQuery)),
     season
   );
 
