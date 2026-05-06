@@ -42,6 +42,33 @@ import { matchesTextSearch } from "@/lib/hikeSearch";
 
 const PAGE_SIZE = 20;
 
+const COUNTRY_ALIASES = [
+  { label: "Italien", aliases: ["italien", "italy", "südtirol", "suedtirol", "dolomiten", "trentino", "alto adige"] },
+  { label: "Österreich", aliases: ["österreich", "oesterreich", "austria", "tirol", "osttirol", "salzburg"] },
+  { label: "Deutschland", aliases: ["deutschland", "germany", "bayern", "bavaria"] },
+  { label: "Schweiz", aliases: ["schweiz", "switzerland", "suisse", "svizzera"] },
+  { label: "Frankreich", aliases: ["frankreich", "france"] },
+  { label: "Slowenien", aliases: ["slowenien", "slovenia"] },
+];
+
+function getJournalCountry(entry) {
+  const explicitCountry = typeof entry?.country === "string" ? entry.country.trim() : "";
+  const source = explicitCountry || entry?.location || "";
+  const normalized = source
+    .toString()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+  const matchedCountry = COUNTRY_ALIASES.find(({ aliases }) =>
+    aliases.some((alias) =>
+      normalized.includes(alias.normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
+    )
+  );
+
+  return matchedCountry?.label || explicitCountry || null;
+}
+
 function VisibilityStatusBadge({ visibility, status }) {
   if (visibility === "public") {
     if (status === "approved") {
@@ -141,6 +168,15 @@ export default function Journal() {
 
   const totalDistance = entries.reduce((sum, entry) => sum + (Number(entry.distance_km) || 0), 0);
   const totalElevation = entries.reduce((sum, entry) => sum + (entry.elevation_m || 0), 0);
+  const countryCount = new Set(entries.map(getJournalCountry).filter(Boolean)).size;
+  const statsItems = [
+    { icon: TOUR_ICONS.map, value: entries.length, label: "Wanderungen", color: "text-brand-400" },
+    { icon: TOUR_ICONS.distance, value: `${totalDistance.toFixed(0)} km`, label: "Gesamt", color: "text-brand-600" },
+    { icon: TOUR_ICONS.elevation, value: `${Math.round(totalElevation).toLocaleString()} Hm`, label: "Aufstieg", color: "text-red-500" },
+    ...(countryCount >= 2
+      ? [{ icon: TOUR_ICONS.country, value: countryCount, label: "Länder", color: "text-brand-500" }]
+      : []),
+  ];
 
   const filtered = entries.filter((entry) => {
     return matchesTextSearch(
@@ -209,13 +245,11 @@ export default function Journal() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="mb-5 grid grid-cols-3 gap-2.5 md:mb-7 md:gap-4"
+            className={`mb-5 grid gap-2.5 md:mb-7 md:gap-4 ${
+              countryCount >= 2 ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-3"
+            }`}
           >
-            {[
-              { icon: TOUR_ICONS.map, value: entries.length, label: "Wanderungen", color: "text-brand-400" },
-              { icon: TOUR_ICONS.distance, value: `${totalDistance.toFixed(0)} km`, label: "Gesamt", color: "text-brand-600" },
-              { icon: TOUR_ICONS.elevation, value: `${Math.round(totalElevation).toLocaleString()} Hm`, label: "Aufstieg", color: "text-red-500" },
-            ].map(({ icon, value, label, color }) => (
+            {statsItems.map(({ icon, value, label, color }) => (
               <div key={label} className="doghike-glass-card rounded-xl px-2.5 py-2 md:px-3 md:py-2.5">
                 <div className="flex items-center justify-center gap-2">
                   {typeof icon === "string" ? (
