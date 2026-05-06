@@ -369,7 +369,7 @@ const VISIBILITY_OPTIONS = [
     emoji: "👤",
     label: "Privat",
     desc: "Nur ich sehe diesen Eintrag",
-    active: "border-stone-400 bg-sky-100 text-slate-900",
+    active: "border-sky-400 bg-sky-100 text-slate-900",
     idle: "border-sky-200 hover:border-sky-300",
   },
   {
@@ -915,7 +915,7 @@ export default function AddJournalEntry() {
                     onClick={() => set("dog_id", null)}
                     className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 text-sm transition-all focus:outline-none ${
                       form.dog_id === null
-                        ? "border-stone-400 bg-sky-100 text-slate-700 font-medium"
+                        ? "border-sky-400 bg-sky-100 text-slate-700 font-medium"
                         : "border-sky-200 text-slate-400 hover:border-sky-300"
                     }`}
                   >
