@@ -44,6 +44,9 @@ export default function Dashboard() {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const { isAuthenticated, user, isLoadingAuth } = useAuth();
   const navigate = useNavigate();
+  const submitHikeUrl = isAuthenticated
+    ? createPageUrl("AddJournalEntry")
+    : createPageUrl("Login");
 
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["allHikes"],
@@ -122,7 +125,7 @@ export default function Dashboard() {
                 <Mountain className="h-[18px] w-[18px]" /> Alle Touren entdecken
               </Button>
             </Link>
-            <Link to={createPageUrl("AddJournalEntry")}>
+            <Link to={submitHikeUrl}>
               <Button size="lg" variant="outline" className="h-[46px] w-full rounded-[15px] border border-white bg-slate-900/50 text-[16px] font-semibold text-white hover:bg-slate-900/60 hover:text-white">
                 <Plus className="h-[18px] w-[18px]" /> Tour einreichen
               </Button>
@@ -163,7 +166,7 @@ export default function Dashboard() {
                   <Mountain className="mr-0 h-[18px] w-[18px]" /> Alle Touren entdecken
                 </Button>
               </Link>
-              <Link to={createPageUrl("AddJournalEntry")}>
+              <Link to={submitHikeUrl}>
                 <Button size="lg" variant="outline" className="h-[46px] w-[177.56px] rounded-[15px] border border-white bg-slate-900/50 px-0 text-[16px] font-semibold leading-[19px] text-white hover:bg-slate-900/60 hover:text-white">
                   <Plus className="mr-0 h-[18px] w-[18px]" /> Tour einreichen
                 </Button>
