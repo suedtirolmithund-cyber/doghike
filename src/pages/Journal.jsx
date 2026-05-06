@@ -209,21 +209,25 @@ export default function Journal() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="mb-6 grid grid-cols-3 gap-2.5 md:mb-8 md:gap-4"
+            className="mb-5 grid grid-cols-3 gap-2.5 md:mb-7 md:gap-4"
           >
             {[
               { icon: TOUR_ICONS.map, value: entries.length, label: "Wanderungen", color: "text-brand-400" },
               { icon: TOUR_ICONS.distance, value: `${totalDistance.toFixed(0)} km`, label: "Gesamt", color: "text-brand-600" },
               { icon: TOUR_ICONS.elevation, value: `${Math.round(totalElevation).toLocaleString()} Hm`, label: "Aufstieg", color: "text-red-500" },
             ].map(({ icon, value, label, color }) => (
-              <div key={label} className="doghike-glass-card rounded-xl p-3 text-center md:p-4">
-                {typeof icon === "string" ? (
-                  <span className={`mb-1 block text-lg ${color} md:text-xl`}>{icon}</span>
-                ) : (
-                  <Mountain className={`w-5 h-5 ${color} mx-auto mb-1`} />
-                )}
-                <p className="text-lg font-bold leading-tight text-slate-900 md:text-xl">{value}</p>
-                <p className="text-xs text-slate-500">{label}</p>
+              <div key={label} className="doghike-glass-card rounded-xl px-2.5 py-2 md:px-3 md:py-2.5">
+                <div className="flex items-center justify-center gap-2">
+                  {typeof icon === "string" ? (
+                    <span className={`block text-sm leading-none ${color} md:text-base`}>{icon}</span>
+                  ) : (
+                    <Mountain className={`h-4 w-4 ${color}`} />
+                  )}
+                  <div className="min-w-0 text-left">
+                    <p className="text-base font-bold leading-tight text-slate-900 md:text-lg">{value}</p>
+                    <p className="text-[11px] leading-tight text-slate-500 md:text-xs">{label}</p>
+                  </div>
+                </div>
               </div>
             ))}
           </motion.div>
