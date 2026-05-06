@@ -1,7 +1,7 @@
 ﻿import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2, PawPrint } from "lucide-react";
+import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -499,10 +499,28 @@ function OnboardingScreen({ onContinue }) {
           aria-label="Weiter"
           className="absolute bottom-[7px] left-[161px] z-30 grid h-[54px] w-[52px] place-items-center rounded-full bg-[#d94a3a]/80 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/30 md:left-1/2 md:-translate-x-1/2"
         >
-          <PawPrint className="h-[38px] w-[38px] fill-white text-white stroke-white stroke-[1.8]" />
+          <FourToePaw className="h-[38px] w-[38px] text-white" />
         </button>
       </section>
     </div>
+  );
+}
+
+function FourToePaw({ className = "" }) {
+  return (
+    <svg
+      viewBox="0 0 64 64"
+      aria-hidden="true"
+      className={className}
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle cx="16" cy="23" r="7.6" />
+      <circle cx="27" cy="14" r="7.8" />
+      <circle cx="39" cy="14" r="7.8" />
+      <circle cx="50" cy="23" r="7.6" />
+      <path d="M17.3 48.7c0-10.5 7.3-18.4 15.7-18.4s15.7 7.9 15.7 18.4c0 6.1-3.6 8.8-8.1 7.4-2.6-.8-4.8-1.7-7.6-1.7s-5 0.9-7.6 1.7c-4.5 1.4-8.1-1.3-8.1-7.4Z" />
+    </svg>
   );
 }
 

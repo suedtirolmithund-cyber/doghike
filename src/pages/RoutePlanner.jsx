@@ -257,8 +257,13 @@ function SmartRoutePlanner({ onRouteReady }) {
   const [searchError, setSearchError] = useState(null);
   const [routingMode, setRoutingMode] = useState("hike");
   const routeRef = useRef(null);
+  const topoTileFallbackRef = useRef(false);
 
   const tile = TILES[mapType];
+
+  useEffect(() => {
+    topoTileFallbackRef.current = false;
+  }, [mapType]);
 
   useEffect(() => {
     if (waypoints.length < 2) {
@@ -373,6 +378,13 @@ function SmartRoutePlanner({ onRouteReady }) {
     setSearchError(null);
   };
 
+  const handleTileError = () => {
+    if (mapType !== "topo" || topoTileFallbackRef.current) return;
+    topoTileFallbackRef.current = true;
+    setMapType("standard");
+    toast.info("Topo ist an dieser Zoomstufe nicht verfügbar. Die Karte wurde auf Standard zurückgesetzt.");
+  };
+
   return (
     <div className="space-y-3">
       {/* Routing mode selector */}
@@ -459,6 +471,7 @@ function SmartRoutePlanner({ onRouteReady }) {
             attribution={tile.attribution}
             maxZoom={tile.maxZoom}
             maxNativeZoom={tile.maxNativeZoom}
+            eventHandlers={{ tileerror: handleTileError }}
           />
           <MapClickHandler onMapClick={handleMapClick} />
           {flyTarget && <MapFlyTo center={flyTarget.center} zoom={flyTarget.zoom} />}

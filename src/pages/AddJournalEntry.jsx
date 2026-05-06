@@ -186,6 +186,7 @@ function LocationPicker({ lat, lng, onChange }) {
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
+  const topoTileFallbackRef = useRef(false);
   const tile = LOCATION_PICKER_TILES[mapType];
 
   useEffect(() => {
@@ -195,6 +196,10 @@ function LocationPicker({ lat, lng, onChange }) {
     }
     setMarkerPos(null);
   }, [lat, lng]);
+
+  useEffect(() => {
+    topoTileFallbackRef.current = false;
+  }, [mapType]);
 
   const handleMapClick = ({ lat: clickLat, lng: clickLng }) => {
     setMarkerPos([clickLat, clickLng]);
@@ -245,6 +250,13 @@ function LocationPicker({ lat, lng, onChange }) {
 
   const dismissSearchResults = () => {
     setSearchResults([]);
+  };
+
+  const handleTileError = () => {
+    if (mapType !== "topo" || topoTileFallbackRef.current) return;
+    topoTileFallbackRef.current = true;
+    setMapType("standard");
+    toast.info("Topo ist an dieser Zoomstufe nicht verfügbar. Die Karte wurde auf Standard zurückgesetzt.");
   };
 
   return (
@@ -326,6 +338,7 @@ function LocationPicker({ lat, lng, onChange }) {
             url={tile.url}
             maxZoom={tile.maxZoom}
             maxNativeZoom={tile.maxNativeZoom}
+            eventHandlers={{ tileerror: handleTileError }}
           />
           <MapClickHandler onMapClick={handleMapClick} />
           {flyTarget && <MapFlyTo center={flyTarget.center} zoom={flyTarget.zoom} />}
