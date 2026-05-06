@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -15,7 +15,7 @@ function StatTile({ value, label, icon }) {
   return (
     <div className="flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-stone-200/70 bg-white/62 px-2.5 py-2 shadow-sm backdrop-blur-sm">
       <span className="text-base leading-none">{icon}</span>
-      <span className="min-w-0 text-sm font-semibold leading-none text-[#8c5f43] md:text-base">{value}</span>
+      <span className="min-w-0 text-sm font-semibold leading-none text-[#164d79] md:text-base">{value}</span>
       {label ? <span className="text-xs font-medium leading-none text-stone-500">{label}</span> : null}
     </div>
   );
@@ -48,7 +48,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
             <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-stone-950/10 to-transparent" />
 
             {PREMIUM_FEATURES_ENABLED && hike.is_premium && (
-              <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/74 px-2.5 py-1 text-xs font-semibold text-[#8c5f43] shadow-sm backdrop-blur-sm">
+              <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/74 px-2.5 py-1 text-xs font-semibold text-[#164d79] shadow-sm backdrop-blur-sm">
                 Premium
               </span>
             )}
@@ -171,7 +171,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
 
               {hike.rating && (
                 <div className="flex shrink-0 items-center gap-1">
-                  <Star className="h-4 w-4 fill-[#b8785f] text-[#b8785f]" />
+                  <Star className="h-4 w-4 fill-[#d94a3a] text-[#d94a3a]" />
                   <span className="text-sm font-medium text-stone-700">{hike.rating}</span>
                 </div>
               )}

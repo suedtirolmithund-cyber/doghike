@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { ArrowLeft, Shield, Lock, Eye, Database, Building2, Clock, Users, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Datenschutz() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-[#f7efe8] pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-[#edf7ff] pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <Link to={createPageUrl("Dashboard")}>
           <Button variant="ghost" className="mb-6">
@@ -346,7 +346,7 @@ export default function Datenschutz() {
                   </div>
                 </div>
 
-          <div className="mt-4 rounded-xl bg-gradient-to-br from-brand-700 to-[#c46f52] p-4 text-white shadow-[0_12px_24px_rgba(124,77,52,0.16)]">
+          <div className="mt-4 rounded-xl bg-gradient-to-br from-brand-700 to-[#2777b8] p-4 text-white shadow-[0_12px_24px_rgba(124,77,52,0.16)]">
                   <p className="font-semibold mb-1">Anfragen stellen:</p>
             <p className="text-brand-50 text-sm">
                     Schreiben Sie an <strong>suedtirolmithund@gmail.com</strong> - wir antworten innerhalb von 30 Tagen.

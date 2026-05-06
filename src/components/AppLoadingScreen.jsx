@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+﻿import { ArrowRight } from "lucide-react";
 
 export default function AppLoadingScreen() {
   return <ExtendedLoadingScreen />;
@@ -17,7 +17,7 @@ function ExtendedLoadingScreen() {
         </div>
 
         <div
-          className="absolute left-[162px] top-[746px] grid h-[54px] w-[52px] place-items-center rounded-full bg-[#BE8C70]/80 text-white"
+          className="absolute left-[162px] top-[746px] grid h-[54px] w-[52px] place-items-center rounded-full bg-[#d94a3a]/80 text-white"
           style={{ mixBlendMode: "plus-lighter" }}
         >
           <ArrowRight className="h-[31px] w-[31px] stroke-[2.4]" />

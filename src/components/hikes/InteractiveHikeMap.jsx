@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Polyline, Popup, useMap } from "react-leaflet";
+﻿import { MapContainer, TileLayer, Marker, Polyline, Popup, useMap } from "react-leaflet";
 import { useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -12,7 +12,7 @@ L.Icon.Default.mergeOptions({
 
 const startIcon = L.divIcon({
   html: `<div style="
-    background: #b8785f;
+    background: #d94a3a;
     color: white;
     width: 38px;
     height: 38px;
@@ -92,7 +92,7 @@ export default function InteractiveHikeMap({
           {hasRoute && (
             <Polyline
               positions={routeCoordinates}
-              color="#b8785f"
+              color="#d94a3a"
               weight={5}
               opacity={0.82}
             />

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+﻿import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { supabase } from "@/lib/supabaseClient";
 import { motion } from "framer-motion";
@@ -145,7 +145,7 @@ export default function Premium() {
 
             <div className="flex justify-center gap-1 mb-4">
               {[1, 2, 3, 4, 5].map((star) => (
-                <Star key={star} className="w-5 h-5 fill-[#b8785f] text-[#b8785f]" />
+                <Star key={star} className="w-5 h-5 fill-[#d94a3a] text-[#d94a3a]" />
               ))}
             </div>
             <p className="text-center text-stone-500 text-sm italic">

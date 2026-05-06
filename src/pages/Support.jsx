@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -214,7 +214,7 @@ export default function Support() {
             )}
           </div>
 
-          <div className="rounded-2xl bg-gradient-to-br from-brand-700 via-brand-600 to-[#c46f52] p-6 md:p-8 text-white shadow-[0_18px_42px_rgba(124,77,52,0.18)]">
+          <div className="rounded-2xl bg-gradient-to-br from-brand-700 via-brand-600 to-[#2777b8] p-6 md:p-8 text-white shadow-[0_18px_42px_rgba(124,77,52,0.18)]">
             <h2 className="text-xl font-semibold mb-4">Weitere Ressourcen</h2>
             <div className="grid md:grid-cols-3 gap-4">
               {[

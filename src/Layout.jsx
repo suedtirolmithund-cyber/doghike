@@ -91,7 +91,7 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </footer>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-stone-200/70 bg-white/72 shadow-[0_-10px_28px_rgba(142,78,54,0.10)] backdrop-blur-md md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-sky-200/70 bg-white/78 shadow-[0_-10px_28px_rgba(16,47,74,0.12)] backdrop-blur-md md:hidden">
         <AnimatePresence>
           {moreOpen && (
             <>
@@ -108,11 +108,11 @@ export default function Layout({ children, currentPageName }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                className="absolute bottom-full left-3 right-3 z-50 rounded-t-2xl border border-stone-200/70 bg-white/82 px-4 pb-3 pt-4 shadow-[0_-14px_34px_rgba(142,78,54,0.12)] backdrop-blur-md"
+                className="absolute bottom-full left-3 right-3 z-50 rounded-t-2xl border border-sky-200/70 bg-white/86 px-4 pb-3 pt-4 shadow-[0_-14px_34px_rgba(16,47,74,0.14)] backdrop-blur-md"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-semibold text-[#7d4f3f]">Weitere Seiten</span>
-                  <button onClick={() => setMoreOpen(false)} className="p-1 text-[#9a6c58] hover:text-[#7d4f3f]">
+                  <span className="text-sm font-semibold text-[#102f4a]">Weitere Seiten</span>
+                  <button onClick={() => setMoreOpen(false)} className="p-1 text-[#164d79] hover:text-[#102f4a]">
                     <X className="w-5 h-5" />
                   </button>
                 </div>
@@ -125,7 +125,7 @@ export default function Layout({ children, currentPageName }) {
                         key={name}
                         to={createPageUrl(name)}
                         className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all ${
-                          active ? "bg-[#c46f52]/12 text-[#9b4f39] shadow-sm" : "text-[#9a6c58] hover:bg-[#c46f52]/7"
+                          active ? "bg-[#d94a3a]/13 text-[#a92f25] shadow-sm" : "text-[#164d79] hover:bg-[#2777b8]/8"
                         }`}
                       >
                         <Icon className="w-5 h-5" />
@@ -137,7 +137,7 @@ export default function Layout({ children, currentPageName }) {
                     <Link
                       to={createPageUrl("AdminDashboard")}
                       className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all ${
-                        isActive("AdminDashboard") ? "bg-[#c46f52]/12 text-[#9b4f39] shadow-sm" : "text-[#9a6c58] hover:bg-[#c46f52]/7"
+                        isActive("AdminDashboard") ? "bg-[#d94a3a]/13 text-[#a92f25] shadow-sm" : "text-[#164d79] hover:bg-[#2777b8]/8"
                       }`}
                     >
                       <ShieldCheck className="w-5 h-5" />
@@ -158,7 +158,7 @@ export default function Layout({ children, currentPageName }) {
                 key={name}
                 to={createPageUrl(name)}
                 className={`flex min-w-0 flex-col items-center gap-1 rounded-xl px-2 py-2 transition-all ${
-                  active ? "bg-[#c46f52]/12 text-[#9b4f39] shadow-sm" : "text-[#9a6c58] hover:bg-[#c46f52]/7 hover:text-[#7d4f3f]"
+                  active ? "bg-[#d94a3a]/13 text-[#a92f25] shadow-sm" : "text-[#164d79] hover:bg-[#2777b8]/8 hover:text-[#102f4a]"
                 }`}
               >
                 <Icon className={`h-5 w-5 shrink-0 text-current ${active ? "stroke-[2.5]" : "stroke-[2]"}`} />
@@ -172,7 +172,7 @@ export default function Layout({ children, currentPageName }) {
           <button
             onClick={() => setMoreOpen((value) => !value)}
             className={`flex min-w-0 flex-col items-center gap-1 rounded-xl px-2 py-2 transition-all ${
-              moreOpen ? "bg-[#c46f52]/12 text-[#9b4f39] shadow-sm" : "text-[#9a6c58] hover:bg-[#c46f52]/7 hover:text-[#7d4f3f]"
+              moreOpen ? "bg-[#d94a3a]/13 text-[#a92f25] shadow-sm" : "text-[#164d79] hover:bg-[#2777b8]/8 hover:text-[#102f4a]"
             }`}
           >
             <Grid className={`w-5 h-5 ${moreOpen ? "stroke-[2.5]" : "stroke-[2]"}`} />
@@ -181,19 +181,19 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </nav>
 
-      <nav className="fixed left-0 right-0 top-0 z-50 hidden border-b border-stone-200/70 bg-white/74 shadow-[0_10px_28px_rgba(142,78,54,0.09)] backdrop-blur-md md:block">
+      <nav className="fixed left-0 right-0 top-0 z-50 hidden border-b border-sky-200/70 bg-white/78 shadow-[0_10px_28px_rgba(16,47,74,0.12)] backdrop-blur-md md:block">
         <div className="max-w-7xl mx-auto px-6 py-3">
           <div className="flex items-center justify-between gap-4">
             <Link
               to={createPageUrl("Dashboard")}
               className="flex shrink-0 items-center gap-2 transition-opacity hover:opacity-80"
             >
-              <div className="rounded-lg bg-[#b8785f] p-2 shadow-sm">
+              <div className="rounded-lg bg-[#d94a3a] p-2 shadow-sm">
                 <Mountain className="w-5 h-5 text-white" />
               </div>
               <div>
-                <span className="block text-lg font-semibold leading-none text-[#7d4f3f]">DogHike</span>
-                <span className="text-xs text-[#9a6c58]">Hundefreundliche Wanderungen</span>
+                <span className="block text-lg font-semibold leading-none text-[#102f4a]">DogHike</span>
+                <span className="text-xs text-[#164d79]">Hundefreundliche Wanderungen</span>
               </div>
             </Link>
 
@@ -205,7 +205,7 @@ export default function Layout({ children, currentPageName }) {
                     key={name}
                     to={createPageUrl(name)}
                     className={`flex min-w-[118px] items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-center transition-all whitespace-nowrap ${
-                      active ? "bg-[#c46f52]/12 text-[#9b4f39] shadow-sm" : "text-[#7b6a58] hover:bg-[#c46f52]/7 hover:text-[#7d4f3f]"
+                      active ? "bg-[#d94a3a]/13 text-[#a92f25] shadow-sm" : "text-[#164d79] hover:bg-[#2777b8]/8 hover:text-[#102f4a]"
                     }`}
                   >
                     <Icon className={`h-4 w-4 shrink-0 text-current ${active ? "stroke-[2.5]" : ""}`} />
@@ -217,7 +217,7 @@ export default function Layout({ children, currentPageName }) {
                 <Link
                   to={createPageUrl("AdminDashboard")}
                   className={`flex min-w-[118px] items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-center transition-all whitespace-nowrap ${
-                    isActive("AdminDashboard") ? "bg-[#c46f52]/12 text-[#9b4f39] shadow-sm" : "text-[#9a6c58] hover:bg-[#c46f52]/7 hover:text-[#7d4f3f]"
+                    isActive("AdminDashboard") ? "bg-[#d94a3a]/13 text-[#a92f25] shadow-sm" : "text-[#164d79] hover:bg-[#2777b8]/8 hover:text-[#102f4a]"
                   }`}
                 >
                   <ShieldCheck className="w-4 h-4" />
@@ -232,14 +232,14 @@ export default function Layout({ children, currentPageName }) {
                   variant="outline"
                   size="sm"
                   onClick={logout}
-                  className="flex items-center gap-1.5 border-stone-200/75 bg-white/60 text-[#7b6a58] hover:border-red-300 hover:bg-red-50 hover:text-red-600"
+                  className="flex items-center gap-1.5 border-sky-200/75 bg-white/68 text-[#164d79] hover:border-red-300 hover:bg-red-50 hover:text-red-600"
                 >
                   <LogOut className="w-4 h-4" />
                   Abmelden
                 </Button>
               ) : (
                 <Link to={createPageUrl("Login")}>
-                  <Button size="sm" className="flex items-center gap-1.5 bg-[#b8785f] text-white hover:bg-[#a4644d]">
+                  <Button size="sm" className="flex items-center gap-1.5 bg-[#d94a3a] text-white hover:bg-[#a92f25]">
                     <LogIn className="w-4 h-4" />
                     Anmelden
                   </Button>

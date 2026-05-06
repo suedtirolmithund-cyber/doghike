@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+﻿import { useState, useCallback, useEffect, useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { createRoute } from "@/lib/routesApi";
@@ -201,15 +201,15 @@ function ElevationChart({ profile }) {
         <AreaChart data={profile} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
           <defs>
             <linearGradient id="eleGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#c46f52" stopOpacity={0.34} />
-              <stop offset="95%" stopColor="#c46f52" stopOpacity={0.06} />
+              <stop offset="5%" stopColor="#2777b8" stopOpacity={0.34} />
+              <stop offset="95%" stopColor="#2777b8" stopOpacity={0.06} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
           <XAxis dataKey="dist" tickFormatter={(v) => `${v} km`} tick={{ fontSize: 9 }} />
           <YAxis domain={[minEle - 20, maxEle + 20]} tick={{ fontSize: 9 }} unit=" m" />
           <Tooltip formatter={(v) => [`${Math.round(v)} m`, "Höhe"]} labelFormatter={(v) => `${v} km`} />
-          <Area type="monotone" dataKey="ele" stroke="#c46f52" strokeWidth={2}
+          <Area type="monotone" dataKey="ele" stroke="#2777b8" strokeWidth={2}
             fill="url(#eleGrad)" dot={false} />
         </AreaChart>
       </ResponsiveContainer>
@@ -397,7 +397,7 @@ function SmartRoutePlanner({ onRouteReady }) {
           {route && (
             <Polyline
               positions={route.positions}
-              color="#b8785f"
+              color="#d94a3a"
               weight={6}
               opacity={0.85}
               eventHandlers={{ click: handleRouteClick }}
@@ -740,7 +740,7 @@ export default function RoutePlanner() {
                 <Button type="button" variant="outline" onClick={() => setRouteGeometry(null)}>
                   Abbrechen
                 </Button>
-                <Button type="submit" disabled={createRouteMutation.isPending} className="bg-[#b8785f] hover:bg-[#a4644d]">
+                <Button type="submit" disabled={createRouteMutation.isPending} className="bg-[#d94a3a] hover:bg-[#a92f25]">
                   {createRouteMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                   {activeTab === "track"
                     ? "Ins Tagebuch übernehmen"

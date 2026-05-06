@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { ArrowLeft, Building2, Mail, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Impressum() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-[#f7efe8] pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-[#edf7ff] pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <Link to={createPageUrl("Dashboard")}>
           <Button variant="ghost" className="mb-6">

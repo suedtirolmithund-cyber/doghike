@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { getDogs, createDog, updateDog, deleteDog } from "@/lib/profilesApi";
@@ -303,7 +303,7 @@ export default function Dogs() {
 
             <div className="bg-gradient-to-b from-[#fcf8f4] via-white to-[#f6ede5] px-5 py-6 md:px-8 md:py-8">
               <div className="rounded-[24px] border border-white/80 bg-white/78 p-5 shadow-[0_18px_34px_rgba(120,90,66,0.10)] backdrop-blur-sm md:p-6">
-                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#b8785f]">Dein nächster Schritt</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#d94a3a]">Dein nächster Schritt</p>
                 <button
                   type="button"
                   onClick={() => {
@@ -316,7 +316,7 @@ export default function Dogs() {
                     <p className="text-xl font-semibold text-stone-800">Hund anlegen</p>
                     <p className="mt-1 text-sm leading-6 text-stone-500">Füge deinen ersten Wanderbegleiter hinzu.</p>
                   </div>
-                  <div className="ml-4 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#b8785f] text-white shadow-[0_10px_22px_rgba(184,120,95,0.32)]">
+                  <div className="ml-4 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#d94a3a] text-white shadow-[0_10px_22px_rgba(184,120,95,0.32)]">
                     <Dog className="h-5 w-5" />
                   </div>
                 </button>
@@ -330,7 +330,7 @@ export default function Dogs() {
                       variant="outline"
                       className="h-auto w-full justify-start gap-3 rounded-[20px] border-stone-200 bg-white/85 px-4 py-4 text-left text-stone-700 shadow-sm hover:bg-brand-50/50"
                     >
-                      <Home className="h-4 w-4 shrink-0 text-[#b8785f]" />
+                      <Home className="h-4 w-4 shrink-0 text-[#d94a3a]" />
                       <span className="text-sm font-medium">Zum Dashboard</span>
                     </Button>
                   </Link>
@@ -339,7 +339,7 @@ export default function Dogs() {
                       variant="outline"
                       className="h-auto w-full justify-start gap-3 rounded-[20px] border-stone-200 bg-white/85 px-4 py-4 text-left text-stone-700 shadow-sm hover:bg-brand-50/50"
                     >
-                      <Mountain className="h-4 w-4 shrink-0 text-[#b8785f]" />
+                      <Mountain className="h-4 w-4 shrink-0 text-[#d94a3a]" />
                       <span className="text-sm font-medium">Touren entdecken</span>
                     </Button>
                   </Link>
@@ -348,7 +348,7 @@ export default function Dogs() {
                       variant="outline"
                       className="h-auto w-full justify-start gap-3 rounded-[20px] border-stone-200 bg-white/85 px-4 py-4 text-left text-stone-700 shadow-sm hover:bg-brand-50/50"
                     >
-                      <Plus className="h-4 w-4 shrink-0 text-[#b8785f]" />
+                      <Plus className="h-4 w-4 shrink-0 text-[#d94a3a]" />
                       <span className="text-sm font-medium">Wanderung eintragen</span>
                     </Button>
                   </Link>
