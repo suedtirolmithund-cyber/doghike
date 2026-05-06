@@ -77,7 +77,7 @@ export default function Layout({ children, currentPageName }) {
 
       <footer className="bg-white/80 border-t border-stone-200 py-3 md:py-4 px-4 md:px-6 text-center mb-20 md:mb-0">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 md:gap-4 text-xs md:text-sm text-stone-500">
-          <span>© 2026 DogHike</span>
+          <span>© 2026 DogTrails</span>
           <span className="hidden sm:inline">•</span>
           <Link to={createPageUrl("Impressum")} className="hover:text-stone-700 underline">Impressum</Link>
           <span className="hidden sm:inline">•</span>
@@ -192,7 +192,7 @@ export default function Layout({ children, currentPageName }) {
                 <Mountain className="w-5 h-5 text-white" />
               </div>
               <div>
-                <span className="block text-lg font-semibold leading-none text-[#7d4f3f]">DogHike</span>
+                <span className="block text-lg font-semibold leading-none text-[#7d4f3f]">DogTrails</span>
                 <span className="text-xs text-[#9a6c58]">Hundefreundliche Wanderungen</span>
               </div>
             </Link>

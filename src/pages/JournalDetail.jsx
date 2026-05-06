@@ -184,9 +184,9 @@ export default function JournalDetail() {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
         <div className="text-center">
-          <ShieldOff className="w-12 h-12 text-stone-300 mx-auto mb-4" />
-          <p className="text-stone-600 font-medium mb-2">Eintrag nicht gefunden</p>
-          <p className="text-stone-400 text-sm mb-4">Dieser Eintrag existiert nicht oder du hast keinen Zugriff.</p>
+          <ShieldOff className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+          <p className="text-slate-600 font-medium mb-2">Eintrag nicht gefunden</p>
+          <p className="text-slate-400 text-sm mb-4">Dieser Eintrag existiert nicht oder du hast keinen Zugriff.</p>
           <Link to={fallbackBackUrl}>
             <Button variant="outline">Zurück zum Tagebuch</Button>
           </Link>
@@ -196,7 +196,7 @@ export default function JournalDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/10 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/10 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-8">
 
         {/* Back button */}
