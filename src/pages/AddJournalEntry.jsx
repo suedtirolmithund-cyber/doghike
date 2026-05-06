@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { createPageUrl } from "@/utils";
 import {
   ArrowLeft, Upload, X, Loader2, Star, FileText,
-  Mountain, TrendingUp, MapPin, AlertTriangle, Dog, Search
+  Mountain, TrendingUp, MapPin, AlertTriangle, Dog, Search, Layers
 } from "lucide-react";
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
 import L from "leaflet";
@@ -143,6 +143,19 @@ const markerIcon = L.divIcon({
   popupAnchor: [0, -30],
 });
 
+const LOCATION_PICKER_TILES = {
+  standard: {
+    url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+    label: "Standard",
+  },
+  topo: {
+    url: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+    attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, SRTM | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)',
+    label: "Topo",
+  },
+};
+
 // Fliegt zur neuen Position wenn sich center ändert
 function MapFlyTo({ center, zoom }) {
   const map = useMap();
@@ -164,9 +177,11 @@ function LocationPicker({ lat, lng, onChange }) {
     lat && lng ? [Number(lat), Number(lng)] : null
   );
   const [flyTarget, setFlyTarget] = useState(null);
+  const [mapType, setMapType] = useState("standard");
   const [searchText, setSearchText] = useState("");
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState(null);
+  const tile = LOCATION_PICKER_TILES[mapType];
 
   const handleMapClick = ({ lat: clickLat, lng: clickLng }) => {
     setMarkerPos([clickLat, clickLng]);
@@ -219,16 +234,28 @@ function LocationPicker({ lat, lng, onChange }) {
       )}
 
       {/* Map */}
-      <div className="rounded-xl overflow-hidden border border-sky-200 shadow-sm" style={{ height: 260 }}>
+      <div className="relative rounded-xl overflow-hidden border border-sky-200 shadow-sm" style={{ height: 260 }}>
+        <div className="absolute right-3 top-3 z-[1000]">
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => setMapType((current) => (current === "standard" ? "topo" : "standard"))}
+            className="h-9 border-white/80 bg-white/92 px-3 text-xs text-slate-700 shadow-sm backdrop-blur-sm hover:bg-white"
+          >
+            <Layers className="mr-1.5 h-4 w-4" />
+            {mapType === "standard" ? "Topo" : "Standard"}
+          </Button>
+        </div>
         <MapContainer
           center={[46.5, 11.3]}
           zoom={9}
           style={{ height: "100%", width: "100%" }}
-          scrollWheelZoom={false}
+          scrollWheelZoom={true}
         >
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
+            attribution={tile.attribution}
+            url={tile.url}
           />
           <MapClickHandler onMapClick={handleMapClick} />
           {flyTarget && <MapFlyTo center={flyTarget.center} zoom={flyTarget.zoom} />}
