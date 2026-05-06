@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 
 export default function StatsCard({ icon: Icon, label, value, unit, delay = 0 }) {
   return (
@@ -9,7 +9,7 @@ export default function StatsCard({ icon: Icon, label, value, unit, delay = 0 })
       className="doghike-glass-card-hover p-5 md:p-6"
     >
       <div className="flex items-center gap-3 mb-3">
-        <div className="rounded-xl bg-gradient-to-br from-brand-500 to-[#c46f52] p-2.5 shadow-sm">
+        <div className="rounded-xl bg-gradient-to-br from-brand-500 to-[#2777b8] p-2.5 shadow-sm">
           <Icon className="w-5 h-5 text-white" />
         </div>
         <span className="text-sm font-medium text-stone-500 uppercase tracking-wide">{label}</span>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -784,7 +784,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         <Button
           type="submit"
           disabled={saving}
-          className="bg-[#b8785f] hover:bg-[#a4644d]"
+          className="bg-[#d94a3a] hover:bg-[#a92f25]"
         >
           {saving ? (
             <>

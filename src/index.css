@@ -4,30 +4,30 @@
 
 @layer base {
   :root {
-    --background: 34 48% 96%;
-    --foreground: 24 29% 19%;
-    --card: 34 52% 96%;
-    --card-foreground: 24 29% 19%;
-    --popover: 34 52% 96%;
-    --popover-foreground: 24 29% 19%;
-    --primary: 13 45% 50%;
+    --background: 207 100% 96%;
+    --foreground: 205 36% 18%;
+    --card: 206 100% 97%;
+    --card-foreground: 205 36% 18%;
+    --popover: 206 100% 97%;
+    --popover-foreground: 205 36% 18%;
+    --primary: 6 67% 54%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 32 47% 90%;
-    --secondary-foreground: 24 29% 24%;
-    --muted: 32 36% 90%;
-    --muted-foreground: 27 18% 42%;
-    --accent: 15 48% 88%;
-    --accent-foreground: 14 43% 33%;
+    --secondary: 208 73% 92%;
+    --secondary-foreground: 205 48% 25%;
+    --muted: 207 60% 91%;
+    --muted-foreground: 205 18% 45%;
+    --accent: 45 92% 74%;
+    --accent-foreground: 37 83% 23%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 29 30% 82%;
-    --input: 29 30% 82%;
-    --ring: 13 45% 50%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --border: 204 52% 78%;
+    --input: 204 52% 78%;
+    --ring: 6 67% 54%;
+    --chart-1: 6 67% 54%;
+    --chart-2: 205 65% 44%;
+    --chart-3: 45 92% 60%;
+    --chart-4: 211 80% 62%;
+    --chart-5: 32 91% 56%;
     --radius: 0.75rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -86,21 +86,22 @@
     @apply bg-background text-foreground;
     font-family: Roboto, ui-sans-serif, system-ui, sans-serif;
     background-image:
-      radial-gradient(circle at top left, rgba(196, 111, 82, 0.06), transparent 28rem),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(239, 227, 211, 0.26));
+      radial-gradient(circle at top left, rgba(246, 196, 61, 0.18), transparent 26rem),
+      radial-gradient(circle at top right, rgba(217, 74, 58, 0.10), transparent 24rem),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(214, 235, 255, 0.42));
     min-height: 100vh;
   }
 }
 
 @layer components {
   .doghike-glass-card {
-    @apply rounded-2xl border border-white/70 shadow-[0_14px_35px_rgba(80,56,38,0.08)] backdrop-blur-xl;
-    background-color: rgba(255, 255, 255, 0.72);
+    @apply rounded-2xl border border-white/70 shadow-[0_14px_35px_rgba(16,47,74,0.11)] backdrop-blur-xl;
+    background-color: rgba(255, 255, 255, 0.76);
   }
 
   .doghike-glass-card-hover {
-    @apply rounded-2xl border border-white/70 shadow-[0_14px_35px_rgba(80,56,38,0.08)] backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_42px_rgba(80,56,38,0.12)];
-    background-color: rgba(255, 255, 255, 0.72);
+    @apply rounded-2xl border border-white/70 shadow-[0_14px_35px_rgba(16,47,74,0.11)] backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_42px_rgba(16,47,74,0.15)];
+    background-color: rgba(255, 255, 255, 0.76);
   }
 
   .doghike-glass-card-hover:hover {
@@ -108,7 +109,7 @@
   }
 
   .doghike-soft-panel {
-    @apply rounded-xl border border-brand-100/80 bg-brand-50/55;
+    @apply rounded-xl border border-brand-100/80 bg-brand-50/70;
   }
 
   .doghike-page-shell {
@@ -148,8 +149,8 @@
   }
 
   .doghike-filter-panel {
-    @apply rounded-2xl border border-white/70 p-4 shadow-[0_14px_35px_rgba(80,56,38,0.08)] backdrop-blur-xl md:p-5;
-    background-color: rgba(255, 255, 255, 0.72);
+    @apply rounded-2xl border border-white/70 p-4 shadow-[0_14px_35px_rgba(16,47,74,0.11)] backdrop-blur-xl md:p-5;
+    background-color: rgba(255, 255, 255, 0.76);
   }
 
   .doghike-filter-label {
@@ -173,8 +174,8 @@
   }
 
   .doghike-empty-state {
-    @apply rounded-2xl border border-white/70 px-5 py-16 text-center shadow-[0_14px_35px_rgba(80,56,38,0.08)] backdrop-blur-xl md:py-20;
-    background-color: rgba(255, 255, 255, 0.72);
+    @apply rounded-2xl border border-white/70 px-5 py-16 text-center shadow-[0_14px_35px_rgba(16,47,74,0.11)] backdrop-blur-xl md:py-20;
+    background-color: rgba(255, 255, 255, 0.76);
   }
 
   .doghike-empty-icon {

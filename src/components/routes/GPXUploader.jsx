@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+﻿import { useState, useRef } from "react";
 import { MapContainer, TileLayer, Polyline, Marker } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import {
@@ -222,7 +222,7 @@ export default function GPXUploader({ onSave }) {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="rounded-xl bg-gradient-to-br from-brand-700 to-[#c46f52] p-4 text-center text-white">
+        <div className="rounded-xl bg-gradient-to-br from-brand-700 to-[#2777b8] p-4 text-center text-white">
               <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.distance}</span>
               <p className="text-2xl font-bold">{gpxData.distance_km}</p>
               <p className="text-xs opacity-70">km Distanz</p>

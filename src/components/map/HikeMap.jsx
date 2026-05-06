@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+﻿import { useEffect, useRef } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import { createPageUrl } from "@/utils";
 import "leaflet/dist/leaflet.css";
@@ -409,7 +409,7 @@ export default function HikeMap({
           color: #9f6f52;
           font-size: 13px;
           font-weight: 800;
-          background: #ead8cd;
+          background: #d6ebff;
         }
         .hike-popup-badge {
           position: absolute;

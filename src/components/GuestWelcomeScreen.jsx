@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+﻿import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2, PawPrint } from "lucide-react";
@@ -256,7 +256,7 @@ export default function GuestWelcomeScreen() {
         >
           <h1
             className="mb-4 text-[36px] font-semibold leading-none"
-            style={{ color: mode === "reset" || mode === "update-password" ? "white" : "#8C6B4A" }}
+            style={{ color: mode === "reset" || mode === "update-password" ? "white" : "#102f4a" }}
           >
             {mode === "reset"
               ? "Passwort"
@@ -273,7 +273,7 @@ export default function GuestWelcomeScreen() {
                 type="button"
                 onClick={() => switchMode("register")}
                 className={`h-10 rounded-[10px] text-[16px] font-medium text-white ${
-                  mode === "register" ? "bg-[#B88C73]" : "bg-white/15"
+                  mode === "register" ? "bg-[#d94a3a]" : "bg-white/15"
                 }`}
               >
                 Registrieren
@@ -282,7 +282,7 @@ export default function GuestWelcomeScreen() {
                 type="button"
                 onClick={() => switchMode("login")}
                 className={`h-10 rounded-[10px] text-[16px] font-medium text-white ${
-                  mode === "login" ? "bg-[#B88C73]" : "bg-white/15"
+                  mode === "login" ? "bg-[#d94a3a]" : "bg-white/15"
                 }`}
               >
                 Login
@@ -308,7 +308,7 @@ export default function GuestWelcomeScreen() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#B88C73] font-medium text-white disabled:opacity-70"
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#d94a3a] font-medium text-white disabled:opacity-70"
               >
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 Link senden
@@ -345,7 +345,7 @@ export default function GuestWelcomeScreen() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#B88C73] font-medium text-white disabled:opacity-70"
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#d94a3a] font-medium text-white disabled:opacity-70"
               >
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 Passwort speichern
@@ -396,7 +396,7 @@ export default function GuestWelcomeScreen() {
                           id="guest-privacy"
                           checked={privacyAccepted}
                           onCheckedChange={setPrivacyAccepted}
-                          className="mt-0.5 border-white/70 data-[state=checked]:border-[#B88C73] data-[state=checked]:bg-[#B88C73]"
+                          className="mt-0.5 border-white/70 data-[state=checked]:border-[#d94a3a] data-[state=checked]:bg-[#d94a3a]"
                         />
                         <label htmlFor="guest-privacy" className="text-xs leading-relaxed text-white/80">
                           Ich akzeptiere die{" "}
@@ -415,7 +415,7 @@ export default function GuestWelcomeScreen() {
                 <button
                   type="submit"
                   disabled={loading || googleLoading}
-                  className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#B88C73] font-medium text-white disabled:opacity-70"
+                  className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#d94a3a] font-medium text-white disabled:opacity-70"
                 >
                   {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                   {mode === "login" ? "Anmelden" : "Konto erstellen"}
@@ -497,7 +497,7 @@ function OnboardingScreen({ onContinue }) {
           type="button"
           onClick={onContinue}
           aria-label="Weiter"
-          className="absolute bottom-[7px] left-[161px] z-30 grid h-[54px] w-[52px] place-items-center rounded-full bg-[#BE8C70]/80 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/30 md:left-1/2 md:-translate-x-1/2"
+          className="absolute bottom-[7px] left-[161px] z-30 grid h-[54px] w-[52px] place-items-center rounded-full bg-[#d94a3a]/80 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/30 md:left-1/2 md:-translate-x-1/2"
         >
           <PawPrint className="h-[38px] w-[38px] fill-white text-white stroke-white stroke-[1.8]" />
         </button>

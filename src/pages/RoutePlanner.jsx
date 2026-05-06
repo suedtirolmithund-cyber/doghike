@@ -248,6 +248,7 @@ function SmartRoutePlanner({ onRouteReady }) {
   const [mapType, setMapType] = useState("standard");
   const [flyTarget, setFlyTarget] = useState(null);
   const [searchText, setSearchText] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState(null);
   const [routingMode, setRoutingMode] = useState("hike");
@@ -315,17 +316,28 @@ function SmartRoutePlanner({ onRouteReady }) {
     if (!query) return;
     setSearching(true);
     setSearchError(null);
+    setSearchResults([]);
     try {
       const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1&accept-language=de`
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&accept-language=de`
       );
       const results = await res.json();
       if (results.length > 0) {
-        const { lat, lon } = results[0];
-        const pos = { lat: parseFloat(lat), lng: parseFloat(lon), label: "" };
-        setWaypoints((prev) => relabelWaypoints([...prev, pos]));
-        setFlyTarget({ center: [parseFloat(lat), parseFloat(lon)], zoom: 13 });
-        setSearchText("");
+        const normalizedResults = results.map((result) => ({
+          lat: parseFloat(result.lat),
+          lng: parseFloat(result.lon),
+          title: result.display_name?.split(",").slice(0, 2).join(", ") || result.display_name,
+          subtitle: result.display_name,
+        }));
+
+        if (normalizedResults.length === 1) {
+          const [selected] = normalizedResults;
+          setWaypoints((prev) => relabelWaypoints([...prev, { lat: selected.lat, lng: selected.lng, label: "" }]));
+          setFlyTarget({ center: [selected.lat, selected.lng], zoom: 13 });
+          setSearchText("");
+        } else {
+          setSearchResults(normalizedResults);
+        }
       } else {
         setSearchError("Ort nicht gefunden");
       }
@@ -336,11 +348,21 @@ function SmartRoutePlanner({ onRouteReady }) {
     }
   };
 
+  const handleSelectSearchResult = (result) => {
+    setWaypoints((prev) => relabelWaypoints([...prev, { lat: result.lat, lng: result.lng, label: "" }]));
+    setFlyTarget({ center: [result.lat, result.lng], zoom: 13 });
+    setSearchResults([]);
+    setSearchText("");
+    setSearchError(null);
+  };
+
   const reset = () => {
     setWaypoints([]);
     setRoute(null);
     setElevation([]);
     onRouteReady(null);
+    setSearchResults([]);
+    setSearchError(null);
   };
 
   return (
@@ -385,6 +407,26 @@ function SmartRoutePlanner({ onRouteReady }) {
       </div>
 
       {searchError && <p className="text-xs text-red-500">{searchError}</p>}
+      {searchResults.length > 1 && (
+        <div className="rounded-xl border border-stone-200/80 bg-white/85 p-2 shadow-sm backdrop-blur-sm">
+          <p className="px-2 pb-2 text-xs font-medium text-stone-500">
+            Mehrere Orte gefunden. Wähle den richtigen aus:
+          </p>
+          <div className="space-y-1">
+            {searchResults.map((result, index) => (
+              <button
+                key={`${result.lat}-${result.lng}-${index}`}
+                type="button"
+                onClick={() => handleSelectSearchResult(result)}
+                className="flex w-full flex-col rounded-lg px-3 py-2 text-left transition hover:bg-brand-50/60"
+              >
+                <span className="text-sm font-medium text-stone-700">{result.title}</span>
+                <span className="text-xs text-stone-500">{result.subtitle}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Map */}
       <div className="relative h-[68vw] min-h-[310px] max-h-[500px] overflow-hidden rounded-xl border border-stone-200 shadow-sm md:h-[440px] md:max-h-none">

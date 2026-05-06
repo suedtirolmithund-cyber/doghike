@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+﻿import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
@@ -777,7 +777,7 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 md:py-10">
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="doghike-page-header">
-          <div className="doghike-page-icon bg-gradient-to-br from-brand-700 to-[#c46f52] text-white shadow-[0_12px_24px_rgba(124,77,52,0.16)]">
+          <div className="doghike-page-icon bg-gradient-to-br from-brand-700 to-[#2777b8] text-white shadow-[0_12px_24px_rgba(124,77,52,0.16)]">
               <ShieldCheck className="h-5 w-5 text-white" />
           </div>
           <div>

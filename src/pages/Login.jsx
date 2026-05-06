@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -8,8 +8,8 @@ import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle2 } from "lucide-react";
 
 const BG_IMAGE = "/log_in.jpg";
 
-const BROWN = "#b88c73";
-const BROWN_DARK = "#8c6b4a";
+const BROWN = "#d94a3a";
+const BROWN_DARK = "#102f4a";
 
 function mapAuthError(message) {
   const msg = String(message || "").toLowerCase();
@@ -412,7 +412,7 @@ export default function Login() {
                           id="privacy"
                           checked={privacyAccepted}
                           onCheckedChange={setPrivacyAccepted}
-                          className="mt-0.5 border-white/60 data-[state=checked]:bg-[#b88c73] data-[state=checked]:border-[#b88c73]"
+                          className="mt-0.5 border-white/60 data-[state=checked]:bg-[#d94a3a] data-[state=checked]:border-[#d94a3a]"
                         />
                         <label htmlFor="privacy" className="text-xs text-white/80 cursor-pointer leading-relaxed">
                           Ich akzeptiere die{" "}
