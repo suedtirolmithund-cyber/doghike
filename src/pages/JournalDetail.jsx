@@ -152,14 +152,24 @@ export default function JournalDetail() {
 
   const isOwner = user?.id === entry?.user_id;
   const visInfo = VISIBILITY_INFO[entry?.visibility ?? "private"];
+  const fallbackBackUrl = createPageUrl("Journal");
 
   const handleBack = () => {
-    if (window.history.length > 1) {
-      navigate(-1);
-      return;
+    if (typeof window !== "undefined") {
+      const previousPath = window.sessionStorage.getItem("doghike:last-path");
+
+      if (
+        previousPath &&
+        previousPath !== window.location.pathname + window.location.search + window.location.hash &&
+        previousPath.startsWith("/") &&
+        !previousPath.startsWith(createPageUrl("JournalDetail"))
+      ) {
+        navigate(previousPath);
+        return;
+      }
     }
 
-    navigate(createPageUrl("Journal"));
+    navigate(fallbackBackUrl);
   };
 
   if (isLoading) {
@@ -177,7 +187,7 @@ export default function JournalDetail() {
           <ShieldOff className="w-12 h-12 text-slate-300 mx-auto mb-4" />
           <p className="text-slate-600 font-medium mb-2">Eintrag nicht gefunden</p>
           <p className="text-slate-400 text-sm mb-4">Dieser Eintrag existiert nicht oder du hast keinen Zugriff.</p>
-          <Link to={createPageUrl("Journal")}>
+          <Link to={fallbackBackUrl}>
             <Button variant="outline">Zurück zum Tagebuch</Button>
           </Link>
         </div>
