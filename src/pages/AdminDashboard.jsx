@@ -29,6 +29,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/lib/AuthContext";
 import { createPageUrl } from "@/utils";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
+import { matchesTextSearch } from "@/lib/hikeSearch";
 import {
   getPendingEntries,
   approveEntry,
@@ -593,62 +594,44 @@ export default function AdminDashboard() {
   const premiumPublicHikesCount = publicHikes.filter((hike) => hike.is_premium).length;
 
   const filteredComments = useMemo(() => {
-    const query = commentSearch.trim().toLowerCase();
-
     return comments.filter((comment) => {
       if (commentFilter === "pending" && !comment.reported) return false;
-
-      if (!query) return true;
-
-      const haystack = [
-        comment.text,
-        comment.profiles?.full_name,
-        comment.profiles?.username,
-        comment.hike_title,
-        comment.hike_id,
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-
-      return haystack.includes(query);
+      return matchesTextSearch(
+        [
+          comment.text,
+          comment.profiles?.full_name,
+          comment.profiles?.username,
+          comment.hike_title,
+          comment.hike_id,
+        ],
+        commentSearch
+      );
     });
   }, [commentFilter, commentSearch, comments]);
 
   const filteredPublicHikes = useMemo(() => {
-    const query = publicHikeSearch.trim().toLowerCase();
-
     return publicHikes.filter((hike) => {
       if (publicHikeStatusFilter !== "all" && hike.status !== publicHikeStatusFilter) {
         return false;
       }
 
-      if (publicHikePremiumFilter === "premium" && !hike.is_premium) return false;
-      if (publicHikePremiumFilter === "free" && hike.is_premium) return false;
+        if (publicHikePremiumFilter === "premium" && !hike.is_premium) return false;
+        if (publicHikePremiumFilter === "free" && hike.is_premium) return false;
 
-      if (!query) return true;
-
-      const haystack = [hike.title, hike.trail_name, hike.location, hike.country]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-
-      return haystack.includes(query);
-    });
+        return matchesTextSearch(
+          [hike.title, hike.trail_name, hike.location, hike.country],
+          publicHikeSearch
+        );
+      });
   }, [publicHikePremiumFilter, publicHikeSearch, publicHikeStatusFilter, publicHikes]);
 
   const filteredUsers = useMemo(() => {
-    const query = userSearch.trim().toLowerCase();
-    if (!query) return adminUsers;
-
     return adminUsers.filter((profile) => {
-      const haystack = [profile.full_name, profile.username, profile.role]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-
-      return haystack.includes(query);
-    });
+        return matchesTextSearch(
+          [profile.full_name, profile.username, profile.role],
+          userSearch
+        );
+      });
   }, [adminUsers, userSearch]);
 
   const approveMutation = useMutation({

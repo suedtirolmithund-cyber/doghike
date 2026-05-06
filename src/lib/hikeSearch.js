@@ -18,3 +18,21 @@ export function matchesHikeSearch(hike, rawQuery) {
   return Array.isArray(hike?.tags)
     && hike.tags.some((tag) => String(tag).toLowerCase().includes(query));
 }
+
+export function normalizeSearchQuery(rawQuery) {
+  return String(rawQuery ?? "")
+    .trim()
+    .replace(/^@+/, "")
+    .replace(/\s+/g, " ")
+    .toLowerCase();
+}
+
+export function matchesTextSearch(values, rawQuery) {
+  const query = normalizeSearchQuery(rawQuery);
+  if (!query) return true;
+
+  return values
+    .filter((value) => value !== null && value !== undefined)
+    .map((value) => String(value).trim().replace(/^@+/, "").toLowerCase())
+    .some((value) => value.includes(query));
+}
