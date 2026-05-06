@@ -1,9 +1,10 @@
 ﻿import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Mountain, Search } from "lucide-react";
+import { Mountain, RotateCcw, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
 import WaterIcon from "@/components/icons/WaterIcon";
@@ -21,10 +22,12 @@ export default function Hikes() {
   const {
     searchQuery,
     setSearchQuery,
+    activeSearchQuery,
     sortBy,
     setSortBy,
     levelFilter,
     setLevelFilter,
+    activeLevelFilter,
     humanDifficultyFilter,
     setHumanDifficultyFilter,
     dogDifficultyFilter,
@@ -41,6 +44,9 @@ export default function Hikes() {
     setSeasonFilter,
     waterFilter,
     setWaterFilter,
+    hasPendingChanges,
+    applyFilters,
+    resetFilters,
     filteredHikes,
   } = useHikeFilters(hikes);
 
@@ -74,6 +80,11 @@ export default function Hikes() {
                 placeholder="Tour oder Ort suchen..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    applyFilters();
+                  }
+                }}
                 className="border-brand-100 bg-white/78 pl-10 shadow-sm"
               />
             </div>
@@ -183,6 +194,23 @@ export default function Hikes() {
                 </Select>
               </div>
             </div>
+
+            <div className="flex flex-col gap-3 border-t border-sky-100/80 pt-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-xs text-slate-500">
+                {hasPendingChanges
+                  ? "Du hast Filter geändert. Tippe auf „Filter anwenden“, um die Ergebnisse zu aktualisieren."
+                  : `${filteredHikes.length} Tour${filteredHikes.length === 1 ? "" : "en"} aktiv gefiltert.`}
+              </p>
+              <div className="flex gap-2">
+                <Button type="button" variant="outline" onClick={resetFilters}>
+                  <RotateCcw className="mr-2 h-4 w-4" />
+                  Zurücksetzen
+                </Button>
+                <Button type="button" onClick={applyFilters} className="bg-brand-500 text-white hover:bg-brand-600">
+                  Filter anwenden
+                </Button>
+              </div>
+            </div>
           </div>
         </motion.div>
 
@@ -204,7 +232,7 @@ export default function Hikes() {
               height="500px"
               fitBounds={true}
               showLegend={true}
-              zoom={searchQuery || levelFilter !== "all" ? 10 : 8}
+              zoom={activeSearchQuery || activeLevelFilter !== "all" ? 10 : 8}
               useCluster={true}
             />
           </motion.div>
