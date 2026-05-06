@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { Suspense, lazy } from 'react';
 
 const CHUNK_RELOAD_KEY = "doghike_chunk_reload_attempted";
+const REACT130_RELOAD_KEY = "doghike_react130_reload_attempted";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -30,6 +31,9 @@ class ErrorBoundary extends React.Component {
       const isChunkLoadError =
         errorMessage.includes("Failed to fetch dynamically imported module")
         || errorMessage.includes("Importing a module script failed");
+      const isInvalidElementTypeError =
+        errorMessage.includes("Minified React error #130")
+        || errorMessage.includes("Element type is invalid");
 
       if (isChunkLoadError && typeof window !== "undefined") {
         const alreadyRetried = window.sessionStorage.getItem(CHUNK_RELOAD_KEY) === "1";
@@ -44,6 +48,25 @@ class ErrorBoundary extends React.Component {
                 <Loader2 className="mx-auto mb-3 h-6 w-6 animate-spin text-brand-500" />
                 <h2 className="mb-2 text-lg font-semibold text-slate-900">App wird aktualisiert</h2>
                 <p className="text-sm text-slate-500">Ein neuer Stand wurde erkannt. DogHike lädt einmal neu.</p>
+              </div>
+            </div>
+          );
+        }
+      }
+
+      if (isInvalidElementTypeError && typeof window !== "undefined") {
+        const alreadyRetried = window.sessionStorage.getItem(REACT130_RELOAD_KEY) === "1";
+
+        if (!alreadyRetried) {
+          window.sessionStorage.setItem(REACT130_RELOAD_KEY, "1");
+          window.location.reload();
+
+          return (
+            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-sky-50 via-white to-brand-50/10 px-6 text-center">
+              <div className="doghike-glass-card max-w-md p-6">
+                <Loader2 className="mx-auto mb-3 h-6 w-6 animate-spin text-brand-500" />
+                <h2 className="mb-2 text-lg font-semibold text-slate-900">App wird aktualisiert</h2>
+                <p className="text-sm text-slate-500">DogTrails lädt den aktuellen Stand einmal neu.</p>
               </div>
             </div>
           );
@@ -149,6 +172,7 @@ function App() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.sessionStorage.removeItem(CHUNK_RELOAD_KEY);
+      window.sessionStorage.removeItem(REACT130_RELOAD_KEY);
     }
   }, []);
 
