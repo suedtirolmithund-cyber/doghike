@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { getAllHikes } from "@/api/sheetsClient";
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -49,8 +49,8 @@ function getCountryLabel(country) {
 const difficultyColors = {
   "1": "bg-brand-100 text-brand-600",
   "2": "bg-lime-100 text-lime-700",
-  "3": "bg-amber-100 text-amber-700",
-  "4": "bg-orange-100 text-orange-700",
+  "3": "bg-yellow-100 text-yellow-700",
+  "4": "bg-red-100 text-red-600",
   "5": "bg-red-100 text-red-700"
 };
 
@@ -74,6 +74,24 @@ export default function HikeDetail() {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [copied, setCopied] = useState(false);
   const normalizedHikeId = hikeId ? String(hikeId) : null;
+  const fallbackBackUrl = hikeSource === "journal" ? createPageUrl("Journal") : createPageUrl("Hikes");
+  const handleBack = () => {
+    if (typeof window !== "undefined") {
+      const previousPath = window.sessionStorage.getItem("doghike:last-path");
+      const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+
+      if (
+        previousPath &&
+        previousPath !== currentPath &&
+        !previousPath.startsWith(createPageUrl("HikeDetail"))
+      ) {
+        navigate(previousPath);
+        return;
+      }
+    }
+
+    navigate(fallbackBackUrl);
+  };
 
   const handleShare = async () => {
     const url = window.location.href;
@@ -175,7 +193,7 @@ export default function HikeDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center">
         <div className="animate-pulse text-brand-500">Lädt...</div>
       </div>
     );
@@ -184,10 +202,10 @@ export default function HikeDetail() {
 
   if (!hike) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="doghike-glass-card p-8 text-center">
-          <p className="text-xl text-stone-700 mb-4">Tour nicht gefunden</p>
-          <Link to={createPageUrl("Hikes")}>
+          <p className="text-xl text-slate-700 mb-4">Tour nicht gefunden</p>
+          <Link to={fallbackBackUrl}>
             <Button className="bg-brand-400 text-white hover:bg-brand-600">Zurück zu den Touren</Button>
           </Link>
         </div>
@@ -232,7 +250,7 @@ export default function HikeDetail() {
     : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
       {/* Hero Image */}
       <div className="relative h-[50vh] overflow-hidden">
         <img
@@ -243,12 +261,17 @@ export default function HikeDetail() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
         
         <div className="absolute top-6 left-6 right-6 flex justify-between items-start">
-          <Link to={createPageUrl("Hikes")}>
-            <Button variant="ghost" className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20">
+          <div>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={handleBack}
+              className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20"
+            >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Zurück
             </Button>
-          </Link>
+          </div>
           <div className="flex gap-2 flex-wrap">
             {(isOwnJournalHike || (isAdmin && hike?._source === "sheets" && hike?._public_hike_id)) && (
               <>
@@ -372,7 +395,7 @@ export default function HikeDetail() {
                   <MapPin className="h-4 w-4" />
                   Ausgangspunkt: {hike.location || hike.trail_name}
                 </div>
-                <h2 className="text-2xl font-semibold text-stone-800">
+                <h2 className="text-2xl font-semibold text-slate-900">
                   {hike.route_coordinates?.length > 0 ? "Karte & Routenverlauf" : "Karte"}
                 </h2>
               </div>
@@ -403,8 +426,8 @@ export default function HikeDetail() {
             <div className="doghike-stat-chip">
               <span className="text-base">{TOUR_ICONS.country}</span>
               <div>
-                <div className="text-sm font-bold text-stone-900 leading-tight">{countryLabel}</div>
-                <div className="text-xs text-stone-400">Land</div>
+                <div className="text-sm font-bold text-slate-950 leading-tight">{countryLabel}</div>
+                <div className="text-xs text-slate-400">Land</div>
               </div>
             </div>
           )}
@@ -412,10 +435,10 @@ export default function HikeDetail() {
             <div className="doghike-stat-chip">
               <span className="text-base">{TOUR_ICONS.date}</span>
               <div>
-                <div className="text-sm font-bold text-stone-900 leading-tight">
+                <div className="text-sm font-bold text-slate-950 leading-tight">
                   {format(new Date(hike.date), "dd.MM.yyyy")}
                 </div>
-                <div className="text-xs text-stone-400">Datum</div>
+                <div className="text-xs text-slate-400">Datum</div>
               </div>
             </div>
           )}
@@ -423,8 +446,8 @@ export default function HikeDetail() {
             <div className="doghike-stat-chip">
               <span className="text-base">{TOUR_ICONS.distance}</span>
               <div>
-                <div className="text-sm font-bold text-stone-900 leading-tight">{hike.distance_km} km</div>
-                <div className="text-xs text-stone-400">Strecke</div>
+                <div className="text-sm font-bold text-slate-950 leading-tight">{hike.distance_km} km</div>
+                <div className="text-xs text-slate-400">Strecke</div>
               </div>
             </div>
           )}
@@ -432,8 +455,8 @@ export default function HikeDetail() {
             <div className="doghike-stat-chip">
               <span className="text-base">{TOUR_ICONS.elevation}</span>
               <div>
-                <div className="text-sm font-bold text-stone-900 leading-tight">{hike.elevation_gain_m} m</div>
-                <div className="text-xs text-stone-400">Höhenmeter</div>
+                <div className="text-sm font-bold text-slate-950 leading-tight">{hike.elevation_gain_m} m</div>
+                <div className="text-xs text-slate-400">Höhenmeter</div>
               </div>
             </div>
           )}
@@ -441,10 +464,10 @@ export default function HikeDetail() {
             <div className="doghike-stat-chip">
               <span className="text-base">{TOUR_ICONS.duration}</span>
               <div>
-                <div className="text-sm font-bold text-stone-900 leading-tight">
+                <div className="text-sm font-bold text-slate-950 leading-tight">
                   {formatDurationHours(hike.duration_minutes)}
                 </div>
-                <div className="text-xs text-stone-400">Gehzeit</div>
+                <div className="text-xs text-slate-400">Gehzeit</div>
               </div>
             </div>
           )}
@@ -457,7 +480,7 @@ export default function HikeDetail() {
                     <span key={i} className={`inline-block w-2 h-2 rounded-full ${i < Number(hike.difficulty) ? 'bg-brand-400' : 'bg-brand-200'}`} />
                   ))}
                 </div>
-                <div className="text-xs text-stone-400">Mensch</div>
+                <div className="text-xs text-slate-400">Mensch</div>
               </div>
             </div>
           )}
@@ -470,7 +493,7 @@ export default function HikeDetail() {
                     <span key={i} className={`inline-block w-2 h-2 rounded-full ${i < Number(hike.dog_difficulty) ? 'bg-brand-600' : 'bg-brand-200'}`} />
                   ))}
                 </div>
-                <div className="text-xs text-stone-400">Hund</div>
+                <div className="text-xs text-slate-400">Hund</div>
               </div>
             </div>
           )}
@@ -496,21 +519,21 @@ export default function HikeDetail() {
             className="mb-10"
           >
             <div className="doghike-glass-card p-6">
-              <h2 className="text-lg font-medium text-stone-800 mb-4">Vorschau</h2>
+              <h2 className="text-lg font-medium text-slate-900 mb-4">Vorschau</h2>
               <div className="space-y-4">
                 {previewNotes ? (
-                  <p className="text-stone-600 leading-relaxed">{previewNotes}</p>
+                  <p className="text-slate-600 leading-relaxed">{previewNotes}</p>
                 ) : (
-                  <p className="text-stone-500">Zu dieser Premium-Tour ist eine Kurzvorschau sichtbar. Die ganzen Details kannst du mit Premium freischalten.</p>
+                  <p className="text-slate-500">Zu dieser Premium-Tour ist eine Kurzvorschau sichtbar. Die ganzen Details kannst du mit Premium freischalten.</p>
                 )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="rounded-xl border border-stone-200 bg-stone-50 p-4">
-                    <p className="text-xs uppercase tracking-wide text-stone-400 mb-1">Ort</p>
-                    <p className="font-medium text-stone-800">{hike.location || "Nicht angegeben"}</p>
+                  <div className="rounded-xl border border-sky-200 bg-sky-50 p-4">
+                    <p className="text-xs uppercase tracking-wide text-slate-400 mb-1">Ort</p>
+                    <p className="font-medium text-slate-900">{hike.location || "Nicht angegeben"}</p>
                   </div>
-                  <div className="rounded-xl border border-stone-200 bg-stone-50 p-4">
-                    <p className="text-xs uppercase tracking-wide text-stone-400 mb-1">Land</p>
-                    <p className="font-medium text-stone-800">{countryLabel || "Nicht angegeben"}</p>
+                  <div className="rounded-xl border border-sky-200 bg-sky-50 p-4">
+                    <p className="text-xs uppercase tracking-wide text-slate-400 mb-1">Land</p>
+                    <p className="font-medium text-slate-900">{countryLabel || "Nicht angegeben"}</p>
                   </div>
                 </div>
               </div>
@@ -552,7 +575,7 @@ export default function HikeDetail() {
                 transition={{ delay: 0.15 }}
                 className="doghike-glass-card p-6"
               >
-                <h2 className="text-lg font-medium text-stone-800 mb-3 flex items-center gap-2">
+                <h2 className="text-lg font-medium text-slate-900 mb-3 flex items-center gap-2">
                   🅿️ Ausgangspunkt & Parken
                 </h2>
                 <ExpandableText text={hike.parking_info} />
@@ -567,7 +590,7 @@ export default function HikeDetail() {
                 transition={{ delay: 0.16 }}
                 className="doghike-glass-card p-6"
               >
-                <h2 className="text-lg font-medium text-stone-800 mb-3 flex items-center gap-2">
+                <h2 className="text-lg font-medium text-slate-900 mb-3 flex items-center gap-2">
                   🍽️ Einkehrmöglichkeiten
                 </h2>
                 <ExpandableText text={hike.restaurant_info} />
@@ -581,7 +604,7 @@ export default function HikeDetail() {
               transition={{ delay: 0.17 }}
               className="doghike-glass-card p-6"
             >
-              <h2 className="text-lg font-medium text-stone-800 mb-4">🐕 Infos für Hundebesitzer</h2>
+              <h2 className="text-lg font-medium text-slate-900 mb-4">🐕 Infos für Hundebesitzer</h2>
               <div className="space-y-4">
                 {/* Wasser: immer anzeigen */}
                 {hike.water_availability ? (
@@ -596,19 +619,19 @@ export default function HikeDetail() {
                   <div className="doghike-soft-panel flex items-center gap-3 p-3">
                     <WaterIcon value="little" className="text-lg" />
                     <div>
-                      <p className="font-medium text-stone-700">Wasser unterwegs</p>
-                      <p className="text-sm text-stone-400">Keine Angabe – Wasser mitnehmen empfohlen</p>
+                      <p className="font-medium text-slate-700">Wasser unterwegs</p>
+                      <p className="text-sm text-slate-400">Keine Angabe – Wasser mitnehmen empfohlen</p>
                     </div>
                   </div>
                 )}
                   {hike.hazard_notes && (
-                    <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl">
-                      <p className="font-medium text-amber-800 mb-1">⚠️ Achtung</p>
+                    <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-xl">
+                      <p className="font-medium text-yellow-800 mb-1">⚠️ Achtung</p>
                       <ExpandableText
                         text={hike.hazard_notes}
                         lines={3}
                         minChars={200}
-                        className="text-sm text-amber-700 whitespace-pre-wrap"
+                        className="text-sm text-yellow-700 whitespace-pre-wrap"
                       />
                     </div>
                   )}
@@ -623,7 +646,7 @@ export default function HikeDetail() {
                 transition={{ delay: 0.2 }}
                 className="doghike-glass-card p-6"
               >
-                <h2 className="text-lg font-medium text-stone-800 mb-4">🐕 Mit dabei</h2>
+                <h2 className="text-lg font-medium text-slate-900 mb-4">🐕 Mit dabei</h2>
                 <div className="flex flex-wrap gap-4">
                   {hikeDogs.map((dog) => (
                     <div key={dog.id} className="doghike-soft-panel flex items-center gap-3 p-3">
@@ -633,8 +656,8 @@ export default function HikeDetail() {
                         className="w-12 h-12 rounded-full object-cover"
                       />
                       <div>
-                        <p className="font-medium text-stone-800">{dog.name}</p>
-                        {dog.breed && <p className="text-sm text-stone-500">{dog.breed}</p>}
+                        <p className="font-medium text-slate-900">{dog.name}</p>
+                        {dog.breed && <p className="text-sm text-slate-500">{dog.breed}</p>}
                       </div>
                     </div>
                   ))}
@@ -650,7 +673,7 @@ export default function HikeDetail() {
                 transition={{ delay: 0.3 }}
                 className="doghike-glass-card p-6"
               >
-                <h2 className="text-lg font-medium text-stone-800 mb-4">Beschreibung & Tipps</h2>
+                <h2 className="text-lg font-medium text-slate-900 mb-4">Beschreibung & Tipps</h2>
                 <ExpandableText text={hike.notes} lines={6} minChars={320} />
               </motion.div>
             )}
@@ -663,7 +686,7 @@ export default function HikeDetail() {
                 transition={{ delay: 0.4 }}
                 className="doghike-glass-card p-6"
               >
-                <h2 className="text-lg font-medium text-stone-800 mb-4">Fotos</h2>
+                <h2 className="text-lg font-medium text-slate-900 mb-4">Fotos</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {photos.map((photo, index) => (
                     <div
