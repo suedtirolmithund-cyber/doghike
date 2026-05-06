@@ -345,6 +345,11 @@ export default function Journal() {
                               {TOUR_ICONS.human} {getDifficultyLabel(entry.difficulty)}
                             </span>
                           )}
+                          {entry.dog_difficulty && (
+                            <span className={`text-xs font-medium ${getDifficultyTextColor(entry.dog_difficulty)}`}>
+                              {TOUR_ICONS.dog} {getDifficultyLabel(entry.dog_difficulty)}
+                            </span>
+                          )}
                         </div>
 
                         <div className="flex flex-wrap gap-1.5 mb-2">
