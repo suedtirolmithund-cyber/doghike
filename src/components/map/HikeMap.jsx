@@ -9,11 +9,11 @@ import "leaflet.markercluster";
 import { formatDurationHours } from "@/lib/duration";
 
 const seasonConfig = {
-  spring: { color: "#ec9cf4", label: "Fruehling" },
+  spring: { color: "#ec9cf4", label: "Frühling" },
   summer: { color: "#d64545", label: "Sommer" },
   autumn: { color: "#f19a4b", label: "Herbst" },
   winter: { color: "#5b83f0", label: "Winter" },
-  all_year: { color: "#38a062", label: "Ganzjaehrig" },
+  all_year: { color: "#38a062", label: "Ganzjährig" },
 };
 
 const legacyAvailabilityMap = {
@@ -28,7 +28,7 @@ const DEFAULT_COLOR = "#38a062";
 
 function getCountryLabel(country) {
   if (country === "italy") return "Italien";
-  if (country === "austria") return "Oesterreich";
+  if (country === "austria") return "Österreich";
   if (country === "germany") return "Deutschland";
   if (country === "switzerland") return "Schweiz";
   if (country === "other") return "Anderes";
