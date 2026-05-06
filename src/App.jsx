@@ -14,6 +14,8 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { Suspense, lazy } from 'react';
 
+const CHUNK_RELOAD_KEY = "doghike_chunk_reload_attempted";
+
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -24,6 +26,30 @@ class ErrorBoundary extends React.Component {
   }
   render() {
     if (this.state.error) {
+      const errorMessage = String(this.state.error);
+      const isChunkLoadError =
+        errorMessage.includes("Failed to fetch dynamically imported module")
+        || errorMessage.includes("Importing a module script failed");
+
+      if (isChunkLoadError && typeof window !== "undefined") {
+        const alreadyRetried = window.sessionStorage.getItem(CHUNK_RELOAD_KEY) === "1";
+
+        if (!alreadyRetried) {
+          window.sessionStorage.setItem(CHUNK_RELOAD_KEY, "1");
+          window.location.reload();
+
+          return (
+            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-stone-50 via-white to-brand-50/10 px-6 text-center">
+              <div className="doghike-glass-card max-w-md p-6">
+                <Loader2 className="mx-auto mb-3 h-6 w-6 animate-spin text-brand-500" />
+                <h2 className="mb-2 text-lg font-semibold text-stone-800">App wird aktualisiert</h2>
+                <p className="text-sm text-stone-500">Ein neuer Stand wurde erkannt. DogHike lädt einmal neu.</p>
+              </div>
+            </div>
+          );
+        }
+      }
+
       return (
         <div style={{ padding: '2rem', fontFamily: 'monospace' }}>
           <h2>Fehler beim Laden der App</h2>
@@ -120,6 +146,11 @@ const AuthenticatedApp = () => {
 
 
 function App() {
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.sessionStorage.removeItem(CHUNK_RELOAD_KEY);
+    }
+  }, []);
 
   return (
     <ErrorBoundary>
