@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 207 100% 96%;
+    --background: 204 72% 97%;
     --foreground: 205 36% 18%;
     --card: 206 100% 97%;
     --card-foreground: 205 36% 18%;
@@ -12,11 +12,11 @@
     --popover-foreground: 205 36% 18%;
     --primary: 6 67% 54%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 208 73% 92%;
+    --secondary: 45 92% 90%;
     --secondary-foreground: 205 48% 25%;
-    --muted: 207 60% 91%;
-    --muted-foreground: 205 18% 45%;
-    --accent: 45 92% 74%;
+    --muted: 42 72% 92%;
+    --muted-foreground: 210 18% 40%;
+    --accent: 42 94% 68%;
     --accent-foreground: 37 83% 23%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
@@ -86,22 +86,23 @@
     @apply bg-background text-foreground;
     font-family: Roboto, ui-sans-serif, system-ui, sans-serif;
     background-image:
-      radial-gradient(circle at top left, rgba(246, 196, 61, 0.18), transparent 26rem),
-      radial-gradient(circle at top right, rgba(217, 74, 58, 0.10), transparent 24rem),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(214, 235, 255, 0.42));
+      radial-gradient(circle at top left, rgba(246, 196, 61, 0.24), transparent 27rem),
+      radial-gradient(circle at top right, rgba(217, 74, 58, 0.13), transparent 24rem),
+      radial-gradient(circle at 20% 85%, rgba(255, 214, 102, 0.15), transparent 24rem),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(237, 247, 255, 0.34));
     min-height: 100vh;
   }
 }
 
 @layer components {
   .doghike-glass-card {
-    @apply rounded-2xl border border-white/70 shadow-[0_14px_35px_rgba(16,47,74,0.11)] backdrop-blur-xl;
-    background-color: rgba(255, 255, 255, 0.76);
+    @apply rounded-2xl border border-yellow-100/80 shadow-[0_14px_35px_rgba(16,47,74,0.09)] backdrop-blur-xl;
+    background-color: rgba(255, 255, 255, 0.78);
   }
 
   .doghike-glass-card-hover {
-    @apply rounded-2xl border border-white/70 shadow-[0_14px_35px_rgba(16,47,74,0.11)] backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_42px_rgba(16,47,74,0.15)];
-    background-color: rgba(255, 255, 255, 0.76);
+    @apply rounded-2xl border border-yellow-100/80 shadow-[0_14px_35px_rgba(16,47,74,0.09)] backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:border-yellow-200 hover:shadow-[0_18px_42px_rgba(217,74,58,0.12)];
+    background-color: rgba(255, 255, 255, 0.78);
   }
 
   .doghike-glass-card-hover:hover {
@@ -109,11 +110,11 @@
   }
 
   .doghike-soft-panel {
-    @apply rounded-xl border border-brand-100/80 bg-brand-50/70;
+    @apply rounded-xl border border-yellow-100/80 bg-yellow-50/55;
   }
 
   .doghike-page-shell {
-    @apply min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8;
+    @apply min-h-screen bg-gradient-to-br from-yellow-50/55 via-white to-sky-50 pb-24 md:pb-8;
   }
 
   .doghike-content-shell {
@@ -125,7 +126,7 @@
   }
 
   .doghike-page-icon {
-    @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600 shadow-sm;
+    @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-yellow-200/80 bg-yellow-100 text-red-600 shadow-sm;
   }
 
   .doghike-page-title {
@@ -149,8 +150,8 @@
   }
 
   .doghike-filter-panel {
-    @apply rounded-2xl border border-white/70 p-4 shadow-[0_14px_35px_rgba(16,47,74,0.11)] backdrop-blur-xl md:p-5;
-    background-color: rgba(255, 255, 255, 0.76);
+    @apply rounded-2xl border border-yellow-100/80 p-4 shadow-[0_14px_35px_rgba(16,47,74,0.09)] backdrop-blur-xl md:p-5;
+    background-color: rgba(255, 255, 255, 0.78);
   }
 
   .doghike-filter-label {
@@ -162,7 +163,7 @@
   }
 
   .doghike-stat-chip {
-    @apply inline-flex items-center gap-2 rounded-full border border-brand-100 bg-white/70 px-3 py-2 text-sm text-slate-700 shadow-sm backdrop-blur-sm;
+    @apply inline-flex items-center gap-2 rounded-full border border-yellow-100 bg-yellow-50/50 px-3 py-2 text-sm text-slate-700 shadow-sm backdrop-blur-sm;
   }
 
   .doghike-stat-chip-strong {
@@ -170,16 +171,16 @@
   }
 
   .doghike-icon-chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-brand-100 bg-brand-50/60 px-2.5 py-1 text-xs font-medium text-brand-700;
+    @apply inline-flex items-center gap-1.5 rounded-full border border-yellow-200/80 bg-yellow-50/70 px-2.5 py-1 text-xs font-medium text-red-600;
   }
 
   .doghike-empty-state {
-    @apply rounded-2xl border border-white/70 px-5 py-16 text-center shadow-[0_14px_35px_rgba(16,47,74,0.11)] backdrop-blur-xl md:py-20;
-    background-color: rgba(255, 255, 255, 0.76);
+    @apply rounded-2xl border border-yellow-100/80 px-5 py-16 text-center shadow-[0_14px_35px_rgba(16,47,74,0.09)] backdrop-blur-xl md:py-20;
+    background-color: rgba(255, 255, 255, 0.78);
   }
 
   .doghike-empty-icon {
-    @apply mx-auto mb-4 h-14 w-14 text-sky-200;
+    @apply mx-auto mb-4 h-14 w-14 text-yellow-300;
   }
 
   .doghike-primary-action {
@@ -187,7 +188,7 @@
   }
 
   .doghike-secondary-action {
-    @apply border-brand-200 bg-white/75 text-slate-700 hover:bg-brand-50/50;
+    @apply border-yellow-200 bg-white/75 text-slate-700 hover:border-yellow-300 hover:bg-yellow-50/70;
   }
 
   .doghike-compact-action {

@@ -250,7 +250,10 @@ export default function Journal() {
             }`}
           >
             {statsItems.map(({ icon, value, label, color }) => (
-              <div key={label} className="doghike-glass-card rounded-xl px-2.5 py-2 md:px-3 md:py-2.5">
+              <div
+                key={label}
+                className="doghike-glass-card rounded-xl border-yellow-100/90 bg-gradient-to-br from-white/88 to-yellow-50/45 px-2.5 py-2 md:px-3 md:py-2.5"
+              >
                 <div className="flex items-center justify-center gap-2">
                   {typeof icon === "string" ? (
                     <span className={`block text-sm leading-none ${color} md:text-base`}>{icon}</span>
