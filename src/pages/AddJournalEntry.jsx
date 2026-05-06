@@ -148,11 +148,15 @@ const LOCATION_PICKER_TILES = {
     url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
     label: "Standard",
+    maxZoom: 19,
+    maxNativeZoom: 19,
   },
   topo: {
     url: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
     attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, SRTM | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)',
     label: "Topo",
+    maxZoom: 17,
+    maxNativeZoom: 17,
   },
 };
 
@@ -313,12 +317,15 @@ function LocationPicker({ lat, lng, onChange }) {
         <MapContainer
           center={[46.5, 11.3]}
           zoom={9}
+          maxZoom={tile.maxZoom}
           style={{ height: "100%", width: "100%" }}
           scrollWheelZoom={true}
         >
           <TileLayer
             attribution={tile.attribution}
             url={tile.url}
+            maxZoom={tile.maxZoom}
+            maxNativeZoom={tile.maxNativeZoom}
           />
           <MapClickHandler onMapClick={handleMapClick} />
           {flyTarget && <MapFlyTo center={flyTarget.center} zoom={flyTarget.zoom} />}

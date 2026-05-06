@@ -2,6 +2,13 @@ import { lazy } from "react";
 import __Layout from "./Layout.jsx";
 
 const CHUNK_IMPORT_RETRY_PREFIX = "doghike_lazy_import_retry:";
+const CACHE_BUST_PARAM = "__doghike_reload";
+
+const hardReloadWithCacheBust = () => {
+  const url = new URL(window.location.href);
+  url.searchParams.set(CACHE_BUST_PARAM, String(Date.now()));
+  window.location.replace(url.toString());
+};
 
 const lazyPage = (loader, key = "page") =>
   lazy(async () => {
@@ -19,7 +26,7 @@ const lazyPage = (loader, key = "page") =>
 
         if (!alreadyRetried) {
           window.sessionStorage.setItem(retryKey, "1");
-          window.location.reload();
+          hardReloadWithCacheBust();
           return new Promise(() => {});
         }
 

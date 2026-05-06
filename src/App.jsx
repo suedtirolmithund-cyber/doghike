@@ -16,6 +16,13 @@ import { Suspense, lazy } from 'react';
 
 const CHUNK_RELOAD_KEY = "doghike_chunk_reload_attempted";
 const REACT130_RELOAD_KEY = "doghike_react130_reload_attempted";
+const CACHE_BUST_PARAM = "__doghike_reload";
+
+function hardReloadWithCacheBust() {
+  const url = new URL(window.location.href);
+  url.searchParams.set(CACHE_BUST_PARAM, String(Date.now()));
+  window.location.replace(url.toString());
+}
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -40,7 +47,7 @@ class ErrorBoundary extends React.Component {
 
         if (!alreadyRetried) {
           window.sessionStorage.setItem(CHUNK_RELOAD_KEY, "1");
-          window.location.reload();
+          hardReloadWithCacheBust();
 
           return (
             <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-sky-50 via-white to-brand-50/10 px-6 text-center">
@@ -59,7 +66,7 @@ class ErrorBoundary extends React.Component {
 
         if (!alreadyRetried) {
           window.sessionStorage.setItem(REACT130_RELOAD_KEY, "1");
-          window.location.reload();
+          hardReloadWithCacheBust();
 
           return (
             <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-sky-50 via-white to-brand-50/10 px-6 text-center">
