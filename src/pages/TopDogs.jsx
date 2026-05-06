@@ -8,6 +8,7 @@ import {
   Loader2, Dog, Sparkles,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TOUR_ICONS } from "@/lib/difficultyConfig";
 
 // Badge-Definitionen
 const BADGE_DEFS = {
@@ -16,7 +17,7 @@ const BADGE_DEFS = {
   explorer:    { emoji: "🧭", label: "Entdecker",       desc: "10+ Touren" },
   ultra:       { emoji: "⚡", label: "Ultra-Läufer",    desc: "500+ km" },
   marathoner:  { emoji: "🏃", label: "Kilometerfresser", desc: "100+ km" },
-  mountaineer: { emoji: "⛰️", label: "Gipfelstürmer",   desc: "1.000+ Höhenmeter" },
+  mountaineer: { emoji: TOUR_ICONS.elevation, label: "Gipfelstürmer",   desc: "1.000+ Höhenmeter" },
   popular:     { emoji: "⭐", label: "Liebling",        desc: "Ø 4,5 Sterne (3+ Bewertungen)" },
 };
 
@@ -408,10 +409,10 @@ export default function TopDogs() {
                   🎯 <span className="hidden sm:inline ml-1">Meiste</span> Touren
                 </TabsTrigger>
                 <TabsTrigger value="distance" className="text-xs md:text-sm">
-                  📏 <span className="hidden sm:inline ml-1">Meiste</span> km
+                  {TOUR_ICONS.distance} <span className="hidden sm:inline ml-1">Meiste</span> km
                 </TabsTrigger>
                 <TabsTrigger value="elevation" className="text-xs md:text-sm">
-                  ⛰️ <span className="hidden sm:inline ml-1">Meiste</span> Hm
+                  {TOUR_ICONS.elevation} <span className="hidden sm:inline ml-1">Meiste</span> Hm
                 </TabsTrigger>
               </TabsList>
 

@@ -291,7 +291,7 @@ export default function RouteDetail() {
                   {route.name}
                 </h1>
                 {route.start_location && (
-                  <p className="text-slate-600">📍 {route.start_location}</p>
+                  <p className="text-slate-600">{TOUR_ICONS.location} {route.start_location}</p>
                 )}
               </div>
 
@@ -697,7 +697,7 @@ export default function RouteDetail() {
 
                       {/* Parking */}
                       <div>
-                        <label className="text-sm font-medium text-slate-700 mb-1 block">🅿️ Ausgangspunkt & Parken</label>
+                        <label className="text-sm font-medium text-slate-700 mb-1 block">{TOUR_ICONS.parking} Ausgangspunkt & Parken</label>
                         <Textarea
                           placeholder="z.B. Großer Parkplatz am Pragser Wildsee..."
                           value={completeData.parking_info}
@@ -708,7 +708,7 @@ export default function RouteDetail() {
 
                       {/* Restaurant */}
                       <div>
-                        <label className="text-sm font-medium text-slate-700 mb-1 block">🍽️ Einkehrmöglichkeiten (optional)</label>
+                        <label className="text-sm font-medium text-slate-700 mb-1 block">{TOUR_ICONS.restaurant} Einkehrmöglichkeiten (optional)</label>
                         <Textarea
                           placeholder="z.B. Seekofel Hütte (2324m)..."
                           value={completeData.restaurant_info}
@@ -719,7 +719,7 @@ export default function RouteDetail() {
 
                       {/* Hazard */}
                       <div>
-                        <label className="text-sm font-medium text-slate-700 mb-1 block">⚠️ Gefahrenstellen (optional)</label>
+                        <label className="text-sm font-medium text-slate-700 mb-1 block">{TOUR_ICONS.hazard} Gefahrenstellen (optional)</label>
                         <Textarea
                           placeholder="z.B. steile Passagen, Leitern, Kühe auf der Alm..."
                           value={completeData.hazard_notes}
@@ -756,9 +756,9 @@ export default function RouteDetail() {
                             completed_duration_minutes: hoursInputToMinutes(completeData.completed_duration_minutes),
                             completed_notes: [
                               completeData.completed_notes,
-                              completeData.parking_info ? `🅿️ ${completeData.parking_info}` : null,
-                              completeData.restaurant_info ? `🍽️ ${completeData.restaurant_info}` : null,
-                              completeData.hazard_notes ? `⚠️ ${completeData.hazard_notes}` : null,
+                              completeData.parking_info ? `${TOUR_ICONS.parking} ${completeData.parking_info}` : null,
+                              completeData.restaurant_info ? `${TOUR_ICONS.restaurant} ${completeData.restaurant_info}` : null,
+                              completeData.hazard_notes ? `${TOUR_ICONS.hazard} ${completeData.hazard_notes}` : null,
                             ].filter(Boolean).join("\n\n") || null,
                             completed_rating: completeData.completed_rating || null,
                           })}

@@ -576,7 +576,7 @@ export default function HikeDetail() {
                 className="doghike-glass-card p-6"
               >
                 <h2 className="text-lg font-medium text-slate-900 mb-3 flex items-center gap-2">
-                  🅿️ Ausgangspunkt & Parken
+                  {TOUR_ICONS.parking} Ausgangspunkt & Parken
                 </h2>
                 <ExpandableText text={hike.parking_info} />
               </motion.div>
@@ -591,7 +591,7 @@ export default function HikeDetail() {
                 className="doghike-glass-card p-6"
               >
                 <h2 className="text-lg font-medium text-slate-900 mb-3 flex items-center gap-2">
-                  🍽️ Einkehrmöglichkeiten
+                  {TOUR_ICONS.restaurant} Einkehrmöglichkeiten
                 </h2>
                 <ExpandableText text={hike.restaurant_info} />
               </motion.div>
@@ -626,7 +626,7 @@ export default function HikeDetail() {
                 )}
                   {hike.hazard_notes && (
                     <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-xl">
-                      <p className="font-medium text-yellow-800 mb-1">⚠️ Achtung</p>
+                      <p className="font-medium text-yellow-800 mb-1">{TOUR_ICONS.hazard} Achtung</p>
                       <ExpandableText
                         text={hike.hazard_notes}
                         lines={3}

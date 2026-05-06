@@ -58,6 +58,9 @@ export const TOUR_ICONS = {
   dog: "🐕",
   season: "🍃",
   speed: "🏃",
+  parking: "🅿️",
+  restaurant: "🍽️",
+  hazard: "⚠️",
 };
 
 export const SEASON_LEVELS = [
