@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+﻿import { useState, useCallback, useEffect, useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { createRoute } from "@/lib/routesApi";
@@ -356,6 +356,10 @@ function SmartRoutePlanner({ onRouteReady }) {
     setSearchError(null);
   };
 
+  const dismissSearchResults = () => {
+    setSearchResults([]);
+  };
+
   const reset = () => {
     setWaypoints([]);
     setRoute(null);
@@ -408,10 +412,19 @@ function SmartRoutePlanner({ onRouteReady }) {
 
       {searchError && <p className="text-xs text-red-500">{searchError}</p>}
       {searchResults.length > 1 && (
-        <div className="rounded-xl border border-stone-200/80 bg-white/85 p-2 shadow-sm backdrop-blur-sm">
-          <p className="px-2 pb-2 text-xs font-medium text-stone-500">
-            Mehrere Orte gefunden. Wähle den richtigen aus:
-          </p>
+        <div className="rounded-xl border border-sky-200/80 bg-white/85 p-2 shadow-sm backdrop-blur-sm">
+          <div className="flex items-center justify-between gap-2 px-2 pb-2">
+            <p className="text-xs font-medium text-slate-500">
+              Mehrere Orte gefunden. Wähle den richtigen aus:
+            </p>
+            <button
+              type="button"
+              onClick={dismissSearchResults}
+              className="text-xs font-medium text-slate-400 transition hover:text-slate-700"
+            >
+              Schließen
+            </button>
+          </div>
           <div className="space-y-1">
             {searchResults.map((result, index) => (
               <button
@@ -420,8 +433,8 @@ function SmartRoutePlanner({ onRouteReady }) {
                 onClick={() => handleSelectSearchResult(result)}
                 className="flex w-full flex-col rounded-lg px-3 py-2 text-left transition hover:bg-brand-50/60"
               >
-                <span className="text-sm font-medium text-stone-700">{result.title}</span>
-                <span className="text-xs text-stone-500">{result.subtitle}</span>
+                <span className="text-sm font-medium text-slate-700">{result.title}</span>
+                <span className="text-xs text-slate-500">{result.subtitle}</span>
               </button>
             ))}
           </div>
@@ -439,7 +452,7 @@ function SmartRoutePlanner({ onRouteReady }) {
           {route && (
             <Polyline
               positions={route.positions}
-              color="#b8785f"
+              color="#d94a3a"
               weight={6}
               opacity={0.85}
               eventHandlers={{ click: handleRouteClick }}
@@ -516,13 +529,13 @@ function SmartRoutePlanner({ onRouteReady }) {
               </span>
               <span className="text-slate-500 flex-1 truncate">{wp.lat.toFixed(5)}, {wp.lng.toFixed(5)}</span>
               {/* Reorder buttons */}
-              <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="flex gap-0.5 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
                 <button onClick={() => moveWaypoint(i, -1)} disabled={i === 0}
-                  className="text-slate-400 hover:text-slate-700 disabled:opacity-20 p-0.5">
+                  className="rounded p-1 text-slate-400 hover:bg-white hover:text-slate-700 disabled:opacity-20">
                   ↑
                 </button>
                 <button onClick={() => moveWaypoint(i, 1)} disabled={i === waypoints.length - 1}
-                  className="text-slate-400 hover:text-slate-700 disabled:opacity-20 p-0.5">
+                  className="rounded p-1 text-slate-400 hover:bg-white hover:text-slate-700 disabled:opacity-20">
                   ↓
                 </button>
               </div>
@@ -782,7 +795,7 @@ export default function RoutePlanner() {
                 <Button type="button" variant="outline" onClick={() => setRouteGeometry(null)}>
                   Abbrechen
                 </Button>
-                <Button type="submit" disabled={createRouteMutation.isPending} className="bg-[#b8785f] hover:bg-[#a4644d]">
+                <Button type="submit" disabled={createRouteMutation.isPending} className="bg-[#d94a3a] hover:bg-[#a92f25]">
                   {createRouteMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                   {activeTab === "track"
                     ? "Ins Tagebuch übernehmen"
