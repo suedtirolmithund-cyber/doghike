@@ -1,8 +1,8 @@
-export const DIFFICULTY_LEVELS = [
+﻿export const DIFFICULTY_LEVELS = [
   { value: "1", label: "Sehr leicht", short: "Stufe 1", textColor: "text-brand-400", badgeClass: "bg-brand-100 text-brand-600 border-brand-200" },
   { value: "2", label: "Leicht", short: "Stufe 2", textColor: "text-lime-600", badgeClass: "bg-lime-100 text-lime-700 border-lime-200" },
-  { value: "3", label: "Mittel", short: "Stufe 3", textColor: "text-yellow-600", badgeClass: "bg-amber-100 text-amber-700 border-amber-200" },
-  { value: "4", label: "Schwer", short: "Stufe 4", textColor: "text-orange-600", badgeClass: "bg-orange-100 text-orange-700 border-orange-200" },
+  { value: "3", label: "Mittel", short: "Stufe 3", textColor: "text-yellow-600", badgeClass: "bg-yellow-100 text-yellow-700 border-yellow-200" },
+  { value: "4", label: "Schwer", short: "Stufe 4", textColor: "text-red-500", badgeClass: "bg-red-100 text-red-600 border-red-200" },
   { value: "5", label: "Sehr schwer", short: "Stufe 5", textColor: "text-red-600", badgeClass: "bg-red-100 text-red-700 border-red-200" },
 ];
 
@@ -32,16 +32,16 @@ export function getDifficultyLabel(level) {
 }
 
 export function getDifficultyTextColor(level) {
-  return DIFFICULTY_TEXT_COLORS[level] ?? "text-stone-500";
+  return DIFFICULTY_TEXT_COLORS[level] ?? "text-slate-500";
 }
 
 export function getDifficultyBadgeClass(level) {
-  return DIFFICULTY_BADGE_CLASSES[level] ?? "bg-stone-100 text-stone-600 border-stone-200";
+  return DIFFICULTY_BADGE_CLASSES[level] ?? "bg-sky-100 text-slate-600 border-sky-200";
 }
 
 export const WATER_LEVELS = [
   { value: "none", numeric: 0, label: "Kein Wasser", icon: "💧", textColor: "text-red-700", badgeClass: "bg-red-50 text-red-700 border-red-200" },
-  { value: "little", numeric: 1, label: "Wenig Wasser", icon: "💧", textColor: "text-orange-700", badgeClass: "bg-orange-50 text-orange-700 border-orange-200" },
+  { value: "little", numeric: 1, label: "Wenig Wasser", icon: "💧", textColor: "text-red-600", badgeClass: "bg-red-50 text-red-600 border-red-200" },
   { value: "moderate", numeric: 2, label: "Etwas Wasser", icon: "💧💧", textColor: "text-brand-700", badgeClass: "bg-brand-50 text-brand-700 border-brand-200" },
   { value: "plenty", numeric: 3, label: "Viel Wasser", icon: "💧💧💧", textColor: "text-cyan-700", badgeClass: "bg-cyan-50 text-cyan-700 border-cyan-200" },
 ];
@@ -63,8 +63,8 @@ export const TOUR_ICONS = {
 export const SEASON_LEVELS = [
   { value: "spring", label: "Frühling", icon: "🌸", color: "bg-pink-100 text-pink-700" },
   { value: "summer", label: "Sommer", icon: "☀️", color: "bg-red-100 text-red-700" },
-  { value: "autumn", label: "Herbst", icon: "🍂", color: "bg-orange-100 text-orange-700" },
-  { value: "winter", label: "Winter", icon: "❄️", color: "bg-stone-100 text-stone-700" },
+  { value: "autumn", label: "Herbst", icon: "🍂", color: "bg-red-100 text-red-600" },
+  { value: "winter", label: "Winter", icon: "❄️", color: "bg-sky-100 text-slate-700" },
   { value: "all_year", label: "Ganzjährig", icon: "🍃", color: "bg-brand-100 text-brand-600" },
 ];
 
@@ -81,7 +81,7 @@ export function getSeasonIcon(value) {
 }
 
 export function getSeasonBadgeClass(value) {
-  return SEASON_BY_VALUE[value]?.color ?? "bg-stone-100 text-stone-600";
+  return SEASON_BY_VALUE[value]?.color ?? "bg-sky-100 text-slate-600";
 }
 
 export const WATER_BY_VALUE = Object.fromEntries(
@@ -104,9 +104,9 @@ export function getWaterIcon(value) {
 }
 
 export function getWaterBadgeClass(value) {
-  return getWaterLevel(value)?.badgeClass ?? "bg-stone-100 text-stone-600 border-stone-200";
+  return getWaterLevel(value)?.badgeClass ?? "bg-sky-100 text-slate-600 border-sky-200";
 }
 
 export function getWaterTextColor(value) {
-  return getWaterLevel(value)?.textColor ?? "text-stone-600";
+  return getWaterLevel(value)?.textColor ?? "text-slate-600";
 }

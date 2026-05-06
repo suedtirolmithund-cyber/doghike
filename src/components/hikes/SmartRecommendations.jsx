@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+﻿import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { supabase } from "@/lib/supabaseClient";
@@ -59,11 +59,11 @@ export default function SmartRecommendations({ allHikes = [] }) {
   return (
     <div className="mb-12">
       <div className="flex items-center gap-2 mb-6">
-        <h2 className="text-2xl font-light text-stone-800">
+        <h2 className="text-2xl font-light text-slate-900">
           {isPersonalized ? "Empfohlen für dich" : "Ausgewählte Touren"}
         </h2>
         {isPersonalized && (
-          <span className="text-xs text-stone-500 bg-stone-100 px-2 py-1 rounded-full flex items-center gap-1">
+          <span className="text-xs text-slate-500 bg-sky-100 px-2 py-1 rounded-full flex items-center gap-1">
             <Sparkles className="w-3 h-3" /> basierend auf deinen Touren
           </span>
         )}

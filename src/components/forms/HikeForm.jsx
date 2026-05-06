@@ -388,11 +388,11 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       </div>
 
       {/* Start Point Section */}
-      <div className="space-y-4 rounded-2xl border border-stone-200/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(92,62,42,0.08)] backdrop-blur-sm md:p-6">
+      <div className="space-y-4 rounded-2xl border border-sky-200/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(16,47,74,0.08)] backdrop-blur-sm md:p-6">
         <div className="flex items-center justify-between">
           <div>
             <Label className="text-lg">📍 Ausgangspunkt *</Label>
-            <p className="text-sm text-stone-500 mt-1">
+            <p className="text-sm text-slate-500 mt-1">
               Wähle den Startpunkt deiner Wanderung auf der Karte aus
             </p>
           </div>
@@ -415,7 +415,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             <p className="text-sm text-brand-600 font-medium mb-1">
               ✓ Ausgangspunkt gesetzt
             </p>
-            <p className="text-xs text-stone-600">
+            <p className="text-xs text-slate-600">
               {formData.location && `📌 ${formData.location} • `}
               {formData.latitude.toFixed(5)}, {formData.longitude.toFixed(5)}
             </p>
@@ -452,11 +452,11 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       </div>
 
       {/* Route Section */}
-      <div className="space-y-4 rounded-2xl border border-stone-200/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(92,62,42,0.08)] backdrop-blur-sm md:p-6">
+      <div className="space-y-4 rounded-2xl border border-sky-200/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(16,47,74,0.08)] backdrop-blur-sm md:p-6">
         <div className="flex items-center justify-between">
           <div>
             <Label className="text-lg">🗺️ Routenverlauf (optional)</Label>
-            <p className="text-sm text-stone-500 mt-1">
+            <p className="text-sm text-slate-500 mt-1">
               Zeichne die komplette Wanderroute oder lade eine GPX-Datei hoch
             </p>
           </div>
@@ -564,8 +564,8 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               <Star
                 className={`w-8 h-8 ${
                   star <= (formData.rating || 0)
-                    ? "fill-amber-400 text-amber-400"
-                    : "text-stone-300"
+                    ? "fill-yellow-400 text-yellow-400"
+                    : "text-slate-300"
                 }`}
               />
             </button>
@@ -583,7 +583,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
                 className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
                   formData.dogs?.includes(dog.id)
                     ? "border-brand-400 bg-brand-50/60"
-                    : "border-stone-200 hover:border-stone-300"
+                    : "border-sky-200 hover:border-sky-300"
                 }`}
               >
                 <Checkbox
@@ -595,7 +595,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
                   alt={dog.name}
                   className="w-10 h-10 rounded-full object-cover"
                 />
-                <span className="font-medium text-stone-700">{dog.name}</span>
+                <span className="font-medium text-slate-700">{dog.name}</span>
               </label>
             ))}
           </div>
@@ -630,7 +630,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             ))}
           </AnimatePresence>
           
-          <label className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-stone-300 rounded-xl cursor-pointer hover:border-brand-400 transition-colors">
+          <label className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-sky-300 rounded-xl cursor-pointer hover:border-brand-400 transition-colors">
             <input
               type="file"
               accept="image/*"
@@ -647,11 +647,11 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               id="photo-input"
             />
             {uploading ? (
-              <Loader2 className="w-6 h-6 text-stone-400 animate-spin" />
+              <Loader2 className="w-6 h-6 text-slate-400 animate-spin" />
             ) : (
               <>
-                <Upload className="w-6 h-6 text-stone-400" />
-                <span className="text-xs text-stone-400 mt-1">Fotos hinzufügen</span>
+                <Upload className="w-6 h-6 text-slate-400" />
+                <span className="text-xs text-slate-400 mt-1">Fotos hinzufügen</span>
               </>
             )}
           </label>
@@ -714,7 +714,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         />
       </div>
 
-      <div className="space-y-2 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+      <div className="space-y-2 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
         <Label htmlFor="visibility" className="text-base font-semibold">Sichtbarkeit der Tour</Label>
         <Select
           value={formData.visibility}
@@ -736,7 +736,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             <SelectItem value="public">🌍 Öffentlich (für alle sichtbar)</SelectItem>
           </SelectContent>
         </Select>
-        <p className="text-xs text-stone-600 mt-2 bg-white p-2 rounded border border-amber-300">
+        <p className="text-xs text-slate-600 mt-2 bg-white p-2 rounded border border-yellow-300">
           {formData.visibility === "private" && "🔒 Nur du kannst diese Tour sehen – nur die Grundangaben sind Pflicht, weitere Felder bleiben optional."}
           {formData.visibility === "friends" && "👥 Nur Freunde können diese Tour sehen – für das Teilen müssen alle Pflichtfelder ausgefüllt sein."}
           {formData.visibility === "public" && "🌍 Alle Nutzer können diese Tour sehen – für eine öffentliche Tour müssen alle Pflichtfelder ausgefüllt sein."}

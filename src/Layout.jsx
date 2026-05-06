@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
@@ -71,23 +71,23 @@ export default function Layout({ children, currentPageName }) {
   const isActive = (pageName) => currentPageName === pageName;
 
   return (
-    <div className="min-h-screen bg-stone-50 flex flex-col">
+    <div className="min-h-screen bg-sky-50 flex flex-col">
       <div className="hidden md:block h-16 shrink-0" />
       <div className="flex-1">{children}</div>
 
-      <footer className="bg-white/80 border-t border-stone-200 py-3 md:py-4 px-4 md:px-6 text-center mb-20 md:mb-0">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 md:gap-4 text-xs md:text-sm text-stone-500">
+      <footer className="bg-white/80 border-t border-sky-200 py-3 md:py-4 px-4 md:px-6 text-center mb-20 md:mb-0">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 md:gap-4 text-xs md:text-sm text-slate-500">
           <span>© 2026 DogTrails</span>
           <span className="hidden sm:inline">•</span>
-          <Link to={createPageUrl("Impressum")} className="hover:text-stone-700 underline">Impressum</Link>
+          <Link to={createPageUrl("Impressum")} className="hover:text-slate-700 underline">Impressum</Link>
           <span className="hidden sm:inline">•</span>
-          <Link to={createPageUrl("Datenschutz")} className="hover:text-stone-700 underline">Datenschutz</Link>
+          <Link to={createPageUrl("Datenschutz")} className="hover:text-slate-700 underline">Datenschutz</Link>
           <span className="hidden sm:inline">•</span>
-          <Link to={createPageUrl("AGB")} className="hover:text-stone-700 underline">AGB</Link>
+          <Link to={createPageUrl("AGB")} className="hover:text-slate-700 underline">AGB</Link>
           <span className="hidden sm:inline">•</span>
-          <Link to={createPageUrl("Legal")} className="hover:text-stone-700 underline">Rechtliche Hinweise</Link>
+          <Link to={createPageUrl("Legal")} className="hover:text-slate-700 underline">Rechtliche Hinweise</Link>
           <span className="hidden sm:inline">•</span>
-          <Link to={createPageUrl("Support")} className="hover:text-stone-700 underline">Hilfe & Support</Link>
+          <Link to={createPageUrl("Support")} className="hover:text-slate-700 underline">Hilfe & Support</Link>
         </div>
       </footer>
 
@@ -99,7 +99,7 @@ export default function Layout({ children, currentPageName }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-40 bg-stone-950/20 backdrop-blur-[1px]"
+                className="fixed inset-0 z-40 bg-slate-950/20 backdrop-blur-[1px]"
                 onClick={() => setMoreOpen(false)}
               />
 

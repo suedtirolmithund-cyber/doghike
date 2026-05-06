@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+﻿import { useState, useEffect, useRef, useCallback } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, Square, Crosshair, Loader2 } from "lucide-react";
@@ -570,21 +570,21 @@ export default function GPSTracker({ onSave }) {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: index * 0.05 }}
             className={`rounded-xl p-2 text-center md:p-3 ${
-              isTracking && !isPaused ? "border border-green-300 bg-white" : "border border-stone-200 bg-white"
+              isTracking && !isPaused ? "border border-green-300 bg-white" : "border border-sky-200 bg-white"
             }`}
           >
-            <p className="text-sm font-bold leading-tight text-stone-800 md:text-xl">
+            <p className="text-sm font-bold leading-tight text-slate-900 md:text-xl">
               {item.value}
-              <span className="ml-0.5 text-xs font-normal text-stone-500 md:text-sm">
+              <span className="ml-0.5 text-xs font-normal text-slate-500 md:text-sm">
                 {item.unit}
               </span>
             </p>
-            <p className="mt-0.5 text-[9px] text-stone-400 md:text-xs">{item.label}</p>
+            <p className="mt-0.5 text-[9px] text-slate-400 md:text-xs">{item.label}</p>
           </motion.div>
         ))}
       </div>
 
-      <div className="relative h-[50vw] min-h-64 max-h-72 overflow-hidden rounded-xl border-2 border-stone-200 md:h-80 lg:h-[400px]">
+      <div className="relative h-[50vw] min-h-64 max-h-72 overflow-hidden rounded-xl border-2 border-sky-200 md:h-80 lg:h-[400px]">
         <MapContainer
           center={currentPosition || myLocation || [46.5, 11.9]}
           zoom={currentPosition || myLocation ? 14 : 10}
@@ -613,7 +613,7 @@ export default function GPSTracker({ onSave }) {
         {isTracking && (
           <div
             className={`absolute left-3 top-3 z-[1000] rounded-full px-3 py-1.5 text-xs font-semibold text-white shadow ${
-              isPaused ? "bg-amber-500" : "animate-pulse bg-red-500"
+              isPaused ? "bg-yellow-500" : "animate-pulse bg-red-500"
             }`}
           >
             {isPaused ? "Pausiert" : "Aufzeichnung laeuft"}
@@ -621,7 +621,7 @@ export default function GPSTracker({ onSave }) {
         )}
 
         {routePoints.length > 0 && (
-          <div className="absolute right-3 top-3 z-[1000] rounded-lg border border-stone-200 bg-white/90 px-2 py-1 text-xs font-medium text-stone-700 shadow backdrop-blur-sm">
+          <div className="absolute right-3 top-3 z-[1000] rounded-lg border border-sky-200 bg-white/90 px-2 py-1 text-xs font-medium text-slate-700 shadow backdrop-blur-sm">
             {routePoints.length} Punkte
           </div>
         )}
@@ -636,7 +636,7 @@ export default function GPSTracker({ onSave }) {
           }}
           disabled={locating}
           title="Meinen Standort finden"
-          className="absolute bottom-3 right-3 z-[1000] flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-stone-200 bg-white p-3 shadow-md hover:bg-stone-50"
+          className="absolute bottom-3 right-3 z-[1000] flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-sky-200 bg-white p-3 shadow-md hover:bg-sky-50"
         >
           {locating ? (
           <Loader2 className="h-5 w-5 animate-spin text-brand-600" />
@@ -658,7 +658,7 @@ export default function GPSTracker({ onSave }) {
               <Button
                 onClick={pauseTracking}
                 variant="outline"
-                className="flex-1 border-amber-400 text-amber-700 hover:bg-amber-50 sm:flex-none"
+                className="flex-1 border-yellow-400 text-yellow-700 hover:bg-yellow-50 sm:flex-none"
               >
                 <Pause className="mr-2 h-4 w-4" />
                 Pause
@@ -690,7 +690,7 @@ export default function GPSTracker({ onSave }) {
       )}
 
       {isTracking && (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800 md:text-sm">
+        <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-3 text-xs text-yellow-800 md:text-sm">
           <p className="mb-1 font-medium">Bestmöglich für die Web-Version:</p>
           <ul className="list-disc space-y-1 pl-4">
             <li>Lass die App möglichst geöffnet oder den Bildschirm aktiv.</li>

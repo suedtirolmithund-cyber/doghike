@@ -175,7 +175,7 @@ export default function GPXUploader({ onSave }) {
           className={`border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer ${
             isDragging
               ? "border-brand-400 bg-brand-50"
-              : "border-stone-300 hover:border-brand-300 hover:bg-brand-50/40"
+              : "border-sky-300 hover:border-brand-300 hover:bg-brand-50/40"
           }`}
           onDragOver={(e) => {
             e.preventDefault();
@@ -192,10 +192,10 @@ export default function GPXUploader({ onSave }) {
             className="hidden"
             onChange={handleFileChange}
           />
-          <Upload className="w-12 h-12 text-stone-400 mx-auto mb-3" />
-          <p className="text-base font-medium text-stone-700 mb-1">GPX-Datei hochladen</p>
-          <p className="text-sm text-stone-500">Datei hierher ziehen oder klicken zum Auswählen</p>
-          <p className="text-xs text-stone-400 mt-2">Unterstützt: .gpx (Garmin, Komoot, Strava und ähnliche)</p>
+          <Upload className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+          <p className="text-base font-medium text-slate-700 mb-1">GPX-Datei hochladen</p>
+          <p className="text-sm text-slate-500">Datei hierher ziehen oder klicken zum Auswählen</p>
+          <p className="text-xs text-slate-400 mt-2">Unterstützt: .gpx (Garmin, Komoot, Strava und ähnliche)</p>
         </div>
       )}
 
@@ -216,7 +216,7 @@ export default function GPXUploader({ onSave }) {
                 <p className="text-xs text-brand-400">{gpxData.coordinates.length} Wegpunkte geladen</p>
               </div>
             </div>
-            <Button variant="ghost" size="sm" onClick={handleClear} className="text-stone-500 hover:text-red-600">
+            <Button variant="ghost" size="sm" onClick={handleClear} className="text-slate-500 hover:text-red-600">
               <Trash2 className="w-4 h-4" />
             </Button>
           </div>
@@ -237,7 +237,7 @@ export default function GPXUploader({ onSave }) {
               <p className="text-2xl font-bold">{formatDurationHours(gpxData.duration_minutes)}</p>
               <p className="text-xs opacity-70">gesch. Dauer</p>
             </div>
-            <div className="bg-amber-700 text-white rounded-xl p-4 text-center">
+            <div className="bg-yellow-500 text-white rounded-xl p-4 text-center">
               <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.elevation}</span>
               <p className="text-2xl font-bold">
                 {gpxData.max_elevation !== -Infinity ? Math.round(gpxData.max_elevation) : "–"}
@@ -246,17 +246,17 @@ export default function GPXUploader({ onSave }) {
             </div>
           </div>
 
-          <div className="bg-stone-50 rounded-lg p-3 text-xs text-stone-600 flex flex-wrap gap-4">
+          <div className="bg-sky-50 rounded-lg p-3 text-xs text-slate-600 flex flex-wrap gap-4">
             <span>⬇️ Abstieg: <strong>{gpxData.elevation_loss_m} m</strong></span>
             {gpxData.min_elevation !== Infinity && (
               <span>🏔️ Min. Höhe: <strong>{Math.round(gpxData.min_elevation)} m</strong></span>
             )}
-            <span className="text-stone-400 ml-auto flex items-center gap-1">
+            <span className="text-slate-400 ml-auto flex items-center gap-1">
               <Zap className="w-3 h-3" /> Dauer nach Naismith-Formel geschätzt
             </span>
           </div>
 
-          <div className="relative h-72 md:h-96 rounded-xl overflow-hidden border-2 border-stone-200">
+          <div className="relative h-72 md:h-96 rounded-xl overflow-hidden border-2 border-sky-200">
             <MapContainer center={mapCenter} zoom={12} style={{ height: "100%", width: "100%" }}>
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

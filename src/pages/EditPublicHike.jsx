@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Camera, Loader2, Trash2 } from "lucide-react";
@@ -255,7 +255,7 @@ export default function EditPublicHike() {
 
   if (isLoadingAuth || isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center">
         <Loader2 className="w-6 h-6 animate-spin text-brand-500" />
       </div>
     );
@@ -263,9 +263,9 @@ export default function EditPublicHike() {
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="doghike-glass-card p-8 text-center">
-          <p className="text-xl text-stone-700 mb-4">Nur Admins können öffentliche Touren bearbeiten.</p>
+          <p className="text-xl text-slate-700 mb-4">Nur Admins können öffentliche Touren bearbeiten.</p>
           <Link to={createPageUrl("Hikes")}>
             <Button className="bg-brand-400 text-white hover:bg-brand-600">Zurück zu den Touren</Button>
           </Link>
@@ -276,9 +276,9 @@ export default function EditPublicHike() {
 
   if (!hike || !formData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="doghike-glass-card p-8 text-center">
-          <p className="text-xl text-stone-700 mb-4">Öffentliche Tour nicht gefunden</p>
+          <p className="text-xl text-slate-700 mb-4">Öffentliche Tour nicht gefunden</p>
           <Link to={createPageUrl("Hikes")}>
             <Button className="bg-brand-400 text-white hover:bg-brand-600">Zurück zu den Touren</Button>
           </Link>
@@ -288,11 +288,11 @@ export default function EditPublicHike() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
           <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`}>
-            <Button variant="ghost" className="pl-0 text-stone-600 hover:text-stone-800">
+            <Button variant="ghost" className="pl-0 text-slate-600 hover:text-slate-900">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Zurück zur Tour
             </Button>
@@ -301,8 +301,8 @@ export default function EditPublicHike() {
 
         <div className="doghike-glass-card p-6 md:p-8">
           <div className="mb-6">
-            <h1 className="text-2xl font-semibold text-stone-800">Öffentliche Tour bearbeiten</h1>
-            <p className="text-stone-500 mt-1">Änderungen werden direkt in Supabase gespeichert.</p>
+            <h1 className="text-2xl font-semibold text-slate-900">Öffentliche Tour bearbeiten</h1>
+            <p className="text-slate-500 mt-1">Änderungen werden direkt in Supabase gespeichert.</p>
           </div>
 
           <form
@@ -575,7 +575,7 @@ export default function EditPublicHike() {
                   className="hidden"
                   disabled={isUploadingPhotos || saveMutation.isPending}
                 />
-                <Button type="button" variant="outline" asChild disabled={isUploadingPhotos || saveMutation.isPending} className="border-brand-200 bg-white/75 text-stone-700 hover:bg-brand-50/50">
+                <Button type="button" variant="outline" asChild disabled={isUploadingPhotos || saveMutation.isPending} className="border-brand-200 bg-white/75 text-slate-700 hover:bg-brand-50/50">
                   <span className="cursor-pointer">
                     {isUploadingPhotos ? (
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -598,14 +598,14 @@ export default function EditPublicHike() {
                           className="h-32 w-full object-cover"
                         />
                       ) : (
-                        <div className="flex h-32 w-full items-center justify-center text-sm text-stone-400">
+                        <div className="flex h-32 w-full items-center justify-center text-sm text-slate-400">
                           Bild wird geladen...
                         </div>
                       )}
                       <button
                         type="button"
                         onClick={() => removePhotoUrl(photoUrl)}
-                        className="absolute top-2 right-2 rounded-full bg-white/90 p-1.5 text-stone-700 shadow-sm hover:bg-white"
+                        className="absolute top-2 right-2 rounded-full bg-white/90 p-1.5 text-slate-700 shadow-sm hover:bg-white"
                         title="Bild entfernen"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -614,7 +614,7 @@ export default function EditPublicHike() {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-stone-500">Noch keine Fotos ausgewählt.</p>
+                <p className="text-sm text-slate-500">Noch keine Fotos ausgewählt.</p>
               )}
             </div>
 
@@ -624,7 +624,7 @@ export default function EditPublicHike() {
                 Speichern
               </Button>
               <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`}>
-                <Button type="button" variant="outline" className="border-brand-200 bg-white/75 text-stone-700 hover:bg-brand-50/50">Abbrechen</Button>
+                <Button type="button" variant="outline" className="border-brand-200 bg-white/75 text-slate-700 hover:bg-brand-50/50">Abbrechen</Button>
               </Link>
             </div>
           </form>

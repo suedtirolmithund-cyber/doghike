@@ -1,4 +1,4 @@
-import { getAllHikes } from "@/api/sheetsClient";
+﻿import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Mountain, RotateCcw, Search } from "lucide-react";
@@ -75,7 +75,7 @@ export default function Hikes() {
         >
           <div className="flex flex-col gap-3">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <Input
                 placeholder="Tour oder Ort suchen..."
                 value={searchQuery}
@@ -251,8 +251,8 @@ export default function Hikes() {
             className="doghike-empty-state"
           >
             <Mountain className="doghike-empty-icon" />
-            <h3 className="mb-2 text-xl font-medium text-stone-700">Keine Touren gefunden</h3>
-            <p className="mx-auto max-w-xs text-sm text-stone-500">
+            <h3 className="mb-2 text-xl font-medium text-slate-700">Keine Touren gefunden</h3>
+            <p className="mx-auto max-w-xs text-sm text-slate-500">
               Passe Suche oder Filter an, um wieder passende Wanderungen zu sehen.
             </p>
           </motion.div>

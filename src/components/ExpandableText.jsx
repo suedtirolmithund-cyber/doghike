@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 /**
@@ -13,7 +13,7 @@ export default function ExpandableText({
   text,
   lines = 3,
   minChars = 150,
-  baseClassName = "text-stone-600 text-sm leading-relaxed",
+  baseClassName = "text-slate-600 text-sm leading-relaxed",
 }) {
   const [expanded, setExpanded] = useState(false);
 

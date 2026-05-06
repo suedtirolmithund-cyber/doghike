@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
@@ -83,7 +83,7 @@ export default function EditRoute() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-stone-400" />
+        <Loader2 className="w-8 h-8 animate-spin text-slate-400" />
       </div>
     );
   }
@@ -92,7 +92,7 @@ export default function EditRoute() {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
         <div className="text-center">
-          <p className="text-xl text-stone-700 mb-4">Route nicht gefunden</p>
+          <p className="text-xl text-slate-700 mb-4">Route nicht gefunden</p>
           <Link to={createPageUrl("Profile")}>
             <Button>Zurück zum Profil</Button>
           </Link>
@@ -102,7 +102,7 @@ export default function EditRoute() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
         <Link to={`${createPageUrl("RouteDetail")}?id=${routeId}`}>
           <Button variant="ghost" className="mb-3 md:mb-4" size="sm">
@@ -118,8 +118,8 @@ export default function EditRoute() {
           <div className="flex items-start gap-3 mb-6">
             <Map className="w-6 h-6 text-brand-700 flex-shrink-0 mt-1" />
             <div>
-              <h1 className="text-xl md:text-2xl font-bold text-stone-800">Route bearbeiten</h1>
-              <p className="text-xs text-stone-500 mt-0.5">Ändere den Streckenverlauf oder die Details</p>
+              <h1 className="text-xl md:text-2xl font-bold text-slate-900">Route bearbeiten</h1>
+              <p className="text-xs text-slate-500 mt-0.5">Ändere den Streckenverlauf oder die Details</p>
             </div>
           </div>
 
@@ -138,7 +138,7 @@ export default function EditRoute() {
             </div>
           ) : (
             <div className="mb-6">
-              <div className="rounded-xl overflow-hidden border border-stone-200 mb-3">
+              <div className="rounded-xl overflow-hidden border border-sky-200 mb-3">
                 <RoutePreviewMap coordinates={routeGeometry?.coordinates ?? []} />
               </div>
               {route?.route_type === "planned" && (
@@ -152,24 +152,24 @@ export default function EditRoute() {
           {routeGeometry && (
             <div className="doghike-soft-panel p-3 mb-6 grid grid-cols-2 md:grid-cols-4 gap-2 text-xs md:text-sm">
               <div>
-                <p className="text-stone-500">Distanz</p>
-                <p className="font-bold text-stone-800">{routeGeometry.distance_km} km</p>
+                <p className="text-slate-500">Distanz</p>
+                <p className="font-bold text-slate-900">{routeGeometry.distance_km} km</p>
               </div>
               {routeGeometry.duration_minutes && (
                 <div>
-                  <p className="text-stone-500">Dauer</p>
-                  <p className="font-bold text-stone-800">{formatDurationHours(routeGeometry.duration_minutes)}</p>
+                  <p className="text-slate-500">Dauer</p>
+                  <p className="font-bold text-slate-900">{formatDurationHours(routeGeometry.duration_minutes)}</p>
                 </div>
               )}
               {routeGeometry.elevation_gain_m && (
                 <div>
-                  <p className="text-stone-500">Aufstieg</p>
-                  <p className="font-bold text-stone-800">+{routeGeometry.elevation_gain_m} m</p>
+                  <p className="text-slate-500">Aufstieg</p>
+                  <p className="font-bold text-slate-900">+{routeGeometry.elevation_gain_m} m</p>
                 </div>
               )}
               <div>
-                <p className="text-stone-500">Wegpunkte</p>
-                <p className="font-bold text-stone-800">{routeGeometry.coordinates?.length ?? 0}</p>
+                <p className="text-slate-500">Wegpunkte</p>
+                <p className="font-bold text-slate-900">{routeGeometry.coordinates?.length ?? 0}</p>
               </div>
             </div>
           )}

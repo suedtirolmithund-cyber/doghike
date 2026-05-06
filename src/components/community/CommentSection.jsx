@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -136,7 +136,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
     <div className="space-y-6">
       {isAuthenticated && canComment && (
         <div className="doghike-glass-card p-4 md:p-6">
-          <h3 className="font-semibold text-stone-800 mb-3 md:mb-4 text-sm md:text-base">
+          <h3 className="font-semibold text-slate-900 mb-3 md:mb-4 text-sm md:text-base">
             Kommentar hinzufügen
           </h3>
           <Textarea
@@ -200,7 +200,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
                 checked={consentPublic}
                 onCheckedChange={setConsentPublic}
               />
-              <label htmlFor="comment-consent" className="text-sm text-stone-700 cursor-pointer flex-1">
+              <label htmlFor="comment-consent" className="text-sm text-slate-700 cursor-pointer flex-1">
                 Ich akzeptiere, dass mein Kommentar und meine Fotos öffentlich sichtbar sein können.
               </label>
             </div>
@@ -209,19 +209,19 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
       )}
 
       {isAuthenticated && !canComment && (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
+        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-sm text-yellow-800">
           Kommentare sind nur bei öffentlichen Wanderungen möglich.
         </div>
       )}
 
       <div className="space-y-3 md:space-y-4">
-        <h3 className="font-semibold text-stone-800 text-sm md:text-base">
+        <h3 className="font-semibold text-slate-900 text-sm md:text-base">
           Kommentare ({comments.length})
         </h3>
 
         {isLoading && (
           <div className="flex justify-center py-8">
-            <Loader2 className="w-6 h-6 text-stone-400 animate-spin" />
+            <Loader2 className="w-6 h-6 text-slate-400 animate-spin" />
           </div>
         )}
 
@@ -244,14 +244,14 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
                     />
                   )}
                   <div>
-                    <p className="font-semibold text-stone-800 text-sm md:text-base">
+                    <p className="font-semibold text-slate-900 text-sm md:text-base">
                       {authorName(comment)}
                     </p>
-                    <p className="text-xs md:text-sm text-stone-500">
+                    <p className="text-xs md:text-sm text-slate-500">
                       {format(new Date(comment.created_at), "dd.MM.yyyy 'um' HH:mm", { locale: de })}
                     </p>
                     {comment.reported && user?.id === comment.user_id && (
-                      <p className="text-xs text-amber-600 mt-1">
+                      <p className="text-xs text-yellow-600 mt-1">
                         Wartet auf Freigabe durch den Admin.
                       </p>
                     )}
@@ -262,14 +262,14 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
                     variant="ghost"
                     size="icon"
                     onClick={() => setDeleteId(comment.id)}
-                    className="text-stone-400 hover:text-red-600 w-7 h-7"
+                    className="text-slate-400 hover:text-red-600 w-7 h-7"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </Button>
                 )}
               </div>
 
-              <p className="text-stone-700 mb-3 text-sm md:text-base">{comment.text}</p>
+              <p className="text-slate-700 mb-3 text-sm md:text-base">{comment.text}</p>
 
               {(comment.photo_preview_url || (comment.photo_url && !comment.photo_url.startsWith("pending://") ? comment.photo_url : null)) && (
                 <img
@@ -284,8 +284,8 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
 
         {!isLoading && comments.length === 0 && (
           <div className="py-8 text-center">
-            <p className="text-stone-600 font-medium">Noch keine Kommentare</p>
-            <p className="mt-1 text-sm text-stone-400">Teile den ersten Eindruck zu dieser Tour.</p>
+            <p className="text-slate-600 font-medium">Noch keine Kommentare</p>
+            <p className="mt-1 text-sm text-slate-400">Teile den ersten Eindruck zu dieser Tour.</p>
           </div>
         )}
       </div>

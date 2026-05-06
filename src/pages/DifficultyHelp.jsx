@@ -1,4 +1,4 @@
-import { Mountain, PawPrint } from "lucide-react";
+﻿import { Mountain, PawPrint } from "lucide-react";
 import { useState } from "react";
 
 const humanLevels = [
@@ -38,8 +38,8 @@ const humanLevels = [
   {
     level: "T4",
     stufe: "Stufe 4",
-    color: "bg-orange-100 border-orange-300 text-orange-800",
-    badge: "bg-orange-500",
+    color: "bg-red-100 border-red-300 text-red-700",
+    badge: "bg-red-500",
     title: "Schwer - Alpiner Weg",
     desc: "Weglos oder stark ausgesetzt. Gute Orientierung, Trittsicherheit und alpine Erfahrung sind notwendig.",
     examples: "Gipfeltouren, alpine Übergänge, sehr steile Wege",
@@ -92,8 +92,8 @@ const dogLevels = [
   },
   {
     stufe: "Stufe 4",
-    color: "bg-orange-100 border-orange-300 text-orange-800",
-    badge: "bg-orange-500",
+    color: "bg-red-100 border-red-300 text-red-700",
+    badge: "bg-red-500",
     title: "Schwer - Nur für fitte Hunde",
     desc: "Ausgesetzte Abschnitte, Leitern oder Treppen, enge Felsdurchgänge. Der Hund muss gegebenenfalls getragen werden.",
     examples: "Klettersteige, hochalpine Wege",
@@ -117,7 +117,7 @@ export default function DifficultyHelp() {
   const levels = activeTab === "human" ? humanLevels : dogLevels;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 pt-4 md:pb-8 md:pt-20">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 pt-4 md:pb-8 md:pt-20">
       <div className="mx-auto max-w-2xl px-4 py-8">
         <div className="doghike-page-header justify-center text-center">
           <div className="doghike-page-icon">
@@ -135,7 +135,7 @@ export default function DifficultyHelp() {
           <button
             onClick={() => setActiveTab("human")}
             className={`flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-medium transition-all ${
-              activeTab === "human" ? "bg-brand-400 text-white shadow" : "text-stone-600 hover:bg-brand-50/50"
+              activeTab === "human" ? "bg-brand-400 text-white shadow" : "text-slate-600 hover:bg-brand-50/50"
             }`}
           >
             <Mountain className="h-4 w-4" />
@@ -144,7 +144,7 @@ export default function DifficultyHelp() {
           <button
             onClick={() => setActiveTab("dog")}
             className={`flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-medium transition-all ${
-              activeTab === "dog" ? "bg-brand-400 text-white shadow" : "text-stone-600 hover:bg-brand-50/50"
+              activeTab === "dog" ? "bg-brand-400 text-white shadow" : "text-slate-600 hover:bg-brand-50/50"
             }`}
           >
             <PawPrint className="h-4 w-4" />

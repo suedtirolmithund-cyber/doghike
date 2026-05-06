@@ -191,17 +191,17 @@ export default function RouteDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center">
-        <p className="text-stone-600">Lade Route...</p>
+      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center">
+        <p className="text-slate-600">Lade Route...</p>
       </div>
     );
   }
 
   if (!route) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-xl text-stone-700 mb-4">Route nicht gefunden</p>
+          <p className="text-xl text-slate-700 mb-4">Route nicht gefunden</p>
           <Link to={createPageUrl("Profile")}>
             <Button>Zurück zum Profil</Button>
           </Link>
@@ -263,7 +263,7 @@ export default function RouteDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
         <Link to={createPageUrl("Profile")}>
           <Button variant="ghost" className="mb-4">
@@ -283,15 +283,15 @@ export default function RouteDetail() {
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
                   <RouteIcon className="w-5 h-5 text-brand-700" />
-                  <span className="text-sm text-stone-500">
+                  <span className="text-sm text-slate-500">
                     {routeTypeLabel}
                   </span>
                 </div>
-                <h1 className="text-2xl md:text-3xl font-bold text-stone-800 mb-2">
+                <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
                   {route.name}
                 </h1>
                 {route.start_location && (
-                  <p className="text-stone-600">📍 {route.start_location}</p>
+                  <p className="text-slate-600">📍 {route.start_location}</p>
                 )}
               </div>
 
@@ -348,13 +348,13 @@ export default function RouteDetail() {
                   Erledigte Route
                 </span>
               ) : (
-                <span className="flex items-center gap-1 text-stone-500">
+                <span className="flex items-center gap-1 text-slate-500">
                   <EyeOff className="w-4 h-4" />
                   {visibilityLabel}
                 </span>
               )}
-              <span className="text-stone-400">•</span>
-              <span className="text-stone-500">
+              <span className="text-slate-400">•</span>
+              <span className="text-slate-500">
                 {route.created_at ? format(new Date(route.created_at), "dd.MM.yyyy") : ""}
               </span>
             </div>
@@ -368,7 +368,7 @@ export default function RouteDetail() {
             className="doghike-glass-card p-4 md:p-5"
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-stone-800">Routenverlauf</h2>
+              <h2 className="text-lg font-semibold text-slate-900">Routenverlauf</h2>
               {isOwner && route.route_type === "planned" && !editingRoute && (
                 <Button variant="outline" size="sm" onClick={() => setEditingRoute(true)}>
                   <Pencil className="w-4 h-4 mr-2" />
@@ -395,7 +395,7 @@ export default function RouteDetail() {
                 </Button>
               </div>
             ) : (
-              <div className="h-96 md:h-[500px] rounded-xl overflow-hidden border border-stone-200">
+              <div className="h-96 md:h-[500px] rounded-xl overflow-hidden border border-sky-200">
                 {route.waypoints?.length > 0 ? (
                   <MapContainer
                     center={route.waypoints[0]}
@@ -414,7 +414,7 @@ export default function RouteDetail() {
                     )}
                   </MapContainer>
                 ) : (
-                  <div className="flex h-full items-center justify-center bg-brand-50/35 text-sm text-stone-500">
+                  <div className="flex h-full items-center justify-center bg-brand-50/35 text-sm text-slate-500">
                     Keine Wegpunkte vorhanden
                   </div>
                 )}
@@ -429,52 +429,52 @@ export default function RouteDetail() {
             transition={{ delay: 0.2 }}
             className="doghike-glass-card p-5"
           >
-            <h2 className="text-lg font-semibold text-stone-800 mb-4">Details</h2>
+            <h2 className="text-lg font-semibold text-slate-900 mb-4">Details</h2>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               <div className="doghike-soft-panel text-center p-3">
                 <span className="mb-2 block text-xl">{TOUR_ICONS.distance}</span>
-                <p className="text-xl font-bold text-stone-800">{route.distance_km ?? "–"}</p>
-                <p className="text-xs text-stone-500">Kilometer</p>
+                <p className="text-xl font-bold text-slate-900">{route.distance_km ?? "–"}</p>
+                <p className="text-xs text-slate-500">Kilometer</p>
               </div>
               <div className="doghike-soft-panel text-center p-3">
                 <span className="mb-2 block text-xl">{TOUR_ICONS.duration}</span>
-                <p className="text-xl font-bold text-stone-800">
+                <p className="text-xl font-bold text-slate-900">
                   {formatDurationHours(effectiveDurationMinutes) || "–"}
                 </p>
-                <p className="text-xs text-stone-500">Gehzeit</p>
+                <p className="text-xs text-slate-500">Gehzeit</p>
               </div>
               <div className="doghike-soft-panel text-center p-3">
                 <span className="mb-2 block text-xl">{TOUR_ICONS.elevation}</span>
-                <p className="text-xl font-bold text-stone-800">
+                <p className="text-xl font-bold text-slate-900">
                   {route.elevation_gain_m ? `+${route.elevation_gain_m}` : "–"}
                 </p>
-                <p className="text-xs text-stone-500">Höhenmeter</p>
+                <p className="text-xs text-slate-500">Höhenmeter</p>
               </div>
               {route.avg_speed_kmh && (
                 <div className="doghike-soft-panel text-center p-3">
                   <span className="mb-2 block text-xl">{TOUR_ICONS.speed}</span>
-                  <p className="text-xl font-bold text-stone-800">{route.avg_speed_kmh}</p>
-                  <p className="text-xs text-stone-500">km/h</p>
+                  <p className="text-xl font-bold text-slate-900">{route.avg_speed_kmh}</p>
+                  <p className="text-xs text-slate-500">km/h</p>
                 </div>
               )}
               <div className="doghike-soft-panel text-center p-3">
                 <Map className="w-5 h-5 mx-auto mb-2 text-brand-700" />
-                <p className="text-xl font-bold text-stone-800">{route.waypoints?.length ?? 0}</p>
-                <p className="text-xs text-stone-500">Wegpunkte</p>
+                <p className="text-xl font-bold text-slate-900">{route.waypoints?.length ?? 0}</p>
+                <p className="text-xs text-slate-500">Wegpunkte</p>
               </div>
             </div>
 
             {route.description && (
               <div className="mb-4">
-                <h3 className="font-medium text-stone-800 mb-2">Beschreibung</h3>
+                <h3 className="font-medium text-slate-900 mb-2">Beschreibung</h3>
                 <ExpandableText text={route.description} lines={6} minChars={320} />
               </div>
             )}
 
             {route.notes && (
               <div>
-                <h3 className="font-medium text-stone-800 mb-2">Notizen</h3>
+                <h3 className="font-medium text-slate-900 mb-2">Notizen</h3>
                 <ExpandableText text={route.notes} lines={6} minChars={320} />
               </div>
             )}
@@ -496,24 +496,24 @@ export default function RouteDetail() {
                   <div className="flex-1">
                     <p className="font-semibold text-brand-600">Tour erledigt! 🎉</p>
                     {route.completed_date && (
-                      <p className="text-sm text-stone-500">Am {format(new Date(route.completed_date), "dd.MM.yyyy")}</p>
+                      <p className="text-sm text-slate-500">Am {format(new Date(route.completed_date), "dd.MM.yyyy")}</p>
                     )}
                     {route.completed_rating > 0 && (
                       <div className="flex gap-0.5 mt-1">
                         {[1,2,3,4,5].map(s => (
-                          <Star key={s} className={`w-4 h-4 ${s <= route.completed_rating ? "fill-yellow-400 text-yellow-400" : "text-stone-300"}`} />
+                          <Star key={s} className={`w-4 h-4 ${s <= route.completed_rating ? "fill-yellow-400 text-yellow-400" : "text-slate-300"}`} />
                         ))}
                       </div>
                     )}
                     {route.completed_notes && (
-                      <p className="text-sm text-stone-600 mt-1">{route.completed_notes}</p>
+                      <p className="text-sm text-slate-600 mt-1">{route.completed_notes}</p>
                     )}
                   </div>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setShowCompleteForm(true)}
-                    className="text-stone-500"
+                    className="text-slate-500"
                   >
                     Bearbeiten
                   </Button>
@@ -521,8 +521,8 @@ export default function RouteDetail() {
               ) : (
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <h3 className="font-semibold text-stone-800">Tour gemacht?</h3>
-                    <p className="text-sm text-stone-500">Markiere diese Route als erledigt</p>
+                    <h3 className="font-semibold text-slate-900">Tour gemacht?</h3>
+                    <p className="text-sm text-slate-500">Markiere diese Route als erledigt</p>
                   </div>
                   <Button
                     onClick={() => setShowCompleteForm(true)}
@@ -542,12 +542,12 @@ export default function RouteDetail() {
                     exit={{ opacity: 0, height: 0 }}
                     className="overflow-hidden"
                   >
-                    <div className="border-t border-stone-200 mt-4 pt-4 space-y-4">
-                      <h4 className="font-medium text-stone-800">Tour-Details ergänzen</h4>
+                    <div className="border-t border-sky-200 mt-4 pt-4 space-y-4">
+                      <h4 className="font-medium text-slate-900">Tour-Details ergänzen</h4>
 
                       {/* Date */}
                       <div>
-                        <label className="text-sm font-medium text-stone-700 mb-1 block">Datum der Tour</label>
+                        <label className="text-sm font-medium text-slate-700 mb-1 block">Datum der Tour</label>
                         <Input
                           type="date"
                           value={completeData.completed_date}
@@ -557,7 +557,7 @@ export default function RouteDetail() {
 
                       {/* Duration */}
                       <div>
-                        <label className="text-sm font-medium text-stone-700 mb-1 block">Tatsächliche Gehzeit (Stunden)</label>
+                        <label className="text-sm font-medium text-slate-700 mb-1 block">Tatsächliche Gehzeit (Stunden)</label>
                         <Input
                           type="number"
                           step="0.1"
@@ -570,7 +570,7 @@ export default function RouteDetail() {
                       {/* Difficulty */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="text-sm font-medium text-stone-700 mb-1 block">Schwierigkeit (Mensch) {TOUR_ICONS.human}</label>
+                          <label className="text-sm font-medium text-slate-700 mb-1 block">Schwierigkeit (Mensch) {TOUR_ICONS.human}</label>
                           <Select value={completeData.difficulty} onValueChange={(v) => setCompleteData({ ...completeData, difficulty: v })}>
                             <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
                             <SelectContent>
@@ -583,7 +583,7 @@ export default function RouteDetail() {
                           </Select>
                         </div>
                         <div>
-                          <label className="text-sm font-medium text-stone-700 mb-1 block">Schwierigkeit (Hund) {TOUR_ICONS.dog}</label>
+                          <label className="text-sm font-medium text-slate-700 mb-1 block">Schwierigkeit (Hund) {TOUR_ICONS.dog}</label>
                           <Select value={completeData.dog_difficulty} onValueChange={(v) => setCompleteData({ ...completeData, dog_difficulty: v })}>
                             <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
                             <SelectContent>
@@ -600,7 +600,7 @@ export default function RouteDetail() {
                       {/* Season & Water */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="text-sm font-medium text-stone-700 mb-1 block">Beste Jahreszeit {TOUR_ICONS.season}</label>
+                          <label className="text-sm font-medium text-slate-700 mb-1 block">Beste Jahreszeit {TOUR_ICONS.season}</label>
                           <Select value={completeData.season} onValueChange={(v) => setCompleteData({ ...completeData, season: v })}>
                             <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
                             <SelectContent>
@@ -613,7 +613,7 @@ export default function RouteDetail() {
                           </Select>
                         </div>
                         <div>
-                          <label className="mb-1 flex items-center gap-1 text-sm font-medium text-stone-700">
+                          <label className="mb-1 flex items-center gap-1 text-sm font-medium text-slate-700">
                             Wasser unterwegs <WaterIcon value="little" />
                           </label>
                           <Select value={completeData.water_availability} onValueChange={(v) => setCompleteData({ ...completeData, water_availability: v })}>
@@ -633,7 +633,7 @@ export default function RouteDetail() {
 
                       {/* Rating */}
                       <div>
-                        <label className="text-sm font-medium text-stone-700 mb-2 block">Bewertung</label>
+                        <label className="text-sm font-medium text-slate-700 mb-2 block">Bewertung</label>
                         <div className="flex gap-1">
                           {[1,2,3,4,5].map(star => (
                             <button
@@ -643,7 +643,7 @@ export default function RouteDetail() {
                               onMouseEnter={() => setHoverRating(star)}
                               onMouseLeave={() => setHoverRating(0)}
                             >
-                              <Star className={`w-8 h-8 transition-colors ${star <= (hoverRating || completeData.completed_rating) ? "fill-yellow-400 text-yellow-400" : "text-stone-300"}`} />
+                              <Star className={`w-8 h-8 transition-colors ${star <= (hoverRating || completeData.completed_rating) ? "fill-yellow-400 text-yellow-400" : "text-slate-300"}`} />
                             </button>
                           ))}
                         </div>
@@ -652,7 +652,7 @@ export default function RouteDetail() {
                       {/* Dogs */}
                       {myDogs.length > 0 && (
                         <div>
-                          <label className="text-sm font-medium text-stone-700 mb-2 block">{TOUR_ICONS.dog} Welche Hunde waren dabei?</label>
+                          <label className="text-sm font-medium text-slate-700 mb-2 block">{TOUR_ICONS.dog} Welche Hunde waren dabei?</label>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             {myDogs.map((dog) => (
                               <div
@@ -663,8 +663,8 @@ export default function RouteDetail() {
                                 <Checkbox checked={completeData.dogs.includes(dog.id)} onCheckedChange={() => toggleDog(dog.id)} />
                                 <img src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`} alt={dog.name} className="w-8 h-8 rounded-full object-cover" />
                                 <div>
-                                  <p className="text-sm font-medium text-stone-800">{dog.name}</p>
-                                  {dog.breed && <p className="text-xs text-stone-500">{dog.breed}</p>}
+                                  <p className="text-sm font-medium text-slate-900">{dog.name}</p>
+                                  {dog.breed && <p className="text-xs text-slate-500">{dog.breed}</p>}
                                 </div>
                               </div>
                             ))}
@@ -674,7 +674,7 @@ export default function RouteDetail() {
 
                       {/* Photos */}
                       <div>
-                        <label className="text-sm font-medium text-stone-700 mb-2 block">Fotos</label>
+                        <label className="text-sm font-medium text-slate-700 mb-2 block">Fotos</label>
                         <div className="flex flex-wrap gap-3">
                           {completeData.photos?.map((url, index) => (
                             <div key={url} className="relative group">
@@ -690,14 +690,14 @@ export default function RouteDetail() {
                           ))}
                           <label className="w-20 h-20 flex flex-col items-center justify-center border-2 border-dashed border-brand-200 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/40 transition-colors">
                             <input type="file" accept="image/*" multiple onChange={handlePhotoUpload} className="hidden" disabled={uploading} />
-                            {uploading ? <Loader2 className="w-5 h-5 text-stone-400 animate-spin" /> : <><Upload className="w-5 h-5 text-stone-400" /><span className="text-xs text-stone-400 mt-1">Fotos</span></>}
+                            {uploading ? <Loader2 className="w-5 h-5 text-slate-400 animate-spin" /> : <><Upload className="w-5 h-5 text-slate-400" /><span className="text-xs text-slate-400 mt-1">Fotos</span></>}
                           </label>
                         </div>
                       </div>
 
                       {/* Parking */}
                       <div>
-                        <label className="text-sm font-medium text-stone-700 mb-1 block">🅿️ Ausgangspunkt & Parken</label>
+                        <label className="text-sm font-medium text-slate-700 mb-1 block">🅿️ Ausgangspunkt & Parken</label>
                         <Textarea
                           placeholder="z.B. Großer Parkplatz am Pragser Wildsee..."
                           value={completeData.parking_info}
@@ -708,7 +708,7 @@ export default function RouteDetail() {
 
                       {/* Restaurant */}
                       <div>
-                        <label className="text-sm font-medium text-stone-700 mb-1 block">🍽️ Einkehrmöglichkeiten (optional)</label>
+                        <label className="text-sm font-medium text-slate-700 mb-1 block">🍽️ Einkehrmöglichkeiten (optional)</label>
                         <Textarea
                           placeholder="z.B. Seekofel Hütte (2324m)..."
                           value={completeData.restaurant_info}
@@ -719,7 +719,7 @@ export default function RouteDetail() {
 
                       {/* Hazard */}
                       <div>
-                        <label className="text-sm font-medium text-stone-700 mb-1 block">⚠️ Gefahrenstellen (optional)</label>
+                        <label className="text-sm font-medium text-slate-700 mb-1 block">⚠️ Gefahrenstellen (optional)</label>
                         <Textarea
                           placeholder="z.B. steile Passagen, Leitern, Kühe auf der Alm..."
                           value={completeData.hazard_notes}
@@ -730,7 +730,7 @@ export default function RouteDetail() {
 
                       {/* Notes */}
                       <div>
-                        <label className="text-sm font-medium text-stone-700 mb-1 block">Beschreibung & Notizen</label>
+                        <label className="text-sm font-medium text-slate-700 mb-1 block">Beschreibung & Notizen</label>
                         <Textarea
                           placeholder="Wie war die Tour? Besondere Erlebnisse, Highlights..."
                           value={completeData.completed_notes}
@@ -796,8 +796,8 @@ export default function RouteDetail() {
             >
               <div className="text-center mb-5">
                 <div className="text-4xl mb-3">🎉</div>
-                <h3 className="text-lg font-semibold text-stone-800">Tour erledigt!</h3>
-                <p className="text-stone-500 text-sm mt-2">
+                <h3 className="text-lg font-semibold text-slate-900">Tour erledigt!</h3>
+                <p className="text-slate-500 text-sm mt-2">
                   Möchtest du einen Tagebucheintrag für diese Wanderung erstellen?
                 </p>
               </div>

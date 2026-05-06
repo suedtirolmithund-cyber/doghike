@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+﻿import { useQuery } from "@tanstack/react-query";
 import { Cloud, Droplets, Wind, Sun, CloudRain, CloudSnow, CloudDrizzle, CloudLightning, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -36,7 +36,7 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
 
   if (isLoading) {
     return (
-      <div className="rounded-2xl border border-stone-200/70 bg-white/70 p-4 shadow-sm backdrop-blur-sm">
+      <div className="rounded-2xl border border-sky-200/70 bg-white/70 p-4 shadow-sm backdrop-blur-sm">
         <div className="flex items-center justify-center gap-2 text-brand-600">
           <Loader2 className="h-4 w-4 animate-spin" />
           <span className="text-xs">Wetterdaten werden geladen...</span>
@@ -54,9 +54,9 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl border border-stone-200/70 bg-white/70 p-4 shadow-[0_12px_28px_rgba(92,62,42,0.08)] backdrop-blur-sm"
+      className="rounded-2xl border border-sky-200/70 bg-white/70 p-4 shadow-[0_12px_28px_rgba(16,47,74,0.08)] backdrop-blur-sm"
     >
-      <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-800 sm:text-base">
+      <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900 sm:text-base">
         <Cloud className="h-4 w-4" />
         Aktuelles Wetter{location ? ` in ${location}` : ""}
       </h3>
@@ -67,10 +67,10 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
             <WeatherIcon className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-2xl font-bold leading-none text-stone-800">
+            <p className="text-2xl font-bold leading-none text-slate-900">
               {Math.round(cur.temperature_2m)}°C
             </p>
-            <p className="mt-1 text-xs text-stone-600">{label}</p>
+            <p className="mt-1 text-xs text-slate-600">{label}</p>
           </div>
         </div>
 
@@ -79,8 +79,8 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
             <div className="flex items-center gap-2 rounded-xl bg-white/45 px-3 py-2">
               <Droplets className="h-4 w-4 text-brand-600" />
               <div>
-                <p className="text-xs text-stone-500">Luftfeuchtigkeit</p>
-                <p className="text-sm font-semibold text-stone-800">
+                <p className="text-xs text-slate-500">Luftfeuchtigkeit</p>
+                <p className="text-sm font-semibold text-slate-900">
                   {Math.round(cur.relative_humidity_2m)}%
                 </p>
               </div>
@@ -90,8 +90,8 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
             <div className="flex items-center gap-2 rounded-xl bg-white/45 px-3 py-2">
               <Wind className="h-4 w-4 text-slate-600" />
               <div>
-                <p className="text-xs text-stone-500">Wind</p>
-                <p className="text-sm font-semibold text-stone-800">
+                <p className="text-xs text-slate-500">Wind</p>
+                <p className="text-sm font-semibold text-slate-900">
                   {Math.round(cur.wind_speed_10m)} km/h
                 </p>
               </div>
@@ -101,7 +101,7 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
       </div>
 
       <div className="mt-3 rounded-lg bg-white/50 px-3 py-2">
-        <p className="text-xs text-stone-500">
+        <p className="text-xs text-slate-500">
           Wetterbedingungen können sich schnell ändern. Prüfe die Vorhersagen vor deiner Wanderung! ·{" "}
           <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer" className="underline">Open-Meteo</a>
         </p>

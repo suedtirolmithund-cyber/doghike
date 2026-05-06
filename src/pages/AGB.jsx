@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export default function AGB() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-[#edf7ff] pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-[#edf7ff] pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <Link to={createPageUrl("Dashboard")}>
           <Button variant="ghost" className="mb-6">
@@ -13,18 +13,18 @@ export default function AGB() {
           </Button>
         </Link>
 
-        <div className="rounded-2xl border border-stone-200/70 bg-white/70 p-4 shadow-[0_14px_34px_rgba(92,62,42,0.1)] backdrop-blur-sm md:p-8">
+        <div className="rounded-2xl border border-sky-200/70 bg-white/70 p-4 shadow-[0_14px_34px_rgba(16,47,74,0.1)] backdrop-blur-sm md:p-8">
           <div className="doghike-page-header mb-2">
             <div className="doghike-page-icon">
               <FileText className="h-5 w-5" />
             </div>
             <h1 className="doghike-page-title">Nutzungsbedingungen</h1>
           </div>
-          <p className="text-xs text-stone-400 mb-8">
+          <p className="text-xs text-slate-400 mb-8">
             Letzte Aktualisierung: April 2026 · Gilt für doghike-suedtirol.vercel.app
           </p>
 
-          <div className="mb-8 rounded-2xl border border-stone-200/70 bg-white/58 p-5 text-stone-700">
+          <div className="mb-8 rounded-2xl border border-sky-200/70 bg-white/58 p-5 text-slate-700">
             <p className="text-sm leading-relaxed">
               Mit der Registrierung oder Nutzung dieser App stimmen Sie diesen Nutzungsbedingungen zu.
               Bitte lesen Sie sie sorgfältig durch.
@@ -33,18 +33,18 @@ export default function AGB() {
 
           <div className="space-y-6 md:space-y-8">
             <section>
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <FileText className="w-5 h-5 text-brand-600" />
                 1. Betreiber & Geltungsbereich
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
                   Diese Nutzungsbedingungen gelten für die Nutzung der Web-App
                   <strong> „DogHike“</strong>{" "}
                   (doghike-suedtirol.vercel.app), betrieben von:
                 </p>
-                <div className="bg-stone-50 rounded-xl p-4">
-                  <p className="font-semibold text-stone-800">Julia Schwärzer</p>
+                <div className="bg-sky-50 rounded-xl p-4">
+                  <p className="font-semibold text-slate-900">Julia Schwärzer</p>
                   <p>Südtirol, Italien</p>
             <p>E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-brand-600 underline">suedtirolmithund@gmail.com</a></p>
                 </div>
@@ -54,12 +54,12 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <UserCheck className="w-5 h-5 text-brand-600" />
                 2. Nutzerkonto & Registrierung
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Die Registrierung ist kostenlos. Sie benötigen eine gültige E-Mail-Adresse oder ein Google-Konto.</li>
                   <li>Sie sind für die Sicherheit Ihres Kontos verantwortlich. Teilen Sie Ihr Passwort nicht.</li>
@@ -70,18 +70,18 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <Image className="w-5 h-5 text-brand-600" />
                 3. Nutzerinhalte (Touren, Fotos, Kommentare)
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
                   Sie können Wanderberichte, Fotos, Bewertungen und Kommentare hochladen.
                   Dabei gelten folgende Regeln:
                 </p>
-                <div className="bg-stone-50 rounded-xl p-4 space-y-2">
-                  <p className="font-semibold text-stone-800">Sie bestätigen:</p>
+                <div className="bg-sky-50 rounded-xl p-4 space-y-2">
+                  <p className="font-semibold text-slate-900">Sie bestätigen:</p>
                   <ul className="list-disc pl-5 space-y-1 text-sm">
                     <li>Sie sind der Urheber der Inhalte oder haben die notwendigen Rechte.</li>
                     <li>Auf Fotos abgebildete Personen haben der Veröffentlichung zugestimmt.</li>
@@ -107,12 +107,12 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <Star className="w-5 h-5 text-brand-600" />
                 4. Bewertungen & Kommentare
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Bewertungen und Kommentare müssen auf eigener Erfahrung beruhen.</li>
                   <li>Gefälschte oder gekaufte Bewertungen sind verboten.</li>
@@ -122,12 +122,12 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <CreditCard className="w-5 h-5 text-brand-600" />
                 5. Premium-Mitgliedschaft (falls aktiviert)
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Preise und Laufzeiten werden auf der Premium-Seite klar ausgewiesen, sobald Premium technisch aktiviert ist.</li>
                   <li>Online-Zahlungen sind derzeit noch nicht live. Sobald sie aktiviert werden, sollen Zahlungen über Stripe Inc. abgewickelt werden.</li>
@@ -140,12 +140,12 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-amber-600" />
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-yellow-600" />
                 6. Verfügbarkeit & Haftung des Betreibers
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Die App wird „wie besehen" bereitgestellt. Wir übernehmen keine Garantie für ununterbrochene Verfügbarkeit.</li>
                   <li>Wartungsarbeiten können die Verfügbarkeit vorübergehend einschränken.</li>
@@ -159,12 +159,12 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
                 <XCircle className="w-5 h-5 text-red-600" />
                 7. Kontensperre & Kündigung
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>Der Betreiber kann Konten sperren oder löschen, wenn:</p>
                 <ul className="list-disc pl-6 space-y-1">
                   <li>diese Nutzungsbedingungen verletzt werden,</li>
@@ -174,12 +174,12 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <FileText className="w-5 h-5 text-brand-600" />
                 8. Änderungen der Nutzungsbedingungen
               </h2>
-              <div className="space-y-3 text-sm md:text-base text-stone-600 leading-relaxed">
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
                   Der Betreiber behält sich vor, diese Bedingungen für die Zukunft zu ändern.
                   Bei wesentlichen Änderungen werden registrierte Nutzer in geeigneter Weise informiert.
@@ -187,19 +187,19 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6 md:pt-8">
-              <h2 className="text-lg md:text-xl font-semibold text-stone-800 mb-3 flex items-center gap-2">
+            <section className="border-t border-sky-200 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <Mail className="w-5 h-5 text-brand-600" />
                 9. Kontakt & Beschwerden
               </h2>
-          <div className="rounded-xl bg-gradient-to-br from-brand-700 to-[#2777b8] p-4 text-sm text-white shadow-[0_12px_24px_rgba(124,77,52,0.16)]">
+          <div className="rounded-xl bg-gradient-to-br from-brand-700 to-[#2777b8] p-4 text-sm text-white shadow-[0_12px_24px_rgba(16,47,74,0.16)]">
                 <p className="font-semibold mb-1">Betreiberin: Julia Schwärzer</p>
             <p className="text-brand-50">E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-white underline">suedtirolmithund@gmail.com</a></p>
               </div>
             </section>
 
-            <section className="border-t border-stone-200 pt-6">
-              <div className="flex flex-wrap gap-4 text-xs text-stone-400">
+            <section className="border-t border-sky-200 pt-6">
+              <div className="flex flex-wrap gap-4 text-xs text-slate-400">
                 <span>Letzte Aktualisierung: April 2026</span>
                 <span>·</span>
             <Link to={createPageUrl("Datenschutz")} className="text-brand-600 underline">Datenschutz</Link>

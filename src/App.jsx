@@ -1,4 +1,4 @@
-import { Toaster } from "@/components/ui/toaster"
+﻿import { Toaster } from "@/components/ui/toaster"
 import CookieBanner from '@/components/CookieBanner';
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
@@ -39,11 +39,11 @@ class ErrorBoundary extends React.Component {
           window.location.reload();
 
           return (
-            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-stone-50 via-white to-brand-50/10 px-6 text-center">
+            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-sky-50 via-white to-brand-50/10 px-6 text-center">
               <div className="doghike-glass-card max-w-md p-6">
                 <Loader2 className="mx-auto mb-3 h-6 w-6 animate-spin text-brand-500" />
-                <h2 className="mb-2 text-lg font-semibold text-stone-800">App wird aktualisiert</h2>
-                <p className="text-sm text-stone-500">Ein neuer Stand wurde erkannt. DogHike lädt einmal neu.</p>
+                <h2 className="mb-2 text-lg font-semibold text-slate-900">App wird aktualisiert</h2>
+                <p className="text-sm text-slate-500">Ein neuer Stand wurde erkannt. DogHike lädt einmal neu.</p>
               </div>
             </div>
           );
@@ -71,7 +71,7 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
   : <>{children}</>;
 
 const PageFallback = () => (
-  <div className="flex min-h-[40vh] items-center justify-center bg-gradient-to-br from-stone-50 via-white to-brand-50/10">
+  <div className="flex min-h-[40vh] items-center justify-center bg-gradient-to-br from-sky-50 via-white to-brand-50/10">
     <Loader2 className="h-6 w-6 animate-spin text-brand-500" />
   </div>
 );

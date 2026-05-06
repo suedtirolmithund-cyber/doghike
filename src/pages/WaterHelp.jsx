@@ -1,4 +1,4 @@
-import { Droplets } from "lucide-react";
+﻿import { Droplets } from "lucide-react";
 import WaterIcon from "@/components/icons/WaterIcon";
 
 const waterLevels = [
@@ -13,7 +13,7 @@ const waterLevels = [
   {
     value: "little",
     label: "Wenig Wasser",
-    color: "bg-orange-50 border-orange-200 text-orange-800",
+    color: "bg-red-50 border-red-200 text-red-700",
     desc: "Es gibt vereinzelt Bachläufe oder Quellen, aber nicht zuverlässig oder nur saisonal.",
     examples: "Bergwege im Spätsommer, südexponierte Hänge",
     tip: "Plane mit eigenen Wasserreserven. Kleine Bachläufe können im Sommer austrocknen.",
@@ -38,7 +38,7 @@ const waterLevels = [
 
 export default function WaterHelp() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 pt-4 md:pb-8 md:pt-20">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 pt-4 md:pb-8 md:pt-20">
       <div className="mx-auto max-w-2xl px-4 py-8">
         <div className="doghike-page-header justify-center text-center">
           <div className="doghike-page-icon">
@@ -68,7 +68,7 @@ export default function WaterHelp() {
           ))}
         </div>
 
-        <div className="doghike-glass-card mt-6 p-4 text-sm text-stone-600">
+        <div className="doghike-glass-card mt-6 p-4 text-sm text-slate-600">
           <p className="mb-1 font-medium">Hinweis für Hundebesitzer</p>
           <p className="text-xs">
             Hunde brauchen bei Hitze und Belastung deutlich mehr Wasser. Plane bei wenig oder keinem Wasser zusätzlich eigenes Wasser für Mensch und Hund ein.

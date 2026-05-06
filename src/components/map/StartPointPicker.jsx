@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -78,7 +78,7 @@ export default function StartPointPicker({ latitude, longitude, onSelect }) {
   };
 
   return (
-    <div className="relative rounded-xl overflow-hidden border border-stone-300" style={{ height: "400px" }}>
+    <div className="relative rounded-xl overflow-hidden border border-sky-300" style={{ height: "400px" }}>
       <MapContainer
         center={position}
         zoom={10}
@@ -96,7 +96,7 @@ export default function StartPointPicker({ latitude, longitude, onSelect }) {
       </MapContainer>
       
       <div className="absolute top-4 left-4 right-4 bg-white/95 backdrop-blur-sm rounded-lg p-3 shadow-lg z-[1000] pointer-events-none">
-        <p className="text-sm text-stone-700">
+        <p className="text-sm text-slate-700">
           📍 Klicke auf die Karte, um den Ausgangspunkt zu setzen
         </p>
       </div>

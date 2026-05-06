@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+﻿import { useMemo } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Mountain } from "lucide-react";
 
@@ -80,11 +80,11 @@ export default function RouteElevationProfile({ coordinates, distance }) {
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
       <div className="doghike-soft-panel p-3">
         <p className="text-xs text-brand-600 font-medium">Distanz</p>
-        <p className="text-lg font-bold text-stone-900">{distance || totalDistance.toFixed(1)} km</p>
+        <p className="text-lg font-bold text-slate-950">{distance || totalDistance.toFixed(1)} km</p>
         </div>
-        <div className="bg-orange-50 rounded-lg p-3 border border-orange-200">
-          <p className="text-xs text-orange-600 font-medium">Höhenunterschied</p>
-          <p className="text-lg font-bold text-orange-900">{Math.round(elevationGain)} m</p>
+        <div className="bg-red-50 rounded-lg p-3 border border-red-200">
+          <p className="text-xs text-red-500 font-medium">Höhenunterschied</p>
+          <p className="text-lg font-bold text-red-800">{Math.round(elevationGain)} m</p>
         </div>
         <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
           <p className="text-xs text-purple-600 font-medium">Max. Höhe</p>
@@ -94,7 +94,7 @@ export default function RouteElevationProfile({ coordinates, distance }) {
 
       {/* Elevation Chart */}
       <div className="doghike-glass-card rounded-xl p-3 md:p-4 overflow-x-auto">
-        <h3 className="text-sm font-semibold text-stone-800 mb-3 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
           <Mountain className="w-4 h-4" />
           Höhenprofil
         </h3>

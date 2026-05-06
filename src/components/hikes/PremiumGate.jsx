@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Lock, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,25 +10,25 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-3xl p-8 border border-stone-200 shadow-sm"
+        className="bg-white rounded-3xl p-8 border border-sky-200 shadow-sm"
       >
-        <div className="w-14 h-14 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-5">
-          <Crown className="w-7 h-7 text-amber-500" />
+        <div className="w-14 h-14 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-5">
+          <Crown className="w-7 h-7 text-yellow-500" />
         </div>
 
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-semibold text-stone-800 mb-2">Mehr Infos mit Premium</h2>
-          <p className="text-stone-500">
-            Die Vorschau zu <span className="font-medium text-stone-700">{hikeName}</span> ist sichtbar.
+          <h2 className="text-2xl font-semibold text-slate-900 mb-2">Mehr Infos mit Premium</h2>
+          <p className="text-slate-500">
+            Die Vorschau zu <span className="font-medium text-slate-700">{hikeName}</span> ist sichtbar.
             Die ganzen Details, Fotos und Zusatzinfos gibt es mit Premium.
           </p>
         </div>
 
-        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 mb-6 text-left">
-          <p className="font-semibold text-amber-800 mb-3 flex items-center gap-2">
+        <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-5 mb-6 text-left">
+          <p className="font-semibold text-yellow-800 mb-3 flex items-center gap-2">
             <Crown className="w-4 h-4" /> Mit Premium siehst du:
           </p>
-          <ul className="space-y-2 text-sm text-amber-700">
+          <ul className="space-y-2 text-sm text-yellow-700">
             <li className="flex items-center gap-2">✓ komplette Beschreibung und Tipps</li>
             <li className="flex items-center gap-2">✓ weitere Fotos und Zusatzinfos</li>
             <li className="flex items-center gap-2">✓ Parken, Einkehr und Hinweise</li>
@@ -38,7 +38,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Link to={createPageUrl("Premium")}>
-            <Button className="bg-amber-500 hover:bg-amber-600 text-white">
+            <Button className="bg-yellow-500 hover:bg-yellow-500 text-white">
               <Crown className="w-5 h-5 mr-2" />
               Jetzt Premium werden
             </Button>
@@ -54,7 +54,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-slate-50">
       {/* Blurred preview */}
       {coverPhoto && (
         <div className="relative h-[40vh] overflow-hidden">
@@ -74,23 +74,23 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-3xl p-10 border border-stone-200 shadow-xl"
+          className="bg-white rounded-3xl p-10 border border-sky-200 shadow-xl"
         >
-          <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Crown className="w-8 h-8 text-amber-500" />
+          <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Crown className="w-8 h-8 text-yellow-500" />
           </div>
 
-          <h2 className="text-2xl font-semibold text-stone-800 mb-2">Premium-Tour</h2>
-          <p className="text-stone-500 mb-2 text-lg font-medium">{hikeName}</p>
-          <p className="text-stone-500 mb-8">
+          <h2 className="text-2xl font-semibold text-slate-900 mb-2">Premium-Tour</h2>
+          <p className="text-slate-500 mb-2 text-lg font-medium">{hikeName}</p>
+          <p className="text-slate-500 mb-8">
             Diese Tour ist exklusiv für Premium-Mitglieder verfügbar. Schließe ein Abo ab, um alle Details, Karten, Fotos und Tipps zu sehen.
           </p>
 
-          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 mb-8 text-left">
-            <p className="font-semibold text-amber-800 mb-3 flex items-center gap-2">
+          <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-5 mb-8 text-left">
+            <p className="font-semibold text-yellow-800 mb-3 flex items-center gap-2">
               <Crown className="w-4 h-4" /> Premium beinhaltet:
             </p>
-            <ul className="space-y-2 text-sm text-amber-700">
+            <ul className="space-y-2 text-sm text-yellow-700">
               <li className="flex items-center gap-2">✓ Zugang zu allen Premium-Touren</li>
               <li className="flex items-center gap-2">✓ Detaillierte Routenbeschreibungen & Karten</li>
               <li className="flex items-center gap-2">✓ Exklusive Fotos & Insider-Tipps</li>
@@ -99,13 +99,13 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
           </div>
 
           <Link to={createPageUrl("Premium")}>
-            <Button className="w-full bg-amber-500 hover:bg-amber-600 text-white h-12 text-base font-medium mb-3">
+            <Button className="w-full bg-yellow-500 hover:bg-yellow-500 text-white h-12 text-base font-medium mb-3">
               <Crown className="w-5 h-5 mr-2" />
               Jetzt Premium werden
             </Button>
           </Link>
           <Link to={createPageUrl("Hikes")}>
-            <Button variant="ghost" className="w-full text-stone-500">
+            <Button variant="ghost" className="w-full text-slate-500">
               Zurück zu allen Touren
             </Button>
           </Link>

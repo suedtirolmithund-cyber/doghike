@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Polyline, useMapEvents, Marker } from "react-leaflet";
+﻿import { MapContainer, TileLayer, Polyline, useMapEvents, Marker } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Trash2, Undo } from "lucide-react";
 import L from "leaflet";
@@ -74,7 +74,7 @@ export default function RouteEditor({ coordinates = [], startPoint = null, onCha
         </Button>
       </div>
 
-      <div className="rounded-2xl overflow-hidden border border-stone-200 shadow-sm" style={{ height: "400px" }}>
+      <div className="rounded-2xl overflow-hidden border border-sky-200 shadow-sm" style={{ height: "400px" }}>
         <MapContainer
           center={center}
           zoom={12}
@@ -108,7 +108,7 @@ export default function RouteEditor({ coordinates = [], startPoint = null, onCha
         </MapContainer>
       </div>
 
-      <p className="text-sm text-stone-500">
+      <p className="text-sm text-slate-500">
         💡 Tipp: Klicken Sie auf die Karte, um Punkte der Route hinzuzufügen. 
         {coordinates.length > 0 && ` (${coordinates.length} Punkt${coordinates.length !== 1 ? 'e' : ''})`}
       </p>

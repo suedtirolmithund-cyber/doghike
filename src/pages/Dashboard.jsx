@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
@@ -100,7 +100,7 @@ export default function Dashboard() {
   const seasonLabel = { spring: "Frühling", summer: "Sommer", autumn: "Herbst", winter: "Winter" }[season];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
       {/* Hero */}
       <div className="relative h-[520px] overflow-hidden bg-gradient-to-br from-[#d8c6b7] via-[#b9a48f] to-[#6f8583] sm:h-[560px] md:h-[507px]">
         <div
@@ -203,9 +203,9 @@ export default function Dashboard() {
         {hikesWithCoords.length > 0 && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="mb-12">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-light text-stone-800">Übersichtskarte</h2>
+              <h2 className="text-2xl font-light text-slate-900">Übersichtskarte</h2>
               <Link to={createPageUrl("MapView")}>
-                <Button variant="ghost" className="text-stone-600 hover:text-stone-800">
+                <Button variant="ghost" className="text-slate-600 hover:text-slate-900">
                   <Map className="w-4 h-4 mr-2" /> Große Karte
                 </Button>
               </Link>
@@ -218,11 +218,11 @@ export default function Dashboard() {
         <div className="mb-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <div>
-              <h2 className="text-2xl font-light text-stone-800">
+              <h2 className="text-2xl font-light text-slate-900">
                 {searchQuery ? "Suchergebnisse" : "Unsere Wandertipps für dich"}
               </h2>
               {!searchQuery && (
-                <p className="text-sm text-stone-400 mt-0.5">
+                <p className="text-sm text-slate-400 mt-0.5">
                   Passend zur aktuellen Jahreszeit - {seasonLabel} & Ganzjährig
                 </p>
               )}
@@ -230,13 +230,13 @@ export default function Dashboard() {
             <div className="flex items-center gap-3">
               {!isAuthenticated && (
                 <Link to={createPageUrl("Login")}>
-                  <Button variant="outline" className="text-stone-700 border-stone-300">
+                  <Button variant="outline" className="text-slate-700 border-sky-300">
                     <LogIn className="w-4 h-4 mr-2" /> Anmelden
                   </Button>
                 </Link>
               )}
               <Link to={createPageUrl("Hikes")}>
-                <Button variant="ghost" className="text-stone-600 hover:text-stone-800">
+                <Button variant="ghost" className="text-slate-600 hover:text-slate-900">
                   Alle anzeigen <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
@@ -246,7 +246,7 @@ export default function Dashboard() {
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="h-72 bg-stone-100 rounded-2xl animate-pulse" />
+                <div key={i} className="h-72 bg-sky-100 rounded-2xl animate-pulse" />
               ))}
             </div>
           ) : visibleHikes.length > 0 ? (
@@ -263,7 +263,7 @@ export default function Dashboard() {
                     variant="outline"
                     size="lg"
                     onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                    className="gap-2 border-stone-300 text-stone-700 hover:bg-stone-50"
+                    className="gap-2 border-sky-300 text-slate-700 hover:bg-sky-50"
                   >
                     <ChevronDown className="w-4 h-4" />
                     10 weitere laden ({filteredHikes.length - visibleCount} übrig)
@@ -275,10 +275,10 @@ export default function Dashboard() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               className="doghike-empty-state">
               <Mountain className="doghike-empty-icon" />
-              <h3 className="text-xl font-medium text-stone-700 mb-2">
+              <h3 className="text-xl font-medium text-slate-700 mb-2">
                 {searchQuery ? "Keine Touren gefunden" : "Noch keine Touren"}
               </h3>
-              <p className="mx-auto max-w-xs text-sm text-stone-500">
+              <p className="mx-auto max-w-xs text-sm text-slate-500">
                 {searchQuery ? "Passe deine Suche an, um weitere Wanderungen zu entdecken." : "Sobald Touren verfügbar sind, erscheinen sie hier."}
               </p>
               {searchQuery && (

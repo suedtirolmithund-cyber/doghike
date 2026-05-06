@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, useMapEvents } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Undo, Trash2, Save, Loader2 } from "lucide-react";
@@ -121,7 +121,7 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
 
   return (
     <div className="space-y-3 md:space-y-4">
-        <div className="doghike-soft-panel p-3 md:p-4 text-xs md:text-sm text-stone-700">
+        <div className="doghike-soft-panel p-3 md:p-4 text-xs md:text-sm text-slate-700">
         <p className="font-medium mb-2">📍 So funktioniert's:</p>
         <ol className="list-decimal pl-4 md:pl-5 space-y-1">
           <li>Klicke auf die Karte, um Wegpunkte zu setzen</li>
@@ -135,13 +135,13 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
           </div>
         )}
         {waypoints.length > 0 && !isCalculating && (
-        <p className="mt-3 font-semibold text-stone-800 text-xs md:text-sm">
+        <p className="mt-3 font-semibold text-slate-900 text-xs md:text-sm">
             Wegpunkte: {waypoints.length} • Distanz: {routeDistance} km
           </p>
         )}
       </div>
 
-      <div className="relative h-64 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-stone-200">
+      <div className="relative h-64 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-sky-200">
         <MapContainer
           center={[46.5, 11.9]}
           zoom={10}

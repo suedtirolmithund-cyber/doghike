@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, useMapEvents, Popup, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -312,7 +312,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
     <div className="space-y-3 md:space-y-4">
       {/* Ortssuche */}
       <div className="doghike-soft-panel p-3 md:p-4">
-        <p className="font-medium text-xs md:text-sm text-stone-800 mb-2">🔍 Ort suchen</p>
+        <p className="font-medium text-xs md:text-sm text-slate-900 mb-2">🔍 Ort suchen</p>
         <div className="flex gap-2">
           <Input
             placeholder="z.B. Pragser Wildsee, Drei Zinnen..."
@@ -342,7 +342,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
                 onClick={() => handleSelectLocation(result)}
             className="w-full text-left p-2 text-xs md:text-sm rounded border border-brand-100 bg-white/70 hover:bg-brand-50/50 transition-colors"
               >
-                <p className="font-medium text-stone-800">{result.display_name}</p>
+                <p className="font-medium text-slate-900">{result.display_name}</p>
               </button>
             ))}
           </div>
@@ -352,8 +352,8 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
         <div className="doghike-soft-panel p-3 md:p-4">
         <div className="flex items-start justify-between mb-2">
           <div>
-            <p className="font-medium text-xs md:text-sm text-stone-800 mb-1">📍 Routenplaner</p>
-            <p className="text-xs text-stone-600">
+            <p className="font-medium text-xs md:text-sm text-slate-900 mb-1">📍 Routenplaner</p>
+            <p className="text-xs text-slate-600">
               {isEditing ? 'Ziehe Wegpunkte um sie zu verschieben' : 'Klicke auf die Karte um Wegpunkte zu setzen'}
             </p>
           <p className="text-xs text-brand-600 mt-1">
@@ -389,18 +389,18 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
           </div>
         )}
         {waypoints.length > 0 && !isCalculating && (
-          <div className="mt-2 pt-2 border-t border-stone-300 space-y-2">
+          <div className="mt-2 pt-2 border-t border-sky-300 space-y-2">
             <div className="flex items-center justify-between text-xs md:text-sm">
-        <span className="text-stone-600">Wegpunkte: <strong className="text-stone-800">{waypoints.length}</strong></span>
-        <span className="text-stone-600">Distanz: <strong className="text-stone-800">{routeDistance} km</strong></span>
+        <span className="text-slate-600">Wegpunkte: <strong className="text-slate-900">{waypoints.length}</strong></span>
+        <span className="text-slate-600">Distanz: <strong className="text-slate-900">{routeDistance} km</strong></span>
             </div>
             {waypoints.length >= 2 && routeDurationMin > 0 && (
       <div className="rounded-lg border border-brand-100 bg-white/70 px-3 py-2 flex flex-wrap gap-3 items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="text-lg">⏱️</span>
                   <div>
-                    <p className="text-xs text-stone-500 leading-none">Geschätzte Gehzeit</p>
-                    <p className="font-bold text-stone-800 text-sm md:text-base">
+                    <p className="text-xs text-slate-500 leading-none">Geschätzte Gehzeit</p>
+                    <p className="font-bold text-slate-900 text-sm md:text-base">
                       {formatDurationHours(routeDurationMin)}
                     </p>
                   </div>
@@ -409,19 +409,19 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
                   <div className="flex items-center gap-2">
                     <span className="text-lg">⛰️</span>
                     <div>
-                      <p className="text-xs text-stone-500 leading-none">Höhenmeter</p>
-        <p className="font-bold text-stone-800 text-sm md:text-base">+{routeElevationGain} m</p>
+                      <p className="text-xs text-slate-500 leading-none">Höhenmeter</p>
+        <p className="font-bold text-slate-900 text-sm md:text-base">+{routeElevationGain} m</p>
                     </div>
                   </div>
                 )}
-                <p className="text-xs text-stone-400 w-full">Nach Naismith-Regel (5 km/h + 600 Hm/h)</p>
+                <p className="text-xs text-slate-400 w-full">Nach Naismith-Regel (5 km/h + 600 Hm/h)</p>
               </div>
             )}
           </div>
         )}
       </div>
 
-      <div className="relative h-[60vw] min-h-64 max-h-72 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-stone-200">
+      <div className="relative h-[60vw] min-h-64 max-h-72 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-sky-200">
         <MapContainer
           center={waypoints.length > 0 ? waypoints[0] : [46.5, 11.9]}
           zoom={waypoints.length > 0 ? 12 : 10}

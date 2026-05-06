@@ -43,7 +43,7 @@ export default function Premium() {
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
             <Link to={createPageUrl("Hikes")}>
-              <Button variant="ghost" className="mb-6 text-stone-600">
+              <Button variant="ghost" className="mb-6 text-slate-600">
                 <ArrowLeft className="w-4 h-4 mr-2" /> Zurück
               </Button>
             </Link>
@@ -54,11 +54,11 @@ export default function Premium() {
             animate={{ opacity: 1, y: 0 }}
             className="doghike-empty-state"
           >
-            <div className="doghike-page-icon mx-auto mb-5 h-14 w-14 text-stone-500">
+            <div className="doghike-page-icon mx-auto mb-5 h-14 w-14 text-slate-500">
               <Crown className="h-7 w-7" />
             </div>
             <h1 className="doghike-page-title mb-3">Premium ist noch nicht aktiv</h1>
-            <p className="text-stone-500">
+            <p className="text-slate-500">
               Die Premium-Funktionen sind im Code vorbereitet, werden für die aktuelle Testphase aber noch nicht für Nutzer freigeschaltet.
             </p>
           </motion.div>
@@ -72,7 +72,7 @@ export default function Premium() {
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
           <Link to={createPageUrl("Hikes")}>
-            <Button variant="ghost" className="mb-6 text-stone-600">
+            <Button variant="ghost" className="mb-6 text-slate-600">
               <ArrowLeft className="w-4 h-4 mr-2" /> Zurück
             </Button>
           </Link>
@@ -87,8 +87,8 @@ export default function Premium() {
             <div className="doghike-page-icon mx-auto mb-6 h-16 w-16">
               <Crown className="h-8 w-8" />
             </div>
-            <h2 className="mb-3 text-3xl font-semibold text-stone-800">Du bist Premium!</h2>
-            <p className="mb-8 text-stone-500">
+            <h2 className="mb-3 text-3xl font-semibold text-slate-900">Du bist Premium!</h2>
+            <p className="mb-8 text-slate-500">
               Du hast Zugang zu allen exklusiven Premium-Touren auf DogHike.
             </p>
             <Link to={createPageUrl("Hikes")}>
@@ -107,7 +107,7 @@ export default function Premium() {
               <p className="doghike-page-subtitle">Entdecke exklusive hundefreundliche Touren in Südtirol</p>
             </div>
 
-            <div className="mb-6 overflow-hidden rounded-2xl border border-[#d8b9a7]/70 bg-gradient-to-br from-[#d7a186] via-[#c8876b] to-[#a86b55] p-8 text-white shadow-[0_20px_46px_rgba(92,62,42,0.18)]">
+            <div className="mb-6 overflow-hidden rounded-2xl border border-[#d8b9a7]/70 bg-gradient-to-br from-[#d7a186] via-[#c8876b] to-[#a86b55] p-8 text-white shadow-[0_20px_46px_rgba(16,47,74,0.18)]">
               <div className="flex items-baseline gap-2 mb-1">
                 <span className="text-5xl font-bold">4,99 €</span>
                 <span className="text-white/75">/ Monat</span>
@@ -148,7 +148,7 @@ export default function Premium() {
                 <Star key={star} className="w-5 h-5 fill-[#d94a3a] text-[#d94a3a]" />
               ))}
             </div>
-            <p className="text-center text-stone-500 text-sm italic">
+            <p className="text-center text-slate-500 text-sm italic">
               "Endlich eine App, die wirklich auf unsere Vierbeiner ausgerichtet ist!" - Martina S.
             </p>
           </motion.div>

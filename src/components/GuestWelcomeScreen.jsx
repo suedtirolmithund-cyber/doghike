@@ -300,7 +300,7 @@ export default function GuestWelcomeScreen() {
                 placeholder="E-Mail Adresse"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-stone-900 outline-none placeholder:text-stone-500"
+                className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-slate-950 outline-none placeholder:text-slate-500"
                 autoComplete="email"
                 required
               />
@@ -337,7 +337,7 @@ export default function GuestWelcomeScreen() {
                 placeholder="Neues Passwort bestätigen"
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
-                className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-stone-900 outline-none placeholder:text-stone-500"
+                className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-slate-950 outline-none placeholder:text-slate-500"
                 autoComplete="new-password"
                 required
               />
@@ -361,7 +361,7 @@ export default function GuestWelcomeScreen() {
                   placeholder="E-Mail Adresse"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
-                  className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-stone-900 outline-none placeholder:text-stone-500"
+                  className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-slate-950 outline-none placeholder:text-slate-500"
                   autoComplete="email"
                   required
                 />
@@ -388,7 +388,7 @@ export default function GuestWelcomeScreen() {
                         placeholder="Passwort bestätigen"
                         value={confirmPassword}
                         onChange={(event) => setConfirmPassword(event.target.value)}
-                        className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-stone-900 outline-none placeholder:text-stone-500"
+                        className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-slate-950 outline-none placeholder:text-slate-500"
                         autoComplete="new-password"
                       />
                       <div className="flex items-start gap-3 px-1">
@@ -514,14 +514,14 @@ function PasswordField({ showPassword, setShowPassword, value, onChange, placeho
         placeholder={placeholder}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 pr-12 text-base text-stone-900 outline-none placeholder:text-stone-500"
+        className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 pr-12 text-base text-slate-950 outline-none placeholder:text-slate-500"
         autoComplete={autoComplete}
         required
       />
       <button
         type="button"
         onClick={() => setShowPassword((value) => !value)}
-        className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-400"
+        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
         tabIndex={-1}
         aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
       >

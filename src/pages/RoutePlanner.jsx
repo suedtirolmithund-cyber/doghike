@@ -188,10 +188,10 @@ function ElevationChart({ profile }) {
   return (
     <div className="doghike-glass-card mt-4 rounded-xl p-3">
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-xs font-semibold text-stone-600 uppercase tracking-wide flex items-center gap-1">
+        <h4 className="text-xs font-semibold text-slate-600 uppercase tracking-wide flex items-center gap-1">
           <Mountain className="w-3.5 h-3.5" /> Höhenprofil
         </h4>
-        <div className="flex gap-3 text-xs text-stone-500">
+        <div className="flex gap-3 text-xs text-slate-500">
           <span className="text-brand-400 font-medium">↑ {gain} m</span>
           <span className="text-red-500 font-medium">↓ {loss} m</span>
           <span>{minEle}–{maxEle} m</span>
@@ -372,11 +372,11 @@ function SmartRoutePlanner({ onRouteReady }) {
         {ROUTING_MODES.map((m) => (
           <button key={m.id} onClick={() => setRoutingMode(m.id)}
             className={`flex-1 rounded-lg px-2 py-2 text-center text-xs font-medium transition-all ${
-              routingMode === m.id ? "bg-brand-100 text-brand-800 shadow-sm" : "text-stone-500 hover:text-stone-700"
+              routingMode === m.id ? "bg-brand-100 text-brand-800 shadow-sm" : "text-slate-500 hover:text-slate-700"
             }`}
           >
             <div>{m.label}</div>
-            <div className="text-[10px] font-normal text-stone-400 mt-0.5 hidden sm:block">{m.desc}</div>
+            <div className="text-[10px] font-normal text-slate-400 mt-0.5 hidden sm:block">{m.desc}</div>
           </button>
         ))}
       </div>
@@ -393,7 +393,7 @@ function SmartRoutePlanner({ onRouteReady }) {
 
         <button
           onClick={() => setMapType((t) => t === "standard" ? "topo" : "standard")}
-          className="flex h-10 shrink-0 items-center gap-1.5 rounded-xl border border-brand-100 bg-white/70 px-3 text-xs font-medium text-stone-600 hover:bg-brand-50/40"
+          className="flex h-10 shrink-0 items-center gap-1.5 rounded-xl border border-brand-100 bg-white/70 px-3 text-xs font-medium text-slate-600 hover:bg-brand-50/40"
         >
           <Layers className="w-3.5 h-3.5" />
           {mapType === "standard" ? "Topo" : "Standard"}
@@ -429,7 +429,7 @@ function SmartRoutePlanner({ onRouteReady }) {
       )}
 
       {/* Map */}
-      <div className="relative h-[68vw] min-h-[310px] max-h-[500px] overflow-hidden rounded-xl border border-stone-200 shadow-sm md:h-[440px] md:max-h-none">
+      <div className="relative h-[68vw] min-h-[310px] max-h-[500px] overflow-hidden rounded-xl border border-sky-200 shadow-sm md:h-[440px] md:max-h-none">
         <MapContainer center={[46.5, 11.3]} zoom={10} style={{ height: "100%", width: "100%" }} scrollWheelZoom={false}>
           <TileLayer url={tile.url} attribution={tile.attribution} />
           <MapClickHandler onMapClick={handleMapClick} />
@@ -463,8 +463,8 @@ function SmartRoutePlanner({ onRouteReady }) {
               <Popup>
                 <div className="text-xs">
                   <p className="font-semibold">{i === 0 ? "Start" : i === waypoints.length - 1 ? "Ziel" : `Wegpunkt ${wp.label}`}</p>
-                  <p className="text-stone-400">{wp.lat.toFixed(5)}, {wp.lng.toFixed(5)}</p>
-                  <p className="text-stone-400 italic">Ziehen zum Verschieben</p>
+                  <p className="text-slate-400">{wp.lat.toFixed(5)}, {wp.lng.toFixed(5)}</p>
+                  <p className="text-slate-400 italic">Ziehen zum Verschieben</p>
                   <button
                     onClick={() => removeWaypoint(i)}
                     className="mt-1 text-red-500 hover:underline text-xs flex items-center gap-1"
@@ -478,28 +478,28 @@ function SmartRoutePlanner({ onRouteReady }) {
         </MapContainer>
 
         {waypoints.length === 0 && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 text-xs text-stone-600 shadow pointer-events-none">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 text-xs text-slate-600 shadow pointer-events-none">
             Tippe auf die Karte um Wegpunkte zu setzen
           </div>
         )}
         {waypoints.length === 1 && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 text-xs text-stone-600 shadow pointer-events-none">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 text-xs text-slate-600 shadow pointer-events-none">
             Setze einen weiteren Punkt für die Route
           </div>
         )}
         {route && waypoints.length >= 2 && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-xl px-3 py-1.5 text-[10px] text-stone-500 shadow pointer-events-none">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-xl px-3 py-1.5 text-[10px] text-slate-500 shadow pointer-events-none">
             Route anklicken → Wegpunkt einfügen · Marker ziehen → verschieben
           </div>
         )}
 
         {calculating && (
-          <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs text-stone-600 flex items-center gap-1.5 shadow">
+          <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs text-slate-600 flex items-center gap-1.5 shadow">
             <Loader2 className="w-3.5 h-3.5 animate-spin text-brand-600" /> Route wird berechnet...
           </div>
         )}
 
-        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 text-[10px] font-medium text-stone-500 shadow">
+        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 text-[10px] font-medium text-slate-500 shadow">
           {tile.label}
         </div>
       </div>
@@ -508,25 +508,25 @@ function SmartRoutePlanner({ onRouteReady }) {
       {waypoints.length > 0 && (
         <div className="space-y-1">
           {waypoints.map((wp, i) => (
-            <div key={i} className="flex items-center gap-2 text-xs bg-stone-50 rounded-lg px-2 py-1.5 group">
+            <div key={i} className="flex items-center gap-2 text-xs bg-sky-50 rounded-lg px-2 py-1.5 group">
               <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-white text-[10px] shrink-0 ${
             i === 0 ? "bg-brand-400" : i === waypoints.length - 1 && waypoints.length > 1 ? "bg-red-600" : "bg-brand-700"
               }`}>
                 {i === 0 ? "S" : i === waypoints.length - 1 && waypoints.length > 1 ? "Z" : wp.label}
               </span>
-              <span className="text-stone-500 flex-1 truncate">{wp.lat.toFixed(5)}, {wp.lng.toFixed(5)}</span>
+              <span className="text-slate-500 flex-1 truncate">{wp.lat.toFixed(5)}, {wp.lng.toFixed(5)}</span>
               {/* Reorder buttons */}
               <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button onClick={() => moveWaypoint(i, -1)} disabled={i === 0}
-                  className="text-stone-400 hover:text-stone-700 disabled:opacity-20 p-0.5">
+                  className="text-slate-400 hover:text-slate-700 disabled:opacity-20 p-0.5">
                   ↑
                 </button>
                 <button onClick={() => moveWaypoint(i, 1)} disabled={i === waypoints.length - 1}
-                  className="text-stone-400 hover:text-stone-700 disabled:opacity-20 p-0.5">
+                  className="text-slate-400 hover:text-slate-700 disabled:opacity-20 p-0.5">
                   ↓
                 </button>
               </div>
-              <button onClick={() => removeWaypoint(i)} className="text-stone-300 hover:text-red-500">
+              <button onClick={() => removeWaypoint(i)} className="text-slate-300 hover:text-red-500">
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -537,24 +537,24 @@ function SmartRoutePlanner({ onRouteReady }) {
       {/* Stats */}
       {route && (
         <div className="grid grid-cols-3 gap-3">
-          <div className="rounded-xl border border-stone-200/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
+          <div className="rounded-xl border border-sky-200/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
             <span className="block text-lg mb-1">{TOUR_ICONS.distance}</span>
-            <p className="text-lg font-bold text-stone-800">{route.distance_km}</p>
-            <p className="text-xs text-stone-500">km</p>
+            <p className="text-lg font-bold text-slate-900">{route.distance_km}</p>
+            <p className="text-xs text-slate-500">km</p>
           </div>
-          <div className="rounded-xl border border-stone-200/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
+          <div className="rounded-xl border border-sky-200/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
             <span className="block text-lg mb-1">{TOUR_ICONS.duration}</span>
-            <p className="text-lg font-bold text-stone-800">
+            <p className="text-lg font-bold text-slate-900">
               {formatDurationHours(route.duration_minutes)}
             </p>
-            <p className="text-xs text-stone-500">ca. Zeit</p>
+            <p className="text-xs text-slate-500">ca. Zeit</p>
           </div>
-          <div className="rounded-xl border border-stone-200/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
+          <div className="rounded-xl border border-sky-200/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
             <span className="block text-lg mb-1">{TOUR_ICONS.elevation}</span>
-            <p className="text-lg font-bold text-stone-800">
+            <p className="text-lg font-bold text-slate-900">
               {elevation.length ? `+${calcElevationGain(elevation).gain} m` : "–"}
             </p>
-            <p className="text-xs text-stone-500">Aufstieg</p>
+            <p className="text-xs text-slate-500">Aufstieg</p>
           </div>
         </div>
       )}
@@ -661,9 +661,9 @@ export default function RoutePlanner() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 flex items-center justify-center p-6">
+      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center p-6">
         <div className="text-center">
-          <p className="text-xl text-stone-700 mb-4">Bitte melde dich an, um Routen zu planen</p>
+          <p className="text-xl text-slate-700 mb-4">Bitte melde dich an, um Routen zu planen</p>
           <Link to={createPageUrl("Login")}>
             <Button className="bg-brand-400 hover:bg-brand-600">Anmelden</Button>
           </Link>
@@ -673,10 +673,10 @@ export default function RoutePlanner() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
         <Link to={createPageUrl("Profile")}>
-          <Button variant="ghost" className="mb-3 h-8 rounded-xl px-2 text-stone-600 hover:bg-brand-50/60 hover:text-stone-800 md:mb-4" size="sm">
+          <Button variant="ghost" className="mb-3 h-8 rounded-xl px-2 text-slate-600 hover:bg-brand-50/60 hover:text-slate-900 md:mb-4" size="sm">
             <ArrowLeft className="w-4 h-4 mr-1.5" />
             <span className="hidden sm:inline">Zurück zum Profil</span>
             <span className="sm:hidden">Zurück</span>
@@ -702,7 +702,7 @@ export default function RoutePlanner() {
           ].map(({ id, icon: Icon, label }) => (
             <button key={id} onClick={() => { setActiveTab(id); setRouteGeometry(null); }}
               className={`flex min-w-0 items-center justify-center gap-1 rounded-lg px-2 py-2 text-xs font-medium transition-all sm:text-sm ${
-                activeTab === id ? "bg-brand-100 text-brand-800 shadow-sm" : "text-stone-500 hover:text-stone-700"
+                activeTab === id ? "bg-brand-100 text-brand-800 shadow-sm" : "text-slate-500 hover:text-slate-700"
               }`}
             >
               <Icon className="h-4 w-4 shrink-0" />
@@ -717,8 +717,8 @@ export default function RoutePlanner() {
         )}
         {activeTab === "track" && (
           <div className="space-y-3">
-            <div className="inline-flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50/80 px-3 py-2 text-xs font-medium text-amber-800 shadow-sm">
-              <span className="inline-flex h-5 shrink-0 items-center gap-1 rounded-full bg-amber-100 px-2 text-[10px] font-bold uppercase tracking-wide text-amber-800">
+            <div className="inline-flex items-start gap-2 rounded-xl border border-yellow-200 bg-yellow-50/80 px-3 py-2 text-xs font-medium text-yellow-800 shadow-sm">
+              <span className="inline-flex h-5 shrink-0 items-center gap-1 rounded-full bg-yellow-100 px-2 text-[10px] font-bold uppercase tracking-wide text-yellow-800">
                 <Info className="h-3 w-3" />
                 Beta
               </span>
@@ -743,7 +743,7 @@ export default function RoutePlanner() {
               onSubmit={handleSubmit}
               className="doghike-glass-card mt-6 space-y-4 p-5"
             >
-              <h3 className="text-base font-semibold text-stone-800">
+              <h3 className="text-base font-semibold text-slate-900">
                 {activeTab === "track"
                   ? "Aufzeichnung ins Tagebuch übernehmen"
                   : activeTab === "gpx"
@@ -770,7 +770,7 @@ export default function RoutePlanner() {
                   rows={2} className="mt-1" />
               </div>
 
-              <div className="rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-600">
+              <div className="rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-slate-600">
                 {activeTab === "track"
                   ? "Diese Aufzeichnung gilt als bereits gemacht und wird direkt als vorausgefüllter Tagebuch-Eintrag geöffnet."
                   : activeTab === "gpx"
