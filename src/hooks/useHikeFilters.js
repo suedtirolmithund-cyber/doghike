@@ -1,6 +1,20 @@
 import { useMemo, useState } from "react";
 import { matchesHikeSearch } from "@/lib/hikeSearch";
 
+const INITIAL_FILTERS = {
+  searchQuery: "",
+  sortBy: "none",
+  levelFilter: "all",
+  humanDifficultyFilter: "all",
+  dogDifficultyFilter: "all",
+  distanceMin: "",
+  distanceMax: "",
+  elevationMin: "",
+  elevationMax: "",
+  seasonFilter: "all",
+  waterFilter: "all",
+};
+
 function getSeasonValues(hike) {
   if (Array.isArray(hike.seasons) && hike.seasons.length > 0) {
     return hike.seasons;
@@ -10,88 +24,95 @@ function getSeasonValues(hike) {
 }
 
 export function useHikeFilters(hikes = []) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState("none");
-  const [levelFilter, setLevelFilter] = useState("all");
-  const [humanDifficultyFilter, setHumanDifficultyFilter] = useState("all");
-  const [dogDifficultyFilter, setDogDifficultyFilter] = useState("all");
-  const [distanceMin, setDistanceMin] = useState("");
-  const [distanceMax, setDistanceMax] = useState("");
-  const [elevationMin, setElevationMin] = useState("");
-  const [elevationMax, setElevationMax] = useState("");
-  const [seasonFilter, setSeasonFilter] = useState("all");
-  const [waterFilter, setWaterFilter] = useState("all");
+  const [draftFilters, setDraftFilters] = useState(INITIAL_FILTERS);
+  const [appliedFilters, setAppliedFilters] = useState(INITIAL_FILTERS);
+
+  const setSearchQuery = (value) => setDraftFilters((prev) => ({ ...prev, searchQuery: value }));
+  const setSortBy = (value) => setDraftFilters((prev) => ({ ...prev, sortBy: value }));
+  const setLevelFilter = (value) => setDraftFilters((prev) => ({ ...prev, levelFilter: value }));
+  const setHumanDifficultyFilter = (value) => setDraftFilters((prev) => ({ ...prev, humanDifficultyFilter: value }));
+  const setDogDifficultyFilter = (value) => setDraftFilters((prev) => ({ ...prev, dogDifficultyFilter: value }));
+  const setDistanceMin = (value) => setDraftFilters((prev) => ({ ...prev, distanceMin: value }));
+  const setDistanceMax = (value) => setDraftFilters((prev) => ({ ...prev, distanceMax: value }));
+  const setElevationMin = (value) => setDraftFilters((prev) => ({ ...prev, elevationMin: value }));
+  const setElevationMax = (value) => setDraftFilters((prev) => ({ ...prev, elevationMax: value }));
+  const setSeasonFilter = (value) => setDraftFilters((prev) => ({ ...prev, seasonFilter: value }));
+  const setWaterFilter = (value) => setDraftFilters((prev) => ({ ...prev, waterFilter: value }));
+
+  const applyFilters = () => {
+    setAppliedFilters(draftFilters);
+  };
+
+  const resetFilters = () => {
+    setDraftFilters(INITIAL_FILTERS);
+    setAppliedFilters(INITIAL_FILTERS);
+  };
+
+  const hasPendingChanges = JSON.stringify(draftFilters) !== JSON.stringify(appliedFilters);
 
   const filteredHikes = useMemo(() => {
     return hikes
       .filter((hike) => {
-        const matchesSearch = matchesHikeSearch(hike, searchQuery);
+        const matchesSearch = matchesHikeSearch(hike, appliedFilters.searchQuery);
         if (!matchesSearch) return false;
 
-        if (humanDifficultyFilter !== "all" && hike.difficulty !== humanDifficultyFilter) return false;
-        if (dogDifficultyFilter !== "all" && hike.dog_difficulty !== dogDifficultyFilter) return false;
-        if (distanceMin && (hike.distance_km || 0) < parseFloat(distanceMin)) return false;
-        if (distanceMax && (hike.distance_km || 0) > parseFloat(distanceMax)) return false;
-        if (elevationMin && (hike.elevation_gain_m || 0) < parseFloat(elevationMin)) return false;
-        if (elevationMax && (hike.elevation_gain_m || 0) > parseFloat(elevationMax)) return false;
-        if (seasonFilter !== "all") {
+        if (appliedFilters.humanDifficultyFilter !== "all" && hike.difficulty !== appliedFilters.humanDifficultyFilter) return false;
+        if (appliedFilters.dogDifficultyFilter !== "all" && hike.dog_difficulty !== appliedFilters.dogDifficultyFilter) return false;
+        if (appliedFilters.distanceMin && (hike.distance_km || 0) < parseFloat(appliedFilters.distanceMin)) return false;
+        if (appliedFilters.distanceMax && (hike.distance_km || 0) > parseFloat(appliedFilters.distanceMax)) return false;
+        if (appliedFilters.elevationMin && (hike.elevation_gain_m || 0) < parseFloat(appliedFilters.elevationMin)) return false;
+        if (appliedFilters.elevationMax && (hike.elevation_gain_m || 0) > parseFloat(appliedFilters.elevationMax)) return false;
+        if (appliedFilters.seasonFilter !== "all") {
           const seasons = getSeasonValues(hike);
-          if (!seasons.includes(seasonFilter) && !seasons.includes("all_year")) return false;
+          if (!seasons.includes(appliedFilters.seasonFilter) && !seasons.includes("all_year")) return false;
         }
-        if (waterFilter !== "all" && hike.water_availability !== waterFilter) return false;
+        if (appliedFilters.waterFilter !== "all" && hike.water_availability !== appliedFilters.waterFilter) return false;
 
-        if (levelFilter === "all") return true;
-        if (sortBy === "difficulty") return hike.difficulty === levelFilter;
-        if (sortBy === "dog_difficulty") return hike.dog_difficulty === levelFilter;
+        if (appliedFilters.levelFilter === "all") return true;
+        if (appliedFilters.sortBy === "difficulty") return hike.difficulty === appliedFilters.levelFilter;
+        if (appliedFilters.sortBy === "dog_difficulty") return hike.dog_difficulty === appliedFilters.levelFilter;
         return true;
       })
       .sort((a, b) => {
-        if (sortBy === "difficulty") return (a.difficulty || "9").localeCompare(b.difficulty || "9");
-        if (sortBy === "dog_difficulty") return (a.dog_difficulty || "9").localeCompare(b.dog_difficulty || "9");
-        if (sortBy === "distance") return (b.distance_km || 0) - (a.distance_km || 0);
-        if (sortBy === "elevation") return (b.elevation_gain_m || 0) - (a.elevation_gain_m || 0);
+        if (appliedFilters.sortBy === "difficulty") return (a.difficulty || "9").localeCompare(b.difficulty || "9");
+        if (appliedFilters.sortBy === "dog_difficulty") return (a.dog_difficulty || "9").localeCompare(b.dog_difficulty || "9");
+        if (appliedFilters.sortBy === "distance") return (b.distance_km || 0) - (a.distance_km || 0);
+        if (appliedFilters.sortBy === "elevation") return (b.elevation_gain_m || 0) - (a.elevation_gain_m || 0);
         const bTime = b.date ? new Date(b.date).getTime() : 0;
         const aTime = a.date ? new Date(a.date).getTime() : 0;
         return bTime - aTime || (a.trail_name || "").localeCompare(b.trail_name || "");
       });
-  }, [
-    hikes,
-    searchQuery,
-    sortBy,
-    levelFilter,
-    humanDifficultyFilter,
-    dogDifficultyFilter,
-    distanceMin,
-    distanceMax,
-    elevationMin,
-    elevationMax,
-    seasonFilter,
-    waterFilter,
-  ]);
+  }, [hikes, appliedFilters]);
 
   return {
-    searchQuery,
+    searchQuery: draftFilters.searchQuery,
     setSearchQuery,
-    sortBy,
+    activeSearchQuery: appliedFilters.searchQuery,
+    sortBy: draftFilters.sortBy,
     setSortBy,
-    levelFilter,
+    activeSortBy: appliedFilters.sortBy,
+    levelFilter: draftFilters.levelFilter,
     setLevelFilter,
-    humanDifficultyFilter,
+    activeLevelFilter: appliedFilters.levelFilter,
+    humanDifficultyFilter: draftFilters.humanDifficultyFilter,
     setHumanDifficultyFilter,
-    dogDifficultyFilter,
+    dogDifficultyFilter: draftFilters.dogDifficultyFilter,
     setDogDifficultyFilter,
-    distanceMin,
+    distanceMin: draftFilters.distanceMin,
     setDistanceMin,
-    distanceMax,
+    distanceMax: draftFilters.distanceMax,
     setDistanceMax,
-    elevationMin,
+    elevationMin: draftFilters.elevationMin,
     setElevationMin,
-    elevationMax,
+    elevationMax: draftFilters.elevationMax,
     setElevationMax,
-    seasonFilter,
+    seasonFilter: draftFilters.seasonFilter,
     setSeasonFilter,
-    waterFilter,
+    waterFilter: draftFilters.waterFilter,
     setWaterFilter,
+    hasPendingChanges,
+    applyFilters,
+    resetFilters,
     filteredHikes,
   };
 }
