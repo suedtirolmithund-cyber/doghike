@@ -192,7 +192,7 @@ export default function AGB() {
             <Mail className="w-5 h-5 text-brand-600" />
                 9. Kontakt & Beschwerden
               </h2>
-          <div className="rounded-xl bg-gradient-to-br from-brand-700 to-[#2777b8] p-4 text-sm text-white shadow-[0_12px_24px_rgba(16,47,74,0.16)]">
+          <div className="rounded-xl bg-gradient-to-br from-[#5f241d] to-[#d94a3a] p-4 text-sm text-white shadow-[0_12px_24px_rgba(95,36,29,0.14)]">
                 <p className="font-semibold mb-1">Betreiberin: Julia Schwärzer</p>
             <p className="text-brand-50">E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-white underline">suedtirolmithund@gmail.com</a></p>
               </div>

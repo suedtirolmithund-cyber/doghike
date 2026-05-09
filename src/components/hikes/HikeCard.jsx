@@ -13,9 +13,9 @@ function StatTile({ value, label, icon }) {
   if (!value) return null;
 
   return (
-    <div className="flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-sky-200/70 bg-white/62 px-2.5 py-2 shadow-sm backdrop-blur-sm">
+    <div className="flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-yellow-100/80 bg-white/68 px-2.5 py-2 shadow-sm backdrop-blur-sm">
       <span className="text-base leading-none">{icon}</span>
-      <span className="min-w-0 text-sm font-semibold leading-none text-[#164d79] md:text-base">{value}</span>
+      <span className="min-w-0 text-sm font-semibold leading-none text-[#7a3f2e] md:text-base">{value}</span>
       {label ? <span className="text-xs font-medium leading-none text-slate-500">{label}</span> : null}
     </div>
   );
@@ -36,7 +36,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
       transition={{ delay: index * 0.08, duration: 0.42 }}
     >
       <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=${hikeSource}`}>
-        <div className="group overflow-hidden rounded-[22px] border border-sky-200/75 bg-white/76 shadow-[0_12px_28px_rgba(16,47,74,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(16,47,74,0.13)]">
+        <div className="group overflow-hidden rounded-[22px] border border-yellow-100/80 bg-white/78 shadow-[0_12px_28px_rgba(95,36,29,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(217,74,58,0.12)]">
           <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a] sm:h-52">
             {coverPhoto && (
               <img
@@ -48,7 +48,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/10 to-transparent" />
 
             {PREMIUM_FEATURES_ENABLED && hike.is_premium && (
-              <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/74 px-2.5 py-1 text-xs font-semibold text-[#164d79] shadow-sm backdrop-blur-sm">
+              <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/74 px-2.5 py-1 text-xs font-semibold text-[#7a3f2e] shadow-sm backdrop-blur-sm">
                 Premium
               </span>
             )}

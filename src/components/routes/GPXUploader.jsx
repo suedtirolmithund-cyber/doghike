@@ -212,7 +212,7 @@ export default function GPXUploader({ onSave }) {
             <div className="flex items-center gap-2">
               <FileText className="w-5 h-5 text-brand-400" />
               <div>
-                <p className="text-sm font-medium text-[#164d79]">{fileName}</p>
+                <p className="text-sm font-medium text-[#7a3f2e]">{fileName}</p>
                 <p className="text-xs text-brand-400">{gpxData.coordinates.length} Wegpunkte geladen</p>
               </div>
             </div>
@@ -222,7 +222,7 @@ export default function GPXUploader({ onSave }) {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="rounded-xl bg-gradient-to-br from-brand-700 to-[#2777b8] p-4 text-center text-white">
+        <div className="rounded-xl bg-gradient-to-br from-[#d94a3a] to-[#f6c43d] p-4 text-center text-white">
               <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.distance}</span>
               <p className="text-2xl font-bold">{gpxData.distance_km}</p>
               <p className="text-xs opacity-70">km Distanz</p>
@@ -232,7 +232,7 @@ export default function GPXUploader({ onSave }) {
               <p className="text-2xl font-bold">+{gpxData.elevation_gain_m}</p>
               <p className="text-xs opacity-70">m Aufstieg</p>
             </div>
-            <div className="rounded-xl bg-gradient-to-br from-[#164d79] to-[#d94a3a] p-4 text-center text-white">
+            <div className="rounded-xl bg-gradient-to-br from-[#7a3f2e] to-[#d94a3a] p-4 text-center text-white">
               <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.duration}</span>
               <p className="text-2xl font-bold">{formatDurationHours(gpxData.duration_minutes)}</p>
               <p className="text-xs opacity-70">gesch. Dauer</p>

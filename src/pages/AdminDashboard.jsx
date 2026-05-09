@@ -777,7 +777,7 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 md:py-10">
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="doghike-page-header">
-          <div className="doghike-page-icon bg-gradient-to-br from-brand-700 to-[#2777b8] text-white shadow-[0_12px_24px_rgba(16,47,74,0.16)]">
+          <div className="doghike-page-icon bg-gradient-to-br from-[#5f241d] to-[#d94a3a] text-white shadow-[0_12px_24px_rgba(95,36,29,0.14)]">
               <ShieldCheck className="h-5 w-5 text-white" />
           </div>
           <div>

@@ -4,24 +4,24 @@
 
 @layer base {
   :root {
-    --background: 204 72% 97%;
-    --foreground: 205 36% 18%;
-    --card: 206 100% 97%;
-    --card-foreground: 205 36% 18%;
-    --popover: 206 100% 97%;
-    --popover-foreground: 205 36% 18%;
+    --background: 42 88% 97%;
+    --foreground: 20 32% 18%;
+    --card: 42 100% 98%;
+    --card-foreground: 20 32% 18%;
+    --popover: 42 100% 98%;
+    --popover-foreground: 20 32% 18%;
     --primary: 6 67% 54%;
     --primary-foreground: 0 0% 100%;
     --secondary: 45 92% 90%;
-    --secondary-foreground: 205 48% 25%;
+    --secondary-foreground: 20 42% 25%;
     --muted: 42 72% 92%;
     --muted-foreground: 210 18% 40%;
     --accent: 42 94% 68%;
     --accent-foreground: 37 83% 23%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 204 52% 78%;
-    --input: 204 52% 78%;
+    --border: 39 58% 80%;
+    --input: 39 58% 80%;
     --ring: 6 67% 54%;
     --chart-1: 6 67% 54%;
     --chart-2: 205 65% 44%;
@@ -86,22 +86,22 @@
     @apply bg-background text-foreground;
     font-family: Roboto, ui-sans-serif, system-ui, sans-serif;
     background-image:
-      radial-gradient(circle at top left, rgba(246, 196, 61, 0.24), transparent 27rem),
-      radial-gradient(circle at top right, rgba(217, 74, 58, 0.13), transparent 24rem),
-      radial-gradient(circle at 20% 85%, rgba(255, 214, 102, 0.15), transparent 24rem),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(237, 247, 255, 0.34));
+      radial-gradient(circle at top left, rgba(246, 196, 61, 0.28), transparent 27rem),
+      radial-gradient(circle at top right, rgba(217, 74, 58, 0.14), transparent 24rem),
+      radial-gradient(circle at 20% 85%, rgba(255, 214, 102, 0.18), transparent 24rem),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 248, 232, 0.44));
     min-height: 100vh;
   }
 }
 
 @layer components {
   .doghike-glass-card {
-    @apply rounded-2xl border border-yellow-100/80 shadow-[0_14px_35px_rgba(16,47,74,0.09)] backdrop-blur-xl;
+    @apply rounded-2xl border border-yellow-100/80 shadow-[0_14px_35px_rgba(95,36,29,0.08)] backdrop-blur-xl;
     background-color: rgba(255, 255, 255, 0.78);
   }
 
   .doghike-glass-card-hover {
-    @apply rounded-2xl border border-yellow-100/80 shadow-[0_14px_35px_rgba(16,47,74,0.09)] backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:border-yellow-200 hover:shadow-[0_18px_42px_rgba(217,74,58,0.12)];
+    @apply rounded-2xl border border-yellow-100/80 shadow-[0_14px_35px_rgba(95,36,29,0.08)] backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:border-yellow-200 hover:shadow-[0_18px_42px_rgba(217,74,58,0.12)];
     background-color: rgba(255, 255, 255, 0.78);
   }
 
@@ -114,7 +114,7 @@
   }
 
   .doghike-page-shell {
-    @apply min-h-screen bg-gradient-to-br from-yellow-50/55 via-white to-sky-50 pb-24 md:pb-8;
+    @apply min-h-screen bg-gradient-to-br from-yellow-50/70 via-white to-orange-50/50 pb-24 md:pb-8;
   }
 
   .doghike-content-shell {
@@ -150,7 +150,7 @@
   }
 
   .doghike-filter-panel {
-    @apply rounded-2xl border border-yellow-100/80 p-4 shadow-[0_14px_35px_rgba(16,47,74,0.09)] backdrop-blur-xl md:p-5;
+    @apply rounded-2xl border border-yellow-100/80 p-4 shadow-[0_14px_35px_rgba(95,36,29,0.08)] backdrop-blur-xl md:p-5;
     background-color: rgba(255, 255, 255, 0.78);
   }
 
@@ -175,7 +175,7 @@
   }
 
   .doghike-empty-state {
-    @apply rounded-2xl border border-yellow-100/80 px-5 py-16 text-center shadow-[0_14px_35px_rgba(16,47,74,0.09)] backdrop-blur-xl md:py-20;
+    @apply rounded-2xl border border-yellow-100/80 px-5 py-16 text-center shadow-[0_14px_35px_rgba(95,36,29,0.08)] backdrop-blur-xl md:py-20;
     background-color: rgba(255, 255, 255, 0.78);
   }
 

@@ -287,7 +287,7 @@ export default function Dogs() {
             animate={{ opacity: 1, y: 0 }}
             className="overflow-hidden rounded-[28px] border border-white/65 bg-white/72 shadow-[0_24px_60px_rgba(16,47,74,0.14)] backdrop-blur-xl"
           >
-            <div className="relative overflow-hidden bg-gradient-to-br from-brand-700 via-[#2777b8] to-[#d94a3a] px-6 py-12 text-center">
+            <div className="relative overflow-hidden bg-gradient-to-br from-[#5f241d] via-[#d94a3a] to-[#f6c43d] px-6 py-12 text-center">
               <div
                 className="absolute inset-0 bg-cover bg-center opacity-70"
                 style={{ backgroundImage: "url('/splash/autumn-hero.jpg')" }}

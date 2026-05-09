@@ -101,7 +101,7 @@ async function loadLeaderboard() {
 
 // Hilfsfunktionen UI
 const RANK_STYLE = [
-  { ring: "ring-2 ring-brand-300", bg: "bg-gradient-to-br from-brand-100 to-[#2777b8]/20", border: "border-brand-300", medal: "🥇", num: "text-brand-700" },
+  { ring: "ring-2 ring-brand-300", bg: "bg-gradient-to-br from-yellow-100 to-[#d94a3a]/12", border: "border-brand-300", medal: "🥇", num: "text-brand-700" },
   { ring: "ring-2 ring-sky-300",  bg: "bg-gradient-to-br from-white/80 to-brand-50",  border: "border-brand-100",  medal: "🥈", num: "text-slate-600"  },
   { ring: "ring-2 ring-red-300", bg: "bg-gradient-to-br from-orange-50 to-brand-50", border: "border-red-200", medal: "🥉", num: "text-red-600" },
 ];

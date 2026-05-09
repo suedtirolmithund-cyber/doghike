@@ -346,7 +346,7 @@ export default function Datenschutz() {
                   </div>
                 </div>
 
-          <div className="mt-4 rounded-xl bg-gradient-to-br from-brand-700 to-[#2777b8] p-4 text-white shadow-[0_12px_24px_rgba(16,47,74,0.16)]">
+          <div className="mt-4 rounded-xl bg-gradient-to-br from-[#5f241d] to-[#d94a3a] p-4 text-white shadow-[0_12px_24px_rgba(95,36,29,0.14)]">
                   <p className="font-semibold mb-1">Anfragen stellen:</p>
             <p className="text-brand-50 text-sm">
                     Schreiben Sie an <strong>suedtirolmithund@gmail.com</strong> - wir antworten innerhalb von 30 Tagen.
