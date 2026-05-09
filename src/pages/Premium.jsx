@@ -107,7 +107,7 @@ export default function Premium() {
               <p className="doghike-page-subtitle">Entdecke exklusive hundefreundliche Touren in Südtirol</p>
             </div>
 
-            <div className="mb-6 overflow-hidden rounded-2xl border border-[#d8b9a7]/70 bg-gradient-to-br from-[#d7a186] via-[#c8876b] to-[#a86b55] p-8 text-white shadow-[0_20px_46px_rgba(16,47,74,0.18)]">
+            <div className="mb-6 overflow-hidden rounded-2xl border border-yellow-100/70 bg-gradient-to-br from-brand-700 via-[#2777b8] to-[#d94a3a] p-8 text-white shadow-[0_20px_46px_rgba(16,47,74,0.18)]">
               <div className="flex items-baseline gap-2 mb-1">
                 <span className="text-5xl font-bold">4,99 €</span>
                 <span className="text-white/75">/ Monat</span>
@@ -132,7 +132,7 @@ export default function Premium() {
                   Stripe-Integration wird gerade eingerichtet. Interesse an Premium?
                 </p>
                 <a href="mailto:suedtirolmithund@gmail.com?subject=Premium Mitgliedschaft">
-                  <Button className="h-12 w-full rounded-xl bg-white text-[#8f5844] hover:bg-white/90">
+                  <Button className="h-12 w-full rounded-xl bg-white text-[#164d79] hover:bg-white/90">
                     <Mail className="w-4 h-4 mr-2" />
                     Jetzt per E-Mail anfragen
                   </Button>

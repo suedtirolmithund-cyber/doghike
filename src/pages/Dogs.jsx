@@ -127,10 +127,12 @@ export default function Dogs() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="text-center">
-          <div className="text-6xl mb-4">Hund</div>
+          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border border-yellow-100 bg-white/78 text-red-600 shadow-[0_14px_35px_rgba(16,47,74,0.09)]">
+            <Dog className="h-9 w-9" />
+          </div>
           <p className="text-slate-600 mb-4">Bitte melde dich an, um deine Hunde zu verwalten.</p>
           <Link to={createPageUrl("Login")}>
-            <Button className="bg-brand-400 hover:bg-brand-600">
+            <Button className="doghike-primary-action">
               <LogIn className="w-4 h-4 mr-2" /> Anmelden
             </Button>
           </Link>
@@ -285,7 +287,7 @@ export default function Dogs() {
             animate={{ opacity: 1, y: 0 }}
             className="overflow-hidden rounded-[28px] border border-white/65 bg-white/72 shadow-[0_24px_60px_rgba(16,47,74,0.14)] backdrop-blur-xl"
           >
-            <div className="relative overflow-hidden bg-gradient-to-br from-[#dcc8b6] via-[#baa18c] to-[#7f918d] px-6 py-12 text-center">
+            <div className="relative overflow-hidden bg-gradient-to-br from-brand-700 via-[#2777b8] to-[#d94a3a] px-6 py-12 text-center">
               <div
                 className="absolute inset-0 bg-cover bg-center opacity-70"
                 style={{ backgroundImage: "url('/splash/autumn-hero.jpg')" }}
@@ -301,8 +303,8 @@ export default function Dogs() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-b from-[#fcf8f4] via-white to-[#f6ede5] px-5 py-6 md:px-8 md:py-8">
-              <div className="rounded-[24px] border border-white/80 bg-white/78 p-5 shadow-[0_18px_34px_rgba(120,90,66,0.10)] backdrop-blur-sm md:p-6">
+            <div className="bg-gradient-to-b from-yellow-50/70 via-white to-sky-50/80 px-5 py-6 md:px-8 md:py-8">
+              <div className="rounded-[24px] border border-yellow-100/80 bg-white/78 p-5 shadow-[0_18px_34px_rgba(16,47,74,0.10)] backdrop-blur-sm md:p-6">
                 <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#d94a3a]">Dein nächster Schritt</p>
                 <button
                   type="button"
@@ -310,19 +312,19 @@ export default function Dogs() {
                     setEditingDog(null);
                     setDialogOpen(true);
                   }}
-                  className="mt-4 flex w-full items-center justify-between rounded-[22px] border border-[#e6d4c6] bg-gradient-to-r from-[#fff8f2] to-[#f7ede3] px-5 py-5 text-left shadow-[0_14px_26px_rgba(146,100,71,0.12)] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_30px_rgba(146,100,71,0.16)]"
+                  className="mt-4 flex w-full items-center justify-between rounded-[22px] border border-yellow-100 bg-gradient-to-r from-white via-yellow-50/70 to-sky-50 px-5 py-5 text-left shadow-[0_14px_26px_rgba(16,47,74,0.10)] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_30px_rgba(217,74,58,0.13)]"
                 >
                   <div className="min-w-0">
                     <p className="text-xl font-semibold text-slate-900">Hund anlegen</p>
                     <p className="mt-1 text-sm leading-6 text-slate-500">Füge deinen ersten Wanderbegleiter hinzu.</p>
                   </div>
-                  <div className="ml-4 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#d94a3a] text-white shadow-[0_10px_22px_rgba(184,120,95,0.32)]">
+                  <div className="ml-4 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#d94a3a] text-white shadow-[0_10px_22px_rgba(217,74,58,0.28)]">
                     <Dog className="h-5 w-5" />
                   </div>
                 </button>
               </div>
 
-              <div className="mt-5 rounded-[24px] border border-white/80 bg-white/70 p-5 shadow-[0_16px_32px_rgba(120,90,66,0.08)] backdrop-blur-sm md:p-6">
+              <div className="mt-5 rounded-[24px] border border-yellow-100/80 bg-white/70 p-5 shadow-[0_16px_32px_rgba(16,47,74,0.08)] backdrop-blur-sm md:p-6">
                 <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">Danach</p>
                 <div className="mt-4 grid gap-3 md:grid-cols-3">
                   <Link to={createPageUrl("Dashboard")} className="block">
@@ -330,7 +332,7 @@ export default function Dogs() {
                       variant="outline"
                       className="h-auto w-full justify-start gap-3 rounded-[20px] border-sky-200 bg-white/85 px-4 py-4 text-left text-slate-700 shadow-sm hover:bg-brand-50/50"
                     >
-                      <Home className="h-4 w-4 shrink-0 text-[#d94a3a]" />
+                      <Home className="h-4 w-4 shrink-0 text-red-600" />
                       <span className="text-sm font-medium">Zum Dashboard</span>
                     </Button>
                   </Link>
@@ -339,7 +341,7 @@ export default function Dogs() {
                       variant="outline"
                       className="h-auto w-full justify-start gap-3 rounded-[20px] border-sky-200 bg-white/85 px-4 py-4 text-left text-slate-700 shadow-sm hover:bg-brand-50/50"
                     >
-                      <Mountain className="h-4 w-4 shrink-0 text-[#d94a3a]" />
+                      <Mountain className="h-4 w-4 shrink-0 text-red-600" />
                       <span className="text-sm font-medium">Touren entdecken</span>
                     </Button>
                   </Link>
@@ -348,7 +350,7 @@ export default function Dogs() {
                       variant="outline"
                       className="h-auto w-full justify-start gap-3 rounded-[20px] border-sky-200 bg-white/85 px-4 py-4 text-left text-slate-700 shadow-sm hover:bg-brand-50/50"
                     >
-                      <Plus className="h-4 w-4 shrink-0 text-[#d94a3a]" />
+                      <Plus className="h-4 w-4 shrink-0 text-red-600" />
                       <span className="text-sm font-medium">Wanderung eintragen</span>
                     </Button>
                   </Link>

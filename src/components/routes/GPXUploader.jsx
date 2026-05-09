@@ -212,7 +212,7 @@ export default function GPXUploader({ onSave }) {
             <div className="flex items-center gap-2">
               <FileText className="w-5 h-5 text-brand-400" />
               <div>
-                <p className="text-sm font-medium text-green-800">{fileName}</p>
+                <p className="text-sm font-medium text-[#164d79]">{fileName}</p>
                 <p className="text-xs text-brand-400">{gpxData.coordinates.length} Wegpunkte geladen</p>
               </div>
             </div>
@@ -232,12 +232,12 @@ export default function GPXUploader({ onSave }) {
               <p className="text-2xl font-bold">+{gpxData.elevation_gain_m}</p>
               <p className="text-xs opacity-70">m Aufstieg</p>
             </div>
-            <div className="bg-blue-700 text-white rounded-xl p-4 text-center">
+            <div className="rounded-xl bg-gradient-to-br from-[#164d79] to-[#d94a3a] p-4 text-center text-white">
               <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.duration}</span>
               <p className="text-2xl font-bold">{formatDurationHours(gpxData.duration_minutes)}</p>
               <p className="text-xs opacity-70">gesch. Dauer</p>
             </div>
-            <div className="bg-yellow-500 text-white rounded-xl p-4 text-center">
+            <div className="rounded-xl bg-gradient-to-br from-[#f6c43d] to-[#d94a3a] p-4 text-center text-white">
               <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.elevation}</span>
               <p className="text-2xl font-bold">
                 {gpxData.max_elevation !== -Infinity ? Math.round(gpxData.max_elevation) : "–"}
@@ -262,7 +262,7 @@ export default function GPXUploader({ onSave }) {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution="&copy; OpenStreetMap"
               />
-              <Polyline positions={gpxData.coordinates} color="#ef4444" weight={4} opacity={0.85} />
+              <Polyline positions={gpxData.coordinates} color="#d94a3a" weight={4} opacity={0.85} />
               {gpxData.coordinates.length > 0 && (
                 <>
                   <Marker position={gpxData.coordinates[0]} />

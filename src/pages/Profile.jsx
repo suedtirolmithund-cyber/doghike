@@ -17,6 +17,7 @@ import {
   Navigation,
   BookOpen,
   Route,
+  Dog,
 } from "lucide-react";
 import { differenceInYears, differenceInMonths } from "date-fns";
 import { Link } from "react-router-dom";
@@ -266,7 +267,9 @@ export default function Profile() {
       <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-md w-full mx-4">
           <div className="doghike-glass-card p-8 text-center">
-            <div className="text-6xl mb-4">Hund</div>
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border border-yellow-100 bg-white/78 text-red-600 shadow-[0_14px_35px_rgba(16,47,74,0.09)]">
+              <Dog className="h-9 w-9" />
+            </div>
             <h2 className="text-2xl font-light text-slate-900 mb-2">Willkommen!</h2>
             <p className="text-slate-500 mb-6">
               Melde dich an, um deine Hunde zu verwalten und dein Profil zu pflegen.

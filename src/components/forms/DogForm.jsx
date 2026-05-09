@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { uploadFile, deleteStoredFile } from "@/lib/profilesApi";
 import { useAuth } from "@/lib/AuthContext";
-import { Upload, Loader2 } from "lucide-react";
+import { Dog, Upload, Loader2 } from "lucide-react";
 
 export default function DogForm({ dog, onSave, onCancel }) {
   const { user } = useAuth();
@@ -101,7 +101,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
     <form onSubmit={handleSubmit} className="doghike-glass-card space-y-6 p-4 sm:p-5">
       <div className="flex flex-col items-center gap-2">
         <div className="relative">
-          <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-sky-100">
+          <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gradient-to-br from-yellow-50 via-white to-sky-50">
             {formData.photo_url ? (
               <img
                 src={formData.photo_url}
@@ -113,7 +113,9 @@ export default function DogForm({ dog, onSave, onCancel }) {
                 }}
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-4xl">Hund</div>
+              <div className="flex h-full w-full items-center justify-center text-red-600">
+                <Dog className="h-12 w-12" />
+              </div>
             )}
           </div>
           <label className="absolute bottom-0 right-0 p-2 bg-brand-400 text-white rounded-full cursor-pointer hover:bg-brand-600 transition-colors shadow-lg">

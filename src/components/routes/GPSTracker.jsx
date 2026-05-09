@@ -664,7 +664,7 @@ export default function GPSTracker({ onSave }) {
                 Pause
               </Button>
             ) : (
-              <Button onClick={resumeTracking} className="flex-1 bg-blue-600 hover:bg-blue-700 sm:flex-none">
+              <Button onClick={resumeTracking} className="flex-1 bg-brand-400 hover:bg-brand-600 sm:flex-none">
                 <Play className="mr-2 h-4 w-4" />
                 Weiter
               </Button>
@@ -681,10 +681,10 @@ export default function GPSTracker({ onSave }) {
         <div className="doghike-soft-panel p-3 text-xs text-brand-800 md:p-4 md:text-sm">
           <p className="mb-2 font-medium">GPS-Aufzeichnung:</p>
           <ul className="list-disc space-y-1 pl-4">
-            <li>Aktiviere GPS auf deinem Geraet.</li>
+            <li>Aktiviere GPS auf deinem Gerät.</li>
             <li>Erlaube dem Browser den Standortzugriff.</li>
-            <li>Der tatsaechliche Weg wird aufgezeichnet und laufend lokal gesichert.</li>
-            <li>Mit Pause kannst du unterbrechen und spaeter weiter aufnehmen.</li>
+            <li>Der tatsächliche Weg wird aufgezeichnet und laufend lokal gesichert.</li>
+            <li>Mit Pause kannst du unterbrechen und später weiter aufnehmen.</li>
           </ul>
         </div>
       )}
