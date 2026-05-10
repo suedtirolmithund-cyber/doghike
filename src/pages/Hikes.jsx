@@ -1,7 +1,7 @@
 ﻿import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { CircleHelp, Mountain, PawPrint, RotateCcw, Search } from "lucide-react";
+import { CircleHelp, Droplets, Mountain, PawPrint, RotateCcw, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -17,6 +17,9 @@ import {
   HUMAN_DIFFICULTY_GUIDE,
   SEASON_LEVELS,
   TOUR_ICONS,
+  WATER_APP_EXPLANATION,
+  WATER_GUIDE,
+  WATER_GUIDE_NOTE,
   WATER_LEVELS,
 } from "@/lib/difficultyConfig";
 import { useHikeFilters } from "@/hooks/useHikeFilters";
@@ -73,6 +76,54 @@ function DifficultyInfoDialog({ icon, title, description, levels }) {
                 <div><span className="font-medium">Beispiele:</span> {level.examples}</div>
                 <div><span className="font-medium">Gelände:</span> {level.terrain}</div>
                 <div><span className="font-medium">{level.fitness ? "Einordnung" : "Hinweis"}:</span> {level.fitness ?? level.note}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function WaterInfoDialog() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <button
+          type="button"
+          className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-brand-200 bg-white/80 text-brand-500 shadow-sm transition hover:border-brand-300 hover:text-brand-600"
+          aria-label="Wasser erklären"
+        >
+          <CircleHelp className="h-3.5 w-3.5" />
+        </button>
+      </DialogTrigger>
+      <DialogContent className="grid-rows-[auto,minmax(0,1fr)] max-h-[85vh] overflow-hidden border-white/80 bg-white/95 p-0 sm:max-w-2xl">
+        <DialogHeader className="border-b border-brand-100/80 px-6 pb-3 pt-6">
+          <DialogTitle className="flex items-center gap-2 text-left text-slate-800">
+            <Droplets className="h-4 w-4 text-brand-500" />
+            Wasser unterwegs
+          </DialogTitle>
+          <DialogDescription className="text-left text-slate-500">
+            So ist die Wasserverfügbarkeit entlang der Route eingeordnet.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="min-h-0 space-y-3 overflow-y-auto px-6 pb-6 pr-5">
+          <div className="rounded-2xl border border-brand-100/70 bg-brand-50/70 p-4 text-sm text-slate-600">
+            <p>{WATER_APP_EXPLANATION}</p>
+            <p className="mt-3 rounded-xl border border-yellow-100 bg-white/70 px-3 py-2 text-slate-700">
+              {WATER_GUIDE_NOTE}
+            </p>
+          </div>
+          {WATER_GUIDE.map((level) => (
+            <div key={level.value} className={`rounded-2xl border p-4 shadow-sm ${level.color}`}>
+              <div className="mb-2 flex items-center gap-3">
+                <WaterIcon value={level.value} className="text-xl" />
+                <div className="font-semibold">{level.label}</div>
+              </div>
+              <p className="mb-2 text-sm">{level.desc}</p>
+              <div className="grid gap-1.5 text-xs opacity-85">
+                <div><span className="font-medium">Beispiele:</span> {level.examples}</div>
+                <div><span className="font-medium">Tipp:</span> {level.tip}</div>
               </div>
             </div>
           ))}
@@ -229,9 +280,12 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="doghike-filter-label text-xs sm:text-sm">
-                  <WaterIcon value="little" /> Wasser
-                </label>
+                <div className="mb-1 flex items-center gap-1.5">
+                  <label className="doghike-filter-label mb-0 text-xs sm:text-sm">
+                    <WaterIcon value="little" /> Wasser
+                  </label>
+                  <WaterInfoDialog />
+                </div>
                 <Select value={waterFilter} onValueChange={setWaterFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Alle" />

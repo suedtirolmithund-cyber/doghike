@@ -178,6 +178,47 @@ export const WATER_LEVELS = [
   { value: "plenty", numeric: 3, label: "Viel Wasser", icon: "💧💧💧", textColor: "text-cyan-700", badgeClass: "bg-cyan-50 text-cyan-700 border-cyan-200" },
 ];
 
+export const WATER_GUIDE = [
+  {
+    value: "none",
+    label: "Kein Wasser",
+    color: "bg-red-50 border-red-200 text-red-800",
+    desc: "Auf der Tour gibt es normalerweise keine verlässlichen natürlichen Wasserstellen für den Hund. Wasser muss vollständig selbst mitgenommen werden.",
+    examples: "Höhenweg, Waldweg oder Almweg ohne Bach, Quelle, Brunnen oder Seezugang",
+    tip: "Plane die komplette Wasserversorgung selbst ein und nimm für den Hund immer genug Reserve mit.",
+  },
+  {
+    value: "little",
+    label: "Wenig Wasser",
+    color: "bg-red-50 border-red-200 text-red-700",
+    desc: "Es gibt einzelne mögliche Wasserstellen, diese können aber selten, schlecht erreichbar oder saisonabhängig sein. Nicht als alleinige Wasserversorgung einplanen.",
+    examples: "Ein kleiner Bach am Anfang der Tour oder eine Quelle, die im Sommer austrocknen kann",
+    tip: "Eigenes Wasser bleibt Pflicht. Einzelne Wasserstellen sind nur ein Bonus und keine sichere Versorgung.",
+  },
+  {
+    value: "moderate",
+    label: "Mehrere Wasserstellen",
+    color: "bg-brand-50 border-brand-200 text-brand-800",
+    desc: "Auf der Tour gibt es mehrere Wasserstellen oder längere Abschnitte mit Bachnähe. Trotzdem kann Wasser saisonal fehlen oder nicht zugänglich sein.",
+    examples: "Wanderung entlang eines Bachs mit mehreren Zugangsmöglichkeiten oder Tour mit mehreren Brunnen oder Quellen",
+    tip: "Gut für viele Hunde, aber je nach Saison oder Gelände nicht überall direkt erreichbar.",
+  },
+  {
+    value: "plenty",
+    label: "Viel Wasser",
+    color: "bg-cyan-50 border-cyan-200 text-cyan-800",
+    desc: "Die Tour bietet sehr regelmäßigen oder fast durchgehenden Wasserzugang. Besonders hundefreundlich, aber eigenes Wasser bleibt trotzdem Pflicht.",
+    examples: "Rundweg um einen See mit wiederholtem direktem Zugang zum Wasser",
+    tip: "Sehr hundefreundlich, trotzdem immer eigenes Trinkwasser und eine Schüssel dabeihaben.",
+  },
+];
+
+export const WATER_APP_EXPLANATION =
+  "Die Wassertropfen zeigen die typische Wasserverfügbarkeit entlang der Route. Sie helfen vor allem dabei einzuschätzen, wie viel Wasser du für dich und deinen Hund selbst mitnehmen solltest.";
+
+export const WATER_GUIDE_NOTE =
+  "Die Wassertropfen zeigen nur die typische Wasserverfügbarkeit entlang der Route. Wasserstellen können je nach Saison, Wetter, Trockenheit, Schneelage oder Bewirtschaftung fehlen. Außerdem kann natürliches Wasser sehr kalt sein, besonders in Bächen, Bergseen oder nach der Schneeschmelze. Manche Hunde reagieren empfindlich darauf. Deshalb sollte für den Hund immer eigenes Wasser mitgenommen werden, auch bei 2 oder 3 Tropfen.";
+
 export const TOUR_ICONS = {
   distance: "📏",
   elevation: "⛰️",

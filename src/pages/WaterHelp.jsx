@@ -1,40 +1,6 @@
 import { Droplets } from "lucide-react";
 import WaterIcon from "@/components/icons/WaterIcon";
-
-const waterLevels = [
-  {
-    value: "none",
-    label: "Kein Wasser",
-    color: "bg-red-50 border-red-200 text-red-800",
-    desc: "Auf der gesamten Route gibt es keine natürlichen Wasserquellen.",
-    examples: "Hochalpine Touren, trockene Felspfade im Sommer",
-    tip: "Nimm ausreichend Wasser mit - mindestens 2 bis 3 Liter pro Person. Für Hunde ist eine faltbare Trinkschüssel sinnvoll.",
-  },
-  {
-    value: "little",
-    label: "Wenig Wasser",
-    color: "bg-red-50 border-red-200 text-red-700",
-    desc: "Es gibt vereinzelt Bachläufe oder Quellen, aber nicht zuverlässig oder nur saisonal.",
-    examples: "Bergwege im Spätsommer, südexponierte Hänge",
-    tip: "Plane mit eigenen Wasserreserven. Kleine Bachläufe können im Sommer austrocknen.",
-  },
-  {
-    value: "moderate",
-    label: "Etwas Wasser",
-    color: "bg-brand-50 border-brand-200 text-brand-800",
-    desc: "Mehrere Bachläufe oder Quellen entlang des Weges, aber nicht in sehr kurzem Abstand.",
-    examples: "Typische Alpentouren im Frühling oder Sommer",
-    tip: "Für Hunde meist gut geeignet. Für längere trockene Abschnitte trotzdem eigenes Wasser mitnehmen.",
-  },
-  {
-    value: "plenty",
-    label: "Viel Wasser",
-    color: "bg-cyan-50 border-cyan-200 text-cyan-800",
-    desc: "Regelmäßig Bäche, Quellen oder Seen entlang des Weges. Wasser ist fast immer erreichbar.",
-    examples: "Touren entlang von Bächen, durch Schluchten oder Almen mit Tränken",
-    tip: "Ideal für Hunde. Prüfe trotzdem kurz, ob das Wasser sauber aussieht.",
-  },
-];
+import { WATER_APP_EXPLANATION, WATER_GUIDE, WATER_GUIDE_NOTE } from "@/lib/difficultyConfig";
 
 export default function WaterHelp() {
   return (
@@ -53,7 +19,7 @@ export default function WaterHelp() {
         </div>
 
         <div className="space-y-4">
-          {waterLevels.map((level) => (
+          {WATER_GUIDE.map((level) => (
             <div key={level.value} className={`rounded-2xl border p-5 shadow-sm ${level.color}`}>
               <div className="mb-3 flex items-center gap-3">
                 <WaterIcon value={level.value} className="text-2xl" />
@@ -69,10 +35,10 @@ export default function WaterHelp() {
         </div>
 
         <div className="doghike-glass-card mt-6 p-4 text-sm text-slate-600">
+          <p className="mb-2 font-medium">Bedeutet in der App</p>
+          <p className="mb-3 text-xs">{WATER_APP_EXPLANATION}</p>
           <p className="mb-1 font-medium">Hinweis für Hundebesitzer</p>
-          <p className="text-xs">
-            Hunde brauchen bei Hitze und Belastung deutlich mehr Wasser. Plane bei wenig oder keinem Wasser zusätzlich eigenes Wasser für Mensch und Hund ein.
-          </p>
+          <p className="text-xs">{WATER_GUIDE_NOTE}</p>
         </div>
       </div>
     </div>
