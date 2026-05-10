@@ -1,6 +1,6 @@
 ﻿export const DIFFICULTY_LEVELS = [
   { value: "1", label: "Sehr leicht", short: "Stufe 1", textColor: "text-brand-400", badgeClass: "bg-brand-100 text-brand-600 border-brand-200" },
-  { value: "2", label: "Leicht", short: "Stufe 2", textColor: "text-lime-600", badgeClass: "bg-lime-100 text-lime-700 border-lime-200" },
+  { value: "2", label: "Leicht", short: "Stufe 2", textColor: "text-yellow-700", badgeClass: "bg-yellow-50 text-yellow-800 border-yellow-200" },
   { value: "3", label: "Mittel", short: "Stufe 3", textColor: "text-yellow-600", badgeClass: "bg-yellow-100 text-yellow-700 border-yellow-200" },
   { value: "4", label: "Schwer", short: "Stufe 4", textColor: "text-red-500", badgeClass: "bg-red-100 text-red-600 border-red-200" },
   { value: "5", label: "Sehr schwer", short: "Stufe 5", textColor: "text-red-600", badgeClass: "bg-red-100 text-red-700 border-red-200" },
@@ -10,7 +10,7 @@ export const HUMAN_DIFFICULTY_GUIDE = [
   {
     level: "T1",
     stufe: "Stufe 1",
-    color: "bg-brand-100 border-green-300 text-green-800",
+    color: "bg-brand-100 border-brand-200 text-brand-700",
     badge: "bg-brand-500",
     title: "Sehr leicht - Wanderweg",
     desc: "Gut markierter Weg ohne besondere Schwierigkeiten. Geeignet für fast alle, auch ohne Wandererfahrung.",
@@ -21,8 +21,8 @@ export const HUMAN_DIFFICULTY_GUIDE = [
   {
     level: "T2",
     stufe: "Stufe 2",
-    color: "bg-lime-100 border-lime-300 text-lime-800",
-    badge: "bg-lime-500",
+    color: "bg-yellow-50 border-yellow-200 text-yellow-800",
+    badge: "bg-yellow-500",
     title: "Leicht - Bergwanderweg",
     desc: "Schmalerer, teils steiler Pfad mit leichten Geländeunterschieden. Gute Trittsicherheit ist hilfreich.",
     examples: "Hügelige Wanderungen, einfache Almtouren",
@@ -67,7 +67,7 @@ export const HUMAN_DIFFICULTY_GUIDE = [
 export const DOG_DIFFICULTY_GUIDE = [
   {
     stufe: "Stufe 1",
-    color: "bg-brand-100 border-green-300 text-green-800",
+    color: "bg-brand-100 border-brand-200 text-brand-700",
     badge: "bg-brand-500",
     title: "Sehr leicht - Ideal für jeden Hund",
     desc: "Breite, befestigte Wege ohne nennenswerte Hindernisse. Kein Absturzrisiko.",
@@ -77,8 +77,8 @@ export const DOG_DIFFICULTY_GUIDE = [
   },
   {
     stufe: "Stufe 2",
-    color: "bg-lime-100 border-lime-300 text-lime-800",
-    badge: "bg-lime-500",
+    color: "bg-yellow-50 border-yellow-200 text-yellow-800",
+    badge: "bg-yellow-500",
     title: "Leicht - Für gesunde Hunde",
     desc: "Leicht hügeliges Gelände, schmale Pfade und keine gefährlichen Stellen.",
     examples: "Hügelige Waldwege, einfache Almwege",
@@ -147,7 +147,7 @@ export function getDifficultyTextColor(level) {
 }
 
 export function getDifficultyBadgeClass(level) {
-  return DIFFICULTY_BADGE_CLASSES[level] ?? "bg-sky-100 text-slate-600 border-sky-200";
+  return DIFFICULTY_BADGE_CLASSES[level] ?? "bg-yellow-50 text-slate-600 border-yellow-100";
 }
 
 export const WATER_LEVELS = [
@@ -178,7 +178,7 @@ export const SEASON_LEVELS = [
   { value: "spring", label: "Frühling", icon: "🌸", color: "bg-pink-100 text-pink-700" },
   { value: "summer", label: "Sommer", icon: "☀️", color: "bg-red-100 text-red-700" },
   { value: "autumn", label: "Herbst", icon: "🍂", color: "bg-red-100 text-red-600" },
-  { value: "winter", label: "Winter", icon: "❄️", color: "bg-sky-100 text-slate-700" },
+  { value: "winter", label: "Winter", icon: "❄️", color: "bg-yellow-50 text-slate-700" },
   { value: "all_year", label: "Ganzjährig", icon: "🍃", color: "bg-brand-100 text-brand-600" },
 ];
 
@@ -195,7 +195,7 @@ export function getSeasonIcon(value) {
 }
 
 export function getSeasonBadgeClass(value) {
-  return SEASON_BY_VALUE[value]?.color ?? "bg-sky-100 text-slate-600";
+  return SEASON_BY_VALUE[value]?.color ?? "bg-yellow-50 text-slate-600";
 }
 
 export const WATER_BY_VALUE = Object.fromEntries(
@@ -218,7 +218,7 @@ export function getWaterIcon(value) {
 }
 
 export function getWaterBadgeClass(value) {
-  return getWaterLevel(value)?.badgeClass ?? "bg-sky-100 text-slate-600 border-sky-200";
+  return getWaterLevel(value)?.badgeClass ?? "bg-yellow-50 text-slate-600 border-yellow-100";
 }
 
 export function getWaterTextColor(value) {

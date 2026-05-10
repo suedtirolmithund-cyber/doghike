@@ -24,8 +24,8 @@ function DifficultyInfoDialog({ icon, title, description, levels }) {
           <CircleHelp className="h-3.5 w-3.5" />
         </button>
       </DialogTrigger>
-      <DialogContent className="max-h-[85vh] overflow-hidden border-white/80 bg-white/95 sm:max-w-2xl">
-        <DialogHeader className="border-b border-brand-100/80 pb-3">
+      <DialogContent className="grid-rows-[auto,minmax(0,1fr)] max-h-[85vh] overflow-hidden border-white/80 bg-white/95 p-0 sm:max-w-2xl">
+        <DialogHeader className="border-b border-brand-100/80 px-6 pb-3 pt-6">
           <DialogTitle className="flex items-center gap-2 text-left text-slate-800">
             {icon}
             {title}
@@ -34,7 +34,7 @@ function DifficultyInfoDialog({ icon, title, description, levels }) {
             {description}
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-3 overflow-y-auto pr-1">
+        <div className="min-h-0 space-y-3 overflow-y-auto px-6 pb-6 pr-5">
           {levels.map((level) => (
             <div key={level.stufe} className={`rounded-2xl border p-4 shadow-sm ${level.color}`}>
               <div className="mb-2 flex items-center gap-3">
@@ -260,7 +260,7 @@ export default function Hikes() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-3 border-t border-sky-100/80 pt-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 border-t border-yellow-100/80 pt-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-xs text-slate-500">
                 {hasPendingChanges
                   ? "Du hast Filter geändert. Tippe auf „Filter anwenden“, um die Ergebnisse zu aktualisieren."
@@ -326,3 +326,4 @@ export default function Hikes() {
     </div>
   );
 }
+
