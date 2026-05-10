@@ -1,15 +1,64 @@
 ﻿import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Mountain, RotateCcw, Search } from "lucide-react";
+import { CircleHelp, Mountain, PawPrint, RotateCcw, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
 import WaterIcon from "@/components/icons/WaterIcon";
-import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
+import { DIFFICULTY_LEVELS, DOG_DIFFICULTY_GUIDE, HUMAN_DIFFICULTY_GUIDE, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 import { useHikeFilters } from "@/hooks/useHikeFilters";
+
+function DifficultyInfoDialog({ icon, title, description, levels }) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <button
+          type="button"
+          className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-brand-200 bg-white/80 text-brand-500 shadow-sm transition hover:border-brand-300 hover:text-brand-600"
+          aria-label={`${title} erklären`}
+        >
+          <CircleHelp className="h-3.5 w-3.5" />
+        </button>
+      </DialogTrigger>
+      <DialogContent className="max-h-[85vh] overflow-hidden border-white/80 bg-white/95 sm:max-w-2xl">
+        <DialogHeader className="border-b border-brand-100/80 pb-3">
+          <DialogTitle className="flex items-center gap-2 text-left text-slate-800">
+            {icon}
+            {title}
+          </DialogTitle>
+          <DialogDescription className="text-left text-slate-500">
+            {description}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-3 overflow-y-auto pr-1">
+          {levels.map((level) => (
+            <div key={level.stufe} className={`rounded-2xl border p-4 shadow-sm ${level.color}`}>
+              <div className="mb-2 flex items-center gap-3">
+                <span className={`rounded-full px-2 py-1 text-xs font-bold text-white ${level.badge}`}>
+                  {level.level ?? level.stufe}
+                </span>
+                <div>
+                  <div className="font-semibold">{level.title}</div>
+                  <div className="text-xs opacity-75">{level.stufe}</div>
+                </div>
+              </div>
+              <p className="mb-2 text-sm">{level.desc}</p>
+              <div className="grid gap-1.5 text-xs opacity-85">
+                <div><span className="font-medium">Beispiele:</span> {level.examples}</div>
+                <div><span className="font-medium">Gelände:</span> {level.terrain}</div>
+                <div><span className="font-medium">{level.fitness ? "Fitness" : "Hinweis"}:</span> {level.fitness ?? level.note}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 export default function Hikes() {
   const { data: hikes = [] } = useQuery({
@@ -91,7 +140,15 @@ export default function Hikes() {
 
             <div className="grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-4">
               <div>
-                <label className="doghike-filter-label text-xs sm:text-sm">{TOUR_ICONS.human} Mensch</label>
+                <div className="mb-1 flex items-center gap-1.5">
+                  <label className="doghike-filter-label mb-0 text-xs sm:text-sm">{TOUR_ICONS.human} Mensch</label>
+                  <DifficultyInfoDialog
+                    icon={<Mountain className="h-4 w-4 text-brand-500" />}
+                    title="Schwierigkeit Mensch"
+                    description="So sind die Touren für Menschen von Stufe 1 bis Stufe 5 eingeordnet."
+                    levels={HUMAN_DIFFICULTY_GUIDE}
+                  />
+                </div>
                 <Select value={humanDifficultyFilter} onValueChange={setHumanDifficultyFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Alle" />
@@ -108,7 +165,15 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="doghike-filter-label text-xs sm:text-sm">{TOUR_ICONS.dog} Hund</label>
+                <div className="mb-1 flex items-center gap-1.5">
+                  <label className="doghike-filter-label mb-0 text-xs sm:text-sm">{TOUR_ICONS.dog} Hund</label>
+                  <DifficultyInfoDialog
+                    icon={<PawPrint className="h-4 w-4 text-brand-500" />}
+                    title="Schwierigkeit Hund"
+                    description="So sind die Touren für Hunde von Stufe 1 bis Stufe 5 eingeordnet."
+                    levels={DOG_DIFFICULTY_GUIDE}
+                  />
+                </div>
                 <Select value={dogDifficultyFilter} onValueChange={setDogDifficultyFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Alle" />
