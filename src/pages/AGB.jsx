@@ -1,11 +1,11 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { ArrowLeft, FileText, UserCheck, Image, Star, CreditCard, AlertTriangle, XCircle, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function AGB() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-[#edf7ff] pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-orange-50 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <Link to={createPageUrl("Dashboard")}>
           <Button variant="ghost" className="mb-6">
@@ -13,7 +13,7 @@ export default function AGB() {
           </Button>
         </Link>
 
-        <div className="rounded-2xl border border-sky-200/70 bg-white/70 p-4 shadow-[0_14px_34px_rgba(16,47,74,0.1)] backdrop-blur-sm md:p-8">
+        <div className="rounded-2xl border border-yellow-100/80 bg-white/78 p-4 shadow-[0_14px_34px_rgba(95,36,29,0.08)] backdrop-blur-sm md:p-8">
           <div className="doghike-page-header mb-2">
             <div className="doghike-page-icon">
               <FileText className="h-5 w-5" />
@@ -24,7 +24,7 @@ export default function AGB() {
             Letzte Aktualisierung: April 2026 · Gilt für doghike-suedtirol.vercel.app
           </p>
 
-          <div className="mb-8 rounded-2xl border border-sky-200/70 bg-white/58 p-5 text-slate-700">
+          <div className="mb-8 rounded-2xl border border-yellow-100/80 bg-white/65 p-5 text-slate-700">
             <p className="text-sm leading-relaxed">
               Mit der Registrierung oder Nutzung dieser App stimmen Sie diesen Nutzungsbedingungen zu.
               Bitte lesen Sie sie sorgfältig durch.
@@ -43,7 +43,7 @@ export default function AGB() {
                   <strong> „DogHike“</strong>{" "}
                   (doghike-suedtirol.vercel.app), betrieben von:
                 </p>
-                <div className="bg-sky-50 rounded-xl p-4">
+                <div className="bg-yellow-50/70 rounded-xl p-4">
                   <p className="font-semibold text-slate-900">Julia Schwärzer</p>
                   <p>Südtirol, Italien</p>
             <p>E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-brand-600 underline">suedtirolmithund@gmail.com</a></p>
@@ -54,7 +54,7 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-sky-200 pt-6 md:pt-8">
+            <section className="border-t border-yellow-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <UserCheck className="w-5 h-5 text-brand-600" />
                 2. Nutzerkonto & Registrierung
@@ -70,7 +70,7 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-sky-200 pt-6 md:pt-8">
+            <section className="border-t border-yellow-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <Image className="w-5 h-5 text-brand-600" />
                 3. Nutzerinhalte (Touren, Fotos, Kommentare)
@@ -80,7 +80,7 @@ export default function AGB() {
                   Sie können Wanderberichte, Fotos, Bewertungen und Kommentare hochladen.
                   Dabei gelten folgende Regeln:
                 </p>
-                <div className="bg-sky-50 rounded-xl p-4 space-y-2">
+                <div className="bg-yellow-50/70 rounded-xl p-4 space-y-2">
                   <p className="font-semibold text-slate-900">Sie bestätigen:</p>
                   <ul className="list-disc pl-5 space-y-1 text-sm">
                     <li>Sie sind der Urheber der Inhalte oder haben die notwendigen Rechte.</li>
@@ -107,7 +107,7 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-sky-200 pt-6 md:pt-8">
+            <section className="border-t border-yellow-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <Star className="w-5 h-5 text-brand-600" />
                 4. Bewertungen & Kommentare
@@ -122,7 +122,7 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-sky-200 pt-6 md:pt-8">
+            <section className="border-t border-yellow-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <CreditCard className="w-5 h-5 text-brand-600" />
                 5. Premium-Mitgliedschaft (falls aktiviert)
@@ -140,7 +140,7 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-sky-200 pt-6 md:pt-8">
+            <section className="border-t border-yellow-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
                 <AlertTriangle className="w-5 h-5 text-yellow-600" />
                 6. Verfügbarkeit & Haftung des Betreibers
@@ -159,7 +159,7 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-sky-200 pt-6 md:pt-8">
+            <section className="border-t border-yellow-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
                 <XCircle className="w-5 h-5 text-red-600" />
                 7. Kontensperre & Kündigung
@@ -174,7 +174,7 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-sky-200 pt-6 md:pt-8">
+            <section className="border-t border-yellow-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <FileText className="w-5 h-5 text-brand-600" />
                 8. Änderungen der Nutzungsbedingungen
@@ -187,7 +187,7 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-sky-200 pt-6 md:pt-8">
+            <section className="border-t border-yellow-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <Mail className="w-5 h-5 text-brand-600" />
                 9. Kontakt & Beschwerden
@@ -198,7 +198,7 @@ export default function AGB() {
               </div>
             </section>
 
-            <section className="border-t border-sky-200 pt-6">
+            <section className="border-t border-yellow-100 pt-6">
               <div className="flex flex-wrap gap-4 text-xs text-slate-400">
                 <span>Letzte Aktualisierung: April 2026</span>
                 <span>·</span>

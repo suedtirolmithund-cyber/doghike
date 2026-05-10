@@ -1,4 +1,4 @@
-﻿import { motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 export default function DogAvatar({ dog, size = "md", showName = true, onClick }) {
   const sizes = {
@@ -22,7 +22,7 @@ export default function DogAvatar({ dog, size = "md", showName = true, onClick }
       className="flex flex-col items-center gap-2 cursor-pointer"
       onClick={onClick}
     >
-      <div className={`${sizes[size]} rounded-full overflow-hidden border-3 border-white shadow-lg ring-2 ring-sky-200/50`}>
+      <div className={`${sizes[size]} rounded-full overflow-hidden border-3 border-white shadow-lg ring-2 ring-yellow-100/80`}>
         <img
           src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
           alt={dog.name}

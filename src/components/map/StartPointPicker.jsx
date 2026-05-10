@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -78,7 +78,7 @@ export default function StartPointPicker({ latitude, longitude, onSelect }) {
   };
 
   return (
-    <div className="relative rounded-xl overflow-hidden border border-sky-300" style={{ height: "400px" }}>
+    <div className="relative rounded-xl overflow-hidden border border-yellow-200" style={{ height: "400px" }}>
       <MapContainer
         center={position}
         zoom={10}

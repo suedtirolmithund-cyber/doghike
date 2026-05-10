@@ -1,4 +1,4 @@
-﻿import { useMemo } from "react";
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { supabase } from "@/lib/supabaseClient";
@@ -102,7 +102,7 @@ async function loadLeaderboard() {
 // Hilfsfunktionen UI
 const RANK_STYLE = [
   { ring: "ring-2 ring-brand-300", bg: "bg-gradient-to-br from-yellow-100 to-[#d94a3a]/12", border: "border-brand-300", medal: "🥇", num: "text-brand-700" },
-  { ring: "ring-2 ring-sky-300",  bg: "bg-gradient-to-br from-white/80 to-brand-50",  border: "border-brand-100",  medal: "🥈", num: "text-slate-600"  },
+  { ring: "ring-2 ring-yellow-200",  bg: "bg-gradient-to-br from-white/80 to-brand-50",  border: "border-brand-100",  medal: "🥈", num: "text-slate-600"  },
   { ring: "ring-2 ring-red-300", bg: "bg-gradient-to-br from-orange-50 to-brand-50", border: "border-red-200", medal: "🥉", num: "text-red-600" },
 ];
 
@@ -368,7 +368,7 @@ export default function TopDogs() {
   const myDogIds = myDogs.map((dog) => dog.id);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
 
         {/* Header */}

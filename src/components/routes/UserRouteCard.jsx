@@ -1,4 +1,4 @@
-﻿import { MapContainer, TileLayer, Polyline } from "react-leaflet";
+import { MapContainer, TileLayer, Polyline } from "react-leaflet";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
@@ -102,7 +102,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
             </Button>
           </Link>
           <Link to={`${createPageUrl("EditRoute")}?id=${route.id}`}>
-            <Button variant="ghost" size="icon" className="text-slate-600 hover:bg-sky-100">
+            <Button variant="ghost" size="icon" className="text-slate-600 hover:bg-yellow-100/80">
               <Edit className="w-4 h-4" />
             </Button>
           </Link>

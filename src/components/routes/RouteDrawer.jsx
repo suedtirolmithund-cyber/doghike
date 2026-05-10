@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, useMapEvents } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Undo, Trash2, Save, Loader2 } from "lucide-react";
@@ -141,7 +141,7 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
         )}
       </div>
 
-      <div className="relative h-64 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-sky-200">
+      <div className="relative h-64 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-yellow-100">
         <MapContainer
           center={[46.5, 11.9]}
           zoom={10}

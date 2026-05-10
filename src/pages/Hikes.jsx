@@ -9,7 +9,16 @@ import { Button } from "@/components/ui/button";
 import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
 import WaterIcon from "@/components/icons/WaterIcon";
-import { DIFFICULTY_LEVELS, DOG_DIFFICULTY_GUIDE, HUMAN_DIFFICULTY_GUIDE, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
+import {
+  DIFFICULTY_APP_EXPLANATIONS,
+  DIFFICULTY_GUIDE_NOTE,
+  DIFFICULTY_LEVELS,
+  DOG_DIFFICULTY_GUIDE,
+  HUMAN_DIFFICULTY_GUIDE,
+  SEASON_LEVELS,
+  TOUR_ICONS,
+  WATER_LEVELS,
+} from "@/lib/difficultyConfig";
 import { useHikeFilters } from "@/hooks/useHikeFilters";
 
 function DifficultyInfoDialog({ icon, title, description, levels }) {
@@ -35,11 +44,24 @@ function DifficultyInfoDialog({ icon, title, description, levels }) {
           </DialogDescription>
         </DialogHeader>
         <div className="min-h-0 space-y-3 overflow-y-auto px-6 pb-6 pr-5">
+          <div className="rounded-2xl border border-brand-100/70 bg-brand-50/70 p-4 text-sm text-slate-600">
+            <div className="space-y-2">
+              {DIFFICULTY_APP_EXPLANATIONS.map((item) => (
+                <div key={item.key}>
+                  <div className="font-medium text-slate-800">{item.title}</div>
+                  <p>{item.description}</p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-3 rounded-xl border border-yellow-100 bg-white/70 px-3 py-2 text-slate-700">
+              {DIFFICULTY_GUIDE_NOTE}
+            </p>
+          </div>
           {levels.map((level) => (
             <div key={level.stufe} className={`rounded-2xl border p-4 shadow-sm ${level.color}`}>
               <div className="mb-2 flex items-center gap-3">
                 <span className={`rounded-full px-2 py-1 text-xs font-bold text-white ${level.badge}`}>
-                  {level.level ?? level.stufe}
+                  {level.level}
                 </span>
                 <div>
                   <div className="font-semibold">{level.title}</div>
@@ -50,7 +72,7 @@ function DifficultyInfoDialog({ icon, title, description, levels }) {
               <div className="grid gap-1.5 text-xs opacity-85">
                 <div><span className="font-medium">Beispiele:</span> {level.examples}</div>
                 <div><span className="font-medium">Gelände:</span> {level.terrain}</div>
-                <div><span className="font-medium">{level.fitness ? "Fitness" : "Hinweis"}:</span> {level.fitness ?? level.note}</div>
+                <div><span className="font-medium">{level.fitness ? "Einordnung" : "Hinweis"}:</span> {level.fitness ?? level.note}</div>
               </div>
             </div>
           ))}

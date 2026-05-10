@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -101,7 +101,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
     <form onSubmit={handleSubmit} className="doghike-glass-card space-y-6 p-4 sm:p-5">
       <div className="flex flex-col items-center gap-2">
         <div className="relative">
-          <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gradient-to-br from-yellow-50 via-white to-sky-50">
+          <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gradient-to-br from-yellow-50 via-white to-orange-50">
             {formData.photo_url ? (
               <img
                 src={formData.photo_url}

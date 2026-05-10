@@ -1,4 +1,4 @@
-﻿import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { createRoute } from "@/lib/routesApi";
@@ -428,7 +428,7 @@ function SmartRoutePlanner({ onRouteReady }) {
 
       {searchError && <p className="text-xs text-red-500">{searchError}</p>}
       {searchResults.length > 1 && (
-        <div className="rounded-xl border border-sky-200/80 bg-white/85 p-2 shadow-sm backdrop-blur-sm">
+        <div className="rounded-xl border border-yellow-100/80 bg-white/85 p-2 shadow-sm backdrop-blur-sm">
           <div className="flex items-center justify-between gap-2 px-2 pb-2">
             <p className="text-xs font-medium text-slate-500">
               Mehrere Orte gefunden. Wähle den richtigen aus:
@@ -458,7 +458,7 @@ function SmartRoutePlanner({ onRouteReady }) {
       )}
 
       {/* Map */}
-      <div className="relative h-[68vw] min-h-[310px] max-h-[500px] overflow-hidden rounded-xl border border-sky-200 shadow-sm md:h-[440px] md:max-h-none">
+      <div className="relative h-[68vw] min-h-[310px] max-h-[500px] overflow-hidden rounded-xl border border-yellow-100 shadow-sm md:h-[440px] md:max-h-none">
         <MapContainer
           center={[46.5, 11.3]}
           zoom={10}
@@ -549,7 +549,7 @@ function SmartRoutePlanner({ onRouteReady }) {
       {waypoints.length > 0 && (
         <div className="space-y-1">
           {waypoints.map((wp, i) => (
-            <div key={i} className="flex items-center gap-2 text-xs bg-sky-50 rounded-lg px-2 py-1.5 group">
+            <div key={i} className="flex items-center gap-2 text-xs bg-yellow-50/70 rounded-lg px-2 py-1.5 group">
               <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-white text-[10px] shrink-0 ${
             i === 0 ? "bg-brand-400" : i === waypoints.length - 1 && waypoints.length > 1 ? "bg-red-600" : "bg-brand-700"
               }`}>
@@ -578,19 +578,19 @@ function SmartRoutePlanner({ onRouteReady }) {
       {/* Stats */}
       {route && (
         <div className="grid grid-cols-3 gap-3">
-          <div className="rounded-xl border border-sky-200/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
+          <div className="rounded-xl border border-yellow-100/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
             <span className="block text-lg mb-1">{TOUR_ICONS.distance}</span>
             <p className="text-lg font-bold text-slate-900">{route.distance_km}</p>
             <p className="text-xs text-slate-500">km</p>
           </div>
-          <div className="rounded-xl border border-sky-200/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
+          <div className="rounded-xl border border-yellow-100/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
             <span className="block text-lg mb-1">{TOUR_ICONS.duration}</span>
             <p className="text-lg font-bold text-slate-900">
               {formatDurationHours(route.duration_minutes)}
             </p>
             <p className="text-xs text-slate-500">ca. Zeit</p>
           </div>
-          <div className="rounded-xl border border-sky-200/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
+          <div className="rounded-xl border border-yellow-100/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
             <span className="block text-lg mb-1">{TOUR_ICONS.elevation}</span>
             <p className="text-lg font-bold text-slate-900">
               {elevation.length ? `+${calcElevationGain(elevation).gain} m` : "–"}
@@ -702,7 +702,7 @@ export default function RoutePlanner() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center p-6">
+      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center p-6">
         <div className="text-center">
           <p className="text-xl text-slate-700 mb-4">Bitte melde dich an, um Routen zu planen</p>
           <Link to={createPageUrl("Login")}>
@@ -714,7 +714,7 @@ export default function RoutePlanner() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
         <Link to={createPageUrl("Profile")}>
           <Button variant="ghost" className="mb-3 h-8 rounded-xl px-2 text-slate-600 hover:bg-brand-50/60 hover:text-slate-900 md:mb-4" size="sm">
@@ -811,7 +811,7 @@ export default function RoutePlanner() {
                   rows={2} className="mt-1" />
               </div>
 
-              <div className="rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-slate-600">
+              <div className="rounded-xl border border-yellow-100 bg-yellow-50/70 px-4 py-3 text-sm text-slate-600">
                 {activeTab === "track"
                   ? "Diese Aufzeichnung gilt als bereits gemacht und wird direkt als vorausgefüllter Tagebuch-Eintrag geöffnet."
                   : activeTab === "gpx"

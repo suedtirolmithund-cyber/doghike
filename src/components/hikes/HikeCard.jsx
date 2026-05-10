@@ -1,4 +1,4 @@
-﻿import { motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -129,7 +129,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                 {hike._source === "journal" ? (
                   <div className="flex min-w-0 items-center gap-2">
                     {(hike.dog_photo_url || hike.author_avatar) && (
-                      <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-white bg-sky-100 shadow-sm">
+                      <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-white bg-yellow-100/80 shadow-sm">
                         <img
                           src={hike.dog_photo_url || hike.author_avatar}
                           alt={hike.dog_name || hike.author_username || ""}
@@ -150,7 +150,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                     {hikeDogs.slice(0, 3).map((dog, dogIndex) => (
                       <div
                         key={dog.id}
-                        className="h-8 w-8 overflow-hidden rounded-full border-2 border-white bg-sky-100 shadow-sm"
+                        className="h-8 w-8 overflow-hidden rounded-full border-2 border-white bg-yellow-100/80 shadow-sm"
                         style={{ marginLeft: dogIndex > 0 ? "-8px" : 0 }}
                       >
                         <img

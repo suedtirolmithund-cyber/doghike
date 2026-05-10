@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -388,7 +388,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       </div>
 
       {/* Start Point Section */}
-      <div className="space-y-4 rounded-2xl border border-sky-200/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(16,47,74,0.08)] backdrop-blur-sm md:p-6">
+      <div className="space-y-4 rounded-2xl border border-yellow-100/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(95,36,29,0.08)] backdrop-blur-sm md:p-6">
         <div className="flex items-center justify-between">
           <div>
             <Label className="text-lg">📍 Ausgangspunkt *</Label>
@@ -452,7 +452,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       </div>
 
       {/* Route Section */}
-      <div className="space-y-4 rounded-2xl border border-sky-200/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(16,47,74,0.08)] backdrop-blur-sm md:p-6">
+      <div className="space-y-4 rounded-2xl border border-yellow-100/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(95,36,29,0.08)] backdrop-blur-sm md:p-6">
         <div className="flex items-center justify-between">
           <div>
             <Label className="text-lg">🗺️ Routenverlauf (optional)</Label>
@@ -583,7 +583,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
                 className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
                   formData.dogs?.includes(dog.id)
                     ? "border-brand-400 bg-brand-50/60"
-                    : "border-sky-200 hover:border-sky-300"
+                    : "border-yellow-100 hover:border-yellow-200"
                 }`}
               >
                 <Checkbox
@@ -630,7 +630,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             ))}
           </AnimatePresence>
           
-          <label className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-sky-300 rounded-xl cursor-pointer hover:border-brand-400 transition-colors">
+          <label className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-yellow-200 rounded-xl cursor-pointer hover:border-brand-400 transition-colors">
             <input
               type="file"
               accept="image/*"

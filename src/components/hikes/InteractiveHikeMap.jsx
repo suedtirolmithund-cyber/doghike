@@ -1,4 +1,4 @@
-﻿import { MapContainer, TileLayer, Marker, Polyline, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Polyline, Popup, useMap } from "react-leaflet";
 import { useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -54,7 +54,7 @@ export default function InteractiveHikeMap({
 }) {
   if (!latitude || !longitude) {
     return (
-      <div className="rounded-2xl border border-sky-200 bg-sky-100 p-8 text-center">
+      <div className="rounded-2xl border border-yellow-100 bg-yellow-100/80 p-8 text-center">
         <p className="text-slate-500">Keine Karteninformationen verfügbar</p>
       </div>
     );

@@ -1,4 +1,4 @@
-﻿import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Cloud, Droplets, Wind, Sun, CloudRain, CloudSnow, CloudDrizzle, CloudLightning, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -36,7 +36,7 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
 
   if (isLoading) {
     return (
-      <div className="rounded-2xl border border-sky-200/70 bg-white/70 p-4 shadow-sm backdrop-blur-sm">
+      <div className="rounded-2xl border border-yellow-100/70 bg-white/70 p-4 shadow-sm backdrop-blur-sm">
         <div className="flex items-center justify-center gap-2 text-brand-600">
           <Loader2 className="h-4 w-4 animate-spin" />
           <span className="text-xs">Wetterdaten werden geladen...</span>
@@ -54,7 +54,7 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl border border-sky-200/70 bg-white/70 p-4 shadow-[0_12px_28px_rgba(16,47,74,0.08)] backdrop-blur-sm"
+      className="rounded-2xl border border-yellow-100/70 bg-white/70 p-4 shadow-[0_12px_28px_rgba(95,36,29,0.08)] backdrop-blur-sm"
     >
       <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900 sm:text-base">
         <Cloud className="h-4 w-4" />

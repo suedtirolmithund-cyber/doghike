@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { supabase } from "@/lib/supabaseClient";
@@ -134,7 +134,7 @@ async function loadNotifications(userId) {
           id: `fe-${entry.id}`,
           type: "friend_entry",
           icon: BookOpen,
-          color: "text-slate-600 bg-sky-50 border-sky-200",
+          color: "text-slate-600 bg-yellow-50/70 border-yellow-100",
           title: `${profile?.full_name || profile?.username || "Freund"} hat "${entry.title}" geteilt`,
           time: entry.created_at,
           link: `${createPageUrl("JournalDetail")}?id=${entry.id}`,
@@ -217,7 +217,7 @@ export default function Notifications() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="doghike-glass-card p-8 text-center">
           <Bell className="w-12 h-12 text-slate-300 mx-auto mb-3" />
           <p className="text-slate-600 font-medium mb-4">Bitte anmelden</p>
@@ -230,7 +230,7 @@ export default function Notifications() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="doghike-page-header">
           <div className="doghike-page-icon">

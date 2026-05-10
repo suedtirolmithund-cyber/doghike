@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -279,15 +279,15 @@ function LocationPicker({ lat, lng, onChange }) {
       )}
 
       {searchResults.length > 0 && (
-        <div className="overflow-hidden rounded-xl border border-sky-200 bg-white shadow-sm">
-          <div className="flex items-center justify-between border-b border-sky-100 px-3 py-2">
+        <div className="overflow-hidden rounded-xl border border-yellow-100 bg-white shadow-sm">
+          <div className="flex items-center justify-between border-b border-yellow-100 px-3 py-2">
             <p className="text-xs font-medium text-slate-500">
               Mehrere Orte gefunden. Bitte den richtigen auswählen.
             </p>
             <button
               type="button"
               onClick={dismissSearchResults}
-              className="rounded-md p-1 text-slate-400 transition-colors hover:bg-sky-50 hover:text-slate-600"
+              className="rounded-md p-1 text-slate-400 transition-colors hover:bg-yellow-50/70 hover:text-slate-600"
               aria-label="Trefferliste schließen"
             >
               <X className="h-4 w-4" />
@@ -299,7 +299,7 @@ function LocationPicker({ lat, lng, onChange }) {
                 key={`${result.place_id ?? result.osm_id ?? index}`}
                 type="button"
                 onClick={() => handleSelectSearchResult(result)}
-                className="flex w-full items-start gap-3 border-b border-sky-100 px-3 py-3 text-left transition-colors last:border-b-0 hover:bg-sky-50"
+                className="flex w-full items-start gap-3 border-b border-yellow-100 px-3 py-3 text-left transition-colors last:border-b-0 hover:bg-yellow-50/70"
               >
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-400" />
                 <div className="min-w-0">
@@ -313,7 +313,7 @@ function LocationPicker({ lat, lng, onChange }) {
       )}
 
       {/* Map */}
-      <div className="relative rounded-xl overflow-hidden border border-sky-200 shadow-sm" style={{ height: 260 }}>
+      <div className="relative rounded-xl overflow-hidden border border-yellow-100 shadow-sm" style={{ height: 260 }}>
         <div className="absolute right-3 top-3 z-[1000]">
           <Button
             type="button"
@@ -372,7 +372,7 @@ function WaterPicker({ label, value, onChange }) {
             className={`flex min-h-[70px] min-w-0 flex-col items-center justify-center gap-1 rounded-xl border px-2 py-2 text-center transition-all focus:outline-none ${
               value === level
                 ? "border-brand-400 bg-brand-50 text-brand-700"
-                : "border-sky-200 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/40"
+                : "border-yellow-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/40"
             }`}
             title={getWaterLabel(level)}
             >
@@ -429,7 +429,7 @@ function SeasonPicker({ value = [], onChange }) {
               className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 text-sm font-medium transition-all focus:outline-none ${
                 active
                   ? "shadow-sm"
-                  : "border-sky-200 bg-white text-slate-500 hover:border-sky-300"
+                  : "border-yellow-100 bg-white text-slate-500 hover:border-yellow-200"
               }`}
             >
               <span>{opt.emoji}</span>
@@ -452,8 +452,8 @@ const VISIBILITY_OPTIONS = [
     emoji: "👤",
     label: "Privat",
     desc: "Nur ich sehe diesen Eintrag",
-    active: "border-sky-400 bg-sky-100 text-slate-900",
-    idle: "border-sky-200 hover:border-sky-300",
+    active: "border-yellow-400 bg-yellow-100/80 text-slate-900",
+    idle: "border-yellow-100 hover:border-yellow-200",
   },
   {
     value: "friends",
@@ -461,7 +461,7 @@ const VISIBILITY_OPTIONS = [
     label: "Freunde",
     desc: "Nur bestätigte Freunde",
     active: "border-brand-300 bg-brand-50 text-brand-800",
-    idle: "border-sky-200 hover:border-brand-200 hover:bg-brand-50/40",
+    idle: "border-yellow-100 hover:border-brand-200 hover:bg-brand-50/40",
   },
   {
     value: "public",
@@ -469,7 +469,7 @@ const VISIBILITY_OPTIONS = [
     label: "Öffentlich",
     desc: "Wird an Admin zur Prüfung geschickt",
     active: "border-brand-400 bg-brand-50 text-brand-700",
-    idle: "border-sky-200 hover:border-brand-300",
+    idle: "border-yellow-100 hover:border-brand-300",
   },
 ];
 
@@ -484,7 +484,7 @@ function VisibilityPicker({ value, onChange }) {
             type="button"
             onClick={() => onChange(opt.value)}
             className={`flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition-all focus:outline-none text-center ${
-              value === opt.value ? opt.active : `border-sky-200 bg-white text-slate-500 ${opt.idle}`
+              value === opt.value ? opt.active : `border-yellow-100 bg-white text-slate-500 ${opt.idle}`
             }`}
           >
             <span className="text-xl">{opt.emoji}</span>
@@ -861,7 +861,7 @@ export default function AddJournalEntry() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/10 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/10 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
 
         {/* Header */}
@@ -998,8 +998,8 @@ export default function AddJournalEntry() {
                     onClick={() => set("dog_id", null)}
                     className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 text-sm transition-all focus:outline-none ${
                       form.dog_id === null
-                        ? "border-sky-400 bg-sky-100 text-slate-700 font-medium"
-                        : "border-sky-200 text-slate-400 hover:border-sky-300"
+                        ? "border-yellow-400 bg-yellow-100/80 text-slate-700 font-medium"
+                        : "border-yellow-100 text-slate-400 hover:border-yellow-200"
                     }`}
                   >
                     Kein / unbekannt
@@ -1012,10 +1012,10 @@ export default function AddJournalEntry() {
                       className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 text-sm transition-all focus:outline-none ${
                         form.dog_id === dog.id
                           ? "border-brand-400 bg-brand-50 text-brand-700 font-medium"
-                          : "border-sky-200 text-slate-600 hover:border-brand-300"
+                          : "border-yellow-100 text-slate-600 hover:border-brand-300"
                       }`}
                     >
-                      <div className="w-6 h-6 rounded-full overflow-hidden bg-sky-100 shrink-0">
+                      <div className="w-6 h-6 rounded-full overflow-hidden bg-yellow-100/80 shrink-0">
                         <img
                           src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
                           alt={dog.name}
@@ -1068,7 +1068,7 @@ export default function AddJournalEntry() {
               </div>
             )}
 
-            <label className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-sky-300 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
+            <label className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-yellow-200 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
               <input type="file" accept="image/*" multiple onChange={handlePhotoUpload} className="hidden" disabled={photoUploading} />
               {photoUploading ? (
                 <><Loader2 className="w-6 h-6 text-slate-400 animate-spin" /><span className="text-sm text-slate-400">Lade hoch...</span></>
@@ -1093,7 +1093,7 @@ export default function AddJournalEntry() {
                 </button>
               </div>
             ) : (
-              <label className="flex items-center gap-3 p-4 border-2 border-dashed border-sky-300 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
+              <label className="flex items-center gap-3 p-4 border-2 border-dashed border-yellow-200 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
                 <input type="file" accept=".gpx" onChange={handleGpxUpload} className="hidden" disabled={gpxUploading} />
                 {gpxUploading ? (
                   <><Loader2 className="w-5 h-5 text-slate-400 animate-spin" /><span className="text-sm text-slate-400">Lade hoch...</span></>

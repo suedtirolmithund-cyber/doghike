@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -66,7 +66,7 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
       </div>
 
       {isAuthenticated && (
-        <div className="border-t border-sky-200 pt-4 md:pt-6">
+        <div className="border-t border-yellow-100 pt-4 md:pt-6">
           <p className="font-semibold text-slate-900 mb-3 text-sm md:text-base">
             {userRating ? "Deine Bewertung ändern" : "Wanderung bewerten"}
           </p>

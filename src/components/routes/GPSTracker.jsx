@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, Square, Crosshair, Loader2 } from "lucide-react";
@@ -570,7 +570,7 @@ export default function GPSTracker({ onSave }) {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: index * 0.05 }}
             className={`rounded-xl p-2 text-center md:p-3 ${
-              isTracking && !isPaused ? "border border-green-300 bg-white" : "border border-sky-200 bg-white"
+              isTracking && !isPaused ? "border border-green-300 bg-white" : "border border-yellow-100 bg-white"
             }`}
           >
             <p className="text-sm font-bold leading-tight text-slate-900 md:text-xl">
@@ -584,7 +584,7 @@ export default function GPSTracker({ onSave }) {
         ))}
       </div>
 
-      <div className="relative h-[50vw] min-h-64 max-h-72 overflow-hidden rounded-xl border-2 border-sky-200 md:h-80 lg:h-[400px]">
+      <div className="relative h-[50vw] min-h-64 max-h-72 overflow-hidden rounded-xl border-2 border-yellow-100 md:h-80 lg:h-[400px]">
         <MapContainer
           center={currentPosition || myLocation || [46.5, 11.9]}
           zoom={currentPosition || myLocation ? 14 : 10}
@@ -616,12 +616,12 @@ export default function GPSTracker({ onSave }) {
               isPaused ? "bg-yellow-500" : "animate-pulse bg-red-500"
             }`}
           >
-            {isPaused ? "Pausiert" : "Aufzeichnung laeuft"}
+            {isPaused ? "Pausiert" : "Aufzeichnung läuft"}
           </div>
         )}
 
         {routePoints.length > 0 && (
-          <div className="absolute right-3 top-3 z-[1000] rounded-lg border border-sky-200 bg-white/90 px-2 py-1 text-xs font-medium text-slate-700 shadow backdrop-blur-sm">
+          <div className="absolute right-3 top-3 z-[1000] rounded-lg border border-yellow-100 bg-white/90 px-2 py-1 text-xs font-medium text-slate-700 shadow backdrop-blur-sm">
             {routePoints.length} Punkte
           </div>
         )}
@@ -636,7 +636,7 @@ export default function GPSTracker({ onSave }) {
           }}
           disabled={locating}
           title="Meinen Standort finden"
-          className="absolute bottom-3 right-3 z-[1000] flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-sky-200 bg-white p-3 shadow-md hover:bg-sky-50"
+          className="absolute bottom-3 right-3 z-[1000] flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-yellow-100 bg-white p-3 shadow-md hover:bg-yellow-50/70"
         >
           {locating ? (
           <Loader2 className="h-5 w-5 animate-spin text-brand-600" />

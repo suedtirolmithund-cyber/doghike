@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { getAllHikes } from "@/api/sheetsClient";
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -193,7 +193,7 @@ export default function HikeDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center">
         <div className="animate-pulse text-brand-500">Lädt...</div>
       </div>
     );
@@ -202,7 +202,7 @@ export default function HikeDetail() {
 
   if (!hike) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="doghike-glass-card p-8 text-center">
           <p className="text-xl text-slate-700 mb-4">Tour nicht gefunden</p>
           <Link to={fallbackBackUrl}>
@@ -250,7 +250,7 @@ export default function HikeDetail() {
     : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
       {/* Hero Image */}
       <div className="relative h-[50vh] overflow-hidden">
         <img
@@ -527,11 +527,11 @@ export default function HikeDetail() {
                   <p className="text-slate-500">Zu dieser Premium-Tour ist eine Kurzvorschau sichtbar. Die ganzen Details kannst du mit Premium freischalten.</p>
                 )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="rounded-xl border border-sky-200 bg-sky-50 p-4">
+                  <div className="rounded-xl border border-yellow-100 bg-yellow-50/70 p-4">
                     <p className="text-xs uppercase tracking-wide text-slate-400 mb-1">Ort</p>
                     <p className="font-medium text-slate-900">{hike.location || "Nicht angegeben"}</p>
                   </div>
-                  <div className="rounded-xl border border-sky-200 bg-sky-50 p-4">
+                  <div className="rounded-xl border border-yellow-100 bg-yellow-50/70 p-4">
                     <p className="text-xs uppercase tracking-wide text-slate-400 mb-1">Land</p>
                     <p className="font-medium text-slate-900">{countryLabel || "Nicht angegeben"}</p>
                   </div>

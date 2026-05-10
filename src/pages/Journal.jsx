@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -107,7 +107,7 @@ function VisibilityStatusBadge({ visibility, status }) {
   }
 
   return (
-    <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-sky-100 text-slate-500 border border-sky-200">
+    <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-yellow-100/80 text-slate-500 border border-yellow-100">
       <User className="w-3 h-3" />
       Privat
     </span>
@@ -192,7 +192,7 @@ export default function Journal() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sky-50 to-brand-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-yellow-50 to-brand-50/20 flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -367,7 +367,7 @@ export default function Journal() {
                               </Badge>
                           )}
                           {entry.gpx_url && (
-                            <Badge variant="secondary" className="text-xs bg-sky-100 text-slate-600">
+                            <Badge variant="secondary" className="text-xs bg-yellow-100/80 text-slate-600">
                               GPX
                             </Badge>
                           )}

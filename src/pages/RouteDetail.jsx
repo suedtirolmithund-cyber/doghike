@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { getRoute, updateRoute, deleteRoute } from "@/lib/routesApi";
@@ -191,7 +191,7 @@ export default function RouteDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center">
         <p className="text-slate-600">Lade Route...</p>
       </div>
     );
@@ -199,7 +199,7 @@ export default function RouteDetail() {
 
   if (!route) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center">
         <div className="text-center">
           <p className="text-xl text-slate-700 mb-4">Route nicht gefunden</p>
           <Link to={createPageUrl("Profile")}>
@@ -263,7 +263,7 @@ export default function RouteDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
         <Link to={createPageUrl("Profile")}>
           <Button variant="ghost" className="mb-4">
@@ -395,7 +395,7 @@ export default function RouteDetail() {
                 </Button>
               </div>
             ) : (
-              <div className="h-96 md:h-[500px] rounded-xl overflow-hidden border border-sky-200">
+              <div className="h-96 md:h-[500px] rounded-xl overflow-hidden border border-yellow-100">
                 {route.waypoints?.length > 0 ? (
                   <MapContainer
                     center={route.waypoints[0]}
@@ -542,7 +542,7 @@ export default function RouteDetail() {
                     exit={{ opacity: 0, height: 0 }}
                     className="overflow-hidden"
                   >
-                    <div className="border-t border-sky-200 mt-4 pt-4 space-y-4">
+                    <div className="border-t border-yellow-100 mt-4 pt-4 space-y-4">
                       <h4 className="font-medium text-slate-900">Tour-Details ergänzen</h4>
 
                       {/* Date */}

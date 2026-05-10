@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Camera, Loader2, Trash2 } from "lucide-react";
@@ -255,7 +255,7 @@ export default function EditPublicHike() {
 
   if (isLoadingAuth || isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center">
         <Loader2 className="w-6 h-6 animate-spin text-brand-500" />
       </div>
     );
@@ -263,7 +263,7 @@ export default function EditPublicHike() {
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="doghike-glass-card p-8 text-center">
           <p className="text-xl text-slate-700 mb-4">Nur Admins können öffentliche Touren bearbeiten.</p>
           <Link to={createPageUrl("Hikes")}>
@@ -276,7 +276,7 @@ export default function EditPublicHike() {
 
   if (!hike || !formData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="doghike-glass-card p-8 text-center">
           <p className="text-xl text-slate-700 mb-4">Öffentliche Tour nicht gefunden</p>
           <Link to={createPageUrl("Hikes")}>
@@ -288,7 +288,7 @@ export default function EditPublicHike() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
           <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`}>

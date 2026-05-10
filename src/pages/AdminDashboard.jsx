@@ -1,4 +1,4 @@
-﻿import { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
@@ -74,7 +74,7 @@ function FilterButton({ active, children, onClick }) {
       className={
         active
           ? "bg-brand-400 text-white hover:bg-brand-600"
-          : "border-sky-200 text-slate-600 hover:bg-sky-50"
+          : "border-yellow-100 text-slate-600 hover:bg-yellow-50/70"
       }
     >
       {children}
@@ -87,13 +87,13 @@ function StatusBadge({ status }) {
   const config = {
     approved: "bg-emerald-50 text-emerald-700 border-emerald-200",
     draft: "bg-yellow-50 text-yellow-700 border-yellow-200",
-    archived: "bg-sky-100 text-slate-600 border-sky-200",
+    archived: "bg-yellow-100/80 text-slate-600 border-yellow-100",
   };
 
   return (
     <Badge
       variant="outline"
-      className={config[normalized] ?? "bg-sky-100 text-slate-600 border-sky-200"}
+      className={config[normalized] ?? "bg-yellow-100/80 text-slate-600 border-yellow-100"}
     >
       {normalized === "approved"
         ? "Freigegeben"
@@ -185,7 +185,7 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="space-y-4 border-t border-sky-100 px-5 pb-4 pt-4">
+            <div className="space-y-4 border-t border-yellow-100 px-5 pb-4 pt-4">
               {entry.description && (
                 <div>
                   <Label className="text-xs uppercase tracking-wide text-slate-500">
@@ -406,7 +406,7 @@ function PublicHikeCard({ hike }) {
       className="doghike-glass-card overflow-hidden"
     >
       <div className="flex flex-col gap-4 p-4 md:flex-row">
-        <div className="h-28 w-full shrink-0 overflow-hidden rounded-2xl bg-sky-100 md:w-44">
+        <div className="h-28 w-full shrink-0 overflow-hidden rounded-2xl bg-yellow-100/80 md:w-44">
           {hike.cover_photo ? (
             <img src={hike.cover_photo} alt="" className="h-full w-full object-cover" />
           ) : (
@@ -483,7 +483,7 @@ function UserCard({ profile, deleting, onDelete }) {
               className="h-11 w-11 shrink-0 rounded-2xl object-cover"
             />
           ) : (
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-sky-100 text-slate-400">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-yellow-100/80 text-slate-400">
               <User className="h-5 w-5" />
             </div>
           )}
@@ -774,7 +774,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 md:py-10">
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="doghike-page-header">
           <div className="doghike-page-icon bg-gradient-to-br from-[#5f241d] to-[#d94a3a] text-white shadow-[0_12px_24px_rgba(95,36,29,0.14)]">
@@ -878,7 +878,7 @@ export default function AdminDashboard() {
                       <p className="text-xs text-slate-500">Kommentare gesamt</p>
                     </div>
                   </div>
-                  <div className="border-l border-sky-200 pl-4">
+                  <div className="border-l border-yellow-100 pl-4">
                     <p className="text-2xl font-bold leading-none text-yellow-700">{pendingCommentsCount}</p>
                     <p className="text-xs text-slate-500">Freigaben nötig</p>
                   </div>
@@ -1016,7 +1016,7 @@ export default function AdminDashboard() {
             <div className="mb-4 grid gap-4 md:grid-cols-[0.9fr_1.1fr]">
               <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-100">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-yellow-100/80">
                     <Users className="h-5 w-5 text-slate-600" />
                   </div>
                   <div>

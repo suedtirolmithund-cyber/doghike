@@ -1,4 +1,4 @@
-﻿import { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { MapContainer, TileLayer, Polyline, Marker } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import {
@@ -175,7 +175,7 @@ export default function GPXUploader({ onSave }) {
           className={`border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer ${
             isDragging
               ? "border-brand-400 bg-brand-50"
-              : "border-sky-300 hover:border-brand-300 hover:bg-brand-50/40"
+              : "border-yellow-200 hover:border-brand-300 hover:bg-brand-50/40"
           }`}
           onDragOver={(e) => {
             e.preventDefault();
@@ -246,7 +246,7 @@ export default function GPXUploader({ onSave }) {
             </div>
           </div>
 
-          <div className="bg-sky-50 rounded-lg p-3 text-xs text-slate-600 flex flex-wrap gap-4">
+          <div className="bg-yellow-50/70 rounded-lg p-3 text-xs text-slate-600 flex flex-wrap gap-4">
             <span>⬇️ Abstieg: <strong>{gpxData.elevation_loss_m} m</strong></span>
             {gpxData.min_elevation !== Infinity && (
               <span>🏔️ Min. Höhe: <strong>{Math.round(gpxData.min_elevation)} m</strong></span>
@@ -256,7 +256,7 @@ export default function GPXUploader({ onSave }) {
             </span>
           </div>
 
-          <div className="relative h-72 md:h-96 rounded-xl overflow-hidden border-2 border-sky-200">
+          <div className="relative h-72 md:h-96 rounded-xl overflow-hidden border-2 border-yellow-100">
             <MapContainer center={mapCenter} zoom={12} style={{ height: "100%", width: "100%" }}>
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

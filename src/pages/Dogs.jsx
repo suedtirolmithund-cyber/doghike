@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { getDogs, createDog, updateDog, deleteDog } from "@/lib/profilesApi";
@@ -125,9 +125,9 @@ export default function Dogs() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="text-center">
-          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border border-yellow-100 bg-white/78 text-red-600 shadow-[0_14px_35px_rgba(16,47,74,0.09)]">
+          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border border-yellow-100 bg-white/78 text-red-600 shadow-[0_14px_35px_rgba(95,36,29,0.09)]">
             <Dog className="h-9 w-9" />
           </div>
           <p className="text-slate-600 mb-4">Bitte melde dich an, um deine Hunde zu verwalten.</p>
@@ -142,7 +142,7 @@ export default function Dogs() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -261,7 +261,7 @@ export default function Dogs() {
                         <p className="text-slate-400 text-xs mb-3 line-clamp-2">{dog.notes}</p>
                       )}
 
-                      <div className="grid grid-cols-3 gap-2 pt-3 border-t border-sky-100">
+                      <div className="grid grid-cols-3 gap-2 pt-3 border-t border-yellow-100">
                         <div className="text-center">
                           <p className="text-lg font-bold text-slate-900">{stats.tourCount}</p>
                           <p className="text-xs text-slate-400">Touren</p>
@@ -285,7 +285,7 @@ export default function Dogs() {
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            className="overflow-hidden rounded-[28px] border border-white/65 bg-white/72 shadow-[0_24px_60px_rgba(16,47,74,0.14)] backdrop-blur-xl"
+            className="overflow-hidden rounded-[28px] border border-white/65 bg-white/72 shadow-[0_24px_60px_rgba(95,36,29,0.14)] backdrop-blur-xl"
           >
             <div className="relative overflow-hidden bg-gradient-to-br from-[#5f241d] via-[#d94a3a] to-[#f6c43d] px-6 py-12 text-center">
               <div
@@ -303,8 +303,8 @@ export default function Dogs() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-b from-yellow-50/70 via-white to-sky-50/80 px-5 py-6 md:px-8 md:py-8">
-              <div className="rounded-[24px] border border-yellow-100/80 bg-white/78 p-5 shadow-[0_18px_34px_rgba(16,47,74,0.10)] backdrop-blur-sm md:p-6">
+            <div className="bg-gradient-to-b from-yellow-50/70 via-white to-orange-50/80 px-5 py-6 md:px-8 md:py-8">
+              <div className="rounded-[24px] border border-yellow-100/80 bg-white/78 p-5 shadow-[0_18px_34px_rgba(95,36,29,0.10)] backdrop-blur-sm md:p-6">
                 <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#d94a3a]">Dein nächster Schritt</p>
                 <button
                   type="button"
@@ -312,7 +312,7 @@ export default function Dogs() {
                     setEditingDog(null);
                     setDialogOpen(true);
                   }}
-                  className="mt-4 flex w-full items-center justify-between rounded-[22px] border border-yellow-100 bg-gradient-to-r from-white via-yellow-50/70 to-sky-50 px-5 py-5 text-left shadow-[0_14px_26px_rgba(16,47,74,0.10)] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_30px_rgba(217,74,58,0.13)]"
+                  className="mt-4 flex w-full items-center justify-between rounded-[22px] border border-yellow-100 bg-gradient-to-r from-white via-yellow-50/70 to-orange-50 px-5 py-5 text-left shadow-[0_14px_26px_rgba(95,36,29,0.10)] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_30px_rgba(217,74,58,0.13)]"
                 >
                   <div className="min-w-0">
                     <p className="text-xl font-semibold text-slate-900">Hund anlegen</p>
@@ -324,13 +324,13 @@ export default function Dogs() {
                 </button>
               </div>
 
-              <div className="mt-5 rounded-[24px] border border-yellow-100/80 bg-white/70 p-5 shadow-[0_16px_32px_rgba(16,47,74,0.08)] backdrop-blur-sm md:p-6">
+              <div className="mt-5 rounded-[24px] border border-yellow-100/80 bg-white/70 p-5 shadow-[0_16px_32px_rgba(95,36,29,0.08)] backdrop-blur-sm md:p-6">
                 <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">Danach</p>
                 <div className="mt-4 grid gap-3 md:grid-cols-3">
                   <Link to={createPageUrl("Dashboard")} className="block">
                     <Button
                       variant="outline"
-                      className="h-auto w-full justify-start gap-3 rounded-[20px] border-sky-200 bg-white/85 px-4 py-4 text-left text-slate-700 shadow-sm hover:bg-brand-50/50"
+                      className="h-auto w-full justify-start gap-3 rounded-[20px] border-yellow-100 bg-white/85 px-4 py-4 text-left text-slate-700 shadow-sm hover:bg-brand-50/50"
                     >
                       <Home className="h-4 w-4 shrink-0 text-red-600" />
                       <span className="text-sm font-medium">Zum Dashboard</span>
@@ -339,7 +339,7 @@ export default function Dogs() {
                   <Link to={createPageUrl("Hikes")} className="block">
                     <Button
                       variant="outline"
-                      className="h-auto w-full justify-start gap-3 rounded-[20px] border-sky-200 bg-white/85 px-4 py-4 text-left text-slate-700 shadow-sm hover:bg-brand-50/50"
+                      className="h-auto w-full justify-start gap-3 rounded-[20px] border-yellow-100 bg-white/85 px-4 py-4 text-left text-slate-700 shadow-sm hover:bg-brand-50/50"
                     >
                       <Mountain className="h-4 w-4 shrink-0 text-red-600" />
                       <span className="text-sm font-medium">Touren entdecken</span>
@@ -348,7 +348,7 @@ export default function Dogs() {
                   <Link to={createPageUrl("AddJournalEntry")} className="block">
                     <Button
                       variant="outline"
-                      className="h-auto w-full justify-start gap-3 rounded-[20px] border-sky-200 bg-white/85 px-4 py-4 text-left text-slate-700 shadow-sm hover:bg-brand-50/50"
+                      className="h-auto w-full justify-start gap-3 rounded-[20px] border-yellow-100 bg-white/85 px-4 py-4 text-left text-slate-700 shadow-sm hover:bg-brand-50/50"
                     >
                       <Plus className="h-4 w-4 shrink-0 text-red-600" />
                       <span className="text-sm font-medium">Wanderung eintragen</span>

@@ -1,4 +1,4 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Lock, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-3xl p-8 border border-sky-200 shadow-sm"
+        className="bg-white rounded-3xl p-8 border border-yellow-100 shadow-sm"
       >
         <div className="w-14 h-14 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-5">
           <Crown className="w-7 h-7 text-yellow-500" />
@@ -54,7 +54,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-slate-50">
       {/* Blurred preview */}
       {coverPhoto && (
         <div className="relative h-[40vh] overflow-hidden">
@@ -74,7 +74,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-3xl p-10 border border-sky-200 shadow-xl"
+          className="bg-white rounded-3xl p-10 border border-yellow-100 shadow-xl"
         >
           <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <Crown className="w-8 h-8 text-yellow-500" />

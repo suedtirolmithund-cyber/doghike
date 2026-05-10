@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -78,7 +78,7 @@ function PhotoGallery({ photos }) {
   const [idx, setIdx] = useState(0);
   if (!photos?.length) return null;
   return (
-    <div className="relative rounded-2xl overflow-hidden bg-sky-100">
+    <div className="relative rounded-2xl overflow-hidden bg-yellow-100/80">
       <img src={photos[idx]} alt="" className="w-full h-64 md:h-96 object-cover" />
       {photos.length > 1 && (
         <>
@@ -196,7 +196,7 @@ export default function JournalDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/10 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/10 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-8">
 
         {/* Back button */}
@@ -265,7 +265,7 @@ export default function JournalDetail() {
                 </span>
               )}
               {entry.duration_minutes && (
-                <span className="flex items-center gap-1 text-slate-600 bg-sky-100 px-2.5 py-1 rounded-full">
+                <span className="flex items-center gap-1 text-slate-600 bg-yellow-100/80 px-2.5 py-1 rounded-full">
                   <span className="text-sm leading-none">{TOUR_ICONS.duration}</span>
                   {formatDurationHours(entry.duration_minutes)}
                 </span>
@@ -293,7 +293,7 @@ export default function JournalDetail() {
                 <span className="text-xs text-slate-500 w-28">Bewertung</span>
                 <div className="flex gap-0.5">
                   {[1,2,3,4,5].map((s) => (
-                    <Star key={s} className={`w-4 h-4 ${s <= entry.rating ? "fill-yellow-400 text-yellow-400" : "text-sky-200"}`} />
+                    <Star key={s} className={`w-4 h-4 ${s <= entry.rating ? "fill-yellow-400 text-yellow-400" : "text-yellow-100"}`} />
                   ))}
                 </div>
               </div>

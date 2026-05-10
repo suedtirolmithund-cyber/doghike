@@ -1,4 +1,4 @@
-﻿import { Droplets } from "lucide-react";
+import { Droplets } from "lucide-react";
 import WaterIcon from "@/components/icons/WaterIcon";
 
 const waterLevels = [
@@ -38,7 +38,7 @@ const waterLevels = [
 
 export default function WaterHelp() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 pt-4 md:pb-8 md:pt-20">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 pt-4 md:pb-8 md:pt-20">
       <div className="mx-auto max-w-2xl px-4 py-8">
         <div className="doghike-page-header justify-center text-center">
           <div className="doghike-page-icon">

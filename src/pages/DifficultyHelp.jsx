@@ -1,6 +1,11 @@
 import { Mountain, PawPrint } from "lucide-react";
 import { useState } from "react";
-import { DOG_DIFFICULTY_GUIDE, HUMAN_DIFFICULTY_GUIDE } from "@/lib/difficultyConfig";
+import {
+  DIFFICULTY_APP_EXPLANATIONS,
+  DIFFICULTY_GUIDE_NOTE,
+  DOG_DIFFICULTY_GUIDE,
+  HUMAN_DIFFICULTY_GUIDE,
+} from "@/lib/difficultyConfig";
 
 export default function DifficultyHelp() {
   const [activeTab, setActiveTab] = useState("human");
@@ -19,6 +24,21 @@ export default function DifficultyHelp() {
               Einheitliche Orientierung für Mensch und Hund
             </p>
           </div>
+        </div>
+
+        <div className="mb-6 rounded-3xl border border-brand-100/80 bg-white/75 p-5 shadow-sm backdrop-blur-xl">
+          <h2 className="mb-3 text-base font-semibold text-slate-800">Bedeutung in der App</h2>
+          <div className="space-y-3 text-sm text-slate-600">
+            {DIFFICULTY_APP_EXPLANATIONS.map((item) => (
+              <div key={item.key}>
+                <div className="font-medium text-slate-800">{item.title}</div>
+                <p>{item.description}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 rounded-2xl border border-yellow-100 bg-yellow-50 px-4 py-3 text-sm text-slate-700">
+            {DIFFICULTY_GUIDE_NOTE}
+          </p>
         </div>
 
         <div className="mb-8 flex gap-2 rounded-xl border border-white/70 bg-white/65 p-1 shadow-sm backdrop-blur-xl">
@@ -47,18 +67,18 @@ export default function DifficultyHelp() {
             <div key={level.stufe} className={`rounded-2xl border p-5 shadow-sm ${level.color}`}>
               <div className="mb-3 flex items-center gap-3">
                 <span className={`rounded-full px-2 py-1 text-xs font-bold text-white ${level.badge}`}>
-                  {level.level ?? level.stufe.replace("Stufe ", "H")}
+                  {level.level}
                 </span>
                 <div>
-                  <span className="font-semibold">{level.stufe}</span>
-                  <span className="ml-2 text-sm opacity-80">- {level.title}</span>
+                  <span className="font-semibold">{level.title}</span>
+                  <span className="ml-2 text-sm opacity-80">- {level.stufe}</span>
                 </div>
               </div>
               <p className="mb-3 text-sm">{level.desc}</p>
               <div className="grid grid-cols-1 gap-1.5 text-xs opacity-80">
                 <div><span className="font-medium">Beispiele:</span> {level.examples}</div>
                 <div><span className="font-medium">Gelände:</span> {level.terrain}</div>
-                <div><span className="font-medium">{activeTab === "human" ? "Fitness" : "Hinweis"}:</span> {level.fitness ?? level.note}</div>
+                <div><span className="font-medium">{activeTab === "human" ? "Einordnung" : "Hinweis"}:</span> {level.fitness ?? level.note}</div>
               </div>
             </div>
           ))}

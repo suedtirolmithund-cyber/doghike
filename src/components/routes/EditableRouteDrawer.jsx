@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, useMapEvents, Popup, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -389,7 +389,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
           </div>
         )}
         {waypoints.length > 0 && !isCalculating && (
-          <div className="mt-2 pt-2 border-t border-sky-300 space-y-2">
+          <div className="mt-2 pt-2 border-t border-yellow-200 space-y-2">
             <div className="flex items-center justify-between text-xs md:text-sm">
         <span className="text-slate-600">Wegpunkte: <strong className="text-slate-900">{waypoints.length}</strong></span>
         <span className="text-slate-600">Distanz: <strong className="text-slate-900">{routeDistance} km</strong></span>
@@ -421,7 +421,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
         )}
       </div>
 
-      <div className="relative h-[60vw] min-h-64 max-h-72 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-sky-200">
+      <div className="relative h-[60vw] min-h-64 max-h-72 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-yellow-100">
         <MapContainer
           center={waypoints.length > 0 ? waypoints[0] : [46.5, 11.9]}
           zoom={waypoints.length > 0 ? 12 : 10}

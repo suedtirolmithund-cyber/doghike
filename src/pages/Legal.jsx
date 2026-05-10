@@ -1,11 +1,11 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { ArrowLeft, Shield, AlertTriangle, Info, CloudRain, User, PawPrint, FileText, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Legal() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-[#edf7ff] pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-orange-50 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <Link to={createPageUrl("Dashboard")}>
           <Button variant="ghost" className="mb-6">
@@ -14,7 +14,7 @@ export default function Legal() {
           </Button>
         </Link>
 
-        <div className="rounded-2xl border border-sky-200/70 bg-white/70 p-4 shadow-[0_14px_34px_rgba(16,47,74,0.1)] backdrop-blur-sm md:p-8">
+        <div className="rounded-2xl border border-yellow-100/80 bg-white/78 p-4 shadow-[0_14px_34px_rgba(95,36,29,0.08)] backdrop-blur-sm md:p-8">
           <div className="doghike-page-header mb-2">
             <div className="doghike-page-icon">
               <Shield className="h-5 w-5" />
@@ -32,7 +32,7 @@ export default function Legal() {
             </div>
           </div>
 
-          <div className="mb-8 rounded-2xl border border-sky-200/70 bg-white/58 p-4">
+          <div className="mb-8 rounded-2xl border border-yellow-100/80 bg-white/65 p-4">
             <p className="font-semibold text-yellow-800 mb-3 flex items-center gap-2">
               <AlertTriangle className="w-4 h-4" /> Bedingungen können sich jederzeit ändern
             </p>
@@ -62,7 +62,7 @@ export default function Legal() {
               </div>
             </section>
 
-            <section className="border-t border-sky-200 pt-6 md:pt-8">
+            <section className="border-t border-yellow-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <FileText className="w-5 h-5 text-brand-600" />
                 2. Keine Gewähr für die Richtigkeit der Touren
@@ -81,7 +81,7 @@ export default function Legal() {
               </div>
             </section>
 
-            <section className="border-t border-sky-200 pt-6 md:pt-8">
+            <section className="border-t border-yellow-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
                 <AlertTriangle className="w-5 h-5 text-yellow-600" />
                 3. Haftung
@@ -102,7 +102,7 @@ export default function Legal() {
               </div>
             </section>
 
-            <section className="border-t border-sky-200 pt-6 md:pt-8">
+            <section className="border-t border-yellow-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <User className="w-5 h-5 text-brand-600" />
                 4. Eigenverantwortung der Nutzer
@@ -121,7 +121,7 @@ export default function Legal() {
               </div>
             </section>
 
-            <section className="border-t border-sky-200 pt-6 md:pt-8">
+            <section className="border-t border-yellow-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <PawPrint className="w-5 h-5 text-brand-600" />
                 5. Kein Ersatz für alpine Erfahrung
@@ -133,7 +133,7 @@ export default function Legal() {
               </div>
             </section>
 
-            <section className="border-t border-sky-200 pt-6 md:pt-8">
+            <section className="border-t border-yellow-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <CloudRain className="w-5 h-5 text-brand-600" />
                 6. Wetter- & Gefahrenhinweise
@@ -156,7 +156,7 @@ export default function Legal() {
               </div>
             </section>
 
-            <section className="border-t border-sky-200 pt-6 md:pt-8">
+            <section className="border-t border-yellow-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <Shield className="w-5 h-5 text-brand-600" />
                 7. Moderation & Veröffentlichung
@@ -169,7 +169,7 @@ export default function Legal() {
               </div>
             </section>
 
-            <section className="border-t border-sky-200 pt-6 md:pt-8">
+            <section className="border-t border-yellow-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <FileText className="w-5 h-5 text-brand-600" />
                 8. Urheberrecht & Rechteübertragung bei Fotos

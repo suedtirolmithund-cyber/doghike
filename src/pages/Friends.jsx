@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -35,7 +35,7 @@ function FeedCard({ entry }) {
       )}
       <div className="p-4">
         <div className="flex items-center gap-2 mb-3">
-          <div className="w-7 h-7 rounded-full overflow-hidden bg-sky-100 shrink-0">
+          <div className="w-7 h-7 rounded-full overflow-hidden bg-yellow-100/80 shrink-0">
             <img src={profile?.avatar_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${entry.user_id}`}
               alt="" className="w-full h-full object-cover" />
           </div>
@@ -70,7 +70,7 @@ function Avatar({ profile, size = "md" }) {
   const src = profile?.avatar_url ||
     `https://api.dicebear.com/7.x/thumbs/svg?seed=${profile?.user_id}&backgroundColor=f5f5f4`;
   return (
-    <div className={`${s} rounded-full overflow-hidden bg-sky-100 shrink-0`}>
+    <div className={`${s} rounded-full overflow-hidden bg-yellow-100/80 shrink-0`}>
       <img src={src} alt="" className="w-full h-full object-cover" />
     </div>
   );
@@ -234,7 +234,7 @@ export default function Friends() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/10 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/10 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
 
         {/* Header */}

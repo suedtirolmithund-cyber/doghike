@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -264,10 +264,10 @@ export default function Profile() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-md w-full mx-4">
           <div className="doghike-glass-card p-8 text-center">
-            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border border-yellow-100 bg-white/78 text-red-600 shadow-[0_14px_35px_rgba(16,47,74,0.09)]">
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border border-yellow-100 bg-white/78 text-red-600 shadow-[0_14px_35px_rgba(95,36,29,0.09)]">
               <Dog className="h-9 w-9" />
             </div>
             <h2 className="text-2xl font-light text-slate-900 mb-2">Willkommen!</h2>
@@ -287,7 +287,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -296,9 +296,9 @@ export default function Profile() {
         >
           <div className="flex items-start gap-5">
             <div className="relative shrink-0">
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-white shadow-md bg-sky-100">
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-white shadow-md bg-yellow-100/80">
                 {avatarUploading ? (
-                  <div className="w-full h-full flex items-center justify-center bg-sky-100">
+                  <div className="w-full h-full flex items-center justify-center bg-yellow-100/80">
                     <Loader2 className="w-6 h-6 text-slate-400 animate-spin" />
                   </div>
                 ) : (
