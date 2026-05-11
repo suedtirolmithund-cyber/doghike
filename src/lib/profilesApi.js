@@ -1,4 +1,5 @@
 import { supabase } from "./supabaseClient";
+import { validateImageUpload } from "./uploadValidation";
 
 function sanitizeUsername(username) {
   if (typeof username !== "string") return null;
@@ -20,6 +21,7 @@ function getStorageDescriptor(fileUrl, bucket) {
 
 // ── File upload ──────────────────────────────────────────────
 export async function uploadFile(bucket, userId, file) {
+  validateImageUpload(file);
   const ext = file.name.split(".").pop();
   const path = `${userId}/${Date.now()}.${ext}`;
   const { data, error } = await supabase.storage

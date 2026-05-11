@@ -20,6 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import WaterIcon from "@/components/icons/WaterIcon";
 import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 import { hoursInputToMinutes, minutesToHoursInput } from "@/lib/duration";
+import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
 
 function buildInitialFormData(hike) {
   return {
@@ -169,7 +170,12 @@ export default function EditPublicHike() {
       toast.success(`${uploadedUrls.length} Bild${uploadedUrls.length !== 1 ? "er" : ""} hochgeladen`);
     } catch (error) {
       console.error("[EditPublicHike] photo upload failed:", error);
-      toast.error("Die Bilder konnten gerade nicht hochgeladen werden. Bitte versuche es noch einmal.");
+      toast.error(
+        getImageUploadErrorMessage(
+          error,
+          "Die Bilder konnten gerade nicht hochgeladen werden. Bitte versuche es noch einmal."
+        )
+      );
     } finally {
       setIsUploadingPhotos(false);
     }

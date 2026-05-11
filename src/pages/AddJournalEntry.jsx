@@ -28,6 +28,7 @@ import {
   getMissingSharedJournalFields,
 } from "@/lib/journalApi";
 import { getDogs } from "@/lib/profilesApi";
+import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
 import { Link } from "react-router-dom";
 import {
   DIFFICULTY_APP_EXPLANATIONS,
@@ -846,8 +847,13 @@ export default function AddJournalEntry() {
       uploadedPhotosRef.current = [...uploadedPhotosRef.current, ...urls];
       setForm((p) => ({ ...p, photos: [...p.photos, ...urls] }));
       toast.success(`${urls.length} Foto${urls.length > 1 ? "s" : ""} hochgeladen`);
-    } catch {
-      toast.error("Die Fotos konnten gerade nicht hochgeladen werden. Bitte versuche es noch einmal.");
+    } catch (error) {
+      toast.error(
+        getImageUploadErrorMessage(
+          error,
+          "Die Fotos konnten gerade nicht hochgeladen werden. Bitte versuche es noch einmal."
+        )
+      );
     } finally {
       setPhotoUploading(false);
     }

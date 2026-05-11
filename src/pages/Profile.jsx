@@ -52,6 +52,7 @@ import {
 } from "@/lib/profilesApi";
 import { getSavedHikes } from "@/lib/communityApi";
 import { loadNotifications } from "@/lib/notificationsApi";
+import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
 import { getAllHikes } from "@/api/sheetsClient";
 import { getUserRoutes } from "@/lib/routesApi";
 import DogForm from "@/components/forms/DogForm";
@@ -136,7 +137,7 @@ export default function Profile() {
         error?.code === "23505" ||
         error?.message?.includes("profiles_username_normalized_unique")
       ) {
-        toast.error("Dieser Username ist bereits vergeben. Bitte wähle einen anderen.");
+        toast.error("Diesen Namen gibt es schon. Bitte wähle einen anderen.");
         return;
       }
 
@@ -209,7 +210,7 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
       queryClient.invalidateQueries({ queryKey: ["comments"] });
       toast.success("Profilbild aktualisiert");
-    } catch {
+    } catch (error) {
       if (uploadedAvatarUrl) {
         try {
           await deleteStoredFile(uploadedAvatarUrl, "avatars");
@@ -217,7 +218,12 @@ export default function Profile() {
           console.error("Temporary avatar cleanup failed:", cleanupError);
         }
       }
-      toast.error("Dein Profilbild konnte gerade nicht hochgeladen werden. Bitte versuche es noch einmal.");
+      toast.error(
+        getImageUploadErrorMessage(
+          error,
+          "Dein Profilbild konnte gerade nicht hochgeladen werden. Bitte versuche es noch einmal."
+        )
+      );
     } finally {
       setAvatarUploading(false);
     }

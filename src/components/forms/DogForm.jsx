@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { uploadFile, deleteStoredFile } from "@/lib/profilesApi";
+import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
 import { useAuth } from "@/lib/AuthContext";
 import { Dog, Upload, Loader2 } from "lucide-react";
 
@@ -46,7 +47,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
 
       setTemporaryUploadedPhotoUrl(url);
     } catch (error) {
-      setUploadError("Das Foto konnte gerade nicht hochgeladen werden. Bitte versuche es noch einmal.");
+      setUploadError(getImageUploadErrorMessage(error));
       console.error("Dog photo upload error:", error);
     } finally {
       setUploading(false);

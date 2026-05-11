@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+import { validateImageUpload } from "@/lib/uploadValidation";
 
 const PUBLIC_HIKE_BUCKET = "journal";
 const PUBLIC_HIKE_PREFIX = "public-hikes/";
@@ -291,6 +292,7 @@ export async function resolvePublicHikePhotoReferences(photoReferences = []) {
 }
 
 export async function uploadPublicHikePhoto(userId, file) {
+  validateImageUpload(file);
   const sanitizedName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
   const path = `${PUBLIC_HIKE_PREFIX}${userId}/${Date.now()}_${sanitizedName}`;
   const { data, error } = await supabase.storage

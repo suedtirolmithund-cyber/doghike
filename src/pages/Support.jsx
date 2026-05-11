@@ -102,7 +102,7 @@ export default function Support() {
         },
         {
           q: "Ich kann keine Fotos hochladen",
-          a: "Stelle sicher, dass die Dateigröße unter 10 MB liegt und es sich um JPG, PNG oder WebP-Dateien handelt.",
+          a: "Stelle sicher, dass die Dateigröße unter 15 MB liegt und es sich um JPG, PNG oder WebP-Dateien handelt.",
         },
         {
           q: "Ein Fehler tritt beim Speichern auf",

@@ -1,4 +1,5 @@
 import { supabase } from "./supabaseClient";
+import { validateImageUpload } from "./uploadValidation";
 
 const JOURNAL_SIGNED_URL_TTL_SECONDS = 60 * 60;
 
@@ -281,6 +282,7 @@ export async function deleteJournalFiles(fileReferences = []) {
 
 // Upload photo or GPX to "journal" bucket
 export async function uploadJournalFile(userId, file) {
+  validateImageUpload(file);
   const ext = file.name.split(".").pop();
   const path = `${userId}/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
   const { data, error } = await supabase.storage

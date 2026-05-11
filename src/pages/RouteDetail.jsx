@@ -31,6 +31,7 @@ import ExpandableText from "@/components/ExpandableText";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 import { formatDurationHours, hoursInputToMinutes } from "@/lib/duration";
+import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -137,8 +138,13 @@ export default function RouteDetail() {
       const urls = await Promise.all(files.map((f) => uploadJournalFile(user.id, f)));
       setCompleteData((prev) => ({ ...prev, photos: [...(prev.photos || []), ...urls] }));
       toast.success(`${urls.length} Foto${urls.length > 1 ? "s" : ""} hochgeladen`);
-    } catch {
-      toast.error("Die Fotos konnten gerade nicht hochgeladen werden. Bitte versuche es noch einmal.");
+    } catch (error) {
+      toast.error(
+        getImageUploadErrorMessage(
+          error,
+          "Die Fotos konnten gerade nicht hochgeladen werden. Bitte versuche es noch einmal."
+        )
+      );
     } finally {
       setUploading(false);
     }

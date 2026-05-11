@@ -16,6 +16,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { uploadJournalFile } from "@/lib/journalApi";
+import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
 import { useAuth } from "@/lib/AuthContext";
 import { Upload, X, Loader2, Star, Map as MapIcon, Trash2, MapPin, HelpCircle } from "lucide-react";
 import { createPageUrl } from "@/utils";
@@ -84,19 +85,29 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
 
   const handlePhotoUploadConfirmed = async (files) => {
     setUploading(true);
-    const uploadedUrls = [];
+    try {
+      const uploadedUrls = [];
 
-    for (const file of files) {
-      const file_url = await uploadJournalFile(user?.id ?? "admin", file);
-      uploadedUrls.push(file_url);
+      for (const file of files) {
+        const file_url = await uploadJournalFile(user?.id ?? "admin", file);
+        uploadedUrls.push(file_url);
+      }
+
+      setFormData(prev => ({
+        ...prev,
+        photos: [...(prev.photos || []), ...uploadedUrls]
+      }));
+      setShowPhotoConsent(false);
+    } catch (error) {
+      toast.error(
+        getImageUploadErrorMessage(
+          error,
+          "Die Fotos konnten gerade nicht hochgeladen werden. Bitte versuche es noch einmal."
+        )
+      );
+    } finally {
+      setUploading(false);
     }
-
-    setFormData(prev => ({
-      ...prev,
-      photos: [...(prev.photos || []), ...uploadedUrls]
-    }));
-    setUploading(false);
-    setShowPhotoConsent(false);
   };
 
   const removePhoto = (index) => {

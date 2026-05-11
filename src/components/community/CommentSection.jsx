@@ -27,6 +27,7 @@ import {
   commentNeedsReview,
   deleteUploadedCommentPhoto,
 } from "@/lib/communityApi";
+import { getImageUploadErrorMessage, validateImageUpload } from "@/lib/uploadValidation";
 
 export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = "sheets", canComment = true }) {
   const { user, isAuthenticated } = useAuth();
@@ -112,6 +113,14 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
   const handlePhotoUpload = (event) => {
     const file = event.target.files[0];
     if (!file || !user) return;
+
+    try {
+      validateImageUpload(file);
+    } catch (error) {
+      toast.error(getImageUploadErrorMessage(error));
+      event.target.value = "";
+      return;
+    }
 
     if (photoPreviewUrl) {
       URL.revokeObjectURL(photoPreviewUrl);
