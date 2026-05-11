@@ -236,10 +236,10 @@ export default function GuestWelcomeScreen() {
       >
         <WarmGlassBackground mobileFrame />
 
-        <p className="absolute left-[22px] top-[129px] h-[33px] w-[340px] text-center text-[20px] font-extrabold leading-[23px] text-white">
+        <p className="absolute left-[18px] top-[118px] h-[72px] w-[340px] text-center text-[34px] font-extrabold uppercase leading-[36px] tracking-[0.01em] text-white drop-shadow-[0_4px_14px_rgba(116,28,59,0.28)]">
           WILLKOMMEN BEI DOGTRAILS
         </p>
-        <p className="absolute left-[21px] top-[215px] h-[33px] w-[340px] text-center text-[20px] font-medium leading-[23px] text-white">
+        <p className="absolute left-[21px] top-[220px] h-[48px] w-[340px] text-center text-[20px] font-medium leading-[23px] text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.25)]">
           Plane hundefreundliche Touren, speichere deine Lieblingswege und entdecke neue Ziele
         </p>
 
