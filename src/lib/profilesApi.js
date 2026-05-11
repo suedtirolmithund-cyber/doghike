@@ -111,6 +111,15 @@ export async function getDogs(userId) {
   return data ?? [];
 }
 
+export async function getDogProfileCount() {
+  const { count, error } = await supabase
+    .from("dogs")
+    .select("*", { count: "exact", head: true });
+
+  if (error) throw error;
+  return count ?? 0;
+}
+
 export async function createDog(userId, dogData) {
   const { data, error } = await supabase
     .from("dogs")

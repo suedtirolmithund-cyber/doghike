@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { Mountain, Route, Map, ArrowRight, Search, LogIn, UserPlus, ChevronDown, Plus } from "lucide-react";
+import { Mountain, Route, Map, ArrowRight, Search, LogIn, UserPlus, ChevronDown, Plus, Globe2, Dog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import StatsCard from "@/components/stats/StatsCard";
 import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
-import { getDogs } from "@/lib/profilesApi";
+import { getDogProfileCount, getDogs } from "@/lib/profilesApi";
 import { matchesHikeSearch } from "@/lib/hikeSearch";
 
 const PAGE_SIZE = 10;
@@ -64,6 +64,13 @@ export default function Dashboard() {
     refetchOnMount: "always",
   });
 
+  const { data: dogProfileCount = 0 } = useQuery({
+    queryKey: ["dogProfileCount"],
+    queryFn: getDogProfileCount,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
+  });
+
   useEffect(() => {
     if (isLoadingAuth || isLoadingDogs) return;
     if (!isAuthenticated || !user?.id) return;
@@ -92,6 +99,16 @@ export default function Dashboard() {
     hikes.filter((h) => matchesHikeSearch(h, searchQuery)),
     season
   );
+
+  const countryCount = useMemo(() => {
+    const uniqueCountries = new Set(
+      hikes
+        .map((hike) => hike.country)
+        .filter(Boolean)
+        .map((country) => String(country).trim().toLowerCase())
+    );
+    return uniqueCountries.size;
+  }, [hikes]);
 
   const visibleHikes   = filteredHikes.slice(0, visibleCount);
   const hasMore        = visibleCount < filteredHikes.length;
@@ -195,8 +212,10 @@ export default function Dashboard() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 pb-32 pt-8 sm:px-6 sm:pt-10 md:pb-20 lg:px-8">
         {/* Stats */}
-        <div className="mb-12 text-center">
-          <StatsCard icon={Route} label="Wanderungen" value={filteredHikes.length} delay={0} />
+        <div className="mb-12 grid grid-cols-1 gap-4 text-center md:grid-cols-3">
+          <StatsCard icon={Route} label="Wanderungen" value={hikes.length} delay={0} />
+          <StatsCard icon={Globe2} label="Länder" value={countryCount} delay={0.08} />
+          <StatsCard icon={Dog} label="Wanderbuddys" value={dogProfileCount} delay={0.16} />
         </div>
 
         {/* Map */}
