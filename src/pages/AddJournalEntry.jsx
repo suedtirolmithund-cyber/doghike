@@ -394,8 +394,9 @@ function LocationPicker({ lat, lng, onChange }) {
     setSearchResults([]);
   };
 
-  const handleTileError = () => {
-    if (mapType !== "topo" || topoTileFallbackRef.current) return;
+  const handleTileError = (event) => {
+    const failedZoom = event?.coords?.z ?? tile.maxNativeZoom;
+    if (mapType !== "topo" || topoTileFallbackRef.current || failedZoom < tile.maxNativeZoom) return;
     topoTileFallbackRef.current = true;
     setMapType("standard");
     toast.info("Topo ist an dieser Zoomstufe nicht verfügbar. Die Karte wurde auf Standard zurückgesetzt.");
