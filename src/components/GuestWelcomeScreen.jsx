@@ -256,7 +256,7 @@ export default function GuestWelcomeScreen() {
         >
           <h1
             className="mb-4 text-[36px] font-semibold leading-none"
-            style={{ color: mode === "reset" || mode === "update-password" ? "white" : "#102f4a" }}
+            style={{ color: mode === "reset" || mode === "update-password" ? "white" : "#741c3b" }}
           >
             {mode === "reset"
               ? "Passwort"
@@ -579,7 +579,7 @@ function Feedback({ error, success }) {
           initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          className="flex items-start gap-2 rounded-xl bg-emerald-500/15 p-3 text-sm text-emerald-100"
+          className="flex items-start gap-2 rounded-xl bg-brand-100/20 p-3 text-sm text-brand-50"
         >
           <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
           <span>{success}</span>

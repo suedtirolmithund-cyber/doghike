@@ -5,7 +5,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import { Mountain, Route, Map, ArrowRight, Search, LogIn, UserPlus, ChevronDown, Plus, Globe2, Dog } from "lucide-react";
+import { Mountain, Route, Map, ArrowRight, Search, LogIn, UserPlus, ChevronDown, Plus, Globe, Dog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import StatsCard from "@/components/stats/StatsCard";
@@ -214,7 +214,7 @@ export default function Dashboard() {
         {/* Stats */}
         <div className="mb-12 grid grid-cols-1 gap-4 text-center md:grid-cols-3">
           <StatsCard icon={Route} label="Wanderungen" value={hikes.length} delay={0} />
-          <StatsCard icon={Globe2} label="Länder" value={countryCount} delay={0.08} />
+          <StatsCard icon={Globe} label="Länder" value={countryCount} delay={0.08} />
           <StatsCard icon={Dog} label="Wanderbuddys" value={dogProfileCount} delay={0.16} />
         </div>
 
