@@ -40,7 +40,7 @@ export default function AGB() {
               <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
                   Diese Nutzungsbedingungen gelten für die Nutzung der Web-App
-                  <strong> „DogHike“</strong>{" "}
+                  <strong> „DogTrails“</strong>{" "}
                   (doghike-suedtirol.vercel.app), betrieben von:
                 </p>
                 <div className="bg-brand-50/70 rounded-xl p-4">

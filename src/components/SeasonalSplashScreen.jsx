@@ -32,7 +32,7 @@ export default function SeasonalSplashScreen() {
     <div className="fixed inset-0 z-[100] overflow-hidden bg-slate-950">
       <img
         src={imageSrc}
-        alt="DogHike Startbild"
+        alt="DogTrails Startbild"
         className="h-full w-full object-cover object-center"
         onError={() => setImageSrc(FALLBACK_SPLASH_IMAGE)}
       />

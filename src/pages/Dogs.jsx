@@ -298,7 +298,7 @@ export default function Dogs() {
                   Willkommen zurück
                 </h2>
                 <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-white/85 md:text-base">
-                  Lege deinen Hund an und mache DogHike persönlicher. So kannst du deine gemeinsamen Wanderungen später viel schöner festhalten.
+                  Lege deinen Hund an und mache DogTrails persönlicher. So kannst du deine gemeinsamen Wanderungen später viel schöner festhalten.
                 </p>
               </div>
             </div>

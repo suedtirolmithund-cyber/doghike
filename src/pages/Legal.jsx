@@ -52,7 +52,7 @@ export default function Legal() {
               </h2>
               <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
-                  <strong>DogHike</strong> ist eine Informationsplattform. Alle Inhalte – Tourenberichte,
+                  <strong>DogTrails</strong> ist eine Informationsplattform. Alle Inhalte – Tourenberichte,
                   GPS-Koordinaten, Fotos, Schwierigkeitsbewertungen und Empfehlungen – dienen ausschließlich
                   der allgemeinen Orientierung.
                 </p>

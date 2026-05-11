@@ -249,7 +249,7 @@ export default function OfflineDownload({ hike, dogs = [] }) {
       pdf.setFontSize(8);
       pdf.setTextColor(128, 128, 128);
       pdf.text(
-        `Erstellt am ${format(new Date(), "dd.MM.yyyy HH:mm")} - DogHike`,
+        `Erstellt am ${format(new Date(), "dd.MM.yyyy HH:mm")} - DogTrails`,
         margin,
         pdf.internal.pageSize.getHeight() - 10
       );

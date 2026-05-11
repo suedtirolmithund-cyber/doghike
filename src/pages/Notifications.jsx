@@ -257,7 +257,7 @@ export default function Notifications() {
             <Bell className="w-5 h-5 text-brand-400 shrink-0" />
             <div className="flex-1">
               <p className="text-sm font-medium text-brand-700">Web-Push aktivieren</p>
-              <p className="text-xs text-brand-400">Erhalte Hinweise auch dann, wenn DogHike gerade nicht geöffnet ist.</p>
+              <p className="text-xs text-brand-400">Erhalte Hinweise auch dann, wenn DogTrails gerade nicht geöffnet ist.</p>
             </div>
             <Button
               size="sm"

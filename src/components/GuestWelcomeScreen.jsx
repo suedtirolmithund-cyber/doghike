@@ -242,7 +242,7 @@ export default function GuestWelcomeScreen() {
         />
 
         <p className="absolute left-[22px] top-[129px] h-[33px] w-[340px] text-center text-[20px] font-extrabold leading-[23px] text-white">
-          WILLKOMMEN BEI DOGHIKE
+          WILLKOMMEN BEI DOGTRAILS
         </p>
         <p className="absolute left-[21px] top-[215px] h-[33px] w-[340px] text-center text-[20px] font-medium leading-[23px] text-white">
           Plane hundefreundliche Touren, speichere deine Lieblingswege und entdecke neue Ziele

@@ -54,7 +54,7 @@ class ErrorBoundary extends React.Component {
               <div className="doghike-glass-card max-w-md p-6">
                 <Loader2 className="mx-auto mb-3 h-6 w-6 animate-spin text-brand-500" />
                 <h2 className="mb-2 text-lg font-semibold text-slate-900">App wird aktualisiert</h2>
-                <p className="text-sm text-slate-500">Ein neuer Stand wurde erkannt. DogHike lädt einmal neu.</p>
+                <p className="text-sm text-slate-500">Ein neuer Stand wurde erkannt. DogTrails lädt einmal neu.</p>
               </div>
             </div>
           );
