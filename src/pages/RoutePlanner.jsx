@@ -349,7 +349,7 @@ function SmartRoutePlanner({ onRouteReady }) {
         setSearchError("Ort nicht gefunden");
       }
     } catch {
-      setSearchError("Suche fehlgeschlagen");
+      setSearchError("Die Suche hängt gerade");
     } finally {
       setSearching(false);
     }
@@ -381,7 +381,7 @@ function SmartRoutePlanner({ onRouteReady }) {
     if (mapType !== "topo" || topoTileFallbackRef.current || failedZoom < tile.maxNativeZoom) return;
     topoTileFallbackRef.current = true;
     setMapType("standard");
-    toast.info("Topo ist an dieser Zoomstufe nicht verfügbar. Die Karte wurde auf Standard zurückgesetzt.");
+    toast.info("Topo geht hier gerade nicht. Die Standardkarte übernimmt.");
   };
 
   return (
@@ -634,7 +634,7 @@ export default function RoutePlanner() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!routeGeometry || !routeData.name) {
-      toast.error("Bitte Namen eingeben und eine Route zeichnen");
+      toast.error("Name und Route fehlen noch.");
       return;
     }
 

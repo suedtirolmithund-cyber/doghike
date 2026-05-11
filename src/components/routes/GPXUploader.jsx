@@ -37,13 +37,13 @@ function mapGpxError(message) {
   const msg = String(message || "").toLowerCase();
 
   if (msg.includes("keine wegpunkte")) {
-    return "In der GPX-Datei wurden keine brauchbaren Wegpunkte gefunden.";
+    return "In der GPX-Datei steckt noch kein brauchbarer Weg.";
   }
   if (msg.includes("parsererror") || msg.includes("xml")) {
-    return "Die GPX-Datei konnte nicht gelesen werden. Bitte prüfe das Format.";
+    return "Die GPX-Datei lässt sich nicht lesen. Prüfe kurz das Format.";
   }
 
-  return "Die GPX-Datei konnte nicht verarbeitet werden. Bitte prüfe die Datei und versuche es noch einmal.";
+  return "Die GPX-Datei wollte gerade nicht mit. Prüfe sie kurz und versuch es noch einmal.";
 }
 
 function parseGPX(text) {
@@ -123,7 +123,7 @@ export default function GPXUploader({ onSave }) {
     if (!file) return;
 
     if (!file.name.toLowerCase().endsWith(".gpx")) {
-      setError("Bitte nur GPX-Dateien hochladen.");
+      setError("Hier passt nur eine GPX-Datei.");
       return;
     }
 
@@ -193,8 +193,8 @@ export default function GPXUploader({ onSave }) {
             onChange={handleFileChange}
           />
           <Upload className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-          <p className="text-base font-medium text-slate-700 mb-1">GPX-Datei hochladen</p>
-          <p className="text-sm text-slate-500">Datei hierher ziehen oder klicken zum Auswählen</p>
+          <p className="text-base font-medium text-slate-700 mb-1">GPX-Weg reinziehen</p>
+          <p className="text-sm text-slate-500">Zieh die Datei hierher oder wähle sie aus.</p>
           <p className="text-xs text-slate-400 mt-2">Unterstützt: .gpx (Garmin, Komoot, Strava und ähnliche)</p>
         </div>
       )}

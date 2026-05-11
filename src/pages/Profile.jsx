@@ -530,7 +530,7 @@ export default function Profile() {
                 <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full border border-white/80 bg-gradient-to-br from-brand-50 via-white to-stone-100 text-5xl shadow-[0_16px_34px_rgba(120,90,66,0.14)]">
                   🐕
                 </div>
-                <h3 className="text-xl font-medium text-slate-700 mb-2">Noch keine Hunde</h3>
+                <h3 className="text-xl font-medium text-slate-700 mb-2">Wer läuft mit dir?</h3>
                 <p className="text-slate-500 mb-6">Lege deinen ersten Hund an, damit du gemeinsame Touren später leichter zuordnen kannst.</p>
                 <Button
                   onClick={() => {
@@ -620,8 +620,8 @@ export default function Profile() {
             ) : (
               <div className="doghike-empty-state">
                 <Navigation className="doghike-empty-icon" />
-                <h3 className="text-xl font-medium text-slate-700 mb-2">Noch keine Routen</h3>
-                <p className="text-slate-500 text-sm mb-6">Plane deine erste Tour oder zeichne eine Wanderung auf, damit sie hier erscheint.</p>
+                <h3 className="text-xl font-medium text-slate-700 mb-2">Noch kein Weg geplant</h3>
+                <p className="text-slate-500 text-sm mb-6">Plane den ersten Weg. Dein Hund kommt später im Tagebuch dazu.</p>
                 <Link to={createPageUrl("RoutePlanner")}>
                   <Button className="doghike-primary-action">
                     <Plus className="w-4 h-4 mr-2" />
@@ -654,9 +654,9 @@ export default function Profile() {
             ) : (
               <div className="doghike-empty-state">
                 <Heart className="doghike-empty-icon" />
-                <h3 className="text-xl font-medium text-slate-700 mb-2">Noch keine Touren gespeichert</h3>
+                <h3 className="text-xl font-medium text-slate-700 mb-2">Noch keine Lieblingstouren</h3>
                 <p className="text-slate-500 text-sm mb-6 max-w-xs mx-auto">
-                  Tippe bei einer Tour auf das Herz, damit du sie hier schnell wiederfindest.
+                  Tippe bei einer Tour aufs Herz. Dann wartet sie hier auf dich.
                 </p>
                 <Link to={createPageUrl("Hikes")}>
                   <Button className="doghike-primary-action">

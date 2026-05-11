@@ -102,7 +102,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       toast.error(
         getImageUploadErrorMessage(
           error,
-          "Die Fotos konnten gerade nicht hochgeladen werden. Bitte versuche es noch einmal."
+          "Die Fotos wollten gerade nicht hochladen. Versuch es gleich noch einmal."
         )
       );
     } finally {
@@ -155,7 +155,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       }
     } catch (error) {
       console.error("Fehler beim Parsen der GPX-Datei:", error);
-      toast.error("Fehler beim Laden der GPX-Datei. Bitte überprüfe das Format.");
+      toast.error("Die GPX-Datei lässt sich nicht lesen. Prüfe kurz das Format.");
     }
     setUploading(false);
   };
@@ -800,7 +800,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
           {saving ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Wird gespeichert...
+              Einen Moment...
             </>
           ) : (
             submitLabel || (hike ? "Tour aktualisieren" : "Tour hinzufügen")

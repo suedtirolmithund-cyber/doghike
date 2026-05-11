@@ -41,7 +41,7 @@ export default function AccountSettings({ user }) {
       const message = String(error?.message || "").toLowerCase();
 
       if (message.includes("not_authenticated")) {
-        toast.error("Du bist gerade nicht mehr angemeldet. Bitte melde dich neu an und versuche es erneut.");
+        toast.error("Du bist nicht mehr angemeldet. Melde dich neu an und versuch es noch einmal.");
       } else {
         toast.error("Dein Konto konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal.");
       }
@@ -78,14 +78,14 @@ export default function AccountSettings({ user }) {
         </h3>
         <div className="space-y-3 text-sm text-slate-600">
           <p>
-            Du hast das Recht auf Auskunft, Berichtigung, Loeschung und Datenportabilitaet gemaess DSGVO.
+            Du hast das Recht auf Auskunft, Berichtigung, Löschung und Datenportabilität gemäß DSGVO.
             Deine Daten werden auf EU-Servern in Frankfurt (Supabase) gespeichert.
           </p>
           <div className="flex flex-wrap gap-2">
             <Link to={createPageUrl("Datenschutz")}>
               <Button variant="outline" size="sm" className="text-slate-700">
                 <ExternalLink className="w-3 h-3 mr-2" />
-                Datenschutzerklaerung
+                Datenschutzerklärung
               </Button>
             </Link>
             <a href={`mailto:${SUPPORT_EMAIL}?subject=DSGVO-Anfrage`}>
@@ -103,7 +103,7 @@ export default function AccountSettings({ user }) {
           <Trash2 className="w-4 h-4" /> Konto & alle Daten löschen
         </h3>
         <p className="text-sm text-slate-600 mb-4">
-          Du kannst die vollstaendige Loeschung deines Kontos und <strong>aller deiner Daten</strong>{" "}
+          Du kannst die vollständige Löschung deines Kontos und <strong>aller deiner Daten</strong>{" "}
           direkt ausfuehren.
         </p>
         <AlertDialog>
@@ -123,7 +123,7 @@ export default function AccountSettings({ user }) {
               <AlertDialogDescription asChild>
                 <div className="space-y-2 text-sm text-slate-600">
                   <p>
-                    Damit loeschst du dein Konto und <strong>alle</strong> deine gespeicherten Daten:
+                    Damit löschst du dein Konto und <strong>alles</strong>, was dazugehört:
                   </p>
                   <ul className="list-disc pl-5 space-y-1">
                     <li>Profil & E-Mail-Adresse</li>

@@ -167,13 +167,13 @@ export default function EditPublicHike() {
         ...prev,
         photoUrls: [...prev.photoUrls, ...uploadedUrls],
       }));
-      toast.success(`${uploadedUrls.length} Bild${uploadedUrls.length !== 1 ? "er" : ""} hochgeladen`);
+      toast.success(`${uploadedUrls.length} Bild${uploadedUrls.length !== 1 ? "er" : ""} ist dabei`);
     } catch (error) {
       console.error("[EditPublicHike] photo upload failed:", error);
       toast.error(
         getImageUploadErrorMessage(
           error,
-          "Die Bilder konnten gerade nicht hochgeladen werden. Bitte versuche es noch einmal."
+          "Die Bilder wollten gerade nicht hochladen. Versuch es gleich noch einmal."
         )
       );
     } finally {
@@ -192,7 +192,7 @@ export default function EditPublicHike() {
       try {
         await deleteUploadedPublicHikePhoto(photoUrl);
       } catch {
-        toast.error("Das entfernte Bild konnte im Speicher nicht aufgeräumt werden.");
+        toast.error("Das entfernte Bild hängt noch im Speicher.");
       }
     }
   };
@@ -250,7 +250,7 @@ export default function EditPublicHike() {
       queryClient.invalidateQueries({ queryKey: ["allHikes"] });
       queryClient.invalidateQueries({ queryKey: ["hike"] });
       queryClient.invalidateQueries({ queryKey: ["hike", "sheets", detailId] });
-      toast.success("Öffentliche Tour gespeichert");
+      toast.success("Die ?ffentliche Tour ist wieder rund.");
       navigate(createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`, { replace: true });
     },
     onError: (error) => {

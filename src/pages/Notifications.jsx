@@ -180,15 +180,15 @@ export default function Notifications() {
       if (!granted) return;
 
       if (!user?.id) {
-        toast.error("Bitte melde dich an, um Push-Benachrichtigungen zu aktivieren.");
+        toast.error("Melde dich an, dann k?nnen Hinweise ankommen.");
         return;
       }
 
       await ensureWebPushSubscription(user.id);
       setSubscriptionEnabled(true);
-      toast.success("Push-Benachrichtigungen wurden aktiviert.");
+      toast.success("Hinweise sind jetzt an.");
     } catch {
-      toast.error("Push-Benachrichtigungen konnten gerade nicht aktiviert werden. Bitte versuche es noch einmal.");
+      toast.error("Hinweise lassen sich gerade nicht aktivieren.");
     } finally {
       setSubscriptionLoading(false);
     }
@@ -199,9 +199,9 @@ export default function Notifications() {
       setSubscriptionLoading(true);
       await disableWebPushSubscription();
       setSubscriptionEnabled(false);
-      toast.success("Push-Benachrichtigungen wurden deaktiviert.");
+      toast.success("Hinweise sind jetzt aus.");
     } catch {
-      toast.error("Push-Benachrichtigungen konnten gerade nicht deaktiviert werden.");
+      toast.error("Hinweise lassen sich gerade nicht deaktivieren.");
     } finally {
       setSubscriptionLoading(false);
     }

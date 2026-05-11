@@ -30,8 +30,8 @@ function mapAuthError(message) {
   if (msg.includes("unable to validate email address")) return "Bitte gib eine gültige E-Mail-Adresse ein.";
   if (msg.includes("signup is disabled")) return "Registrierungen sind gerade nicht möglich.";
   if (msg.includes("same password")) return "Bitte wähle ein anderes Passwort als bisher.";
-  if (msg.includes("for security purposes")) return "Bitte warte einen Moment und versuche es dann noch einmal.";
-  return "Das hat gerade nicht geklappt. Bitte versuche es noch einmal.";
+  if (msg.includes("for security purposes")) return "Warte kurz. Dann probieren wir es noch einmal.";
+  return "Das hat gerade nicht geklappt. Versuch es gleich noch einmal.";
 }
 
 export default function GuestWelcomeScreen() {
@@ -104,7 +104,7 @@ export default function GuestWelcomeScreen() {
     setSuccessMsg(null);
 
     if (!email || !password) {
-      setLocalError("Bitte E-Mail und Passwort eingeben.");
+      setLocalError("E-Mail und Passwort fehlen noch.");
       return;
     }
 
@@ -159,7 +159,7 @@ export default function GuestWelcomeScreen() {
     setSuccessMsg(null);
 
     if (!email) {
-      setLocalError("Bitte E-Mail-Adresse eingeben.");
+      setLocalError("Gib zuerst deine E-Mail-Adresse ein.");
       return;
     }
 
@@ -180,7 +180,7 @@ export default function GuestWelcomeScreen() {
     setSuccessMsg(null);
 
     if (!password) {
-      setLocalError("Bitte neues Passwort eingeben.");
+      setLocalError("Gib dein neues Passwort ein.");
       return;
     }
     if (password.length < 6) {

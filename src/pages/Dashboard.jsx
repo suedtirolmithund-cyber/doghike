@@ -300,10 +300,10 @@ export default function Dashboard() {
               className="doghike-empty-state">
               <Mountain className="doghike-empty-icon" />
               <h3 className="text-xl font-medium text-slate-700 mb-2">
-                {searchQuery ? "Keine Touren gefunden" : "Noch keine Touren"}
+                {searchQuery ? "Da ist noch nicht der richtige Weg dabei" : "Noch keine Touren"}
               </h3>
               <p className="mx-auto max-w-xs text-sm text-slate-500">
-                {searchQuery ? "Passe deine Suche an, um weitere Wanderungen zu entdecken." : "Sobald Touren verfügbar sind, erscheinen sie hier."}
+                {searchQuery ? "?ndere die Suche ein wenig. Vielleicht wartet der passende Weg gleich daneben." : "Sobald Touren verfügbar sind, erscheinen sie hier."}
               </p>
               {searchQuery && (
                 <Button variant="outline" onClick={() => setSearchQuery("")} className="doghike-secondary-action mt-4">

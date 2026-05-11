@@ -334,7 +334,7 @@ export default function GPSTracker({ onSave }) {
 
   const startWatchers = useCallback(() => {
     if (!navigator.geolocation) {
-      toast.error("GPS wird von deinem Browser nicht unterstuetzt.");
+      toast.error("Dein Browser kann GPS gerade nicht nutzen.");
       return false;
     }
 
@@ -345,7 +345,7 @@ export default function GPSTracker({ onSave }) {
       handlePositionSample,
       (error) => {
         console.error("GPS error:", error);
-        toast.error("Fehler beim Abrufen der GPS-Position. Bitte GPS aktivieren.");
+        toast.error("GPS findet dich gerade nicht. Prüfe die Freigabe.");
       },
       { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 },
     );
@@ -362,7 +362,7 @@ export default function GPSTracker({ onSave }) {
 
   const findMyLocation = () => {
     if (!navigator.geolocation) {
-      toast.error("GPS wird von deinem Browser nicht unterstuetzt.");
+      toast.error("Dein Browser kann GPS gerade nicht nutzen.");
       return;
     }
 
@@ -377,7 +377,7 @@ export default function GPSTracker({ onSave }) {
       },
       () => {
         setLocating(false);
-        toast.error("Standort nicht verfuegbar - GPS aktiviert und Berechtigung erteilt?");
+        toast.error("Kein Standort. Ist GPS frei gegeben?");
       },
       { enableHighAccuracy: true, timeout: 10000 },
     );
@@ -385,7 +385,7 @@ export default function GPSTracker({ onSave }) {
 
   const startTracking = () => {
     if (!navigator.geolocation) {
-      toast.error("GPS wird von deinem Browser nicht unterstuetzt.");
+      toast.error("Dein Browser kann GPS gerade nicht nutzen.");
       return;
     }
 
@@ -485,7 +485,7 @@ export default function GPSTracker({ onSave }) {
       });
       resetTrackingState();
     } else {
-      toast.error("Zu wenige GPS-Punkte aufgezeichnet.");
+      toast.error("Der Weg ist noch zu kurz aufgezeichnet.");
       resetTrackingState();
     }
   };
@@ -493,7 +493,7 @@ export default function GPSTracker({ onSave }) {
   useEffect(() => {
     if (initialState.restoredSnapshot?.isTracking) {
       startWatchers();
-      toast.info("Deine letzte GPS-Aufzeichnung wurde wiederhergestellt.");
+      toast.info("Deine letzte Aufzeichnung ist wieder da.");
     }
   }, [initialState.restoredSnapshot, startWatchers]);
 

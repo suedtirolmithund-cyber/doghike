@@ -93,7 +93,7 @@ export default function RouteDetail() {
       try {
         await deleteJournalFiles(pendingPhotos);
       } catch {
-        toast.error("Nicht alle temporären Fotos konnten entfernt werden.");
+        toast.error("Ein paar Fotos hängen noch fest.");
       }
     }
 
@@ -111,7 +111,7 @@ export default function RouteDetail() {
       setEditingRoute(false);
     },
     onError: () => {
-      toast.error("Die Route konnte gerade nicht aktualisiert werden. Bitte versuche es noch einmal.");
+      toast.error("Die Route wollte gerade nicht aktualisieren.");
     },
   });
 
@@ -137,12 +137,12 @@ export default function RouteDetail() {
     try {
       const urls = await Promise.all(files.map((f) => uploadJournalFile(user.id, f)));
       setCompleteData((prev) => ({ ...prev, photos: [...(prev.photos || []), ...urls] }));
-      toast.success(`${urls.length} Foto${urls.length > 1 ? "s" : ""} hochgeladen`);
+      toast.success(`${urls.length} Foto${urls.length > 1 ? "s" : ""} ist dabei`);
     } catch (error) {
       toast.error(
         getImageUploadErrorMessage(
           error,
-          "Die Fotos konnten gerade nicht hochgeladen werden. Bitte versuche es noch einmal."
+          "Die Fotos wollten gerade nicht hochladen. Versuch es gleich noch einmal."
         )
       );
     } finally {
@@ -156,7 +156,7 @@ export default function RouteDetail() {
       try {
         await deleteJournalFiles([photoToRemove]);
       } catch {
-        toast.error("Das Foto konnte gerade nicht entfernt werden. Bitte versuche es noch einmal.");
+        toast.error("Das Foto bleibt gerade noch drin.");
         return;
       }
     }
@@ -178,7 +178,7 @@ export default function RouteDetail() {
       navigate(createPageUrl("Profile"));
     },
     onError: () => {
-      toast.error("Die Route konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal.");
+      toast.error("Die Route wollte gerade nicht verschwinden.");
     },
   });
 
@@ -191,14 +191,14 @@ export default function RouteDetail() {
       setShowJournalDialog(true); // Prompt to create journal entry
     },
     onError: () => {
-      toast.error("Die Route konnte gerade nicht als erledigt gespeichert werden. Bitte versuche es noch einmal.");
+      toast.error("Der Abschluss wollte gerade nicht speichern.");
     },
   });
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center">
-        <p className="text-slate-600">Lade Route...</p>
+        <p className="text-slate-600">Der Weg lädt...</p>
       </div>
     );
   }

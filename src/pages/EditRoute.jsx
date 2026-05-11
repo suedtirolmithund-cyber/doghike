@@ -54,16 +54,16 @@ export default function EditRoute() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userRoutes", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["route", routeId] });
-      toast.success("Route aktualisiert");
+      toast.success("Deine Route ist wieder rund.");
       navigate(`${createPageUrl("RouteDetail")}?id=${routeId}`);
     },
-    onError: () => toast.error("Die Route konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Die Route wollte gerade nicht speichern."),
   });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!routeData?.name) {
-      toast.error("Bitte gib einen Namen ein");
+      toast.error("Der Route fehlt noch ein Name.");
       return;
     }
 

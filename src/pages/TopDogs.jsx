@@ -316,9 +316,9 @@ function RankingTab({ rows, metric, myDogIds }) {
     return (
       <div className="doghike-empty-state">
         <Dog className="doghike-empty-icon" />
-        <p className="text-slate-600 font-medium">Noch keine Daten</p>
+        <p className="text-slate-600 font-medium">Noch kein Gipfelmoment</p>
         <p className="mx-auto mt-1 max-w-xs text-sm text-slate-500">
-          Trage deine erste Wanderung mit deinem Hund ein, dann erscheint ihr hier.
+          Trage die erste Wanderung mit deinem Hund ein. Dann steht ihr hier.
         </p>
       </div>
     );

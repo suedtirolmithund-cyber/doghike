@@ -821,7 +821,7 @@ export default function AddJournalEntry() {
         try {
           await deleteJournalFiles(filesToDelete);
         } catch {
-          toast.error("Einige ersetzte Dateien konnten nicht vollständig entfernt werden.");
+          toast.error("Ein paar alte Dateien hängen noch fest.");
         }
       }
 
@@ -921,7 +921,7 @@ export default function AddJournalEntry() {
         await deleteJournalFiles([form.gpx_url]);
         uploadedGpxRef.current = uploadedGpxRef.current.filter((existingUrl) => existingUrl !== form.gpx_url);
       } catch {
-        toast.error("Die GPX-Datei konnte gerade nicht entfernt werden. Bitte versuche es noch einmal.");
+        toast.error("Die GPX-Datei bleibt gerade noch drin.");
         return;
       }
     } else if (originalGpxRef.current === form.gpx_url) {
@@ -934,7 +934,7 @@ export default function AddJournalEntry() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!form.title || !form.date) {
-      toast.error("Titel und Datum sind Pflichtfelder.");
+      toast.error("Titel und Datum fehlen noch.");
       return;
     }
 
@@ -1245,7 +1245,7 @@ export default function AddJournalEntry() {
             {form.gpx_url ? (
               <div className="flex items-center gap-3 p-3 bg-brand-50 border border-brand-200 rounded-lg">
                 <MapPin className="w-4 h-4 text-brand-400 shrink-0" />
-                <span className="text-sm text-brand-600 flex-1 truncate">GPX-Datei gespeichert</span>
+                <span className="text-sm text-brand-600 flex-1 truncate">GPX-Datei ist dabei</span>
                 <button type="button" onClick={() => void removeUploadedGpx()} className="text-slate-400 hover:text-brand-500">
                   <X className="w-4 h-4" />
                 </button>

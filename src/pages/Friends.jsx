@@ -399,8 +399,8 @@ export default function Friends() {
             ) : (
               <div className="doghike-empty-state">
                 <Users className="doghike-empty-icon" />
-                <p className="text-slate-600 font-medium mb-1">Noch keine Freunde</p>
-                <p className="text-slate-400 text-sm">Suche nach anderen Nutzern und schicke deine erste Anfrage.</p>
+                <p className="text-slate-600 font-medium mb-1">Noch niemand auf deiner Liste</p>
+                <p className="text-slate-400 text-sm">Such nach Menschen, mit denen du Touren teilen willst.</p>
               </div>
             )}
           </TabsContent>
@@ -441,8 +441,8 @@ export default function Friends() {
             ) : (
               <div className="doghike-empty-state">
                 <Clock className="doghike-empty-icon" />
-                <p className="text-slate-600 font-medium mb-1">Keine offenen Anfragen</p>
-                <p className="text-slate-400 text-sm">Sobald dir jemand schreibt, erscheint es hier.</p>
+                <p className="text-slate-600 font-medium mb-1">Gerade wartet niemand</p>
+                <p className="text-slate-400 text-sm">Wenn jemand anklopft, siehst du es hier.</p>
               </div>
             )}
           </TabsContent>
@@ -477,8 +477,8 @@ export default function Friends() {
             ) : (
               <div className="doghike-empty-state">
                 <Clock className="doghike-empty-icon" />
-                <p className="text-slate-600 font-medium mb-1">Keine gesendeten Anfragen</p>
-                <p className="text-slate-400 text-sm">Suche nach einem Nutzer und sende deine erste Anfrage.</p>
+                <p className="text-slate-600 font-medium mb-1">Keine Anfrage unterwegs</p>
+                <p className="text-slate-400 text-sm">Such nach einem Namen. Dann geht die Anfrage raus.</p>
               </div>
             )}
           </TabsContent>
@@ -489,14 +489,14 @@ export default function Friends() {
             ) : friendIds.length === 0 ? (
               <div className="doghike-empty-state">
                 <Users className="doghike-empty-icon" />
-                <p className="text-slate-600 font-medium mb-1">Noch keine Freunde</p>
+                <p className="text-slate-600 font-medium mb-1">Noch niemand auf deiner Liste</p>
                 <p className="text-slate-400 text-sm">Füge Freunde hinzu, um ihre Wanderungen zu sehen.</p>
               </div>
             ) : feedEntries.length === 0 ? (
               <div className="doghike-empty-state">
                 <BookOpen className="doghike-empty-icon" />
-                <p className="text-slate-600 font-medium mb-1">Noch keine Touren von Freunden</p>
-                <p className="text-slate-400 text-sm">Deine Freunde haben noch keine Wanderungen geteilt.</p>
+                <p className="text-slate-600 font-medium mb-1">Noch keine geteilten Wege</p>
+                <p className="text-slate-400 text-sm">Wenn deine Freunde losziehen und teilen, erscheint es hier.</p>
               </div>
             ) : (
               <div className="space-y-4">

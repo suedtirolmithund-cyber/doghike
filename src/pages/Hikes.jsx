@@ -392,9 +392,9 @@ export default function Hikes() {
             className="doghike-empty-state"
           >
             <Mountain className="doghike-empty-icon" />
-            <h3 className="mb-2 text-xl font-medium text-slate-700">Keine Touren gefunden</h3>
+            <h3 className="mb-2 text-xl font-medium text-slate-700">Da passt gerade nichts</h3>
             <p className="mx-auto max-w-xs text-sm text-slate-500">
-              Passe Suche oder Filter an, um wieder passende Wanderungen zu sehen.
+              Stell die Suche etwas weiter. Dann tauchen neue Wege auf.
             </p>
           </motion.div>
         )}

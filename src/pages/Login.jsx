@@ -39,7 +39,7 @@ function mapAuthError(message) {
     return "Bitte warte einen Moment und versuche es dann noch einmal.";
   }
 
-  return "Das hat gerade nicht geklappt. Bitte versuche es noch einmal.";
+  return "Das hat gerade nicht geklappt. Versuch es gleich noch einmal.";
 }
 
 export default function Login() {
@@ -87,7 +87,7 @@ export default function Login() {
     setSuccessMsg(null);
 
     if (!email || !password) {
-      setLocalError("Bitte E-Mail und Passwort eingeben.");
+      setLocalError("E-Mail und Passwort fehlen noch.");
       return;
     }
 
