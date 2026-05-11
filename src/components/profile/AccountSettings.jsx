@@ -58,7 +58,7 @@ export default function AccountSettings({ user }) {
         </h3>
         <div>
           <Label className="text-sm text-slate-600 mb-1 block">E-Mail-Adresse</Label>
-          <Input value={user?.email || ""} disabled className="bg-yellow-50/70 text-slate-500" />
+          <Input value={user?.email || ""} disabled className="bg-brand-50/70 text-slate-500" />
           <p className="text-xs text-slate-400 mt-1">
             E-Mail-Änderungen können über{" "}
             <a
@@ -98,8 +98,8 @@ export default function AccountSettings({ user }) {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-red-200 bg-red-50/50 p-5 shadow-[0_14px_35px_rgba(95,36,29,0.08)] backdrop-blur-xl">
-        <h3 className="text-base font-semibold text-red-700 mb-2 flex items-center gap-2">
+      <div className="rounded-2xl border border-brand-100 bg-brand-50/50 p-5 shadow-[0_14px_35px_rgba(192,48,96,0.08)] backdrop-blur-xl">
+        <h3 className="text-base font-semibold text-brand-500 mb-2 flex items-center gap-2">
           <Trash2 className="w-4 h-4" /> Konto & alle Daten löschen
         </h3>
         <p className="text-sm text-slate-600 mb-4">
@@ -111,7 +111,7 @@ export default function AccountSettings({ user }) {
             <Button
               variant="outline"
               disabled={isDeleting}
-              className="border-red-300 text-red-600 hover:bg-red-50 hover:border-red-400"
+              className="border-brand-200 text-brand-400 hover:bg-brand-50 hover:border-brand-200"
             >
               <AlertTriangle className="w-4 h-4 mr-2" />
               {isDeleting ? "Konto wird gelöscht..." : "Konto löschen"}
@@ -133,7 +133,7 @@ export default function AccountSettings({ user }) {
                     <li>Freundschaften</li>
                     <li>Routen & GPS-Daten</li>
                   </ul>
-                  <p className="font-medium text-red-600">
+                  <p className="font-medium text-brand-400">
                     Diese Löschung ist endgültig und kann nicht rückgängig gemacht werden.
                   </p>
                 </div>
@@ -144,7 +144,7 @@ export default function AccountSettings({ user }) {
               <AlertDialogAction
                 onClick={handleDeleteAccount}
                 disabled={isDeleting}
-                className="bg-red-600 hover:bg-red-700 text-white"
+                className="bg-brand-400 hover:bg-brand-500 text-white"
               >
                 {isDeleting ? "Wird gelöscht..." : "Jetzt endgültig löschen"}
               </AlertDialogAction>

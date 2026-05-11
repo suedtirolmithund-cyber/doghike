@@ -365,7 +365,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
               size="sm"
               variant={isEditing ? "default" : "outline"}
               onClick={() => setIsEditing(!isEditing)}
-              className={isEditing ? "bg-red-600 hover:bg-red-700" : ""}
+              className={isEditing ? "bg-brand-400 hover:bg-brand-500" : ""}
             >
               {isEditing ? (
                 <>
@@ -389,7 +389,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
           </div>
         )}
         {waypoints.length > 0 && !isCalculating && (
-          <div className="mt-2 pt-2 border-t border-yellow-200 space-y-2">
+          <div className="mt-2 pt-2 border-t border-brand-100 space-y-2">
             <div className="flex items-center justify-between text-xs md:text-sm">
         <span className="text-slate-600">Wegpunkte: <strong className="text-slate-900">{waypoints.length}</strong></span>
         <span className="text-slate-600">Distanz: <strong className="text-slate-900">{routeDistance} km</strong></span>
@@ -421,7 +421,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
         )}
       </div>
 
-      <div className="relative h-[60vw] min-h-64 max-h-72 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-yellow-100">
+      <div className="relative h-[60vw] min-h-64 max-h-72 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-brand-100">
         <MapContainer
           center={waypoints.length > 0 ? waypoints[0] : [46.5, 11.9]}
           zoom={waypoints.length > 0 ? 12 : 10}
@@ -443,7 +443,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
         </MapContainer>
         
         {isEditing && (
-          <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-2 rounded-lg shadow-lg text-xs md:text-sm font-medium z-[1000]">
+          <div className="absolute top-4 left-4 bg-brand-400 text-white px-3 py-2 rounded-lg shadow-lg text-xs md:text-sm font-medium z-[1000]">
             <Move className="w-4 h-4 inline mr-2" />
             Bearbeitungsmodus aktiv
           </div>
@@ -464,7 +464,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
           variant="outline"
           onClick={handleClear}
           disabled={waypoints.length === 0}
-          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+          className="text-brand-400 hover:text-brand-500 hover:bg-brand-50"
           size="sm"
         >
           <Trash2 className="w-3 h-3 md:w-4 md:h-4 md:mr-2" />

@@ -62,7 +62,7 @@ function StarPicker({ label, value, onChange }) {
             className="focus:outline-none"
           >
             <Star className={`w-7 h-7 transition-colors ${
-              s <= (hover || value) ? "fill-yellow-400 text-yellow-400" : "text-slate-300"
+              s <= (hover || value) ? "fill-brand-100 text-brand-100" : "text-slate-300"
             }`} />
           </button>
         ))}
@@ -108,7 +108,7 @@ function DifficultyInfoDialog({ icon, title, description, levels }) {
                 </div>
               ))}
             </div>
-            <p className="mt-3 rounded-xl border border-yellow-100 bg-white/70 px-3 py-2 text-slate-700">
+            <p className="mt-3 rounded-xl border border-brand-100 bg-white/70 px-3 py-2 text-slate-700">
               {DIFFICULTY_GUIDE_NOTE}
             </p>
           </div>
@@ -162,7 +162,7 @@ function WaterInfoDialog() {
         <div className="min-h-0 space-y-3 overflow-y-auto px-6 pb-6 pr-5">
           <div className="rounded-2xl border border-brand-100/70 bg-brand-50/70 p-4 text-sm text-slate-600">
             <p>{WATER_APP_EXPLANATION}</p>
-            <p className="mt-3 rounded-xl border border-yellow-100 bg-white/70 px-3 py-2 text-slate-700">
+            <p className="mt-3 rounded-xl border border-brand-100 bg-white/70 px-3 py-2 text-slate-700">
               {WATER_GUIDE_NOTE}
             </p>
           </div>
@@ -416,19 +416,19 @@ function LocationPicker({ lat, lng, onChange }) {
       </form>
 
       {searchError && (
-        <p className="text-xs text-red-500">{searchError}</p>
+        <p className="text-xs text-brand-500">{searchError}</p>
       )}
 
       {searchResults.length > 0 && (
-        <div className="overflow-hidden rounded-xl border border-yellow-100 bg-white shadow-sm">
-          <div className="flex items-center justify-between border-b border-yellow-100 px-3 py-2">
+        <div className="overflow-hidden rounded-xl border border-brand-100 bg-white shadow-sm">
+          <div className="flex items-center justify-between border-b border-brand-100 px-3 py-2">
             <p className="text-xs font-medium text-slate-500">
               Mehrere Orte gefunden. Bitte den richtigen auswählen.
             </p>
             <button
               type="button"
               onClick={dismissSearchResults}
-              className="rounded-md p-1 text-slate-400 transition-colors hover:bg-yellow-50/70 hover:text-slate-600"
+              className="rounded-md p-1 text-slate-400 transition-colors hover:bg-brand-50/70 hover:text-slate-600"
               aria-label="Trefferliste schließen"
             >
               <X className="h-4 w-4" />
@@ -440,7 +440,7 @@ function LocationPicker({ lat, lng, onChange }) {
                 key={`${result.place_id ?? result.osm_id ?? index}`}
                 type="button"
                 onClick={() => handleSelectSearchResult(result)}
-                className="flex w-full items-start gap-3 border-b border-yellow-100 px-3 py-3 text-left transition-colors last:border-b-0 hover:bg-yellow-50/70"
+                className="flex w-full items-start gap-3 border-b border-brand-100 px-3 py-3 text-left transition-colors last:border-b-0 hover:bg-brand-50/70"
               >
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-400" />
                 <div className="min-w-0">
@@ -454,7 +454,7 @@ function LocationPicker({ lat, lng, onChange }) {
       )}
 
       {/* Map */}
-      <div className="relative rounded-xl overflow-hidden border border-yellow-100 shadow-sm" style={{ height: 260 }}>
+      <div className="relative rounded-xl overflow-hidden border border-brand-100 shadow-sm" style={{ height: 260 }}>
         <div className="absolute right-3 top-3 z-[1000]">
           <Button
             type="button"
@@ -516,7 +516,7 @@ function WaterPicker({ label, value, onChange }) {
             className={`flex min-h-[70px] min-w-0 flex-col items-center justify-center gap-1 rounded-xl border px-2 py-2 text-center transition-all focus:outline-none ${
               value === level
                 ? "border-brand-400 bg-brand-50 text-brand-700"
-                : "border-yellow-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/40"
+                : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/40"
             }`}
             title={getWaterLabel(level)}
             >
@@ -573,7 +573,7 @@ function SeasonPicker({ value = [], onChange }) {
               className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 text-sm font-medium transition-all focus:outline-none ${
                 active
                   ? "shadow-sm"
-                  : "border-yellow-100 bg-white text-slate-500 hover:border-yellow-200"
+                  : "border-brand-100 bg-white text-slate-500 hover:border-brand-100"
               }`}
             >
               <span>{opt.emoji}</span>
@@ -596,8 +596,8 @@ const VISIBILITY_OPTIONS = [
     emoji: "👤",
     label: "Privat",
     desc: "Nur ich sehe diesen Eintrag",
-    active: "border-yellow-400 bg-yellow-100/80 text-slate-900",
-    idle: "border-yellow-100 hover:border-yellow-200",
+    active: "border-brand-200 bg-brand-100/80 text-slate-900",
+    idle: "border-brand-100 hover:border-brand-100",
   },
   {
     value: "friends",
@@ -605,7 +605,7 @@ const VISIBILITY_OPTIONS = [
     label: "Freunde",
     desc: "Nur bestätigte Freunde",
     active: "border-brand-300 bg-brand-50 text-brand-800",
-    idle: "border-yellow-100 hover:border-brand-200 hover:bg-brand-50/40",
+    idle: "border-brand-100 hover:border-brand-200 hover:bg-brand-50/40",
   },
   {
     value: "public",
@@ -613,7 +613,7 @@ const VISIBILITY_OPTIONS = [
     label: "Öffentlich",
     desc: "Wird an Admin zur Prüfung geschickt",
     active: "border-brand-400 bg-brand-50 text-brand-700",
-    idle: "border-yellow-100 hover:border-brand-300",
+    idle: "border-brand-100 hover:border-brand-300",
   },
 ];
 
@@ -628,7 +628,7 @@ function VisibilityPicker({ value, onChange }) {
             type="button"
             onClick={() => onChange(opt.value)}
             className={`flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition-all focus:outline-none text-center ${
-              value === opt.value ? opt.active : `border-yellow-100 bg-white text-slate-500 ${opt.idle}`
+              value === opt.value ? opt.active : `border-brand-100 bg-white text-slate-500 ${opt.idle}`
             }`}
           >
             <span className="text-xl">{opt.emoji}</span>
@@ -1005,7 +1005,7 @@ export default function AddJournalEntry() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/10 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/10 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
 
         {/* Header */}
@@ -1142,8 +1142,8 @@ export default function AddJournalEntry() {
                     onClick={() => set("dog_id", null)}
                     className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 text-sm transition-all focus:outline-none ${
                       form.dog_id === null
-                        ? "border-yellow-400 bg-yellow-100/80 text-slate-700 font-medium"
-                        : "border-yellow-100 text-slate-400 hover:border-yellow-200"
+                        ? "border-brand-200 bg-brand-100/80 text-slate-700 font-medium"
+                        : "border-brand-100 text-slate-400 hover:border-brand-100"
                     }`}
                   >
                     Kein / unbekannt
@@ -1156,10 +1156,10 @@ export default function AddJournalEntry() {
                       className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 text-sm transition-all focus:outline-none ${
                         form.dog_id === dog.id
                           ? "border-brand-400 bg-brand-50 text-brand-700 font-medium"
-                          : "border-yellow-100 text-slate-600 hover:border-brand-300"
+                          : "border-brand-100 text-slate-600 hover:border-brand-300"
                       }`}
                     >
-                      <div className="w-6 h-6 rounded-full overflow-hidden bg-yellow-100/80 shrink-0">
+                      <div className="w-6 h-6 rounded-full overflow-hidden bg-brand-100/80 shrink-0">
                         <img
                           src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
                           alt={dog.name}
@@ -1175,7 +1175,7 @@ export default function AddJournalEntry() {
 
             <div>
               <Label htmlFor="hazard_notes" className="flex items-center gap-1">
-                <AlertTriangle className="w-3.5 h-3.5 text-yellow-500" /> Gefahrenhinweise
+                <AlertTriangle className="w-3.5 h-3.5 text-brand-500" /> Gefahrenhinweise
               </Label>
               <Textarea id="hazard_notes" value={form.hazard_notes} onChange={(e) => set("hazard_notes", e.target.value)}
                 placeholder="z.B. Steinschlaggefahr, steile Abschnitte, kein Schatten..." rows={2} className="mt-1" />
@@ -1203,7 +1203,7 @@ export default function AddJournalEntry() {
                     <img src={url} alt="" className="w-full h-full object-cover rounded-lg" />
                     <button type="button"
                       onClick={() => void removeUploadedPhoto(i)}
-                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-1 right-1 bg-brand-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -1212,7 +1212,7 @@ export default function AddJournalEntry() {
               </div>
             )}
 
-            <label className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-yellow-200 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
+            <label className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-brand-100 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
               <input type="file" accept="image/*" multiple onChange={handlePhotoUpload} className="hidden" disabled={photoUploading} />
               {photoUploading ? (
                 <><Loader2 className="w-6 h-6 text-slate-400 animate-spin" /><span className="text-sm text-slate-400">Lade hoch...</span></>
@@ -1232,12 +1232,12 @@ export default function AddJournalEntry() {
               <div className="flex items-center gap-3 p-3 bg-brand-50 border border-brand-200 rounded-lg">
                 <MapPin className="w-4 h-4 text-brand-400 shrink-0" />
                 <span className="text-sm text-brand-600 flex-1 truncate">GPX-Datei gespeichert</span>
-                <button type="button" onClick={() => void removeUploadedGpx()} className="text-slate-400 hover:text-red-500">
+                <button type="button" onClick={() => void removeUploadedGpx()} className="text-slate-400 hover:text-brand-500">
                   <X className="w-4 h-4" />
                 </button>
               </div>
             ) : (
-              <label className="flex items-center gap-3 p-4 border-2 border-dashed border-yellow-200 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
+              <label className="flex items-center gap-3 p-4 border-2 border-dashed border-brand-100 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
                 <input type="file" accept=".gpx" onChange={handleGpxUpload} className="hidden" disabled={gpxUploading} />
                 {gpxUploading ? (
                   <><Loader2 className="w-5 h-5 text-slate-400 animate-spin" /><span className="text-sm text-slate-400">Lade hoch...</span></>
@@ -1270,7 +1270,7 @@ export default function AddJournalEntry() {
             <VisibilityPicker value={form.visibility} onChange={(v) => { set("visibility", v); }} />
             {form.visibility === "public" && (
               <div className="mt-3 space-y-2">
-                <p className="text-xs text-yellow-700 bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-2">
+                <p className="text-xs text-brand-600 bg-brand-50 border border-brand-100 rounded-lg px-3 py-2">
                   Nach dem Speichern wird dieser Eintrag an einen Admin zur Prüfung geschickt und erst danach öffentlich sichtbar.
                 </p>
                 <div className="text-xs rounded-lg border border-brand-200 bg-brand-50/70 px-3 py-2 text-brand-800">
@@ -1284,7 +1284,7 @@ export default function AddJournalEntry() {
 
           {/* Foto-Einverständnis (nur wenn Fotos + nicht privat) */}
           {form.photos.length > 0 && form.visibility !== "private" && (
-            <section className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4">
+            <section className="bg-brand-50 border border-brand-100 rounded-2xl p-4">
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -1292,7 +1292,7 @@ export default function AddJournalEntry() {
                   onChange={(e) => setPhotoConsent(e.target.checked)}
                   className="mt-1 w-4 h-4 rounded accent-brand-400 shrink-0 cursor-pointer"
                 />
-                <span className="text-sm text-yellow-800 leading-relaxed">
+                <span className="text-sm text-brand-700 leading-relaxed">
                   <strong>Einverständnis Fotos:</strong> Ich bestätige, dass ich die Nutzungsrechte
                   an den hochgeladenen Fotos besitze und dass abgebildete Personen der
                   Veröffentlichung zugestimmt haben. Mir ist bewusst, dass diese Fotos für{" "}

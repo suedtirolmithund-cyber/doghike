@@ -12,7 +12,7 @@ L.Icon.Default.mergeOptions({
 
 const startIcon = L.divIcon({
   html: `<div style="
-    background: #d94a3a;
+    background: #c03060;
     color: white;
     width: 38px;
     height: 38px;
@@ -54,7 +54,7 @@ export default function InteractiveHikeMap({
 }) {
   if (!latitude || !longitude) {
     return (
-      <div className="rounded-2xl border border-yellow-100 bg-yellow-100/80 p-8 text-center">
+      <div className="rounded-2xl border border-brand-100 bg-brand-100/80 p-8 text-center">
         <p className="text-slate-500">Keine Karteninformationen verfügbar</p>
       </div>
     );
@@ -82,7 +82,7 @@ export default function InteractiveHikeMap({
           <Marker position={center} icon={startIcon}>
             <Popup>
               <div className="text-center">
-                <p className="font-semibold text-[#d94a3a]">Ausgangspunkt</p>
+                <p className="font-semibold text-[#c03060]">Ausgangspunkt</p>
                 <p className="text-sm text-slate-600">{trailName}</p>
                 {location && <p className="mt-1 text-xs text-slate-500">{location}</p>}
               </div>
@@ -92,7 +92,7 @@ export default function InteractiveHikeMap({
           {hasRoute && (
             <Polyline
               positions={routeCoordinates}
-              color="#d94a3a"
+              color="#c03060"
               weight={5}
               opacity={0.82}
             />

@@ -63,7 +63,7 @@ export default function SmartRecommendations({ allHikes = [] }) {
           {isPersonalized ? "Empfohlen für dich" : "Ausgewählte Touren"}
         </h2>
         {isPersonalized && (
-          <span className="text-xs text-slate-500 bg-yellow-100/80 px-2 py-1 rounded-full flex items-center gap-1">
+          <span className="text-xs text-slate-500 bg-brand-100/80 px-2 py-1 rounded-full flex items-center gap-1">
             <Sparkles className="w-3 h-3" /> basierend auf deinen Touren
           </span>
         )}

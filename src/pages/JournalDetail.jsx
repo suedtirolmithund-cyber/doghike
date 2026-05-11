@@ -54,11 +54,11 @@ function PublicStatusBadge({ status, rejectionReason }) {
   if (status === "rejected") {
     return (
       <div className="space-y-2">
-        <Badge className="bg-red-100 text-red-700 border border-red-200 hover:bg-red-100">
+        <Badge className="bg-brand-100 text-brand-500 border border-brand-100 hover:bg-brand-100">
           Abgelehnt
         </Badge>
         {rejectionReason ? (
-          <p className="text-xs text-red-600">
+          <p className="text-xs text-brand-400">
             Grund: {rejectionReason}
           </p>
         ) : null}
@@ -67,7 +67,7 @@ function PublicStatusBadge({ status, rejectionReason }) {
   }
 
   return (
-    <Badge className="bg-yellow-100 text-yellow-700 border border-yellow-200 hover:bg-yellow-100">
+    <Badge className="bg-brand-100 text-brand-600 border border-brand-100 hover:bg-brand-100">
       Wartet auf Prüfung
     </Badge>
   );
@@ -78,7 +78,7 @@ function PhotoGallery({ photos }) {
   const [idx, setIdx] = useState(0);
   if (!photos?.length) return null;
   return (
-    <div className="relative rounded-2xl overflow-hidden bg-yellow-100/80">
+    <div className="relative rounded-2xl overflow-hidden bg-brand-100/80">
       <img src={photos[idx]} alt="" className="w-full h-64 md:h-96 object-cover" />
       {photos.length > 1 && (
         <>
@@ -196,7 +196,7 @@ export default function JournalDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/10 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/10 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-8">
 
         {/* Back button */}
@@ -265,7 +265,7 @@ export default function JournalDetail() {
                 </span>
               )}
               {entry.duration_minutes && (
-                <span className="flex items-center gap-1 text-slate-600 bg-yellow-100/80 px-2.5 py-1 rounded-full">
+                <span className="flex items-center gap-1 text-slate-600 bg-brand-100/80 px-2.5 py-1 rounded-full">
                   <span className="text-sm leading-none">{TOUR_ICONS.duration}</span>
                   {formatDurationHours(entry.duration_minutes)}
                 </span>
@@ -293,7 +293,7 @@ export default function JournalDetail() {
                 <span className="text-xs text-slate-500 w-28">Bewertung</span>
                 <div className="flex gap-0.5">
                   {[1,2,3,4,5].map((s) => (
-                    <Star key={s} className={`w-4 h-4 ${s <= entry.rating ? "fill-yellow-400 text-yellow-400" : "text-yellow-100"}`} />
+                    <Star key={s} className={`w-4 h-4 ${s <= entry.rating ? "fill-brand-100 text-brand-100" : "text-brand-100"}`} />
                   ))}
                 </div>
               </div>
@@ -344,7 +344,7 @@ export default function JournalDetail() {
             )}
             {entry.hazard_notes && (
               <div className="flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 text-yellow-500 shrink-0 mt-0.5" />
+                <AlertTriangle className="w-4 h-4 text-brand-500 shrink-0 mt-0.5" />
                 <p className="text-sm text-slate-600">{entry.hazard_notes}</p>
               </div>
             )}

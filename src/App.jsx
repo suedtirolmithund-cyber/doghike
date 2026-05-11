@@ -50,7 +50,7 @@ class ErrorBoundary extends React.Component {
           hardReloadWithCacheBust();
 
           return (
-            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-yellow-50 via-white to-brand-50/10 px-6 text-center">
+            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-50 via-white to-brand-50/10 px-6 text-center">
               <div className="doghike-glass-card max-w-md p-6">
                 <Loader2 className="mx-auto mb-3 h-6 w-6 animate-spin text-brand-500" />
                 <h2 className="mb-2 text-lg font-semibold text-slate-900">App wird aktualisiert</h2>
@@ -69,7 +69,7 @@ class ErrorBoundary extends React.Component {
           hardReloadWithCacheBust();
 
           return (
-            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-yellow-50 via-white to-brand-50/10 px-6 text-center">
+            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-50 via-white to-brand-50/10 px-6 text-center">
               <div className="doghike-glass-card max-w-md p-6">
                 <Loader2 className="mx-auto mb-3 h-6 w-6 animate-spin text-brand-500" />
                 <h2 className="mb-2 text-lg font-semibold text-slate-900">App wird aktualisiert</h2>
@@ -101,7 +101,7 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
   : <>{children}</>;
 
 const PageFallback = () => (
-  <div className="flex min-h-[40vh] items-center justify-center bg-gradient-to-br from-yellow-50 via-white to-brand-50/10">
+  <div className="flex min-h-[40vh] items-center justify-center bg-gradient-to-br from-brand-50 via-white to-brand-50/10">
     <Loader2 className="h-6 w-6 animate-spin text-brand-500" />
   </div>
 );

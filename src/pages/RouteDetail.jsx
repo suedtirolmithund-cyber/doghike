@@ -191,7 +191,7 @@ export default function RouteDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center">
         <p className="text-slate-600">Lade Route...</p>
       </div>
     );
@@ -199,7 +199,7 @@ export default function RouteDetail() {
 
   if (!route) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center">
         <div className="text-center">
           <p className="text-xl text-slate-700 mb-4">Route nicht gefunden</p>
           <Link to={createPageUrl("Profile")}>
@@ -263,7 +263,7 @@ export default function RouteDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
         <Link to={createPageUrl("Profile")}>
           <Button variant="ghost" className="mb-4">
@@ -314,7 +314,7 @@ export default function RouteDetail() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="text-red-600 hover:text-red-700"
+                        className="text-brand-400 hover:text-brand-500"
                       >
                         <Trash2 className="w-5 h-5" />
                       </Button>
@@ -330,7 +330,7 @@ export default function RouteDetail() {
                         <AlertDialogCancel>Abbrechen</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => deleteRouteMutation.mutate()}
-                          className="bg-red-600 hover:bg-red-700"
+                          className="bg-brand-400 hover:bg-brand-500"
                         >
                           Löschen
                         </AlertDialogAction>
@@ -395,7 +395,7 @@ export default function RouteDetail() {
                 </Button>
               </div>
             ) : (
-              <div className="h-96 md:h-[500px] rounded-xl overflow-hidden border border-yellow-100">
+              <div className="h-96 md:h-[500px] rounded-xl overflow-hidden border border-brand-100">
                 {route.waypoints?.length > 0 ? (
                   <MapContainer
                     center={route.waypoints[0]}
@@ -501,7 +501,7 @@ export default function RouteDetail() {
                     {route.completed_rating > 0 && (
                       <div className="flex gap-0.5 mt-1">
                         {[1,2,3,4,5].map(s => (
-                          <Star key={s} className={`w-4 h-4 ${s <= route.completed_rating ? "fill-yellow-400 text-yellow-400" : "text-slate-300"}`} />
+                          <Star key={s} className={`w-4 h-4 ${s <= route.completed_rating ? "fill-brand-100 text-brand-100" : "text-slate-300"}`} />
                         ))}
                       </div>
                     )}
@@ -542,7 +542,7 @@ export default function RouteDetail() {
                     exit={{ opacity: 0, height: 0 }}
                     className="overflow-hidden"
                   >
-                    <div className="border-t border-yellow-100 mt-4 pt-4 space-y-4">
+                    <div className="border-t border-brand-100 mt-4 pt-4 space-y-4">
                       <h4 className="font-medium text-slate-900">Tour-Details ergänzen</h4>
 
                       {/* Date */}
@@ -643,7 +643,7 @@ export default function RouteDetail() {
                               onMouseEnter={() => setHoverRating(star)}
                               onMouseLeave={() => setHoverRating(0)}
                             >
-                              <Star className={`w-8 h-8 transition-colors ${star <= (hoverRating || completeData.completed_rating) ? "fill-yellow-400 text-yellow-400" : "text-slate-300"}`} />
+                              <Star className={`w-8 h-8 transition-colors ${star <= (hoverRating || completeData.completed_rating) ? "fill-brand-100 text-brand-100" : "text-slate-300"}`} />
                             </button>
                           ))}
                         </div>
@@ -682,7 +682,7 @@ export default function RouteDetail() {
                               <button
                                 type="button"
                                 onClick={() => removePhoto(index)}
-                                className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                className="absolute -top-2 -right-2 p-1 bg-brand-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                               >
                                 <X className="w-3 h-3" />
                               </button>

@@ -310,7 +310,7 @@ export default function HikeMap({
 
   return (
     <div
-      className="relative overflow-hidden rounded-2xl border border-yellow-100/50 shadow-sm"
+      className="relative overflow-hidden rounded-2xl border border-brand-100/50 shadow-sm"
       style={{ height }}
     >
       <MapContainer
@@ -327,7 +327,7 @@ export default function HikeMap({
       </MapContainer>
 
       {showLegend && (
-        <div className="absolute bottom-3 left-3 z-[1000] hidden flex-col gap-1 rounded-xl border border-yellow-100/60 bg-white/90 px-3 py-2 text-xs text-slate-700 shadow backdrop-blur-sm md:flex">
+        <div className="absolute bottom-3 left-3 z-[1000] hidden flex-col gap-1 rounded-xl border border-brand-100/60 bg-white/90 px-3 py-2 text-xs text-slate-700 shadow backdrop-blur-sm md:flex">
           {Object.entries(seasonConfig).map(([key, { color, label }]) => (
             <div key={key} className="flex items-center gap-2">
               <span

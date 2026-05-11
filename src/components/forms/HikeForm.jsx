@@ -388,7 +388,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       </div>
 
       {/* Start Point Section */}
-      <div className="space-y-4 rounded-2xl border border-yellow-100/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(95,36,29,0.08)] backdrop-blur-sm md:p-6">
+      <div className="space-y-4 rounded-2xl border border-brand-100/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(192,48,96,0.08)] backdrop-blur-sm md:p-6">
         <div className="flex items-center justify-between">
           <div>
             <Label className="text-lg">📍 Ausgangspunkt *</Label>
@@ -402,7 +402,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               variant="outline"
               size="sm"
               onClick={() => setFormData({ ...formData, latitude: "", longitude: "", location: "" })}
-              className="text-red-600 hover:text-red-700"
+              className="text-brand-400 hover:text-brand-500"
             >
               <Trash2 className="w-4 h-4 mr-2" />
               Zurücksetzen
@@ -452,7 +452,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       </div>
 
       {/* Route Section */}
-      <div className="space-y-4 rounded-2xl border border-yellow-100/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(95,36,29,0.08)] backdrop-blur-sm md:p-6">
+      <div className="space-y-4 rounded-2xl border border-brand-100/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(192,48,96,0.08)] backdrop-blur-sm md:p-6">
         <div className="flex items-center justify-between">
           <div>
             <Label className="text-lg">🗺️ Routenverlauf (optional)</Label>
@@ -466,7 +466,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               variant="outline"
               size="sm"
               onClick={() => setFormData({ ...formData, route_coordinates: [] })}
-              className="text-red-600 hover:text-red-700"
+              className="text-brand-400 hover:text-brand-500"
             >
               <Trash2 className="w-4 h-4 mr-2" />
               Route löschen
@@ -564,7 +564,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               <Star
                 className={`w-8 h-8 ${
                   star <= (formData.rating || 0)
-                    ? "fill-yellow-400 text-yellow-400"
+                    ? "fill-brand-100 text-brand-100"
                     : "text-slate-300"
                 }`}
               />
@@ -583,7 +583,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
                 className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
                   formData.dogs?.includes(dog.id)
                     ? "border-brand-400 bg-brand-50/60"
-                    : "border-yellow-100 hover:border-yellow-200"
+                    : "border-brand-100 hover:border-brand-100"
                 }`}
               >
                 <Checkbox
@@ -622,7 +622,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
                 <button
                   type="button"
                   onClick={() => removePhoto(index)}
-                  className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute -top-2 -right-2 p-1 bg-brand-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -630,7 +630,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             ))}
           </AnimatePresence>
           
-          <label className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-yellow-200 rounded-xl cursor-pointer hover:border-brand-400 transition-colors">
+          <label className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-brand-100 rounded-xl cursor-pointer hover:border-brand-400 transition-colors">
             <input
               type="file"
               accept="image/*"
@@ -714,7 +714,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         />
       </div>
 
-      <div className="space-y-2 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
+      <div className="space-y-2 p-4 bg-brand-50 border border-brand-100 rounded-xl">
         <Label htmlFor="visibility" className="text-base font-semibold">Sichtbarkeit der Tour</Label>
         <Select
           value={formData.visibility}
@@ -736,13 +736,13 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             <SelectItem value="public">🌍 Öffentlich (für alle sichtbar)</SelectItem>
           </SelectContent>
         </Select>
-        <p className="text-xs text-slate-600 mt-2 bg-white p-2 rounded border border-yellow-300">
+        <p className="text-xs text-slate-600 mt-2 bg-white p-2 rounded border border-brand-200">
           {formData.visibility === "private" && "🔒 Nur du kannst diese Tour sehen – nur die Grundangaben sind Pflicht, weitere Felder bleiben optional."}
           {formData.visibility === "friends" && "👥 Nur Freunde können diese Tour sehen – für das Teilen müssen alle Pflichtfelder ausgefüllt sein."}
           {formData.visibility === "public" && "🌍 Alle Nutzer können diese Tour sehen – für eine öffentliche Tour müssen alle Pflichtfelder ausgefüllt sein."}
         </p>
         {hike && hike.visibility === "public" && formData.visibility !== "public" && (
-          <p className="text-xs text-red-600 font-medium mt-2">
+          <p className="text-xs text-brand-400 font-medium mt-2">
             ⚠️ Achtung: Du änderst die Sichtbarkeit von öffentlich - die Tour wird dann aus der öffentlichen Liste entfernt!
           </p>
         )}
@@ -784,7 +784,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         <Button
           type="submit"
           disabled={saving}
-          className="bg-[#d94a3a] hover:bg-[#a92f25]"
+          className="bg-[#c03060] hover:bg-[#8f2348]"
         >
           {saving ? (
             <>

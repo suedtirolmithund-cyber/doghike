@@ -1,4 +1,4 @@
-﻿import { getAllHikes } from "@/api/sheetsClient";
+import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { CircleHelp, Droplets, Mountain, PawPrint, RotateCcw, Search } from "lucide-react";
@@ -56,7 +56,7 @@ function DifficultyInfoDialog({ icon, title, description, levels }) {
                 </div>
               ))}
             </div>
-            <p className="mt-3 rounded-xl border border-yellow-100 bg-white/70 px-3 py-2 text-slate-700">
+            <p className="mt-3 rounded-xl border border-brand-100 bg-white/70 px-3 py-2 text-slate-700">
               {DIFFICULTY_GUIDE_NOTE}
             </p>
           </div>
@@ -110,7 +110,7 @@ function WaterInfoDialog() {
         <div className="min-h-0 space-y-3 overflow-y-auto px-6 pb-6 pr-5">
           <div className="rounded-2xl border border-brand-100/70 bg-brand-50/70 p-4 text-sm text-slate-600">
             <p>{WATER_APP_EXPLANATION}</p>
-            <p className="mt-3 rounded-xl border border-yellow-100 bg-white/70 px-3 py-2 text-slate-700">
+            <p className="mt-3 rounded-xl border border-brand-100 bg-white/70 px-3 py-2 text-slate-700">
               {WATER_GUIDE_NOTE}
             </p>
           </div>
@@ -336,7 +336,7 @@ export default function Hikes() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-3 border-t border-yellow-100/80 pt-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 border-t border-brand-100/80 pt-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-xs text-slate-500">
                 {hasPendingChanges
                   ? "Du hast Filter geändert. Tippe auf „Filter anwenden“, um die Ergebnisse zu aktualisieren."

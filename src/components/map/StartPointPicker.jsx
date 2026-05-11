@@ -78,7 +78,7 @@ export default function StartPointPicker({ latitude, longitude, onSelect }) {
   };
 
   return (
-    <div className="relative rounded-xl overflow-hidden border border-yellow-200" style={{ height: "400px" }}>
+    <div className="relative rounded-xl overflow-hidden border border-brand-100" style={{ height: "400px" }}>
       <MapContainer
         center={position}
         zoom={10}

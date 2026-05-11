@@ -102,7 +102,7 @@ export default function EditRoute() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
         <Link to={`${createPageUrl("RouteDetail")}?id=${routeId}`}>
           <Button variant="ghost" className="mb-3 md:mb-4" size="sm">
@@ -138,7 +138,7 @@ export default function EditRoute() {
             </div>
           ) : (
             <div className="mb-6">
-              <div className="rounded-xl overflow-hidden border border-yellow-100 mb-3">
+              <div className="rounded-xl overflow-hidden border border-brand-100 mb-3">
                 <RoutePreviewMap coordinates={routeGeometry?.coordinates ?? []} />
               </div>
               {route?.route_type === "planned" && (

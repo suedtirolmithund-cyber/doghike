@@ -13,9 +13,9 @@ function StatTile({ value, label, icon }) {
   if (!value) return null;
 
   return (
-    <div className="flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-yellow-100/80 bg-white/68 px-2.5 py-2 shadow-sm backdrop-blur-sm">
+    <div className="flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-brand-100/80 bg-white/68 px-2.5 py-2 shadow-sm backdrop-blur-sm">
       <span className="text-base leading-none">{icon}</span>
-      <span className="min-w-0 text-sm font-semibold leading-none text-[#7a3f2e] md:text-base">{value}</span>
+      <span className="min-w-0 text-sm font-semibold leading-none text-[#741c3b] md:text-base">{value}</span>
       {label ? <span className="text-xs font-medium leading-none text-slate-500">{label}</span> : null}
     </div>
   );
@@ -36,7 +36,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
       transition={{ delay: index * 0.08, duration: 0.42 }}
     >
       <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=${hikeSource}`}>
-        <div className="group overflow-hidden rounded-[22px] border border-yellow-100/80 bg-white/78 shadow-[0_12px_28px_rgba(95,36,29,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(217,74,58,0.12)]">
+        <div className="group overflow-hidden rounded-[22px] border border-brand-100/80 bg-white/78 shadow-[0_12px_28px_rgba(192,48,96,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(232,88,32,0.12)]">
           <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a] sm:h-52">
             {coverPhoto && (
               <img
@@ -48,7 +48,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/10 to-transparent" />
 
             {PREMIUM_FEATURES_ENABLED && hike.is_premium && (
-              <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/74 px-2.5 py-1 text-xs font-semibold text-[#7a3f2e] shadow-sm backdrop-blur-sm">
+              <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/74 px-2.5 py-1 text-xs font-semibold text-[#741c3b] shadow-sm backdrop-blur-sm">
                 Premium
               </span>
             )}
@@ -129,7 +129,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                 {hike._source === "journal" ? (
                   <div className="flex min-w-0 items-center gap-2">
                     {(hike.dog_photo_url || hike.author_avatar) && (
-                      <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-white bg-yellow-100/80 shadow-sm">
+                      <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-white bg-brand-100/80 shadow-sm">
                         <img
                           src={hike.dog_photo_url || hike.author_avatar}
                           alt={hike.dog_name || hike.author_username || ""}
@@ -150,7 +150,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                     {hikeDogs.slice(0, 3).map((dog, dogIndex) => (
                       <div
                         key={dog.id}
-                        className="h-8 w-8 overflow-hidden rounded-full border-2 border-white bg-yellow-100/80 shadow-sm"
+                        className="h-8 w-8 overflow-hidden rounded-full border-2 border-white bg-brand-100/80 shadow-sm"
                         style={{ marginLeft: dogIndex > 0 ? "-8px" : 0 }}
                       >
                         <img
@@ -171,7 +171,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
 
               {hike.rating && (
                 <div className="flex shrink-0 items-center gap-1">
-                  <Star className="h-4 w-4 fill-[#d94a3a] text-[#d94a3a]" />
+                  <Star className="h-4 w-4 fill-[#c03060] text-[#c03060]" />
                   <span className="text-sm font-medium text-slate-700">{hike.rating}</span>
                 </div>
               )}

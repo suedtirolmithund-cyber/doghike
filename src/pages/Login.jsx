@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -8,7 +8,7 @@ import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle2 } from "lucide-react";
 
 const BG_IMAGE = "/log_in.jpg";
 
-const BROWN = "#d94a3a";
+const BROWN = "#c03060";
 const BROWN_DARK = "#102f4a";
 
 function mapAuthError(message) {
@@ -412,14 +412,14 @@ export default function Login() {
                           id="privacy"
                           checked={privacyAccepted}
                           onCheckedChange={setPrivacyAccepted}
-                          className="mt-0.5 border-white/60 data-[state=checked]:bg-[#d94a3a] data-[state=checked]:border-[#d94a3a]"
+                          className="mt-0.5 border-white/60 data-[state=checked]:bg-[#c03060] data-[state=checked]:border-[#c03060]"
                         />
                         <label htmlFor="privacy" className="text-xs text-white/80 cursor-pointer leading-relaxed">
                           Ich akzeptiere die{" "}
                           <Link to={createPageUrl("Datenschutz")} className="underline text-white" target="_blank">
                             Datenschutzerklärung
                           </Link>{" "}
-                          gemäß DSGVO. <span className="text-red-400">*</span>
+                          gemäß DSGVO. <span className="text-brand-300">*</span>
                         </label>
                       </div>
                     </motion.div>

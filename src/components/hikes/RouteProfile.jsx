@@ -1,4 +1,4 @@
-﻿import { useMemo } from "react";
+import { useMemo } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Mountain } from "lucide-react";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
@@ -21,9 +21,9 @@ function formatPace(paceMinPerKm) {
 function getIntensity(distKm, elevM) {
   const score = (distKm || 0) * 1.5 + (elevM || 0) * 0.02;
   if (score < 10) return { label: "Leicht", icon: "🟢", bg: "bg-brand-50 border-brand-200 text-brand-700" };
-  if (score < 22) return { label: "Mittel", icon: "🟡", bg: "bg-yellow-50 border-yellow-200 text-yellow-800" };
-  if (score < 40) return { label: "Anspruchsvoll", icon: "🟠", bg: "bg-red-50 border-red-200 text-red-700" };
-  return { label: "Sehr schwer", icon: "🔴", bg: "bg-red-50 border-red-200 text-red-800" };
+  if (score < 22) return { label: "Mittel", icon: "🟡", bg: "bg-brand-50 border-brand-100 text-brand-700" };
+  if (score < 40) return { label: "Anspruchsvoll", icon: "🟠", bg: "bg-brand-50 border-brand-100 text-brand-500" };
+  return { label: "Sehr schwer", icon: "🔴", bg: "bg-brand-50 border-brand-100 text-brand-700" };
 }
 
 export default function RouteProfile({ hike }) {
@@ -76,12 +76,12 @@ export default function RouteProfile({ hike }) {
           </div>
         )}
         {hike.elevation_gain_m && (
-          <div className="rounded-xl border border-red-200 bg-red-50/80 p-4">
-            <div className="flex items-center gap-1.5 text-red-500 mb-1">
+          <div className="rounded-xl border border-brand-100 bg-brand-50/80 p-4">
+            <div className="flex items-center gap-1.5 text-brand-500 mb-1">
               <span className="text-sm leading-none">{TOUR_ICONS.elevation}</span>
               <span className="text-xs font-medium">Aufstieg</span>
             </div>
-            <p className="text-2xl font-bold text-red-800">
+            <p className="text-2xl font-bold text-brand-700">
               +{hike.elevation_gain_m} <span className="text-sm font-normal">m</span>
             </p>
           </div>
@@ -141,8 +141,8 @@ export default function RouteProfile({ hike }) {
             <AreaChart data={profileData.data} margin={{ top: 5, right: 10, left: 0, bottom: 20 }}>
               <defs>
                 <linearGradient id="elevGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#d94a3a" stopOpacity={0.68} />
-                  <stop offset="95%" stopColor="#f6c43d" stopOpacity={0.08} />
+                  <stop offset="5%" stopColor="#c03060" stopOpacity={0.68} />
+                  <stop offset="95%" stopColor="#fada6a" stopOpacity={0.08} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#e7e5e4" />
@@ -162,7 +162,7 @@ export default function RouteProfile({ hike }) {
                 labelFormatter={(v) => `${v} km`}
                 formatter={(v) => [`${Math.round(v)} m`, "Höhe"]}
               />
-              <Area type="monotone" dataKey="elevation" stroke="#d94a3a" strokeWidth={2.5} fill="url(#elevGrad)" />
+              <Area type="monotone" dataKey="elevation" stroke="#c03060" strokeWidth={2.5} fill="url(#elevGrad)" />
             </AreaChart>
           </ResponsiveContainer>
           <p className="text-xs text-slate-400 mt-1 text-center italic">

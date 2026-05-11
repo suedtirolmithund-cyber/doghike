@@ -22,7 +22,7 @@ export default function DogAvatar({ dog, size = "md", showName = true, onClick }
       className="flex flex-col items-center gap-2 cursor-pointer"
       onClick={onClick}
     >
-      <div className={`${sizes[size]} rounded-full overflow-hidden border-3 border-white shadow-lg ring-2 ring-yellow-100/80`}>
+      <div className={`${sizes[size]} rounded-full overflow-hidden border-3 border-white shadow-lg ring-2 ring-brand-100/80`}>
         <img
           src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
           alt={dog.name}

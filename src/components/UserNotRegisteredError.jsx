@@ -1,7 +1,7 @@
 const UserNotRegisteredError = () => {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 px-4">
-      <div className="w-full max-w-md rounded-2xl border border-brand-400/30 bg-gradient-to-br from-brand-700 via-brand-600 to-[#2777b8] p-8 text-white shadow-[0_18px_42px_rgba(95,36,29,0.2)]">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-brand-50 via-white to-brand-50/20 px-4">
+      <div className="w-full max-w-md rounded-2xl border border-brand-400/30 bg-gradient-to-br from-brand-700 via-brand-600 to-[#2777b8] p-8 text-white shadow-[0_18px_42px_rgba(192,48,96,0.2)]">
         <div className="text-center">
           <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-white/16">
             <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

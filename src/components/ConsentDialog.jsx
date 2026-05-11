@@ -52,7 +52,7 @@ export default function ConsentDialog({ type, onAccept, onDecline, open = true }
         </DialogHeader>
 
         <div className="space-y-4">
-          <div className="flex items-center gap-3 p-3 bg-yellow-50/70 rounded-lg">
+          <div className="flex items-center gap-3 p-3 bg-brand-50/70 rounded-lg">
             <Checkbox
               id="consent"
               checked={accepted}

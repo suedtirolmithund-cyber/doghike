@@ -43,7 +43,7 @@ export default function WeatherWidget({ location, latitude, longitude }) {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl p-6 border border-yellow-100/50">
+      <div className="bg-white rounded-2xl p-6 border border-brand-100/50">
         <div className="flex items-center justify-center py-8 gap-2">
           <Loader2 className="w-5 h-5 text-slate-400 animate-spin" />
           <span className="text-slate-500 text-sm">Wetter wird geladen...</span>
@@ -61,7 +61,7 @@ export default function WeatherWidget({ location, latitude, longitude }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl border border-yellow-100/70 bg-white/70 p-4 shadow-[0_12px_28px_rgba(95,36,29,0.08)] backdrop-blur-sm md:p-5"
+      className="rounded-2xl border border-brand-100/70 bg-white/70 p-4 shadow-[0_12px_28px_rgba(192,48,96,0.08)] backdrop-blur-sm md:p-5"
     >
       <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900 md:text-base">
         <Cloud className="h-4 w-4" />
@@ -69,7 +69,7 @@ export default function WeatherWidget({ location, latitude, longitude }) {
       </h2>
 
       {/* Aktuell */}
-      <div className="mb-3 rounded-xl border border-yellow-100/60 bg-white/58 p-3 backdrop-blur-sm">
+      <div className="mb-3 rounded-xl border border-brand-100/60 bg-white/58 p-3 backdrop-blur-sm">
         <div className="flex items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
@@ -110,7 +110,7 @@ export default function WeatherWidget({ location, latitude, longitude }) {
                 ? "Heute"
                 : format(parseISO(dateStr), "EEE", { locale: de });
               return (
-                <div key={dateStr} className="rounded-xl border border-yellow-100/60 bg-white/55 p-2 text-center backdrop-blur-sm">
+                <div key={dateStr} className="rounded-xl border border-brand-100/60 bg-white/55 p-2 text-center backdrop-blur-sm">
                   <div className="text-xs text-slate-600 mb-2 capitalize">{dayName}</div>
                   <DayIcon className="mx-auto mb-2 h-5 w-5 text-brand-600" />
                   <div className="text-sm font-medium text-slate-900">

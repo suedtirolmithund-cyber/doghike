@@ -197,7 +197,7 @@ function ElevationChart({ profile }) {
         </h4>
         <div className="flex gap-3 text-xs text-slate-500">
           <span className="text-brand-400 font-medium">↑ {gain} m</span>
-          <span className="text-red-500 font-medium">↓ {loss} m</span>
+          <span className="text-brand-500 font-medium">↓ {loss} m</span>
           <span>{minEle}–{maxEle} m</span>
         </div>
       </div>
@@ -420,15 +420,15 @@ function SmartRoutePlanner({ onRouteReady }) {
         </button>
 
         {waypoints.length > 0 && (
-          <Button size="sm" variant="outline" onClick={reset} className="col-span-2 h-9 text-red-500 hover:text-red-600 sm:col-span-1">
+          <Button size="sm" variant="outline" onClick={reset} className="col-span-2 h-9 text-brand-500 hover:text-brand-400 sm:col-span-1">
             <RotateCcw className="w-3.5 h-3.5 mr-1" /> Reset
           </Button>
         )}
       </div>
 
-      {searchError && <p className="text-xs text-red-500">{searchError}</p>}
+      {searchError && <p className="text-xs text-brand-500">{searchError}</p>}
       {searchResults.length > 1 && (
-        <div className="rounded-xl border border-yellow-100/80 bg-white/85 p-2 shadow-sm backdrop-blur-sm">
+        <div className="rounded-xl border border-brand-100/80 bg-white/85 p-2 shadow-sm backdrop-blur-sm">
           <div className="flex items-center justify-between gap-2 px-2 pb-2">
             <p className="text-xs font-medium text-slate-500">
               Mehrere Orte gefunden. Wähle den richtigen aus:
@@ -458,7 +458,7 @@ function SmartRoutePlanner({ onRouteReady }) {
       )}
 
       {/* Map */}
-      <div className="relative h-[68vw] min-h-[310px] max-h-[500px] overflow-hidden rounded-xl border border-yellow-100 shadow-sm md:h-[440px] md:max-h-none">
+      <div className="relative h-[68vw] min-h-[310px] max-h-[500px] overflow-hidden rounded-xl border border-brand-100 shadow-sm md:h-[440px] md:max-h-none">
         <MapContainer
           center={[46.5, 11.3]}
           zoom={10}
@@ -480,7 +480,7 @@ function SmartRoutePlanner({ onRouteReady }) {
           {route && (
             <Polyline
               positions={route.positions}
-              color="#d94a3a"
+              color="#c03060"
               weight={6}
               opacity={0.85}
               eventHandlers={{ click: handleRouteClick }}
@@ -508,7 +508,7 @@ function SmartRoutePlanner({ onRouteReady }) {
                   <p className="text-slate-400 italic">Ziehen zum Verschieben</p>
                   <button
                     onClick={() => removeWaypoint(i)}
-                    className="mt-1 text-red-500 hover:underline text-xs flex items-center gap-1"
+                    className="mt-1 text-brand-500 hover:underline text-xs flex items-center gap-1"
                   >
                     <X className="w-3 h-3" /> Entfernen
                   </button>
@@ -549,9 +549,9 @@ function SmartRoutePlanner({ onRouteReady }) {
       {waypoints.length > 0 && (
         <div className="space-y-1">
           {waypoints.map((wp, i) => (
-            <div key={i} className="flex items-center gap-2 text-xs bg-yellow-50/70 rounded-lg px-2 py-1.5 group">
+            <div key={i} className="flex items-center gap-2 text-xs bg-brand-50/70 rounded-lg px-2 py-1.5 group">
               <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-white text-[10px] shrink-0 ${
-            i === 0 ? "bg-brand-400" : i === waypoints.length - 1 && waypoints.length > 1 ? "bg-red-600" : "bg-brand-700"
+            i === 0 ? "bg-brand-400" : i === waypoints.length - 1 && waypoints.length > 1 ? "bg-brand-400" : "bg-brand-700"
               }`}>
                 {i === 0 ? "S" : i === waypoints.length - 1 && waypoints.length > 1 ? "Z" : wp.label}
               </span>
@@ -567,7 +567,7 @@ function SmartRoutePlanner({ onRouteReady }) {
                   ↓
                 </button>
               </div>
-              <button onClick={() => removeWaypoint(i)} className="text-slate-300 hover:text-red-500">
+              <button onClick={() => removeWaypoint(i)} className="text-slate-300 hover:text-brand-500">
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -578,19 +578,19 @@ function SmartRoutePlanner({ onRouteReady }) {
       {/* Stats */}
       {route && (
         <div className="grid grid-cols-3 gap-3">
-          <div className="rounded-xl border border-yellow-100/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
+          <div className="rounded-xl border border-brand-100/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
             <span className="block text-lg mb-1">{TOUR_ICONS.distance}</span>
             <p className="text-lg font-bold text-slate-900">{route.distance_km}</p>
             <p className="text-xs text-slate-500">km</p>
           </div>
-          <div className="rounded-xl border border-yellow-100/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
+          <div className="rounded-xl border border-brand-100/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
             <span className="block text-lg mb-1">{TOUR_ICONS.duration}</span>
             <p className="text-lg font-bold text-slate-900">
               {formatDurationHours(route.duration_minutes)}
             </p>
             <p className="text-xs text-slate-500">ca. Zeit</p>
           </div>
-          <div className="rounded-xl border border-yellow-100/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
+          <div className="rounded-xl border border-brand-100/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
             <span className="block text-lg mb-1">{TOUR_ICONS.elevation}</span>
             <p className="text-lg font-bold text-slate-900">
               {elevation.length ? `+${calcElevationGain(elevation).gain} m` : "–"}
@@ -702,7 +702,7 @@ export default function RoutePlanner() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center p-6">
+      <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center p-6">
         <div className="text-center">
           <p className="text-xl text-slate-700 mb-4">Bitte melde dich an, um Routen zu planen</p>
           <Link to={createPageUrl("Login")}>
@@ -714,7 +714,7 @@ export default function RoutePlanner() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
         <Link to={createPageUrl("Profile")}>
           <Button variant="ghost" className="mb-3 h-8 rounded-xl px-2 text-slate-600 hover:bg-brand-50/60 hover:text-slate-900 md:mb-4" size="sm">
@@ -758,8 +758,8 @@ export default function RoutePlanner() {
         )}
         {activeTab === "track" && (
           <div className="space-y-3">
-            <div className="inline-flex items-start gap-2 rounded-xl border border-yellow-200 bg-yellow-50/80 px-3 py-2 text-xs font-medium text-yellow-800 shadow-sm">
-              <span className="inline-flex h-5 shrink-0 items-center gap-1 rounded-full bg-yellow-100 px-2 text-[10px] font-bold uppercase tracking-wide text-yellow-800">
+            <div className="inline-flex items-start gap-2 rounded-xl border border-brand-100 bg-brand-50/80 px-3 py-2 text-xs font-medium text-brand-700 shadow-sm">
+              <span className="inline-flex h-5 shrink-0 items-center gap-1 rounded-full bg-brand-100 px-2 text-[10px] font-bold uppercase tracking-wide text-brand-700">
                 <Info className="h-3 w-3" />
                 Beta
               </span>
@@ -811,7 +811,7 @@ export default function RoutePlanner() {
                   rows={2} className="mt-1" />
               </div>
 
-              <div className="rounded-xl border border-yellow-100 bg-yellow-50/70 px-4 py-3 text-sm text-slate-600">
+              <div className="rounded-xl border border-brand-100 bg-brand-50/70 px-4 py-3 text-sm text-slate-600">
                 {activeTab === "track"
                   ? "Diese Aufzeichnung gilt als bereits gemacht und wird direkt als vorausgefüllter Tagebuch-Eintrag geöffnet."
                   : activeTab === "gpx"
@@ -823,7 +823,7 @@ export default function RoutePlanner() {
                 <Button type="button" variant="outline" onClick={() => setRouteGeometry(null)}>
                   Abbrechen
                 </Button>
-                <Button type="submit" disabled={createRouteMutation.isPending} className="bg-[#d94a3a] hover:bg-[#a92f25]">
+                <Button type="submit" disabled={createRouteMutation.isPending} className="bg-[#c03060] hover:bg-[#8f2348]">
                   {createRouteMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                   {activeTab === "track"
                     ? "Ins Tagebuch übernehmen"

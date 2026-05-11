@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Impressum() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-orange-50 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <Link to={createPageUrl("Dashboard")}>
           <Button variant="ghost" className="mb-6">
@@ -14,7 +14,7 @@ export default function Impressum() {
           </Button>
         </Link>
 
-        <div className="rounded-2xl border border-yellow-100/80 bg-white/78 p-4 shadow-[0_14px_34px_rgba(95,36,29,0.08)] backdrop-blur-sm md:p-8">
+        <div className="rounded-2xl border border-brand-100/80 bg-white/78 p-4 shadow-[0_14px_34px_rgba(192,48,96,0.08)] backdrop-blur-sm md:p-8">
           <div className="doghike-page-header mb-6">
             <div className="doghike-page-icon">
               <Building2 className="h-5 w-5" />
@@ -27,7 +27,7 @@ export default function Impressum() {
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
                 Angaben gemäß D.Lgs. 70/2003 und Art. 13 DSGVO
               </h2>
-              <div className="bg-yellow-50/70 rounded-xl p-4 space-y-2 text-sm md:text-base text-slate-600">
+              <div className="bg-brand-50/70 rounded-xl p-4 space-y-2 text-sm md:text-base text-slate-600">
                 <p className="font-semibold text-slate-900">Julia Schwärzer</p>
                 <p>Südtirol (Trentino-Südtirol / Alto Adige), Italien</p>
                 <p>
@@ -38,13 +38,13 @@ export default function Impressum() {
                   <strong>Partita IVA:</strong>{" "}
                   <span className="text-slate-400 italic">nicht vorhanden (privater Betrieb ohne gewerbliche Tätigkeit)</span>
                 </p>
-                <p className="text-xs text-yellow-700 pt-2">
+                <p className="text-xs text-brand-600 pt-2">
                   Hinweis: Für eine vollständige Anbieterkennzeichnung sollte hier eine vollständige geografische Postanschrift angegeben werden.
                 </p>
               </div>
             </section>
 
-            <section className="border-t border-yellow-100 pt-6 md:pt-8">
+            <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">Kontakt</h2>
               <div className="space-y-3 text-sm md:text-base text-slate-600">
                 <div className="flex items-center gap-2">
@@ -68,7 +68,7 @@ export default function Impressum() {
               </div>
             </section>
 
-            <section className="border-t border-yellow-100 pt-6 md:pt-8">
+            <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
                 Verantwortliche Person (Art. 4 Abs. 7 DSGVO)
               </h2>
@@ -79,7 +79,7 @@ export default function Impressum() {
               </div>
             </section>
 
-            <section className="border-t border-yellow-100 pt-6 md:pt-8">
+            <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
                 Verbraucherstreitbeilegung
               </h2>
@@ -89,7 +89,7 @@ export default function Impressum() {
               </p>
             </section>
 
-            <section className="border-t border-yellow-100 pt-6 md:pt-8">
+            <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
                 Haftung für Inhalte
               </h2>
@@ -102,7 +102,7 @@ export default function Impressum() {
               </div>
             </section>
 
-            <section className="border-t border-yellow-100 pt-6 md:pt-8">
+            <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
                 Haftung für externe Links
               </h2>
@@ -113,7 +113,7 @@ export default function Impressum() {
               </p>
             </section>
 
-            <section className="border-t border-yellow-100 pt-6 md:pt-8">
+            <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
                 Urheberrecht
               </h2>
@@ -130,7 +130,7 @@ export default function Impressum() {
               </div>
             </section>
 
-            <section className="border-t border-yellow-100 pt-6 md:pt-8">
+            <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
                 Kartenmaterial & Datenquellen
               </h2>
@@ -181,7 +181,7 @@ export default function Impressum() {
               </div>
             </section>
 
-            <section className="border-t border-yellow-100 pt-6">
+            <section className="border-t border-brand-100 pt-6">
               <p className="text-xs text-slate-400">Letzte Aktualisierung: April 2026</p>
             </section>
           </div>

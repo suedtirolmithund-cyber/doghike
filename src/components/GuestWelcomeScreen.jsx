@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
@@ -273,7 +273,7 @@ export default function GuestWelcomeScreen() {
                 type="button"
                 onClick={() => switchMode("register")}
                 className={`h-10 rounded-[10px] text-[16px] font-medium text-white ${
-                  mode === "register" ? "bg-[#d94a3a]" : "bg-white/15"
+                  mode === "register" ? "bg-[#c03060]" : "bg-white/15"
                 }`}
               >
                 Registrieren
@@ -282,7 +282,7 @@ export default function GuestWelcomeScreen() {
                 type="button"
                 onClick={() => switchMode("login")}
                 className={`h-10 rounded-[10px] text-[16px] font-medium text-white ${
-                  mode === "login" ? "bg-[#d94a3a]" : "bg-white/15"
+                  mode === "login" ? "bg-[#c03060]" : "bg-white/15"
                 }`}
               >
                 Login
@@ -308,7 +308,7 @@ export default function GuestWelcomeScreen() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#d94a3a] font-medium text-white disabled:opacity-70"
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#c03060] font-medium text-white disabled:opacity-70"
               >
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 Link senden
@@ -345,7 +345,7 @@ export default function GuestWelcomeScreen() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#d94a3a] font-medium text-white disabled:opacity-70"
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#c03060] font-medium text-white disabled:opacity-70"
               >
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 Passwort speichern
@@ -396,7 +396,7 @@ export default function GuestWelcomeScreen() {
                           id="guest-privacy"
                           checked={privacyAccepted}
                           onCheckedChange={setPrivacyAccepted}
-                          className="mt-0.5 border-white/70 data-[state=checked]:border-[#d94a3a] data-[state=checked]:bg-[#d94a3a]"
+                          className="mt-0.5 border-white/70 data-[state=checked]:border-[#c03060] data-[state=checked]:bg-[#c03060]"
                         />
                         <label htmlFor="guest-privacy" className="text-xs leading-relaxed text-white/80">
                           Ich akzeptiere die{" "}
@@ -415,7 +415,7 @@ export default function GuestWelcomeScreen() {
                 <button
                   type="submit"
                   disabled={loading || googleLoading}
-                  className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#d94a3a] font-medium text-white disabled:opacity-70"
+                  className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#c03060] font-medium text-white disabled:opacity-70"
                 >
                   {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                   {mode === "login" ? "Anmelden" : "Konto erstellen"}
@@ -497,7 +497,7 @@ function OnboardingScreen({ onContinue }) {
           type="button"
           onClick={onContinue}
           aria-label="Weiter"
-          className="absolute bottom-[7px] left-[161px] z-30 grid h-[54px] w-[52px] place-items-center rounded-full bg-[#d94a3a]/80 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/30 md:left-1/2 md:-translate-x-1/2"
+          className="absolute bottom-[7px] left-[161px] z-30 grid h-[54px] w-[52px] place-items-center rounded-full bg-[#c03060]/80 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/30 md:left-1/2 md:-translate-x-1/2"
         >
           <FourToePaw className="h-[38px] w-[38px] text-white" />
         </button>
@@ -568,7 +568,7 @@ function Feedback({ error, success }) {
           initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          className="flex items-start gap-2 rounded-xl bg-red-500/15 p-3 text-sm text-red-100"
+          className="flex items-start gap-2 rounded-xl bg-brand-500/15 p-3 text-sm text-brand-100"
         >
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
           <span>{error}</span>

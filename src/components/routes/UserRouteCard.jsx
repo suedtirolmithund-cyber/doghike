@@ -45,7 +45,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
           attributionControl={false}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <Polyline positions={coordinates} color="#d94a3a" weight={4} />
+          <Polyline positions={coordinates} color="#c03060" weight={4} />
         </MapContainer>
 
         <div className="absolute left-3 top-3 z-[1000] flex items-center gap-1 rounded-full border border-white/70 bg-white/82 px-3 py-1 text-xs font-medium text-slate-700 shadow-sm backdrop-blur-sm">
@@ -102,7 +102,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
             </Button>
           </Link>
           <Link to={`${createPageUrl("EditRoute")}?id=${route.id}`}>
-            <Button variant="ghost" size="icon" className="text-slate-600 hover:bg-yellow-100/80">
+            <Button variant="ghost" size="icon" className="text-slate-600 hover:bg-brand-100/80">
               <Edit className="w-4 h-4" />
             </Button>
           </Link>
@@ -110,7 +110,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
             variant="ghost"
             size="icon"
             onClick={() => onDelete(route.id)}
-            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+            className="text-brand-400 hover:text-brand-500 hover:bg-brand-50"
           >
             <Trash2 className="w-4 h-4" />
           </Button>

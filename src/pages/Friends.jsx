@@ -35,7 +35,7 @@ function FeedCard({ entry }) {
       )}
       <div className="p-4">
         <div className="flex items-center gap-2 mb-3">
-          <div className="w-7 h-7 rounded-full overflow-hidden bg-yellow-100/80 shrink-0">
+          <div className="w-7 h-7 rounded-full overflow-hidden bg-brand-100/80 shrink-0">
             <img src={profile?.avatar_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${entry.user_id}`}
               alt="" className="w-full h-full object-cover" />
           </div>
@@ -51,7 +51,7 @@ function FeedCard({ entry }) {
         <div className="flex flex-wrap gap-3 text-xs text-slate-500 mb-2">
           {entry.distance_km && <span className="flex items-center gap-1"><span className="text-sm leading-none">{TOUR_ICONS.distance}</span>{entry.distance_km} km</span>}
           {entry.elevation_m && <span className="flex items-center gap-1"><span className="text-sm leading-none">{TOUR_ICONS.elevation}</span>{entry.elevation_m} Hm</span>}
-          {entry.rating > 0 && <span className="flex items-center gap-1 text-yellow-500"><Star className="w-3 h-3 fill-yellow-400" />{entry.rating}/5</span>}
+          {entry.rating > 0 && <span className="flex items-center gap-1 text-brand-500"><Star className="w-3 h-3 fill-brand-100" />{entry.rating}/5</span>}
         </div>
         {entry.description && <p className="text-sm text-slate-500 line-clamp-2">{entry.description}</p>}
         {entry.dog_suitable && (
@@ -70,7 +70,7 @@ function Avatar({ profile, size = "md" }) {
   const src = profile?.avatar_url ||
     `https://api.dicebear.com/7.x/thumbs/svg?seed=${profile?.user_id}&backgroundColor=f5f5f4`;
   return (
-    <div className={`${s} rounded-full overflow-hidden bg-yellow-100/80 shrink-0`}>
+    <div className={`${s} rounded-full overflow-hidden bg-brand-100/80 shrink-0`}>
       <img src={src} alt="" className="w-full h-full object-cover" />
     </div>
   );
@@ -234,7 +234,7 @@ export default function Friends() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/10 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/10 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
 
         {/* Header */}
@@ -249,7 +249,7 @@ export default function Friends() {
             <p className="doghike-page-subtitle">
             {accepted.length} Freund{accepted.length !== 1 ? "e" : ""}
             {incoming.length > 0 && (
-              <span className="ml-2 inline-flex items-center gap-1 font-medium text-yellow-600">
+              <span className="ml-2 inline-flex items-center gap-1 font-medium text-brand-300">
                 · {incoming.length} offene Anfrage{incoming.length !== 1 ? "n" : ""}
               </span>
             )}
@@ -313,11 +313,11 @@ export default function Friends() {
                             <UserPlus className="w-3.5 h-3.5 mr-1" /> Anfrage senden
                           </Button>
                         ) : isIncomingPending ? (
-                          <span className="text-xs text-yellow-600 font-medium flex items-center gap-1">
+                          <span className="text-xs text-brand-300 font-medium flex items-center gap-1">
                             <Clock className="w-3.5 h-3.5" /> Offene Anfrage
                           </span>
                         ) : isOutgoingPending ? (
-                          <span className="text-xs text-yellow-600 font-medium flex items-center gap-1">
+                          <span className="text-xs text-brand-300 font-medium flex items-center gap-1">
                             <Clock className="w-3.5 h-3.5" /> Gesendet
                           </span>
                         ) : isAccepted ? (
@@ -354,7 +354,7 @@ export default function Friends() {
               <span className="sm:hidden">Anfragen</span>
               <span className="hidden sm:inline">Offene Anfragen</span>
               {incoming.length > 0 && (
-                <span className="ml-1.5 bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5 py-0.5">
+                <span className="ml-1.5 bg-brand-500 text-white text-[10px] font-bold rounded-full px-1.5 py-0.5">
                   {incoming.length}
                 </span>
               )}
@@ -388,7 +388,7 @@ export default function Friends() {
                       <Button size="sm" variant="ghost"
                         onClick={() => removeMutation.mutate(f.id)}
                         disabled={removeMutation.isPending}
-                        className="ml-auto h-9 w-9 rounded-xl p-0 text-slate-400 hover:bg-red-50 hover:text-red-500"
+                        className="ml-auto h-9 w-9 rounded-xl p-0 text-slate-400 hover:bg-brand-50 hover:text-brand-500"
                       >
                         <UserMinus className="w-3.5 h-3.5" />
                       </Button>
@@ -413,12 +413,12 @@ export default function Friends() {
                   const profile = profileMap[f.requester_id] ?? { user_id: f.requester_id, full_name: "Nutzer", username: null, avatar_url: null };
                   return (
                     <motion.div key={f.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                      className="rounded-xl border border-yellow-200 bg-yellow-50/70 p-3 flex items-center gap-3 shadow-sm backdrop-blur-xl"
+                      className="rounded-xl border border-brand-100 bg-brand-50/70 p-3 flex items-center gap-3 shadow-sm backdrop-blur-xl"
                     >
                       <Avatar profile={profile} />
                       <div className="flex-1 min-w-0">
                         <ProfileName profile={profile} />
-                        <p className="text-xs text-yellow-600">Möchte dein Freund sein</p>
+                        <p className="text-xs text-brand-300">Möchte dein Freund sein</p>
                       </div>
                       <div className="flex gap-2 shrink-0">
                         <Button size="sm" onClick={() => acceptMutation.mutate(f.id)}
@@ -429,7 +429,7 @@ export default function Friends() {
                         </Button>
                         <Button size="sm" variant="outline" onClick={() => rejectMutation.mutate(f.id)}
                           disabled={rejectMutation.isPending}
-                          className="border-red-200 text-red-500 hover:bg-red-50 h-8"
+                          className="border-brand-100 text-brand-500 hover:bg-brand-50 h-8"
                         >
                           <X className="w-3.5 h-3.5" />
                         </Button>
@@ -466,7 +466,7 @@ export default function Friends() {
                       </div>
                       <Button size="sm" variant="ghost"
                         onClick={() => removeMutation.mutate(f.id)}
-                        className="ml-auto h-9 w-9 rounded-xl p-0 text-slate-400 hover:text-red-500"
+                        className="ml-auto h-9 w-9 rounded-xl p-0 text-slate-400 hover:text-brand-500"
                       >
                         <X className="w-3.5 h-3.5" />
                       </Button>

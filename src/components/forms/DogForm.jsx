@@ -101,7 +101,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
     <form onSubmit={handleSubmit} className="doghike-glass-card space-y-6 p-4 sm:p-5">
       <div className="flex flex-col items-center gap-2">
         <div className="relative">
-          <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gradient-to-br from-yellow-50 via-white to-orange-50">
+          <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gradient-to-br from-brand-50 via-white to-brand-50">
             {formData.photo_url ? (
               <img
                 src={formData.photo_url}
@@ -113,7 +113,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
                 }}
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-red-600">
+              <div className="flex h-full w-full items-center justify-center text-brand-400">
                 <Dog className="h-12 w-12" />
               </div>
             )}
@@ -130,7 +130,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
           </label>
         </div>
         {uploadError && (
-          <p className="text-xs text-red-600 text-center max-w-xs">{uploadError}</p>
+          <p className="text-xs text-brand-400 text-center max-w-xs">{uploadError}</p>
         )}
       </div>
 
@@ -203,7 +203,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
       </div>
 
       {validationError && (
-        <p className="text-sm text-red-600">{validationError}</p>
+        <p className="text-sm text-brand-400">{validationError}</p>
       )}
 
       <div className="flex gap-3 justify-end pt-2">

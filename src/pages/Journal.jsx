@@ -82,7 +82,7 @@ function VisibilityStatusBadge({ visibility, status }) {
 
     if (status === "rejected") {
       return (
-        <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-700 border border-red-200">
+        <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-brand-100 text-brand-500 border border-brand-100">
           <Globe className="w-3 h-3" />
           Abgelehnt
         </span>
@@ -90,7 +90,7 @@ function VisibilityStatusBadge({ visibility, status }) {
     }
 
     return (
-      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-200">
+      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-brand-100 text-brand-600 border border-brand-100">
         <Globe className="w-3 h-3" />
         Wartet auf Prüfung
       </span>
@@ -107,7 +107,7 @@ function VisibilityStatusBadge({ visibility, status }) {
   }
 
   return (
-    <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-yellow-100/80 text-slate-500 border border-yellow-100">
+    <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-brand-100/80 text-slate-500 border border-brand-100">
       <User className="w-3 h-3" />
       Privat
     </span>
@@ -120,7 +120,7 @@ function StarRating({ rating }) {
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
-          className={`w-3.5 h-3.5 ${star <= rating ? "fill-yellow-400 text-yellow-400" : "text-slate-300"}`}
+          className={`w-3.5 h-3.5 ${star <= rating ? "fill-brand-100 text-brand-100" : "text-slate-300"}`}
         />
       ))}
     </div>
@@ -172,7 +172,7 @@ export default function Journal() {
   const statsItems = [
     { icon: TOUR_ICONS.map, value: entries.length, label: "Wanderungen", color: "text-brand-400" },
     { icon: TOUR_ICONS.distance, value: `${totalDistance.toFixed(0)} km`, label: "Gesamt", color: "text-brand-600" },
-    { icon: TOUR_ICONS.elevation, value: `${Math.round(totalElevation).toLocaleString()} Hm`, label: "Aufstieg", color: "text-red-500" },
+    { icon: TOUR_ICONS.elevation, value: `${Math.round(totalElevation).toLocaleString()} Hm`, label: "Aufstieg", color: "text-brand-500" },
     ...(countryCount >= 2
       ? [{ icon: TOUR_ICONS.country, value: countryCount, label: "Länder", color: "text-brand-500" }]
       : []),
@@ -192,7 +192,7 @@ export default function Journal() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 to-brand-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-brand-50 to-brand-50/20 flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -252,7 +252,7 @@ export default function Journal() {
             {statsItems.map(({ icon, value, label, color }) => (
               <div
                 key={label}
-                className="doghike-glass-card rounded-xl border-yellow-100/90 bg-gradient-to-br from-white/88 to-yellow-50/45 px-2.5 py-2 md:px-3 md:py-2.5"
+                className="doghike-glass-card rounded-xl border-brand-100/90 bg-gradient-to-br from-white/88 to-brand-50/45 px-2.5 py-2 md:px-3 md:py-2.5"
               >
                 <div className="flex items-center justify-center gap-2">
                   {typeof icon === "string" ? (
@@ -333,7 +333,7 @@ export default function Journal() {
 
                         <div className="my-2 flex flex-wrap gap-x-3 gap-y-1.5">
                           <StatsChip icon={TOUR_ICONS.distance} value={entry.distance_km} unit="km" />
-                          <StatsChip icon={TOUR_ICONS.elevation} value={entry.elevation_m} unit="Hm" color="text-red-500" />
+                          <StatsChip icon={TOUR_ICONS.elevation} value={entry.elevation_m} unit="Hm" color="text-brand-500" />
                           <StatsChip
                             icon={TOUR_ICONS.duration}
                             value={formatDurationHours(entry.duration_minutes)}
@@ -367,7 +367,7 @@ export default function Journal() {
                               </Badge>
                           )}
                           {entry.gpx_url && (
-                            <Badge variant="secondary" className="text-xs bg-yellow-100/80 text-slate-600">
+                            <Badge variant="secondary" className="text-xs bg-brand-100/80 text-slate-600">
                               GPX
                             </Badge>
                           )}
@@ -391,7 +391,7 @@ export default function Journal() {
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-7 text-xs text-red-500 hover:text-red-600 hover:bg-red-50"
+                            className="h-7 text-xs text-brand-500 hover:text-brand-400 hover:bg-brand-50"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </Button>
@@ -407,7 +407,7 @@ export default function Journal() {
                             <AlertDialogCancel>Abbrechen</AlertDialogCancel>
                             <AlertDialogAction
                               onClick={() => deleteMutation.mutate(entry.id)}
-                              className="bg-red-600 hover:bg-red-700"
+                              className="bg-brand-400 hover:bg-brand-500"
                             >
                               Löschen
                             </AlertDialogAction>

@@ -1,4 +1,4 @@
-﻿@tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -114,7 +114,7 @@
   }
 
   .doghike-page-shell {
-    @apply min-h-screen bg-gradient-to-br from-brand-50 via-white to-orange-50/60 pb-24 md:pb-8;
+    @apply min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/60 pb-24 md:pb-8;
   }
 
   .doghike-content-shell {
@@ -180,7 +180,7 @@
   }
 
   .doghike-empty-icon {
-    @apply mx-auto mb-4 h-14 w-14 text-yellow-300;
+    @apply mx-auto mb-4 h-14 w-14 text-brand-100;
   }
 
   .doghike-primary-action {

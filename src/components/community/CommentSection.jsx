@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -152,7 +152,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
               <img src={photoPreviewUrl} alt="" className="w-24 h-24 object-cover rounded-lg" />
               <button
                 onClick={clearSelectedPhoto}
-                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                className="absolute -top-2 -right-2 bg-brand-500 text-white rounded-full p-1 hover:bg-brand-400"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -209,7 +209,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
       )}
 
       {isAuthenticated && !canComment && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-sm text-yellow-800">
+        <div className="bg-brand-50 border border-brand-100 rounded-xl p-4 text-sm text-brand-700">
           Kommentare sind nur bei öffentlichen Wanderungen möglich.
         </div>
       )}
@@ -251,7 +251,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
                       {format(new Date(comment.created_at), "dd.MM.yyyy 'um' HH:mm", { locale: de })}
                     </p>
                     {comment.reported && user?.id === comment.user_id && (
-                      <p className="text-xs text-yellow-600 mt-1">
+                      <p className="text-xs text-brand-300 mt-1">
                         Wartet auf Freigabe durch den Admin.
                       </p>
                     )}
@@ -262,7 +262,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
                     variant="ghost"
                     size="icon"
                     onClick={() => setDeleteId(comment.id)}
-                    className="text-slate-400 hover:text-red-600 w-7 h-7"
+                    className="text-slate-400 hover:text-brand-400 w-7 h-7"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </Button>
@@ -302,7 +302,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
             <AlertDialogCancel>Abbrechen</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteMutation.mutate(deleteId)}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-brand-400 hover:bg-brand-500"
             >
               Löschen
             </AlertDialogAction>

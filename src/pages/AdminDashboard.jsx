@@ -74,7 +74,7 @@ function FilterButton({ active, children, onClick }) {
       className={
         active
           ? "bg-brand-400 text-white hover:bg-brand-600"
-          : "border-yellow-100 text-slate-600 hover:bg-yellow-50/70"
+          : "border-brand-100 text-slate-600 hover:bg-brand-50/70"
       }
     >
       {children}
@@ -86,14 +86,14 @@ function StatusBadge({ status }) {
   const normalized = (status ?? "").toLowerCase();
   const config = {
     approved: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    draft: "bg-yellow-50 text-yellow-700 border-yellow-200",
-    archived: "bg-yellow-100/80 text-slate-600 border-yellow-100",
+    draft: "bg-brand-50 text-brand-600 border-brand-100",
+    archived: "bg-brand-100/80 text-slate-600 border-brand-100",
   };
 
   return (
     <Badge
       variant="outline"
-      className={config[normalized] ?? "bg-yellow-100/80 text-slate-600 border-yellow-100"}
+      className={config[normalized] ?? "bg-brand-100/80 text-slate-600 border-brand-100"}
     >
       {normalized === "approved"
         ? "Freigegeben"
@@ -126,7 +126,7 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
             <div className="mb-1 flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1 rounded-full border border-yellow-200 bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-700">
+              <span className="inline-flex items-center gap-1 rounded-full border border-brand-100 bg-brand-100 px-2 py-0.5 text-xs font-medium text-brand-600">
                 Wartet auf Prüfung
               </span>
               <span className="text-xs text-slate-400">
@@ -185,7 +185,7 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="space-y-4 border-t border-yellow-100 px-5 pb-4 pt-4">
+            <div className="space-y-4 border-t border-brand-100 px-5 pb-4 pt-4">
               {entry.description && (
                 <div>
                   <Label className="text-xs uppercase tracking-wide text-slate-500">
@@ -197,9 +197,9 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
                 </div>
               )}
               {entry.hazard_notes && (
-                <div className="flex gap-2 rounded-lg border border-yellow-200 bg-yellow-50 p-3">
-                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-yellow-600" />
-                  <p className="text-sm text-yellow-700">{entry.hazard_notes}</p>
+                <div className="flex gap-2 rounded-lg border border-brand-100 bg-brand-50 p-3">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-brand-300" />
+                  <p className="text-sm text-brand-600">{entry.hazard_notes}</p>
                 </div>
               )}
               {entry.photos?.length > 0 && (
@@ -245,7 +245,7 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
               onClick={() => setShowRejectForm(true)}
               disabled={approving || rejecting}
               variant="outline"
-              className="border-red-300 text-red-600 hover:bg-red-50"
+              className="border-brand-200 text-brand-400 hover:bg-brand-50"
               size="sm"
             >
               <XCircle className="mr-1.5 h-4 w-4" />
@@ -253,8 +253,8 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
             </Button>
           </div>
         ) : (
-          <div className="space-y-3 rounded-xl border border-red-200 bg-red-50 p-4">
-            <Label className="text-sm font-medium text-red-700">
+          <div className="space-y-3 rounded-xl border border-brand-100 bg-brand-50 p-4">
+            <Label className="text-sm font-medium text-brand-500">
               Ablehnungsgrund (optional)
             </Label>
             <Textarea
@@ -269,7 +269,7 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
                 onClick={() => onReject(entry.id, reason)}
                 disabled={rejecting}
                 size="sm"
-                className="bg-red-600 text-white hover:bg-red-700"
+                className="bg-brand-400 text-white hover:bg-brand-500"
               >
                 {rejecting ? (
                   <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
@@ -324,7 +324,7 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-sm font-semibold text-slate-900">{authorName}</span>
               {needsApproval && (
-                <span className="inline-flex items-center gap-1 rounded-full border border-yellow-200 bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-700">
+                <span className="inline-flex items-center gap-1 rounded-full border border-brand-100 bg-brand-100 px-2 py-0.5 text-xs font-medium text-brand-600">
                   Freigabe nötig
                 </span>
               )}
@@ -358,7 +358,7 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
             size="icon"
             onClick={() => onDelete(comment.id)}
             disabled={deleting || approving}
-            className="h-8 w-8 text-slate-400 hover:text-red-600"
+            className="h-8 w-8 text-slate-400 hover:text-brand-400"
           >
             {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
           </Button>
@@ -406,7 +406,7 @@ function PublicHikeCard({ hike }) {
       className="doghike-glass-card overflow-hidden"
     >
       <div className="flex flex-col gap-4 p-4 md:flex-row">
-        <div className="h-28 w-full shrink-0 overflow-hidden rounded-2xl bg-yellow-100/80 md:w-44">
+        <div className="h-28 w-full shrink-0 overflow-hidden rounded-2xl bg-brand-100/80 md:w-44">
           {hike.cover_photo ? (
             <img src={hike.cover_photo} alt="" className="h-full w-full object-cover" />
           ) : (
@@ -483,7 +483,7 @@ function UserCard({ profile, deleting, onDelete }) {
               className="h-11 w-11 shrink-0 rounded-2xl object-cover"
             />
           ) : (
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-yellow-100/80 text-slate-400">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-brand-100/80 text-slate-400">
               <User className="h-5 w-5" />
             </div>
           )}
@@ -520,7 +520,7 @@ function UserCard({ profile, deleting, onDelete }) {
               variant="ghost"
               size="icon"
               disabled={deleting}
-              className="h-8 w-8 text-slate-400 hover:text-red-600"
+              className="h-8 w-8 text-slate-400 hover:text-brand-400"
             >
               {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
             </Button>
@@ -536,7 +536,7 @@ function UserCard({ profile, deleting, onDelete }) {
               <AlertDialogCancel>Abbrechen</AlertDialogCancel>
               <AlertDialogAction
                 onClick={() => onDelete(profile.user_id)}
-                className="bg-red-600 text-white hover:bg-red-700"
+                className="bg-brand-400 text-white hover:bg-brand-500"
               >
                 Endgültig löschen
               </AlertDialogAction>
@@ -760,7 +760,7 @@ export default function AdminDashboard() {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
         <div className="text-center">
-          <ShieldCheck className="mx-auto mb-4 h-12 w-12 text-red-300" />
+          <ShieldCheck className="mx-auto mb-4 h-12 w-12 text-brand-200" />
           <p className="text-lg font-semibold text-slate-700">Kein Zugriff</p>
           <p className="mt-1 text-sm text-slate-500">Diese Seite ist nur für Administratoren.</p>
           <Link to="/">
@@ -774,10 +774,10 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 md:py-10">
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="doghike-page-header">
-          <div className="doghike-page-icon bg-gradient-to-br from-[#5f241d] to-[#d94a3a] text-white shadow-[0_12px_24px_rgba(95,36,29,0.14)]">
+          <div className="doghike-page-icon bg-gradient-to-br from-[#56152d] to-[#c03060] text-white shadow-[0_12px_24px_rgba(192,48,96,0.14)]">
               <ShieldCheck className="h-5 w-5 text-white" />
           </div>
           <div>
@@ -794,7 +794,7 @@ export default function AdminDashboard() {
               <Clock className="h-4 w-4" />
               Touren prüfen
               {entries.length > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-yellow-500 text-[10px] font-bold text-white">
+                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-brand-500 text-[10px] font-bold text-white">
                   {entries.length > 9 ? "9+" : entries.length}
                 </span>
               )}
@@ -804,7 +804,7 @@ export default function AdminDashboard() {
               <MessageSquare className="h-4 w-4" />
               Kommentare
               {pendingCommentsCount > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-brand-500 text-[10px] font-bold text-white">
                   {pendingCommentsCount > 9 ? "9+" : pendingCommentsCount}
                 </span>
               )}
@@ -824,8 +824,8 @@ export default function AdminDashboard() {
           <TabsContent value="entries">
             <div className="mb-6 flex items-center gap-4 rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
               <div className="flex items-center gap-2">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-yellow-100">
-                  <Clock className="h-5 w-5 text-yellow-600" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-100">
+                  <Clock className="h-5 w-5 text-brand-300" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold leading-none text-slate-900">{entries.length}</p>
@@ -870,16 +870,16 @@ export default function AdminDashboard() {
               <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-100">
-                      <MessageSquare className="h-5 w-5 text-red-600" />
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-100">
+                      <MessageSquare className="h-5 w-5 text-brand-400" />
                     </div>
                     <div>
                       <p className="text-2xl font-bold leading-none text-slate-900">{comments.length}</p>
                       <p className="text-xs text-slate-500">Kommentare gesamt</p>
                     </div>
                   </div>
-                  <div className="border-l border-yellow-100 pl-4">
-                    <p className="text-2xl font-bold leading-none text-yellow-700">{pendingCommentsCount}</p>
+                  <div className="border-l border-brand-100 pl-4">
+                    <p className="text-2xl font-bold leading-none text-brand-600">{pendingCommentsCount}</p>
                     <p className="text-xs text-slate-500">Freigaben nötig</p>
                   </div>
                 </div>
@@ -1016,7 +1016,7 @@ export default function AdminDashboard() {
             <div className="mb-4 grid gap-4 md:grid-cols-[0.9fr_1.1fr]">
               <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-yellow-100/80">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-100/80">
                     <Users className="h-5 w-5 text-slate-600" />
                   </div>
                   <div>

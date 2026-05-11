@@ -175,7 +175,7 @@ export default function GPXUploader({ onSave }) {
           className={`border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer ${
             isDragging
               ? "border-brand-400 bg-brand-50"
-              : "border-yellow-200 hover:border-brand-300 hover:bg-brand-50/40"
+              : "border-brand-100 hover:border-brand-300 hover:bg-brand-50/40"
           }`}
           onDragOver={(e) => {
             e.preventDefault();
@@ -200,7 +200,7 @@ export default function GPXUploader({ onSave }) {
       )}
 
       {error && (
-        <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-sm">
+        <div className="flex items-center gap-2 bg-brand-50 border border-brand-100 rounded-lg p-3 text-brand-500 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           {error}
         </div>
@@ -212,17 +212,17 @@ export default function GPXUploader({ onSave }) {
             <div className="flex items-center gap-2">
               <FileText className="w-5 h-5 text-brand-400" />
               <div>
-                <p className="text-sm font-medium text-[#7a3f2e]">{fileName}</p>
+                <p className="text-sm font-medium text-[#741c3b]">{fileName}</p>
                 <p className="text-xs text-brand-400">{gpxData.coordinates.length} Wegpunkte geladen</p>
               </div>
             </div>
-            <Button variant="ghost" size="sm" onClick={handleClear} className="text-slate-500 hover:text-red-600">
+            <Button variant="ghost" size="sm" onClick={handleClear} className="text-slate-500 hover:text-brand-400">
               <Trash2 className="w-4 h-4" />
             </Button>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="rounded-xl bg-gradient-to-br from-[#d94a3a] to-[#f6c43d] p-4 text-center text-white">
+        <div className="rounded-xl bg-gradient-to-br from-[#c03060] to-[#fada6a] p-4 text-center text-white">
               <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.distance}</span>
               <p className="text-2xl font-bold">{gpxData.distance_km}</p>
               <p className="text-xs opacity-70">km Distanz</p>
@@ -232,12 +232,12 @@ export default function GPXUploader({ onSave }) {
               <p className="text-2xl font-bold">+{gpxData.elevation_gain_m}</p>
               <p className="text-xs opacity-70">m Aufstieg</p>
             </div>
-            <div className="rounded-xl bg-gradient-to-br from-[#7a3f2e] to-[#d94a3a] p-4 text-center text-white">
+            <div className="rounded-xl bg-gradient-to-br from-[#741c3b] to-[#c03060] p-4 text-center text-white">
               <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.duration}</span>
               <p className="text-2xl font-bold">{formatDurationHours(gpxData.duration_minutes)}</p>
               <p className="text-xs opacity-70">gesch. Dauer</p>
             </div>
-            <div className="rounded-xl bg-gradient-to-br from-[#f6c43d] to-[#d94a3a] p-4 text-center text-white">
+            <div className="rounded-xl bg-gradient-to-br from-[#fada6a] to-[#c03060] p-4 text-center text-white">
               <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.elevation}</span>
               <p className="text-2xl font-bold">
                 {gpxData.max_elevation !== -Infinity ? Math.round(gpxData.max_elevation) : "–"}
@@ -246,7 +246,7 @@ export default function GPXUploader({ onSave }) {
             </div>
           </div>
 
-          <div className="bg-yellow-50/70 rounded-lg p-3 text-xs text-slate-600 flex flex-wrap gap-4">
+          <div className="bg-brand-50/70 rounded-lg p-3 text-xs text-slate-600 flex flex-wrap gap-4">
             <span>⬇️ Abstieg: <strong>{gpxData.elevation_loss_m} m</strong></span>
             {gpxData.min_elevation !== Infinity && (
               <span>🏔️ Min. Höhe: <strong>{Math.round(gpxData.min_elevation)} m</strong></span>
@@ -256,13 +256,13 @@ export default function GPXUploader({ onSave }) {
             </span>
           </div>
 
-          <div className="relative h-72 md:h-96 rounded-xl overflow-hidden border-2 border-yellow-100">
+          <div className="relative h-72 md:h-96 rounded-xl overflow-hidden border-2 border-brand-100">
             <MapContainer center={mapCenter} zoom={12} style={{ height: "100%", width: "100%" }}>
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution="&copy; OpenStreetMap"
               />
-              <Polyline positions={gpxData.coordinates} color="#d94a3a" weight={4} opacity={0.85} />
+              <Polyline positions={gpxData.coordinates} color="#c03060" weight={4} opacity={0.85} />
               {gpxData.coordinates.length > 0 && (
                 <>
                   <Marker position={gpxData.coordinates[0]} />

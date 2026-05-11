@@ -1,9 +1,9 @@
-﻿export const DIFFICULTY_LEVELS = [
+export const DIFFICULTY_LEVELS = [
   { value: "1", label: "Sehr leicht", short: "Stufe 1", textColor: "text-brand-400", badgeClass: "bg-brand-100 text-brand-600 border-brand-200" },
-  { value: "2", label: "Leicht", short: "Stufe 2", textColor: "text-yellow-700", badgeClass: "bg-yellow-50 text-yellow-800 border-yellow-200" },
-  { value: "3", label: "Mittel", short: "Stufe 3", textColor: "text-yellow-600", badgeClass: "bg-yellow-100 text-yellow-700 border-yellow-200" },
-  { value: "4", label: "Anspruchsvoll", short: "Stufe 4", textColor: "text-red-500", badgeClass: "bg-red-100 text-red-600 border-red-200" },
-  { value: "5", label: "Sehr anspruchsvoll", short: "Stufe 5", textColor: "text-red-600", badgeClass: "bg-red-100 text-red-700 border-red-200" },
+  { value: "2", label: "Leicht", short: "Stufe 2", textColor: "text-brand-600", badgeClass: "bg-brand-50 text-brand-700 border-brand-100" },
+  { value: "3", label: "Mittel", short: "Stufe 3", textColor: "text-brand-300", badgeClass: "bg-brand-100 text-brand-600 border-brand-100" },
+  { value: "4", label: "Anspruchsvoll", short: "Stufe 4", textColor: "text-brand-500", badgeClass: "bg-brand-100 text-brand-400 border-brand-100" },
+  { value: "5", label: "Sehr anspruchsvoll", short: "Stufe 5", textColor: "text-brand-400", badgeClass: "bg-brand-100 text-brand-500 border-brand-100" },
 ];
 
 export const HUMAN_DIFFICULTY_GUIDE = [
@@ -21,8 +21,8 @@ export const HUMAN_DIFFICULTY_GUIDE = [
   {
     level: "T2",
     stufe: "Stufe 2",
-    color: "bg-yellow-50 border-yellow-200 text-yellow-800",
-    badge: "bg-yellow-500",
+    color: "bg-brand-50 border-brand-100 text-brand-700",
+    badge: "bg-brand-500",
     title: "Bergwandern",
     desc: "Schmalere, steilere oder steinige Wege. Trittsicherheit beim Menschen ist erforderlich.",
     examples: "Almwege, schmalere Bergpfade, einfachere Höhenwege",
@@ -32,8 +32,8 @@ export const HUMAN_DIFFICULTY_GUIDE = [
   {
     level: "T3",
     stufe: "Stufe 3",
-    color: "bg-yellow-100 border-yellow-300 text-yellow-800",
-    badge: "bg-yellow-500",
+    color: "bg-brand-100 border-brand-200 text-brand-700",
+    badge: "bg-brand-500",
     title: "Anspruchsvolles Bergwandern",
     desc: "Steilere, teils ausgesetzte oder unwegsame Abschnitte. Erfahrung und Trittsicherheit sind nötig.",
     examples: "Steilere Bergwege, Geröllpassagen, wurzelige oder schmale Pfade",
@@ -43,8 +43,8 @@ export const HUMAN_DIFFICULTY_GUIDE = [
   {
     level: "T4",
     stufe: "Stufe 4",
-    color: "bg-red-100 border-red-300 text-red-700",
-    badge: "bg-red-500",
+    color: "bg-brand-100 border-brand-200 text-brand-500",
+    badge: "bg-brand-500",
     title: "Alpinwandern",
     desc: "Schwieriges Gelände mit steilen Schrofen, Geröll sowie teils weglosen oder unmarkierten Passagen.",
     examples: "Alpine Übergänge, steile felsige Routen, weglosere Abschnitte",
@@ -54,8 +54,8 @@ export const HUMAN_DIFFICULTY_GUIDE = [
   {
     level: "T5",
     stufe: "Stufe 5",
-    color: "bg-red-100 border-red-300 text-red-800",
-    badge: "bg-red-500",
+    color: "bg-brand-100 border-brand-200 text-brand-700",
+    badge: "bg-brand-500",
     title: "Schweres Alpinwandern",
     desc: "Sehr steiles, exponiertes Gelände mit möglichen kletterähnlichen Passagen. Alpine Erfahrung ist nötig.",
     examples: "Sehr ausgesetzte alpine Routen, felsige Schlüsselstellen",
@@ -79,8 +79,8 @@ export const DOG_DIFFICULTY_GUIDE = [
   {
     level: "H2",
     stufe: "Stufe 2",
-    color: "bg-yellow-50 border-yellow-200 text-yellow-800",
-    badge: "bg-yellow-500",
+    color: "bg-brand-50 border-brand-100 text-brand-700",
+    badge: "bg-brand-500",
     title: "Leicht",
     desc: "Gut machbare Wanderung mit moderater Länge oder Steigung. Der Hund braucht normale Grundfitness und sollte an verschiedene Untergründe gewöhnt sein.",
     examples: "Mittlere Almwege, längere Waldwege, sanftere Berganstiege",
@@ -90,8 +90,8 @@ export const DOG_DIFFICULTY_GUIDE = [
   {
     level: "H3",
     stufe: "Stufe 3",
-    color: "bg-yellow-100 border-yellow-300 text-yellow-800",
-    badge: "bg-yellow-500",
+    color: "bg-brand-100 border-brand-200 text-brand-700",
+    badge: "bg-brand-500",
     title: "Mittel",
     desc: "Längere oder steilere Tour mit schmalen, steinigen oder wurzeligen Wegen. Der Hund sollte fit, trittsicher und berggewöhnt sein.",
     examples: "Längere Bergtouren, steilere Anstiege, wurzelige oder steinige Pfade",
@@ -101,8 +101,8 @@ export const DOG_DIFFICULTY_GUIDE = [
   {
     level: "H4",
     stufe: "Stufe 4",
-    color: "bg-red-100 border-red-300 text-red-700",
-    badge: "bg-red-500",
+    color: "bg-brand-100 border-brand-200 text-brand-500",
+    badge: "bg-brand-500",
     title: "Anspruchsvoll",
     desc: "Deutlich fordernde Tour mit größerer Höhendifferenz, längerer Gehzeit oder schwierigen Stellen. Nur für ausgewachsene, fitte und bergerfahrene Hunde.",
     examples: "Lange Bergtage, steile Touren mit engeren oder schwierigeren Passagen",
@@ -112,8 +112,8 @@ export const DOG_DIFFICULTY_GUIDE = [
   {
     level: "H5",
     stufe: "Stufe 5",
-    color: "bg-red-100 border-red-300 text-red-800",
-    badge: "bg-red-500",
+    color: "bg-brand-100 border-brand-200 text-brand-700",
+    badge: "bg-brand-500",
     title: "Sehr anspruchsvoll",
     desc: "Sehr fordernde Hundetour mit steilen, felsigen, schmalen oder ausgesetzten Passagen. Der Hund braucht sehr gute Kondition, Berggewöhnung und sichere Führung; einzelne Stellen können Hilfe oder Sicherung erfordern.",
     examples: "Sehr steile Bergtouren, felsige Passagen, ausgesetzte Engstellen",
@@ -168,21 +168,21 @@ export function getDifficultyTextColor(level) {
 }
 
 export function getDifficultyBadgeClass(level) {
-  return DIFFICULTY_BADGE_CLASSES[level] ?? "bg-yellow-50 text-slate-600 border-yellow-100";
+  return DIFFICULTY_BADGE_CLASSES[level] ?? "bg-brand-50 text-slate-600 border-brand-100";
 }
 
 export const WATER_LEVELS = [
-  { value: "none", numeric: 0, label: "Kein Wasser", icon: "💧", textColor: "text-red-700", badgeClass: "bg-red-50 text-red-700 border-red-200" },
-  { value: "little", numeric: 1, label: "Wenig Wasser", icon: "💧", textColor: "text-red-600", badgeClass: "bg-red-50 text-red-600 border-red-200" },
+  { value: "none", numeric: 0, label: "Kein Wasser", icon: "💧", textColor: "text-brand-500", badgeClass: "bg-brand-50 text-brand-500 border-brand-100" },
+  { value: "little", numeric: 1, label: "Wenig Wasser", icon: "💧", textColor: "text-brand-400", badgeClass: "bg-brand-50 text-brand-400 border-brand-100" },
   { value: "moderate", numeric: 2, label: "Etwas Wasser", icon: "💧💧", textColor: "text-brand-700", badgeClass: "bg-brand-50 text-brand-700 border-brand-200" },
-  { value: "plenty", numeric: 3, label: "Viel Wasser", icon: "💧💧💧", textColor: "text-cyan-700", badgeClass: "bg-cyan-50 text-cyan-700 border-cyan-200" },
+  { value: "plenty", numeric: 3, label: "Viel Wasser", icon: "💧💧💧", textColor: "text-brand-300", badgeClass: "bg-brand-50 text-brand-300 border-brand-100" },
 ];
 
 export const WATER_GUIDE = [
   {
     value: "none",
     label: "Kein Wasser",
-    color: "bg-red-50 border-red-200 text-red-800",
+    color: "bg-brand-50 border-brand-100 text-brand-700",
     desc: "Auf der Tour gibt es normalerweise keine verlässlichen natürlichen Wasserstellen für den Hund. Wasser muss vollständig selbst mitgenommen werden.",
     examples: "Höhenweg, Waldweg oder Almweg ohne Bach, Quelle, Brunnen oder Seezugang",
     tip: "Plane die komplette Wasserversorgung selbst ein und nimm für den Hund immer genug Reserve mit.",
@@ -190,7 +190,7 @@ export const WATER_GUIDE = [
   {
     value: "little",
     label: "Wenig Wasser",
-    color: "bg-red-50 border-red-200 text-red-700",
+    color: "bg-brand-50 border-brand-100 text-brand-500",
     desc: "Es gibt einzelne mögliche Wasserstellen, diese können aber selten, schlecht erreichbar oder saisonabhängig sein. Nicht als alleinige Wasserversorgung einplanen.",
     examples: "Ein kleiner Bach am Anfang der Tour oder eine Quelle, die im Sommer austrocknen kann",
     tip: "Eigenes Wasser bleibt Pflicht. Einzelne Wasserstellen sind nur ein Bonus und keine sichere Versorgung.",
@@ -206,7 +206,7 @@ export const WATER_GUIDE = [
   {
     value: "plenty",
     label: "Viel Wasser",
-    color: "bg-cyan-50 border-cyan-200 text-cyan-800",
+    color: "bg-brand-50 border-brand-100 text-brand-500",
     desc: "Die Tour bietet sehr regelmäßigen oder fast durchgehenden Wasserzugang. Besonders hundefreundlich, aber eigenes Wasser bleibt trotzdem Pflicht.",
     examples: "Rundweg um einen See mit wiederholtem direktem Zugang zum Wasser",
     tip: "Sehr hundefreundlich, trotzdem immer eigenes Trinkwasser und eine Schüssel dabeihaben.",
@@ -237,10 +237,10 @@ export const TOUR_ICONS = {
 };
 
 export const SEASON_LEVELS = [
-  { value: "spring", label: "Frühling", icon: "🌸", color: "bg-pink-100 text-pink-700" },
-  { value: "summer", label: "Sommer", icon: "☀️", color: "bg-red-100 text-red-700" },
-  { value: "autumn", label: "Herbst", icon: "🍂", color: "bg-red-100 text-red-600" },
-  { value: "winter", label: "Winter", icon: "❄️", color: "bg-yellow-50 text-slate-700" },
+  { value: "spring", label: "Frühling", icon: "🌸", color: "bg-brand-100 text-brand-500" },
+  { value: "summer", label: "Sommer", icon: "☀️", color: "bg-brand-100 text-brand-500" },
+  { value: "autumn", label: "Herbst", icon: "🍂", color: "bg-brand-100 text-brand-400" },
+  { value: "winter", label: "Winter", icon: "❄️", color: "bg-brand-50 text-slate-700" },
   { value: "all_year", label: "Ganzjährig", icon: "🍃", color: "bg-brand-100 text-brand-600" },
 ];
 
@@ -257,7 +257,7 @@ export function getSeasonIcon(value) {
 }
 
 export function getSeasonBadgeClass(value) {
-  return SEASON_BY_VALUE[value]?.color ?? "bg-yellow-50 text-slate-600";
+  return SEASON_BY_VALUE[value]?.color ?? "bg-brand-50 text-slate-600";
 }
 
 export const WATER_BY_VALUE = Object.fromEntries(
@@ -280,7 +280,7 @@ export function getWaterIcon(value) {
 }
 
 export function getWaterBadgeClass(value) {
-  return getWaterLevel(value)?.badgeClass ?? "bg-yellow-50 text-slate-600 border-yellow-100";
+  return getWaterLevel(value)?.badgeClass ?? "bg-brand-50 text-slate-600 border-brand-100";
 }
 
 export function getWaterTextColor(value) {

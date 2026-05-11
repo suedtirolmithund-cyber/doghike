@@ -1,4 +1,4 @@
-﻿import { useMemo } from "react";
+import { useMemo } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Mountain } from "lucide-react";
 
@@ -82,13 +82,13 @@ export default function RouteElevationProfile({ coordinates, distance }) {
         <p className="text-xs text-brand-600 font-medium">Distanz</p>
         <p className="text-lg font-bold text-slate-950">{distance || totalDistance.toFixed(1)} km</p>
         </div>
-        <div className="bg-red-50 rounded-lg p-3 border border-red-200">
-          <p className="text-xs text-red-500 font-medium">Höhenunterschied</p>
-          <p className="text-lg font-bold text-red-800">{Math.round(elevationGain)} m</p>
+        <div className="bg-brand-50 rounded-lg p-3 border border-brand-100">
+          <p className="text-xs text-brand-500 font-medium">Höhenunterschied</p>
+          <p className="text-lg font-bold text-brand-700">{Math.round(elevationGain)} m</p>
         </div>
-        <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
-          <p className="text-xs text-purple-600 font-medium">Max. Höhe</p>
-          <p className="text-lg font-bold text-purple-900">{Math.round(maxElevation)} m</p>
+        <div className="bg-brand-50 rounded-lg p-3 border border-brand-100">
+          <p className="text-xs text-brand-400 font-medium">Max. Höhe</p>
+          <p className="text-lg font-bold text-brand-700">{Math.round(maxElevation)} m</p>
         </div>
       </div>
 

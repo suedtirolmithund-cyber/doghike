@@ -264,10 +264,10 @@ export default function Profile() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-md w-full mx-4">
           <div className="doghike-glass-card p-8 text-center">
-            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border border-yellow-100 bg-white/78 text-red-600 shadow-[0_14px_35px_rgba(95,36,29,0.09)]">
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border border-brand-100 bg-white/78 text-brand-400 shadow-[0_14px_35px_rgba(192,48,96,0.09)]">
               <Dog className="h-9 w-9" />
             </div>
             <h2 className="text-2xl font-light text-slate-900 mb-2">Willkommen!</h2>
@@ -287,7 +287,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -296,9 +296,9 @@ export default function Profile() {
         >
           <div className="flex items-start gap-5">
             <div className="relative shrink-0">
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-white shadow-md bg-yellow-100/80">
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-white shadow-md bg-brand-100/80">
                 {avatarUploading ? (
-                  <div className="w-full h-full flex items-center justify-center bg-yellow-100/80">
+                  <div className="w-full h-full flex items-center justify-center bg-brand-100/80">
                     <Loader2 className="w-6 h-6 text-slate-400 animate-spin" />
                   </div>
                 ) : (
@@ -385,7 +385,7 @@ export default function Profile() {
               variant="outline"
               size="sm"
               onClick={logout}
-              className="h-10 w-10 shrink-0 rounded-xl border-brand-100 bg-white/70 p-0 text-brand-600 shadow-sm hover:border-red-200 hover:bg-red-50 hover:text-red-600 md:w-auto md:px-3"
+              className="h-10 w-10 shrink-0 rounded-xl border-brand-100 bg-white/70 p-0 text-brand-600 shadow-sm hover:border-brand-100 hover:bg-brand-50 hover:text-brand-400 md:w-auto md:px-3"
             >
               <LogOut className="w-4 h-4 md:mr-2" />
               <span className="hidden md:inline">Abmelden</span>
@@ -475,8 +475,8 @@ export default function Profile() {
                           </Button>
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
-                              <Button size="icon" variant="ghost" className="bg-white/80 backdrop-blur-sm hover:bg-red-50 w-8 h-8">
-                                <Trash2 className="w-3.5 h-3.5 text-red-500" />
+                              <Button size="icon" variant="ghost" className="bg-white/80 backdrop-blur-sm hover:bg-brand-50 w-8 h-8">
+                                <Trash2 className="w-3.5 h-3.5 text-brand-500" />
                               </Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
@@ -488,7 +488,7 @@ export default function Profile() {
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel>Abbrechen</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => deleteDogMutation.mutate(dog.id)} className="bg-red-600 hover:bg-red-700">
+                                <AlertDialogAction onClick={() => deleteDogMutation.mutate(dog.id)} className="bg-brand-400 hover:bg-brand-500">
                                   Entfernen
                                 </AlertDialogAction>
                               </AlertDialogFooter>

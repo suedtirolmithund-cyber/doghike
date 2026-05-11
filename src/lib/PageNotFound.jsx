@@ -8,8 +8,8 @@ export default function PageNotFound() {
   const { isAdmin } = useAuth();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 p-6">
-      <div className="w-full max-w-md space-y-6 rounded-2xl border border-brand-400/30 bg-gradient-to-br from-brand-700 via-brand-600 to-[#2777b8] p-8 text-center text-white shadow-[0_18px_42px_rgba(95,36,29,0.2)]">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-50 via-white to-brand-50/20 p-6">
+      <div className="w-full max-w-md space-y-6 rounded-2xl border border-brand-400/30 bg-gradient-to-br from-brand-700 via-brand-600 to-[#2777b8] p-8 text-center text-white shadow-[0_18px_42px_rgba(192,48,96,0.2)]">
         <div className="space-y-2">
           <h1 className="text-7xl font-light text-white/70">404</h1>
           <div className="mx-auto h-0.5 w-16 bg-white/35" />

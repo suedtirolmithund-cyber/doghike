@@ -141,7 +141,7 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
         )}
       </div>
 
-      <div className="relative h-64 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-yellow-100">
+      <div className="relative h-64 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-brand-100">
         <MapContainer
           center={[46.5, 11.9]}
           zoom={10}
@@ -174,7 +174,7 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
           variant="outline"
           onClick={handleClear}
           disabled={waypoints.length === 0}
-          className="text-red-600 hover:text-red-700"
+          className="text-brand-400 hover:text-brand-500"
           size="sm"
         >
           <Trash2 className="w-3 h-3 md:w-4 md:h-4 md:mr-2" />

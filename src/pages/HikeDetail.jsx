@@ -48,10 +48,10 @@ function getCountryLabel(country) {
 
 const difficultyColors = {
   "1": "bg-brand-100 text-brand-600",
-  "2": "bg-lime-100 text-lime-700",
-  "3": "bg-yellow-100 text-yellow-700",
-  "4": "bg-red-100 text-red-600",
-  "5": "bg-red-100 text-red-700"
+  "2": "bg-brand-100 text-brand-600",
+  "3": "bg-brand-100 text-brand-600",
+  "4": "bg-brand-100 text-brand-400",
+  "5": "bg-brand-100 text-brand-500"
 };
 
 const weatherEmojis = {
@@ -193,7 +193,7 @@ export default function HikeDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center">
         <div className="animate-pulse text-brand-500">Lädt...</div>
       </div>
     );
@@ -202,7 +202,7 @@ export default function HikeDetail() {
 
   if (!hike) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="doghike-glass-card p-8 text-center">
           <p className="text-xl text-slate-700 mb-4">Tour nicht gefunden</p>
           <Link to={fallbackBackUrl}>
@@ -250,7 +250,7 @@ export default function HikeDetail() {
     : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       {/* Hero Image */}
       <div className="relative h-[50vh] overflow-hidden">
         <img
@@ -289,7 +289,7 @@ export default function HikeDetail() {
                 </Link>
                 {isOwnJournalHike && <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="ghost" className="bg-red-500/20 backdrop-blur-sm text-white hover:bg-red-500/40">
+                    <Button variant="ghost" className="bg-brand-500/20 backdrop-blur-sm text-white hover:bg-brand-500/40">
                       <Trash2 className="w-4 h-4 mr-1" />
                       Löschen
                     </Button>
@@ -305,7 +305,7 @@ export default function HikeDetail() {
                       <AlertDialogCancel>Abbrechen</AlertDialogCancel>
                       <AlertDialogAction
                         onClick={() => deleteJournalEntryMutation.mutate()}
-                        className="bg-red-600 hover:bg-red-700"
+                        className="bg-brand-400 hover:bg-brand-500"
                       >
                         Löschen
                       </AlertDialogAction>
@@ -527,11 +527,11 @@ export default function HikeDetail() {
                   <p className="text-slate-500">Zu dieser Premium-Tour ist eine Kurzvorschau sichtbar. Die ganzen Details kannst du mit Premium freischalten.</p>
                 )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="rounded-xl border border-yellow-100 bg-yellow-50/70 p-4">
+                  <div className="rounded-xl border border-brand-100 bg-brand-50/70 p-4">
                     <p className="text-xs uppercase tracking-wide text-slate-400 mb-1">Ort</p>
                     <p className="font-medium text-slate-900">{hike.location || "Nicht angegeben"}</p>
                   </div>
-                  <div className="rounded-xl border border-yellow-100 bg-yellow-50/70 p-4">
+                  <div className="rounded-xl border border-brand-100 bg-brand-50/70 p-4">
                     <p className="text-xs uppercase tracking-wide text-slate-400 mb-1">Land</p>
                     <p className="font-medium text-slate-900">{countryLabel || "Nicht angegeben"}</p>
                   </div>
@@ -625,13 +625,13 @@ export default function HikeDetail() {
                   </div>
                 )}
                   {hike.hazard_notes && (
-                    <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-xl">
-                      <p className="font-medium text-yellow-800 mb-1">{TOUR_ICONS.hazard} Achtung</p>
+                    <div className="p-3 bg-brand-50 border border-brand-100 rounded-xl">
+                      <p className="font-medium text-brand-700 mb-1">{TOUR_ICONS.hazard} Achtung</p>
                       <ExpandableText
                         text={hike.hazard_notes}
                         lines={3}
                         minChars={200}
-                        className="text-sm text-yellow-700 whitespace-pre-wrap"
+                        className="text-sm text-brand-600 whitespace-pre-wrap"
                       />
                     </div>
                   )}

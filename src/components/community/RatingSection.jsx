@@ -54,7 +54,7 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
               key={star}
               className={`w-5 h-5 ${
                 star <= Math.round(averageRating)
-                  ? "fill-yellow-400 text-yellow-400"
+                  ? "fill-brand-100 text-brand-100"
                   : "text-slate-300"
               }`}
             />
@@ -66,7 +66,7 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
       </div>
 
       {isAuthenticated && (
-        <div className="border-t border-yellow-100 pt-4 md:pt-6">
+        <div className="border-t border-brand-100 pt-4 md:pt-6">
           <p className="font-semibold text-slate-900 mb-3 text-sm md:text-base">
             {userRating ? "Deine Bewertung ändern" : "Wanderung bewerten"}
           </p>
@@ -84,8 +84,8 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
                 <Star
                   className={`w-10 h-10 md:w-8 md:h-8 transition-colors ${
                     star <= (hoverRating || selectedRating || userRating?.rating || 0)
-                      ? "fill-yellow-400 text-yellow-400"
-                      : "text-slate-300 hover:text-yellow-200"
+                      ? "fill-brand-100 text-brand-100"
+                      : "text-slate-300 hover:text-brand-100"
                   }`}
                 />
               </motion.button>

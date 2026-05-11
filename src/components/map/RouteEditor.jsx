@@ -74,7 +74,7 @@ export default function RouteEditor({ coordinates = [], startPoint = null, onCha
         </Button>
       </div>
 
-      <div className="rounded-2xl overflow-hidden border border-yellow-100 shadow-sm" style={{ height: "400px" }}>
+      <div className="rounded-2xl overflow-hidden border border-brand-100 shadow-sm" style={{ height: "400px" }}>
         <MapContainer
           center={center}
           zoom={12}

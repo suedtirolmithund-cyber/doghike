@@ -101,9 +101,9 @@ async function loadLeaderboard() {
 
 // Hilfsfunktionen UI
 const RANK_STYLE = [
-  { ring: "ring-2 ring-brand-300", bg: "bg-gradient-to-br from-yellow-100 to-[#d94a3a]/12", border: "border-brand-300", medal: "🥇", num: "text-brand-700" },
-  { ring: "ring-2 ring-yellow-200",  bg: "bg-gradient-to-br from-white/80 to-brand-50",  border: "border-brand-100",  medal: "🥈", num: "text-slate-600"  },
-  { ring: "ring-2 ring-red-300", bg: "bg-gradient-to-br from-orange-50 to-brand-50", border: "border-red-200", medal: "🥉", num: "text-red-600" },
+  { ring: "ring-2 ring-brand-300", bg: "bg-gradient-to-br from-brand-100 to-[#c03060]/12", border: "border-brand-300", medal: "🥇", num: "text-brand-700" },
+  { ring: "ring-2 ring-brand-100",  bg: "bg-gradient-to-br from-white/80 to-brand-50",  border: "border-brand-100",  medal: "🥈", num: "text-slate-600"  },
+  { ring: "ring-2 ring-brand-200", bg: "bg-gradient-to-br from-brand-50 to-brand-50", border: "border-brand-100", medal: "🥉", num: "text-brand-400" },
 ];
 
 function dogPhoto(dog) {
@@ -265,7 +265,7 @@ function CommunityStats({ rows }) {
   return (
     <div className="grid grid-cols-3 gap-3 mb-6">
       {[
-        { icon: Dog,       value: rows.length, label: "Hunde", color: "bg-yellow-50 text-yellow-700 border-yellow-200" },
+        { icon: Dog,       value: rows.length, label: "Hunde", color: "bg-brand-50 text-brand-600 border-brand-100" },
         { icon: Ruler,     value: `${totalKm.toFixed(0)} km`, label: "gesamt", color: "bg-brand-50 text-brand-700 border-brand-200" },
         { icon: TrendingUp,value: `${(totalHm/1000).toFixed(1)}k`, label: "Höhenmeter", color: "bg-brand-50 text-brand-600 border-brand-200" },
       ].map(({ icon: Icon, value, label, color }) => (
@@ -284,7 +284,7 @@ function BadgeLegend() {
   return (
     <details className="doghike-glass-card mt-6 rounded-xl overflow-hidden">
       <summary className="px-4 py-3 text-sm font-semibold text-slate-600 cursor-pointer flex items-center gap-2">
-        <Sparkles className="w-4 h-4 text-yellow-500" /> Abzeichen-Legende
+        <Sparkles className="w-4 h-4 text-brand-500" /> Abzeichen-Legende
       </summary>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-4 pt-2">
         {Object.values(BADGE_DEFS).map((b) => (
@@ -368,7 +368,7 @@ export default function TopDogs() {
   const myDogIds = myDogs.map((dog) => dog.id);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
 
         {/* Header */}
@@ -393,7 +393,7 @@ export default function TopDogs() {
 
         {/* Error */}
         {error && !isLoading && (
-          <div className="text-center py-16 text-red-500 text-sm">
+          <div className="text-center py-16 text-brand-500 text-sm">
             Die Rangliste konnte gerade nicht geladen werden. Bitte versuche es noch einmal.
           </div>
         )}

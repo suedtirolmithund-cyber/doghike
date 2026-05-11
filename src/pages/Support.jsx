@@ -113,7 +113,7 @@ export default function Support() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <Link to={createPageUrl("Dashboard")}>
           <Button variant="ghost" className="mb-6">
@@ -214,7 +214,7 @@ export default function Support() {
             )}
           </div>
 
-          <div className="rounded-2xl bg-gradient-to-br from-[#5f241d] via-[#d94a3a] to-[#f6c43d] p-6 md:p-8 text-white shadow-[0_18px_42px_rgba(95,36,29,0.16)]">
+          <div className="rounded-2xl bg-gradient-to-br from-[#56152d] via-[#c03060] to-[#fada6a] p-6 md:p-8 text-white shadow-[0_18px_42px_rgba(192,48,96,0.16)]">
             <h2 className="text-xl font-semibold mb-4">Weitere Ressourcen</h2>
             <div className="grid md:grid-cols-3 gap-4">
               {[

@@ -19,7 +19,7 @@ export default function MapView() {
   const hikesWithCoords = hikes.filter(h => h.latitude && h.longitude);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
         <motion.div
           initial={{ opacity: 0, y: -20 }}

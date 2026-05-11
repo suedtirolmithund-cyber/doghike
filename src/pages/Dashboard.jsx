@@ -100,7 +100,7 @@ export default function Dashboard() {
   const seasonLabel = { spring: "Frühling", summer: "Sommer", autumn: "Herbst", winter: "Winter" }[season];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-brand-50/20 pb-24 md:pb-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       {/* Hero */}
       <div className="relative h-[520px] overflow-hidden bg-gradient-to-br from-[#d8c6b7] via-[#b9a48f] to-[#6f8583] sm:h-[560px] md:h-[507px]">
         <div
@@ -230,7 +230,7 @@ export default function Dashboard() {
             <div className="flex items-center gap-3">
               {!isAuthenticated && (
                 <Link to={createPageUrl("Login")}>
-                  <Button variant="outline" className="text-slate-700 border-yellow-200">
+                  <Button variant="outline" className="text-slate-700 border-brand-100">
                     <LogIn className="w-4 h-4 mr-2" /> Anmelden
                   </Button>
                 </Link>
@@ -246,7 +246,7 @@ export default function Dashboard() {
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="h-72 bg-yellow-100/80 rounded-2xl animate-pulse" />
+                <div key={i} className="h-72 bg-brand-100/80 rounded-2xl animate-pulse" />
               ))}
             </div>
           ) : visibleHikes.length > 0 ? (
@@ -263,7 +263,7 @@ export default function Dashboard() {
                     variant="outline"
                     size="lg"
                     onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                    className="gap-2 border-yellow-200 text-slate-700 hover:bg-yellow-50/70"
+                    className="gap-2 border-brand-100 text-slate-700 hover:bg-brand-50/70"
                   >
                     <ChevronDown className="w-4 h-4" />
                     10 weitere laden ({filteredHikes.length - visibleCount} übrig)
