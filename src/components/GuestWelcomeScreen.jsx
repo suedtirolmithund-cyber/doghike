@@ -6,6 +6,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
 
+const ONBOARDING_IMAGE = "/onboarding/A739105-desktop.webp";
+const ONBOARDING_IMAGE_MOBILE = "/onboarding/A739105-mobile.webp";
 const LOGIN_IMAGE = "/onboarding/A739195-2.jpg";
 const USE_IMAGE_BACKGROUNDS = false;
 
@@ -467,10 +469,17 @@ function OnboardingScreen({ onContinue }) {
   }, [onContinue]);
 
   return (
-    <div className="min-h-screen bg-[#fff8f0]">
-      <section className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-[#fff8f0] md:max-w-none md:rounded-none">
-        <WarmGlassBackground mobileFrame />
-        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(116,28,59,0.82)_-20%,rgba(192,48,96,0.3)_36%,rgba(255,248,240,0)_72%)]" />
+    <div className="min-h-screen bg-black">
+      <section className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-black md:max-w-none md:rounded-none">
+        <picture>
+          <source media="(max-width: 767px)" srcSet={ONBOARDING_IMAGE_MOBILE} />
+          <img
+            src={ONBOARDING_IMAGE}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+        </picture>
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,#000000_-31.83%,rgba(0,0,0,0)_43.72%)]" />
 
         <div className="absolute bottom-[72px] left-4 h-[216px] w-[343px] opacity-80 md:left-1/2 md:-translate-x-1/2">
           <h1 className="absolute left-0 top-0 h-[113px] w-[343px] text-center font-['Roboto',sans-serif] text-[40px] font-normal leading-[47px] text-white">
