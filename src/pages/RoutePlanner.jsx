@@ -20,8 +20,6 @@ import GPSTracker from "@/components/routes/GPSTracker";
 import GPXUploader from "@/components/routes/GPXUploader";
 import { deleteJournalFiles, uploadJournalFile } from "@/lib/journalApi";
 import { toast } from "sonner";
-import { TOUR_ICONS } from "@/lib/difficultyConfig";
-import { formatDurationHours } from "@/lib/duration";
 
 // ── Leaflet fix ───────────────────────────────────────────────
 delete L.Icon.Default.prototype._getIconUrl;
@@ -575,31 +573,7 @@ function SmartRoutePlanner({ onRouteReady }) {
         </div>
       )}
 
-      {/* Stats */}
-      {route && (
-        <div className="grid grid-cols-3 gap-3">
-          <div className="rounded-xl border border-brand-100/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
-            <span className="block text-lg mb-1">{TOUR_ICONS.distance}</span>
-            <p className="text-lg font-bold text-slate-900">{route.distance_km}</p>
-            <p className="text-xs text-slate-500">km</p>
-          </div>
-          <div className="rounded-xl border border-brand-100/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
-            <span className="block text-lg mb-1">{TOUR_ICONS.duration}</span>
-            <p className="text-lg font-bold text-slate-900">
-              {formatDurationHours(route.duration_minutes)}
-            </p>
-            <p className="text-xs text-slate-500">ca. Zeit</p>
-          </div>
-          <div className="rounded-xl border border-brand-100/70 bg-white/70 p-3 text-center shadow-sm backdrop-blur-sm">
-            <span className="block text-lg mb-1">{TOUR_ICONS.elevation}</span>
-            <p className="text-lg font-bold text-slate-900">
-              {elevation.length ? `+${calcElevationGain(elevation).gain} m` : "–"}
-            </p>
-            <p className="text-xs text-slate-500">Aufstieg</p>
-          </div>
-        </div>
-      )}
-
+      
       {/* Elevation profile */}
       <AnimatePresence>
         {elevation.length > 0 && (
