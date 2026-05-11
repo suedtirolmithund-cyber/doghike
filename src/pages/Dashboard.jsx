@@ -219,7 +219,6 @@ export default function Dashboard() {
             icon={Dog}
             label="Wanderbuddys"
             value={dogProfileCount}
-            description="angemeldete Hunde in der App"
             delay={0.16}
           />
         </div>
