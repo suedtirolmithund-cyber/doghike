@@ -6,9 +6,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
 
-const ONBOARDING_IMAGE = "/onboarding/A739105-desktop.webp";
-const ONBOARDING_IMAGE_MOBILE = "/onboarding/A739105-mobile.webp";
 const LOGIN_IMAGE = "/onboarding/A739195-2.jpg";
+const USE_IMAGE_BACKGROUNDS = false;
 
 function preloadImage(src) {
   return new Promise((resolve) => {
@@ -58,6 +57,11 @@ export default function GuestWelcomeScreen() {
   const error = localError || authError;
 
   useEffect(() => {
+    if (!USE_IMAGE_BACKGROUNDS) {
+      setLoginImageReady(true);
+      return undefined;
+    }
+
     let active = true;
     preloadImage(LOGIN_IMAGE).then(() => {
       if (active) setLoginImageReady(true);
@@ -222,24 +226,15 @@ export default function GuestWelcomeScreen() {
   }
 
   return (
-    <div className="grid min-h-[100dvh] place-items-center overflow-hidden bg-black md:relative">
-      <img
-        src={LOGIN_IMAGE}
-        alt=""
-        className="hidden md:block md:absolute md:inset-0 md:h-full md:w-full md:object-contain"
-      />
+    <div className="grid min-h-[100dvh] place-items-center overflow-hidden bg-[#fff8f0] md:relative">
+      <WarmGlassBackground />
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.25 }}
-        className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-[#F8F8F8] md:h-[812px] md:bg-transparent"
+        className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-[#fff8f0] md:h-[812px] md:bg-transparent"
       >
-        <img
-          src={LOGIN_IMAGE}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover md:hidden"
-          style={{ objectPosition: "center center" }}
-        />
+        <WarmGlassBackground mobileFrame />
 
         <p className="absolute left-[22px] top-[129px] h-[33px] w-[340px] text-center text-[20px] font-extrabold leading-[23px] text-white">
           WILLKOMMEN BEI DOGTRAILS
@@ -472,17 +467,10 @@ function OnboardingScreen({ onContinue }) {
   }, [onContinue]);
 
   return (
-    <div className="min-h-screen bg-black">
-      <section className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-black md:max-w-none md:rounded-none">
-        <picture>
-          <source media="(max-width: 767px)" srcSet={ONBOARDING_IMAGE_MOBILE} />
-          <img
-            src={ONBOARDING_IMAGE}
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          />
-        </picture>
-        <div className="absolute inset-0 bg-[linear-gradient(0deg,#000000_-31.83%,rgba(0,0,0,0)_43.72%)]" />
+    <div className="min-h-screen bg-[#fff8f0]">
+      <section className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-[#fff8f0] md:max-w-none md:rounded-none">
+        <WarmGlassBackground mobileFrame />
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(116,28,59,0.82)_-20%,rgba(192,48,96,0.3)_36%,rgba(255,248,240,0)_72%)]" />
 
         <div className="absolute bottom-[72px] left-4 h-[216px] w-[343px] opacity-80 md:left-1/2 md:-translate-x-1/2">
           <h1 className="absolute left-0 top-0 h-[113px] w-[343px] text-center font-['Roboto',sans-serif] text-[40px] font-normal leading-[47px] text-white">
@@ -521,6 +509,21 @@ function FourToePaw({ className = "" }) {
       <circle cx="50" cy="23" r="7.6" />
       <path d="M17.3 48.7c0-10.5 7.3-18.4 15.7-18.4s15.7 7.9 15.7 18.4c0 6.1-3.6 8.8-8.1 7.4-2.6-.8-4.8-1.7-7.6-1.7s-5 0.9-7.6 1.7c-4.5 1.4-8.1-1.3-8.1-7.4Z" />
     </svg>
+  );
+}
+
+function WarmGlassBackground({ mobileFrame = false }) {
+  return (
+    <div className={`absolute inset-0 overflow-hidden ${mobileFrame ? "" : "hidden md:block"}`} aria-hidden="true">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(250,218,106,0.92)_0,rgba(250,218,106,0.45)_20%,transparent_46%),radial-gradient(circle_at_82%_8%,rgba(248,160,48,0.82)_0,rgba(248,160,48,0.34)_22%,transparent_49%),radial-gradient(circle_at_50%_96%,rgba(192,48,96,0.58)_0,rgba(232,88,32,0.3)_32%,transparent_62%),linear-gradient(145deg,#fff8f0_0%,#ffe6bf_47%,#f8a030_100%)]" />
+      <div className="absolute -left-20 top-16 h-72 w-72 rounded-full bg-[#fada6a]/45 blur-3xl md:h-[34rem] md:w-[34rem]" />
+      <div className="absolute -right-24 top-28 h-80 w-80 rounded-full bg-[#e85820]/35 blur-3xl md:h-[36rem] md:w-[36rem]" />
+      <div className="absolute bottom-[-8rem] left-1/2 h-96 w-[34rem] -translate-x-1/2 rounded-[50%] bg-[#c03060]/30 blur-3xl md:w-[54rem]" />
+      <div className="absolute inset-x-[-8%] bottom-[12%] h-40 rotate-[-5deg] rounded-[50%] border-t border-white/35 bg-white/12 backdrop-blur-[2px]" />
+      <div className="absolute inset-x-[-10%] bottom-[20%] h-28 rotate-[4deg] rounded-[50%] border-t border-[#741c3b]/10" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.45)_0%,rgba(255,248,240,0.12)_42%,rgba(116,28,59,0.18)_100%)]" />
+      <div className="absolute inset-0 opacity-[0.18] [background-image:linear-gradient(120deg,rgba(255,255,255,0.7)_1px,transparent_1px),linear-gradient(30deg,rgba(116,28,59,0.28)_1px,transparent_1px)] [background-size:92px_92px,130px_130px]" />
+    </div>
   );
 }
 
