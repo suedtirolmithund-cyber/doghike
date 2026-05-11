@@ -9,7 +9,7 @@ import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle2 } from "lucide-react";
 const BG_IMAGE = "/log_in.jpg";
 
 const BROWN = "#c03060";
-const BROWN_DARK = "#102f4a";
+const BROWN_DARK = "#741c3b";
 
 function mapAuthError(message) {
   const msg = String(message || "").toLowerCase();
@@ -500,7 +500,7 @@ function Feedback({ error, success }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
           className="flex items-start gap-2 p-3 rounded-xl text-sm"
-          style={{ background: "rgba(239,68,68,0.15)", color: "#fca5a5" }}
+          style={{ background: "rgba(192,48,96,0.16)", color: "#fada6a" }}
         >
           <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
           <span>{error}</span>
@@ -512,7 +512,7 @@ function Feedback({ error, success }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
           className="flex items-start gap-2 p-3 rounded-xl text-sm"
-          style={{ background: "rgba(52,211,153,0.15)", color: "#6ee7b7" }}
+          style={{ background: "rgba(250,218,106,0.18)", color: "#fff8f0" }}
         >
           <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" />
           <span>{success}</span>
