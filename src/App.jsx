@@ -1,15 +1,16 @@
 import { Toaster } from "@/components/ui/toaster"
 import CookieBanner from '@/components/CookieBanner';
-import { QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider, useQuery } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import NavigationTracker from '@/lib/NavigationTracker'
 import { pagesConfig } from './pages.config'
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import AppLoadingScreen from '@/components/AppLoadingScreen';
 import { Loader2 } from 'lucide-react';
 import GuestWelcomeScreen from '@/components/GuestWelcomeScreen';
+import { getDogs } from '@/lib/profilesApi';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Suspense, lazy } from 'react';
@@ -17,6 +18,7 @@ import { Suspense, lazy } from 'react';
 const CHUNK_RELOAD_KEY = "doghike_chunk_reload_attempted";
 const REACT130_RELOAD_KEY = "doghike_react130_reload_attempted";
 const CACHE_BUST_PARAM = "__doghike_reload";
+const DOG_PROFILE_REDIRECT_KEY = "dogtrails_no_dog_profile_redirected";
 
 function hardReloadWithCacheBust() {
   const url = new URL(window.location.href);
@@ -137,6 +139,30 @@ const BootLoadingGate = () => {
   return <AppLoadingScreen extended />;
 };
 
+const DogProfileRedirect = () => {
+  const { user, isAuthenticated } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const { data: dogs = [], isFetched, isError } = useQuery({
+    queryKey: ["dogs", user?.id],
+    queryFn: () => getDogs(user.id),
+    enabled: isAuthenticated && !!user?.id,
+    staleTime: 30_000,
+  });
+
+  useEffect(() => {
+    if (!isAuthenticated || !isFetched || isError || dogs.length > 0) return;
+    if (location.pathname === "/Profile") return;
+    if (window.sessionStorage.getItem(DOG_PROFILE_REDIRECT_KEY) === user.id) return;
+
+    window.sessionStorage.setItem(DOG_PROFILE_REDIRECT_KEY, user.id);
+    navigate("/Profile", { replace: true });
+  }, [dogs.length, isAuthenticated, isError, isFetched, location.pathname, navigate, user?.id]);
+
+  return null;
+};
+
 const AuthenticatedApp = () => {
   const { isAuthenticated, isLoadingAuth, isLoadingPublicSettings } = useAuth();
   const isBootLoading = isLoadingPublicSettings || isLoadingAuth;
@@ -154,6 +180,7 @@ const AuthenticatedApp = () => {
     <Routes>
       <Route path="/" element={
         <PageShell currentPageName={mainPageKey}>
+          <DogProfileRedirect />
           <MainPage />
         </PageShell>
       } />
@@ -163,12 +190,13 @@ const AuthenticatedApp = () => {
           path={`/${path}`}
           element={
             <PageShell currentPageName={path}>
+              <DogProfileRedirect />
               <Page />
             </PageShell>
           }
         />
       ))}
-      <Route path="/Premium" element={<PageShell currentPageName="Premium"><PremiumPage /></PageShell>} />
+      <Route path="/Premium" element={<PageShell currentPageName="Premium"><DogProfileRedirect /><PremiumPage /></PageShell>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
