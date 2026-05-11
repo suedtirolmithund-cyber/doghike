@@ -26,8 +26,8 @@ export default function AGB() {
 
           <div className="mb-8 rounded-2xl border border-brand-100/80 bg-white/65 p-5 text-slate-700">
             <p className="text-sm leading-relaxed">
-              Mit der Registrierung oder Nutzung dieser App stimmen Sie diesen Nutzungsbedingungen zu.
-              Bitte lesen Sie sie sorgfältig durch.
+              Mit der Registrierung oder Nutzung dieser App stimmst du diesen Nutzungsbedingungen zu.
+              Lies sie bitte sorgfältig durch.
             </p>
           </div>
 
@@ -61,11 +61,11 @@ export default function AGB() {
               </h2>
               <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>Die Registrierung ist kostenlos. Sie benötigen eine gültige E-Mail-Adresse oder ein Google-Konto.</li>
-                  <li>Sie sind für die Sicherheit Ihres Kontos verantwortlich. Teilen Sie Ihr Passwort nicht.</li>
+                  <li>Die Registrierung ist kostenlos. Du brauchst eine gültige E-Mail-Adresse oder ein Google-Konto.</li>
+                  <li>Du bist für die Sicherheit deines Kontos verantwortlich. Teile dein Passwort nicht.</li>
                   <li>Pro Person ist ein Konto erlaubt. Mehrfachkonten können bei Missbrauch gesperrt werden.</li>
-                  <li>Sie müssen mindestens 16 Jahre alt sein.</li>
-                  <li>Sie können die Löschung Ihres Kontos jederzeit anfragen: Profil → Konto → „Konto löschen".</li>
+                  <li>Du musst mindestens 16 Jahre alt sein.</li>
+                  <li>Du kannst dein Konto jederzeit löschen lassen: Profil → Konto → „Konto löschen“.</li>
                 </ul>
               </div>
             </section>
@@ -77,16 +77,16 @@ export default function AGB() {
               </h2>
               <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
-                  Sie können Wanderberichte, Fotos, Bewertungen und Kommentare hochladen.
+                  Du kannst Wanderberichte, Fotos, Bewertungen und Kommentare hochladen.
                   Dabei gelten folgende Regeln:
                 </p>
                 <div className="bg-brand-50/70 rounded-xl p-4 space-y-2">
-                  <p className="font-semibold text-slate-900">Sie bestätigen:</p>
+                  <p className="font-semibold text-slate-900">Du bestätigst:</p>
                   <ul className="list-disc pl-5 space-y-1 text-sm">
-                    <li>Sie sind der Urheber der Inhalte oder haben die notwendigen Rechte.</li>
+                    <li>Du bist Urheber der Inhalte oder hast die notwendigen Rechte.</li>
                     <li>Auf Fotos abgebildete Personen haben der Veröffentlichung zugestimmt.</li>
                     <li>Die Inhalte sind nach bestem Wissen wahrheitsgemäß.</li>
-                    <li>Sie räumen dem Betreiber das nicht-exklusive, kostenlose Recht ein, die Inhalte im Rahmen der App anzuzeigen und zu speichern.</li>
+                    <li>Du erlaubst dem Betreiber, die Inhalte im Rahmen der App anzuzeigen und zu speichern.</li>
                   </ul>
                 </div>
                 <div className="bg-brand-50 border border-brand-100 rounded-xl p-4">
@@ -116,7 +116,7 @@ export default function AGB() {
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Bewertungen und Kommentare müssen auf eigener Erfahrung beruhen.</li>
                   <li>Gefälschte oder gekaufte Bewertungen sind verboten.</li>
-                  <li>Sie können eigene Kommentare jederzeit löschen.</li>
+                  <li>Du kannst eigene Kommentare jederzeit löschen.</li>
                   <li>Kommentare, die gegen diese Regeln verstoßen, können entfernt werden.</li>
                 </ul>
               </div>
@@ -149,7 +149,7 @@ export default function AGB() {
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Die App wird „wie besehen" bereitgestellt. Wir übernehmen keine Garantie für ununterbrochene Verfügbarkeit.</li>
                   <li>Wartungsarbeiten können die Verfügbarkeit vorübergehend einschränken.</li>
-                  <li>Wir übernehmen keine Gewähr dafür, dass alle Daten dauerhaft verfügbar bleiben. Bitte sichern Sie wichtige GPX-Daten zusätzlich lokal.</li>
+                  <li>Wir übernehmen keine Gewähr dafür, dass alle Daten dauerhaft verfügbar bleiben. Sichere wichtige GPX-Daten zusätzlich lokal.</li>
                   <li>
                     Toureninformationen dienen nur zur Orientierung. Eine Haftung für leichte Fahrlässigkeit bei
                     unzutreffenden oder veralteten Tourangaben wird - soweit gesetzlich zulässig - ausgeschlossen.

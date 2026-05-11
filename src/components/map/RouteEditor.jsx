@@ -109,7 +109,7 @@ export default function RouteEditor({ coordinates = [], startPoint = null, onCha
       </div>
 
       <p className="text-sm text-slate-500">
-        💡 Tipp: Klicken Sie auf die Karte, um Punkte der Route hinzuzufügen. 
+        Tipp: Klicke auf die Karte und setze Punkte für deine Route.
         {coordinates.length > 0 && ` (${coordinates.length} Punkt${coordinates.length !== 1 ? 'e' : ''})`}
       </p>
 

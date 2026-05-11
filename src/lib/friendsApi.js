@@ -57,7 +57,7 @@ export async function sendFriendRequest(requesterId, receiverId) {
 
   const acceptedFriendship = (existing ?? []).find((friendship) => friendship.status === "accepted");
   if (acceptedFriendship) {
-    throw new Error("Ihr seid bereits befreundet.");
+    throw new Error("Du bist mit dieser Person bereits befreundet.");
   }
 
   const staleFriendships = (existing ?? []).filter((friendship) => friendship.status !== "accepted");

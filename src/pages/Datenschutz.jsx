@@ -26,12 +26,11 @@ export default function Datenschutz() {
           <div className="space-y-6 md:space-y-8">
             <section>
               <p className="text-sm md:text-base text-slate-600 leading-relaxed">
-                Der Schutz Ihrer persönlichen Daten ist uns ein besonderes Anliegen. Wir verarbeiten
-                Ihre Daten ausschließlich auf Grundlage der gesetzlichen Bestimmungen der
+                Der Schutz deiner persönlichen Daten ist uns wichtig. Wir verarbeiten
+                deine Daten nur auf Grundlage der gesetzlichen Bestimmungen der
                 EU-Datenschutz-Grundverordnung (DSGVO / Verordnung (EU) 2016/679) sowie des
                 italienischen Datenschutzgesetzes (D.Lgs. 196/2003 in der geänderten Fassung).
-                In dieser Erklärung informieren wir Sie darüber, welche Daten wir erheben,
-                warum, wie lange wir sie speichern, wer Zugriff hat und welche Rechte Sie haben.
+                Hier erfährst du, welche Daten wir erheben, warum wir sie speichern, wer Zugriff hat und welche Rechte du hast.
               </p>
             </section>
 
@@ -60,7 +59,7 @@ export default function Datenschutz() {
                   <ul className="list-disc pl-6 space-y-1">
                     <li><strong>E-Mail-Adresse</strong> (Pflichtfeld)</li>
                     <li><strong>Passwort</strong> (verschlüsselt gehasht, nie im Klartext gespeichert)</li>
-                    <li><strong>Anzeigename</strong> (optional, von Ihnen frei wählbar)</li>
+                    <li><strong>Anzeigename</strong> (optional, von dir frei wählbar)</li>
                     <li><strong>Zeitpunkt der Registrierung</strong> und Zustimmung zur Datenschutzerklärung</li>
                   </ul>
                 </div>
@@ -69,8 +68,8 @@ export default function Datenschutz() {
                   <p className="font-medium text-slate-900 mb-2">Bei der Nutzung der App:</p>
                   <ul className="list-disc pl-6 space-y-1">
                     <li><strong>Wanderungsdaten:</strong> Trailname, Ort, Datum, Distanz, Höhenmeter, Dauer, Schwierigkeit, Saison, Wasserverfügbarkeit, Notizen, Parkplatzinfos</li>
-                    <li><strong>GPS-Koordinaten:</strong> Startpunkt und optionale Routenpunkte, die Sie selbst eingeben oder aufzeichnen</li>
-                    <li><strong>Fotos:</strong> Von Ihnen hochgeladene Bilder (Sie bestätigen beim Upload, die Nutzungsrechte zu besitzen)</li>
+                    <li><strong>GPS-Koordinaten:</strong> Startpunkt und optionale Routenpunkte, die du selbst eingibst oder aufzeichnest</li>
+                    <li><strong>Fotos:</strong> Von dir hochgeladene Bilder. Beim Upload bestätigst du, dass du die Nutzungsrechte besitzt.</li>
                     <li><strong>Hundeprofil:</strong> Name, Rasse, Geburtsdatum, Foto (alles freiwillig)</li>
                     <li><strong>Soziale Daten:</strong> Kommentare, Bewertungen (1-5 Sterne), Freundschaftsanfragen</li>
                   </ul>
@@ -150,14 +149,14 @@ export default function Datenschutz() {
               <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <ul className="list-disc pl-6 space-y-3">
                   <li><strong>Kontodaten (E-Mail):</strong> Bis zur Kontolöschung; danach Löschung innerhalb angemessener Bearbeitungsfrist.</li>
-                  <li><strong>Wanderungen, Fotos, GPS-Daten:</strong> Bis zur manuellen Löschung durch Sie oder nach Bearbeitung einer Kontolöschung.</li>
-                  <li><strong>Kommentare & Bewertungen:</strong> Bis zur Löschung durch Sie oder nach Bearbeitung einer Kontolöschung.</li>
+                  <li><strong>Wanderungen, Fotos, GPS-Daten:</strong> Bis du sie löschst oder wir deine Kontolöschung bearbeiten.</li>
+                  <li><strong>Kommentare & Bewertungen:</strong> Bis du sie löschst oder wir deine Kontolöschung bearbeiten.</li>
                   <li><strong>Technische Logs:</strong> Vercel speichert Zugriffslogs typischerweise bis zu 30 Tage; Supabase Auth-Logs nach deren jeweiliger Standardaufbewahrung.</li>
                   <li><strong>Einwilligungsnachweis:</strong> Datum der Zustimmung zur Datenschutzerklärung wird gespeichert, soweit dies zum Nachweis erforderlich ist.</li>
                 </ul>
                 <div className="bg-brand-50 border border-brand-100 rounded-xl p-4 mt-4">
                   <p className="text-brand-700 text-sm">
-                    <strong>Recht auf Vergessenwerden:</strong> Sie können Ihr Konto und alle Ihre Daten jederzeit
+                    <strong>Recht auf Vergessenwerden:</strong> Du kannst dein Konto und alle deine Daten jederzeit
                     in den Profileinstellungen unter "Konto löschen" zur Löschung anfragen.
                     Die Anfrage wird per E-Mail vorbereitet und danach manuell bearbeitet.
                   </p>
@@ -168,15 +167,15 @@ export default function Datenschutz() {
             <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
                 <Users className="w-5 h-5" />
-                4. Wer Zugriff auf Ihre Daten hat
+                4. Wer Zugriff auf deine Daten hat
               </h2>
               <div className="space-y-4 text-sm md:text-base text-slate-600 leading-relaxed">
                 <div className="bg-brand-50/70 rounded-xl p-4">
                   <p className="font-medium text-slate-900 mb-2">Innerhalb der App:</p>
                   <ul className="list-disc pl-6 space-y-2">
-                    <li><strong>Nur Sie</strong> sehen Ihre privaten Wanderungen und Kontoinformationen.</li>
-                    <li><strong>Freunde</strong> sehen nur Inhalte, die Sie ausdrücklich für Freunde freigeben.</li>
-                    <li><strong>Alle Nutzer</strong> sehen Touren-Daten aus unserem öffentlichen Google Sheet sowie von Ihnen veröffentlichte Inhalte nach den jeweiligen Sichtbarkeitseinstellungen.</li>
+                    <li><strong>Nur du</strong> siehst deine privaten Wanderungen und Kontoinformationen.</li>
+                    <li><strong>Freunde</strong> sehen nur Inhalte, die du ausdrücklich für Freunde freigibst.</li>
+                    <li><strong>Alle Nutzer</strong> sehen Touren-Daten aus unserem öffentlichen Google Sheet und Inhalte, die du öffentlich teilst.</li>
                     <li><strong>Administratoren</strong> können Inhalte zur Moderation und Freigabe einsehen.</li>
                   </ul>
                 </div>
@@ -189,7 +188,7 @@ export default function Datenschutz() {
                 5. Auftragsverarbeiter & externe Dienste
               </h2>
               <div className="space-y-3 text-sm md:text-base text-slate-600">
-                <p>Wir geben Ihre Daten <strong>nur an folgende Auftragsverarbeiter oder technische Dienste</strong> weiter:</p>
+                <p>Wir geben deine Daten <strong>nur an folgende Auftragsverarbeiter oder technische Dienste</strong> weiter:</p>
 
                 <div className="space-y-3">
                   <div className="border border-brand-100 rounded-xl p-4">
@@ -206,31 +205,31 @@ export default function Datenschutz() {
 
                   <div className="border border-brand-100 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Google LLC (Sign-in mit Google / OAuth)</p>
-                    <p>Wenn Sie sich über "Mit Google anmelden" registrieren oder einloggen, überträgt Google Ihre E-Mail-Adresse, Ihren Namen und Ihr Profilbild an Supabase Auth.</p>
+                    <p>Wenn du dich über "Mit Google anmelden" registrierst oder einloggst, überträgt Google deine E-Mail-Adresse, deinen Namen und dein Profilbild an Supabase Auth.</p>
               <p className="mt-1 text-slate-500">Datenschutz: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">policies.google.com/privacy</a></p>
                   </div>
 
                   <div className="border border-brand-100 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">OpenStreetMap / CARTO (Kartenkacheln)</p>
-                    <p>Lädt Kartenkacheln. Dabei wird Ihre IP-Adresse technisch bedingt an diese Dienste übertragen.</p>
+                    <p>Lädt Kartenkacheln. Dabei wird deine IP-Adresse technisch bedingt an diese Dienste übertragen.</p>
               <p className="mt-1 text-slate-500"><a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">OSM Datenschutzrichtlinie</a></p>
                   </div>
 
                   <div className="border border-brand-100 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Nominatim / OpenStreetMap (Ortssuche)</p>
-                    <p>Wenn Sie im Routenplaner oder im Tagebuch einen Ort suchen, werden Suchtext und IP-Adresse kurzzeitig an Nominatim übertragen.</p>
+                    <p>Wenn du im Routenplaner oder im Tagebuch einen Ort suchst, werden Suchtext und IP-Adresse kurzzeitig an Nominatim übertragen.</p>
               <p className="mt-1 text-slate-500"><a href="https://nominatim.org/privacy.html" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">nominatim.org/privacy.html</a></p>
                   </div>
 
                   <div className="border border-brand-100 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">BRouter und GraphHopper GmbH (Routenberechnung)</p>
-                    <p>Beim Planen einer Route werden die von Ihnen gesetzten Wegpunkt-Koordinaten an externe Routing-Dienste übertragen. Aktuell verwendet die App BRouter als primären Dienst und GraphHopper als technischen Fallback. Es werden dabei keine Kontodaten oder Inhaltsdaten Ihrer App-Beiträge an diese Dienste übermittelt.</p>
+                    <p>Beim Planen einer Route werden deine Wegpunkt-Koordinaten an externe Routing-Dienste übertragen. Aktuell nutzt die App BRouter als primären Dienst und GraphHopper als technischen Fallback. Kontodaten oder Inhalte deiner App-Beiträge werden dabei nicht übermittelt.</p>
               <p className="mt-1 text-slate-500"><a href="https://www.graphhopper.com/privacy/" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">graphhopper.com/privacy</a></p>
                   </div>
 
                   <div className="border border-brand-100 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Open-Meteo (Wetterdaten)</p>
-                    <p>Wenn Sie eine Tourendetailseite aufrufen, die einen Startpunkt hat, werden die GPS-Koordinaten des Startpunkts an Open-Meteo gesendet, um Wetterdaten zu laden.</p>
+                    <p>Wenn du eine Tourendetailseite mit Startpunkt öffnest, werden die GPS-Koordinaten des Startpunkts an Open-Meteo gesendet, um Wetterdaten zu laden.</p>
               <p className="mt-1 text-slate-500"><a href="https://open-meteo.com/en/terms" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">open-meteo.com/en/terms</a></p>
                   </div>
 
@@ -256,12 +255,12 @@ export default function Datenschutz() {
                 6. Hochgeladene Fotos & Urheberrecht
               </h2>
               <div className="bg-brand-50 border border-brand-100 rounded-xl p-4 text-sm text-brand-700 leading-relaxed">
-                <p><strong>Beim Hochladen von Fotos bestätigen Sie:</strong></p>
+                <p><strong>Beim Hochladen von Fotos bestätigst du:</strong></p>
                 <ul className="list-disc pl-5 mt-2 space-y-1">
-                  <li>Sie sind der Urheber oder besitzen die Nutzungsrechte an den Fotos.</li>
+                  <li>Du bist Urheber oder besitzt die Nutzungsrechte an den Fotos.</li>
                   <li>Die abgebildeten Personen haben der Veröffentlichung zugestimmt (sofern erkennbar).</li>
                   <li>Fotos zu öffentlichen Touren können für andere berechtigte Nutzer innerhalb der App sichtbar werden.</li>
-                  <li>Sie können Fotos jederzeit durch Bearbeiten der Wanderung entfernen.</li>
+                  <li>Du kannst Fotos jederzeit durch Bearbeiten der Wanderung entfernen.</li>
                 </ul>
               </div>
             </section>
@@ -289,8 +288,8 @@ export default function Datenschutz() {
                       </tr>
                       <tr className="bg-brand-50/70">
                         <td className="p-2 font-mono text-xs">doghike_cookie_consent</td>
-                        <td className="p-2">LocalStorage: Speichert Ihre Auswahl zum Hinweis auf technisch notwendige Speicher</td>
-                        <td className="p-2">Dauerhaft (bis Sie den Browser-Speicher löschen)</td>
+                        <td className="p-2">LocalStorage: Speichert deine Auswahl zum Hinweis auf technisch notwendige Speicher</td>
+                        <td className="p-2">Dauerhaft, bis du den Browser-Speicher löschst</td>
                       </tr>
                       <tr>
                         <td className="p-2 font-mono text-xs">sidebar_state</td>
@@ -307,13 +306,13 @@ export default function Datenschutz() {
             <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
                 <Lock className="w-5 h-5" />
-                8. Ihre Rechte (Art. 15-21 DSGVO)
+                8. Deine Rechte (Art. 15-21 DSGVO)
               </h2>
               <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
                   <div className="bg-brand-50/70 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Auskunft (Art. 15)</p>
-                    <p className="text-sm">Welche Daten wir über Sie gespeichert haben.</p>
+                    <p className="text-sm">Welche Daten wir über dich gespeichert haben.</p>
                   </div>
                   <div className="bg-brand-50/70 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Berichtigung (Art. 16)</p>
@@ -325,7 +324,7 @@ export default function Datenschutz() {
                   </div>
                   <div className="bg-brand-50/70 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Datenportabilität (Art. 20)</p>
-                    <p className="text-sm">Ihre Daten in einem gängigen Format anfordern.</p>
+                    <p className="text-sm">Deine Daten in einem gängigen Format anfordern.</p>
                   </div>
                   <div className="bg-brand-50/70 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Einschränkung (Art. 18)</p>
@@ -349,7 +348,7 @@ export default function Datenschutz() {
           <div className="mt-4 rounded-xl bg-gradient-to-br from-[#56152d] to-[#c03060] p-4 text-white shadow-[0_12px_24px_rgba(192,48,96,0.14)]">
                   <p className="font-semibold mb-1">Anfragen stellen:</p>
             <p className="text-brand-50 text-sm">
-                    Schreiben Sie an <strong>suedtirolmithund@gmail.com</strong> - wir antworten innerhalb von 30 Tagen.
+                    Schreib an <strong>suedtirolmithund@gmail.com</strong>. Wir antworten innerhalb von 30 Tagen.
                     Für Kontolöschung: Anfrage über die Profileinstellungen oder per E-Mail.
                   </p>
                 </div>
@@ -371,9 +370,9 @@ export default function Datenschutz() {
             <section className="border-t border-brand-100 pt-6 md:pt-8">
               <div className="bg-brand-50 border border-brand-100 rounded-xl p-4">
                 <p className="text-brand-700 text-sm md:text-base leading-relaxed">
-                  <strong>Öffentliche Inhalte:</strong> Kommentare und Bewertungen, die Sie abgeben,
-                  sind für alle App-Nutzer sichtbar. Fotos, die Sie zu öffentlichen Touren hochladen,
-                  können für andere Nutzer der App sichtbar werden. Bitte teilen Sie keine sensiblen
+                  <strong>Öffentliche Inhalte:</strong> Kommentare und Bewertungen, die du abgibst,
+                  sind für alle App-Nutzer sichtbar. Fotos, die du zu öffentlichen Touren hochlädst,
+                  können für andere Nutzer der App sichtbar werden. Teile keine sensiblen
                   personenbezogenen Informationen in öffentlichen Beiträgen.
                 </p>
               </div>

@@ -214,7 +214,7 @@ export const WATER_GUIDE = [
 ];
 
 export const WATER_APP_EXPLANATION =
-  "Die Wassertropfen zeigen die typische Wasserverfügbarkeit entlang der Route. Sie helfen vor allem dabei einzuschätzen, wie viel Wasser du für dich und deinen Hund selbst mitnehmen solltest.";
+  "Die Wassertropfen zeigen die typische Wasserverfügbarkeit entlang der Route. So schätzt du besser ein, wie viel Wasser du für dich und deinen Hund mitnehmen solltest.";
 
 export const WATER_GUIDE_NOTE =
   "Die Wassertropfen zeigen nur die typische Wasserverfügbarkeit entlang der Route. Wasserstellen können je nach Saison, Wetter, Trockenheit, Schneelage oder Bewirtschaftung fehlen. Außerdem kann natürliches Wasser sehr kalt sein, besonders in Bächen, Bergseen oder nach der Schneeschmelze. Manche Hunde reagieren empfindlich darauf. Deshalb sollte für den Hund immer eigenes Wasser mitgenommen werden, auch bei 2 oder 3 Tropfen.";
