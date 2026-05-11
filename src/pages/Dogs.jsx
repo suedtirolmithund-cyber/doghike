@@ -77,41 +77,42 @@ export default function Dogs() {
 
   const createMutation = useMutation({
     mutationFn: (data) => createDog(user.id, data),
-    onSuccess: () => {
+    onSuccess: (dog) => {
       queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dog"] });
       queryClient.invalidateQueries({ queryKey: ["topDogs"] });
       setDialogOpen(false);
-      toast.success("Hund hinzugefügt");
+      toast.success(`${dog?.name || "Dein Hund"} ist jetzt dabei.`);
     },
-    onError: () => toast.error("Der Hund konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Das hat gerade nicht geklappt. Versuch es gleich noch einmal."),
   });
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }) => updateDog(id, data),
-    onSuccess: () => {
+    onSuccess: (dog) => {
       queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dog"] });
       queryClient.invalidateQueries({ queryKey: ["topDogs"] });
       setDialogOpen(false);
       setEditingDog(null);
-      toast.success("Hund aktualisiert");
+      toast.success(`${dog?.name || "Dein Hund"} ist aktualisiert.`);
     },
-    onError: () => toast.error("Die Änderungen am Hund konnten gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Die Änderung ist noch nicht angekommen. Versuch es gleich noch einmal."),
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id) => deleteDog(id),
-    onSuccess: () => {
+    onSuccess: (_, dogId) => {
       queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dog"] });
       queryClient.invalidateQueries({ queryKey: ["topDogs"] });
-      toast.success("Hund entfernt");
+      const removedDog = dogs.find((dog) => dog.id === dogId);
+      toast.success(`${removedDog?.name || "Der Hund"} ist aus deiner Liste raus.`);
     },
-    onError: () => toast.error("Der Hund konnte gerade nicht entfernt werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Das Entfernen hat gerade nicht geklappt."),
   });
 
   const handleSave = async (data) => {

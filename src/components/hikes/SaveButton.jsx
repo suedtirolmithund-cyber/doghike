@@ -25,18 +25,18 @@ export default function SaveButton({ hikeId, hikeSource = "sheets", className })
     mutationFn: () => saveHike(user.id, normalizedHikeId, hikeSource),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] });
-      toast.success("Tour gespeichert");
+      toast.success("Die Tour wartet jetzt in deiner Merkliste.");
     },
-    onError: () => toast.error("Die Tour konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Das Merken hat gerade nicht geklappt."),
   });
 
   const unsaveMutation = useMutation({
     mutationFn: () => unsaveHike(user.id, normalizedHikeId, hikeSource),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] });
-      toast.success("Tour entfernt");
+      toast.success("Die Tour ist aus deiner Merkliste raus.");
     },
-    onError: () => toast.error("Die Tour konnte gerade nicht aus der Merkliste entfernt werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Das Entfernen hat gerade nicht geklappt."),
   });
 
   const handleClick = (e) => {

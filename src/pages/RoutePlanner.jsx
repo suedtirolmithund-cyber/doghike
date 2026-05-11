@@ -281,7 +281,7 @@ function SmartRoutePlanner({ onRouteReady }) {
         onRouteReady(r);
       })
       .catch(() => {
-        if (!cancelled) toast.error("Die Route konnte gerade nicht berechnet werden. Bitte versuche es noch einmal.");
+        if (!cancelled) toast.error("Der Weg lässt sich gerade nicht berechnen. Versuch es gleich noch einmal.");
       })
       .finally(() => { if (!cancelled) setCalculating(false); });
 
@@ -606,10 +606,10 @@ export default function RoutePlanner() {
     mutationFn: (data) => createRoute(user.id, data),
     onSuccess: (savedRoute) => {
       queryClient.invalidateQueries({ queryKey: ["userRoutes", user?.id] });
-      toast.success("Route gespeichert!");
+      toast.success("Deine Route ist bereit.");
       navigate(createPageUrl("RouteDetail") + `?id=${savedRoute.id}`);
     },
-    onError: () => toast.error("Die Route konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Die Route wollte gerade nicht speichern."),
   });
 
   const buildJournalPrefillFromRecordedRoute = () => {

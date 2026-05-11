@@ -89,12 +89,12 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
       setConsentPublic(false);
       toast.success(
         needsReview
-          ? "Kommentar gespeichert und zur Freigabe an den Admin gesendet."
-          : "Kommentar veröffentlicht."
+          ? "Danke. Dein Tipp wird kurz geprüft."
+          : "Dein Tipp ist online."
       );
     },
     onError: () => {
-      toast.error("Der Kommentar konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.");
+      toast.error("Dein Tipp ist noch nicht angekommen. Versuch es gleich noch einmal.");
     },
   });
 
@@ -103,10 +103,10 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", hikeSource, normalizedHikeId] });
       setDeleteId(null);
-      toast.success("Kommentar gelöscht.");
+      toast.success("Der Tipp ist weg.");
     },
     onError: () => {
-      toast.error("Der Kommentar konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal.");
+      toast.error("Das Löschen hat gerade nicht geklappt.");
     },
   });
 

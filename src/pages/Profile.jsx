@@ -128,7 +128,7 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
       queryClient.invalidateQueries({ queryKey: ["comments"] });
       setEditingProfile(false);
-      toast.success("Profil gespeichert");
+      toast.success("Dein Profil fühlt sich jetzt runder an.");
     },
     onError: (error) => {
       if (
@@ -141,47 +141,48 @@ export default function Profile() {
         return;
       }
 
-      toast.error("Dein Profil konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.");
+      toast.error("Dein Profil wollte gerade nicht mit. Versuch es gleich noch einmal.");
     },
   });
 
   const createDogMutation = useMutation({
     mutationFn: (data) => createDog(user.id, data),
-    onSuccess: () => {
+    onSuccess: (dog) => {
       queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dog"] });
       queryClient.invalidateQueries({ queryKey: ["topDogs"] });
       setDialogOpen(false);
-      toast.success("Hund hinzugefügt");
+      toast.success(`${dog?.name || "Dein Hund"} ist jetzt dabei.`);
     },
-    onError: () => toast.error("Dein Hund konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Das hat gerade nicht geklappt. Dein Hund bleibt bei dir, wir versuchen es gleich noch einmal."),
   });
 
   const updateDogMutation = useMutation({
     mutationFn: ({ id, data }) => updateDog(id, data),
-    onSuccess: () => {
+    onSuccess: (dog) => {
       queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dog"] });
       queryClient.invalidateQueries({ queryKey: ["topDogs"] });
       setDialogOpen(false);
       setEditingDog(null);
-      toast.success("Hund aktualisiert");
+      toast.success(`${dog?.name || "Dein Hund"} ist aktualisiert.`);
     },
-    onError: () => toast.error("Die Änderungen am Hund konnten gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Die Änderung ist noch nicht angekommen. Versuch es gleich noch einmal."),
   });
 
   const deleteDogMutation = useMutation({
     mutationFn: (id) => deleteDog(id),
-    onSuccess: () => {
+    onSuccess: (_, dogId) => {
       queryClient.invalidateQueries({ queryKey: ["dogs", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dogStats", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["dog"] });
       queryClient.invalidateQueries({ queryKey: ["topDogs"] });
-      toast.success("Hund entfernt");
+      const removedDog = dogs.find((dog) => dog.id === dogId);
+      toast.success(`${removedDog?.name || "Der Hund"} ist aus deiner Liste raus.`);
     },
-    onError: () => toast.error("Der Hund konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Das Entfernen hat gerade nicht geklappt."),
   });
 
   const handleAvatarUpload = async (event) => {
@@ -209,7 +210,7 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ["friendProfiles"] });
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
       queryClient.invalidateQueries({ queryKey: ["comments"] });
-      toast.success("Profilbild aktualisiert");
+      toast.success("Dein neues Profilbild ist da.");
     } catch (error) {
       if (uploadedAvatarUrl) {
         try {
@@ -221,7 +222,7 @@ export default function Profile() {
       toast.error(
         getImageUploadErrorMessage(
           error,
-          "Dein Profilbild konnte gerade nicht hochgeladen werden. Bitte versuche es noch einmal."
+          "Das Foto wollte gerade nicht hochladen. Versuch es gleich noch einmal."
         )
       );
     } finally {

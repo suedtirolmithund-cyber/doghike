@@ -159,10 +159,10 @@ export default function Journal() {
       queryClient.invalidateQueries({ queryKey: ["journalEntry"] });
       queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["notifications", user?.id] });
-      toast.success("Eintrag gelöscht");
+      toast.success("Der Eintrag ist weg.");
     },
     onError: () => {
-      toast.error("Der Eintrag konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal.");
+      toast.error("Das Löschen hat gerade nicht geklappt.");
     },
   });
 
@@ -438,9 +438,9 @@ export default function Journal() {
             className="doghike-empty-state py-24"
           >
             <BookOpen className="doghike-empty-icon" />
-            <h3 className="text-xl font-medium text-slate-700 mb-2">Noch keine Einträge</h3>
+            <h3 className="text-xl font-medium text-slate-700 mb-2">Noch keine Wanderungen</h3>
             <p className="text-slate-500 mb-6 text-sm max-w-xs mx-auto">
-              Starte mit deiner ersten Wanderung und sammle hier Fotos, Daten und persönliche Erinnerungen.
+              Halte den ersten Tag mit deinem Hund fest. Fotos, Strecke, Gefühl.
             </p>
             <Link to={createPageUrl("AddJournalEntry")}>
               <Button className="bg-brand-400 hover:bg-brand-600">
@@ -451,7 +451,7 @@ export default function Journal() {
         ) : (
           <div className="doghike-empty-state">
             <Search className="doghike-empty-icon" />
-            <p className="text-slate-600 font-medium mb-1">Keine passenden Einträge</p>
+            <p className="text-slate-600 font-medium mb-1">Nichts Passendes gefunden</p>
             <p className="text-slate-400 text-sm mb-4">Für „{search}“ wurde nichts gefunden.</p>
             <Button variant="outline" onClick={() => setSearch("")}>
               Suche zurücksetzen

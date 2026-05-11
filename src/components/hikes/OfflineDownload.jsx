@@ -262,7 +262,7 @@ export default function OfflineDownload({ hike, dogs = [] }) {
       setTimeout(() => setSuccess(false), 3000);
     } catch (error) {
       console.error("Fehler beim Erstellen der PDF:", error);
-      toast.error("Fehler beim Erstellen der Offline-Datei. Bitte versuche es noch einmal.");
+      toast.error("Offline klappt gerade nicht. Versuch es gleich noch einmal.");
     } finally {
       setDownloading(false);
     }
@@ -283,7 +283,7 @@ export default function OfflineDownload({ hike, dogs = [] }) {
         ) : success ? (
           <>
             <Check className="w-4 h-4 mr-2" />
-            Gespeichert!
+            Alles offline.
           </>
         ) : (
           <>

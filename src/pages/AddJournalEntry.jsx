@@ -833,10 +833,17 @@ export default function AddJournalEntry() {
         queryClient.invalidateQueries({ queryKey: ["topDogs"] });
         queryClient.invalidateQueries({ queryKey: ["journalEntry"] });
         queryClient.invalidateQueries({ queryKey: ["notifications", user?.id] });
-      toast.success(editId ? "Eintrag aktualisiert" : "Wanderung gespeichert!");
+      const selectedDog = userDogs.find((dog) => dog.id === form.dog_id);
+      toast.success(
+        editId
+          ? "Der Eintrag ist wieder rund."
+          : selectedDog
+            ? `${selectedDog.name} und du habt diesen Tag festgehalten.`
+            : "Diese Wanderung ist jetzt in deinem Tagebuch."
+      );
       navigate(createPageUrl("Journal"));
     },
-    onError: () => toast.error("Deine Wanderung konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Die Wanderung wollte gerade nicht ins Tagebuch. Versuch es gleich noch einmal."),
   });
 
   const handlePhotoUpload = async (e) => {
@@ -847,12 +854,12 @@ export default function AddJournalEntry() {
       const urls = await Promise.all(files.map((f) => uploadJournalFile(user.id, f)));
       uploadedPhotosRef.current = [...uploadedPhotosRef.current, ...urls];
       setForm((p) => ({ ...p, photos: [...p.photos, ...urls] }));
-      toast.success(`${urls.length} Foto${urls.length > 1 ? "s" : ""} hochgeladen`);
+      toast.success(`${urls.length} Foto${urls.length > 1 ? "s" : ""} ist dabei.`);
     } catch (error) {
       toast.error(
         getImageUploadErrorMessage(
           error,
-          "Die Fotos konnten gerade nicht hochgeladen werden. Bitte versuche es noch einmal."
+          "Die Fotos wollten gerade nicht hochladen. Versuch es gleich noch einmal."
         )
       );
     } finally {
@@ -870,7 +877,7 @@ export default function AddJournalEntry() {
       try {
         await deleteJournalFiles([photoToRemove]);
       } catch {
-        toast.error("Das Foto konnte gerade nicht entfernt werden. Bitte versuche es noch einmal.");
+        toast.error("Das Foto bleibt gerade noch drin. Versuch es gleich noch einmal.");
         return;
       }
 
@@ -898,9 +905,9 @@ export default function AddJournalEntry() {
       }
       uploadedGpxRef.current = [...uploadedGpxRef.current, url];
       setForm((p) => ({ ...p, gpx_url: url }));
-      toast.success("GPX-Datei hochgeladen");
+      toast.success("Die GPX-Datei ist dabei.");
     } catch {
-      toast.error("Die GPX-Datei konnte gerade nicht hochgeladen werden. Bitte versuche es noch einmal.");
+      toast.error("Die GPX-Datei wollte gerade nicht hochladen.");
     } finally {
       setGpxUploading(false);
     }

@@ -161,36 +161,36 @@ export default function Friends() {
     mutationFn: (receiverId) => sendFriendRequest(user.id, receiverId),
     onSuccess: () => {
       refreshFriendData();
-      toast.success("Freundschaftsanfrage gesendet");
+      toast.success("Anfrage ist raus.");
     },
-    onError: () => toast.error("Die Freundschaftsanfrage konnte gerade nicht gesendet werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Die Anfrage wollte gerade nicht raus."),
   });
 
   const acceptMutation = useMutation({
     mutationFn: acceptFriendRequest,
     onSuccess: () => {
       refreshFriendData();
-      toast.success("Freundschaft bestätigt");
+      toast.success("Ihr könnt jetzt Touren teilen.");
     },
-    onError: () => toast.error("Die Anfrage konnte gerade nicht angenommen werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Das Annehmen hat gerade nicht geklappt."),
   });
 
   const rejectMutation = useMutation({
     mutationFn: rejectFriendRequest,
     onSuccess: () => {
       refreshFriendData();
-      toast.success("Anfrage abgelehnt");
+      toast.success("Anfrage abgelehnt.");
     },
-    onError: () => toast.error("Die Anfrage konnte gerade nicht abgelehnt werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Das Ablehnen hat gerade nicht geklappt."),
   });
 
   const removeMutation = useMutation({
     mutationFn: removeFriend,
     onSuccess: () => {
       refreshFriendData();
-      toast.success("Freund entfernt");
+      toast.success("Der Kontakt ist raus.");
     },
-    onError: () => toast.error("Der Kontakt konnte gerade nicht entfernt werden. Bitte versuche es noch einmal."),
+    onError: () => toast.error("Das Entfernen hat gerade nicht geklappt."),
   });
 
   const handleSearch = async (e) => {
@@ -201,10 +201,10 @@ export default function Friends() {
       const results = await searchProfiles(searchQuery, user.id);
       setSearchResults(results);
       if (results.length === 0) {
-        toast.info("Kein passender Nutzer gefunden. Prüfe den Namen oder versuche es später noch einmal.");
+        toast.info("Niemand gefunden. Prüfe den Namen noch einmal.");
       }
     } catch {
-      toast.error("Die Suche konnte gerade nicht ausgeführt werden. Bitte versuche es noch einmal.");
+      toast.error("Die Suche hängt gerade. Versuch es gleich noch einmal.");
     } finally {
       setSearching(false);
     }
