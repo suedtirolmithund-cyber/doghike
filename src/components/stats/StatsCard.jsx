@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function StatsCard({ icon: Icon, label, value, unit, delay = 0 }) {
+export default function StatsCard({ icon: Icon, label, value, unit, description, delay = 0 }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -18,6 +18,9 @@ export default function StatsCard({ icon: Icon, label, value, unit, delay = 0 })
         <span className="text-3xl font-light text-slate-900">{value}</span>
         {unit && <span className="text-sm text-slate-400">{unit}</span>}
       </div>
+      {description && (
+        <p className="mt-2 text-sm text-slate-500">{description}</p>
+      )}
     </motion.div>
   );
 }

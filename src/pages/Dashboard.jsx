@@ -215,7 +215,13 @@ export default function Dashboard() {
         <div className="mb-12 grid grid-cols-1 gap-4 text-center md:grid-cols-3">
           <StatsCard icon={Route} label="Wanderungen" value={hikes.length} delay={0} />
           <StatsCard icon={Globe} label="Länder" value={countryCount} delay={0.08} />
-          <StatsCard icon={Dog} label="Wanderbuddys" value={dogProfileCount} delay={0.16} />
+          <StatsCard
+            icon={Dog}
+            label="Wanderbuddys"
+            value={dogProfileCount}
+            description="angemeldete Hunde in der App"
+            delay={0.16}
+          />
         </div>
 
         {/* Map */}
