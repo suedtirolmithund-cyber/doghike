@@ -214,17 +214,34 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen relative flex items-end justify-center overflow-hidden">
+    <div className="relative flex min-h-[100dvh] flex-col justify-between overflow-x-hidden overflow-y-auto px-4 py-6 sm:items-center sm:justify-end">
       <div className="absolute inset-0">
         <img src={BG_IMAGE} alt="" className="w-full h-full object-cover object-center" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
       </div>
 
+      {mode !== "reset" && mode !== "update-password" && (
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
+          className="relative z-10 mx-auto mt-10 w-full max-w-sm text-center sm:mt-14"
+          style={{ fontFamily: "Roboto, sans-serif" }}
+        >
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/85">
+            Willkommen bei DogTrails
+          </p>
+          <h2 className="mt-4 text-[28px] font-extrabold leading-tight text-white drop-shadow md:text-[34px]">
+            Plane Touren, die zu dir und deinem Hund passen.
+          </h2>
+        </motion.div>
+      )}
+
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45 }}
-        className="relative w-full max-w-sm mx-4 mb-8 rounded-3xl overflow-hidden"
+        className="relative z-10 mt-6 w-full max-w-sm rounded-3xl overflow-hidden sm:mb-8"
         style={{ background: "rgba(255,255,255,0.10)", backdropFilter: "blur(2px)" }}
       >
         <div className="px-6 pt-8 pb-6">
