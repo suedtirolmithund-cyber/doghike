@@ -289,7 +289,7 @@ export function getWaterLabel(value) {
 }
 
 export function getWaterIcon(value) {
-  return getWaterLevel(value)?.icon ?? "??";
+  return getWaterLevel(value)?.icon ?? "💧";
 }
 
 export function getWaterBadgeClass(value) {

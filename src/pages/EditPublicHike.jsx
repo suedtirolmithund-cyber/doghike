@@ -251,7 +251,7 @@ export default function EditPublicHike() {
       queryClient.invalidateQueries({ queryKey: ["allHikes"] });
       queryClient.invalidateQueries({ queryKey: ["hike"] });
       queryClient.invalidateQueries({ queryKey: ["hike", "sheets", detailId] });
-      toast.success("Die ?ffentliche Tour ist wieder rund.");
+      toast.success("Die öffentliche Tour ist wieder rund.");
       navigate(createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`, { replace: true });
     },
     onError: (error) => {

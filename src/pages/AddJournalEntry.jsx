@@ -261,7 +261,7 @@ function BonePicker({ label, value, onChange }) {
               s <= active ? "opacity-100" : "opacity-25"
             }`}
             title={getDifficultyLabel(s)}
-          >??</button>
+          >{TOUR_ICONS.dog}</button>
         )})}
         {value > 0 && (
           <>
@@ -431,7 +431,7 @@ function LocationPicker({ lat, lng, onChange }) {
               type="button"
               onClick={dismissSearchResults}
               className="rounded-md p-1 text-slate-400 transition-colors hover:bg-brand-50/70 hover:text-slate-600"
-              aria-label="Trefferliste schlie?en"
+              aria-label="Trefferliste schließen"
             >
               <X className="h-4 w-4" />
             </button>
@@ -595,7 +595,7 @@ function SeasonPicker({ value = [], onChange }) {
 const VISIBILITY_OPTIONS = [
   {
     value: "private",
-    emoji: "??",
+    emoji: "👤",
     label: "Privat",
     desc: "Nur ich sehe diesen Eintrag",
     active: "border-brand-200 bg-brand-100/80 text-slate-900",
@@ -603,7 +603,7 @@ const VISIBILITY_OPTIONS = [
   },
   {
     value: "friends",
-    emoji: "??",
+    emoji: "🫂",
     label: "Freunde",
     desc: "Nur bestätigte Freunde",
     active: "border-brand-300 bg-brand-50 text-brand-800",
@@ -611,8 +611,8 @@ const VISIBILITY_OPTIONS = [
   },
   {
     value: "public",
-    emoji: "??",
-    label: "?ffentlich",
+    emoji: "🌍",
+    label: "Öffentlich",
     desc: "Wird an Admin zur Prüfung geschickt",
     active: "border-brand-400 bg-brand-50 text-brand-700",
     idle: "border-brand-100 hover:border-brand-300",
@@ -955,7 +955,7 @@ export default function AddJournalEntry() {
     if (form.visibility === "friends" || form.visibility === "public") {
       const missing = getMissingSharedJournalFields(form);
       if (missing.length > 0) {
-        const targetLabel = form.visibility === "public" ? "?ffentlich" : "mit Freunden geteilt";
+        const targetLabel = form.visibility === "public" ? "öffentlich" : "mit Freunden geteilt";
         toast.error(
           `Um eine Tour ${targetLabel} zu speichern, müssen alle Pflichtfelder ausgefüllt sein: ${missing.join(", ")}`,
           {
@@ -1061,7 +1061,7 @@ export default function AddJournalEntry() {
                 {editId ? "Eintrag bearbeiten" : "Neue Wanderung"}
               </h1>
               <p className="doghike-page-subtitle">
-                {editId ? "?ndere deine Aufzeichnung" : "Halte dein Wandererlebnis fest"}
+                {editId ? "Ändere deine Aufzeichnung" : "Halte dein Wandererlebnis fest"}
               </p>
             </div>
           </div>
@@ -1192,7 +1192,7 @@ export default function AddJournalEntry() {
                   })}
                 </div>
                 <p className="mt-2 text-xs text-slate-400">
-                  Du kannst eine oder mehrere Angaben wählen. Diese Infos bleiben nur in privaten Einträgen und werden bei Freunde oder ?ffentlich nicht mitgeteilt.
+                  Du kannst eine oder mehrere Angaben wählen. Diese Infos bleiben nur in privaten Einträgen und werden bei Freunde oder öffentlich nicht mitgeteilt.
                 </p>
               </div>
             )}
