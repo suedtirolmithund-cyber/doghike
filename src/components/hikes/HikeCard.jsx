@@ -95,7 +95,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                 <ExpandableText
                   text={hike.notes}
                   lines={6}
-                  className="text-sm leading-relaxed text-slate-600"
+                  className="text-sm font-normal leading-relaxed text-[#C07820]"
                 />
               </div>
             )}
@@ -114,7 +114,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                       </div>
                     )}
                     {(hike.dog_name || hike.author_username) && (
-                      <span className="truncate text-xs text-slate-500">
+                      <span className="truncate text-xs font-medium text-[#C07820]">
                         {hike.dog_name && <span>{hike.dog_name}</span>}
                         {hike.dog_name && hike.author_username && " · "}
                         {hike.author_username && <span>@{hike.author_username}</span>}
@@ -137,7 +137,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                       </div>
                     ))}
                     {hikeDogs.length > 0 && (
-                      <span className="ml-1 truncate text-sm text-slate-500">
+                      <span className="ml-1 truncate text-sm font-normal text-[#C07820]">
                         {hikeDogs.map((dog) => dog.name).join(", ")}
                       </span>
                     )}
@@ -148,7 +148,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               {hike.rating && (
                 <div className="flex shrink-0 items-center gap-1">
                   <Star className="h-4 w-4 fill-[#A8003C] text-[#A8003C]" />
-                  <span className="text-sm font-medium text-slate-700">{hike.rating}</span>
+                  <span className="text-sm font-normal text-[#7C3020]">{hike.rating}</span>
                 </div>
               )}
             </div>

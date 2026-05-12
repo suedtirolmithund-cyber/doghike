@@ -141,11 +141,11 @@
   }
 
   .doghike-page-title {
-    @apply text-2xl font-bold text-slate-900;
+    @apply text-2xl font-bold text-[#7C3020];
   }
 
   .doghike-page-subtitle {
-    @apply mt-1 text-sm font-normal leading-5 text-slate-500;
+    @apply mt-1 text-sm font-normal leading-5 text-[#C07820];
   }
 
   .doghike-section-header {
@@ -153,11 +153,11 @@
   }
 
   .doghike-section-title {
-    @apply text-xl font-semibold tracking-normal text-slate-900;
+    @apply text-xl font-semibold tracking-normal text-[#A8003C];
   }
 
   .doghike-section-subtitle {
-    @apply text-sm font-normal leading-5 text-slate-500;
+    @apply text-sm font-normal leading-5 text-[#C07820];
   }
 
   .doghike-filter-panel {
@@ -166,7 +166,7 @@
   }
 
   .doghike-filter-label {
-    @apply mb-2 flex items-center gap-1.5 text-xs font-medium text-slate-700;
+    @apply mb-2 flex items-center gap-1.5 text-xs font-medium text-[#7C3020];
   }
 
   .doghike-card-grid {
@@ -174,11 +174,11 @@
   }
 
   .doghike-stat-chip {
-    @apply inline-flex items-center gap-2 rounded-full border border-brand-100/55 bg-brand-50/65 px-3 py-2 text-sm font-normal text-slate-700 shadow-sm backdrop-blur-sm;
+    @apply inline-flex items-center gap-2 rounded-full border border-brand-100/55 bg-brand-50/65 px-3 py-2 text-sm font-normal text-[#C07820] shadow-sm backdrop-blur-sm;
   }
 
   .doghike-stat-chip-strong {
-    @apply font-semibold text-slate-950;
+    @apply font-semibold text-[#7C3020];
   }
 
   .doghike-icon-chip {
@@ -199,7 +199,7 @@
   }
 
   .doghike-secondary-action {
-    @apply border-brand-100 bg-white/75 text-slate-700 hover:border-brand-200 hover:bg-brand-50/80;
+    @apply border-brand-100 bg-white/75 text-[#7C3020] hover:border-brand-200 hover:bg-brand-50/80;
   }
 
   .doghike-compact-action {
