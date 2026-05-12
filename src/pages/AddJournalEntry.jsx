@@ -196,7 +196,7 @@ function MountainPicker({ label, value, onChange }) {
       <div className="mb-1 flex items-center gap-1.5">
         <Label className="mb-0 block text-sm text-slate-600">{label}</Label>
         <DifficultyInfoDialog
-          icon={<Mountain className="h-4 w-4 text-brand-500" />}
+          icon={<span className="text-sm leading-none">{TOUR_ICONS.human}</span>}
           title="Schwierigkeit Mensch"
           description="So ist die Wegtechnik fÃ¼r Menschen von Stufe 1 bis Stufe 5 eingeordnet."
           levels={HUMAN_DIFFICULTY_GUIDE}
@@ -242,7 +242,7 @@ function BonePicker({ label, value, onChange }) {
       <div className="mb-1 flex items-center gap-1.5">
         <Label className="mb-0 block text-sm text-slate-600">{label}</Label>
         <DifficultyInfoDialog
-          icon={<Dog className="h-4 w-4 text-brand-500" />}
+          icon={<span className="text-sm leading-none">{TOUR_ICONS.dog}</span>}
           title="Schwierigkeit Hund"
           description="So ist die Belastung fÃ¼r Hunde von Stufe 1 bis Stufe 5 eingeordnet."
           levels={DOG_DIFFICULTY_GUIDE}
@@ -1285,7 +1285,7 @@ export default function AddJournalEntry() {
               onChange={(v) => set("seasons", v)}
             />
             <p className="mt-2 text-xs text-slate-400">
-              Bei privaten EintrÃ¤gen optional. FÃ¼r EintrÃ¤ge mit Freunden oder Ã¶ffentlich bitte mindestens eine Jahreszeit auswÃ¤hlen.
+              Du kannst eine oder mehrere Jahreszeiten auswählen, zum Beispiel Frühling und Herbst. Bei privaten Einträgen optional. Für Einträge mit Freunden oder öffentlich bitte mindestens eine Jahreszeit auswählen.
             </p>
           </section>
 

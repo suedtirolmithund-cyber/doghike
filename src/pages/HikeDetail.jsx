@@ -4,7 +4,6 @@ import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, Edit, Trash2, ChevronLeft, ChevronRight, X, Share2, Check, MapPin
@@ -252,16 +251,6 @@ export default function HikeDetail() {
       ? `${hike.notes.slice(0, 220).trim()}...`
       : hike.notes
     : null;
-  const bottomStatsCount = [
-    hike.distance_km,
-    hike.elevation_gain_m,
-    hike.duration_minutes,
-    countryLabel,
-    hike.date,
-    hike.difficulty,
-    hike.dog_difficulty,
-  ].filter(Boolean).length;
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       {/* Hero Image */}
@@ -428,29 +417,20 @@ export default function HikeDetail() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="mb-10 grid gap-2"
-          style={{ gridTemplateColumns: `repeat(${Math.max(bottomStatsCount, 1)}, minmax(0, 1fr))` }}
+          className="mb-10 -mx-1 overflow-x-auto px-1 pb-1"
         >
-          {hike.distance_km && (
-            <div className="doghike-stat-chip w-full justify-center px-4 py-2.5">
-              <span className="text-base">{TOUR_ICONS.distance}</span>
+          <div className="flex min-w-max gap-2.5">
+          {countryLabel && (
+            <div className="doghike-stat-chip min-w-[128px] shrink-0 justify-center px-4 py-2.5">
+              <span className="text-base">{TOUR_ICONS.country}</span>
               <div>
-                <div className="text-sm font-bold text-slate-950 leading-tight">{hike.distance_km} km</div>
-                <div className="text-xs text-slate-400">Strecke</div>
-              </div>
-            </div>
-          )}
-          {hike.elevation_gain_m && (
-            <div className="doghike-stat-chip w-full justify-center px-4 py-2.5">
-              <span className="text-base">{TOUR_ICONS.elevation}</span>
-              <div>
-                <div className="text-sm font-bold text-slate-950 leading-tight">{hike.elevation_gain_m} Hm</div>
-                <div className="text-xs text-slate-400">Aufstieg</div>
+                <div className="text-sm font-bold text-slate-950 leading-tight">{countryLabel}</div>
+                <div className="text-xs text-slate-400">Land</div>
               </div>
             </div>
           )}
           {hike.duration_minutes && (
-            <div className="doghike-stat-chip w-full justify-center px-4 py-2.5">
+            <div className="doghike-stat-chip min-w-[128px] shrink-0 justify-center px-4 py-2.5">
               <span className="text-base">{TOUR_ICONS.duration}</span>
               <div>
                 <div className="text-sm font-bold text-slate-950 leading-tight">
@@ -460,28 +440,26 @@ export default function HikeDetail() {
               </div>
             </div>
           )}
-          {countryLabel && (
-            <div className="doghike-stat-chip w-full justify-center px-4 py-2.5">
-              <span className="text-base">{TOUR_ICONS.country}</span>
+          {hike.distance_km && (
+            <div className="doghike-stat-chip min-w-[128px] shrink-0 justify-center px-4 py-2.5">
+              <span className="text-base">{TOUR_ICONS.distance}</span>
               <div>
-                <div className="text-sm font-bold text-slate-950 leading-tight">{countryLabel}</div>
-                <div className="text-xs text-slate-400">Land</div>
+                <div className="text-sm font-bold text-slate-950 leading-tight">{hike.distance_km} km</div>
+                <div className="text-xs text-slate-400">Strecke</div>
               </div>
             </div>
           )}
-          {hike.date && (
-            <div className="doghike-stat-chip w-full justify-center px-4 py-2.5">
-              <span className="text-base">{TOUR_ICONS.date}</span>
+          {hike.elevation_gain_m && (
+            <div className="doghike-stat-chip min-w-[128px] shrink-0 justify-center px-4 py-2.5">
+              <span className="text-base">{TOUR_ICONS.elevation}</span>
               <div>
-                <div className="text-sm font-bold text-slate-950 leading-tight">
-                  {format(new Date(hike.date), "dd.MM.yyyy")}
-                </div>
-                <div className="text-xs text-slate-400">Datum</div>
+                <div className="text-sm font-bold text-slate-950 leading-tight">{hike.elevation_gain_m} Hm</div>
+                <div className="text-xs text-slate-400">Aufstieg</div>
               </div>
             </div>
           )}
           {hike.difficulty && (
-            <div className="doghike-stat-chip w-full justify-center border-brand-200 bg-brand-50/75 px-4 py-2.5">
+            <div className="doghike-stat-chip min-w-[128px] shrink-0 justify-center border-brand-200 bg-brand-50/75 px-4 py-2.5">
               <span className="text-base">{TOUR_ICONS.human}</span>
               <div>
                 <div className="flex gap-0.5 mb-0.5">
@@ -494,7 +472,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.dog_difficulty && (
-            <div className="doghike-stat-chip w-full justify-center border-brand-200 bg-brand-50/75 px-4 py-2.5">
+            <div className="doghike-stat-chip min-w-[128px] shrink-0 justify-center border-brand-200 bg-brand-50/75 px-4 py-2.5">
               <span className="text-base">{TOUR_ICONS.dog}</span>
               <div>
                 <div className="flex gap-0.5 mb-0.5">
@@ -506,6 +484,7 @@ export default function HikeDetail() {
               </div>
             </div>
           )}
+          </div>
         </motion.div>
 
         {/* Route Profile - Full Width */}
