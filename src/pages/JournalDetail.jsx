@@ -347,6 +347,18 @@ export default function JournalDetail() {
                 <span className="text-sm text-brand-400 font-medium">{TOUR_ICONS.dog} Ja</span>
               </div>
             )}
+            {isOwner && entry.visibility === "private" && Array.isArray(entry.dog_mood_tags) && entry.dog_mood_tags.length > 0 && (
+              <div className="flex items-start gap-2 flex-wrap">
+                <span className="text-xs text-slate-500 w-28">Hund heute</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {entry.dog_mood_tags.map((tag) => (
+                    <Badge key={tag} variant="secondary" className="border border-brand-100 bg-brand-50/70 text-brand-700 text-xs">
+                      {TOUR_ICONS.dog} {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
             {entry.hazard_notes && (
               <div className="flex items-start gap-2">
                 <AlertTriangle className="w-4 h-4 text-brand-500 shrink-0 mt-0.5" />

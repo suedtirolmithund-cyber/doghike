@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -35,6 +35,7 @@ import {
   DIFFICULTY_APP_EXPLANATIONS,
   DIFFICULTY_GUIDE_NOTE,
   DIFFICULTY_LEVELS,
+  DOG_PRIVATE_TAGS,
   DOG_DIFFICULTY_GUIDE,
   HUMAN_DIFFICULTY_GUIDE,
   SEASON_LEVELS,
@@ -260,9 +261,7 @@ function BonePicker({ label, value, onChange }) {
               s <= active ? "opacity-100" : "opacity-25"
             }`}
             title={getDifficultyLabel(s)}
-          >
-            🦴
-          </button>
+          >??</button>
         )})}
         {value > 0 && (
           <>
@@ -432,7 +431,7 @@ function LocationPicker({ lat, lng, onChange }) {
               type="button"
               onClick={dismissSearchResults}
               className="rounded-md p-1 text-slate-400 transition-colors hover:bg-brand-50/70 hover:text-slate-600"
-              aria-label="Trefferliste schließen"
+              aria-label="Trefferliste schlie?en"
             >
               <X className="h-4 w-4" />
             </button>
@@ -596,7 +595,7 @@ function SeasonPicker({ value = [], onChange }) {
 const VISIBILITY_OPTIONS = [
   {
     value: "private",
-    emoji: "👤",
+    emoji: "??",
     label: "Privat",
     desc: "Nur ich sehe diesen Eintrag",
     active: "border-brand-200 bg-brand-100/80 text-slate-900",
@@ -604,7 +603,7 @@ const VISIBILITY_OPTIONS = [
   },
   {
     value: "friends",
-    emoji: "🫂",
+    emoji: "??",
     label: "Freunde",
     desc: "Nur bestätigte Freunde",
     active: "border-brand-300 bg-brand-50 text-brand-800",
@@ -612,8 +611,8 @@ const VISIBILITY_OPTIONS = [
   },
   {
     value: "public",
-    emoji: "🌍",
-    label: "Öffentlich",
+    emoji: "??",
+    label: "?ffentlich",
     desc: "Wird an Admin zur Prüfung geschickt",
     active: "border-brand-400 bg-brand-50 text-brand-700",
     idle: "border-brand-100 hover:border-brand-300",
@@ -665,6 +664,7 @@ const EMPTY_FORM = {
   visibility: "private",
   seasons: [],
   dog_id: null,
+  dog_mood_tags: [],
 };
 
 export default function AddJournalEntry() {
@@ -694,6 +694,7 @@ export default function AddJournalEntry() {
     hazard_notes: routePrefill?.hazard_notes ?? "",
     seasons: routePrefill?.seasons ?? [],
     dog_id: routePrefill?.dog_id ?? null,
+    dog_mood_tags: routePrefill?.dog_mood_tags ?? [],
     photos: routePrefill?.photos ?? [],
     gpx_url: routePrefill?.gpx_url ?? "",
   };
@@ -719,6 +720,7 @@ export default function AddJournalEntry() {
       hazard_notes: prefill.hazard_notes || EMPTY_FORM.hazard_notes,
       seasons: Array.isArray(prefill.seasons) ? prefill.seasons : EMPTY_FORM.seasons,
       dog_id: prefill.dog_id ?? EMPTY_FORM.dog_id,
+      dog_mood_tags: Array.isArray(prefill.dog_mood_tags) ? prefill.dog_mood_tags : EMPTY_FORM.dog_mood_tags,
       photos: Array.isArray(prefill.photos) ? prefill.photos : EMPTY_FORM.photos,
       gpx_url: prefill.gpx_url || EMPTY_FORM.gpx_url,
     }),
@@ -775,6 +777,7 @@ export default function AddJournalEntry() {
         visibility: existing.visibility ?? "private",
         seasons: existing.seasons ?? [],
         dog_id: existing.dog_id ?? null,
+        dog_mood_tags: existing.dog_mood_tags ?? [],
       });
     }
   }, [existing]);
@@ -952,7 +955,7 @@ export default function AddJournalEntry() {
     if (form.visibility === "friends" || form.visibility === "public") {
       const missing = getMissingSharedJournalFields(form);
       if (missing.length > 0) {
-        const targetLabel = form.visibility === "public" ? "öffentlich" : "mit Freunden geteilt";
+        const targetLabel = form.visibility === "public" ? "?ffentlich" : "mit Freunden geteilt";
         toast.error(
           `Um eine Tour ${targetLabel} zu speichern, müssen alle Pflichtfelder ausgefüllt sein: ${missing.join(", ")}`,
           {
@@ -984,6 +987,7 @@ export default function AddJournalEntry() {
       difficulty: form.difficulty || null,
       rating: form.rating || null,
       dog_difficulty: form.dog_difficulty || null,
+      dog_mood_tags: form.visibility === "private" ? (form.dog_mood_tags ?? []) : [],
       latitude: form.latitude !== "" ? Number(form.latitude) : null,
       longitude: form.longitude !== "" ? Number(form.longitude) : null,
       // public -> pending admin review (admins can keep approved entries approved)
@@ -994,6 +998,14 @@ export default function AddJournalEntry() {
   };
 
   const set = (key, val) => setForm((p) => ({ ...p, [key]: val }));
+  const toggleDogMoodTag = (tag) => {
+    setForm((prev) => ({
+      ...prev,
+      dog_mood_tags: prev.dog_mood_tags.includes(tag)
+        ? prev.dog_mood_tags.filter((entry) => entry !== tag)
+        : [...prev.dog_mood_tags, tag],
+    }));
+  };
 
   if (!isAuthenticated) {
     return (
@@ -1049,7 +1061,7 @@ export default function AddJournalEntry() {
                 {editId ? "Eintrag bearbeiten" : "Neue Wanderung"}
               </h1>
               <p className="doghike-page-subtitle">
-                {editId ? "Ändere deine Aufzeichnung" : "Halte dein Wandererlebnis fest"}
+                {editId ? "?ndere deine Aufzeichnung" : "Halte dein Wandererlebnis fest"}
               </p>
             </div>
           </div>
@@ -1156,6 +1168,34 @@ export default function AddJournalEntry() {
             <WaterPicker label="Wasserverfügbarkeit" value={form.water_available} onChange={(v) => set("water_available", v)} />
 
             <BonePicker label="Schwierigkeit (Hund)" value={form.dog_difficulty} onChange={(v) => set("dog_difficulty", v)} />
+
+            {form.visibility === "private" && (
+              <div>
+                <Label className="text-sm text-slate-600 mb-2 block">Wie war dein Hund drauf? (optional, nur privat)</Label>
+                <div className="flex flex-wrap gap-2">
+                  {DOG_PRIVATE_TAGS.map((tag) => {
+                    const isActive = form.dog_mood_tags.includes(tag);
+                    return (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => toggleDogMoodTag(tag)}
+                        className={`rounded-full border px-3 py-2 text-sm transition-all ${
+                          isActive
+                            ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
+                            : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
+                        }`}
+                      >
+                        {tag}
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="mt-2 text-xs text-slate-400">
+                  Du kannst eine oder mehrere Angaben wählen. Diese Infos bleiben nur in privaten Einträgen und werden bei Freunde oder ?ffentlich nicht mitgeteilt.
+                </p>
+              </div>
+            )}
 
             {/* Dog picker */}
             {userDogs.length > 0 && (
@@ -1295,7 +1335,7 @@ export default function AddJournalEntry() {
               onChange={(v) => set("seasons", v)}
             />
             <p className="mt-2 text-xs text-slate-400">
-              Du kannst eine oder mehrere Jahreszeiten ausw�hlen, zum Beispiel Fr�hling und Herbst. Bei privaten Eintr�gen optional. F�r Eintr�ge mit Freunden oder �ffentlich bitte mindestens eine Jahreszeit ausw�hlen.
+              Du kannst eine oder mehrere Jahreszeiten auswählen, zum Beispiel Frühling und Herbst. Bei privaten Einträgen optional. Für Einträge mit Freunden oder öffentlich bitte mindestens eine Jahreszeit auswählen.
             </p>
           </section>
 
@@ -1365,6 +1405,7 @@ export default function AddJournalEntry() {
     </div>
   );
 }
+
 
 
 

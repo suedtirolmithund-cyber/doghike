@@ -6,6 +6,19 @@ export const DIFFICULTY_LEVELS = [
   { value: "5", label: "Sehr anspruchsvoll", short: "Stufe 5", textColor: "text-brand-400", badgeClass: "bg-brand-100 text-brand-500 border-brand-100" },
 ];
 
+export const DOG_PRIVATE_TAGS = [
+  "💪 Fit",
+  "🔥 Motiviert",
+  "🌟 Super drauf",
+  "😌 Ruhig",
+  "🛋️ Brauchte Pausen",
+  "🚀 Viel Energie",
+  "🛋️ Gemütlich",
+  "🎯 Trittsicher",
+  "🤍 Vorsichtig",
+  "🌿 Entspannt",
+];
+
 export const HUMAN_DIFFICULTY_GUIDE = [
   {
     level: "T1",
@@ -276,7 +289,7 @@ export function getWaterLabel(value) {
 }
 
 export function getWaterIcon(value) {
-  return getWaterLevel(value)?.icon ?? "💧";
+  return getWaterLevel(value)?.icon ?? "??";
 }
 
 export function getWaterBadgeClass(value) {
