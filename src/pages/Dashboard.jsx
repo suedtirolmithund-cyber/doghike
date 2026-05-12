@@ -140,19 +140,19 @@ export default function Dashboard() {
 
           <div className="mt-6 grid w-full max-w-[343px] gap-3">
             <Link to={createPageUrl("Hikes")}>
-              <Button size="lg" variant="soft" className="h-[46px] w-full border border-[#F9C030] bg-[#F9C030]/92 text-[#7C4A00] shadow-[0_12px_26px_rgba(249,192,48,0.22)] hover:bg-[#F9C030]">
+              <Button size="lg" variant="outline" className="h-[46px] w-full border border-[#F9C030] bg-[#FDF0E8]/92 text-[#7C3020] shadow-[0_12px_26px_rgba(249,192,48,0.2)] hover:bg-[#FDF0E8] hover:text-[#7C3020]">
                 <Mountain className="h-[18px] w-[18px] text-[#F07030]" /> Alle Touren entdecken
               </Button>
             </Link>
             <Link to={submitHikeUrl}>
-              <Button size="lg" variant="primary" className="h-[46px] w-full border border-[#F07030] bg-[#F07030]/92 text-white shadow-[0_12px_26px_rgba(240,112,48,0.24)] hover:bg-[#F07030]">
-                <Plus className="h-[18px] w-[18px] text-white" /> Tour einreichen
+              <Button size="lg" variant="outline" className="h-[46px] w-full border border-[#F9C030] bg-[#FDF0E8]/92 text-[#7C3020] shadow-[0_12px_26px_rgba(249,192,48,0.2)] hover:bg-[#FDF0E8] hover:text-[#7C3020]">
+                <Plus className="h-[18px] w-[18px] text-[#F07030]" /> Tour einreichen
               </Button>
             </Link>
             {!isAuthenticated && (
               <Link to={createPageUrl("Login")}>
-                  <Button size="lg" variant="primary" className="h-[46px] w-full border border-[#F07030] bg-[#F07030]/92 text-white shadow-[0_12px_26px_rgba(240,112,48,0.24)] hover:bg-[#F07030]">
-                    <UserPlus className="h-[18px] w-[18px] text-white" /> Registrieren
+                  <Button size="lg" variant="outline" className="h-[46px] w-full border border-[#F9C030] bg-[#FDF0E8]/92 text-[#7C3020] shadow-[0_12px_26px_rgba(249,192,48,0.2)] hover:bg-[#FDF0E8] hover:text-[#7C3020]">
+                    <UserPlus className="h-[18px] w-[18px] text-[#F07030]" /> Registrieren
                 </Button>
               </Link>
             )}
@@ -181,19 +181,19 @@ export default function Dashboard() {
             </p>
             <div className="absolute left-1/2 top-[281px] flex h-[46px] -translate-x-1/2 items-center justify-center gap-4">
               <Link to={createPageUrl("Hikes")}>
-                <Button size="lg" variant="soft" className="h-[46px] w-[224.19px] border border-[#F9C030] bg-[#F9C030]/92 px-0 text-[16px] font-bold leading-[19px] text-[#7C4A00] shadow-[0_12px_26px_rgba(249,192,48,0.22)] hover:bg-[#F9C030]">
+                <Button size="lg" variant="outline" className="h-[46px] w-[224.19px] border border-[#F9C030] bg-[#FDF0E8]/92 px-0 text-[16px] font-bold leading-[19px] text-[#7C3020] shadow-[0_12px_26px_rgba(249,192,48,0.2)] hover:bg-[#FDF0E8] hover:text-[#7C3020]">
                   <Mountain className="mr-0 h-[18px] w-[18px] text-[#F07030]" /> Alle Touren entdecken
                 </Button>
               </Link>
               <Link to={submitHikeUrl}>
-                <Button size="lg" variant="primary" className="h-[46px] w-[177.56px] border border-[#F07030] bg-[#F07030]/92 px-0 text-[16px] font-bold leading-[19px] text-white shadow-[0_12px_26px_rgba(240,112,48,0.24)] hover:bg-[#F07030]">
-                  <Plus className="mr-0 h-[18px] w-[18px] text-white" /> Tour einreichen
+                <Button size="lg" variant="outline" className="h-[46px] w-[177.56px] border border-[#F9C030] bg-[#FDF0E8]/92 px-0 text-[16px] font-bold leading-[19px] text-[#7C3020] shadow-[0_12px_26px_rgba(249,192,48,0.2)] hover:bg-[#FDF0E8] hover:text-[#7C3020]">
+                  <Plus className="mr-0 h-[18px] w-[18px] text-[#F07030]" /> Tour einreichen
                 </Button>
               </Link>
               {!isAuthenticated && (
                 <Link to={createPageUrl("Login")}>
-                    <Button size="lg" variant="primary" className="h-[46px] w-[153.64px] border border-[#F07030] bg-[#F07030]/92 px-0 text-[16px] font-bold leading-[19px] text-white shadow-[0_12px_26px_rgba(240,112,48,0.24)] hover:bg-[#F07030]">
-                      <UserPlus className="mr-0 h-[18px] w-[18px] text-white" /> Registrieren
+                    <Button size="lg" variant="outline" className="h-[46px] w-[153.64px] border border-[#F9C030] bg-[#FDF0E8]/92 px-0 text-[16px] font-bold leading-[19px] text-[#7C3020] shadow-[0_12px_26px_rgba(249,192,48,0.2)] hover:bg-[#FDF0E8] hover:text-[#7C3020]">
+                      <UserPlus className="mr-0 h-[18px] w-[18px] text-[#F07030]" /> Registrieren
                   </Button>
                 </Link>
               )}
