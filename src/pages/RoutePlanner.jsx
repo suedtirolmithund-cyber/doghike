@@ -483,7 +483,7 @@ function SmartRoutePlanner({ onRouteReady }) {
           {route && (
             <Polyline
               positions={route.positions}
-              color="#c03060"
+              color="#A8003C"
               weight={6}
               opacity={0.85}
               eventHandlers={{ click: handleRouteClick }}
@@ -802,7 +802,7 @@ export default function RoutePlanner() {
                 <Button type="button" variant="outline" onClick={() => setRouteGeometry(null)}>
                   Abbrechen
                 </Button>
-                <Button type="submit" disabled={createRouteMutation.isPending} className="bg-[#c03060] hover:bg-[#8f2348]">
+                <Button type="submit" disabled={createRouteMutation.isPending} className="bg-[#A8003C] hover:bg-[#7C3020]">
                   {createRouteMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                   {activeTab === "track"
                     ? "Ins Tagebuch übernehmen"

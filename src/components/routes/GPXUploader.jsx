@@ -212,7 +212,7 @@ export default function GPXUploader({ onSave }) {
             <div className="flex items-center gap-2">
               <FileText className="w-5 h-5 text-brand-400" />
               <div>
-                <p className="text-sm font-medium text-[#741c3b]">{fileName}</p>
+                <p className="text-sm font-medium text-[#7C3020]">{fileName}</p>
                 <p className="text-xs text-brand-400">{gpxData.coordinates.length} Wegpunkte geladen</p>
               </div>
             </div>
@@ -222,7 +222,7 @@ export default function GPXUploader({ onSave }) {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="rounded-xl bg-gradient-to-br from-[#c03060] to-[#fada6a] p-4 text-center text-white">
+        <div className="rounded-xl bg-gradient-to-br from-[#A8003C] to-[#F9C030] p-4 text-center text-white">
               <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.distance}</span>
               <p className="text-2xl font-bold">{gpxData.distance_km}</p>
               <p className="text-xs opacity-70">km Distanz</p>
@@ -232,12 +232,12 @@ export default function GPXUploader({ onSave }) {
               <p className="text-2xl font-bold">+{gpxData.elevation_gain_m}</p>
               <p className="text-xs opacity-70">m Aufstieg</p>
             </div>
-            <div className="rounded-xl bg-gradient-to-br from-[#741c3b] to-[#c03060] p-4 text-center text-white">
+            <div className="rounded-xl bg-gradient-to-br from-[#7C3020] to-[#A8003C] p-4 text-center text-white">
               <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.duration}</span>
               <p className="text-2xl font-bold">{formatDurationHours(gpxData.duration_minutes)}</p>
               <p className="text-xs opacity-70">gesch. Dauer</p>
             </div>
-            <div className="rounded-xl bg-gradient-to-br from-[#fada6a] to-[#c03060] p-4 text-center text-white">
+            <div className="rounded-xl bg-gradient-to-br from-[#F9C030] to-[#A8003C] p-4 text-center text-white">
               <span className="block text-xl mb-1 opacity-80">{TOUR_ICONS.elevation}</span>
               <p className="text-2xl font-bold">
                 {gpxData.max_elevation !== -Infinity ? Math.round(gpxData.max_elevation) : "–"}
@@ -262,7 +262,7 @@ export default function GPXUploader({ onSave }) {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution="&copy; OpenStreetMap"
               />
-              <Polyline positions={gpxData.coordinates} color="#c03060" weight={4} opacity={0.85} />
+              <Polyline positions={gpxData.coordinates} color="#A8003C" weight={4} opacity={0.85} />
               {gpxData.coordinates.length > 0 && (
                 <>
                   <Marker position={gpxData.coordinates[0]} />

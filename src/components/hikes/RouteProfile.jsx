@@ -141,8 +141,8 @@ export default function RouteProfile({ hike }) {
             <AreaChart data={profileData.data} margin={{ top: 5, right: 10, left: 0, bottom: 20 }}>
               <defs>
                 <linearGradient id="elevGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#c03060" stopOpacity={0.68} />
-                  <stop offset="95%" stopColor="#fada6a" stopOpacity={0.08} />
+                  <stop offset="5%" stopColor="#A8003C" stopOpacity={0.68} />
+                  <stop offset="95%" stopColor="#F9C030" stopOpacity={0.08} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#e7e5e4" />
@@ -162,7 +162,7 @@ export default function RouteProfile({ hike }) {
                 labelFormatter={(v) => `${v} km`}
                 formatter={(v) => [`${Math.round(v)} m`, "Höhe"]}
               />
-              <Area type="monotone" dataKey="elevation" stroke="#c03060" strokeWidth={2.5} fill="url(#elevGrad)" />
+              <Area type="monotone" dataKey="elevation" stroke="#A8003C" strokeWidth={2.5} fill="url(#elevGrad)" />
             </AreaChart>
           </ResponsiveContainer>
           <p className="text-xs text-slate-400 mt-1 text-center italic">

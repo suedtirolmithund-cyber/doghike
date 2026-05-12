@@ -17,7 +17,7 @@ function ExtendedLoadingScreen() {
         </div>
 
         <div
-          className="absolute left-[162px] top-[746px] grid h-[54px] w-[52px] place-items-center rounded-full bg-[#c03060]/80 text-white"
+          className="absolute left-[162px] top-[746px] grid h-[54px] w-[52px] place-items-center rounded-full bg-[#A8003C]/80 text-white"
           style={{ mixBlendMode: "plus-lighter" }}
         >
           <ArrowRight className="h-[31px] w-[31px] stroke-[2.4]" />

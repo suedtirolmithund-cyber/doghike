@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import AppLoadingScreen from '@/components/AppLoadingScreen';
+import PawLoadingTrail from '@/components/PawLoadingTrail';
 import { Loader2 } from 'lucide-react';
 import GuestWelcomeScreen from '@/components/GuestWelcomeScreen';
 import { getDogs } from '@/lib/profilesApi';
@@ -57,6 +58,7 @@ class ErrorBoundary extends React.Component {
                 <Loader2 className="mx-auto mb-3 h-6 w-6 animate-spin text-brand-500" />
                 <h2 className="mb-2 text-lg font-semibold text-slate-900">App wird aktualisiert</h2>
                 <p className="text-sm text-slate-500">Ein neuer Stand wurde erkannt. DogTrails lädt einmal neu.</p>
+                <PawLoadingTrail />
               </div>
             </div>
           );
@@ -76,6 +78,7 @@ class ErrorBoundary extends React.Component {
                 <Loader2 className="mx-auto mb-3 h-6 w-6 animate-spin text-brand-500" />
                 <h2 className="mb-2 text-lg font-semibold text-slate-900">App wird aktualisiert</h2>
                 <p className="text-sm text-slate-500">DogTrails lädt den aktuellen Stand einmal neu.</p>
+                <PawLoadingTrail />
               </div>
             </div>
           );
@@ -104,7 +107,11 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
 
 const PageFallback = () => (
   <div className="flex min-h-[40vh] items-center justify-center bg-gradient-to-br from-brand-50 via-white to-brand-50/10">
-    <Loader2 className="h-6 w-6 animate-spin text-brand-500" />
+    <div className="text-center">
+      <Loader2 className="mx-auto h-6 w-6 animate-spin text-brand-500" />
+      <p className="mt-3 text-sm text-slate-500">Lädt...</p>
+      <PawLoadingTrail />
+    </div>
   </div>
 );
 

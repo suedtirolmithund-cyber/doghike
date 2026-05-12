@@ -61,7 +61,7 @@ export default function WeatherWidget({ location, latitude, longitude }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl border border-brand-100/70 bg-white/70 p-4 shadow-[0_12px_28px_rgba(192,48,96,0.08)] backdrop-blur-sm md:p-5"
+      className="rounded-2xl border border-brand-100/70 bg-white/70 p-4 shadow-[0_12px_28px_rgba(168,0,60,0.08)] backdrop-blur-sm md:p-5"
     >
       <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900 md:text-base">
         <Cloud className="h-4 w-4" />

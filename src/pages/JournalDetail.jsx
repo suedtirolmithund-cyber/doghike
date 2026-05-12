@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import WaterIcon from "@/components/icons/WaterIcon";
+import PawLoadingTrail from "@/components/PawLoadingTrail";
 import {
   getDifficultyLabel,
   getDifficultyTextColor,
@@ -175,7 +176,11 @@ export default function JournalDetail() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-slate-400" />
+        <div className="text-center">
+          <Loader2 className="mx-auto h-8 w-8 animate-spin text-slate-400" />
+          <p className="mt-3 text-slate-500">Lädt...</p>
+          <PawLoadingTrail />
+        </div>
       </div>
     );
   }

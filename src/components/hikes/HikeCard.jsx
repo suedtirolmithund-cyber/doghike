@@ -23,7 +23,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
       transition={{ delay: index * 0.08, duration: 0.42 }}
     >
       <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=${hikeSource}`}>
-        <div className="group overflow-hidden rounded-[22px] border border-brand-100/80 bg-white/78 shadow-[0_12px_28px_rgba(192,48,96,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(232,88,32,0.12)]">
+        <div className="group overflow-hidden rounded-[22px] border border-brand-100/80 bg-white/78 shadow-[0_12px_28px_rgba(168,0,60,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(240,112,48,0.12)]">
           <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a] sm:h-52">
             {coverPhoto && (
               <img
@@ -35,7 +35,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/10 to-transparent" />
 
             {PREMIUM_FEATURES_ENABLED && hike.is_premium && (
-              <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/74 px-2.5 py-1 text-xs font-semibold text-[#741c3b] shadow-sm backdrop-blur-sm">
+              <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/74 px-2.5 py-1 text-xs font-semibold text-[#7C3020] shadow-sm backdrop-blur-sm">
                 Premium
               </span>
             )}
@@ -147,7 +147,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
 
               {hike.rating && (
                 <div className="flex shrink-0 items-center gap-1">
-                  <Star className="h-4 w-4 fill-[#c03060] text-[#c03060]" />
+                  <Star className="h-4 w-4 fill-[#A8003C] text-[#A8003C]" />
                   <span className="text-sm font-medium text-slate-700">{hike.rating}</span>
                 </div>
               )}

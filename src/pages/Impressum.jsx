@@ -14,7 +14,7 @@ export default function Impressum() {
           </Button>
         </Link>
 
-        <div className="rounded-2xl border border-brand-100/80 bg-white/78 p-4 shadow-[0_14px_34px_rgba(192,48,96,0.08)] backdrop-blur-sm md:p-8">
+        <div className="rounded-2xl border border-brand-100/80 bg-white/78 p-4 shadow-[0_14px_34px_rgba(168,0,60,0.08)] backdrop-blur-sm md:p-8">
           <div className="doghike-page-header mb-6">
             <div className="doghike-page-icon">
               <Building2 className="h-5 w-5" />

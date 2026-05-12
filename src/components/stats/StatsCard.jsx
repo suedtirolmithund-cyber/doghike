@@ -9,7 +9,7 @@ export default function StatsCard({ icon: Icon, label, value, unit, description,
       className="doghike-glass-card-hover p-4 md:p-5"
     >
       <div className="flex items-center gap-2.5">
-        <div className="rounded-xl bg-gradient-to-br from-[#fada6a] to-[#c03060] p-2 shadow-sm">
+        <div className="rounded-xl bg-gradient-to-br from-[#F9C030] to-[#A8003C] p-2 shadow-sm">
           <Icon className="h-4 w-4 text-white md:h-5 md:w-5" />
         </div>
         <div className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-0.5">

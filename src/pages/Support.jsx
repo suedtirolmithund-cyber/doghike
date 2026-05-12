@@ -214,7 +214,7 @@ export default function Support() {
             )}
           </div>
 
-          <div className="rounded-2xl bg-gradient-to-br from-[#56152d] via-[#c03060] to-[#fada6a] p-6 md:p-8 text-white shadow-[0_18px_42px_rgba(192,48,96,0.16)]">
+          <div className="rounded-2xl bg-gradient-to-br from-[#501F14] via-[#A8003C] to-[#F9C030] p-6 md:p-8 text-white shadow-[0_18px_42px_rgba(168,0,60,0.16)]">
             <h2 className="text-xl font-semibold mb-4">Weitere Ressourcen</h2>
             <div className="grid md:grid-cols-3 gap-4">
               {[

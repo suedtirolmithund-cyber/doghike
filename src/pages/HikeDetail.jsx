@@ -29,6 +29,7 @@ import SaveButton from "@/components/hikes/SaveButton";
 import CommentSection from "@/components/community/CommentSection";
 import RatingSection from "@/components/community/RatingSection";
 import ExpandableText from "@/components/ExpandableText";
+import PawLoadingTrail from "@/components/PawLoadingTrail";
 import PremiumGate from "@/components/hikes/PremiumGate";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { supabase } from "@/lib/supabaseClient";
@@ -194,7 +195,10 @@ export default function HikeDetail() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center">
-        <div className="animate-pulse text-brand-500">Lädt...</div>
+        <div className="text-center">
+          <div className="animate-pulse text-brand-500">Lädt...</div>
+          <PawLoadingTrail />
+        </div>
       </div>
     );
   }

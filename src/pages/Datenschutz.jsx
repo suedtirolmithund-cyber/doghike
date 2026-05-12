@@ -14,7 +14,7 @@ export default function Datenschutz() {
           </Button>
         </Link>
 
-        <div className="rounded-2xl border border-brand-100/80 bg-white/78 p-4 shadow-[0_14px_34px_rgba(192,48,96,0.08)] backdrop-blur-sm md:p-8">
+        <div className="rounded-2xl border border-brand-100/80 bg-white/78 p-4 shadow-[0_14px_34px_rgba(168,0,60,0.08)] backdrop-blur-sm md:p-8">
           <div className="doghike-page-header mb-2">
             <div className="doghike-page-icon">
               <Shield className="h-5 w-5" />
@@ -345,7 +345,7 @@ export default function Datenschutz() {
                   </div>
                 </div>
 
-          <div className="mt-4 rounded-xl bg-gradient-to-br from-[#56152d] to-[#c03060] p-4 text-white shadow-[0_12px_24px_rgba(192,48,96,0.14)]">
+          <div className="mt-4 rounded-xl bg-gradient-to-br from-[#501F14] to-[#A8003C] p-4 text-white shadow-[0_12px_24px_rgba(168,0,60,0.14)]">
                   <p className="font-semibold mb-1">Anfragen stellen:</p>
             <p className="text-brand-50 text-sm">
                     Schreib an <strong>suedtirolmithund@gmail.com</strong>. Wir antworten innerhalb von 30 Tagen.

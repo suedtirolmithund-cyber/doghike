@@ -399,7 +399,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       </div>
 
       {/* Start Point Section */}
-      <div className="space-y-4 rounded-2xl border border-brand-100/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(192,48,96,0.08)] backdrop-blur-sm md:p-6">
+      <div className="space-y-4 rounded-2xl border border-brand-100/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(168,0,60,0.08)] backdrop-blur-sm md:p-6">
         <div className="flex items-center justify-between">
           <div>
             <Label className="text-lg">📍 Ausgangspunkt *</Label>
@@ -463,7 +463,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       </div>
 
       {/* Route Section */}
-      <div className="space-y-4 rounded-2xl border border-brand-100/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(192,48,96,0.08)] backdrop-blur-sm md:p-6">
+      <div className="space-y-4 rounded-2xl border border-brand-100/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(168,0,60,0.08)] backdrop-blur-sm md:p-6">
         <div className="flex items-center justify-between">
           <div>
             <Label className="text-lg">🗺️ Routenverlauf (optional)</Label>
@@ -795,7 +795,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         <Button
           type="submit"
           disabled={saving}
-          className="bg-[#c03060] hover:bg-[#8f2348]"
+          className="bg-[#A8003C] hover:bg-[#7C3020]"
         >
           {saving ? (
             <>

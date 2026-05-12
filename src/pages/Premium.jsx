@@ -107,7 +107,7 @@ export default function Premium() {
               <p className="doghike-page-subtitle">Entdecke exklusive hundefreundliche Touren in Südtirol</p>
             </div>
 
-            <div className="mb-6 overflow-hidden rounded-2xl border border-brand-100/70 bg-gradient-to-br from-[#56152d] via-[#c03060] to-[#fada6a] p-8 text-white shadow-[0_20px_46px_rgba(192,48,96,0.16)]">
+            <div className="mb-6 overflow-hidden rounded-2xl border border-brand-100/70 bg-gradient-to-br from-[#501F14] via-[#A8003C] to-[#F9C030] p-8 text-white shadow-[0_20px_46px_rgba(168,0,60,0.16)]">
               <div className="flex items-baseline gap-2 mb-1">
                 <span className="text-5xl font-bold">4,99 €</span>
                 <span className="text-white/75">/ Monat</span>
@@ -132,7 +132,7 @@ export default function Premium() {
                   Stripe-Integration wird gerade eingerichtet. Interesse an Premium?
                 </p>
                 <a href="mailto:suedtirolmithund@gmail.com?subject=Premium Mitgliedschaft">
-                  <Button className="h-12 w-full rounded-xl bg-white text-[#741c3b] hover:bg-white/90">
+                  <Button className="h-12 w-full rounded-xl bg-white text-[#7C3020] hover:bg-white/90">
                     <Mail className="w-4 h-4 mr-2" />
                     Jetzt per E-Mail anfragen
                   </Button>
@@ -145,7 +145,7 @@ export default function Premium() {
 
             <div className="flex justify-center gap-1 mb-4">
               {[1, 2, 3, 4, 5].map((star) => (
-                <Star key={star} className="w-5 h-5 fill-[#c03060] text-[#c03060]" />
+                <Star key={star} className="w-5 h-5 fill-[#A8003C] text-[#A8003C]" />
               ))}
             </div>
             <p className="text-center text-slate-500 text-sm italic">

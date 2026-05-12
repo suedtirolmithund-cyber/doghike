@@ -28,6 +28,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import ExpandableText from "@/components/ExpandableText";
+import PawLoadingTrail from "@/components/PawLoadingTrail";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 import { formatDurationHours, hoursInputToMinutes } from "@/lib/duration";
@@ -198,7 +199,10 @@ export default function RouteDetail() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center">
-        <p className="text-slate-600">Der Weg lädt...</p>
+        <div className="text-center">
+          <p className="text-slate-600">Der Weg lädt...</p>
+          <PawLoadingTrail />
+        </div>
       </div>
     );
   }

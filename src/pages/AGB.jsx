@@ -13,7 +13,7 @@ export default function AGB() {
           </Button>
         </Link>
 
-        <div className="rounded-2xl border border-brand-100/80 bg-white/78 p-4 shadow-[0_14px_34px_rgba(192,48,96,0.08)] backdrop-blur-sm md:p-8">
+        <div className="rounded-2xl border border-brand-100/80 bg-white/78 p-4 shadow-[0_14px_34px_rgba(168,0,60,0.08)] backdrop-blur-sm md:p-8">
           <div className="doghike-page-header mb-2">
             <div className="doghike-page-icon">
               <FileText className="h-5 w-5" />
@@ -192,7 +192,7 @@ export default function AGB() {
             <Mail className="w-5 h-5 text-brand-600" />
                 9. Kontakt & Beschwerden
               </h2>
-          <div className="rounded-xl bg-gradient-to-br from-[#56152d] to-[#c03060] p-4 text-sm text-white shadow-[0_12px_24px_rgba(192,48,96,0.14)]">
+          <div className="rounded-xl bg-gradient-to-br from-[#501F14] to-[#A8003C] p-4 text-sm text-white shadow-[0_12px_24px_rgba(168,0,60,0.14)]">
                 <p className="font-semibold mb-1">Betreiberin: Julia Schwärzer</p>
             <p className="text-brand-50">E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-white underline">suedtirolmithund@gmail.com</a></p>
               </div>

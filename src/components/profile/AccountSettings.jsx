@@ -98,7 +98,7 @@ export default function AccountSettings({ user }) {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-brand-100 bg-brand-50/50 p-5 shadow-[0_14px_35px_rgba(192,48,96,0.08)] backdrop-blur-xl">
+      <div className="rounded-2xl border border-brand-100 bg-brand-50/50 p-5 shadow-[0_14px_35px_rgba(168,0,60,0.08)] backdrop-blur-xl">
         <h3 className="text-base font-semibold text-brand-500 mb-2 flex items-center gap-2">
           <Trash2 className="w-4 h-4" /> Konto & alle Daten löschen
         </h3>

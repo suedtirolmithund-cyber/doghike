@@ -228,13 +228,13 @@ export default function GuestWelcomeScreen() {
   }
 
   return (
-    <div className="grid min-h-[100dvh] place-items-center overflow-hidden bg-[#fff8f0] md:relative">
+    <div className="grid min-h-[100dvh] place-items-center overflow-hidden bg-[#FDF0E8] md:relative">
       <WarmGlassBackground />
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.25 }}
-        className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-[#fff8f0] md:h-[812px] md:bg-transparent"
+        className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-[#FDF0E8] md:h-[812px] md:bg-transparent"
       >
         <WarmGlassBackground mobileFrame />
 
@@ -253,7 +253,7 @@ export default function GuestWelcomeScreen() {
         >
           <h1
             className="mb-4 text-[36px] font-semibold leading-none"
-            style={{ color: mode === "reset" || mode === "update-password" ? "white" : "#741c3b" }}
+            style={{ color: mode === "reset" || mode === "update-password" ? "white" : "#7C3020" }}
           >
             {mode === "reset"
               ? "Passwort"
@@ -270,7 +270,7 @@ export default function GuestWelcomeScreen() {
                 type="button"
                 onClick={() => switchMode("register")}
                 className={`h-10 rounded-[10px] text-[16px] font-medium text-white ${
-                  mode === "register" ? "bg-[#c03060]" : "bg-white/15"
+                  mode === "register" ? "bg-[#A8003C]" : "bg-white/15"
                 }`}
               >
                 Registrieren
@@ -279,7 +279,7 @@ export default function GuestWelcomeScreen() {
                 type="button"
                 onClick={() => switchMode("login")}
                 className={`h-10 rounded-[10px] text-[16px] font-medium text-white ${
-                  mode === "login" ? "bg-[#c03060]" : "bg-white/15"
+                  mode === "login" ? "bg-[#A8003C]" : "bg-white/15"
                 }`}
               >
                 Login
@@ -305,7 +305,7 @@ export default function GuestWelcomeScreen() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#c03060] font-medium text-white disabled:opacity-70"
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#A8003C] font-medium text-white disabled:opacity-70"
               >
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 Link senden
@@ -342,7 +342,7 @@ export default function GuestWelcomeScreen() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#c03060] font-medium text-white disabled:opacity-70"
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#A8003C] font-medium text-white disabled:opacity-70"
               >
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 Passwort speichern
@@ -393,7 +393,7 @@ export default function GuestWelcomeScreen() {
                           id="guest-privacy"
                           checked={privacyAccepted}
                           onCheckedChange={setPrivacyAccepted}
-                          className="mt-0.5 border-white/70 data-[state=checked]:border-[#c03060] data-[state=checked]:bg-[#c03060]"
+                          className="mt-0.5 border-white/70 data-[state=checked]:border-[#A8003C] data-[state=checked]:bg-[#A8003C]"
                         />
                         <label htmlFor="guest-privacy" className="text-xs leading-relaxed text-white/80">
                           Ich akzeptiere die{" "}
@@ -412,7 +412,7 @@ export default function GuestWelcomeScreen() {
                 <button
                   type="submit"
                   disabled={loading || googleLoading}
-                  className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#c03060] font-medium text-white disabled:opacity-70"
+                  className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#A8003C] font-medium text-white disabled:opacity-70"
                 >
                   {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                   {mode === "login" ? "Anmelden" : "Konto erstellen"}
@@ -494,7 +494,7 @@ function OnboardingScreen({ onContinue }) {
           type="button"
           onClick={onContinue}
           aria-label="Weiter"
-          className="absolute bottom-[7px] left-[161px] z-30 grid h-[54px] w-[52px] place-items-center rounded-full bg-[#c03060]/80 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/30 md:left-1/2 md:-translate-x-1/2"
+          className="absolute bottom-[7px] left-[161px] z-30 grid h-[54px] w-[52px] place-items-center rounded-full bg-[#A8003C]/80 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/30 md:left-1/2 md:-translate-x-1/2"
         >
           <FourToePaw className="h-[38px] w-[38px] text-white" />
         </button>
@@ -524,12 +524,12 @@ function FourToePaw({ className = "" }) {
 function WarmGlassBackground({ mobileFrame = false }) {
   return (
     <div className={`absolute inset-0 overflow-hidden ${mobileFrame ? "" : "hidden md:block"}`} aria-hidden="true">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(250,218,106,0.92)_0,rgba(250,218,106,0.45)_20%,transparent_46%),radial-gradient(circle_at_82%_8%,rgba(248,160,48,0.82)_0,rgba(248,160,48,0.34)_22%,transparent_49%),radial-gradient(circle_at_50%_96%,rgba(192,48,96,0.58)_0,rgba(232,88,32,0.3)_32%,transparent_62%),linear-gradient(145deg,#fff8f0_0%,#ffe6bf_47%,#f8a030_100%)]" />
-      <div className="absolute -left-20 top-16 h-72 w-72 rounded-full bg-[#fada6a]/45 blur-3xl md:h-[34rem] md:w-[34rem]" />
-      <div className="absolute -right-24 top-28 h-80 w-80 rounded-full bg-[#e85820]/35 blur-3xl md:h-[36rem] md:w-[36rem]" />
-      <div className="absolute bottom-[-8rem] left-1/2 h-96 w-[34rem] -translate-x-1/2 rounded-[50%] bg-[#c03060]/30 blur-3xl md:w-[54rem]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(249,192,48,0.92)_0,rgba(249,192,48,0.45)_20%,transparent_46%),radial-gradient(circle_at_82%_8%,rgba(240,112,48,0.82)_0,rgba(240,112,48,0.34)_22%,transparent_49%),radial-gradient(circle_at_50%_96%,rgba(168,0,60,0.58)_0,rgba(240,112,48,0.3)_32%,transparent_62%),linear-gradient(145deg,#FDF0E8_0%,#ffe6bf_47%,#F07030_100%)]" />
+      <div className="absolute -left-20 top-16 h-72 w-72 rounded-full bg-[#F9C030]/45 blur-3xl md:h-[34rem] md:w-[34rem]" />
+      <div className="absolute -right-24 top-28 h-80 w-80 rounded-full bg-[#F07030]/35 blur-3xl md:h-[36rem] md:w-[36rem]" />
+      <div className="absolute bottom-[-8rem] left-1/2 h-96 w-[34rem] -translate-x-1/2 rounded-[50%] bg-[#A8003C]/30 blur-3xl md:w-[54rem]" />
       <div className="absolute inset-x-[-8%] bottom-[12%] h-40 rotate-[-5deg] rounded-[50%] border-t border-white/35 bg-white/12 backdrop-blur-[2px]" />
-      <div className="absolute inset-x-[-10%] bottom-[20%] h-28 rotate-[4deg] rounded-[50%] border-t border-[#741c3b]/10" />
+      <div className="absolute inset-x-[-10%] bottom-[20%] h-28 rotate-[4deg] rounded-[50%] border-t border-[#7C3020]/10" />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.45)_0%,rgba(255,248,240,0.12)_42%,rgba(116,28,59,0.18)_100%)]" />
       <div className="absolute inset-0 opacity-[0.18] [background-image:linear-gradient(120deg,rgba(255,255,255,0.7)_1px,transparent_1px),linear-gradient(30deg,rgba(116,28,59,0.28)_1px,transparent_1px)] [background-size:92px_92px,130px_130px]" />
     </div>

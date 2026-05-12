@@ -45,7 +45,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
           attributionControl={false}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <Polyline positions={coordinates} color="#c03060" weight={4} />
+          <Polyline positions={coordinates} color="#A8003C" weight={4} />
         </MapContainer>
 
         <div className="absolute left-3 top-3 z-[1000] flex items-center gap-1 rounded-full border border-white/70 bg-white/82 px-3 py-1 text-xs font-medium text-slate-700 shadow-sm backdrop-blur-sm">

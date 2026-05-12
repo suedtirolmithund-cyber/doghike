@@ -274,7 +274,7 @@ export default function Profile() {
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-md w-full mx-4">
           <div className="doghike-glass-card p-8 text-center">
-            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border border-brand-100 bg-white/78 text-brand-400 shadow-[0_14px_35px_rgba(192,48,96,0.09)]">
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border border-brand-100 bg-white/78 text-brand-400 shadow-[0_14px_35px_rgba(168,0,60,0.09)]">
               <Dog className="h-9 w-9" />
             </div>
             <h2 className="text-2xl font-light text-slate-900 mb-2">Willkommen!</h2>
