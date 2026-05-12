@@ -446,35 +446,6 @@ export default function HikeDetail() {
               </div>
             </div>
           )}
-          {hike.distance_km && (
-            <div className="doghike-stat-chip">
-              <span className="text-base">{TOUR_ICONS.distance}</span>
-              <div>
-                <div className="text-sm font-bold text-slate-950 leading-tight">{hike.distance_km} km</div>
-                <div className="text-xs text-slate-400">Strecke</div>
-              </div>
-            </div>
-          )}
-          {hike.elevation_gain_m && (
-            <div className="doghike-stat-chip">
-              <span className="text-base">{TOUR_ICONS.elevation}</span>
-              <div>
-                <div className="text-sm font-bold text-slate-950 leading-tight">{hike.elevation_gain_m} m</div>
-                <div className="text-xs text-slate-400">Höhenmeter</div>
-              </div>
-            </div>
-          )}
-          {hike.duration_minutes && (
-            <div className="doghike-stat-chip">
-              <span className="text-base">{TOUR_ICONS.duration}</span>
-              <div>
-                <div className="text-sm font-bold text-slate-950 leading-tight">
-                  {formatDurationHours(hike.duration_minutes)}
-                </div>
-                <div className="text-xs text-slate-400">Gehzeit</div>
-              </div>
-            </div>
-          )}
           {hike.difficulty && (
             <div className="doghike-stat-chip border-brand-200 bg-brand-50/75">
               <span className="text-base">{TOUR_ICONS.human}</span>
