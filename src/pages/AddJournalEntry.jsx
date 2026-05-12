@@ -850,9 +850,9 @@ export default function AddJournalEntry() {
   const handlePhotoUpload = async (e) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
-    const oversized = files.filter((f) => f.size > 10 * 1024 * 1024);
+    const oversized = files.filter((f) => f.size > 15 * 1024 * 1024);
     if (oversized.length) {
-      toast.error(`${oversized.length} Foto${oversized.length > 1 ? "s" : ""} zu groß (max. 10 MB pro Foto)`);
+      toast.error(`${oversized.length} Foto${oversized.length > 1 ? "s" : ""} zu groß (max. 15 MB pro Foto)`);
       return;
     }
     setPhotoUploading(true);
