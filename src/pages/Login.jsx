@@ -8,8 +8,8 @@ import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle2 } from "lucide-react";
 
 const BG_IMAGE = "/log_in.jpg";
 
-const BROWN = "#c03060";
-const BROWN_DARK = "#741c3b";
+const BROWN = "#A8003C";
+const BROWN_DARK = "#7C3020";
 
 function mapAuthError(message) {
   const msg = String(message || "").toLowerCase();
@@ -429,7 +429,7 @@ export default function Login() {
                           id="privacy"
                           checked={privacyAccepted}
                           onCheckedChange={setPrivacyAccepted}
-                          className="mt-0.5 border-white/60 data-[state=checked]:bg-[#c03060] data-[state=checked]:border-[#c03060]"
+                          className="mt-0.5 border-white/60 data-[state=checked]:bg-[#A8003C] data-[state=checked]:border-[#A8003C]"
                         />
                         <label htmlFor="privacy" className="text-xs text-white/80 cursor-pointer leading-relaxed">
                           Ich akzeptiere die{" "}
@@ -517,7 +517,7 @@ function Feedback({ error, success }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
           className="flex items-start gap-2 p-3 rounded-xl text-sm"
-          style={{ background: "rgba(192,48,96,0.16)", color: "#fada6a" }}
+          style={{ background: "rgba(168,0,60,0.16)", color: "#F9C030" }}
         >
           <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
           <span>{error}</span>
@@ -529,7 +529,7 @@ function Feedback({ error, success }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
           className="flex items-start gap-2 p-3 rounded-xl text-sm"
-          style={{ background: "rgba(250,218,106,0.18)", color: "#fff8f0" }}
+          style={{ background: "rgba(249,192,48,0.18)", color: "#FDF0E8" }}
         >
           <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" />
           <span>{success}</span>

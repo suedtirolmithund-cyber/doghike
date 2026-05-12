@@ -4,30 +4,30 @@
 
 @layer base {
   :root {
-    --background: 32 100% 97%;
-    --foreground: 20 32% 18%;
-    --card: 32 100% 97%;
-    --card-foreground: 20 32% 18%;
-    --popover: 32 100% 97%;
-    --popover-foreground: 20 32% 18%;
-    --primary: 340 60% 47%;
+    --background: 23 84% 95%;
+    --foreground: 12 59% 31%;
+    --card: 0 0% 100%;
+    --card-foreground: 12 59% 31%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 12 59% 31%;
+    --primary: 339 100% 33%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 47 94% 70%;
-    --secondary-foreground: 20 42% 25%;
-    --muted: 32 100% 94%;
-    --muted-foreground: 210 18% 40%;
-    --accent: 34 93% 58%;
-    --accent-foreground: 20 32% 18%;
+    --secondary: 342 60% 58%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 23 84% 92%;
+    --muted-foreground: 36 71% 44%;
+    --accent: 20 86% 56%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 39 58% 80%;
-    --input: 39 58% 80%;
-    --ring: 340 60% 47%;
-    --chart-1: 340 60% 47%;
-    --chart-2: 17 81% 52%;
-    --chart-3: 34 93% 58%;
-    --chart-4: 47 94% 70%;
-    --chart-5: 32 100% 97%;
+    --border: 43 94% 58%;
+    --input: 43 94% 58%;
+    --ring: 339 100% 33%;
+    --chart-1: 339 100% 33%;
+    --chart-2: 342 60% 58%;
+    --chart-3: 20 86% 56%;
+    --chart-4: 43 94% 58%;
+    --chart-5: 36 71% 44%;
     --radius: 0.75rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -86,10 +86,10 @@
     @apply bg-background text-foreground;
     font-family: Roboto, ui-sans-serif, system-ui, sans-serif;
     background-image:
-      radial-gradient(circle at top left, rgba(250, 218, 106, 0.34), transparent 27rem),
-      radial-gradient(circle at top right, rgba(192, 48, 96, 0.13), transparent 24rem),
-      radial-gradient(circle at 20% 85%, rgba(248, 160, 48, 0.18), transparent 24rem),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 248, 240, 0.54));
+      radial-gradient(circle at top left, rgba(249, 192, 48, 0.34), transparent 27rem),
+      radial-gradient(circle at top right, rgba(168, 0, 60, 0.13), transparent 24rem),
+      radial-gradient(circle at 20% 85%, rgba(240, 112, 48, 0.18), transparent 24rem),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(253, 240, 232, 0.54));
     min-height: 100vh;
   }
 }

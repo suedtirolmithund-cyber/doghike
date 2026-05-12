@@ -772,20 +772,20 @@ export default function RoutePlanner() {
               </h3>
 
               <div>
-                <Label htmlFor="name">Name *</Label>
+                <Label htmlFor="name">Name der Tour *</Label>
                 <Input id="name" placeholder="z.B. Pragser Wildsee Rundweg"
                   value={routeData.name} onChange={(e) => setRouteData({ ...routeData, name: e.target.value })}
                   required className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="start_location">Startpunkt</Label>
+                <Label htmlFor="start_location">Startpunkt / Parkplatz</Label>
                 <Input id="start_location" placeholder="z.B. Parkplatz Pragser Wildsee"
                   value={routeData.start_location} onChange={(e) => setRouteData({ ...routeData, start_location: e.target.value })}
                   className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="description">Beschreibung</Label>
-                <Textarea id="description" placeholder="Beschreibe deine Route..."
+                <Label htmlFor="description">Beschreibung / Notizen</Label>
+                <Textarea id="description" placeholder="Notizen zu deiner Route..."
                   value={routeData.description} onChange={(e) => setRouteData({ ...routeData, description: e.target.value })}
                   rows={2} className="mt-1" />
               </div>

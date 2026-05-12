@@ -6,17 +6,19 @@ export default function StatsCard({ icon: Icon, label, value, unit, description,
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.5 }}
-      className="doghike-glass-card-hover p-5 md:p-6"
+      className="doghike-glass-card-hover p-4 md:p-5"
     >
-      <div className="flex items-center gap-3 mb-3">
-        <div className="rounded-xl bg-gradient-to-br from-[#fada6a] to-[#c03060] p-2.5 shadow-sm">
-          <Icon className="w-5 h-5 text-white" />
+      <div className="flex items-center gap-2.5">
+        <div className="rounded-xl bg-gradient-to-br from-[#fada6a] to-[#c03060] p-2 shadow-sm">
+          <Icon className="h-4 w-4 text-white md:h-5 md:w-5" />
         </div>
-        <span className="text-sm font-medium text-slate-500 uppercase tracking-wide">{label}</span>
-      </div>
-      <div className="flex items-baseline gap-1.5">
-        <span className="text-3xl font-light text-slate-900">{value}</span>
-        {unit && <span className="text-sm text-slate-400">{unit}</span>}
+        <div className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
+          <span className="text-2xl font-light leading-none text-slate-900 md:text-3xl">{value}</span>
+          <span className="truncate text-xs font-semibold uppercase tracking-[0.08em] text-slate-500 md:text-sm">
+            {label}
+          </span>
+          {unit && <span className="text-xs text-slate-400 md:text-sm">{unit}</span>}
+        </div>
       </div>
       {description && (
         <p className="mt-2 text-sm text-slate-500">{description}</p>
