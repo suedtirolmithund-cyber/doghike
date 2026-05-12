@@ -47,7 +47,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
             )}
 
             <div className="absolute bottom-4 left-4 right-4">
-              <h3 className="mb-1 text-xl font-semibold leading-tight text-white drop-shadow-sm">{hike.trail_name}</h3>
+              <h3 className="mb-1 text-base font-semibold leading-tight text-white drop-shadow-sm">{hike.trail_name}</h3>
               <div className="flex items-center gap-1.5 text-sm font-medium text-white/85">
                 <span>{TOUR_ICONS.location}</span>
                 <span>{hike.location || "Dolomites"}</span>
@@ -75,17 +75,17 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
           <div className="p-4">
             <div className="mb-3 flex flex-wrap items-center gap-1.5">
               {humanDifficultyLabel && (
-                <Badge className={`${getDifficultyBadgeClass(hike.difficulty)} border px-2.5 py-1 text-xs font-medium`}>
+                <Badge className={`${getDifficultyBadgeClass(hike.difficulty)} border px-2.5 py-1 text-[11px] font-semibold`}>
                   {TOUR_ICONS.human} {humanDifficultyLabel}
                 </Badge>
               )}
               {dogDifficultyLabel && (
-                <Badge className={`${getDifficultyBadgeClass(hike.dog_difficulty)} border px-2.5 py-1 text-xs font-medium`}>
+                <Badge className={`${getDifficultyBadgeClass(hike.dog_difficulty)} border px-2.5 py-1 text-[11px] font-semibold`}>
                   {TOUR_ICONS.dog} {dogDifficultyLabel}
                 </Badge>
               )}
               {hike.water_availability && (
-                <span className={`rounded-full border px-2.5 py-1 text-xs font-medium ${getWaterBadgeClass(hike.water_availability)}`}>
+                <span className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold ${getWaterBadgeClass(hike.water_availability)}`}>
                   <WaterIcon value={hike.water_availability} /> {getWaterLabel(hike.water_availability) ?? hike.water_availability}
                 </span>
               )}

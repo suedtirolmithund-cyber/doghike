@@ -110,6 +110,8 @@ export default function Dashboard() {
     return uniqueCountries.size;
   }, [hikes]);
 
+  const safeDogProfileCount = Number.isFinite(dogProfileCount) ? dogProfileCount : 0;
+
   const visibleHikes   = filteredHikes.slice(0, visibleCount);
   const hasMore        = visibleCount < filteredHikes.length;
   const hikesWithCoords = filteredHikes.filter((h) => h.latitude && h.longitude);
@@ -218,7 +220,7 @@ export default function Dashboard() {
           <StatsCard
             icon={Dog}
             label="Wanderbuddys"
-            value={dogProfileCount}
+            value={safeDogProfileCount}
             delay={0.16}
           />
         </div>

@@ -116,10 +116,18 @@ export async function getDogs(userId) {
 export async function getDogProfileCount() {
   const { count, error } = await supabase
     .from("dogs")
-    .select("*", { count: "exact", head: true });
+    .select("id", { count: "exact", head: true });
 
-  if (error) throw error;
-  return count ?? 0;
+  if (!error && typeof count === "number") {
+    return count;
+  }
+
+  const { data, error: fallbackError } = await supabase
+    .from("dogs")
+    .select("id");
+
+  if (fallbackError) throw fallbackError;
+  return Array.isArray(data) ? data.length : 0;
 }
 
 export async function createDog(userId, dogData) {

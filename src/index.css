@@ -141,11 +141,11 @@
   }
 
   .doghike-page-title {
-    @apply text-2xl font-bold text-slate-900 md:text-3xl;
+    @apply text-2xl font-bold text-slate-900;
   }
 
   .doghike-page-subtitle {
-    @apply mt-1 text-sm leading-5 text-slate-500 md:text-base;
+    @apply mt-1 text-sm font-normal leading-5 text-slate-500;
   }
 
   .doghike-section-header {
@@ -153,11 +153,11 @@
   }
 
   .doghike-section-title {
-    @apply text-xl font-semibold tracking-normal text-slate-900 md:text-2xl;
+    @apply text-xl font-semibold tracking-normal text-slate-900;
   }
 
   .doghike-section-subtitle {
-    @apply text-sm leading-5 text-slate-500;
+    @apply text-sm font-normal leading-5 text-slate-500;
   }
 
   .doghike-filter-panel {
@@ -166,7 +166,7 @@
   }
 
   .doghike-filter-label {
-    @apply mb-2 flex items-center gap-1.5 text-sm font-medium text-slate-700;
+    @apply mb-2 flex items-center gap-1.5 text-xs font-medium text-slate-700;
   }
 
   .doghike-card-grid {
@@ -174,7 +174,7 @@
   }
 
   .doghike-stat-chip {
-    @apply inline-flex items-center gap-2 rounded-full border border-brand-100/55 bg-brand-50/65 px-3 py-2 text-sm text-slate-700 shadow-sm backdrop-blur-sm;
+    @apply inline-flex items-center gap-2 rounded-full border border-brand-100/55 bg-brand-50/65 px-3 py-2 text-sm font-normal text-slate-700 shadow-sm backdrop-blur-sm;
   }
 
   .doghike-stat-chip-strong {
@@ -182,7 +182,7 @@
   }
 
   .doghike-icon-chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-brand-100/70 bg-brand-50/70 px-2.5 py-1 text-xs font-medium text-brand-400;
+    @apply inline-flex items-center gap-1.5 rounded-full border border-brand-100/70 bg-brand-50/70 px-2.5 py-1 text-[11px] font-semibold text-brand-400;
   }
 
   .doghike-empty-state {
@@ -203,6 +203,6 @@
   }
 
   .doghike-compact-action {
-    @apply h-9 rounded-xl px-3 text-sm;
+    @apply h-9 rounded-xl px-3 text-xs font-semibold;
   }
 }

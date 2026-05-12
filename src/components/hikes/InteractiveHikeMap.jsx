@@ -108,13 +108,13 @@ export default function InteractiveHikeMap({
 
       {stats.length > 0 && (
       <div className="px-1 pb-1 pt-3">
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2.5">
           {stats.map((item) => (
             <span
               key={item.label}
-              className="inline-flex items-center gap-1.5 rounded-full border border-brand-100 bg-brand-50/70 px-3 py-1.5 text-xs font-medium text-slate-700"
+              className="inline-flex items-center gap-2 rounded-full border border-brand-100 bg-brand-50/75 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm"
             >
-              <span className="text-sm leading-none">{item.icon}</span>
+              <span className="text-base leading-none">{item.icon}</span>
               {item.value}
             </span>
           ))}
