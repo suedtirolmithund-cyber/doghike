@@ -252,7 +252,15 @@ export default function HikeDetail() {
       ? `${hike.notes.slice(0, 220).trim()}...`
       : hike.notes
     : null;
-  const bottomStatsCount = [countryLabel, hike.date, hike.difficulty, hike.dog_difficulty].filter(Boolean).length;
+  const bottomStatsCount = [
+    hike.distance_km,
+    hike.elevation_gain_m,
+    hike.duration_minutes,
+    countryLabel,
+    hike.date,
+    hike.difficulty,
+    hike.dog_difficulty,
+  ].filter(Boolean).length;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
@@ -411,11 +419,6 @@ export default function HikeDetail() {
               routeCoordinates={hike.route_coordinates}
               trailName={hike.trail_name}
               location={hike.location}
-              stats={[
-                hike.distance_km && { label: "Strecke", icon: TOUR_ICONS.distance, value: `${hike.distance_km} km` },
-                hike.elevation_gain_m && { label: "Aufstieg", icon: TOUR_ICONS.elevation, value: `${hike.elevation_gain_m} Hm` },
-                hike.duration_minutes && { label: "Gehzeit", icon: TOUR_ICONS.duration, value: formatDurationHours(hike.duration_minutes) },
-              ].filter(Boolean)}
             />
           </motion.div>
         )}
@@ -428,6 +431,35 @@ export default function HikeDetail() {
           className="mb-10 grid gap-2"
           style={{ gridTemplateColumns: `repeat(${Math.max(bottomStatsCount, 1)}, minmax(0, 1fr))` }}
         >
+          {hike.distance_km && (
+            <div className="doghike-stat-chip w-full justify-center px-4 py-2.5">
+              <span className="text-base">{TOUR_ICONS.distance}</span>
+              <div>
+                <div className="text-sm font-bold text-slate-950 leading-tight">{hike.distance_km} km</div>
+                <div className="text-xs text-slate-400">Strecke</div>
+              </div>
+            </div>
+          )}
+          {hike.elevation_gain_m && (
+            <div className="doghike-stat-chip w-full justify-center px-4 py-2.5">
+              <span className="text-base">{TOUR_ICONS.elevation}</span>
+              <div>
+                <div className="text-sm font-bold text-slate-950 leading-tight">{hike.elevation_gain_m} Hm</div>
+                <div className="text-xs text-slate-400">Aufstieg</div>
+              </div>
+            </div>
+          )}
+          {hike.duration_minutes && (
+            <div className="doghike-stat-chip w-full justify-center px-4 py-2.5">
+              <span className="text-base">{TOUR_ICONS.duration}</span>
+              <div>
+                <div className="text-sm font-bold text-slate-950 leading-tight">
+                  {formatDurationHours(hike.duration_minutes)}
+                </div>
+                <div className="text-xs text-slate-400">Gehzeit</div>
+              </div>
+            </div>
+          )}
           {countryLabel && (
             <div className="doghike-stat-chip w-full justify-center px-4 py-2.5">
               <span className="text-base">{TOUR_ICONS.country}</span>
