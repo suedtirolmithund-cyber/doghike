@@ -138,31 +138,31 @@ export default function Dashboard() {
 
           <div className="mt-6 grid w-full max-w-[343px] gap-3">
             <Link to={createPageUrl("Hikes")}>
-              <Button size="lg" variant="outline" className="h-[46px] w-full rounded-[15px] border border-white bg-slate-900/50 text-[16px] font-semibold text-white shadow-[0_12px_24px_rgba(0,0,0,0.14)] hover:bg-slate-900/60 hover:text-white">
-                <Mountain className="h-[18px] w-[18px]" /> Alle Touren entdecken
+              <Button size="lg" variant="outline" className="h-[46px] w-full rounded-[15px] border border-[#fada6a]/90 bg-slate-950/45 text-[16px] font-semibold text-white shadow-[0_12px_26px_rgba(250,218,106,0.18)] hover:border-[#fada6a] hover:bg-slate-950/60 hover:text-white">
+                <Mountain className="h-[18px] w-[18px] text-[#fada6a]" /> Alle Touren entdecken
               </Button>
             </Link>
             <Link to={submitHikeUrl}>
-              <Button size="lg" variant="outline" className="h-[46px] w-full rounded-[15px] border border-white bg-slate-900/50 text-[16px] font-semibold text-white hover:bg-slate-900/60 hover:text-white">
-                <Plus className="h-[18px] w-[18px]" /> Tour einreichen
+              <Button size="lg" variant="outline" className="h-[46px] w-full rounded-[15px] border border-[#fada6a]/90 bg-slate-950/45 text-[16px] font-semibold text-white shadow-[0_12px_26px_rgba(250,218,106,0.18)] hover:border-[#fada6a] hover:bg-slate-950/60 hover:text-white">
+                <Plus className="h-[18px] w-[18px] text-[#fada6a]" /> Tour einreichen
               </Button>
             </Link>
             {!isAuthenticated && (
               <Link to={createPageUrl("Login")}>
-                <Button size="lg" variant="outline" className="h-[46px] w-full rounded-[15px] border border-white bg-slate-900/50 text-[16px] font-semibold text-white hover:bg-slate-900/60 hover:text-white">
-                  <UserPlus className="h-[18px] w-[18px]" /> Registrieren
+                  <Button size="lg" variant="outline" className="h-[46px] w-full rounded-[15px] border border-[#fada6a]/90 bg-slate-950/45 text-[16px] font-semibold text-white shadow-[0_12px_26px_rgba(250,218,106,0.18)] hover:border-[#fada6a] hover:bg-slate-950/60 hover:text-white">
+                    <UserPlus className="h-[18px] w-[18px] text-[#fada6a]" /> Registrieren
                 </Button>
               </Link>
             )}
           </div>
 
           <div className="relative mt-5 h-[52px] w-full max-w-[343px]">
-            <Search className="absolute left-[16px] top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-white/75" />
+            <Search className="absolute left-[16px] top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-[#fada6a]" />
             <Input
               placeholder="Tour oder Ort suchen..."
               value={searchQuery}
               onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE); }}
-              className="h-[52px] w-full rounded-[15px] border border-white bg-stone-800/20 pl-12 pr-4 text-[16px] text-white placeholder:text-white"
+              className="h-[52px] w-full rounded-[15px] border border-[#fada6a]/80 bg-slate-950/25 pl-12 pr-4 text-[16px] text-white shadow-[0_10px_26px_rgba(250,218,106,0.14)] placeholder:text-white"
             />
           </div>
         </div>
@@ -179,31 +179,31 @@ export default function Dashboard() {
             </p>
             <div className="absolute left-1/2 top-[281px] flex h-[46px] -translate-x-1/2 items-center justify-center gap-4">
               <Link to={createPageUrl("Hikes")}>
-                <Button size="lg" variant="outline" className="h-[46px] w-[224.19px] rounded-[15px] border border-white bg-slate-900/50 px-0 text-[16px] font-semibold leading-[19px] text-white shadow-[0_12px_24px_rgba(0,0,0,0.14)] hover:bg-slate-900/60 hover:text-white">
-                  <Mountain className="mr-0 h-[18px] w-[18px]" /> Alle Touren entdecken
+                <Button size="lg" variant="outline" className="h-[46px] w-[224.19px] rounded-[15px] border border-[#fada6a]/90 bg-slate-950/45 px-0 text-[16px] font-semibold leading-[19px] text-white shadow-[0_12px_26px_rgba(250,218,106,0.18)] hover:border-[#fada6a] hover:bg-slate-950/60 hover:text-white">
+                  <Mountain className="mr-0 h-[18px] w-[18px] text-[#fada6a]" /> Alle Touren entdecken
                 </Button>
               </Link>
               <Link to={submitHikeUrl}>
-                <Button size="lg" variant="outline" className="h-[46px] w-[177.56px] rounded-[15px] border border-white bg-slate-900/50 px-0 text-[16px] font-semibold leading-[19px] text-white hover:bg-slate-900/60 hover:text-white">
-                  <Plus className="mr-0 h-[18px] w-[18px]" /> Tour einreichen
+                <Button size="lg" variant="outline" className="h-[46px] w-[177.56px] rounded-[15px] border border-[#fada6a]/90 bg-slate-950/45 px-0 text-[16px] font-semibold leading-[19px] text-white shadow-[0_12px_26px_rgba(250,218,106,0.18)] hover:border-[#fada6a] hover:bg-slate-950/60 hover:text-white">
+                  <Plus className="mr-0 h-[18px] w-[18px] text-[#fada6a]" /> Tour einreichen
                 </Button>
               </Link>
               {!isAuthenticated && (
                 <Link to={createPageUrl("Login")}>
-                  <Button size="lg" variant="outline" className="h-[46px] w-[153.64px] rounded-[15px] border border-white bg-slate-900/50 px-0 text-[16px] font-semibold leading-[19px] text-white hover:bg-slate-900/60 hover:text-white">
-                    <UserPlus className="mr-0 h-[18px] w-[18px]" /> Registrieren
+                    <Button size="lg" variant="outline" className="h-[46px] w-[153.64px] rounded-[15px] border border-[#fada6a]/90 bg-slate-950/45 px-0 text-[16px] font-semibold leading-[19px] text-white shadow-[0_12px_26px_rgba(250,218,106,0.18)] hover:border-[#fada6a] hover:bg-slate-950/60 hover:text-white">
+                      <UserPlus className="mr-0 h-[18px] w-[18px] text-[#fada6a]" /> Registrieren
                   </Button>
                 </Link>
               )}
             </div>
 
             <div className="absolute left-1/2 top-[422px] h-[56px] w-[672px] -translate-x-1/2">
-              <Search className="absolute left-[16px] top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-white/75" />
+              <Search className="absolute left-[16px] top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-[#fada6a]" />
               <Input
                 placeholder="Tour oder Ort suchen..."
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE); }}
-                className="h-[56px] w-[672px] rounded-[15px] border border-white bg-stone-800/15 pl-12 pr-[18px] text-[20px] font-normal leading-[24px] text-white shadow-[0_8px_22px_rgba(41,37,36,0.12)] placeholder:text-white [text-shadow:0_4px_4px_rgba(0,0,0,0.25)]"
+                className="h-[56px] w-[672px] rounded-[15px] border border-[#fada6a]/80 bg-slate-950/25 pl-12 pr-[18px] text-[20px] font-normal leading-[24px] text-white shadow-[0_10px_28px_rgba(250,218,106,0.16)] placeholder:text-white [text-shadow:0_4px_4px_rgba(0,0,0,0.25)]"
               />
             </div>
           </motion.div>
@@ -303,7 +303,7 @@ export default function Dashboard() {
                 {searchQuery ? "Da ist noch nicht der richtige Weg dabei" : "Noch keine Touren"}
               </h3>
               <p className="mx-auto max-w-xs text-sm text-slate-500">
-                {searchQuery ? "?ndere die Suche ein wenig. Vielleicht wartet der passende Weg gleich daneben." : "Sobald Touren verfügbar sind, erscheinen sie hier."}
+                {searchQuery ? "Ändere die Suche ein wenig. Vielleicht wartet der passende Weg gleich daneben." : "Sobald Touren verfügbar sind, erscheinen sie hier."}
               </p>
               {searchQuery && (
                 <Button variant="outline" onClick={() => setSearchQuery("")} className="doghike-secondary-action mt-4">
