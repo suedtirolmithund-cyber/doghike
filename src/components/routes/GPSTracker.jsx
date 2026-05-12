@@ -318,7 +318,7 @@ export default function GPSTracker({ onSave }) {
           elevationGainRef.current += diff;
         }
       }
-      altitudesRef.current = [...previousAltitudes, altitude];
+      altitudesRef.current.push(altitude);
     }
   }, []);
 
@@ -346,6 +346,7 @@ export default function GPSTracker({ onSave }) {
       (error) => {
         console.error("GPS error:", error);
         toast.error("GPS findet dich gerade nicht. Prüfe die Freigabe.");
+        releaseWakeLock();
       },
       { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 },
     );
