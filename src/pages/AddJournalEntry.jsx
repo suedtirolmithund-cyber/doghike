@@ -28,7 +28,7 @@ import {
   getMissingSharedJournalFields,
 } from "@/lib/journalApi";
 import { getDogs } from "@/lib/profilesApi";
-import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
+import { getImageUploadErrorMessage, validateImageUpload } from "@/lib/uploadValidation";
 import { Link } from "react-router-dom";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 import {
@@ -850,9 +850,10 @@ export default function AddJournalEntry() {
   const handlePhotoUpload = async (e) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
-    const oversized = files.filter((f) => f.size > 15 * 1024 * 1024);
-    if (oversized.length) {
-      toast.error(`${oversized.length} Foto${oversized.length > 1 ? "s" : ""} zu groß (max. 15 MB pro Foto)`);
+    try {
+      files.forEach(validateImageUpload);
+    } catch (error) {
+      toast.error(getImageUploadErrorMessage(error));
       return;
     }
     setPhotoUploading(true);
