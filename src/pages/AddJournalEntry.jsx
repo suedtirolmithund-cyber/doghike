@@ -850,6 +850,11 @@ export default function AddJournalEntry() {
   const handlePhotoUpload = async (e) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
+    const oversized = files.filter((f) => f.size > 10 * 1024 * 1024);
+    if (oversized.length) {
+      toast.error(`${oversized.length} Foto${oversized.length > 1 ? "s" : ""} zu groÃŸ (max. 10 MB pro Foto)`);
+      return;
+    }
     setPhotoUploading(true);
     try {
       const urls = await Promise.all(files.map((f) => uploadJournalFile(user.id, f)));
@@ -893,6 +898,10 @@ export default function AddJournalEntry() {
   const handleGpxUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("GPX-Datei zu groÃŸ (max. 5 MB)");
+      return;
+    }
     setGpxUploading(true);
     try {
       const url = await uploadJournalFile(user.id, file);
@@ -1285,7 +1294,7 @@ export default function AddJournalEntry() {
               onChange={(v) => set("seasons", v)}
             />
             <p className="mt-2 text-xs text-slate-400">
-              Du kannst eine oder mehrere Jahreszeiten auswählen, zum Beispiel Frühling und Herbst. Bei privaten Einträgen optional. Für Einträge mit Freunden oder öffentlich bitte mindestens eine Jahreszeit auswählen.
+              Du kannst eine oder mehrere Jahreszeiten auswï¿½hlen, zum Beispiel Frï¿½hling und Herbst. Bei privaten Eintrï¿½gen optional. Fï¿½r Eintrï¿½ge mit Freunden oder ï¿½ffentlich bitte mindestens eine Jahreszeit auswï¿½hlen.
             </p>
           </section>
 
