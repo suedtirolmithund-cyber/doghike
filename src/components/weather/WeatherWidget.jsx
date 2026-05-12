@@ -3,6 +3,7 @@ import { Cloud, CloudRain, CloudSnow, Sun, Wind, Droplets, Loader2, CloudLightni
 import { motion } from "framer-motion";
 import { format, parseISO } from "date-fns";
 import { de } from "date-fns/locale";
+import PawLoadingTrail from "@/components/PawLoadingTrail";
 
 // WMO weather code → label + icon
 function wmoToWeather(code) {
@@ -44,9 +45,12 @@ export default function WeatherWidget({ location, latitude, longitude }) {
   if (loading) {
     return (
       <div className="bg-white rounded-2xl p-6 border border-brand-100/50">
-        <div className="flex items-center justify-center py-8 gap-2">
-          <Loader2 className="w-5 h-5 text-slate-400 animate-spin" />
-          <span className="text-slate-500 text-sm">Wetter wird geladen...</span>
+        <div className="py-8 text-center">
+          <div className="flex items-center justify-center gap-2">
+            <Loader2 className="w-5 h-5 text-slate-400 animate-spin" />
+            <span className="text-slate-500 text-sm">Wetter wird geladen...</span>
+          </div>
+          <PawLoadingTrail />
         </div>
       </div>
     );

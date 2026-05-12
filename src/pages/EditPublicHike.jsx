@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import PawLoadingTrail from "@/components/PawLoadingTrail";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 import { hoursInputToMinutes, minutesToHoursInput } from "@/lib/duration";
@@ -604,8 +605,9 @@ export default function EditPublicHike() {
                           className="h-32 w-full object-cover"
                         />
                       ) : (
-                        <div className="flex h-32 w-full items-center justify-center text-sm text-slate-400">
-                          Bild wird geladen...
+                        <div className="flex h-32 w-full flex-col items-center justify-center px-4 text-center text-sm text-slate-400">
+                          <span>Bild wird geladen...</span>
+                          <PawLoadingTrail className="mt-2" />
                         </div>
                       )}
                       <button

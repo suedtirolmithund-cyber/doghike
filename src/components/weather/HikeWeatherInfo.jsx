@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Cloud, Droplets, Wind, Sun, CloudRain, CloudSnow, CloudDrizzle, CloudLightning, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
+import PawLoadingTrail from "@/components/PawLoadingTrail";
 
 function wmoToWeather(code) {
   if (code === 0) return { label: "Sonnig", Icon: Sun };
@@ -37,9 +38,12 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
   if (isLoading) {
     return (
       <div className="rounded-2xl border border-brand-100/70 bg-white/70 p-4 shadow-sm backdrop-blur-sm">
-        <div className="flex items-center justify-center gap-2 text-brand-600">
-          <Loader2 className="h-4 w-4 animate-spin" />
-          <span className="text-xs">Wetterdaten werden geladen...</span>
+        <div className="text-center text-brand-600">
+          <div className="flex items-center justify-center gap-2">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <span className="text-xs">Wetterdaten werden geladen...</span>
+          </div>
+          <PawLoadingTrail />
         </div>
       </div>
     );

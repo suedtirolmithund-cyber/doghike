@@ -226,7 +226,7 @@ export default function Login() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45 }}
           className="relative z-10 mx-auto mt-10 w-full max-w-sm text-center sm:mt-14"
-          style={{ fontFamily: "Roboto, sans-serif" }}
+          style={{ fontFamily: "Nunito, sans-serif" }}
         >
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/85">
             Willkommen bei DogTrails
@@ -249,7 +249,7 @@ export default function Login() {
             className="text-4xl font-semibold mb-6"
             style={{
               color: mode === "reset" || mode === "update-password" ? "white" : BROWN_DARK,
-              fontFamily: "Roboto, sans-serif",
+              fontFamily: "Nunito, sans-serif",
             }}
           >
             {mode === "reset"
@@ -269,7 +269,7 @@ export default function Login() {
                 style={{
                   background: mode === "register" ? BROWN : "rgba(255,255,255,0.15)",
                   color: "white",
-                  fontFamily: "Roboto, sans-serif",
+                  fontFamily: "Nunito, sans-serif",
                 }}
               >
                 Registrieren
@@ -280,7 +280,7 @@ export default function Login() {
                 style={{
                   background: mode === "login" ? BROWN : "rgba(255,255,255,0.15)",
                   color: "white",
-                  fontFamily: "Roboto, sans-serif",
+                  fontFamily: "Nunito, sans-serif",
                 }}
               >
                 Login
@@ -299,7 +299,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full h-14 px-4 rounded-2xl text-base outline-none border-0"
-                style={{ background: "#f0f0f0", color: "#222", fontFamily: "Roboto, sans-serif" }}
+                style={{ background: "#f0f0f0", color: "#222", fontFamily: "Nunito, sans-serif" }}
                 autoComplete="email"
                 required
               />
@@ -308,7 +308,7 @@ export default function Login() {
                 type="submit"
                 disabled={loading}
                 className="w-full h-11 rounded-xl text-white font-medium flex items-center justify-center gap-2"
-                style={{ background: BROWN, fontFamily: "Roboto, sans-serif" }}
+                style={{ background: BROWN, fontFamily: "Nunito, sans-serif" }}
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                 Link senden
@@ -335,7 +335,7 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full h-14 px-4 pr-12 rounded-2xl text-base outline-none border-0"
-                  style={{ background: "#f0f0f0", color: "#222", fontFamily: "Roboto, sans-serif" }}
+                  style={{ background: "#f0f0f0", color: "#222", fontFamily: "Nunito, sans-serif" }}
                   autoComplete="new-password"
                   required
                 />
@@ -354,7 +354,7 @@ export default function Login() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full h-14 px-4 rounded-2xl text-base outline-none border-0"
-                style={{ background: "#f0f0f0", color: "#222", fontFamily: "Roboto, sans-serif" }}
+                style={{ background: "#f0f0f0", color: "#222", fontFamily: "Nunito, sans-serif" }}
                 autoComplete="new-password"
                 required
               />
@@ -363,7 +363,7 @@ export default function Login() {
                 type="submit"
                 disabled={loading}
                 className="w-full h-11 rounded-xl text-white font-medium flex items-center justify-center gap-2"
-                style={{ background: BROWN, fontFamily: "Roboto, sans-serif" }}
+                style={{ background: BROWN, fontFamily: "Nunito, sans-serif" }}
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                 Passwort speichern
@@ -380,7 +380,7 @@ export default function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full h-14 px-4 rounded-2xl text-base outline-none border-0"
-                  style={{ background: "#f0f0f0", color: "#222", fontFamily: "Roboto, sans-serif" }}
+                  style={{ background: "#f0f0f0", color: "#222", fontFamily: "Nunito, sans-serif" }}
                   autoComplete="email"
                   required
                 />
@@ -392,7 +392,7 @@ export default function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full h-14 px-4 pr-12 rounded-2xl text-base outline-none border-0"
-                    style={{ background: "#f0f0f0", color: "#222", fontFamily: "Roboto, sans-serif" }}
+                    style={{ background: "#f0f0f0", color: "#222", fontFamily: "Nunito, sans-serif" }}
                     autoComplete={mode === "login" ? "current-password" : "new-password"}
                     required
                   />
@@ -421,7 +421,7 @@ export default function Login() {
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         className="w-full h-14 px-4 rounded-2xl text-base outline-none border-0"
-                        style={{ background: "#f0f0f0", color: "#222", fontFamily: "Roboto, sans-serif" }}
+                        style={{ background: "#f0f0f0", color: "#222", fontFamily: "Nunito, sans-serif" }}
                         autoComplete="new-password"
                       />
                       <div className="flex items-start gap-3 px-1">
@@ -449,7 +449,7 @@ export default function Login() {
                   type="submit"
                   disabled={loading || googleLoading}
                   className="w-full h-11 rounded-xl text-white font-medium flex items-center justify-center gap-2"
-                  style={{ background: BROWN, fontFamily: "Roboto, sans-serif" }}
+                  style={{ background: BROWN, fontFamily: "Nunito, sans-serif" }}
                 >
                   {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                   {mode === "login" ? "Anmelden" : "Konto erstellen"}
@@ -467,7 +467,7 @@ export default function Login() {
                 onClick={handleGoogle}
                 disabled={googleLoading || loading}
                 className="w-full h-11 rounded-xl font-medium flex items-center justify-center gap-2 text-sm"
-                style={{ background: "rgba(255,255,255,0.15)", color: "white", fontFamily: "Roboto, sans-serif" }}
+                style={{ background: "rgba(255,255,255,0.15)", color: "white", fontFamily: "Nunito, sans-serif" }}
               >
                 {googleLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -487,7 +487,7 @@ export default function Login() {
                   type="button"
                   onClick={() => switchMode("reset")}
                   className="w-full text-center text-sm text-white/60 hover:text-white/90 mt-2"
-                  style={{ fontFamily: "Roboto, sans-serif" }}
+                  style={{ fontFamily: "Nunito, sans-serif" }}
                 >
                   Passwort oder E-Mail vergessen?
                 </button>
@@ -497,7 +497,7 @@ export default function Login() {
         </div>
 
         <div className="text-center pb-4 px-4">
-          <p className="text-xs text-white/50" style={{ fontFamily: "Roboto, sans-serif" }}>
+          <p className="text-xs text-white/50" style={{ fontFamily: "Nunito, sans-serif" }}>
             <Link to={createPageUrl("Datenschutz")} className="hover:text-white/80">Datenschutz</Link>
             {" · "}
             <Link to={createPageUrl("Legal")} className="hover:text-white/80">Nutzungsbedingungen</Link>

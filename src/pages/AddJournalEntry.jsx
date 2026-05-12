@@ -30,6 +30,7 @@ import {
 import { getDogs } from "@/lib/profilesApi";
 import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
 import { Link } from "react-router-dom";
+import PawLoadingTrail from "@/components/PawLoadingTrail";
 import {
   DIFFICULTY_APP_EXPLANATIONS,
   DIFFICULTY_GUIDE_NOTE,
@@ -1229,7 +1230,13 @@ export default function AddJournalEntry() {
             <label className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-brand-100 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
               <input type="file" accept="image/*" multiple onChange={handlePhotoUpload} className="hidden" disabled={photoUploading} />
               {photoUploading ? (
-                <><Loader2 className="w-6 h-6 text-slate-400 animate-spin" /><span className="text-sm text-slate-400">Lade hoch...</span></>
+                <div className="flex flex-col items-center">
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="w-6 h-6 text-slate-400 animate-spin" />
+                    <span className="text-sm text-slate-400">Lade hoch...</span>
+                  </div>
+                  <PawLoadingTrail className="mt-2" />
+                </div>
               ) : (
                 <><Upload className="w-6 h-6 text-slate-400" /><span className="text-sm text-slate-500">Fotos hochladen</span><span className="text-xs text-slate-400">JPG, PNG, WEBP</span></>
               )}
@@ -1254,7 +1261,13 @@ export default function AddJournalEntry() {
               <label className="flex items-center gap-3 p-4 border-2 border-dashed border-brand-100 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
                 <input type="file" accept=".gpx" onChange={handleGpxUpload} className="hidden" disabled={gpxUploading} />
                 {gpxUploading ? (
-                  <><Loader2 className="w-5 h-5 text-slate-400 animate-spin" /><span className="text-sm text-slate-400">Lade hoch...</span></>
+                  <div className="flex flex-col items-center">
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="w-5 h-5 text-slate-400 animate-spin" />
+                      <span className="text-sm text-slate-400">Lade hoch...</span>
+                    </div>
+                    <PawLoadingTrail className="mt-2" />
+                  </div>
                 ) : (
                   <><Upload className="w-5 h-5 text-slate-400" /><span className="text-sm text-slate-500">.gpx Datei hochladen</span></>
                 )}

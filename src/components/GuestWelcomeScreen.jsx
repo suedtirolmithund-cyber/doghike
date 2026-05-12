@@ -482,7 +482,7 @@ function OnboardingScreen({ onContinue }) {
         <div className="absolute inset-0 bg-[linear-gradient(0deg,#000000_-31.83%,rgba(0,0,0,0)_43.72%)]" />
 
         <div className="absolute bottom-[72px] left-4 h-[216px] w-[343px] opacity-80 md:left-1/2 md:-translate-x-1/2">
-          <h1 className="absolute left-0 top-0 h-[113px] w-[343px] text-center font-['Roboto',sans-serif] text-[40px] font-normal leading-[47px] text-white">
+          <h1 className="absolute left-0 top-0 h-[113px] w-[343px] text-center font-['Nunito',sans-serif] text-[40px] font-normal leading-[47px] text-white">
             Hundefreundliche Wanderungen
           </h1>
           <p className="absolute left-0 top-[131px] h-[85px] w-[343px] text-center text-[25px] font-medium leading-[29px] text-white">
