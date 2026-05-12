@@ -112,8 +112,9 @@ async function calcBrouterRoute(waypoints, profile = "hiking-mountain") {
 }
 
 // ── GraphHopper fallback ───────────────────────────────────────
-const GH_API_KEY = import.meta.env.VITE_GRAPHHOPPER_KEY || "LijBPDQGfu7Imiq1X1Jw83a5787IYJB2mEQhHe8A7";
+const GH_API_KEY = import.meta.env.VITE_GRAPHHOPPER_KEY || "";
 async function calcGraphHopperRoute(waypoints, profile = "hike") {
+  if (!GH_API_KEY) throw new Error("GraphHopper nicht konfiguriert");
   const points = waypoints.map((w) => [w.lng, w.lat]);
   const res = await fetch(
     `https://graphhopper.com/api/1/route?key=${GH_API_KEY}&profile=${profile}&points_encoded=false&elevation=true`,
@@ -148,6 +149,9 @@ async function calcRoute(waypoints, mode = "hike") {
     return await calcBrouterRoute(waypoints, brouterProfile);
   } catch (err) {
     console.warn("BRouter fehlgeschlagen, fallback auf GraphHopper:", err.message);
+    if (!GH_API_KEY) {
+      throw err;
+    }
     try {
       return await calcGraphHopperRoute(waypoints, mode === "foot" ? "foot" : "hike");
     } catch (err2) {

@@ -8,7 +8,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { formatDurationHours } from "@/lib/duration";
 
-const GH_API_KEY = import.meta.env.VITE_GRAPHHOPPER_KEY || "LijBPDQGfu7Imiq1X1Jw83a5787IYJB2mEQhHe8A7";
+const GH_API_KEY = import.meta.env.VITE_GRAPHHOPPER_KEY || "";
 
 // Fix Leaflet default marker icon
 delete L.Icon.Default.prototype._getIconUrl;
@@ -169,6 +169,11 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
 
     setIsCalculating(true);
     try {
+      if (!GH_API_KEY) {
+        await fetchRouteOSRM(points);
+        return;
+      }
+
       // Build GraphHopper request - foot_hiking prefers designated hiking trails
       // but also uses footpaths and side trails
       const pointsParam = points.map(p => `point=${p[0]},${p[1]}`).join('&');
