@@ -4,6 +4,15 @@
 
 @layer base {
   :root {
+    --color-primary: #A8003C;
+    --color-secondary: #D4547A;
+    --color-accent: #F07030;
+    --color-gold: #F9C030;
+    --color-background: #FDF0E8;
+    --color-surface: #FFFFFF;
+    --color-text: #7C3020;
+    --color-muted: #C07820;
+    --color-sos: #A8003C;
     --background: 23 84% 95%;
     --foreground: 12 59% 31%;
     --card: 0 0% 100%;
@@ -85,6 +94,8 @@
   body {
     @apply bg-background text-foreground;
     font-family: Roboto, ui-sans-serif, system-ui, sans-serif;
+    background-color: #FDF0E8;
+    color: #7C3020;
     background-image:
       radial-gradient(circle at top left, rgba(249, 192, 48, 0.34), transparent 27rem),
       radial-gradient(circle at top right, rgba(168, 0, 60, 0.13), transparent 24rem),
