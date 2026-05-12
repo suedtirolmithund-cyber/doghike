@@ -402,7 +402,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       <div className="space-y-4 rounded-2xl border border-brand-100/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(168,0,60,0.08)] backdrop-blur-sm md:p-6">
         <div className="flex items-center justify-between">
           <div>
-            <Label className="text-lg">📍 Ausgangspunkt *</Label>
+            <Label className="text-lg">{TOUR_ICONS.location} Ausgangspunkt *</Label>
             <p className="text-sm text-slate-500 mt-1">
               Wähle den Startpunkt deiner Wanderung auf der Karte aus
             </p>
@@ -427,7 +427,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               ✓ Ausgangspunkt gesetzt
             </p>
             <p className="text-xs text-slate-600">
-              {formData.location && `📌 ${formData.location} • `}
+              {formData.location && `${TOUR_ICONS.location} ${formData.location} • `}
               {formData.latitude.toFixed(5)}, {formData.longitude.toFixed(5)}
             </p>
           </div>
@@ -466,7 +466,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       <div className="space-y-4 rounded-2xl border border-brand-100/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(168,0,60,0.08)] backdrop-blur-sm md:p-6">
         <div className="flex items-center justify-between">
           <div>
-            <Label className="text-lg">🗺️ Routenverlauf (optional)</Label>
+            <Label className="text-lg">{TOUR_ICONS.map} Routenverlauf (optional)</Label>
             <p className="text-sm text-slate-500 mt-1">
               Zeichne die komplette Wanderroute oder lade eine GPX-Datei hoch
             </p>
@@ -682,7 +682,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
           />
 
       <div className="space-y-2">
-        <Label htmlFor="parking_info">🅿️ Ausgangspunkt & Parken (optional)</Label>
+        <Label htmlFor="parking_info">{TOUR_ICONS.parking} Ausgangspunkt & Parken (optional)</Label>
         <Textarea
           id="parking_info"
           value={formData.parking_info}
@@ -693,7 +693,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="restaurant_info">🍽️ Einkehrmöglichkeiten (optional)</Label>
+        <Label htmlFor="restaurant_info">{TOUR_ICONS.restaurant} Einkehrmöglichkeiten (optional)</Label>
         <Textarea
           id="restaurant_info"
           value={formData.restaurant_info}
@@ -704,7 +704,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="hazard_notes">⚠️ Achtung - Gefahrenstellen (optional)</Label>
+        <Label htmlFor="hazard_notes">{TOUR_ICONS.hazard} Achtung - Gefahrenstellen (optional)</Label>
         <Textarea
           id="hazard_notes"
           value={formData.hazard_notes}
@@ -754,7 +754,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         </p>
         {hike && hike.visibility === "public" && formData.visibility !== "public" && (
           <p className="text-xs text-brand-400 font-medium mt-2">
-            ⚠️ Achtung: Du änderst die Sichtbarkeit von öffentlich - die Tour wird dann aus der öffentlichen Liste entfernt!
+            {TOUR_ICONS.hazard} Achtung: Du änderst die Sichtbarkeit von öffentlich - die Tour wird dann aus der öffentlichen Liste entfernt!
           </p>
         )}
       </div>

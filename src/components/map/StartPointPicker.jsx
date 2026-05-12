@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { TOUR_ICONS } from "@/lib/difficultyConfig";
 
 const startPointIcon = L.divIcon({
   html: `
@@ -16,7 +17,7 @@ const startPointIcon = L.divIcon({
       font-size: 20px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
       border: 3px solid white;
-    ">📍</div>
+    ">${TOUR_ICONS.location}</div>
   `,
   className: 'start-point-marker',
   iconSize: [36, 36],
@@ -97,7 +98,7 @@ export default function StartPointPicker({ latitude, longitude, onSelect }) {
       
       <div className="absolute top-4 left-4 right-4 bg-white/95 backdrop-blur-sm rounded-lg p-3 shadow-lg z-[1000] pointer-events-none">
         <p className="text-sm text-slate-700">
-          📍 Klicke auf die Karte, um den Ausgangspunkt zu setzen
+          {TOUR_ICONS.location} Klicke auf die Karte, um den Ausgangspunkt zu setzen
         </p>
       </div>
 

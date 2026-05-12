@@ -5,6 +5,7 @@ import { Undo, Trash2, Save, Loader2 } from "lucide-react";
 import RouteElevationProfile from "./RouteElevationProfile";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { TOUR_ICONS } from "@/lib/difficultyConfig";
 
 // Fix Leaflet default marker icon
 delete L.Icon.Default.prototype._getIconUrl;
@@ -122,7 +123,7 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
   return (
     <div className="space-y-3 md:space-y-4">
         <div className="doghike-soft-panel p-3 md:p-4 text-xs md:text-sm text-slate-700">
-        <p className="font-medium mb-2">📍 So funktioniert's:</p>
+        <p className="font-medium mb-2">{TOUR_ICONS.location} So funktioniert's:</p>
         <ol className="list-decimal pl-4 md:pl-5 space-y-1">
           <li>Klicke auf die Karte, um Wegpunkte zu setzen</li>
           <li>Die Route folgt automatisch Wanderwegen</li>

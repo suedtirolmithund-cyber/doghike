@@ -7,6 +7,7 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import L from "leaflet";
 import "leaflet.markercluster";
 import { formatDurationHours } from "@/lib/duration";
+import { TOUR_ICONS } from "@/lib/difficultyConfig";
 
 const seasonConfig = {
   spring: { color: "#ec9cf4", label: "Frühling" },
@@ -65,7 +66,7 @@ function createGroupedIcon({ color, photoUrl, count }) {
           <img
             src="${photoUrl}"
             style="width:100%;height:100%;object-fit:cover;"
-            onerror="this.parentElement.innerHTML='🐕'"
+            onerror="this.parentElement.innerHTML='${TOUR_ICONS.dog}'"
           />
         </div>
         ${count > 1 ? `
@@ -182,12 +183,12 @@ function buildHikePopupItem(hike, isGrouped) {
   const imageHtml = hike.photos?.[0]
     ? `<img src="${hike.photos[0]}" alt="${hike.trail_name}"
          class="hike-popup-image" />`
-    : `<div style="width:60px;height:60px;border-radius:8px;background:#f5f5f4;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🐾</div>`;
+    : `<div style="width:60px;height:60px;border-radius:8px;background:#f5f5f4;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${TOUR_ICONS.dog}</div>`;
 
   const stats = [
-    hike.distance_km ? `📏 ${hike.distance_km} km` : null,
-    hike.elevation_gain_m ? `⛰️ ${hike.elevation_gain_m} Hm` : null,
-    hike.duration_minutes ? `⏱️ ${formatDurationHours(hike.duration_minutes)}` : null,
+    hike.distance_km ? `${TOUR_ICONS.distance} ${hike.distance_km} km` : null,
+    hike.elevation_gain_m ? `${TOUR_ICONS.elevation} ${hike.elevation_gain_m} Hm` : null,
+    hike.duration_minutes ? `${TOUR_ICONS.duration} ${formatDurationHours(hike.duration_minutes)}` : null,
   ]
     .filter(Boolean)
     .join(" · ");

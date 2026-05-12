@@ -247,9 +247,9 @@ export default function GPXUploader({ onSave }) {
           </div>
 
           <div className="bg-brand-50/70 rounded-lg p-3 text-xs text-slate-600 flex flex-wrap gap-4">
-            <span>⬇️ Abstieg: <strong>{gpxData.elevation_loss_m} m</strong></span>
+            <span>{TOUR_ICONS.elevation} Abstieg: <strong>{gpxData.elevation_loss_m} m</strong></span>
             {gpxData.min_elevation !== Infinity && (
-              <span>🏔️ Min. Höhe: <strong>{Math.round(gpxData.min_elevation)} m</strong></span>
+              <span>{TOUR_ICONS.elevation} Min. Höhe: <strong>{Math.round(gpxData.min_elevation)} m</strong></span>
             )}
             <span className="text-slate-400 ml-auto flex items-center gap-1">
               <Zap className="w-3 h-3" /> Dauer nach Naismith-Formel geschätzt

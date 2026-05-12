@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import ExpandableText from "@/components/ExpandableText";
 import WaterIcon from "@/components/icons/WaterIcon";
-import { TOUR_ICONS, getDifficultyBadgeClass, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
+import { TOUR_ICONS, getDifficultyBadgeClass, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 
 export default function HikeCard({ hike, dogs = [], index = 0 }) {
@@ -15,6 +15,15 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
   const detailId = hikeSource === "sheets" && hike._public_hike_id ? hike.route_id || String(hike._public_hike_id) : hike.id;
   const dogDifficultyLabel = getDifficultyLabel(hike.dog_difficulty);
   const humanDifficultyLabel = getDifficultyLabel(hike.difficulty);
+  const previewIcon = hike.season
+    ? getSeasonIcon(hike.season)
+    : hike.water_availability
+      ? getWaterIcon(hike.water_availability)
+      : humanDifficultyLabel
+        ? TOUR_ICONS.human
+        : dogDifficultyLabel
+          ? TOUR_ICONS.dog
+          : null;
 
   return (
     <motion.div
@@ -40,9 +49,9 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               </span>
             )}
 
-            {hike.season && (
+            {previewIcon && (
               <span className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/74 text-xl shadow-sm backdrop-blur-sm">
-                {getSeasonIcon(hike.season)}
+                {previewIcon}
               </span>
             )}
 

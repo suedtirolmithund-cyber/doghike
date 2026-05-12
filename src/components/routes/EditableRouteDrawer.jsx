@@ -7,6 +7,7 @@ import RouteElevationProfile from "./RouteElevationProfile";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { formatDurationHours } from "@/lib/duration";
+import { TOUR_ICONS } from "@/lib/difficultyConfig";
 
 const GH_API_KEY = import.meta.env.VITE_GRAPHHOPPER_KEY || "";
 
@@ -357,7 +358,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
         <div className="doghike-soft-panel p-3 md:p-4">
         <div className="flex items-start justify-between mb-2">
           <div>
-            <p className="font-medium text-xs md:text-sm text-slate-900 mb-1">📍 Routenplaner</p>
+            <p className="font-medium text-xs md:text-sm text-slate-900 mb-1">{TOUR_ICONS.location} Routenplaner</p>
             <p className="text-xs text-slate-600">
               {isEditing ? 'Ziehe Wegpunkte um sie zu verschieben' : 'Klicke auf die Karte um Wegpunkte zu setzen'}
             </p>
@@ -402,7 +403,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
             {waypoints.length >= 2 && routeDurationMin > 0 && (
       <div className="rounded-lg border border-brand-100 bg-white/70 px-3 py-2 flex flex-wrap gap-3 items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="text-lg">⏱️</span>
+                  <span className="text-lg">{TOUR_ICONS.duration}</span>
                   <div>
                     <p className="text-xs text-slate-500 leading-none">Geschätzte Gehzeit</p>
                     <p className="font-bold text-slate-900 text-sm md:text-base">
@@ -412,7 +413,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
                 </div>
                 {routeElevationGain > 0 && (
                   <div className="flex items-center gap-2">
-                    <span className="text-lg">⛰️</span>
+                    <span className="text-lg">{TOUR_ICONS.elevation}</span>
                     <div>
                       <p className="text-xs text-slate-500 leading-none">Höhenmeter</p>
         <p className="font-bold text-slate-900 text-sm md:text-base">+{routeElevationGain} m</p>
