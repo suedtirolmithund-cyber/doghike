@@ -252,6 +252,7 @@ export default function HikeDetail() {
       ? `${hike.notes.slice(0, 220).trim()}...`
       : hike.notes
     : null;
+  const bottomStatsCount = [countryLabel, hike.date, hike.difficulty, hike.dog_difficulty].filter(Boolean).length;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
@@ -424,10 +425,11 @@ export default function HikeDetail() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="mb-10 flex flex-wrap gap-2"
+          className="mb-10 grid gap-2"
+          style={{ gridTemplateColumns: `repeat(${Math.max(bottomStatsCount, 1)}, minmax(0, 1fr))` }}
         >
           {countryLabel && (
-            <div className="doghike-stat-chip">
+            <div className="doghike-stat-chip w-full justify-center px-4 py-2.5">
               <span className="text-base">{TOUR_ICONS.country}</span>
               <div>
                 <div className="text-sm font-bold text-slate-950 leading-tight">{countryLabel}</div>
@@ -436,7 +438,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.date && (
-            <div className="doghike-stat-chip">
+            <div className="doghike-stat-chip w-full justify-center px-4 py-2.5">
               <span className="text-base">{TOUR_ICONS.date}</span>
               <div>
                 <div className="text-sm font-bold text-slate-950 leading-tight">
@@ -447,7 +449,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.difficulty && (
-            <div className="doghike-stat-chip border-brand-200 bg-brand-50/75">
+            <div className="doghike-stat-chip w-full justify-center border-brand-200 bg-brand-50/75 px-4 py-2.5">
               <span className="text-base">{TOUR_ICONS.human}</span>
               <div>
                 <div className="flex gap-0.5 mb-0.5">
@@ -460,7 +462,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.dog_difficulty && (
-            <div className="doghike-stat-chip border-brand-200 bg-brand-50/75">
+            <div className="doghike-stat-chip w-full justify-center border-brand-200 bg-brand-50/75 px-4 py-2.5">
               <span className="text-base">{TOUR_ICONS.dog}</span>
               <div>
                 <div className="flex gap-0.5 mb-0.5">
