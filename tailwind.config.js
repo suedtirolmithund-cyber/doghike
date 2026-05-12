@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Nunito', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['Nunito', 'sans-serif'],
       },
   		borderRadius: {
   			lg: 'var(--radius)',
