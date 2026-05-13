@@ -1264,34 +1264,36 @@ export default function AddJournalEntry() {
             <BonePicker label="Schwierigkeit (Hund)" value={form.dog_difficulty} onChange={(v) => set("dog_difficulty", v)} />
 
             <div>
-              <div className="mb-2 flex items-center gap-1.5">
-                <Label className="mb-0 block text-sm text-slate-600">Hinweise für Hunde (optional)</Label>
-                <GrazingAnimalsInfoDialog />
-                <MuzzleInfoDialog />
-              </div>
+              <Label className="mb-2 block text-sm text-slate-600">Hinweise für Hunde (optional)</Label>
               <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={() => toggleDogHint("grazing_animals")}
-                  className={`rounded-full border px-3 py-2 text-sm transition-all ${
-                    form.grazing_animals
-                      ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
-                      : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
-                  }`}
-                >
-                  🐄 Weidetiere
-                </button>
-                <button
-                  type="button"
-                  onClick={() => toggleDogHint("muzzle_recommended")}
-                  className={`rounded-full border px-3 py-2 text-sm transition-all ${
-                    form.muzzle_recommended
-                      ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
-                      : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
-                  }`}
-                >
-                  🦮 Maulkorb
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => toggleDogHint("grazing_animals")}
+                    className={`rounded-full border px-3 py-2 text-sm transition-all ${
+                      form.grazing_animals
+                        ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
+                        : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
+                    }`}
+                  >
+                    🐄 Weidetiere
+                  </button>
+                  <GrazingAnimalsInfoDialog />
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => toggleDogHint("muzzle_recommended")}
+                    className={`rounded-full border px-3 py-2 text-sm transition-all ${
+                      form.muzzle_recommended
+                        ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
+                        : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
+                    }`}
+                  >
+                    🦮 Maulkorb
+                  </button>
+                  <MuzzleInfoDialog />
+                </div>
               </div>
               <p className="mt-2 text-xs text-slate-400">
                 Du kannst keinen, einen oder beide Hinweise auswählen. Wenn nichts markiert ist, werden sie im Eintrag nicht angezeigt.
