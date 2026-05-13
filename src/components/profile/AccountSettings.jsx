@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { User, Mail, Trash2, AlertTriangle, Shield, ExternalLink } from "lucide-react";
+import { User, Mail, Trash2, AlertTriangle, Shield, ExternalLink, MessageCircle, Bug } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -92,6 +92,31 @@ export default function AccountSettings({ user }) {
               <Button variant="outline" size="sm" className="text-slate-700">
                 <Mail className="w-3 h-3 mr-2" />
                 Datenauskunft anfragen
+              </Button>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div className="doghike-glass-card p-5">
+        <h3 className="text-base font-semibold text-slate-900 mb-3 flex items-center gap-2">
+          <MessageCircle className="w-4 h-4" /> Feedback & Fehler melden
+        </h3>
+        <div className="space-y-3 text-sm text-slate-600">
+          <p>
+            Wenn dir etwas auffällt oder du eine Idee für DogTrails hast, kannst du uns hier direkt schreiben.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <Link to={createPageUrl("Support")}>
+              <Button variant="outline" size="sm" className="text-slate-700">
+                <Bug className="w-3 h-3 mr-2" />
+                Formular öffnen
+              </Button>
+            </Link>
+            <a href={`mailto:${SUPPORT_EMAIL}?subject=Feedback oder Fehler melden`}>
+              <Button variant="outline" size="sm" className="text-slate-700">
+                <Mail className="w-3 h-3 mr-2" />
+                Direkt per E-Mail
               </Button>
             </a>
           </div>
