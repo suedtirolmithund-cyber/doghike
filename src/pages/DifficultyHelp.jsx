@@ -1,10 +1,11 @@
-import { Mountain, PawPrint } from "lucide-react";
+import { Mountain } from "lucide-react";
 import { useState } from "react";
 import {
   DIFFICULTY_APP_EXPLANATIONS,
   DIFFICULTY_GUIDE_NOTE,
   DOG_DIFFICULTY_GUIDE,
   HUMAN_DIFFICULTY_GUIDE,
+  TOUR_ICONS,
 } from "@/lib/difficultyConfig";
 
 export default function DifficultyHelp() {
@@ -48,8 +49,8 @@ export default function DifficultyHelp() {
               activeTab === "human" ? "bg-brand-400 text-white shadow" : "text-slate-600 hover:bg-brand-50/50"
             }`}
           >
-            <Mountain className="h-4 w-4" />
-            Für Menschen
+            <span className="text-sm leading-none">{TOUR_ICONS.human}</span>
+            Mensch
           </button>
           <button
             onClick={() => setActiveTab("dog")}
@@ -57,8 +58,8 @@ export default function DifficultyHelp() {
               activeTab === "dog" ? "bg-brand-400 text-white shadow" : "text-slate-600 hover:bg-brand-50/50"
             }`}
           >
-            <PawPrint className="h-4 w-4" />
-            Für Hunde
+            <span className="text-sm leading-none">{TOUR_ICONS.dog}</span>
+            Hund
           </button>
         </div>
 

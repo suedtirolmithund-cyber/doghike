@@ -1,7 +1,7 @@
 import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { CircleHelp, Droplets, Mountain, PawPrint, RotateCcw, Search } from "lucide-react";
+import { CircleHelp, Mountain, PawPrint, RotateCcw, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -100,7 +100,7 @@ function WaterInfoDialog() {
       <DialogContent className="grid-rows-[auto,minmax(0,1fr)] max-h-[85vh] overflow-hidden border-white/80 bg-white/95 p-0 sm:max-w-2xl">
         <DialogHeader className="border-b border-brand-100/80 px-6 pb-3 pt-6">
           <DialogTitle className="flex items-center gap-2 text-left text-slate-800">
-            <Droplets className="h-4 w-4 text-brand-500" />
+            <WaterIcon value="little" className="text-base text-brand-500" />
             Wasser unterwegs
           </DialogTitle>
           <DialogDescription className="text-left text-slate-500">

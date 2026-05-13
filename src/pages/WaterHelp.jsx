@@ -1,4 +1,3 @@
-import { Droplets } from "lucide-react";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { WATER_APP_EXPLANATION, WATER_GUIDE, WATER_GUIDE_NOTE } from "@/lib/difficultyConfig";
 
@@ -8,13 +7,27 @@ export default function WaterHelp() {
       <div className="mx-auto max-w-2xl px-4 py-8">
         <div className="doghike-page-header justify-center text-center">
           <div className="doghike-page-icon">
-            <Droplets className="h-5 w-5" />
+            <WaterIcon value="little" className="text-lg" />
           </div>
           <div>
             <h1 className="doghike-page-title">Wasser unterwegs</h1>
             <p className="doghike-page-subtitle mx-auto max-w-md">
               Einheitliche Skala für die Wasserverfügbarkeit auf der Route.
             </p>
+          </div>
+        </div>
+
+        <div className="mb-6 rounded-3xl border border-brand-100/80 bg-white/75 p-5 shadow-sm backdrop-blur-xl">
+          <h2 className="mb-3 text-base font-semibold text-slate-800">Bedeutung in der App</h2>
+          <div className="space-y-3 text-sm text-slate-600">
+            <div>
+              <div className="font-medium text-slate-800">Wasserverfügbarkeit</div>
+              <p>{WATER_APP_EXPLANATION}</p>
+            </div>
+            <div>
+              <div className="font-medium text-slate-800">Hinweis für Hundebesitzer</div>
+              <p>{WATER_GUIDE_NOTE}</p>
+            </div>
           </div>
         </div>
 
@@ -32,13 +45,6 @@ export default function WaterHelp() {
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="doghike-glass-card mt-6 p-4 text-sm text-slate-600">
-          <p className="mb-2 font-medium">Bedeutet in der App</p>
-          <p className="mb-3 text-xs">{WATER_APP_EXPLANATION}</p>
-          <p className="mb-1 font-medium">Hinweis für Hundebesitzer</p>
-          <p className="text-xs">{WATER_GUIDE_NOTE}</p>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { createPageUrl } from "@/utils";
 import {
   ArrowLeft, Upload, X, Loader2, Star, FileText,
-  Mountain, TrendingUp, MapPin, AlertTriangle, Dog, Search, Layers
+  Mountain, TrendingUp, MapPin, AlertTriangle, Dog, Search, Layers, CircleHelp
 } from "lucide-react";
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
 import L from "leaflet";
@@ -89,7 +89,7 @@ function DifficultyInfoDialog({ icon, title, description, levels }) {
           className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-brand-200 bg-white/80 text-brand-500 shadow-sm transition hover:border-brand-300 hover:text-brand-600"
           aria-label={`${title} erklären`}
         >
-          <Layers className="h-3.5 w-3.5" />
+          <CircleHelp className="h-3.5 w-3.5" />
         </button>
       </DialogTrigger>
       <DialogContent className="grid-rows-[auto,minmax(0,1fr)] max-h-[85vh] overflow-hidden border-white/80 bg-white/95 p-0 sm:max-w-2xl">
@@ -150,13 +150,13 @@ function WaterInfoDialog() {
           className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-brand-200 bg-white/80 text-brand-500 shadow-sm transition hover:border-brand-300 hover:text-brand-600"
           aria-label="Wasser erklären"
         >
-          <Layers className="h-3.5 w-3.5" />
+          <CircleHelp className="h-3.5 w-3.5" />
         </button>
       </DialogTrigger>
       <DialogContent className="grid-rows-[auto,minmax(0,1fr)] max-h-[85vh] overflow-hidden border-white/80 bg-white/95 p-0 sm:max-w-2xl">
         <DialogHeader className="border-b border-brand-100/80 px-6 pb-3 pt-6">
           <DialogTitle className="flex items-center gap-2 text-left text-slate-800">
-            <Layers className="h-4 w-4 text-brand-500" />
+            <WaterIcon value="little" className="text-base text-brand-500" />
             Wasser unterwegs
           </DialogTitle>
           <DialogDescription className="text-left text-slate-500">
