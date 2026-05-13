@@ -442,11 +442,11 @@ export default function HikeDetail() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="mb-10 -mx-4 overflow-x-auto px-4 pb-1 sm:-mx-1 sm:px-1"
+          className="mb-10"
         >
-          <div className="flex min-w-max gap-2.5">
+          <div className="flex flex-wrap gap-2.5">
           {countryLabel && (
-            <div className="doghike-stat-chip min-w-[116px] shrink-0 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
+            <div className="doghike-stat-chip min-w-[116px] flex-1 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
               <span className="text-base">{TOUR_ICONS.country}</span>
               <div>
                 <div className="text-sm font-bold text-slate-950 leading-tight">{countryLabel}</div>
@@ -455,7 +455,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.duration_minutes && (
-            <div className="doghike-stat-chip min-w-[116px] shrink-0 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
+            <div className="doghike-stat-chip min-w-[116px] flex-1 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
               <span className="text-base">{TOUR_ICONS.duration}</span>
               <div>
                 <div className="text-sm font-bold text-slate-950 leading-tight">
@@ -466,7 +466,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.distance_km && (
-            <div className="doghike-stat-chip min-w-[116px] shrink-0 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
+            <div className="doghike-stat-chip min-w-[116px] flex-1 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
               <span className="text-base">{TOUR_ICONS.distance}</span>
               <div>
                 <div className="text-sm font-bold text-slate-950 leading-tight">{hike.distance_km} km</div>
@@ -475,7 +475,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.elevation_gain_m && (
-            <div className="doghike-stat-chip min-w-[116px] shrink-0 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
+            <div className="doghike-stat-chip min-w-[116px] flex-1 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
               <span className="text-base">{TOUR_ICONS.elevation}</span>
               <div>
                 <div className="text-sm font-bold text-slate-950 leading-tight">{hike.elevation_gain_m} Hm</div>
@@ -484,7 +484,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.difficulty && (
-            <div className="doghike-stat-chip min-w-[116px] shrink-0 justify-center border-brand-200 bg-brand-50/75 px-3 py-2.5 sm:min-w-[128px] sm:px-4">
+            <div className="doghike-stat-chip min-w-[116px] flex-1 justify-center border-brand-200 bg-brand-50/75 px-3 py-2.5 sm:min-w-[128px] sm:px-4">
               <span className="text-base">{TOUR_ICONS.human}</span>
               <div>
                 <div className="flex gap-0.5 mb-0.5">
@@ -497,7 +497,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.dog_difficulty && (
-            <div className="doghike-stat-chip min-w-[116px] shrink-0 justify-center border-brand-200 bg-brand-50/75 px-3 py-2.5 sm:min-w-[128px] sm:px-4">
+            <div className="doghike-stat-chip min-w-[116px] flex-1 justify-center border-brand-200 bg-brand-50/75 px-3 py-2.5 sm:min-w-[128px] sm:px-4">
               <span className="text-base">{TOUR_ICONS.dog}</span>
               <div>
                 <div className="flex gap-0.5 mb-0.5">
@@ -510,7 +510,7 @@ export default function HikeDetail() {
             </div>
           )}
           {seasonValue && getSeasonLabel(seasonValue) && (
-            <div className="doghike-stat-chip min-w-[116px] shrink-0 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
+            <div className="doghike-stat-chip min-w-[116px] flex-1 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
               <span className="text-base">{getSeasonIcon(seasonValue)}</span>
               <div>
                 <div className="text-sm font-bold text-slate-950 leading-tight">{getSeasonLabel(seasonValue)}</div>
