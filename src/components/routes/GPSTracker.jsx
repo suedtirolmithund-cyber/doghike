@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, Square, Crosshair, Loader2 } from "lucide-react";
+import { Play, Pause, Square, Crosshair, Loader2, Wifi, WifiOff } from "lucide-react";
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import RouteElevationProfile from "./RouteElevationProfile";
@@ -35,6 +36,34 @@ const MIN_ELEVATION_GAIN_STEP_METERS = 3;
 const MAX_REASONABLE_ELEVATION_STEP_METERS = 40;
 const GPS_TRACK_STORAGE_KEY = "doghike_active_gps_track";
 const GPS_TRACK_MAX_AGE_MS = 12 * 60 * 60 * 1000;
+const AUTO_PAUSE_STILLNESS_MS = 3 * 60 * 1000;
+
+// Ramer-Douglas-Peucker track simplification
+function perpendicularDistance(point, lineStart, lineEnd) {
+  const [x0, y0] = point;
+  const [x1, y1] = lineStart;
+  const [x2, y2] = lineEnd;
+  const num = Math.abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1);
+  const den = Math.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2);
+  return den === 0 ? 0 : num / den;
+}
+
+function rdp(points, epsilon) {
+  if (points.length < 3) return points;
+  let maxDist = 0;
+  let maxIndex = 0;
+  for (let i = 1; i < points.length - 1; i++) {
+    const d = perpendicularDistance(points[i], points[0], points[points.length - 1]);
+    if (d > maxDist) { maxDist = d; maxIndex = i; }
+  }
+  if (maxDist > epsilon) {
+    return [
+      ...rdp(points.slice(0, maxIndex + 1), epsilon).slice(0, -1),
+      ...rdp(points.slice(maxIndex), epsilon),
+    ];
+  }
+  return [points[0], points[points.length - 1]];
+}
 const DEFAULT_STATS = { distance: 0, duration: 0, avgSpeed: 0, elevationGain: 0 };
 
 function MapUpdater({ center, flyToRef }) {
@@ -157,6 +186,8 @@ export default function GPSTracker({ onSave }) {
   const [elapsedSeconds, setElapsedSeconds] = useState(initialState.elapsedSeconds);
   const [myLocation, setMyLocation] = useState(initialState.myLocation);
   const [locating, setLocating] = useState(false);
+  const [gpsAccuracy, setGpsAccuracy] = useState(null);
+  const [liveElevationProfile, setLiveElevationProfile] = useState([]);
 
   const watchIdRef = useRef(null);
   const pollIntervalRef = useRef(null);
@@ -175,6 +206,7 @@ export default function GPSTracker({ onSave }) {
   const lastPauseTimeRef = useRef(initialState.restoredSnapshot?.lastPauseTime ?? null);
   const distanceRef = useRef(initialState.restoredSnapshot?.distance ?? initialState.stats.distance ?? 0);
   const elevationGainRef = useRef(initialState.restoredSnapshot?.elevationGain ?? initialState.stats.elevationGain ?? 0);
+  const lastMovementTimeRef = useRef(null);
 
   const clearPersistedTrackingState = useCallback(() => {
     if (typeof window === "undefined") return;
@@ -267,12 +299,29 @@ export default function GPSTracker({ onSave }) {
       avgSpeed,
       elevationGain: elevationGainRef.current,
     });
+
+    // Auto-Pause bei Stillstand > 3 Minuten
+    if (
+      lastMovementTimeRef.current &&
+      !isPausedRef.current &&
+      now - lastMovementTimeRef.current > AUTO_PAUSE_STILLNESS_MS
+    ) {
+      isPausedRef.current = true;
+      lastPauseTimeRef.current = now;
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+      setIsPaused(true);
+      toast.info("Auto-Pause: Keine Bewegung seit 3 Minuten.");
+    }
   }, [getTotalPausedMs]);
 
   const handlePositionSample = useCallback((position) => {
     if (isPausedRef.current) return;
 
     const { latitude, longitude, altitude, accuracy } = position.coords;
+
+    setGpsAccuracy(accuracy ?? null);
+
     if (accuracy && accuracy > MAX_ACCEPTED_ACCURACY_METERS) return;
 
     const newPoint = [latitude, longitude];
@@ -299,12 +348,10 @@ export default function GPSTracker({ onSave }) {
       distanceRef.current += dist / 1000;
     }
 
-    routePointsRef.current = [...prev, newPoint];
-    pointSamplesRef.current = [
-      ...pointSamplesRef.current,
-      { point: newPoint, timestamp: sampleTime, altitude },
-    ];
-    setRoutePoints(routePointsRef.current);
+    lastMovementTimeRef.current = Date.now();
+    routePointsRef.current.push(newPoint);
+    pointSamplesRef.current.push({ point: newPoint, timestamp: sampleTime, altitude });
+    setRoutePoints([...routePointsRef.current]);
     setCurrentPosition(newPoint);
 
     if (altitude !== null && altitude !== undefined) {
@@ -319,6 +366,10 @@ export default function GPSTracker({ onSave }) {
         }
       }
       altitudesRef.current.push(altitude);
+      setLiveElevationProfile((prev) => [
+        ...prev,
+        { dist: parseFloat(distanceRef.current.toFixed(2)), ele: Math.round(altitude) },
+      ]);
     }
   }, []);
 
@@ -398,6 +449,7 @@ export default function GPSTracker({ onSave }) {
     startTimeRef.current = Date.now();
     pausedTimeRef.current = 0;
     lastPauseTimeRef.current = null;
+    lastMovementTimeRef.current = null;
     isPausedRef.current = false;
     visibilityWarningShownRef.current = false;
 
@@ -405,6 +457,8 @@ export default function GPSTracker({ onSave }) {
     setCurrentPosition(null);
     setStats(DEFAULT_STATS);
     setElapsedSeconds(0);
+    setGpsAccuracy(null);
+    setLiveElevationProfile([]);
 
     const trackingStarted = startWatchers();
     if (!trackingStarted) {
@@ -451,6 +505,7 @@ export default function GPSTracker({ onSave }) {
     startTimeRef.current = null;
     pausedTimeRef.current = 0;
     lastPauseTimeRef.current = null;
+    lastMovementTimeRef.current = null;
     isPausedRef.current = false;
     visibilityWarningShownRef.current = false;
     setIsTracking(false);
@@ -459,6 +514,8 @@ export default function GPSTracker({ onSave }) {
     setCurrentPosition(null);
     setStats(DEFAULT_STATS);
     setElapsedSeconds(0);
+    setGpsAccuracy(null);
+    setLiveElevationProfile([]);
     clearPersistedTrackingState();
   }, [clearPersistedTrackingState, releaseWakeLock, stopWatchers]);
 
@@ -477,8 +534,9 @@ export default function GPSTracker({ onSave }) {
       durationMin > 0 ? parseFloat(((finalDist / durationMin) * 60).toFixed(1)) : 0;
 
     if (points.length >= 2) {
+      const simplified = rdp(points, 0.00005);
       onSave({
-        coordinates: points,
+        coordinates: simplified,
         distance_km: parseFloat(finalDist.toFixed(2)),
         duration_minutes: durationMin,
         avg_speed_kmh: avgSpeed,
@@ -621,6 +679,17 @@ export default function GPSTracker({ onSave }) {
           </div>
         )}
 
+        {isTracking && gpsAccuracy !== null && (
+          <div className={`absolute left-3 top-12 z-[1000] flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium shadow ${
+            gpsAccuracy <= 10 ? "bg-green-500 text-white" :
+            gpsAccuracy <= 25 ? "bg-amber-400 text-white" :
+            "bg-red-500 text-white"
+          }`}>
+            {gpsAccuracy <= 25 ? <Wifi className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
+            ±{Math.round(gpsAccuracy)}m
+          </div>
+        )}
+
         {routePoints.length > 0 && (
           <div className="absolute right-3 top-3 z-[1000] rounded-lg border border-brand-100 bg-white/90 px-2 py-1 text-xs font-medium text-slate-700 shadow backdrop-blur-sm">
             {routePoints.length} Punkte
@@ -701,7 +770,31 @@ export default function GPSTracker({ onSave }) {
         </div>
       )}
 
-      {routePoints.length >= 2 && (
+      {liveElevationProfile.length >= 3 && (
+        <div className="rounded-xl border border-brand-100 bg-white p-3">
+          <p className="mb-2 text-xs font-medium text-slate-500">Höhenprofil (live)</p>
+          <ResponsiveContainer width="100%" height={80}>
+            <AreaChart data={liveElevationProfile} margin={{ top: 2, right: 4, left: -20, bottom: 0 }}>
+              <defs>
+                <linearGradient id="eleGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#b88c73" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#b88c73" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="dist" tick={{ fontSize: 9 }} tickFormatter={(v) => `${v}km`} />
+              <YAxis tick={{ fontSize: 9 }} width={36} tickFormatter={(v) => `${v}m`} />
+              <Tooltip
+                formatter={(v) => [`${v}m`, "Höhe"]}
+                labelFormatter={(v) => `${v}km`}
+                contentStyle={{ fontSize: 11 }}
+              />
+              <Area type="monotone" dataKey="ele" stroke="#b88c73" strokeWidth={2} fill="url(#eleGrad)" dot={false} />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+
+      {!isTracking && routePoints.length >= 2 && (
         <div className="mt-2">
           <RouteElevationProfile coordinates={routePoints} distance={stats.distance} />
         </div>
