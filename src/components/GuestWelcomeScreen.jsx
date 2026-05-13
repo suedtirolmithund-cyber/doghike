@@ -238,10 +238,13 @@ export default function GuestWelcomeScreen() {
       >
         <WarmGlassBackground mobileFrame />
 
-        <p className="absolute left-[18px] top-[118px] h-[72px] w-[340px] text-center text-[34px] font-extrabold uppercase leading-[36px] tracking-[0.01em] text-white drop-shadow-[0_4px_14px_rgba(116,28,59,0.28)]">
+        <p className="absolute left-[18px] top-[40px] h-[64px] w-[340px] text-center text-[30px] font-extrabold uppercase leading-[32px] tracking-[0.01em] text-white drop-shadow-[0_4px_14px_rgba(116,28,59,0.34)] sm:top-[70px] sm:text-[34px] sm:leading-[36px]">
           WILLKOMMEN BEI DOGTRAILS
         </p>
-        <p className="absolute left-[21px] top-[220px] h-[48px] w-[340px] text-center text-[20px] font-medium leading-[23px] text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.25)]">
+        <div className="absolute left-[21px] top-[112px] w-[340px] text-center text-[18px] leading-none drop-shadow-[0_3px_10px_rgba(116,28,59,0.28)] sm:top-[152px]">
+          🐾 🐾 🐾
+        </div>
+        <p className="absolute left-[21px] top-[136px] h-[48px] w-[340px] text-center text-[17px] font-semibold leading-[21px] text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.3)] sm:top-[188px] sm:text-[20px] sm:leading-[23px]">
           Plane hundefreundliche Touren, speichere deine Lieblingswege und entdecke neue Ziele
         </p>
 
