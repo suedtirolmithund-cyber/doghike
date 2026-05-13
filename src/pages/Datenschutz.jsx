@@ -21,7 +21,7 @@ export default function Datenschutz() {
             </div>
             <h1 className="doghike-page-title">Datenschutzerklärung</h1>
           </div>
-          <p className="text-xs text-slate-400 mb-8">Letzte Aktualisierung: April 2026</p>
+          <p className="text-xs text-slate-400 mb-8">Letzte Aktualisierung: Mai 2026</p>
 
           <div className="space-y-6 md:space-y-8">
             <section>
@@ -193,7 +193,7 @@ export default function Datenschutz() {
                 <div className="space-y-3">
                   <div className="border border-brand-100 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Supabase Inc. (Authentifizierung, Datenbank, Storage)</p>
-                    <p>Speichert Nutzerkonten, Session-Tokens und App-Daten. Journal-Dateien werden in einem privaten Storage-Bucket gespeichert und in der App bei Bedarf über zeitlich begrenzte Links ausgeliefert.</p>
+                    <p>Speichert Nutzerkonten, Session-Tokens und App-Daten. Journal-Dateien werden in Supabase Storage gespeichert und in der App je nach Freigabe privat, für Freunde oder öffentlich ausgeliefert.</p>
               <p className="mt-1 text-slate-500">Datenschutz: <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">supabase.com/privacy</a></p>
                   </div>
 
@@ -231,6 +231,29 @@ export default function Datenschutz() {
                     <p className="font-semibold text-slate-900 mb-1">Open-Meteo (Wetterdaten)</p>
                     <p>Wenn du eine Tourendetailseite mit Startpunkt öffnest, werden die GPS-Koordinaten des Startpunkts an Open-Meteo gesendet, um Wetterdaten zu laden.</p>
               <p className="mt-1 text-slate-500"><a href="https://open-meteo.com/en/terms" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">open-meteo.com/en/terms</a></p>
+                  </div>
+
+                  <div className="border border-brand-100 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">Google Sheets (öffentliche Tourdaten)</p>
+                    <p>Öffentliche Tourdaten werden aus einem veröffentlichten Google-Sheet geladen. Beim Abruf können IP-Adresse, Browserdaten und der Zeitpunkt des Abrufs an Google übertragen werden.</p>
+                    <p className="mt-1 text-slate-500"><a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">policies.google.com/privacy</a></p>
+                  </div>
+
+                  <div className="border border-brand-100 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">DiceBear (Avatar-Platzhalter)</p>
+                    <p>Wenn kein eigenes Profil- oder Hundefoto vorhanden ist, kann die App Avatar-Platzhalter von DiceBear laden. Dabei können IP-Adresse und der technische Seed, zum Beispiel ein Name oder eine Nutzer-ID, übertragen werden.</p>
+                    <p className="mt-1 text-slate-500"><a href="https://www.dicebear.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">dicebear.com/privacy-policy</a></p>
+                  </div>
+
+                  <div className="border border-brand-100 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">cdnjs / Cloudflare (Kartenmarker)</p>
+                    <p>Einige Kartenmarker werden über cdnjs geladen. Dabei werden technisch notwendige Abrufdaten wie IP-Adresse und Browserinformationen an den CDN-Anbieter übertragen.</p>
+                    <p className="mt-1 text-slate-500"><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">cloudflare.com/privacypolicy</a></p>
+                  </div>
+
+                  <div className="border border-brand-100 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">Externe Bild- und Mediendienste</p>
+                    <p>Einzelne statische Bilder oder Platzhalter können aus externen Quellen wie Base44-Medien oder Unsplash geladen werden. Dabei können IP-Adresse, Browserdaten und der Zeitpunkt des Abrufs an den jeweiligen Anbieter übertragen werden.</p>
                   </div>
 
                   <div className="border border-brand-100 rounded-xl p-4">
@@ -288,7 +311,7 @@ export default function Datenschutz() {
                       </tr>
                       <tr className="bg-brand-50/70">
                         <td className="p-2 font-mono text-xs">doghike_cookie_consent</td>
-                        <td className="p-2">LocalStorage: Speichert deine Auswahl zum Hinweis auf technisch notwendige Speicher</td>
+                        <td className="p-2">LocalStorage: Speichert, dass du den Hinweis zu technisch notwendigen Speichern gesehen hast</td>
                         <td className="p-2">Dauerhaft, bis du den Browser-Speicher löschst</td>
                       </tr>
                       <tr>
@@ -371,8 +394,8 @@ export default function Datenschutz() {
               <div className="bg-brand-50 border border-brand-100 rounded-xl p-4">
                 <p className="text-brand-700 text-sm md:text-base leading-relaxed">
                   <strong>Öffentliche Inhalte:</strong> Kommentare und Bewertungen, die du abgibst,
-                  sind für alle App-Nutzer sichtbar. Fotos, die du zu öffentlichen Touren hochlädst,
-                  können für andere Nutzer der App sichtbar werden. Teile keine sensiblen
+                  können für andere App-Nutzer sichtbar sein. Fotos, die du zu öffentlichen Touren hochlädst,
+                  können je nach Freigabe für andere Nutzer oder öffentlich sichtbar werden. Teile keine sensiblen
                   personenbezogenen Informationen in öffentlichen Beiträgen.
                 </p>
               </div>

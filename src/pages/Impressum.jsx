@@ -31,15 +31,15 @@ export default function Impressum() {
                 <p className="font-semibold text-slate-900">Julia Schwärzer</p>
                 <p>Südtirol (Trentino-Südtirol / Alto Adige), Italien</p>
                 <p>
-                  <strong>Codice Fiscale:</strong>{" "}
-                  <span className="text-slate-400 italic">auf Anfrage per E-Mail</span>
+                  <strong>Vollständige Postanschrift:</strong>{" "}
+                  <span className="font-medium text-brand-700">vor Veröffentlichung ergänzen</span>
                 </p>
                 <p>
-                  <strong>Partita IVA:</strong>{" "}
-                  <span className="text-slate-400 italic">nicht vorhanden (privater Betrieb ohne gewerbliche Tätigkeit)</span>
+                  <strong>Codice Fiscale / Partita IVA:</strong>{" "}
+                  <span className="font-medium text-brand-700">vor Veröffentlichung prüfen und ergänzen, falls gesetzlich erforderlich</span>
                 </p>
-                <p className="text-xs text-brand-600 pt-2">
-                  Hinweis: Für eine vollständige Anbieterkennzeichnung sollte hier eine vollständige geografische Postanschrift angegeben werden.
+                <p className="text-xs text-brand-700 pt-2 leading-relaxed">
+                  Wichtig: Ein öffentliches, geschäftsmäßiges oder entgeltliches Angebot sollte eine vollständige geografische Anschrift und die gesetzlich erforderlichen Identifikationsangaben enthalten. Diese Angaben dürfen nicht nur auf Anfrage bereitgestellt werden.
                 </p>
               </div>
             </section>
@@ -84,8 +84,7 @@ export default function Impressum() {
                 Verbraucherstreitbeilegung
               </h2>
               <p className="text-sm md:text-base text-slate-600 leading-relaxed">
-                Wir sind nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren
-                vor einer Verbraucherschlichtungsstelle teilzunehmen.
+                Wir sind nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen. Der frühere Hinweis auf die EU-ODR-Plattform wurde entfernt, da diese Plattform seit 20. Juli 2025 eingestellt ist.
               </p>
             </section>
 
@@ -166,6 +165,9 @@ export default function Impressum() {
                   </a>.
                 </p>
                 <p>
+                  Weitere technische Quellen: Google Sheets für öffentliche Tourdaten, DiceBear für Avatar-Platzhalter, cdnjs/Cloudflare für Kartenmarker sowie Base44-/Bilddienste, soweit diese Medien in der App geladen werden.
+                </p>
+                <p>
                   Authentifizierung: Google Sign-In über{" "}
           <a href="https://supabase.com" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">
                     Supabase Auth
@@ -182,7 +184,7 @@ export default function Impressum() {
             </section>
 
             <section className="border-t border-brand-100 pt-6">
-              <p className="text-xs text-slate-400">Letzte Aktualisierung: April 2026</p>
+              <p className="text-xs text-slate-400">Letzte Aktualisierung: Mai 2026</p>
             </section>
           </div>
         </div>

@@ -19,13 +19,13 @@ export default function CookieBanner() {
     }
   }, []);
 
-  const accept = () => {
-    localStorage.setItem(CONSENT_KEY, JSON.stringify({ accepted: true, date: new Date().toISOString() }));
+  const acknowledge = () => {
+    localStorage.setItem(CONSENT_KEY, JSON.stringify({ acknowledged: true, date: new Date().toISOString() }));
     setVisible(false);
   };
 
-  const decline = () => {
-    localStorage.setItem(CONSENT_KEY, JSON.stringify({ accepted: false, date: new Date().toISOString() }));
+  const closeNecessary = () => {
+    localStorage.setItem(CONSENT_KEY, JSON.stringify({ acknowledged: true, necessaryOnly: true, date: new Date().toISOString() }));
     setVisible(false);
   };
 
@@ -49,10 +49,8 @@ export default function CookieBanner() {
                   Datenschutz & technisch notwendige Cookies
                 </h3>
                 <p className="text-xs text-brand-50 leading-relaxed">
-                  Diese App verwendet ausschließlich <strong>technisch notwendige Cookies</strong> zur
-                  Authentifizierung (Supabase Session) und zur Speicherung deiner Einstellungen.
-                  Es gibt keine Werbe- oder Tracking-Cookies. Daten werden auf
-                  EU-Servern (Frankfurt) gespeichert.{" "}
+                  Diese App verwendet ausschließlich technisch notwendige Cookies und Browser-Speicher
+                  für Anmeldung, Sicherheit und Einstellungen. Es gibt keine Werbe- oder Tracking-Cookies.{" "}
                   <Link
                     to={createPageUrl("Datenschutz")}
                     className="text-white underline hover:text-brand-50"
@@ -65,17 +63,17 @@ export default function CookieBanner() {
 
             <div className="flex flex-col sm:flex-row gap-2">
               <Button
-                onClick={accept}
+                onClick={acknowledge}
                 className="flex-1 bg-white text-brand-700 hover:bg-brand-50 h-10 text-sm"
               >
-                Verstanden & akzeptieren
+                Verstanden
               </Button>
               <Button
-                onClick={decline}
+                onClick={closeNecessary}
                 variant="outline"
                 className="flex-1 border-white/35 bg-white/10 text-white hover:bg-white/18 h-10 text-sm"
               >
-                Nur notwendige
+                Schließen
               </Button>
             </div>
           </div>
