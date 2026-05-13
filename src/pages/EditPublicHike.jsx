@@ -36,6 +36,8 @@ function buildInitialFormData(hike) {
     dog_difficulty: hike?.dog_difficulty || "unset",
     water_availability: hike?.water_availability || "unset",
     season: hike?.season || "unset",
+    grazing_animals: hike?.grazing_animals ?? false,
+    muzzle_recommended: hike?.muzzle_recommended ?? false,
     hazard_notes: hike?.hazard_notes || "",
     parking_info: hike?.parking_info || "",
     restaurant_info: hike?.restaurant_info || "",
@@ -226,6 +228,8 @@ export default function EditPublicHike() {
           ? null
           : WATER_LEVELS.find((level) => level.value === formData.water_availability)?.numeric ?? null,
         season: formData.season === "unset" ? null : formData.season || null,
+        grazing_animals: !!formData.grazing_animals,
+        muzzle_recommended: !!formData.muzzle_recommended,
         hazard_notes: formData.hazard_notes.trim() || null,
         parking_info: formData.parking_info.trim() || null,
         restaurant_info: formData.restaurant_info.trim() || null,
@@ -468,6 +472,34 @@ export default function EditPublicHike() {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Hinweise für Hunde</Label>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setFormData((prev) => ({ ...prev, grazing_animals: !prev.grazing_animals }))}
+                    className={`rounded-full border px-3 py-2 text-sm transition-all ${
+                      formData.grazing_animals
+                        ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
+                        : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
+                    }`}
+                  >
+                    🐄 Weidetiere
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData((prev) => ({ ...prev, muzzle_recommended: !prev.muzzle_recommended }))}
+                    className={`rounded-full border px-3 py-2 text-sm transition-all ${
+                      formData.muzzle_recommended
+                        ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
+                        : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
+                    }`}
+                  >
+                    🦮 Maulkorb
+                  </button>
+                </div>
               </div>
 
               <div className="space-y-2">
