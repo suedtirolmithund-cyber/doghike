@@ -631,7 +631,7 @@ export default function HikeDetail() {
               transition={{ delay: 0.17 }}
               className="doghike-glass-card p-6"
             >
-              <h2 className="text-lg font-medium text-slate-900 mb-4">🐕 Infos für Hundebesitzer</h2>
+              <h2 className="text-lg font-medium text-slate-900 mb-4">{TOUR_ICONS.dog} Infos für Hundebesitzer</h2>
               <div className="space-y-4">
                 {/* Wasser: immer anzeigen */}
                 {hike.water_availability ? (
@@ -655,12 +655,12 @@ export default function HikeDetail() {
                   <div className="flex flex-wrap gap-2">
                     {hike.grazing_animals && (
                       <Badge className="border border-brand-100 bg-brand-50/70 text-brand-700">
-                        🐄 Weidetiere
+                        {TOUR_ICONS.grazing} Weidetiere
                       </Badge>
                     )}
                     {hike.muzzle_recommended && (
                       <Badge className="border border-brand-100 bg-brand-50/70 text-brand-700">
-                        🦮 Maulkorb
+                        {TOUR_ICONS.muzzle} Maulkorb
                       </Badge>
                     )}
                   </div>
@@ -687,7 +687,7 @@ export default function HikeDetail() {
                 transition={{ delay: 0.2 }}
                 className="doghike-glass-card p-6"
               >
-                <h2 className="text-lg font-medium text-slate-900 mb-4">🐕 Mit dabei</h2>
+                <h2 className="text-lg font-medium text-slate-900 mb-4">{TOUR_ICONS.dog} Mit dabei</h2>
                 <div className="flex flex-wrap gap-4">
                   {hikeDogs.map((dog) => (
                     <div key={dog.id} className="doghike-soft-panel flex items-center gap-3 p-3">

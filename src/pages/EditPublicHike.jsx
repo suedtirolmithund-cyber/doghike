@@ -486,7 +486,7 @@ export default function EditPublicHike() {
                         : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
                     }`}
                   >
-                    🐄 Weidetiere
+                    {TOUR_ICONS.grazing} Weidetiere
                   </button>
                   <button
                     type="button"
@@ -497,7 +497,7 @@ export default function EditPublicHike() {
                         : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
                     }`}
                   >
-                    🦮 Maulkorb
+                    {TOUR_ICONS.muzzle} Maulkorb
                   </button>
                 </div>
               </div>

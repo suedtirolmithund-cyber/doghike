@@ -351,12 +351,12 @@ export default function JournalDetail() {
                 <div className="flex flex-wrap gap-1.5">
                   {entry.grazing_animals && (
                     <Badge variant="secondary" className="border border-brand-100 bg-brand-50/70 text-brand-700 text-xs">
-                      🐄 Weidetiere
+                      {TOUR_ICONS.grazing} Weidetiere
                     </Badge>
                   )}
                   {entry.muzzle_recommended && (
                     <Badge variant="secondary" className="border border-brand-100 bg-brand-50/70 text-brand-700 text-xs">
-                      🦮 Maulkorb
+                      {TOUR_ICONS.muzzle} Maulkorb
                     </Badge>
                   )}
                 </div>
