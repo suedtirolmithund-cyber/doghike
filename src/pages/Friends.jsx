@@ -21,6 +21,7 @@ import {
   sendFriendRequest, acceptFriendRequest,
   rejectFriendRequest, removeFriend, searchProfiles,
 } from "@/lib/friendsApi";
+import { getAvatarDataUrl } from "@/lib/fallbackImages";
 
 function FeedCard({ entry }) {
   const profile = entry.profile;
@@ -36,7 +37,7 @@ function FeedCard({ entry }) {
       <div className="p-4">
         <div className="flex items-center gap-2 mb-3">
           <div className="w-7 h-7 rounded-full overflow-hidden bg-brand-100/80 shrink-0">
-            <img src={profile?.avatar_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${entry.user_id}`}
+            <img src={profile?.avatar_url || getAvatarDataUrl(entry.user_id)}
               alt="" className="w-full h-full object-cover" />
           </div>
           <span className="text-sm text-slate-600">
@@ -67,8 +68,7 @@ function FeedCard({ entry }) {
 
 function Avatar({ profile, size = "md" }) {
   const s = size === "sm" ? "w-8 h-8" : "w-11 h-11";
-  const src = profile?.avatar_url ||
-    `https://api.dicebear.com/7.x/thumbs/svg?seed=${profile?.user_id}&backgroundColor=f5f5f4`;
+  const src = profile?.avatar_url || getAvatarDataUrl(profile?.user_id);
   return (
     <div className={`${s} rounded-full overflow-hidden bg-brand-100/80 shrink-0`}>
       <img src={src} alt="" className="w-full h-full object-cover" />

@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { getAvatarDataUrl } from "@/lib/fallbackImages";
 
 export default function DogAvatar({ dog, size = "md", showName = true, onClick }) {
   const sizes = {
@@ -24,7 +25,7 @@ export default function DogAvatar({ dog, size = "md", showName = true, onClick }
     >
       <div className={`${sizes[size]} rounded-full overflow-hidden border-3 border-white shadow-lg ring-2 ring-brand-100/80`}>
         <img
-          src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
+          src={dog.photo_url || getAvatarDataUrl(dog.name)}
           alt={dog.name}
           className="w-full h-full object-cover"
         />

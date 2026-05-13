@@ -165,7 +165,7 @@ export default function Impressum() {
                   </a>.
                 </p>
                 <p>
-                  Weitere technische Quellen: Google Sheets für öffentliche Tourdaten, DiceBear für Avatar-Platzhalter, cdnjs/Cloudflare für Kartenmarker sowie Base44-/Bilddienste, soweit diese Medien in der App geladen werden.
+                  Platzhalterbilder, App-Icons und Kartenmarker werden lokal bzw. aus gebündelten App-Assets geladen.
                 </p>
                 <p>
                   Authentifizierung: Google Sign-In über{" "}

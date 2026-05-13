@@ -58,6 +58,7 @@ import { getUserRoutes } from "@/lib/routesApi";
 import DogForm from "@/components/forms/DogForm";
 import HikeCard from "@/components/hikes/HikeCard";
 import AccountSettings from "@/components/profile/AccountSettings";
+import { getAvatarDataUrl } from "@/lib/fallbackImages";
 
 export default function Profile() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -267,7 +268,7 @@ export default function Profile() {
     return `${months} Monat${months !== 1 ? "e" : ""}`;
   };
 
-  const fallbackAvatarUrl = `https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.id}&backgroundColor=f5f5f4`;
+  const fallbackAvatarUrl = getAvatarDataUrl(user?.id);
   const hasResolvedProfile = !user?.id || profile !== undefined;
 
   const displayName =
@@ -475,12 +476,12 @@ export default function Profile() {
                     >
                       <div className="relative h-40 bg-gradient-to-br from-brand-50 via-white to-stone-100 md:h-44">
                         <img
-                          src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}&backgroundColor=f5f5f4`}
+                          src={dog.photo_url || getAvatarDataUrl(dog.name)}
                           alt={dog.name}
                           className="w-full h-full object-cover"
                           onError={(event) => {
                             event.target.onerror = null;
-                            event.target.src = `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}&backgroundColor=f5f5f4`;
+                            event.target.src = getAvatarDataUrl(dog.name);
                           }}
                         />
                         <div className="absolute top-3 right-3 flex gap-2">

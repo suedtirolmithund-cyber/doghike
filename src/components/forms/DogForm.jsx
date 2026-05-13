@@ -7,6 +7,7 @@ import { uploadFile, deleteStoredFile } from "@/lib/profilesApi";
 import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
 import { useAuth } from "@/lib/AuthContext";
 import { Dog, Upload, Loader2 } from "lucide-react";
+import { getAvatarDataUrl } from "@/lib/fallbackImages";
 
 export default function DogForm({ dog, onSave, onCancel }) {
   const { user } = useAuth();
@@ -110,7 +111,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
                 className="w-full h-full object-cover"
                 onError={(event) => {
                   event.target.onerror = null;
-                  event.target.src = `https://api.dicebear.com/7.x/thumbs/svg?seed=${formData.name}&backgroundColor=f5f5f4`;
+                  event.target.src = getAvatarDataUrl(formData.name);
                 }}
               />
             ) : (

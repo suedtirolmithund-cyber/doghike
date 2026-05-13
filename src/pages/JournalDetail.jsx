@@ -10,7 +10,7 @@ import { de } from "date-fns/locale";
 import { motion } from "framer-motion";
 import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 import {
   ArrowLeft, Star, AlertTriangle, Dog, User, Users, Globe,
   Loader2, ShieldOff, ChevronLeft, ChevronRight,
@@ -29,13 +29,11 @@ import {
   TOUR_ICONS,
 } from "@/lib/difficultyConfig";
 import { formatDurationHours } from "@/lib/duration";
+import { getAvatarDataUrl } from "@/lib/fallbackImages";
 
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-  iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-});
+
+configureLeafletDefaultIcon();
+
 
 const VISIBILITY_INFO = {
   private: { icon: User,  label: "Privat",       color: "text-slate-500" },
@@ -225,7 +223,7 @@ export default function JournalDetail() {
             {/* Author */}
             <div className="flex items-center gap-3 mb-4">
               <img
-                src={author?.avatar_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${entry.user_id}`}
+                src={author?.avatar_url || getAvatarDataUrl(entry.user_id)}
                 alt="" className="w-9 h-9 rounded-full object-cover"
               />
               <div>
@@ -388,7 +386,7 @@ export default function JournalDetail() {
           {dog && (
             <div className="doghike-glass-card p-4 flex items-center gap-3">
               <img
-                src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
+                src={dog.photo_url || getAvatarDataUrl(dog.name)}
                 alt={dog.name} className="w-12 h-12 rounded-full object-cover border-2 border-white shadow"
               />
               <div>

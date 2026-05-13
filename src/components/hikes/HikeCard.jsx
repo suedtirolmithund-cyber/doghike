@@ -7,6 +7,7 @@ import ExpandableText from "@/components/ExpandableText";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { TOUR_ICONS, getDifficultyBadgeClass, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
+import { getAvatarDataUrl } from "@/lib/fallbackImages";
 
 export default function HikeCard({ hike, dogs = [], index = 0 }) {
   const hikeDogs = dogs.filter((dog) => hike.dogs?.includes(dog.id));
@@ -142,7 +143,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                         style={{ marginLeft: dogIndex > 0 ? "-8px" : 0 }}
                       >
                         <img
-                          src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
+                          src={dog.photo_url || getAvatarDataUrl(dog.name)}
                           alt={dog.name}
                           className="h-full w-full object-cover"
                         />

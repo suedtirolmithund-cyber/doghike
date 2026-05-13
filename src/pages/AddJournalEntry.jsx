@@ -31,6 +31,7 @@ import { getDogs } from "@/lib/profilesApi";
 import { getImageUploadErrorMessage, validateImageUpload } from "@/lib/uploadValidation";
 import { Link } from "react-router-dom";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
+import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import {
   DIFFICULTY_APP_EXPLANATIONS,
   DIFFICULTY_GUIDE_NOTE,
@@ -1357,7 +1358,7 @@ export default function AddJournalEntry() {
                     >
                       <div className="w-6 h-6 rounded-full overflow-hidden bg-brand-100/80 shrink-0">
                         <img
-                          src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
+                          src={dog.photo_url || getAvatarDataUrl(dog.name)}
                           alt={dog.name}
                           className="w-full h-full object-cover"
                         />
