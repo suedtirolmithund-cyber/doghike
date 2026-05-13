@@ -207,6 +207,8 @@ export default function GPSTracker({ onSave }) {
   const distanceRef = useRef(initialState.restoredSnapshot?.distance ?? initialState.stats.distance ?? 0);
   const elevationGainRef = useRef(initialState.restoredSnapshot?.elevationGain ?? initialState.stats.elevationGain ?? 0);
   const lastMovementTimeRef = useRef(null);
+  const hiddenAtRef = useRef(null);
+  const burstTimersRef = useRef([]);
 
   const clearPersistedTrackingState = useCallback(() => {
     if (typeof window === "undefined") return;
@@ -506,6 +508,9 @@ export default function GPSTracker({ onSave }) {
     pausedTimeRef.current = 0;
     lastPauseTimeRef.current = null;
     lastMovementTimeRef.current = null;
+    hiddenAtRef.current = null;
+    burstTimersRef.current.forEach(clearTimeout);
+    burstTimersRef.current = [];
     isPausedRef.current = false;
     visibilityWarningShownRef.current = false;
     setIsTracking(false);
@@ -566,19 +571,40 @@ export default function GPSTracker({ onSave }) {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "hidden") {
         persistTrackingState();
-
-        if (isTracking && !isPaused && !visibilityWarningShownRef.current) {
-          visibilityWarningShownRef.current = true;
-          toast.warning(
-            "Wenn der Browser im Hintergrund gedrosselt wird, kann die Aufzeichnung ungenauer werden.",
-          );
+        if (isTracking && !isPaused) {
+          hiddenAtRef.current = Date.now();
+          if (!visibilityWarningShownRef.current) {
+            visibilityWarningShownRef.current = true;
+            toast.warning(
+              "Wenn der Browser im Hintergrund gedrosselt wird, kann die Aufzeichnung ungenauer werden.",
+            );
+          }
         }
         return;
       }
 
       if (document.visibilityState === "visible" && isTracking && !isPaused) {
         requestWakeLock();
-        requestFreshPosition();
+
+        const goneMs = hiddenAtRef.current ? Date.now() - hiddenAtRef.current : 0;
+        hiddenAtRef.current = null;
+
+        // Burst: für jede Sekunde im Hintergrund einen Extra-GPS-Ping, max 8
+        const burstCount = goneMs > 10_000
+          ? Math.min(Math.floor(goneMs / 1000), 8)
+          : 1;
+
+        burstTimersRef.current.forEach(clearTimeout);
+        burstTimersRef.current = [];
+
+        for (let i = 0; i < burstCount; i++) {
+          const t = setTimeout(requestFreshPosition, i * 600);
+          burstTimersRef.current.push(t);
+        }
+
+        if (burstCount > 1) {
+          toast.info(`GPS wird nachgeholt (${Math.round(goneMs / 1000)}s Pause).`);
+        }
       }
     };
 
