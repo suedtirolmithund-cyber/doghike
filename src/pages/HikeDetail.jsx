@@ -275,6 +275,8 @@ export default function HikeDetail() {
   const nextPhoto = () => setCurrentPhotoIndex((prev) => (prev + 1) % photos.length);
   const prevPhoto = () => setCurrentPhotoIndex((prev) => (prev - 1 + photos.length) % photos.length);
   const canComment = hike?._source === "sheets" || hike?.visibility === "public";
+  const canDownloadPdf = hike?._source === "sheets" || isOwnJournalHike || hike?.visibility === "public";
+  const includePhotosInPdf = hike?._source === "sheets" || isOwnJournalHike;
   const previewNotes = hike.notes
     ? hike.notes.length > 220
       ? `${hike.notes.slice(0, 220).trim()}...`
@@ -447,7 +449,12 @@ export default function HikeDetail() {
           className="mb-10"
         >
           <div className="mb-4 flex flex-wrap items-center justify-end gap-2">
-            <OfflineDownload hike={hike} dogs={hikeDogs} />
+            <OfflineDownload
+              hike={hike}
+              dogs={hikeDogs}
+              allowDownload={canDownloadPdf}
+              includePhotos={includePhotosInPdf}
+            />
           </div>
           <div className="flex flex-wrap gap-2.5">
           {countryLabel && (
