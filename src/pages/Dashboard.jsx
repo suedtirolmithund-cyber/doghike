@@ -219,7 +219,7 @@ export default function Dashboard() {
           <StatsCard icon={Globe} label="Länder" value={countryCount} delay={0.08} />
           <StatsCard
             icon={Dog}
-            label="Wanderbuddys"
+            label="Wanderbuddies"
             value={safeDogProfileCount}
             delay={0.16}
           />
