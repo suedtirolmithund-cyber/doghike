@@ -32,3 +32,6 @@ dist-ssr
 # Local generated helper artifacts
 ADMIN-KURZUEBERSICHT-DOGHIKE.pdf
 public/design-rest-preview.html
+
+# Supabase local state
+supabase/.temp/
