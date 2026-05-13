@@ -430,6 +430,14 @@ export default function HikeDetail() {
                   {hike.route_coordinates?.length > 0 ? "Karte & Routenverlauf" : "Karte"}
                 </h2>
               </div>
+              <div className="flex justify-start sm:justify-end">
+                <OfflineDownload
+                  hike={hike}
+                  dogs={hikeDogs}
+                  allowDownload={canDownloadPdf}
+                  includePhotos={includePhotosInPdf}
+                />
+              </div>
             </div>
             <InteractiveHikeMap
               latitude={hike.latitude}
@@ -448,14 +456,6 @@ export default function HikeDetail() {
           transition={{ delay: 0.15 }}
           className="mb-10"
         >
-          <div className="mb-4 flex flex-wrap items-center justify-end gap-2">
-            <OfflineDownload
-              hike={hike}
-              dogs={hikeDogs}
-              allowDownload={canDownloadPdf}
-              includePhotos={includePhotosInPdf}
-            />
-          </div>
           <div className="flex flex-wrap gap-2.5">
           {countryLabel && (
             <div className="doghike-stat-chip min-w-[116px] flex-1 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
