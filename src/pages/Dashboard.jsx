@@ -51,17 +51,18 @@ export default function Dashboard() {
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
-    staleTime: 0,
-    refetchOnMount: "always",
-    refetchOnWindowFocus: true,
+    staleTime: 5 * 60_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   const { data: dogs = [], isLoading: isLoadingDogs } = useQuery({
     queryKey: ["dogs", user?.id],
     queryFn: () => getDogs(user.id),
     enabled: !!user?.id,
-    staleTime: 0,
-    refetchOnMount: "always",
+    staleTime: 5 * 60_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   const { data: dogProfileCount = 0 } = useQuery({
