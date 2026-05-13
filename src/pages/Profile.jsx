@@ -446,7 +446,7 @@ export default function Profile() {
 
         <Tabs defaultValue="dogs" className="space-y-4 md:space-y-6">
           <div>
-            <TabsList className="grid h-auto w-full grid-cols-4 gap-1 border border-white/70 bg-white/65 p-1 backdrop-blur-xl md:gap-1.5">
+            <TabsList className="grid h-auto w-full grid-cols-2 gap-1 border border-white/70 bg-white/65 p-1 backdrop-blur-xl sm:grid-cols-4 md:gap-1.5">
               <TabsTrigger value="dogs" className="h-11 min-w-0 whitespace-nowrap px-2 text-sm md:px-4 md:text-base">Hunde</TabsTrigger>
               <TabsTrigger value="routes" className="flex h-11 min-w-0 items-center gap-1.5 whitespace-nowrap px-2 text-sm md:px-4 md:text-base">
                 <Navigation className="h-4 w-4" />
