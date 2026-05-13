@@ -347,6 +347,23 @@ export default function JournalDetail() {
                 <span className="text-sm text-brand-400 font-medium">{TOUR_ICONS.dog} Ja</span>
               </div>
             )}
+            {(entry.grazing_animals || entry.muzzle_recommended) && (
+              <div className="flex items-start gap-2 flex-wrap">
+                <span className="text-xs text-slate-500 w-28">Hinweise</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {entry.grazing_animals && (
+                    <Badge variant="secondary" className="border border-brand-100 bg-brand-50/70 text-brand-700 text-xs">
+                      🐄 Weidetiere
+                    </Badge>
+                  )}
+                  {entry.muzzle_recommended && (
+                    <Badge variant="secondary" className="border border-brand-100 bg-brand-50/70 text-brand-700 text-xs">
+                      🦮 Maulkorb
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            )}
             {isOwner && entry.visibility === "private" && Array.isArray(entry.dog_mood_tags) && entry.dog_mood_tags.length > 0 && (
               <div className="flex items-start gap-2 flex-wrap">
                 <span className="text-xs text-slate-500 w-28">Hund heute</span>

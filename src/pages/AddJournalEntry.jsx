@@ -660,6 +660,8 @@ const EMPTY_FORM = {
   dog_suitable: true,
   water_available: 0,
   dog_difficulty: 0,
+  grazing_animals: false,
+  muzzle_recommended: false,
   hazard_notes: "",
   visibility: "private",
   seasons: [],
@@ -691,6 +693,8 @@ export default function AddJournalEntry() {
     rating: routePrefill?.rating ?? 0,
     dog_difficulty: routePrefill?.dog_difficulty ?? 0,
     water_available: routePrefill?.water_available ?? 0,
+    grazing_animals: routePrefill?.grazing_animals ?? false,
+    muzzle_recommended: routePrefill?.muzzle_recommended ?? false,
     hazard_notes: routePrefill?.hazard_notes ?? "",
     seasons: routePrefill?.seasons ?? [],
     dog_id: routePrefill?.dog_id ?? null,
@@ -717,6 +721,8 @@ export default function AddJournalEntry() {
       rating: prefill.rating || EMPTY_FORM.rating,
       dog_difficulty: prefill.dog_difficulty || EMPTY_FORM.dog_difficulty,
       water_available: prefill.water_available ?? EMPTY_FORM.water_available,
+      grazing_animals: prefill.grazing_animals ?? EMPTY_FORM.grazing_animals,
+      muzzle_recommended: prefill.muzzle_recommended ?? EMPTY_FORM.muzzle_recommended,
       hazard_notes: prefill.hazard_notes || EMPTY_FORM.hazard_notes,
       seasons: Array.isArray(prefill.seasons) ? prefill.seasons : EMPTY_FORM.seasons,
       dog_id: prefill.dog_id ?? EMPTY_FORM.dog_id,
@@ -773,6 +779,8 @@ export default function AddJournalEntry() {
         dog_suitable: existing.dog_suitable ?? true,
         water_available: existing.water_available ?? 0,
         dog_difficulty: existing.dog_difficulty ?? 0,
+        grazing_animals: existing.grazing_animals ?? false,
+        muzzle_recommended: existing.muzzle_recommended ?? false,
         hazard_notes: existing.hazard_notes ?? "",
         visibility: existing.visibility ?? "private",
         seasons: existing.seasons ?? [],
@@ -987,6 +995,8 @@ export default function AddJournalEntry() {
       difficulty: form.difficulty || null,
       rating: form.rating || null,
       dog_difficulty: form.dog_difficulty || null,
+      grazing_animals: !!form.grazing_animals,
+      muzzle_recommended: !!form.muzzle_recommended,
       dog_mood_tags: form.visibility === "private" ? (form.dog_mood_tags ?? []) : [],
       latitude: form.latitude !== "" ? Number(form.latitude) : null,
       longitude: form.longitude !== "" ? Number(form.longitude) : null,
@@ -1006,6 +1016,7 @@ export default function AddJournalEntry() {
         : [...prev.dog_mood_tags, tag],
     }));
   };
+  const toggleDogHint = (field) => setForm((prev) => ({ ...prev, [field]: !prev[field] }));
 
   if (!isAuthenticated) {
     return (
@@ -1168,6 +1179,37 @@ export default function AddJournalEntry() {
             <WaterPicker label="Wasserverfügbarkeit" value={form.water_available} onChange={(v) => set("water_available", v)} />
 
             <BonePicker label="Schwierigkeit (Hund)" value={form.dog_difficulty} onChange={(v) => set("dog_difficulty", v)} />
+
+            <div>
+              <Label className="text-sm text-slate-600 mb-2 block">Hinweise für Hunde (optional)</Label>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => toggleDogHint("grazing_animals")}
+                  className={`rounded-full border px-3 py-2 text-sm transition-all ${
+                    form.grazing_animals
+                      ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
+                      : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
+                  }`}
+                >
+                  🐄 Weidetiere
+                </button>
+                <button
+                  type="button"
+                  onClick={() => toggleDogHint("muzzle_recommended")}
+                  className={`rounded-full border px-3 py-2 text-sm transition-all ${
+                    form.muzzle_recommended
+                      ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
+                      : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
+                  }`}
+                >
+                  🦮 Maulkorb
+                </button>
+              </div>
+              <p className="mt-2 text-xs text-slate-400">
+                Du kannst keinen, einen oder beide Hinweise auswählen. Wenn nichts markiert ist, werden sie im Eintrag nicht angezeigt.
+              </p>
+            </div>
 
             {form.visibility === "private" && (
               <div>
