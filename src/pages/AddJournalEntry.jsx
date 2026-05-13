@@ -228,6 +228,49 @@ function GrazingAnimalsInfoDialog() {
   );
 }
 
+function MuzzleInfoDialog() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <button
+          type="button"
+          className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-brand-200 bg-white/80 text-brand-500 shadow-sm transition hover:border-brand-300 hover:text-brand-600"
+          aria-label="Maulkorb erklären"
+        >
+          <Layers className="h-3.5 w-3.5" />
+        </button>
+      </DialogTrigger>
+      <DialogContent className="grid-rows-[auto,minmax(0,1fr)] max-h-[85vh] overflow-hidden border-white/80 bg-white/95 p-0 sm:max-w-xl">
+        <DialogHeader className="border-b border-brand-100/80 px-6 pb-3 pt-6">
+          <DialogTitle className="flex items-center gap-2 text-left text-slate-800">
+            <span className="text-sm leading-none">🦮</span>
+            Maulkorb unterwegs
+          </DialogTitle>
+          <DialogDescription className="text-left text-slate-500">
+            Informiere dich am besten immer vorher je nach Land und Situation.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="min-h-0 space-y-3 overflow-y-auto px-6 pb-6 pr-5">
+          <div className="rounded-2xl border border-brand-100/70 bg-brand-50/70 p-4 text-sm text-slate-600 space-y-3">
+            <p>
+              Je nach Land, Region oder Betreiber können für Hunde Leinen- und Maulkorbpflichten gelten. Informiere dich deshalb am besten immer vorab.
+            </p>
+            <p>
+              In Italien kann ein Maulkorb zum Beispiel in öffentlichen Verkehrsmitteln, bei Menschenansammlungen oder auf Anweisung verlangt werden. Es ist deshalb sinnvoll, den Hund schon vor der Reise stressfrei an einen Maulkorb zu gewöhnen.
+            </p>
+            <p>
+              Auch bei Bergbahnen kann es je nach Gesellschaft Unterschiede geben. Dasselbe gilt oft für Regeln und Ticketpreise für Hunde.
+            </p>
+            <p className="rounded-xl border border-brand-100 bg-white/70 px-3 py-2 text-slate-700">
+              In öffentlichen Verkehrsmitteln reicht eine Maulschlinge oft nicht aus. Prüfe deshalb immer die aktuellen Vorgaben vor Ort.
+            </p>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 // Berg-Picker (Schwierigkeit Mensch)
 function MountainPicker({ label, value, onChange }) {
   const [hover, setHover] = useState(0);
@@ -1224,6 +1267,7 @@ export default function AddJournalEntry() {
               <div className="mb-2 flex items-center gap-1.5">
                 <Label className="mb-0 block text-sm text-slate-600">Hinweise für Hunde (optional)</Label>
                 <GrazingAnimalsInfoDialog />
+                <MuzzleInfoDialog />
               </div>
               <div className="flex flex-wrap gap-2">
                 <button
