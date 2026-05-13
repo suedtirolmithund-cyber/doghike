@@ -445,28 +445,28 @@ export default function Profile() {
         </motion.div>
 
         <Tabs defaultValue="dogs" className="space-y-4 md:space-y-6">
-          <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-            <TabsList className="inline-flex min-w-full justify-start gap-1 border border-white/70 bg-white/65 backdrop-blur-xl md:justify-center md:gap-1.5">
-              <TabsTrigger value="dogs" className="h-11 flex-shrink-0 whitespace-nowrap px-4 text-sm md:text-base">Hunde</TabsTrigger>
-              <TabsTrigger value="routes" className="flex h-11 flex-shrink-0 items-center gap-1.5 whitespace-nowrap px-4 text-sm md:text-base">
+          <div>
+            <TabsList className="grid h-auto w-full grid-cols-4 gap-1 border border-white/70 bg-white/65 p-1 backdrop-blur-xl md:gap-1.5">
+              <TabsTrigger value="dogs" className="h-11 min-w-0 whitespace-nowrap px-2 text-sm md:px-4 md:text-base">Hunde</TabsTrigger>
+              <TabsTrigger value="routes" className="flex h-11 min-w-0 items-center gap-1.5 whitespace-nowrap px-2 text-sm md:px-4 md:text-base">
                 <Navigation className="h-4 w-4" />
                 Routen
                 {userRoutes.length > 0 && (
-                  <span className="rounded-full bg-brand-100 px-2 py-0.5 text-xs font-bold leading-none text-brand-700">
+                  <span className="rounded-full bg-brand-100 px-1.5 py-0.5 text-xs font-bold leading-none text-brand-700 md:px-2">
                     {userRoutes.length}
                   </span>
                 )}
               </TabsTrigger>
-              <TabsTrigger value="saved" className="flex h-11 flex-shrink-0 items-center gap-1.5 whitespace-nowrap px-4 text-sm md:text-base">
+              <TabsTrigger value="saved" className="flex h-11 min-w-0 items-center gap-1.5 whitespace-nowrap px-2 text-sm md:px-4 md:text-base">
                 <Heart className="h-4 w-4" />
                 Gespeichert
                 {savedHikes.length > 0 && (
-                  <span className="rounded-full bg-brand-100 px-2 py-0.5 text-xs font-bold leading-none text-brand-600">
+                  <span className="rounded-full bg-brand-100 px-1.5 py-0.5 text-xs font-bold leading-none text-brand-600 md:px-2">
                     {savedHikes.length}
                   </span>
                 )}
               </TabsTrigger>
-              <TabsTrigger value="settings" className="h-11 flex-shrink-0 whitespace-nowrap px-4 text-sm md:text-base">Konto</TabsTrigger>
+              <TabsTrigger value="settings" className="h-11 min-w-0 whitespace-nowrap px-2 text-sm md:px-4 md:text-base">Konto</TabsTrigger>
             </TabsList>
           </div>
 
