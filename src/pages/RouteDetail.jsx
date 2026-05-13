@@ -33,16 +33,13 @@ import WaterIcon from "@/components/icons/WaterIcon";
 import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 import { formatDurationHours, hoursInputToMinutes } from "@/lib/duration";
 import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
+import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 
-// Fix Leaflet default marker icon
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-  iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-});
+
+configureLeafletDefaultIcon();
+
 
 export default function RouteDetail() {
   const [searchParams] = useSearchParams();
@@ -671,7 +668,7 @@ export default function RouteDetail() {
                                 onClick={() => toggleDog(dog.id)}
                               >
                                 <Checkbox checked={completeData.dogs.includes(dog.id)} onCheckedChange={() => toggleDog(dog.id)} />
-                                <img src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`} alt={dog.name} className="w-8 h-8 rounded-full object-cover" />
+                                <img src={dog.photo_url || getAvatarDataUrl(dog.name)} alt={dog.name} className="w-8 h-8 rounded-full object-cover" />
                                 <div>
                                   <p className="text-sm font-medium text-slate-900">{dog.name}</p>
                                   {dog.breed && <p className="text-xs text-slate-500">{dog.breed}</p>}

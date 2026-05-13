@@ -6,18 +6,15 @@ import { Undo, Trash2, Save, Loader2, Edit2, Move, X, Search } from "lucide-reac
 import RouteElevationProfile from "./RouteElevationProfile";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 import { formatDurationHours } from "@/lib/duration";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
 
 const GH_API_KEY = import.meta.env.VITE_GRAPHHOPPER_KEY || "";
 
-// Fix Leaflet default marker icon
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-  iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-});
+
+configureLeafletDefaultIcon();
+
 
 // Create custom draggable marker icon
 const createWaypointIcon = (index, isEditing) => {

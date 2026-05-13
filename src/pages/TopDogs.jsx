@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
+import { getAvatarDataUrl } from "@/lib/fallbackImages";
 
 // Badge-Definitionen
 const BADGE_DEFS = {
@@ -107,7 +108,7 @@ const RANK_STYLE = [
 ];
 
 function dogPhoto(dog) {
-  return dog?.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog?.name ?? "dog"}&backgroundColor=f5f5f4`;
+  return dog?.photo_url || getAvatarDataUrl(dog?.name ?? "dog");
 }
 
 // Podium (Top 3)

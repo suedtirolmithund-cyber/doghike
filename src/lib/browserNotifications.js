@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
+import { APP_ICON } from "@/lib/fallbackImages";
 
-const ICON = "https://api.dicebear.com/7.x/thumbs/svg?seed=doghike&backgroundColor=1c1917";
+const ICON = APP_ICON;
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_WEB_PUSH_PUBLIC_KEY || "";
 
 function urlBase64ToUint8Array(base64String) {

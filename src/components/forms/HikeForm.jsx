@@ -28,6 +28,7 @@ import ConsentDialog from "@/components/ConsentDialog";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 import { hoursInputToMinutes, minutesToHoursInput } from "@/lib/duration";
+import { getAvatarDataUrl } from "@/lib/fallbackImages";
 
 function buildInitialFormData(hike) {
   if (!hike) {
@@ -637,7 +638,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
                   onCheckedChange={() => toggleDog(dog.id)}
                 />
                 <img
-                  src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
+                  src={dog.photo_url || getAvatarDataUrl(dog.name)}
                   alt={dog.name}
                   className="w-10 h-10 rounded-full object-cover"
                 />

@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import DogForm from "@/components/forms/DogForm";
+import { getAvatarDataUrl } from "@/lib/fallbackImages";
 
 function getAge(birthDate) {
   if (!birthDate) return null;
@@ -193,11 +194,11 @@ export default function Dogs() {
                   >
                     <div className="relative h-48 bg-gradient-to-br from-brand-50 via-white to-stone-100">
                       <img
-                        src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}&backgroundColor=f5f5f4`}
+                        src={dog.photo_url || getAvatarDataUrl(dog.name)}
                         alt={dog.name}
                         className="w-full h-full object-cover"
                         onError={(event) => {
-                          event.target.src = `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}&backgroundColor=f5f5f4`;
+                          event.target.src = getAvatarDataUrl(dog.name);
                         }}
                       />
                       <div className="absolute top-3 right-3 flex gap-2">

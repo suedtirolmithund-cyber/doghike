@@ -240,20 +240,8 @@ export default function Datenschutz() {
                   </div>
 
                   <div className="border border-brand-100 rounded-xl p-4">
-                    <p className="font-semibold text-slate-900 mb-1">DiceBear (Avatar-Platzhalter)</p>
-                    <p>Wenn kein eigenes Profil- oder Hundefoto vorhanden ist, kann die App Avatar-Platzhalter von DiceBear laden. Dabei können IP-Adresse und der technische Seed, zum Beispiel ein Name oder eine Nutzer-ID, übertragen werden.</p>
-                    <p className="mt-1 text-slate-500"><a href="https://www.dicebear.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">dicebear.com/privacy-policy</a></p>
-                  </div>
-
-                  <div className="border border-brand-100 rounded-xl p-4">
-                    <p className="font-semibold text-slate-900 mb-1">cdnjs / Cloudflare (Kartenmarker)</p>
-                    <p>Einige Kartenmarker werden über cdnjs geladen. Dabei werden technisch notwendige Abrufdaten wie IP-Adresse und Browserinformationen an den CDN-Anbieter übertragen.</p>
-                    <p className="mt-1 text-slate-500"><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">cloudflare.com/privacypolicy</a></p>
-                  </div>
-
-                  <div className="border border-brand-100 rounded-xl p-4">
-                    <p className="font-semibold text-slate-900 mb-1">Externe Bild- und Mediendienste</p>
-                    <p>Einzelne statische Bilder oder Platzhalter können aus externen Quellen wie Base44-Medien oder Unsplash geladen werden. Dabei können IP-Adresse, Browserdaten und der Zeitpunkt des Abrufs an den jeweiligen Anbieter übertragen werden.</p>
+                    <p className="font-semibold text-slate-900 mb-1">Lokale Platzhalterbilder</p>
+                    <p>Avatar-Platzhalter, App-Icons und Kartenmarker werden lokal aus der App oder aus gebündelten App-Assets geladen. Dafür wird kein zusätzlicher Avatar- oder Icon-Drittanbieter kontaktiert.</p>
                   </div>
 
                   <div className="border border-brand-100 rounded-xl p-4">

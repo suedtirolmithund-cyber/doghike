@@ -35,6 +35,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { TOUR_ICONS, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { formatDurationHours } from "@/lib/duration";
+import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { toast } from "sonner";
 
 function getCountryLabel(country) {
@@ -248,7 +249,7 @@ export default function HikeDetail() {
 
   const hikeDogs = dogs.filter(d => hike.dogs?.includes(d.id));
   const photos = hike.photos || [];
-  const coverPhoto = photos[0] || "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80";
+  const coverPhoto = photos[0] || "/splash/autumn-hero.jpg";
   const detailId = hike?._source === "sheets" && hike?._public_hike_id
     ? hike.route_id || String(hike._public_hike_id)
     : hike.id;
@@ -687,7 +688,7 @@ export default function HikeDetail() {
                   {hikeDogs.map((dog) => (
                     <div key={dog.id} className="doghike-soft-panel flex items-center gap-3 p-3">
                       <img
-                        src={dog.photo_url || `https://api.dicebear.com/7.x/thumbs/svg?seed=${dog.name}`}
+                        src={dog.photo_url || getAvatarDataUrl(dog.name)}
                         alt={dog.name}
                         className="w-12 h-12 rounded-full object-cover"
                       />
