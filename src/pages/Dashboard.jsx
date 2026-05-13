@@ -179,7 +179,7 @@ export default function Dashboard() {
               Entdecke die schönsten Wanderungen in den Bergen,<br />
               zusammen mit deinem Vierbeiner.
             </p>
-            <div className="absolute left-1/2 top-[281px] flex h-[46px] -translate-x-1/2 items-center justify-center gap-4">
+            <div className="absolute left-1/2 top-[281px] flex h-[46px] -translate-x-1/2 items-center justify-center gap-2">
               <Link to={createPageUrl("Hikes")}>
                 <Button size="lg" variant="outline" className="h-[46px] w-[224.19px] border !border-[#F9C030] !bg-[#FDF0E8] px-0 text-[16px] font-bold leading-[19px] !text-[#7C3020] shadow-[0_12px_26px_rgba(249,192,48,0.2)] hover:!bg-[#FDF0E8] hover:!text-[#7C3020]">
                   <Mountain className="mr-0 h-[18px] w-[18px] text-[#F07030]" /> Alle Touren entdecken
