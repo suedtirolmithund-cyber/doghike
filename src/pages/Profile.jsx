@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -59,6 +59,7 @@ import DogForm from "@/components/forms/DogForm";
 import HikeCard from "@/components/hikes/HikeCard";
 import AccountSettings from "@/components/profile/AccountSettings";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
+import { BADGE_DEFS, getBadges, loadLeaderboard } from "@/lib/topDogs";
 
 export default function Profile() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -83,6 +84,15 @@ export default function Profile() {
     queryKey: ["dogs", user?.id],
     queryFn: () => getDogs(user.id),
     enabled: !!user?.id,
+    staleTime: 5 * 60_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
+
+  const { data: topDogs = [] } = useQuery({
+    queryKey: ["topDogs"],
+    queryFn: loadLeaderboard,
+    enabled: dogs.length > 0,
     staleTime: 5 * 60_000,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -125,6 +135,24 @@ export default function Profile() {
   });
 
   const notificationCount = notifications.length;
+
+  const dogBadgeMeta = useMemo(() => {
+    const tourRanking = [...topDogs].sort((a, b) => b.tourCount - a.tourCount);
+    const distanceRanking = [...topDogs].sort((a, b) => b.totalDistance - a.totalDistance);
+    const elevationRanking = [...topDogs].sort((a, b) => b.totalElevation - a.totalElevation);
+    const championIds = new Set(
+      [tourRanking[0]?.dog?.id, distanceRanking[0]?.dog?.id, elevationRanking[0]?.dog?.id].filter(Boolean)
+    );
+
+    return Object.fromEntries(
+      topDogs.map((entry) => [
+        entry.dog.id,
+        {
+          badges: getBadges(entry, championIds.has(entry.dog.id)),
+        },
+      ])
+    );
+  }, [topDogs]);
 
   const savedHikeObjects = savedHikes
     .map((saved) =>
@@ -527,6 +555,19 @@ export default function Profile() {
                           <span className="text-xs text-brand-700 bg-brand-50 border border-brand-100 px-2 py-0.5 rounded-full">{dog.breed}</span>
                           )}
                         </div>
+                        {dogBadgeMeta[dog.id]?.badges?.length > 0 && (
+                          <div className="mb-2 flex flex-wrap gap-1.5">
+                            {dogBadgeMeta[dog.id].badges.map((badgeKey) => (
+                              <span
+                                key={badgeKey}
+                                title={`${BADGE_DEFS[badgeKey].label}: ${BADGE_DEFS[badgeKey].desc}`}
+                                className="inline-flex items-center justify-center rounded-full border border-brand-100 bg-brand-50 px-2 py-1 text-sm leading-none"
+                              >
+                                {BADGE_DEFS[badgeKey].emoji}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                         {getAge(dog.birth_date) && (
                           <p className="text-sm text-slate-500 mb-2">{getAge(dog.birth_date)}</p>
                         )}
