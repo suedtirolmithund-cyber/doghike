@@ -121,7 +121,14 @@ export default function HikeDetail() {
   const { data: hike, isLoading } = useQuery({
     queryKey: ["hike", hikeSource, hikeId],
     queryFn: async () => {
-      const hikes = await getAllHikes();
+      const cachedHikes = queryClient.getQueryData(["allHikes"]);
+      const hikes = Array.isArray(cachedHikes) && cachedHikes.length > 0
+        ? cachedHikes
+        : await queryClient.fetchQuery({
+            queryKey: ["allHikes"],
+            queryFn: getAllHikes,
+            staleTime: 5 * 60_000,
+          });
       return hikes.find((h) => {
         if ((h._source ?? "sheets") !== hikeSource) return false;
 
@@ -132,7 +139,8 @@ export default function HikeDetail() {
         return String(h.id) === normalizedHikeId;
       });
     },
-    enabled: !!normalizedHikeId
+    enabled: !!normalizedHikeId,
+    staleTime: 5 * 60_000,
   });
 
   const { user: currentUser, isAdmin } = useAuth();
