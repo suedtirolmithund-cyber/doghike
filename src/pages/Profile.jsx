@@ -314,8 +314,8 @@ export default function Profile() {
           animate={{ opacity: 1, y: 0 }}
           className="doghike-glass-card p-6 mb-6 md:mb-8"
         >
-          <div className="flex items-start gap-5">
-            <div className="relative shrink-0">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
+            <div className="relative mx-auto shrink-0 sm:mx-0">
               <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-white shadow-md bg-brand-100/80">
                 {avatarUploading ? (
                   <div className="w-full h-full flex items-center justify-center bg-brand-100/80">
@@ -331,7 +331,7 @@ export default function Profile() {
               </label>
             </div>
 
-            <div className="flex-1 min-w-0">
+            <div className="min-w-0 flex-1 text-center sm:text-left">
               {editingProfile ? (
                 <div className="space-y-2">
                   <div>
@@ -374,7 +374,7 @@ export default function Profile() {
                     <p className="text-sm text-slate-400">@{profile.username}</p>
                   )}
                   <p className="text-xs text-slate-400 mt-0.5 truncate">{user?.email}</p>
-                  <div className="mt-2 flex flex-wrap gap-2">
+                  <div className="mt-2 flex flex-wrap justify-center gap-2 sm:justify-start">
                     <Button size="sm" variant="outline" className="h-7 text-xs" onClick={startEditProfile}>
                       <Edit className="w-3 h-3 mr-1" /> Profil bearbeiten
                     </Button>
@@ -401,15 +401,17 @@ export default function Profile() {
               )}
             </div>
 
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={logout}
-              className="h-10 w-10 shrink-0 rounded-xl border-brand-100 bg-white/70 p-0 text-brand-600 shadow-sm hover:border-brand-100 hover:bg-brand-50 hover:text-brand-400 md:w-auto md:px-3"
-            >
-              <LogOut className="w-4 h-4 md:mr-2" />
-              <span className="hidden md:inline">Abmelden</span>
-            </Button>
+            <div className="flex justify-center sm:justify-end">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={logout}
+                className="h-10 shrink-0 rounded-xl border-brand-100 bg-white/70 px-3 text-brand-600 shadow-sm hover:border-brand-100 hover:bg-brand-50 hover:text-brand-400"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Abmelden</span>
+              </Button>
+            </div>
           </div>
         </motion.div>
 
