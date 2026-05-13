@@ -103,16 +103,16 @@ function DifficultyInfoDialog({ icon, title, description, levels }) {
           </DialogDescription>
         </DialogHeader>
         <div className="min-h-0 space-y-3 overflow-y-auto px-6 pb-6 pr-5">
-          <div className="rounded-2xl border border-brand-100/70 bg-brand-50/70 p-4 text-sm text-slate-600">
+          <div className="doghike-info-box">
             <div className="space-y-2">
               {DIFFICULTY_APP_EXPLANATIONS.map((item) => (
                 <div key={item.key}>
-                  <div className="font-medium text-slate-800">{item.title}</div>
-                  <p>{item.description}</p>
+                  <div className="doghike-info-subtitle">{item.title}</div>
+                  <p className="doghike-info-text">{item.description}</p>
                 </div>
               ))}
             </div>
-            <p className="mt-3 rounded-xl border border-brand-100 bg-white/70 px-3 py-2 text-slate-700">
+            <p className="doghike-info-note">
               {DIFFICULTY_GUIDE_NOTE}
             </p>
           </div>
@@ -164,9 +164,9 @@ function WaterInfoDialog() {
           </DialogDescription>
         </DialogHeader>
         <div className="min-h-0 space-y-3 overflow-y-auto px-6 pb-6 pr-5">
-          <div className="rounded-2xl border border-brand-100/70 bg-brand-50/70 p-4 text-sm text-slate-600">
-            <p>{WATER_APP_EXPLANATION}</p>
-            <p className="mt-3 rounded-xl border border-brand-100 bg-white/70 px-3 py-2 text-slate-700">
+          <div className="doghike-info-box">
+            <p className="doghike-info-text">{WATER_APP_EXPLANATION}</p>
+            <p className="doghike-info-note">
               {WATER_GUIDE_NOTE}
             </p>
           </div>
@@ -212,14 +212,14 @@ function GrazingAnimalsInfoDialog() {
           </DialogDescription>
         </DialogHeader>
         <div className="min-h-0 space-y-3 overflow-y-auto px-6 pb-6 pr-5">
-          <div className="rounded-2xl border border-brand-100/70 bg-brand-50/70 p-4 text-sm text-slate-600 space-y-3">
-            <p>
+          <div className="doghike-info-box space-y-3">
+            <p className="doghike-info-text">
               Weidetiere können sich je nach Saison, Ort und Jahr verändern. Eine Wanderung kann zum Beispiel im Herbst oder Frühling gemacht worden sein, als noch keine Tiere auf der Weide waren.
             </p>
-            <p>
+            <p className="doghike-info-text">
               Außerdem können Tiere später an anderen Stellen stehen oder auf derselben Route in einem anderen Jahr ganz anders verteilt sein.
             </p>
-            <p className="rounded-xl border border-brand-100 bg-white/70 px-3 py-2 text-slate-700">
+            <p className="doghike-info-note">
               Nutze den Hinweis also nur als Orientierung und rechne trotzdem immer damit, dass unterwegs Weidetiere auftauchen können.
             </p>
           </div>
@@ -252,17 +252,17 @@ function MuzzleInfoDialog() {
           </DialogDescription>
         </DialogHeader>
         <div className="min-h-0 space-y-3 overflow-y-auto px-6 pb-6 pr-5">
-          <div className="rounded-2xl border border-brand-100/70 bg-brand-50/70 p-4 text-sm text-slate-600 space-y-3">
-            <p>
+          <div className="doghike-info-box space-y-3">
+            <p className="doghike-info-text">
               Je nach Land, Region oder Betreiber können für Hunde Leinen- und Maulkorbpflichten gelten. Informiere dich deshalb am besten immer vorab.
             </p>
-            <p>
+            <p className="doghike-info-text">
               In Italien kann ein Maulkorb zum Beispiel in öffentlichen Verkehrsmitteln, bei Menschenansammlungen oder auf Anweisung verlangt werden. Es ist deshalb sinnvoll, den Hund schon vor der Reise stressfrei an einen Maulkorb zu gewöhnen.
             </p>
-            <p>
+            <p className="doghike-info-text">
               Auch bei Bergbahnen kann es je nach Gesellschaft Unterschiede geben. Dasselbe gilt oft für Regeln und Ticketpreise für Hunde.
             </p>
-            <p className="rounded-xl border border-brand-100 bg-white/70 px-3 py-2 text-slate-700">
+            <p className="doghike-info-note">
               In öffentlichen Verkehrsmitteln reicht eine Maulschlinge oft nicht aus. Prüfe deshalb immer die aktuellen Vorgaben vor Ort.
             </p>
           </div>

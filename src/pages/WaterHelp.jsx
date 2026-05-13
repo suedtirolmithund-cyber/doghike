@@ -17,16 +17,16 @@ export default function WaterHelp() {
           </div>
         </div>
 
-        <div className="mb-6 rounded-3xl border border-brand-100/80 bg-white/75 p-5 shadow-sm backdrop-blur-xl">
-          <h2 className="mb-3 text-base font-semibold text-slate-800">Bedeutung in der App</h2>
-          <div className="space-y-3 text-sm text-slate-600">
+        <div className="doghike-info-box-lg mb-6">
+          <h2 className="doghike-info-title">Bedeutung in der App</h2>
+          <div className="space-y-3">
             <div>
-              <div className="font-medium text-slate-800">Wasserverfügbarkeit</div>
-              <p>{WATER_APP_EXPLANATION}</p>
+              <div className="doghike-info-subtitle">Wasserverfügbarkeit</div>
+              <p className="doghike-info-text">{WATER_APP_EXPLANATION}</p>
             </div>
             <div>
-              <div className="font-medium text-slate-800">Hinweis für Hundebesitzer</div>
-              <p>{WATER_GUIDE_NOTE}</p>
+              <div className="doghike-info-subtitle">Hinweis für Hundebesitzer</div>
+              <p className="doghike-info-text">{WATER_GUIDE_NOTE}</p>
             </div>
           </div>
         </div>

@@ -27,17 +27,17 @@ export default function DifficultyHelp() {
           </div>
         </div>
 
-        <div className="mb-6 rounded-3xl border border-brand-100/80 bg-white/75 p-5 shadow-sm backdrop-blur-xl">
-          <h2 className="mb-3 text-base font-semibold text-slate-800">Bedeutung in der App</h2>
-          <div className="space-y-3 text-sm text-slate-600">
+        <div className="doghike-info-box-lg mb-6">
+          <h2 className="doghike-info-title">Bedeutung in der App</h2>
+          <div className="space-y-3">
             {DIFFICULTY_APP_EXPLANATIONS.map((item) => (
               <div key={item.key}>
-                <div className="font-medium text-slate-800">{item.title}</div>
-                <p>{item.description}</p>
+                <div className="doghike-info-subtitle">{item.title}</div>
+                <p className="doghike-info-text">{item.description}</p>
               </div>
             ))}
           </div>
-          <p className="mt-4 rounded-2xl border border-brand-100 bg-brand-50 px-4 py-3 text-sm text-slate-700">
+          <p className="doghike-info-note mt-4">
             {DIFFICULTY_GUIDE_NOTE}
           </p>
         </div>
