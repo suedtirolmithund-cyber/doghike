@@ -242,6 +242,7 @@ export default function HikeDetail() {
       : [];
   
   const countryLabel = getCountryLabel(hike.country);
+  const seasonValue = hike.season || (Array.isArray(hike.seasons) ? hike.seasons[0] : null);
 
   const nextPhoto = () => setCurrentPhotoIndex((prev) => (prev + 1) % photos.length);
   const prevPhoto = () => setCurrentPhotoIndex((prev) => (prev - 1 + photos.length) % photos.length);
@@ -481,6 +482,15 @@ export default function HikeDetail() {
                   ))}
                 </div>
                 <div className="text-xs text-slate-400">Hund</div>
+              </div>
+            </div>
+          )}
+          {seasonValue && getSeasonLabel(seasonValue) && (
+            <div className="doghike-stat-chip min-w-[128px] shrink-0 justify-center px-4 py-2.5">
+              <span className="text-base">{getSeasonIcon(seasonValue)}</span>
+              <div>
+                <div className="text-sm font-bold text-slate-950 leading-tight">{getSeasonLabel(seasonValue)}</div>
+                <div className="text-xs text-slate-400">Jahreszeit</div>
               </div>
             </div>
           )}
