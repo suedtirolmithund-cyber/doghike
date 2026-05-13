@@ -137,9 +137,9 @@ export default function Hikes() {
   const { data: hikes = [] } = useQuery({
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
-    staleTime: 0,
-    refetchOnMount: "always",
-    refetchOnWindowFocus: true,
+    staleTime: 5 * 60_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
   const {
     searchQuery,
@@ -402,4 +402,3 @@ export default function Hikes() {
     </div>
   );
 }
-
