@@ -556,3 +556,19 @@ begin
   where id = current_user_id;
 end;
 $$;
+
+create table if not exists public.support_requests (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users(id) on delete set null,
+  email text,
+  category text not null default 'feedback',
+  subject text not null,
+  message text not null,
+  page_url text,
+  user_agent text,
+  email_status text not null default 'pending',
+  email_error text,
+  created_at timestamptz not null default now()
+);
+
+alter table public.support_requests enable row level security;

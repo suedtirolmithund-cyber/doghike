@@ -13,28 +13,58 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { sendSupportMessage } from "@/lib/supportApi";
 
 const SUPPORT_EMAIL = "suedtirolmithund@gmail.com";
 
 export default function Support() {
   const { user } = useAuth();
+  const [email, setEmail] = useState(user?.email || "");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
     if (!subject.trim() || !message.trim()) {
       toast.error("Bitte fülle alle Felder aus");
       return;
     }
 
-    const from = user?.email ? `\n\nVon: ${user.email}` : "";
-    const body = encodeURIComponent(`Betreff: ${subject}\n\nNachricht:\n${message}${from}`);
-    const mailto = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(`Support: ${subject}`)}&body=${body}`;
-    window.open(mailto, "_blank");
-    setSubmitted(true);
-    toast.success("E-Mail-Programm wird geöffnet...");
+    if (!user?.email && !email.trim()) {
+      toast.error("Bitte gib eine E-Mail-Adresse an, damit wir dir antworten können.");
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      await sendSupportMessage({
+        subject: subject.trim(),
+        message: message.trim(),
+        email: user?.email || email.trim(),
+        category: "feedback",
+        pageUrl: typeof window !== "undefined" ? window.location.href : "",
+        userAgent: typeof navigator !== "undefined" ? navigator.userAgent : "",
+      });
+
+      setSubmitted(true);
+      toast.success("Deine Nachricht wurde gesendet.");
+    } catch (error) {
+      const code = String(error?.code || error?.message || "").toLowerCase();
+
+      if (code.includes("support_email_not_configured")) {
+        toast.error("Der Versand ist noch nicht fertig eingerichtet. Schreib uns bis dahin bitte direkt per E-Mail.");
+      } else if (code.includes("email_send_failed")) {
+        toast.error("Deine Nachricht konnte gerade nicht per E-Mail zugestellt werden. Bitte versuche es noch einmal.");
+      } else {
+        toast.error("Deine Nachricht konnte gerade nicht gesendet werden. Bitte versuche es noch einmal.");
+      }
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const faqs = [
@@ -84,7 +114,7 @@ export default function Support() {
         },
         {
           q: "Wie kann ich mein Konto löschen?",
-          a: "Gehe zu 'Mein Profil' -> Konto -> 'Konto löschen'. Dort wird eine Löschanfrage per E-Mail vorbereitet, die danach manuell bearbeitet wird.",
+          a: "Gehe zu 'Mein Profil' -> Konto -> 'Konto löschen'. Dort kannst du die Löschung direkt auslösen.",
         },
         {
           q: "Werden meine GPS-Daten gespeichert?",
@@ -176,15 +206,16 @@ export default function Support() {
             {submitted ? (
               <div className="text-center py-12">
                 <CheckCircle2 className="w-16 h-16 text-brand-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-slate-900 mb-2">E-Mail-Programm geöffnet!</h3>
+                <h3 className="text-xl font-semibold text-slate-900 mb-2">Nachricht gesendet!</h3>
                 <p className="text-slate-500 text-sm mb-6">
-                  Falls es nicht geklappt hat, schreib direkt an{" "}
+                  Falls du noch etwas ergänzen willst, schreib direkt an{" "}
                   <a href={`mailto:${SUPPORT_EMAIL}`} className="text-brand-600 underline">{SUPPORT_EMAIL}</a>.
                 </p>
                 <Button
                   variant="outline"
                   onClick={() => {
                     setSubmitted(false);
+                    setEmail(user?.email || "");
                     setSubject("");
                     setMessage("");
                   }}
@@ -194,22 +225,62 @@ export default function Support() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Betreff</label>
-                  <Input value={subject} onChange={(event) => setSubject(event.target.value)} placeholder="Worum geht es?" required />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Nachricht</label>
-                  <Textarea value={message} onChange={(event) => setMessage(event.target.value)} placeholder="Beschreibe dein Anliegen..." rows={5} required />
-                </div>
-                {user && (
-                  <div className="doghike-soft-panel p-3 text-sm text-brand-800">
-                    Antwort kommt an: <strong>{user.email}</strong>
+                {!user?.email && (
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">Deine E-Mail-Adresse</label>
+                    <Input
+                      type="email"
+                      value={email}
+                      onChange={(event) => setEmail(event.target.value)}
+                      placeholder="name@example.com"
+                      required
+                    />
                   </div>
                 )}
-                <Button type="submit" className="w-full bg-brand-400 hover:bg-brand-600">
-                  <Send className="w-4 h-4 mr-2" /> Nachricht senden
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Betreff</label>
+                  <Input
+                    value={subject}
+                    onChange={(event) => setSubject(event.target.value)}
+                    placeholder="Worum geht es?"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Nachricht</label>
+                  <Textarea
+                    value={message}
+                    onChange={(event) => setMessage(event.target.value)}
+                    placeholder="Beschreibe dein Anliegen..."
+                    rows={5}
+                    required
+                  />
+                </div>
+
+                {user?.email && (
+                  <div className="doghike-soft-panel p-3 text-sm text-brand-800">
+                    Antwortadresse für Rückfragen: <strong>{user.email}</strong>
+                  </div>
+                )}
+
+                <Button type="submit" disabled={submitting} className="w-full bg-brand-400 hover:bg-brand-600 disabled:opacity-60">
+                  {submitting ? (
+                    <>Wird gesendet...</>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4 mr-2" /> Nachricht senden
+                    </>
+                  )}
                 </Button>
+
+                <div className="text-center text-sm text-slate-500">
+                  Oder direkt per E-Mail an{" "}
+                  <a href={`mailto:${SUPPORT_EMAIL}`} className="text-brand-600 underline">
+                    {SUPPORT_EMAIL}
+                  </a>
+                </div>
               </form>
             )}
           </div>
