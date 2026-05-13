@@ -288,7 +288,7 @@ export default function OfflineDownload({ hike, dogs = [] }) {
         ) : (
           <>
             <FileDown className="w-4 h-4 mr-2" />
-            Offline-PDF
+            Tour als PDF
           </>
         )}
       </Button>
