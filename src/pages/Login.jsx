@@ -225,13 +225,14 @@ export default function Login() {
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45 }}
-          className="relative z-10 mx-auto mt-10 w-full max-w-sm text-center sm:mt-14"
+          className="relative z-10 mx-auto mt-4 w-full max-w-sm text-center sm:mt-10"
           style={{ fontFamily: "Nunito, sans-serif" }}
         >
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/85">
             Willkommen bei DogTrails
           </p>
-          <h2 className="mt-4 text-[28px] font-extrabold leading-tight text-white drop-shadow md:text-[34px]">
+          <div className="mt-3 text-lg leading-none text-white drop-shadow">🐾 🐾 🐾</div>
+          <h2 className="mt-3 text-[24px] font-extrabold leading-[29px] text-white drop-shadow md:text-[34px] md:leading-tight">
             Plane Touren, die zu dir und deinem Hund passen.
           </h2>
         </motion.div>
