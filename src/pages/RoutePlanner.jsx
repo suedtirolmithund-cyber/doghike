@@ -798,11 +798,11 @@ export default function RoutePlanner() {
                     : "Diese Planung bleibt privat. Erst wenn du die Route später als Wanderung einträgst, kannst du sie auf Freunde oder öffentlich stellen."}
               </div>
 
-              <div className="flex gap-2 justify-end">
-                <Button type="button" variant="outline" onClick={() => setRouteGeometry(null)}>
+              <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                <Button type="button" variant="outline" onClick={() => setRouteGeometry(null)} className="w-full sm:w-auto">
                   Abbrechen
                 </Button>
-                <Button type="submit" disabled={createRouteMutation.isPending} className="bg-[#A8003C] hover:bg-[#7C3020]">
+                <Button type="submit" disabled={createRouteMutation.isPending} className="w-full bg-[#A8003C] hover:bg-[#7C3020] sm:w-auto">
                   {createRouteMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                   {activeTab === "track"
                     ? "Ins Tagebuch übernehmen"
