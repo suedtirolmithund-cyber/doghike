@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { getAllHikes } from "@/api/sheetsClient";
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -67,6 +67,7 @@ export default function HikeDetail() {
   const [searchParams] = useSearchParams();
   const hikeId = searchParams.get("id");
   const hikeSource = searchParams.get("source") ?? "sheets";
+  const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   
@@ -74,6 +75,22 @@ export default function HikeDetail() {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [copied, setCopied] = useState(false);
   const normalizedHikeId = hikeId ? String(hikeId) : null;
+  const prefetchedHike = location.state?.hike;
+  const initialHike = useMemo(() => {
+    if (!prefetchedHike || !normalizedHikeId) return undefined;
+
+    const prefetchedSource = prefetchedHike._source ?? "sheets";
+    if (prefetchedSource !== hikeSource) return undefined;
+
+    if (hikeSource === "sheets") {
+      const prefetchedDetailId = String(
+        prefetchedHike._public_hike_id ?? prefetchedHike.route_id ?? prefetchedHike.id ?? ""
+      );
+      return prefetchedDetailId === normalizedHikeId ? prefetchedHike : undefined;
+    }
+
+    return String(prefetchedHike.id ?? "") === normalizedHikeId ? prefetchedHike : undefined;
+  }, [prefetchedHike, normalizedHikeId, hikeSource]);
   const fallbackBackUrl = hikeSource === "journal" ? createPageUrl("Journal") : createPageUrl("Hikes");
   const handleBack = () => {
     if (typeof window !== "undefined") {
@@ -120,6 +137,7 @@ export default function HikeDetail() {
 
   const { data: hike, isLoading } = useQuery({
     queryKey: ["hike", hikeSource, hikeId],
+    initialData: initialHike,
     queryFn: async () => {
       const cachedHikes = queryClient.getQueryData(["allHikes"]);
       const hikes = Array.isArray(cachedHikes) && cachedHikes.length > 0
@@ -720,6 +738,7 @@ export default function HikeDetail() {
                       <img
                         src={photo}
                         alt={`Photo ${index + 1}`}
+                        loading="lazy"
                         className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                       />
                     </div>
