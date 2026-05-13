@@ -73,33 +73,45 @@ export default function Profile() {
     queryKey: ["profile", user?.id],
     queryFn: () => getProfile(user.id),
     enabled: !!user?.id,
+    staleTime: 5 * 60_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   const { data: dogs = [], isLoading: dogsLoading } = useQuery({
     queryKey: ["dogs", user?.id],
     queryFn: () => getDogs(user.id),
     enabled: !!user?.id,
+    staleTime: 5 * 60_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   const { data: savedHikes = [], isLoading: savedLoading } = useQuery({
     queryKey: ["savedHikes", user?.id],
     queryFn: () => getSavedHikes(user.id),
     enabled: !!user?.id,
+    staleTime: 5 * 60_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   const { data: allHikes = [], isLoading: allHikesLoading } = useQuery({
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
     enabled: savedHikes.length > 0,
-    staleTime: 0,
-    refetchOnMount: "always",
-    refetchOnWindowFocus: true,
+    staleTime: 5 * 60_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   const { data: userRoutes = [], isLoading: routesLoading } = useQuery({
     queryKey: ["userRoutes", user?.id],
     queryFn: () => getUserRoutes(user.id),
     enabled: !!user?.id,
+    staleTime: 5 * 60_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   const { data: notifications = [] } = useQuery({
@@ -107,7 +119,8 @@ export default function Profile() {
     queryFn: () => loadNotifications(user.id),
     enabled: !!user?.id,
     staleTime: 2 * 60_000,
-    refetchInterval: 5 * 60_000,
+    refetchOnWindowFocus: false,
+    refetchInterval: 10 * 60_000,
   });
 
   const notificationCount = notifications.length;

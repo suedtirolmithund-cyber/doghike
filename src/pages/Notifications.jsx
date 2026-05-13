@@ -212,7 +212,8 @@ export default function Notifications() {
     queryFn: () => loadNotifications(user.id),
     enabled: !!user?.id,
     staleTime: 2 * 60_000,
-    refetchInterval: 5 * 60_000,
+    refetchOnWindowFocus: false,
+    refetchInterval: 10 * 60_000,
   });
 
   if (!isAuthenticated) {
