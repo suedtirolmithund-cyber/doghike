@@ -79,7 +79,7 @@ export default function AccountSettings({ user }) {
         <div className="space-y-3 text-sm text-slate-600">
           <p>
             Du hast das Recht auf Auskunft, Berichtigung, Löschung und Datenportabilität gemäß DSGVO.
-            Deine Daten werden auf EU-Servern in Frankfurt (Supabase) gespeichert.
+            Details zu Speicherorten, externen Diensten und möglichen Drittlandtransfers findest du in der Datenschutzerklärung.
           </p>
           <div className="flex flex-wrap gap-2">
             <Link to={createPageUrl("Datenschutz")}>
