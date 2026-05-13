@@ -289,19 +289,19 @@ export default function HikeDetail() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
         
-        <div className="absolute top-6 left-6 right-6 flex justify-between items-start">
-          <div>
+        <div className="absolute left-4 right-4 top-4 flex flex-col gap-2 sm:left-6 sm:right-6 sm:top-6 sm:flex-row sm:items-start sm:justify-between">
+          <div className="self-start">
             <Button
               type="button"
               variant="ghost"
               onClick={handleBack}
-              className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20"
+              className="h-10 bg-white/10 px-3 text-sm backdrop-blur-sm text-white hover:bg-white/20"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Zurück
             </Button>
           </div>
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex flex-wrap gap-2 self-start sm:justify-end">
             {(isOwnJournalHike || (isAdmin && hike?._source === "sheets" && hike?._public_hike_id)) && (
               <>
                 <Link
@@ -311,14 +311,14 @@ export default function HikeDetail() {
                       : createPageUrl("EditPublicHike") + `?id=${encodeURIComponent(detailId ?? "")}`
                   }
                 >
-                  <Button variant="ghost" className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20">
+                  <Button variant="ghost" className="h-10 bg-white/10 px-3 text-sm backdrop-blur-sm text-white hover:bg-white/20">
                     <Edit className="w-4 h-4 mr-1" />
                     Bearbeiten
                   </Button>
                 </Link>
                 {isOwnJournalHike && <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="ghost" className="bg-brand-500/20 backdrop-blur-sm text-white hover:bg-brand-500/40">
+                    <Button variant="ghost" className="h-10 bg-brand-500/20 px-3 text-sm backdrop-blur-sm text-white hover:bg-brand-500/40">
                       <Trash2 className="w-4 h-4 mr-1" />
                       Löschen
                     </Button>
@@ -346,7 +346,7 @@ export default function HikeDetail() {
           </div>
         </div>
 
-        <div className="absolute bottom-8 left-8 right-8">
+        <div className="absolute bottom-6 left-4 right-4 sm:bottom-8 sm:left-8 sm:right-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -380,11 +380,11 @@ export default function HikeDetail() {
                 </Badge>
               )}
             </div>
-            <h1 className="text-4xl md:text-5xl font-light text-white mb-2">{hike.trail_name}</h1>
-            <div className="flex items-center gap-3 text-white/85">
-              <div className="flex items-center gap-2 text-base md:text-lg font-medium">
+            <h1 className="mb-2 text-3xl font-light leading-tight text-white sm:text-4xl md:text-5xl">{hike.trail_name}</h1>
+            <div className="flex flex-wrap items-center gap-2.5 text-white/85 sm:gap-3">
+              <div className="flex min-w-0 items-center gap-2 text-sm font-medium sm:text-base md:text-lg">
                 <span>{TOUR_ICONS.location}</span>
-                <span>{hike.location || "Dolomites"}</span>
+                <span className="break-words">{hike.location || "Dolomites"}</span>
               </div>
               <SaveButton
                 hikeId={communityHikeId}
@@ -399,9 +399,7 @@ export default function HikeDetail() {
                   ? <Check className="w-5 h-5 text-brand-400" />
                   : <Share2 className="w-5 h-5" />}
               </button>
-              {countryLabel && (
-                <span className="ml-2">{countryLabel}</span>
-              )}
+              {countryLabel && <span className="text-sm sm:text-base">{countryLabel}</span>}
             </div>
           </motion.div>
         </div>
@@ -444,11 +442,11 @@ export default function HikeDetail() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="mb-10 -mx-1 overflow-x-auto px-1 pb-1"
+          className="mb-10 -mx-4 overflow-x-auto px-4 pb-1 sm:-mx-1 sm:px-1"
         >
           <div className="flex min-w-max gap-2.5">
           {countryLabel && (
-            <div className="doghike-stat-chip min-w-[128px] shrink-0 justify-center px-4 py-2.5">
+            <div className="doghike-stat-chip min-w-[116px] shrink-0 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
               <span className="text-base">{TOUR_ICONS.country}</span>
               <div>
                 <div className="text-sm font-bold text-slate-950 leading-tight">{countryLabel}</div>
@@ -457,7 +455,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.duration_minutes && (
-            <div className="doghike-stat-chip min-w-[128px] shrink-0 justify-center px-4 py-2.5">
+            <div className="doghike-stat-chip min-w-[116px] shrink-0 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
               <span className="text-base">{TOUR_ICONS.duration}</span>
               <div>
                 <div className="text-sm font-bold text-slate-950 leading-tight">
@@ -468,7 +466,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.distance_km && (
-            <div className="doghike-stat-chip min-w-[128px] shrink-0 justify-center px-4 py-2.5">
+            <div className="doghike-stat-chip min-w-[116px] shrink-0 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
               <span className="text-base">{TOUR_ICONS.distance}</span>
               <div>
                 <div className="text-sm font-bold text-slate-950 leading-tight">{hike.distance_km} km</div>
@@ -477,7 +475,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.elevation_gain_m && (
-            <div className="doghike-stat-chip min-w-[128px] shrink-0 justify-center px-4 py-2.5">
+            <div className="doghike-stat-chip min-w-[116px] shrink-0 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
               <span className="text-base">{TOUR_ICONS.elevation}</span>
               <div>
                 <div className="text-sm font-bold text-slate-950 leading-tight">{hike.elevation_gain_m} Hm</div>
@@ -486,7 +484,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.difficulty && (
-            <div className="doghike-stat-chip min-w-[128px] shrink-0 justify-center border-brand-200 bg-brand-50/75 px-4 py-2.5">
+            <div className="doghike-stat-chip min-w-[116px] shrink-0 justify-center border-brand-200 bg-brand-50/75 px-3 py-2.5 sm:min-w-[128px] sm:px-4">
               <span className="text-base">{TOUR_ICONS.human}</span>
               <div>
                 <div className="flex gap-0.5 mb-0.5">
@@ -499,7 +497,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.dog_difficulty && (
-            <div className="doghike-stat-chip min-w-[128px] shrink-0 justify-center border-brand-200 bg-brand-50/75 px-4 py-2.5">
+            <div className="doghike-stat-chip min-w-[116px] shrink-0 justify-center border-brand-200 bg-brand-50/75 px-3 py-2.5 sm:min-w-[128px] sm:px-4">
               <span className="text-base">{TOUR_ICONS.dog}</span>
               <div>
                 <div className="flex gap-0.5 mb-0.5">
@@ -512,7 +510,7 @@ export default function HikeDetail() {
             </div>
           )}
           {seasonValue && getSeasonLabel(seasonValue) && (
-            <div className="doghike-stat-chip min-w-[128px] shrink-0 justify-center px-4 py-2.5">
+            <div className="doghike-stat-chip min-w-[116px] shrink-0 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
               <span className="text-base">{getSeasonIcon(seasonValue)}</span>
               <div>
                 <div className="text-sm font-bold text-slate-950 leading-tight">{getSeasonLabel(seasonValue)}</div>
