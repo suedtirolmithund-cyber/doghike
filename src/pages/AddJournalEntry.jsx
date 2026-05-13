@@ -188,6 +188,46 @@ function WaterInfoDialog() {
   );
 }
 
+function GrazingAnimalsInfoDialog() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <button
+          type="button"
+          className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-brand-200 bg-white/80 text-brand-500 shadow-sm transition hover:border-brand-300 hover:text-brand-600"
+          aria-label="Weidetiere erklären"
+        >
+          <Layers className="h-3.5 w-3.5" />
+        </button>
+      </DialogTrigger>
+      <DialogContent className="grid-rows-[auto,minmax(0,1fr)] max-h-[85vh] overflow-hidden border-white/80 bg-white/95 p-0 sm:max-w-xl">
+        <DialogHeader className="border-b border-brand-100/80 px-6 pb-3 pt-6">
+          <DialogTitle className="flex items-center gap-2 text-left text-slate-800">
+            <span className="text-sm leading-none">🐄</span>
+            Weidetiere unterwegs
+          </DialogTitle>
+          <DialogDescription className="text-left text-slate-500">
+            Dieser Hinweis ist hilfreich, aber nie ganz verlässlich.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="min-h-0 space-y-3 overflow-y-auto px-6 pb-6 pr-5">
+          <div className="rounded-2xl border border-brand-100/70 bg-brand-50/70 p-4 text-sm text-slate-600 space-y-3">
+            <p>
+              Weidetiere können sich je nach Saison, Ort und Jahr verändern. Eine Wanderung kann zum Beispiel im Herbst oder Frühling gemacht worden sein, als noch keine Tiere auf der Weide waren.
+            </p>
+            <p>
+              Außerdem können Tiere später an anderen Stellen stehen oder auf derselben Route in einem anderen Jahr ganz anders verteilt sein.
+            </p>
+            <p className="rounded-xl border border-brand-100 bg-white/70 px-3 py-2 text-slate-700">
+              Nutze den Hinweis also nur als Orientierung und rechne trotzdem immer damit, dass unterwegs Weidetiere auftauchen können.
+            </p>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 // Berg-Picker (Schwierigkeit Mensch)
 function MountainPicker({ label, value, onChange }) {
   const [hover, setHover] = useState(0);
@@ -1181,7 +1221,10 @@ export default function AddJournalEntry() {
             <BonePicker label="Schwierigkeit (Hund)" value={form.dog_difficulty} onChange={(v) => set("dog_difficulty", v)} />
 
             <div>
-              <Label className="text-sm text-slate-600 mb-2 block">Hinweise für Hunde (optional)</Label>
+              <div className="mb-2 flex items-center gap-1.5">
+                <Label className="mb-0 block text-sm text-slate-600">Hinweise für Hunde (optional)</Label>
+                <GrazingAnimalsInfoDialog />
+              </div>
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
