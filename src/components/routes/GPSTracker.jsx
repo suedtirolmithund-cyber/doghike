@@ -188,11 +188,25 @@ export default function GPSTracker({ onSave }) {
   const [myLocation, setMyLocation] = useState(initialState.myLocation);
   const [locating, setLocating] = useState(false);
   const [gpsAccuracy, setGpsAccuracy] = useState(null);
-  const [liveElevationProfile, setLiveElevationProfile] = useState([]);
+  const [liveElevationProfile, setLiveElevationProfile] = useState(() => {
+    const samples = initialState.restoredSnapshot?.pointSamples ?? [];
+    if (samples.length < 2) return [];
+    let dist = 0;
+    return samples.reduce((acc, s, i) => {
+      if (i > 0) {
+        dist += haversineDistance(samples[i - 1].point, s.point);
+      }
+      if (s.altitude != null) {
+        acc.push({ dist: parseFloat(dist.toFixed(2)), ele: Math.round(s.altitude) });
+      }
+      return acc;
+    }, []);
+  });
 
   const watchIdRef = useRef(null);
   const pollIntervalRef = useRef(null);
   const intervalRef = useRef(null);
+  const lastPersistRef = useRef(0);
   const wakeLockRef = useRef(null);
   const flyToRef = useRef(null);
   const flyControllerRef = useRef(null);
@@ -225,7 +239,7 @@ export default function GPSTracker({ onSave }) {
     return pausedTimeRef.current + activePauseMs;
   }, []);
 
-  const persistTrackingState = useCallback(() => {
+  const persistTrackingState = useCallback((force = false) => {
     if (typeof window === "undefined") return;
 
     const hasTrackData = routePointsRef.current.length > 0 || isTracking;
@@ -233,6 +247,10 @@ export default function GPSTracker({ onSave }) {
       window.localStorage.removeItem(GPS_TRACK_STORAGE_KEY);
       return;
     }
+
+    const now = Date.now();
+    if (!force && now - lastPersistRef.current < 5000) return;
+    lastPersistRef.current = now;
 
     const snapshot = {
       savedAt: Date.now(),
@@ -334,18 +352,15 @@ export default function GPSTracker({ onSave }) {
     if (prev.length > 0) {
       const dist = haversineDistance(prev[prev.length - 1], newPoint) * 1000;
       const lastSample = pointSamplesRef.current[pointSamplesRef.current.length - 1];
-      const elapsedHours = lastSample
-        ? Math.max((sampleTime - lastSample.timestamp) / 3_600_000, 1 / 3600)
-        : 0;
-      const speedKmh = elapsedHours > 0 ? dist / 1000 / elapsedHours : 0;
-
       if (dist < MIN_POINT_DISTANCE_METERS) {
         setCurrentPosition(newPoint);
         return;
       }
 
-      if (speedKmh > MAX_REASONABLE_SPEED_KMH) {
-        return;
+      if (lastSample && sampleTime !== lastSample.timestamp) {
+        const elapsedHours = (sampleTime - lastSample.timestamp) / 3_600_000;
+        const speedKmh = elapsedHours > 0 ? dist / 1000 / elapsedHours : 0;
+        if (speedKmh > MAX_REASONABLE_SPEED_KMH) return;
       }
 
       distanceRef.current += dist / 1000;
@@ -571,7 +586,7 @@ export default function GPSTracker({ onSave }) {
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === "hidden") {
-        persistTrackingState();
+        persistTrackingState(true);
         if (isTracking && !isPaused) {
           hiddenAtRef.current = Date.now();
           if (!visibilityWarningShownRef.current) {
@@ -610,7 +625,7 @@ export default function GPSTracker({ onSave }) {
     };
 
     const handlePageHide = () => {
-      persistTrackingState();
+      persistTrackingState(true);
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
