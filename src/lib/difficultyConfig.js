@@ -233,6 +233,7 @@ export const WATER_GUIDE_NOTE =
   "Die Wassertropfen zeigen nur die typische Wasserverfügbarkeit entlang der Route. Wasserstellen können je nach Saison, Wetter, Trockenheit, Schneelage oder Bewirtschaftung fehlen. Außerdem kann natürliches Wasser sehr kalt sein, besonders in Bächen, Bergseen oder nach der Schneeschmelze. Manche Hunde reagieren empfindlich darauf. Deshalb sollte für den Hund immer eigenes Wasser mitgenommen werden, auch bei 2 oder 3 Tropfen.";
 
 export const TOUR_ICONS = {
+  tour: "⛰️",
   distance: "📏",
   elevation: "⛰️",
   duration: "⏱️",
@@ -244,6 +245,13 @@ export const TOUR_ICONS = {
   dog: "🐕",
   season: "🍃",
   speed: "🏃",
+  grazing: "🐄",
+  muzzle: "🦮",
+  private: "👤",
+  friends: "👥",
+  public: "🌍",
+  tip: "💡",
+  check: "✓",
   parking: "🅿️",
   restaurant: "🍽️",
   hazard: "⚠️",

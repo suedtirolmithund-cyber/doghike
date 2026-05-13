@@ -247,7 +247,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="country">Land 🌍</Label>
+          <Label htmlFor="country">Land {TOUR_ICONS.country}</Label>
           <Select
             value={formData.country || "italy"}
             onValueChange={(value) => setFormData({ ...formData, country: value })}
@@ -260,7 +260,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               <SelectItem value="austria">🇦🇹 Österreich</SelectItem>
               <SelectItem value="germany">🇩🇪 Deutschland</SelectItem>
               <SelectItem value="switzerland">🇨🇭 Schweiz</SelectItem>
-              <SelectItem value="other">🌍 Anderes</SelectItem>
+              <SelectItem value="other">{TOUR_ICONS.country} Anderes</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -379,7 +379,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
                   : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
               }`}
             >
-              🐄 Weidetiere
+              {TOUR_ICONS.grazing} Weidetiere
             </button>
             <button
               type="button"
@@ -390,7 +390,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
                   : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
               }`}
             >
-              🦮 Maulkorb
+              {TOUR_ICONS.muzzle} Maulkorb
             </button>
           </div>
           <p className="text-xs text-slate-500">
@@ -460,7 +460,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         {formData.latitude && formData.longitude && (
           <div className="p-3 bg-white rounded-lg border border-brand-200">
             <p className="text-sm text-brand-600 font-medium mb-1">
-              ✓ Ausgangspunkt gesetzt
+              {TOUR_ICONS.check} Ausgangspunkt gesetzt
             </p>
             <p className="text-xs text-slate-600">
               {formData.location && `${TOUR_ICONS.location} ${formData.location} • `}
@@ -524,7 +524,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         {formData.route_coordinates?.length > 0 && (
           <div className="p-3 bg-white rounded-lg border border-brand-200">
             <p className="text-sm text-brand-600 font-medium">
-              ✓ Route mit {formData.route_coordinates.length} Wegpunkten
+              {TOUR_ICONS.check} Route mit {formData.route_coordinates.length} Wegpunkten
             </p>
           </div>
         )}
@@ -573,7 +573,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
           <div className="space-y-2">
             <div className="rounded-xl border border-brand-200/70 bg-brand-50/60 p-2">
               <p className="text-xs text-brand-700">
-                💡 Klicke auf die Karte, um Wegpunkte hinzuzufügen. Der erste Punkt wird automatisch als Ausgangspunkt verwendet.
+                {TOUR_ICONS.tip} Klicke auf die Karte, um Wegpunkte hinzuzufügen. Der erste Punkt wird automatisch als Ausgangspunkt verwendet.
               </p>
             </div>
             <RouteEditor
@@ -778,15 +778,15 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             <SelectValue placeholder="Wählen" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="private">🔒 Privat (nur für mich)</SelectItem>
-            <SelectItem value="friends">👥 Mit Freunden teilen</SelectItem>
-            <SelectItem value="public">🌍 Öffentlich (für alle sichtbar)</SelectItem>
+            <SelectItem value="private">{TOUR_ICONS.private} Privat (nur für mich)</SelectItem>
+            <SelectItem value="friends">{TOUR_ICONS.friends} Mit Freunden teilen</SelectItem>
+            <SelectItem value="public">{TOUR_ICONS.public} Öffentlich (für alle sichtbar)</SelectItem>
           </SelectContent>
         </Select>
         <p className="text-xs text-slate-600 mt-2 bg-white p-2 rounded border border-brand-200">
-          {formData.visibility === "private" && "🔒 Nur du kannst diese Tour sehen – nur die Grundangaben sind Pflicht, weitere Felder bleiben optional."}
-          {formData.visibility === "friends" && "👥 Nur Freunde können diese Tour sehen – für das Teilen müssen alle Pflichtfelder ausgefüllt sein."}
-          {formData.visibility === "public" && "🌍 Alle Nutzer können diese Tour sehen – für eine öffentliche Tour müssen alle Pflichtfelder ausgefüllt sein."}
+          {formData.visibility === "private" && `${TOUR_ICONS.private} Nur du kannst diese Tour sehen – nur die Grundangaben sind Pflicht, weitere Felder bleiben optional.`}
+          {formData.visibility === "friends" && `${TOUR_ICONS.friends} Nur Freunde können diese Tour sehen – für das Teilen müssen alle Pflichtfelder ausgefüllt sein.`}
+          {formData.visibility === "public" && `${TOUR_ICONS.public} Alle Nutzer können diese Tour sehen – für eine öffentliche Tour müssen alle Pflichtfelder ausgefüllt sein.`}
         </p>
         {hike && hike.visibility === "public" && formData.visibility !== "public" && (
           <p className="text-xs text-brand-400 font-medium mt-2">

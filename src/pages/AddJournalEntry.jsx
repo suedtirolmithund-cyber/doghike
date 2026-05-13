@@ -204,7 +204,7 @@ function GrazingAnimalsInfoDialog() {
       <DialogContent className="grid-rows-[auto,minmax(0,1fr)] max-h-[85vh] overflow-hidden border-white/80 bg-white/95 p-0 sm:max-w-xl">
         <DialogHeader className="border-b border-brand-100/80 px-6 pb-3 pt-6">
           <DialogTitle className="flex items-center gap-2 text-left text-slate-800">
-            <span className="text-sm leading-none">🐄</span>
+            <span className="text-sm leading-none">{TOUR_ICONS.grazing}</span>
             Weidetiere unterwegs
           </DialogTitle>
           <DialogDescription className="text-left text-slate-500">
@@ -244,7 +244,7 @@ function MuzzleInfoDialog() {
       <DialogContent className="grid-rows-[auto,minmax(0,1fr)] max-h-[85vh] overflow-hidden border-white/80 bg-white/95 p-0 sm:max-w-xl">
         <DialogHeader className="border-b border-brand-100/80 px-6 pb-3 pt-6">
           <DialogTitle className="flex items-center gap-2 text-left text-slate-800">
-            <span className="text-sm leading-none">🦮</span>
+            <span className="text-sm leading-none">{TOUR_ICONS.muzzle}</span>
             Maulkorb unterwegs
           </DialogTitle>
           <DialogDescription className="text-left text-slate-500">
@@ -679,7 +679,7 @@ function SeasonPicker({ value = [], onChange }) {
 const VISIBILITY_OPTIONS = [
   {
     value: "private",
-    emoji: "👤",
+    emoji: TOUR_ICONS.private,
     label: "Privat",
     desc: "Nur ich sehe diesen Eintrag",
     active: "border-brand-200 bg-brand-100/80 text-slate-900",
@@ -687,7 +687,7 @@ const VISIBILITY_OPTIONS = [
   },
   {
     value: "friends",
-    emoji: "🫂",
+    emoji: TOUR_ICONS.friends,
     label: "Freunde",
     desc: "Nur bestätigte Freunde",
     active: "border-brand-300 bg-brand-50 text-brand-800",
@@ -695,7 +695,7 @@ const VISIBILITY_OPTIONS = [
   },
   {
     value: "public",
-    emoji: "🌍",
+    emoji: TOUR_ICONS.public,
     label: "Öffentlich",
     desc: "Wird an Admin zur Prüfung geschickt",
     active: "border-brand-400 bg-brand-50 text-brand-700",
@@ -1277,7 +1277,7 @@ export default function AddJournalEntry() {
                         : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
                     }`}
                   >
-                    🐄 Weidetiere
+                    {TOUR_ICONS.grazing} Weidetiere
                   </button>
                   <GrazingAnimalsInfoDialog />
                 </div>
@@ -1291,7 +1291,7 @@ export default function AddJournalEntry() {
                         : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
                     }`}
                   >
-                    🦮 Maulkorb
+                    {TOUR_ICONS.muzzle} Maulkorb
                   </button>
                   <MuzzleInfoDialog />
                 </div>
