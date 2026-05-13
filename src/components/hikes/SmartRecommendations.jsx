@@ -12,11 +12,12 @@ export default function SmartRecommendations({ allHikes = [] }) {
   const { data: myEntries = [] } = useQuery({
     queryKey: ["myJournalEntries", user?.id],
     queryFn: async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("journal_entries")
         .select("distance_km, elevation_m, difficulty")
         .eq("user_id", user.id)
         .limit(50);
+      if (error) throw error;
       return data ?? [];
     },
     enabled: !!user?.id,
