@@ -21,7 +21,31 @@ import {
   sendFriendRequest, acceptFriendRequest,
   rejectFriendRequest, removeFriend, searchProfiles,
 } from "@/lib/friendsApi";
-import { getAvatarDataUrl } from "@/lib/fallbackImages";
+
+const DOG_AVATAR_EMOJIS = ["🐕", "🐩", "🦮", "🐕‍🦺", "🐶"];
+
+function getDogAvatarEmoji(seed) {
+  const value = String(seed || "dogtrails");
+  let hash = 0;
+  for (let index = 0; index < value.length; index += 1) {
+    hash = (hash * 31 + value.charCodeAt(index)) >>> 0;
+  }
+  return DOG_AVATAR_EMOJIS[hash % DOG_AVATAR_EMOJIS.length];
+}
+
+function DogAvatarFallback({ seed, size = "md" }) {
+  const isSmall = size === "sm";
+  return (
+    <div
+      className={`flex h-full w-full items-center justify-center rounded-full border border-brand-100 bg-brand-50 text-center shadow-inner ${
+        isSmall ? "text-lg" : "text-2xl"
+      }`}
+      aria-hidden="true"
+    >
+      {getDogAvatarEmoji(seed)}
+    </div>
+  );
+}
 
 function FeedCard({ entry }) {
   const profile = entry.profile;
@@ -37,8 +61,11 @@ function FeedCard({ entry }) {
       <div className="p-4">
         <div className="flex items-center gap-2 mb-3">
           <div className="w-7 h-7 rounded-full overflow-hidden bg-brand-100/80 shrink-0">
-            <img src={profile?.avatar_url || getAvatarDataUrl(entry.user_id)}
-              alt="" className="w-full h-full object-cover" />
+            {profile?.avatar_url ? (
+              <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
+            ) : (
+              <DogAvatarFallback seed={profile?.user_id || entry.user_id || authorName} size="sm" />
+            )}
           </div>
           <span className="text-sm text-slate-600">
             <span className="font-medium text-slate-900">{authorName}</span>{" "}war wandern
@@ -68,10 +95,14 @@ function FeedCard({ entry }) {
 
 function Avatar({ profile, size = "md" }) {
   const s = size === "sm" ? "w-8 h-8" : "w-11 h-11";
-  const src = profile?.avatar_url || getAvatarDataUrl(profile?.user_id);
+  const seed = profile?.user_id || profile?.username || profile?.full_name;
   return (
     <div className={`${s} rounded-full overflow-hidden bg-brand-100/80 shrink-0`}>
-      <img src={src} alt="" className="w-full h-full object-cover" />
+      {profile?.avatar_url ? (
+        <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
+      ) : (
+        <DogAvatarFallback seed={seed} size={size} />
+      )}
     </div>
   );
 }
