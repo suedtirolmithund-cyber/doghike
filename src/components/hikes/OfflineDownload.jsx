@@ -10,7 +10,7 @@ import { formatDurationHours } from "@/lib/duration";
 
 function getCountryLabel(country) {
   if (country === "italy") return "Italien";
-  if (country === "austria") return "Oesterreich";
+  if (country === "austria") return "Österreich";
   if (country === "germany") return "Deutschland";
   if (country === "switzerland") return "Schweiz";
   if (country === "other") return "Anderes";
@@ -18,11 +18,19 @@ function getCountryLabel(country) {
 }
 
 const seasonLabels = {
-  spring: "Fruehling",
+  spring: "Frühling",
   summer: "Sommer",
   autumn: "Herbst",
   winter: "Winter",
-  all_year: "Ganzjaehrig",
+  all_year: "Ganzjährig",
+};
+
+const PDF_COLORS = {
+  brand: [180, 124, 78],
+  text: [31, 41, 55],
+  muted: [107, 114, 128],
+  line: [229, 231, 235],
+  soft: [248, 245, 241],
 };
 
 function fileToDataUrl(blob) {
@@ -39,6 +47,16 @@ async function imageUrlToDataUrl(url) {
   if (!response.ok) throw new Error("image_fetch_failed");
   const blob = await response.blob();
   return fileToDataUrl(blob);
+}
+
+function transliterateFilename(value) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ß/g, "ss")
+    .replace(/[^a-zA-Z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .replace(/_+/g, "_");
 }
 
 export default function OfflineDownload({
@@ -84,67 +102,121 @@ export default function OfflineDownload({
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
       const margin = 15;
+      const contentWidth = pageWidth - margin * 2;
+      const footerHeight = 12;
+      const maxY = pageHeight - margin - footerHeight;
       let yPosition = margin;
 
-      pdf.setFontSize(20);
-      pdf.setFont("helvetica", "bold");
-      pdf.text(hike.trail_name, margin, yPosition);
-      yPosition += 10;
+      const ensureSpace = (heightNeeded = 12) => {
+        if (yPosition + heightNeeded <= maxY) return;
+        pdf.addPage();
+        yPosition = margin;
+      };
 
+      const addSectionTitle = (title) => {
+        ensureSpace(14);
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(12);
+        pdf.setTextColor(...PDF_COLORS.text);
+        pdf.text(title, margin, yPosition);
+        yPosition += 3;
+        pdf.setDrawColor(...PDF_COLORS.line);
+        pdf.line(margin, yPosition, margin + contentWidth, yPosition);
+        yPosition += 6;
+      };
+
+      const addParagraph = (text) => {
+        if (!text) return;
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(10);
+        pdf.setTextColor(...PDF_COLORS.text);
+        const lines = pdf.splitTextToSize(text, contentWidth);
+        ensureSpace(lines.length * 5 + 4);
+        pdf.text(lines, margin, yPosition);
+        yPosition += lines.length * 5 + 4;
+      };
+
+      const addKeyValueGrid = (items) => {
+        const visibleItems = items.filter((item) => item.value);
+        if (!visibleItems.length) return;
+
+        const columns = 2;
+        const gap = 4;
+        const boxWidth = (contentWidth - gap) / columns;
+        const boxHeight = 18;
+
+        for (let index = 0; index < visibleItems.length; index += columns) {
+          ensureSpace(boxHeight + 2);
+          const row = visibleItems.slice(index, index + columns);
+
+          row.forEach((item, columnIndex) => {
+            const x = margin + columnIndex * (boxWidth + gap);
+            pdf.setFillColor(...PDF_COLORS.soft);
+            pdf.setDrawColor(...PDF_COLORS.line);
+            pdf.roundedRect(x, yPosition, boxWidth, boxHeight, 3, 3, "FD");
+
+            pdf.setFont("helvetica", "normal");
+            pdf.setFontSize(8);
+            pdf.setTextColor(...PDF_COLORS.muted);
+            pdf.text(item.label, x + 4, yPosition + 6);
+
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(11);
+            pdf.setTextColor(...PDF_COLORS.text);
+            const valueLines = pdf.splitTextToSize(String(item.value), boxWidth - 8);
+            pdf.text(valueLines.slice(0, 2), x + 4, yPosition + 12);
+          });
+
+          yPosition += boxHeight + 4;
+        }
+      };
+
+      const addFooterToAllPages = () => {
+        const totalPages = pdf.getNumberOfPages();
+
+        for (let page = 1; page <= totalPages; page += 1) {
+          pdf.setPage(page);
+          pdf.setDrawColor(...PDF_COLORS.line);
+          pdf.line(margin, pageHeight - footerHeight, margin + contentWidth, pageHeight - footerHeight);
+          pdf.setFont("helvetica", "normal");
+          pdf.setFontSize(8);
+          pdf.setTextColor(...PDF_COLORS.muted);
+          pdf.text(`Erstellt am ${format(new Date(), "dd.MM.yyyy HH:mm")} · DogTrails`, margin, pageHeight - 7);
+          pdf.text(`Seite ${page}/${totalPages}`, pageWidth - margin, pageHeight - 7, { align: "right" });
+        }
+      };
+
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(22);
+      pdf.setTextColor(...PDF_COLORS.text);
+      const titleLines = pdf.splitTextToSize(hike.trail_name || "Tour", contentWidth);
+      pdf.text(titleLines, margin, yPosition);
+      yPosition += titleLines.length * 8;
+
+      pdf.setFont("helvetica", "normal");
       pdf.setFontSize(11);
-      pdf.setFont("helvetica", "normal");
-      if (hike.location) {
-        pdf.text(`Ort: ${hike.location}`, margin, yPosition);
-        yPosition += 6;
-      }
-
-      const countryLabel = getCountryLabel(hike.country);
-      if (countryLabel) {
-        pdf.text(`Land: ${countryLabel}`, margin, yPosition);
-        yPosition += 6;
-      }
-
-      if (hike.date) {
-        pdf.text(`Datum: ${format(new Date(hike.date), "dd.MM.yyyy")}`, margin, yPosition);
+      pdf.setTextColor(...PDF_COLORS.muted);
+      const introLine = [hike.location, getCountryLabel(hike.country)].filter(Boolean).join(" · ");
+      if (introLine) {
+        pdf.text(introLine, margin, yPosition);
         yPosition += 8;
       }
 
-      pdf.setFillColor(245, 245, 245);
-      pdf.rect(margin, yPosition, pageWidth - 2 * margin, 30, "F");
-      yPosition += 7;
+      pdf.setDrawColor(...PDF_COLORS.brand);
+      pdf.setLineWidth(0.8);
+      pdf.line(margin, yPosition, margin + contentWidth, yPosition);
+      yPosition += 8;
 
-      pdf.setFontSize(10);
-      pdf.setFont("helvetica", "bold");
-      if (hike.distance_km) {
-        pdf.text(`Strecke: ${hike.distance_km} km`, margin + 5, yPosition);
-      }
-      if (hike.elevation_gain_m) {
-        pdf.text(`Hoehenmeter: ${hike.elevation_gain_m} m`, pageWidth / 2, yPosition);
-      }
-      yPosition += 6;
-
-      if (hike.duration_minutes) {
-        pdf.text(`Gehzeit: ${formatDurationHours(hike.duration_minutes)}`, margin + 5, yPosition);
-      }
-      if (hike.difficulty) {
-        pdf.text(`Schwierigkeit Mensch: ${getDifficultyLabel(hike.difficulty)}`, margin + 5, yPosition + 6);
-      }
-      yPosition += 12;
-
-      if (hike.dog_difficulty) {
-        pdf.text(`Schwierigkeit Hund: ${getDifficultyLabel(hike.dog_difficulty)}`, margin + 5, yPosition);
-        yPosition += 6;
-      }
-
-      pdf.setFont("helvetica", "normal");
-      if (hike.season) {
-        pdf.text(`Beste Jahreszeit: ${seasonLabels[hike.season] || hike.season}`, margin, yPosition);
-        yPosition += 6;
-      }
-      if (hike.water_availability) {
-        pdf.text(`Wasser unterwegs: ${getWaterLabel(hike.water_availability)}`, margin, yPosition);
-        yPosition += 8;
-      }
+      addKeyValueGrid([
+        { label: "Strecke", value: hike.distance_km ? `${hike.distance_km} km` : null },
+        { label: "Höhenmeter", value: hike.elevation_gain_m ? `${hike.elevation_gain_m} m` : null },
+        { label: "Gehzeit", value: hike.duration_minutes ? formatDurationHours(hike.duration_minutes) : null },
+        { label: "Mensch", value: hike.difficulty ? getDifficultyLabel(hike.difficulty) : null },
+        { label: "Hund", value: hike.dog_difficulty ? getDifficultyLabel(hike.dog_difficulty) : null },
+        { label: "Wasser", value: hike.water_availability ? getWaterLabel(hike.water_availability) : null },
+        { label: "Jahreszeit", value: hike.season ? seasonLabels[hike.season] || hike.season : null },
+        { label: "Datum", value: hike.date ? format(new Date(hike.date), "dd.MM.yyyy") : null },
+      ]);
 
       const mapElement = document.querySelector(".leaflet-container");
       if (mapElement) {
@@ -153,150 +225,85 @@ export default function OfflineDownload({
             useCORS: true,
             allowTaint: true,
             backgroundColor: "#f5f5f5",
+            scale: 1.4,
           });
 
-          const imgData = canvas.toDataURL("image/jpeg", 0.82);
-          const imgWidth = pageWidth - 2 * margin;
-          const imgHeight = Math.min((canvas.height * imgWidth) / canvas.width, 100);
+          const imgData = canvas.toDataURL("image/jpeg", 0.88);
+          const imgHeight = Math.min((canvas.height * contentWidth) / canvas.width, 96);
 
-          if (yPosition + imgHeight > pageHeight - margin) {
-            pdf.addPage();
-            yPosition = margin;
-          }
-
-          pdf.setFont("helvetica", "bold");
-          pdf.setFontSize(12);
-          pdf.text("Karte:", margin, yPosition);
-          yPosition += 7;
-
-          pdf.addImage(imgData, "JPEG", margin, yPosition, imgWidth, imgHeight);
-          yPosition += imgHeight + 10;
+          addSectionTitle("Karte");
+          ensureSpace(imgHeight + 10);
+          pdf.addImage(imgData, "JPEG", margin, yPosition, contentWidth, imgHeight);
+          yPosition += imgHeight + 5;
+          pdf.setFont("helvetica", "normal");
+          pdf.setFontSize(8);
+          pdf.setTextColor(...PDF_COLORS.muted);
+          pdf.text("Kartengrundlage: OpenStreetMap / CARTO", margin, yPosition);
+          yPosition += 6;
         } catch (error) {
           console.error("Fehler beim Erfassen der Karte:", error);
         }
       }
 
-      pdf.addPage();
-      yPosition = margin;
-
-      if (hike.parking_info) {
-        pdf.setFont("helvetica", "bold");
-        pdf.setFontSize(12);
-        pdf.text("Ausgangspunkt & Parken:", margin, yPosition);
-        yPosition += 7;
-
-        pdf.setFont("helvetica", "normal");
-        pdf.setFontSize(10);
-        const parkingLines = pdf.splitTextToSize(hike.parking_info, pageWidth - 2 * margin);
-        pdf.text(parkingLines, margin, yPosition);
-        yPosition += parkingLines.length * 5 + 8;
-      }
-
-      if (hike.restaurant_info) {
-        if (yPosition > 250) {
-          pdf.addPage();
-          yPosition = margin;
-        }
-        pdf.setFont("helvetica", "bold");
-        pdf.setFontSize(12);
-        pdf.text("Einkehrmoeglichkeiten:", margin, yPosition);
-        yPosition += 7;
-
-        pdf.setFont("helvetica", "normal");
-        pdf.setFontSize(10);
-        const restaurantLines = pdf.splitTextToSize(hike.restaurant_info, pageWidth - 2 * margin);
-        pdf.text(restaurantLines, margin, yPosition);
-        yPosition += restaurantLines.length * 5 + 8;
-      }
+      addSectionTitle("Tourdetails");
+      addKeyValueGrid([
+        { label: "Startpunkt / Parkplatz", value: hike.parking_info || null },
+        { label: "Einkehr", value: hike.restaurant_info || null },
+      ]);
 
       if (hike.hazard_notes) {
-        if (yPosition > 250) {
-          pdf.addPage();
-          yPosition = margin;
-        }
-        pdf.setFont("helvetica", "bold");
-        pdf.setFontSize(12);
-        pdf.text("Achtung - Gefahrenstellen:", margin, yPosition);
-        yPosition += 7;
-
-        pdf.setFont("helvetica", "normal");
-        pdf.setFontSize(10);
-        const hazardLines = pdf.splitTextToSize(hike.hazard_notes, pageWidth - 2 * margin);
-        pdf.text(hazardLines, margin, yPosition);
-        yPosition += hazardLines.length * 5 + 8;
+        addSectionTitle("Achtung - Gefahrenstellen");
+        addParagraph(hike.hazard_notes);
       }
 
       if (hike.notes) {
-        if (yPosition > 250) {
-          pdf.addPage();
-          yPosition = margin;
-        }
-        pdf.setFont("helvetica", "bold");
-        pdf.setFontSize(12);
-        pdf.text("Beschreibung & Tipps:", margin, yPosition);
-        yPosition += 7;
-
-        pdf.setFont("helvetica", "normal");
-        pdf.setFontSize(10);
-        const notesLines = pdf.splitTextToSize(hike.notes, pageWidth - 2 * margin);
-        pdf.text(notesLines, margin, yPosition);
-        yPosition += notesLines.length * 5 + 8;
+        addSectionTitle("Beschreibung & Tipps");
+        addParagraph(hike.notes);
       }
 
       if (dogs.length > 0) {
-        if (yPosition > 260) {
-          pdf.addPage();
-          yPosition = margin;
-        }
-        pdf.setFont("helvetica", "bold");
-        pdf.setFontSize(12);
-        pdf.text("Mit dabei:", margin, yPosition);
-        yPosition += 7;
-
-        pdf.setFont("helvetica", "normal");
-        pdf.setFontSize(10);
-        dogs.forEach((dog) => {
-          pdf.text(`- ${dog.name}${dog.breed ? ` (${dog.breed})` : ""}`, margin + 5, yPosition);
-          yPosition += 5;
-        });
+        addSectionTitle("Mit dabei");
+        addParagraph(dogs.map((dog) => `• ${dog.name}${dog.breed ? ` (${dog.breed})` : ""}`).join("\n"));
       }
 
       if (includePhotos && Array.isArray(hike.photos) && hike.photos.length > 0) {
-        pdf.addPage();
-        yPosition = margin;
-        pdf.setFont("helvetica", "bold");
-        pdf.setFontSize(12);
-        pdf.text("Fotos:", margin, yPosition);
-        yPosition += 8;
-
+        const photoData = [];
         for (const photo of hike.photos.slice(0, 4)) {
           try {
             const imgData = await imageUrlToDataUrl(photo);
-            const imgWidth = pageWidth - 2 * margin;
-            const imgHeight = 60;
-
-            if (yPosition + imgHeight > pageHeight - margin) {
-              pdf.addPage();
-              yPosition = margin;
-            }
-
-            pdf.addImage(imgData, "JPEG", margin, yPosition, imgWidth, imgHeight);
-            yPosition += imgHeight + 6;
+            photoData.push(imgData);
           } catch (error) {
-            console.error("Fehler beim Einfuegen eines Fotos:", error);
+            console.error("Fehler beim Einfügen eines Fotos:", error);
+          }
+        }
+
+        if (photoData.length > 0) {
+          pdf.addPage();
+          yPosition = margin;
+          addSectionTitle("Fotos");
+
+          const gap = 6;
+          const photoWidth = (contentWidth - gap) / 2;
+          const photoHeight = 56;
+
+          for (let index = 0; index < photoData.length; index += 2) {
+            ensureSpace(photoHeight + 4);
+            const row = photoData.slice(index, index + 2);
+
+            row.forEach((imgData, columnIndex) => {
+              const x = margin + columnIndex * (photoWidth + gap);
+              pdf.addImage(imgData, "JPEG", x, yPosition, photoWidth, photoHeight);
+            });
+
+            yPosition += photoHeight + 6;
           }
         }
       }
 
-      pdf.setFontSize(8);
-      pdf.setTextColor(128, 128, 128);
-      pdf.text(
-        `Erstellt am ${format(new Date(), "dd.MM.yyyy HH:mm")} - DogTrails`,
-        margin,
-        pageHeight - 10
-      );
+      addFooterToAllPages();
 
-      const filename = `${hike.trail_name.replace(/[^a-z0-9]/gi, "_")}.pdf`;
+      const baseName = transliterateFilename(hike.trail_name || "tour");
+      const filename = `${baseName || "tour"}.pdf`;
       pdf.save(filename);
 
       setSuccess(true);
