@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, Square, Crosshair, Loader2, Wifi, WifiOff } from "lucide-react";
@@ -37,6 +37,7 @@ const MAX_REASONABLE_ELEVATION_STEP_METERS = 40;
 const GPS_TRACK_STORAGE_KEY = "doghike_active_gps_track";
 const GPS_TRACK_MAX_AGE_MS = 12 * 60 * 60 * 1000;
 const AUTO_PAUSE_STILLNESS_MS = 3 * 60 * 1000;
+const GAP_THRESHOLD_MS = 30_000;
 
 // Ramer-Douglas-Peucker track simplification
 function perpendicularDistance(point, lineStart, lineEnd) {
@@ -640,6 +641,35 @@ export default function GPSTracker({ onSave }) {
     return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   };
 
+  const routeSegments = useMemo(() => {
+    if (routePoints.length < 2) return [];
+    const samples = pointSamplesRef.current;
+    const segments = [];
+    let currentSegment = [routePoints[0]];
+    let currentIsDashed = false;
+
+    for (let i = 1; i < routePoints.length; i++) {
+      const prevSample = samples[i - 1];
+      const currSample = samples[i];
+      const gap = prevSample && currSample ? currSample.timestamp - prevSample.timestamp : 0;
+      const bridgeIsDashed = gap > GAP_THRESHOLD_MS;
+
+      if (bridgeIsDashed !== currentIsDashed) {
+        segments.push({ positions: [...currentSegment], dashed: currentIsDashed });
+        currentSegment = [routePoints[i - 1], routePoints[i]];
+        currentIsDashed = bridgeIsDashed;
+      } else {
+        currentSegment.push(routePoints[i]);
+      }
+    }
+
+    if (currentSegment.length >= 2) {
+      segments.push({ positions: currentSegment, dashed: currentIsDashed });
+    }
+
+    return segments;
+  }, [routePoints]);
+
   return (
     <div className="space-y-3 md:space-y-4">
       <div className="grid grid-cols-4 gap-2">
@@ -681,9 +711,16 @@ export default function GPSTracker({ onSave }) {
             attribution="&copy; OpenStreetMap"
           />
           <MapFlyController flyRef={flyControllerRef} />
-          {routePoints.length > 1 && (
-            <Polyline positions={routePoints} color="#1e293b" weight={5} opacity={0.85} />
-          )}
+          {routeSegments.map((seg, idx) => (
+            <Polyline
+              key={idx}
+              positions={seg.positions}
+              color={seg.dashed ? "#94a3b8" : "#1e293b"}
+              weight={5}
+              opacity={seg.dashed ? 0.55 : 0.85}
+              dashArray={seg.dashed ? "8 8" : undefined}
+            />
+          ))}
           {currentPosition && (
             <>
               <Marker position={currentPosition} icon={myLocationIcon} />
