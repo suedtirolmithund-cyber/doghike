@@ -25,6 +25,7 @@ import RouteProfile from "@/components/hikes/RouteProfile";
 import HikeWeatherInfo from "@/components/weather/HikeWeatherInfo";
 import InteractiveHikeMap from "@/components/hikes/InteractiveHikeMap";
 import SaveButton from "@/components/hikes/SaveButton";
+import OfflineDownload from "@/components/hikes/OfflineDownload";
 import CommentSection from "@/components/community/CommentSection";
 import RatingSection from "@/components/community/RatingSection";
 import ExpandableText from "@/components/ExpandableText";
@@ -445,6 +446,9 @@ export default function HikeDetail() {
           transition={{ delay: 0.15 }}
           className="mb-10"
         >
+          <div className="mb-4 flex flex-wrap items-center justify-end gap-2">
+            <OfflineDownload hike={hike} dogs={hikeDogs} />
+          </div>
           <div className="flex flex-wrap gap-2.5">
           {countryLabel && (
             <div className="doghike-stat-chip min-w-[116px] flex-1 justify-center px-3 py-2.5 sm:min-w-[128px] sm:px-4">
