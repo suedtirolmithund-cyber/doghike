@@ -199,7 +199,7 @@ export default function Dashboard() {
               )}
             </div>
 
-            <div className="absolute left-1/2 top-[422px] h-[56px] w-[672px] -translate-x-1/2">
+            <div className="absolute left-1/2 top-[386px] h-[56px] w-[672px] -translate-x-1/2">
               <Search className="absolute left-[16px] top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-[#F07030]" />
               <Input
                 placeholder="Tour oder Ort suchen..."
