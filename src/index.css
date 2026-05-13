@@ -212,6 +212,30 @@
   .doghike-compact-action {
     @apply h-9 rounded-xl px-3 text-xs font-semibold;
   }
+
+  .doghike-info-box {
+    @apply rounded-2xl border border-brand-100/80 bg-white/75 p-4 text-sm text-[#7C3020] shadow-[0_12px_28px_rgba(168,0,60,0.07)] backdrop-blur-xl;
+  }
+
+  .doghike-info-box-lg {
+    @apply rounded-3xl border border-brand-100/80 bg-white/75 p-5 text-sm text-[#7C3020] shadow-sm backdrop-blur-xl;
+  }
+
+  .doghike-info-title {
+    @apply mb-3 text-base font-semibold text-[#7C3020];
+  }
+
+  .doghike-info-subtitle {
+    @apply font-semibold text-[#A8003C];
+  }
+
+  .doghike-info-text {
+    @apply text-sm font-normal leading-5 text-[#C07820];
+  }
+
+  .doghike-info-note {
+    @apply mt-3 rounded-xl border border-brand-100/80 bg-brand-50/70 px-3 py-2 text-sm font-medium leading-5 text-[#7C3020];
+  }
 }
 
 @layer utilities {
