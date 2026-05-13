@@ -14,7 +14,7 @@ export default function StatsCard({ icon: Icon, label, value, unit, description,
         </div>
         <div className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
           <span className="text-2xl font-light leading-none text-slate-900 md:text-3xl">{value}</span>
-          <span className="truncate text-xs font-semibold uppercase tracking-[0.08em] text-slate-500 md:text-sm">
+          <span className="min-w-0 whitespace-normal break-words text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500 sm:text-xs md:text-sm">
             {label}
           </span>
           {unit && <span className="text-xs text-slate-400 md:text-sm">{unit}</span>}
