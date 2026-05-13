@@ -228,6 +228,64 @@ function RankRow({ entry, rank, metric, isMyDog }) {
   );
 }
 
+function CompactRankRow({ entry, rank, metric, isMyDog }) {
+  const badges = getBadges(entry, false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.15 + (rank - 4) * 0.05 }}
+      className={`rounded-2xl border p-3 ${
+        isMyDog ? "border-brand-300 bg-brand-50/70 shadow-sm" : "border-white/70 bg-white/78 shadow-sm backdrop-blur-xl"
+      }`}
+    >
+      <div className="flex items-center gap-3">
+        <span className="w-7 shrink-0 text-center text-sm font-bold text-slate-500">#{rank}</span>
+        <img
+          src={dogPhoto(entry.dog)}
+          alt={entry.dog.name}
+          className="h-11 w-11 shrink-0 rounded-full border-2 border-white object-cover shadow-sm"
+        />
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <p className="truncate text-sm font-semibold text-slate-900">{entry.dog.name}</p>
+            {isMyDog && (
+              <span className="shrink-0 rounded-full bg-brand-100 px-1.5 py-0.5 text-[10px] font-medium text-brand-600">
+                Dein Hund
+              </span>
+            )}
+          </div>
+          {entry.dog.breed && <p className="truncate text-[11px] text-slate-400">{entry.dog.breed}</p>}
+          {badges.length > 0 && (
+            <div className="mt-0.5 flex flex-wrap gap-1">
+              {badges.map((badgeKey) => (
+                <span
+                  key={badgeKey}
+                  title={`${BADGE_DEFS[badgeKey].label}: ${BADGE_DEFS[badgeKey].desc}`}
+                  className="cursor-default text-sm leading-none"
+                >
+                  {BADGE_DEFS[badgeKey].emoji}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="shrink-0 text-right">
+          <p className="text-sm font-bold text-slate-900">
+            {metric === "tours" && entry.tourCount}
+            {metric === "distance" && entry.totalDistance}
+            {metric === "elevation" && entry.totalElevation.toLocaleString()}
+          </p>
+          <p className="text-[10px] text-slate-400">
+            {metric === "tours" ? "Touren" : metric === "distance" ? "km" : "Hm"}
+          </p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 // Dein Hund - falls nicht in Top 10
 function MyDogCard({ entry, rank, metric }) {
   if (!entry) return null;
@@ -307,7 +365,8 @@ function RankingTab({ rows, metric, myDogIds }) {
   }, [rows, metric]);
 
   const top3 = sorted.slice(0, 3);
-  const rest  = sorted.slice(3, 10);
+  const nextTwo = sorted.slice(3, 5);
+  const rest  = sorted.slice(5, 10);
   const ownDogIdSet = new Set(myDogIds ?? []);
   const myIdx = sorted.findIndex((r) => ownDogIdSet.has(r.dog?.id));
   const myEntry = myIdx >= 0 ? sorted[myIdx] : null;
@@ -328,12 +387,25 @@ function RankingTab({ rows, metric, myDogIds }) {
   return (
     <div>
       <Podium top3={top3} metric={metric} />
+      {nextTwo.length > 0 && (
+        <div className="mb-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+          {nextTwo.map((entry, index) => (
+            <CompactRankRow
+              key={entry.dog.id}
+              entry={entry}
+              rank={index + 4}
+              metric={metric}
+              isMyDog={ownDogIdSet.has(entry.dog?.id)}
+            />
+          ))}
+        </div>
+      )}
       <div className="space-y-2">
         {rest.map((entry, i) => (
           <RankRow
             key={entry.dog.id}
             entry={entry}
-            rank={i + 4}
+            rank={i + 6}
             metric={metric}
             isMyDog={ownDogIdSet.has(entry.dog?.id)}
           />
