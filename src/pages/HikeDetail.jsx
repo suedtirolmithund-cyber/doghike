@@ -612,6 +612,20 @@ export default function HikeDetail() {
                     </div>
                   </div>
                 )}
+                {(hike.grazing_animals || hike.muzzle_recommended) && (
+                  <div className="flex flex-wrap gap-2">
+                    {hike.grazing_animals && (
+                      <Badge className="border border-brand-100 bg-brand-50/70 text-brand-700">
+                        🐄 Weidetiere
+                      </Badge>
+                    )}
+                    {hike.muzzle_recommended && (
+                      <Badge className="border border-brand-100 bg-brand-50/70 text-brand-700">
+                        🦮 Maulkorb
+                      </Badge>
+                    )}
+                  </div>
+                )}
                   {hike.hazard_notes && (
                     <div className="p-3 bg-brand-50 border border-brand-100 rounded-xl">
                       <p className="font-medium text-brand-700 mb-1">{TOUR_ICONS.hazard} Achtung</p>

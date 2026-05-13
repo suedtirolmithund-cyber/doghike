@@ -354,6 +354,8 @@ export async function getPublicHikeById(hikeId) {
     water_availability: mapSupabaseWaterLevel(hikeRow.water_availability),
     difficulty: hikeRow.difficulty != null ? String(hikeRow.difficulty) : null,
     dog_difficulty: hikeRow.dog_difficulty != null ? String(hikeRow.dog_difficulty) : null,
+    grazing_animals: !!hikeRow.grazing_animals,
+    muzzle_recommended: !!hikeRow.muzzle_recommended,
   };
 }
 

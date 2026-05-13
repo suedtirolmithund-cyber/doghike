@@ -43,6 +43,8 @@ function buildInitialFormData(hike) {
       dog_difficulty: "3",
       season: "all_year",
       water_availability: "moderate",
+      grazing_animals: false,
+      muzzle_recommended: false,
       hazard_notes: "",
       parking_info: "",
       restaurant_info: "",
@@ -59,6 +61,8 @@ function buildInitialFormData(hike) {
 
   return {
     ...hike,
+    grazing_animals: hike?.grazing_animals ?? false,
+    muzzle_recommended: hike?.muzzle_recommended ?? false,
     duration_minutes: minutesToHoursInput(hike.duration_minutes),
   };
 }
@@ -360,6 +364,37 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               ))}
             </SelectContent>
           </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label>Hinweise für Hunde (optional)</Label>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, grazing_animals: !formData.grazing_animals })}
+              className={`rounded-full border px-3 py-2 text-sm transition-all ${
+                formData.grazing_animals
+                  ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
+                  : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
+              }`}
+            >
+              🐄 Weidetiere
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, muzzle_recommended: !formData.muzzle_recommended })}
+              className={`rounded-full border px-3 py-2 text-sm transition-all ${
+                formData.muzzle_recommended
+                  ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
+                  : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
+              }`}
+            >
+              🦮 Maulkorb
+            </button>
+          </div>
+          <p className="text-xs text-slate-500">
+            Optional für alle Touren. Du kannst keinen, einen oder beide Hinweise angeben.
+          </p>
         </div>
 
         <div className="space-y-2">
