@@ -14,6 +14,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { sendSupportMessage } from "@/lib/supportApi";
+import { showSavedFeedback, showSentFeedback } from "@/lib/feedbackToast";
 
 const SUPPORT_EMAIL = "suedtirolmithund@gmail.com";
 
@@ -51,11 +52,11 @@ export default function Support() {
       });
 
       setSubmitted(true);
-      toast.success(
-        result?.delivery === "email_sent"
-          ? "Deine Nachricht wurde gesendet."
-          : "Deine Nachricht wurde gespeichert."
-      );
+      if (result?.delivery === "email_sent") {
+        showSentFeedback("Nachricht gesendet", "Dein Feedback ist bei uns angekommen.");
+      } else {
+        showSavedFeedback("Nachricht gespeichert", "Dein Feedback ist sicher bei uns hinterlegt.");
+      }
     } catch (error) {
       const code = String(error?.code || error?.message || "").toLowerCase();
 

@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { showFriendFeedback, showSavedFeedback, showSentFeedback } from "@/lib/feedbackToast";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { useAuth } from "@/lib/AuthContext";
@@ -192,7 +193,7 @@ export default function Friends() {
     mutationFn: (receiverId) => sendFriendRequest(user.id, receiverId),
     onSuccess: () => {
       refreshFriendData();
-      toast.success("Anfrage ist raus.");
+      showSentFeedback("Anfrage gesendet", "Die Freundschaftsanfrage ist jetzt raus.");
     },
     onError: () => toast.error("Die Anfrage wollte gerade nicht raus."),
   });
@@ -201,7 +202,7 @@ export default function Friends() {
     mutationFn: acceptFriendRequest,
     onSuccess: () => {
       refreshFriendData();
-      toast.success("Ihr könnt jetzt Touren teilen.");
+      showFriendFeedback("Freund hinzugefügt", "Ihr könnt jetzt Touren teilen.");
     },
     onError: () => toast.error("Das Annehmen hat gerade nicht geklappt."),
   });
@@ -210,7 +211,7 @@ export default function Friends() {
     mutationFn: rejectFriendRequest,
     onSuccess: () => {
       refreshFriendData();
-      toast.success("Anfrage abgelehnt.");
+      showSavedFeedback("Anfrage abgelehnt", "Die Anfrage wurde sauber abgelehnt.");
     },
     onError: () => toast.error("Das Ablehnen hat gerade nicht geklappt."),
   });
@@ -219,7 +220,7 @@ export default function Friends() {
     mutationFn: removeFriend,
     onSuccess: () => {
       refreshFriendData();
-      toast.success("Der Kontakt ist raus.");
+      showSavedFeedback("Kontakt entfernt", "Die Verbindung wurde gelöst.");
     },
     onError: () => toast.error("Das Entfernen hat gerade nicht geklappt."),
   });
