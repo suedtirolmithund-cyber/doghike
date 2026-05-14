@@ -3,6 +3,10 @@ import { validateImageUpload } from "./uploadValidation";
 
 const COMMENT_SIGNED_URL_TTL_SECONDS = 60 * 60;
 
+function normalizeHikeSource(value) {
+  return value ?? "sheets";
+}
+
 function getStorageDescriptor(photoReference) {
   if (!photoReference) return null;
 
@@ -92,31 +96,69 @@ export async function getSavedHikes(userId) {
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []).map((savedHike) => ({
+    ...savedHike,
+    hike_source: normalizeHikeSource(savedHike.hike_source),
+  }));
 }
 
 export async function saveHike(userId, hikeId, hikeSource = "sheets") {
   const normalizedHikeId = String(hikeId);
+  const normalizedHikeSource = normalizeHikeSource(hikeSource);
+
+  const { data: existingRows, error: existingError } = await supabase
+    .from("saved_hikes")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("hike_id", normalizedHikeId);
+  if (existingError) throw existingError;
+
+  const matchingExistingRow = (existingRows ?? []).find(
+    (row) => normalizeHikeSource(row.hike_source) === normalizedHikeSource
+  );
+
+  if (matchingExistingRow) {
+    return {
+      ...matchingExistingRow,
+      hike_source: normalizeHikeSource(matchingExistingRow.hike_source),
+    };
+  }
+
   const { data, error } = await supabase
     .from("saved_hikes")
-    .upsert(
-      { user_id: userId, hike_id: normalizedHikeId, hike_source: hikeSource },
-      { onConflict: "user_id,hike_id,hike_source" }
-    )
+    .insert({ user_id: userId, hike_id: normalizedHikeId, hike_source: normalizedHikeSource })
     .select()
     .single();
   if (error) throw error;
-  return data;
+  return {
+    ...data,
+    hike_source: normalizeHikeSource(data.hike_source),
+  };
 }
 
 export async function unsaveHike(userId, hikeId, hikeSource = "sheets") {
   const normalizedHikeId = String(hikeId);
+  const normalizedHikeSource = normalizeHikeSource(hikeSource);
+
+  const { data: existingRows, error: fetchError } = await supabase
+    .from("saved_hikes")
+    .select("id, hike_source")
+    .eq("user_id", userId)
+    .eq("hike_id", normalizedHikeId);
+  if (fetchError) throw fetchError;
+
+  const idsToDelete = (existingRows ?? [])
+    .filter((row) => normalizeHikeSource(row.hike_source) === normalizedHikeSource)
+    .map((row) => row.id);
+
+  if (idsToDelete.length === 0) {
+    return;
+  }
+
   const { error } = await supabase
     .from("saved_hikes")
     .delete()
-    .eq("user_id", userId)
-    .eq("hike_id", normalizedHikeId)
-    .eq("hike_source", hikeSource);
+    .in("id", idsToDelete);
   if (error) throw error;
 }
 
@@ -124,23 +166,44 @@ export async function getRatings(hikeId, hikeSource = "sheets", alternateHikeIds
   const normalizedHikeIds = Array.from(
     new Set([hikeId, ...alternateHikeIds].map((value) => String(value)).filter(Boolean))
   );
+  const normalizedHikeSource = normalizeHikeSource(hikeSource);
   const { data, error } = await supabase
     .from("ratings")
     .select("*")
-    .in("hike_id", normalizedHikeIds)
-    .eq("hike_source", hikeSource);
+    .in("hike_id", normalizedHikeIds);
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []).filter((rating) => normalizeHikeSource(rating.hike_source) === normalizedHikeSource);
 }
 
 export async function upsertRating(userId, hikeId, hikeSource = "sheets", rating) {
   const normalizedHikeId = String(hikeId);
+  const normalizedHikeSource = normalizeHikeSource(hikeSource);
+
+  const { data: existingRows, error: existingError } = await supabase
+    .from("ratings")
+    .select("id, hike_source")
+    .eq("user_id", userId)
+    .eq("hike_id", normalizedHikeId);
+  if (existingError) throw existingError;
+
+  const matchingExistingRow = (existingRows ?? []).find(
+    (row) => normalizeHikeSource(row.hike_source) === normalizedHikeSource
+  );
+
+  if (matchingExistingRow) {
+    const { data, error } = await supabase
+      .from("ratings")
+      .update({ rating, hike_source: normalizedHikeSource })
+      .eq("id", matchingExistingRow.id)
+      .select()
+      .single();
+    if (error) throw error;
+    return data;
+  }
+
   const { data, error } = await supabase
     .from("ratings")
-    .upsert(
-      { user_id: userId, hike_id: normalizedHikeId, hike_source: hikeSource, rating },
-      { onConflict: "user_id,hike_id,hike_source" }
-    )
+    .insert({ user_id: userId, hike_id: normalizedHikeId, hike_source: normalizedHikeSource, rating })
     .select()
     .single();
   if (error) throw error;
@@ -151,7 +214,7 @@ export async function getComments(hikeId, hikeSource = "sheets", alternateHikeId
   const normalizedHikeIds = Array.from(
     new Set([hikeId, ...alternateHikeIds].map((value) => String(value)).filter(Boolean))
   );
-  const normalizedHikeSource = hikeSource ?? "sheets";
+  const normalizedHikeSource = normalizeHikeSource(hikeSource);
   const { data: authData } = await supabase.auth.getUser();
   const currentUserId = authData?.user?.id;
 
@@ -171,7 +234,7 @@ export async function getComments(hikeId, hikeSource = "sheets", alternateHikeId
   if (error) throw error;
 
   const filteredComments = (data ?? []).filter(
-    (comment) => (comment.hike_source ?? "sheets") === normalizedHikeSource
+    (comment) => normalizeHikeSource(comment.hike_source) === normalizedHikeSource
   );
 
   const userIds = Array.from(new Set(filteredComments.map((comment) => comment.user_id).filter(Boolean)));
