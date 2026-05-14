@@ -47,7 +47,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
     };
   }, [photoPreviewUrl]);
 
-  const { data: comments = [], isLoading } = useQuery({
+  const { data: comments = [], isLoading, isError, refetch } = useQuery({
     queryKey: ["comments", hikeSource, normalizedHikeId, ...hikeAliases],
     queryFn: () => getComments(normalizedHikeId, hikeSource, hikeAliases),
   });
@@ -79,7 +79,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
     },
     onSuccess: () => {
       const needsReview = commentNeedsReview(text);
-      queryClient.invalidateQueries({ queryKey: ["comments", hikeSource, normalizedHikeId] });
+      queryClient.invalidateQueries({ queryKey: ["comments"] });
       setText("");
       if (photoPreviewUrl) {
         URL.revokeObjectURL(photoPreviewUrl);
@@ -101,7 +101,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
   const deleteMutation = useMutation({
     mutationFn: (id) => deleteComment(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments", hikeSource, normalizedHikeId] });
+      queryClient.invalidateQueries({ queryKey: ["comments"] });
       setDeleteId(null);
       toast.success("Der Tipp ist weg.");
     },
@@ -234,8 +234,18 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
           </div>
         )}
 
+        {!isLoading && isError && (
+          <div className="doghike-soft-panel py-6 px-4 text-center">
+            <p className="text-slate-700 font-medium">Kommentare konnten gerade nicht geladen werden.</p>
+            <p className="mt-1 text-sm text-slate-500">Bitte versuche es gleich noch einmal.</p>
+            <Button type="button" variant="outline" className="mt-4" onClick={() => refetch()}>
+              Neu laden
+            </Button>
+          </div>
+        )}
+
         <AnimatePresence>
-          {comments.map((comment) => (
+          {!isError && comments.map((comment) => (
             <motion.div
               key={comment.id}
               initial={{ opacity: 0, y: 20 }}
@@ -291,7 +301,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
           ))}
         </AnimatePresence>
 
-        {!isLoading && comments.length === 0 && (
+        {!isLoading && !isError && comments.length === 0 && (
           <div className="py-8 text-center">
             <p className="text-slate-600 font-medium">Noch keine Tipps</p>
             <p className="mt-1 text-sm text-slate-400">Teile den ersten Eindruck zu dieser Tour.</p>
