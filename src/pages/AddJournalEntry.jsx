@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { toast } from "sonner";
+import { showSavedFeedback, showUploadedFeedback } from "@/lib/feedbackToast";
 import { useAuth } from "@/lib/AuthContext";
 import {
   createJournalEntry,
@@ -930,13 +931,13 @@ export default function AddJournalEntry() {
         queryClient.invalidateQueries({ queryKey: ["journalEntry"] });
         queryClient.invalidateQueries({ queryKey: ["notifications", user?.id] });
       const selectedDog = userDogs.find((dog) => dog.id === form.dog_id);
-      toast.success(
-        editId
-          ? "Der Eintrag ist wieder rund."
-          : selectedDog
-            ? `${selectedDog.name} und du habt diesen Tag festgehalten.`
-            : "Diese Wanderung ist jetzt in deinem Tagebuch."
-      );
+      if (editId) {
+        showSavedFeedback("Tagebuch gespeichert", "Dein Eintrag ist wieder rund.");
+      } else if (selectedDog) {
+        showSavedFeedback("Wanderung gespeichert", `${selectedDog.name} und du habt diesen Tag festgehalten.`);
+      } else {
+        showSavedFeedback("Wanderung gespeichert", "Diese Wanderung ist jetzt in deinem Tagebuch.");
+      }
       navigate(createPageUrl("Journal"));
     },
     onError: () => toast.error("Die Wanderung wollte gerade nicht ins Tagebuch. Versuch es gleich noch einmal."),
@@ -956,7 +957,10 @@ export default function AddJournalEntry() {
       const urls = await Promise.all(files.map((f) => uploadJournalFile(user.id, f)));
       uploadedPhotosRef.current = [...uploadedPhotosRef.current, ...urls];
       setForm((p) => ({ ...p, photos: [...p.photos, ...urls] }));
-      toast.success(`${urls.length} Foto${urls.length > 1 ? "s" : ""} ist dabei.`);
+      showUploadedFeedback(
+        `${urls.length} Foto${urls.length > 1 ? "s" : ""} hochgeladen`,
+        "Deine Bilder sind jetzt im Eintrag dabei."
+      );
     } catch (error) {
       toast.error(
         getImageUploadErrorMessage(
@@ -1011,7 +1015,7 @@ export default function AddJournalEntry() {
       }
       uploadedGpxRef.current = [...uploadedGpxRef.current, url];
       setForm((p) => ({ ...p, gpx_url: url }));
-      toast.success("Die GPX-Datei ist dabei.");
+      showUploadedFeedback("GPX hochgeladen", "Die Route ist jetzt im Eintrag dabei.");
     } catch {
       toast.error("Die GPX-Datei wollte gerade nicht hochladen.");
     } finally {

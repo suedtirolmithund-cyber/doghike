@@ -60,6 +60,7 @@ import HikeCard from "@/components/hikes/HikeCard";
 import AccountSettings from "@/components/profile/AccountSettings";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { BADGE_DEFS, getBadges, loadLeaderboard } from "@/lib/topDogs";
+import { showDogFeedback, showSavedFeedback, showUploadedFeedback } from "@/lib/feedbackToast";
 
 export default function Profile() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -170,7 +171,7 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
       queryClient.invalidateQueries({ queryKey: ["comments"] });
       setEditingProfile(false);
-      toast.success("Dein Profil fühlt sich jetzt runder an.");
+      showSavedFeedback("Profil gespeichert", "Deine Änderungen sind jetzt sichtbar.");
     },
     onError: (error) => {
       if (
@@ -195,7 +196,7 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ["dog"] });
       queryClient.invalidateQueries({ queryKey: ["topDogs"] });
       setDialogOpen(false);
-      toast.success(`${dog?.name || "Dein Hund"} ist jetzt dabei.`);
+      showDogFeedback(`${dog?.name || "Dein Hund"} ist jetzt dabei`, "Dein Wanderbuddy wurde gespeichert.");
     },
     onError: () => toast.error("Das hat gerade nicht geklappt. Dein Hund bleibt bei dir, wir versuchen es gleich noch einmal."),
   });
@@ -209,7 +210,7 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ["topDogs"] });
       setDialogOpen(false);
       setEditingDog(null);
-      toast.success(`${dog?.name || "Dein Hund"} ist aktualisiert.`);
+      showSavedFeedback(`${dog?.name || "Dein Hund"} ist aktualisiert`, "Die Hundedaten sind wieder auf dem neuesten Stand.");
     },
     onError: () => toast.error("Die Änderung ist noch nicht angekommen. Versuch es gleich noch einmal."),
   });
@@ -222,7 +223,7 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ["dog"] });
       queryClient.invalidateQueries({ queryKey: ["topDogs"] });
       const removedDog = dogs.find((dog) => dog.id === dogId);
-      toast.success(`${removedDog?.name || "Der Hund"} ist aus deiner Liste raus.`);
+      showSavedFeedback(`${removedDog?.name || "Der Hund"} entfernt`, "Der Wanderbuddy ist aus deiner Liste raus.");
     },
     onError: () => toast.error("Das Entfernen hat gerade nicht geklappt."),
   });
@@ -252,7 +253,7 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ["friendProfiles"] });
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
       queryClient.invalidateQueries({ queryKey: ["comments"] });
-      toast.success("Dein neues Profilbild ist da.");
+      showUploadedFeedback("Profilbild hochgeladen", "Dein neues Profilbild ist jetzt sichtbar.");
     } catch (error) {
       if (uploadedAvatarUrl) {
         try {
