@@ -42,6 +42,8 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               <img
                 src={coverPhoto}
                 alt={hike.trail_name}
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
             )}
@@ -60,10 +62,12 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
             )}
 
             <div className="absolute bottom-4 left-4 right-4">
-              <h3 className="mb-1 text-base font-semibold leading-tight text-white drop-shadow-sm">{hike.trail_name}</h3>
-              <div className="flex items-center gap-1.5 text-sm font-medium text-white/85">
+              <h3 className="mb-1 line-clamp-2 text-base font-semibold leading-tight text-white drop-shadow-sm">
+                {hike.trail_name}
+              </h3>
+              <div className="flex min-w-0 items-center gap-1.5 text-sm font-medium text-white/85">
                 <span>{TOUR_ICONS.location}</span>
-                <span>{hike.location || "Dolomites"}</span>
+                <span className="truncate">{hike.location || "Dolomites"}</span>
               </div>
               {Array.isArray(hike.tags) && hike.tags.length > 0 && (
                 <div className="mt-2 flex flex-wrap items-center gap-1.5">
@@ -122,6 +126,8 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                         <img
                           src={hike.dog_photo_url || hike.author_avatar}
                           alt={hike.dog_name || hike.author_username || ""}
+                          loading="lazy"
+                          decoding="async"
                           className="h-full w-full object-cover"
                         />
                       </div>
@@ -145,6 +151,8 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                         <img
                           src={dog.photo_url || getAvatarDataUrl(dog.name)}
                           alt={dog.name}
+                          loading="lazy"
+                          decoding="async"
                           className="h-full w-full object-cover"
                         />
                       </div>
