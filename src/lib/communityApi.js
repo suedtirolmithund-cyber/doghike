@@ -156,7 +156,7 @@ export async function getComments(hikeId, hikeSource = "sheets", alternateHikeId
 
   let query = supabase
     .from("comments")
-    .select("*, profiles:user_id ( username, full_name, avatar_url )")
+    .select("*")
     .in("hike_id", normalizedHikeIds)
     .eq("hike_source", hikeSource)
     .order("created_at", { ascending: false });
@@ -170,17 +170,35 @@ export async function getComments(hikeId, hikeSource = "sheets", alternateHikeId
   const { data, error } = await query;
   if (error) throw error;
 
+  const userIds = Array.from(new Set((data ?? []).map((comment) => comment.user_id).filter(Boolean)));
+  let profileMap = {};
+
+  if (userIds.length > 0) {
+    const { data: profiles, error: profilesError } = await supabase
+      .from("profiles")
+      .select("user_id, username, full_name, avatar_url")
+      .in("user_id", userIds);
+
+    if (profilesError) {
+      console.error("[getComments] profile lookup failed:", profilesError.message);
+    } else {
+      profileMap = Object.fromEntries((profiles ?? []).map((profile) => [profile.user_id, profile]));
+    }
+  }
+
   const commentsWithPreview = await Promise.all(
     (data ?? []).map(async (comment) => {
       if (comment.photo_url?.startsWith("pending://") && currentUserId === comment.user_id) {
         return {
           ...comment,
+          profiles: profileMap[comment.user_id] ?? null,
           photo_preview_url: await createPendingCommentSignedUrl(comment.photo_url),
         };
       }
 
       return {
         ...comment,
+        profiles: profileMap[comment.user_id] ?? null,
         photo_preview_url: await createCommentPhotoDisplayUrl(comment.photo_url),
       };
     })
