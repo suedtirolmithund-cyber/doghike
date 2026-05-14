@@ -2,6 +2,10 @@ import { supabase } from "./supabaseClient";
 import { publishPendingCommentPhoto } from "./communityApi";
 import { hydrateJournalEntriesMedia, validatePublicJournalEntry } from "./journalApi";
 
+function normalizeHikeSource(value) {
+  return value ?? "sheets";
+}
+
 function getStorageDescriptor(photoReference) {
   if (!photoReference) return null;
   if (photoReference.startsWith("pending://")) {
@@ -135,13 +139,13 @@ export async function getAllComments() {
 
   const publicHikeIds = [...new Set(
     data
-      .filter((comment) => (comment.hike_source ?? "sheets") === "sheets")
+      .filter((comment) => normalizeHikeSource(comment.hike_source) === "sheets")
       .map((comment) => comment.hike_id)
       .filter(Boolean)
   )];
   const journalHikeIds = [...new Set(
     data
-      .filter((comment) => comment.hike_source === "journal")
+      .filter((comment) => normalizeHikeSource(comment.hike_source) === "journal")
       .map((comment) => comment.hike_id)
       .filter(Boolean)
   )];
@@ -168,7 +172,7 @@ export async function getAllComments() {
 
   const commentsWithPreview = await Promise.all(
     data.map(async (comment) => {
-      const commentSource = comment.hike_source ?? "sheets";
+      const commentSource = normalizeHikeSource(comment.hike_source);
       const storageDescriptor = getStorageDescriptor(comment.photo_url);
 
       if (storageDescriptor?.bucket === "comments-pending") {

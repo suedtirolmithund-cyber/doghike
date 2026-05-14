@@ -62,6 +62,10 @@ import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { BADGE_DEFS, getBadges, loadLeaderboard } from "@/lib/topDogs";
 import { showDogFeedback, showSavedFeedback, showUploadedFeedback } from "@/lib/feedbackToast";
 
+function normalizeHikeSource(value) {
+  return value ?? "sheets";
+}
+
 export default function Profile() {
   const { user, isAuthenticated, logout } = useAuth();
   const queryClient = useQueryClient();
@@ -156,11 +160,21 @@ export default function Profile() {
   }, [topDogs]);
 
   const savedHikeObjects = savedHikes
-    .map((saved) =>
-      allHikes.find(
-        (hike) => String(hike.id) === String(saved.hike_id) && (hike._source ?? "sheets") === (saved.hike_source ?? "sheets")
-      )
-    )
+    .map((saved) => {
+      const savedSource = normalizeHikeSource(saved.hike_source);
+      const savedId = String(saved.hike_id);
+
+      return allHikes.find((hike) => {
+        const hikeSource = normalizeHikeSource(hike._source);
+        if (hikeSource !== savedSource) return false;
+
+        const candidateIds = [hike.id, hike._public_hike_id, hike.route_id]
+          .filter(Boolean)
+          .map((value) => String(value));
+
+        return candidateIds.includes(savedId);
+      });
+    })
     .filter(Boolean);
 
   const upsertProfileMutation = useMutation({
