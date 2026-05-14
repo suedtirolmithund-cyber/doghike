@@ -151,6 +151,7 @@ export async function getComments(hikeId, hikeSource = "sheets", alternateHikeId
   const normalizedHikeIds = Array.from(
     new Set([hikeId, ...alternateHikeIds].map((value) => String(value)).filter(Boolean))
   );
+  const normalizedHikeSource = hikeSource ?? "sheets";
   const { data: authData } = await supabase.auth.getUser();
   const currentUserId = authData?.user?.id;
 
@@ -158,7 +159,6 @@ export async function getComments(hikeId, hikeSource = "sheets", alternateHikeId
     .from("comments")
     .select("*")
     .in("hike_id", normalizedHikeIds)
-    .eq("hike_source", hikeSource)
     .order("created_at", { ascending: false });
 
   if (currentUserId) {
@@ -170,7 +170,11 @@ export async function getComments(hikeId, hikeSource = "sheets", alternateHikeId
   const { data, error } = await query;
   if (error) throw error;
 
-  const userIds = Array.from(new Set((data ?? []).map((comment) => comment.user_id).filter(Boolean)));
+  const filteredComments = (data ?? []).filter(
+    (comment) => (comment.hike_source ?? "sheets") === normalizedHikeSource
+  );
+
+  const userIds = Array.from(new Set(filteredComments.map((comment) => comment.user_id).filter(Boolean)));
   let profileMap = {};
 
   if (userIds.length > 0) {
@@ -187,7 +191,7 @@ export async function getComments(hikeId, hikeSource = "sheets", alternateHikeId
   }
 
   const commentsWithPreview = await Promise.all(
-    (data ?? []).map(async (comment) => {
+    filteredComments.map(async (comment) => {
       if (comment.photo_url?.startsWith("pending://") && currentUserId === comment.user_id) {
         return {
           ...comment,
