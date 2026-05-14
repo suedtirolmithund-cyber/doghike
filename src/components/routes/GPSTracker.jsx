@@ -689,7 +689,7 @@ export default function GPSTracker({ onSave }) {
         {[
           { value: stats.distance.toFixed(2), unit: "km", label: "Distanz" },
           { value: formatTime(elapsedSeconds), unit: "", label: "Zeit" },
-          { value: `+${Math.round(stats.elevationGain)}`, unit: "m", label: "Hoehenmeter" },
+          { value: `+${Math.round(stats.elevationGain)}`, unit: "m", label: "Höhenmeter" },
           { value: stats.avgSpeed.toFixed(1), unit: "km/h", label: "Speed" },
         ].map((item, index) => (
           <motion.div
