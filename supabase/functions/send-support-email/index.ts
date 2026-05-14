@@ -54,10 +54,6 @@ Deno.serve(async (request) => {
       return json({ error: "supabase_not_configured" }, 500);
     }
 
-    if (!resendApiKey || !supportInbox) {
-      return json({ error: "support_email_not_configured" }, 500);
-    }
-
     const admin = createClient(supabaseUrl, serviceRoleKey);
     const accessToken = getAccessToken(request);
 
@@ -100,7 +96,7 @@ Deno.serve(async (request) => {
         category,
         page_url: pageUrl,
         user_agent: userAgent,
-        email_status: "pending",
+        email_status: resendApiKey && supportInbox ? "pending" : "stored_only",
       })
       .select("id")
       .single();
@@ -108,6 +104,10 @@ Deno.serve(async (request) => {
     if (insertError || !insertedRequest) {
       console.error("[SupportEmail] insert failed", insertError);
       return json({ error: "support_request_insert_failed" }, 500);
+    }
+
+    if (!resendApiKey || !supportInbox) {
+      return json({ ok: true, requestId: insertedRequest.id, delivery: "stored_only" });
     }
 
     const supportBody = [
@@ -149,7 +149,7 @@ Deno.serve(async (request) => {
         })
         .eq("id", insertedRequest.id);
 
-      return json({ error: "email_send_failed" }, 502);
+      return json({ ok: true, requestId: insertedRequest.id, delivery: "stored_only", emailError: "email_send_failed" });
     }
 
     await admin
@@ -160,7 +160,7 @@ Deno.serve(async (request) => {
       })
       .eq("id", insertedRequest.id);
 
-    return json({ ok: true, requestId: insertedRequest.id });
+    return json({ ok: true, requestId: insertedRequest.id, delivery: "email_sent" });
   } catch (error) {
     console.error("[SupportEmail] function error", error);
     return json({ error: "internal_error" }, 500);

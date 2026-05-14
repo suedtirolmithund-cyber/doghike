@@ -41,7 +41,7 @@ export default function Support() {
     setSubmitting(true);
 
     try {
-      await sendSupportMessage({
+      const result = await sendSupportMessage({
         subject: subject.trim(),
         message: message.trim(),
         email: user?.email || email.trim(),
@@ -51,14 +51,16 @@ export default function Support() {
       });
 
       setSubmitted(true);
-      toast.success("Deine Nachricht wurde gesendet.");
+      toast.success(
+        result?.delivery === "email_sent"
+          ? "Deine Nachricht wurde gesendet."
+          : "Deine Nachricht wurde gespeichert."
+      );
     } catch (error) {
       const code = String(error?.code || error?.message || "").toLowerCase();
 
-      if (code.includes("support_email_not_configured")) {
-        toast.error("Der Versand ist noch nicht fertig eingerichtet. Schreib uns bis dahin bitte direkt per E-Mail.");
-      } else if (code.includes("email_send_failed")) {
-        toast.error("Deine Nachricht konnte gerade nicht per E-Mail zugestellt werden. Bitte versuche es noch einmal.");
+      if (code.includes("email_send_failed")) {
+        toast.error("Deine Nachricht wurde gespeichert, aber nicht per E-Mail weitergeleitet.");
       } else {
         toast.error("Deine Nachricht konnte gerade nicht gesendet werden. Bitte versuche es noch einmal.");
       }
@@ -206,9 +208,9 @@ export default function Support() {
             {submitted ? (
               <div className="text-center py-12">
                 <CheckCircle2 className="w-16 h-16 text-brand-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-slate-900 mb-2">Nachricht gesendet!</h3>
+                <h3 className="text-xl font-semibold text-slate-900 mb-2">Nachricht angekommen!</h3>
                 <p className="text-slate-500 text-sm mb-6">
-                  Falls du noch etwas ergänzen willst, schreib direkt an{" "}
+                  Wir haben deine Nachricht gespeichert. Falls du noch etwas ergänzen willst, schreib direkt an{" "}
                   <a href={`mailto:${SUPPORT_EMAIL}`} className="text-brand-600 underline">{SUPPORT_EMAIL}</a>.
                 </p>
                 <Button
