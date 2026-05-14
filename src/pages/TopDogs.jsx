@@ -119,7 +119,7 @@ function Podium({ top3, metric }) {
   const origIdx = [1, 0, 2];
 
   return (
-    <div className="flex items-end justify-center gap-3 mb-6 px-4">
+    <div className="mb-6 flex items-end justify-center gap-2 px-1 sm:gap-3 sm:px-4">
       {order.map((entry, i) => {
         if (!entry) return null;
         const style  = RANK_STYLE[origIdx[i]];
@@ -130,28 +130,30 @@ function Podium({ top3, metric }) {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 + 0.2 }}
-            className="flex flex-col items-center gap-1 flex-1 max-w-[110px]"
+            className="flex max-w-[108px] flex-1 flex-col items-center gap-1 sm:max-w-[110px]"
           >
             {/* Dog avatar */}
-            <div className={`relative ${isFirst ? "w-20 h-20" : "w-14 h-14"}`}>
+            <div className={`relative ${isFirst ? "h-16 w-16 sm:h-20 sm:w-20" : "h-12 w-12 sm:h-14 sm:w-14"}`}>
               <img
                 src={dogPhoto(entry.dog)}
                 alt={entry.dog.name}
+                loading="lazy"
+                decoding="async"
                 className={`w-full h-full rounded-full object-cover border-4 border-white shadow-md ${style.ring}`}
               />
               <span className="absolute -top-2 -right-1 text-xl leading-none">{style.medal}</span>
             </div>
 
             {/* Name */}
-            <p className={`font-bold text-slate-900 text-center leading-tight ${isFirst ? "text-sm" : "text-xs"} line-clamp-1 max-w-full px-1`}>
+            <p className={`max-w-full px-1 text-center font-bold leading-tight text-slate-900 ${isFirst ? "text-xs sm:text-sm" : "text-[11px] sm:text-xs"} line-clamp-2`}>
               {entry.dog.name}
             </p>
             {entry.dog.breed && (
-              <p className="text-[10px] text-slate-400 text-center line-clamp-1">{entry.dog.breed}</p>
+              <p className="line-clamp-1 text-center text-[10px] text-slate-400">{entry.dog.breed}</p>
             )}
 
             {/* Value */}
-            <p className={`font-extrabold ${isFirst ? "text-xl" : "text-base"} ${style.num}`}>
+            <p className={`font-extrabold ${isFirst ? "text-lg sm:text-xl" : "text-sm sm:text-base"} ${style.num}`}>
               {metric === "tours"     && entry.tourCount}
               {metric === "distance"  && `${entry.totalDistance}`}
               {metric === "elevation" && entry.totalElevation.toLocaleString()}
@@ -179,7 +181,7 @@ function RankRow({ entry, rank, metric, isMyDog }) {
       initial={{ opacity: 0, x: -16 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: (rank - 4) * 0.04 }}
-      className={`flex items-center gap-3 p-3 rounded-xl border ${
+      className={`flex flex-wrap items-center gap-3 rounded-xl border p-3 ${
         isMyDog ? "border-brand-300 bg-brand-50/60 shadow-sm" : "border-white/70 bg-white/70 shadow-sm backdrop-blur-xl"
       }`}
     >
@@ -190,6 +192,8 @@ function RankRow({ entry, rank, metric, isMyDog }) {
       <img
         src={dogPhoto(entry.dog)}
         alt={entry.dog.name}
+        loading="lazy"
+        decoding="async"
         className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm shrink-0"
       />
 
@@ -214,7 +218,7 @@ function RankRow({ entry, rank, metric, isMyDog }) {
       </div>
 
       {/* Wert */}
-      <div className="text-right shrink-0">
+      <div className="ml-auto text-right shrink-0">
         <p className="text-base font-bold text-slate-900">
           {metric === "tours"     && entry.tourCount}
           {metric === "distance"  && entry.totalDistance}
@@ -245,6 +249,8 @@ function CompactRankRow({ entry, rank, metric, isMyDog }) {
         <img
           src={dogPhoto(entry.dog)}
           alt={entry.dog.name}
+          loading="lazy"
+          decoding="async"
           className="h-11 w-11 shrink-0 rounded-full border-2 border-white object-cover shadow-sm"
         />
         <div className="min-w-0 flex-1">
@@ -293,9 +299,11 @@ function MyDogCard({ entry, rank, metric }) {
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mt-4 p-4 rounded-2xl border-2 border-brand-300 bg-brand-50/70 flex items-center gap-4 shadow-sm backdrop-blur-xl"
+      className="mt-4 flex flex-wrap items-center gap-4 rounded-2xl border-2 border-brand-300 bg-brand-50/70 p-4 shadow-sm backdrop-blur-xl"
     >
       <img src={dogPhoto(entry.dog)} alt={entry.dog.name}
+        loading="lazy"
+        decoding="async"
         className="w-12 h-12 rounded-full object-cover border-2 border-white shadow" />
       <div className="flex-1 min-w-0">
         <p className="font-bold text-slate-900">{entry.dog.name}</p>
@@ -322,15 +330,15 @@ function CommunityStats({ rows }) {
   const totalHm    = rows.reduce((s, r) => s + r.totalElevation, 0);
 
   return (
-    <div className="grid grid-cols-3 gap-3 mb-6">
+    <div className="mb-6 grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
       {[
         { icon: Dog,       value: rows.length, label: "Hunde", color: "bg-brand-50 text-brand-600 border-brand-100" },
         { icon: Ruler,     value: `${totalKm.toFixed(0)} km`, label: "gesamt", color: "bg-brand-50 text-brand-700 border-brand-200" },
         { icon: TrendingUp,value: `${(totalHm/1000).toFixed(1)}k`, label: "Höhenmeter", color: "bg-brand-50 text-brand-600 border-brand-200" },
       ].map(({ icon: Icon, value, label, color }) => (
-        <div key={label} className={`rounded-xl border p-3 text-center ${color}`}>
-          <Icon className="w-4 h-4 mx-auto mb-1 opacity-70" />
-          <p className="font-bold text-base leading-tight">{value}</p>
+        <div key={label} className={`rounded-xl border p-3 text-center sm:text-left ${color}`}>
+          <Icon className="mx-auto mb-1 h-4 w-4 opacity-70 sm:mx-0" />
+          <p className="text-base font-bold leading-tight">{value}</p>
           <p className="text-[11px] opacity-70">{label}</p>
         </div>
       ))}
@@ -427,6 +435,7 @@ export default function TopDogs() {
     queryKey: ["topDogs"],
     queryFn:  loadLeaderboard,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   // Mein erster Hund (für Highlight)
@@ -437,6 +446,8 @@ export default function TopDogs() {
       return getDogs(user.id);
     },
     enabled: !!user?.id,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
   const myDogIds = myDogs.map((dog) => dog.id);
 
