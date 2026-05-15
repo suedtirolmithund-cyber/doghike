@@ -91,7 +91,7 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </footer>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-brand-100/70 bg-white/78 shadow-[0_-10px_28px_rgba(168,0,60,0.12)] backdrop-blur-md md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-brand-100 bg-[#fff7ed]/96 shadow-[0_-12px_32px_rgba(124,48,32,0.18)] backdrop-blur-sm md:hidden">
         <AnimatePresence>
           {moreOpen && (
             <>
