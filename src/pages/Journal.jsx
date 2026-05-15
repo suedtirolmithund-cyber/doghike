@@ -343,12 +343,12 @@ export default function Journal() {
                             color="text-brand-600"
                           />
                           {entry.difficulty && (
-                            <span className={`inline-flex min-h-8 items-center rounded-full bg-brand-50/70 px-2.5 py-1 text-sm font-medium ${getDifficultyTextColor(entry.difficulty)}`}>
+                            <span className={`inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full bg-brand-50/70 px-2.5 py-1 text-center text-sm font-medium leading-tight whitespace-normal break-words ${getDifficultyTextColor(entry.difficulty)}`}>
                               {TOUR_ICONS.human} {getDifficultyLabel(entry.difficulty)}
                             </span>
                           )}
                           {entry.dog_difficulty && (
-                            <span className={`inline-flex min-h-8 items-center rounded-full bg-brand-50/70 px-2.5 py-1 text-sm font-medium ${getDifficultyTextColor(entry.dog_difficulty)}`}>
+                            <span className={`inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full bg-brand-50/70 px-2.5 py-1 text-center text-sm font-medium leading-tight whitespace-normal break-words ${getDifficultyTextColor(entry.dog_difficulty)}`}>
                               {TOUR_ICONS.dog} {getDifficultyLabel(entry.dog_difficulty)}
                             </span>
                           )}
@@ -356,14 +356,14 @@ export default function Journal() {
 
                         <div className="mb-2 flex flex-wrap gap-2">
                           {entry.dog_suitable && (
-                            <Badge variant="secondary" className="min-h-8 border-brand-200 bg-brand-50 px-3 py-1 text-sm text-brand-600 md:text-xs">
+                            <Badge variant="secondary" className="min-h-8 border-brand-200 bg-brand-50 px-2.5 py-1 text-sm text-brand-600 md:px-3 md:text-xs">
                               Hundefreundlich
                             </Badge>
                           )}
                           {entry.water_available !== null && entry.water_available !== undefined && (
                               <Badge
                                 variant="secondary"
-                                className={`min-h-8 border px-3 py-1 text-sm md:text-xs ${getWaterBadgeClass(entry.water_available)}`}
+                                className={`min-h-8 border px-2.5 py-1 text-sm md:px-3 md:text-xs ${getWaterBadgeClass(entry.water_available)}`}
                               >
                                 <WaterIcon value={entry.water_available} /> {getWaterLabel(entry.water_available) ?? getWaterLabel(0)}
                               </Badge>
