@@ -118,9 +118,31 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         return;
       }
 
-      for (const file of validFiles) {
-        const file_url = await uploadJournalFile(user?.id ?? "admin", file);
-        uploadedUrls.push(file_url);
+      const uploadResults = await Promise.allSettled(
+        validFiles.map((file) => uploadJournalFile(user?.id ?? "admin", file))
+      );
+      const failedUploads = uploadResults.filter((result) => result.status === "rejected");
+
+      for (const result of uploadResults) {
+        if (result.status === "fulfilled" && result.value) {
+          uploadedUrls.push(result.value);
+        }
+      }
+
+      if (failedUploads.length > 0) {
+        toast.warning(
+          `${failedUploads.length} Foto${failedUploads.length > 1 ? "s" : ""} nicht hochgeladen`,
+          {
+            description: uploadedUrls.length > 0
+              ? "Die anderen Bilder sind trotzdem im Eintrag dabei."
+              : "Bitte versuch es gleich noch einmal.",
+          }
+        );
+      }
+
+      if (!uploadedUrls.length) {
+        toast.error("Kein Foto konnte gerade hochgeladen werden. Versuch es gleich noch einmal.");
+        return;
       }
 
       setFormData(prev => ({
