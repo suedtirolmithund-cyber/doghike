@@ -377,25 +377,25 @@ export default function Friends() {
         </motion.div>
 
         <Tabs defaultValue={incoming.length > 0 ? "requests" : "friends"}>
-          <TabsList className="grid w-full grid-cols-4 border border-white/70 bg-white/65 backdrop-blur-xl mb-4">
-            <TabsTrigger value="friends" className="px-1 text-[11px] sm:text-sm">
+          <TabsList className="mb-4 grid h-auto w-full grid-cols-2 gap-1 border border-white/70 bg-white/65 p-1 backdrop-blur-xl sm:grid-cols-4">
+            <TabsTrigger value="friends" className="h-11 px-2 text-sm">
               <span className="sm:hidden">Freunde</span>
               <span className="hidden sm:inline">Freunde ({accepted.length})</span>
             </TabsTrigger>
-            <TabsTrigger value="requests" className="relative px-1 text-[11px] sm:text-sm">
+            <TabsTrigger value="requests" className="relative h-11 px-2 text-sm">
               <span className="sm:hidden">Anfragen</span>
               <span className="hidden sm:inline">Offene Anfragen</span>
               {incoming.length > 0 && (
-                <span className="ml-1.5 bg-brand-500 text-white text-[10px] font-bold rounded-full px-1.5 py-0.5">
+                <span className="ml-1.5 rounded-full bg-brand-500 px-1.5 py-0.5 text-[10px] font-bold text-white">
                   {incoming.length}
                 </span>
               )}
             </TabsTrigger>
-            <TabsTrigger value="sent" className="px-1 text-[11px] sm:text-sm">
+            <TabsTrigger value="sent" className="h-11 px-2 text-sm">
               <span className="sm:hidden">Gesendet</span>
               <span className="hidden sm:inline">Gesendet ({outgoing.length})</span>
             </TabsTrigger>
-            <TabsTrigger value="feed" className="px-1 text-[11px] sm:text-sm">
+            <TabsTrigger value="feed" className="h-11 px-2 text-sm">
               <span className="sm:hidden">Touren</span>
               <span className="hidden sm:inline">Touren von Freunden</span>
             </TabsTrigger>
