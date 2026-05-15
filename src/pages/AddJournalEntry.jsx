@@ -821,6 +821,7 @@ export default function AddJournalEntry() {
   const [photoConsent, setPhotoConsent] = useState(false);
   const [photoPreviewUrls, setPhotoPreviewUrls] = useState([]);
   const [draggedPhotoIndex, setDraggedPhotoIndex] = useState(null);
+  const draggedPhotoIndexRef = useRef(null);
   const uploadedPhotosRef = useRef([]);
   const uploadedGpxRef = useRef([]);
   const originalPhotosRef = useRef([]);
@@ -1064,17 +1065,24 @@ export default function AddJournalEntry() {
     setPhotoPreviewUrls((prev) => reorder(prev));
   };
 
-  const handlePhotoDragStart = (event, index) => {
+  const handlePhotoPointerDown = (event, index) => {
+    if (event.target.closest("button")) return;
+    event.preventDefault();
+    draggedPhotoIndexRef.current = index;
     setDraggedPhotoIndex(index);
-    event.dataTransfer.effectAllowed = "move";
-    event.dataTransfer.setData("text/plain", String(index));
+    event.currentTarget.setPointerCapture?.(event.pointerId);
   };
 
-  const handlePhotoDrop = (event, targetIndex) => {
-    event.preventDefault();
-    const sourceIndex = Number(event.dataTransfer.getData("text/plain"));
-    const fromIndex = Number.isInteger(sourceIndex) ? sourceIndex : draggedPhotoIndex;
+  const handlePhotoPointerEnter = (targetIndex) => {
+    const fromIndex = draggedPhotoIndexRef.current;
+    if (fromIndex === null || fromIndex === targetIndex) return;
     moveUploadedPhotoToIndex(fromIndex, targetIndex);
+    draggedPhotoIndexRef.current = targetIndex;
+    setDraggedPhotoIndex(targetIndex);
+  };
+
+  const endPhotoPointerDrag = () => {
+    draggedPhotoIndexRef.current = null;
     setDraggedPhotoIndex(null);
   };
 
@@ -1485,20 +1493,16 @@ export default function AddJournalEntry() {
                 {photoPreviewUrls.map((url, i) => (
                   <div
                     key={`${form.photos[i] ?? url}-${i}`}
-                    draggable
-                    onDragStart={(event) => handlePhotoDragStart(event, i)}
-                    onDragEnd={() => setDraggedPhotoIndex(null)}
-                    onDragOver={(event) => {
-                      event.preventDefault();
-                      event.dataTransfer.dropEffect = "move";
-                    }}
-                    onDrop={(event) => handlePhotoDrop(event, i)}
-                    className={`relative aspect-square h-28 w-28 shrink-0 cursor-grab overflow-hidden rounded-lg border bg-white shadow-sm transition-all active:cursor-grabbing sm:h-32 sm:w-32 ${
+                    onPointerDown={(event) => handlePhotoPointerDown(event, i)}
+                    onPointerEnter={() => handlePhotoPointerEnter(i)}
+                    onPointerUp={endPhotoPointerDrag}
+                    onPointerCancel={endPhotoPointerDrag}
+                    className={`relative aspect-square h-28 w-28 shrink-0 touch-none select-none cursor-grab overflow-hidden rounded-lg border bg-white shadow-sm transition-all active:cursor-grabbing sm:h-32 sm:w-32 ${
                       draggedPhotoIndex === i
                         ? "scale-[0.98] border-[#F07030] opacity-70"
                         : "border-brand-100"
                     }`}
-                    title="Bild ziehen, um die Reihenfolge zu ändern"
+                    title="Gedrückt halten und über ein anderes Bild ziehen"
                   >
                     <img
                       src={url}
@@ -1516,7 +1520,7 @@ export default function AddJournalEntry() {
                     <div className="absolute inset-x-1 bottom-1 flex items-center justify-between gap-1">
                       <button
                         type="button"
-                        draggable={false}
+                        onPointerDown={(event) => event.stopPropagation()}
                         onClick={(event) => {
                           event.stopPropagation();
                           moveUploadedPhoto(i, -1);
@@ -1529,7 +1533,7 @@ export default function AddJournalEntry() {
                       </button>
                       <button
                         type="button"
-                        draggable={false}
+                        onPointerDown={(event) => event.stopPropagation()}
                         onClick={(event) => {
                           event.stopPropagation();
                           void removeUploadedPhoto(i);
@@ -1541,7 +1545,7 @@ export default function AddJournalEntry() {
                       </button>
                       <button
                         type="button"
-                        draggable={false}
+                        onPointerDown={(event) => event.stopPropagation()}
                         onClick={(event) => {
                           event.stopPropagation();
                           moveUploadedPhoto(i, 1);
