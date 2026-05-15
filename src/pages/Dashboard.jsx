@@ -13,10 +13,9 @@ import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
 import { getDogProfileCount, getDogs } from "@/lib/profilesApi";
 import { matchesHikeSearch } from "@/lib/hikeSearch";
+import { hasSeenDogNudgeThisSession, markDogNudgeSeenThisSession } from "@/lib/dogNudgeSession";
 
 const PAGE_SIZE = 10;
-const FIRST_DASHBOARD_WITHOUT_DOG_KEY = "doghike:first-dashboard-without-dog";
-const DOG_NUDGE_COMPLETED_KEY = "doghike:dog-nudge-completed";
 
 function getCurrentSeason() {
   const m = new Date().getMonth() + 1;
@@ -76,21 +75,9 @@ export default function Dashboard() {
     if (isLoadingAuth || isLoadingDogs) return;
     if (!isAuthenticated || !user?.id) return;
     if (dogs.length > 0) return;
-    if (typeof window === "undefined") return;
+    if (hasSeenDogNudgeThisSession(user.id)) return;
 
-    const firstVisitKey = `${FIRST_DASHBOARD_WITHOUT_DOG_KEY}:${user.id}`;
-    const nudgeCompletedKey = `${DOG_NUDGE_COMPLETED_KEY}:${user.id}`;
-    const hasSeenDashboardWithoutDog = window.localStorage.getItem(firstVisitKey);
-    const hasCompletedDogNudge = window.localStorage.getItem(nudgeCompletedKey);
-
-    if (!hasSeenDashboardWithoutDog) {
-      window.localStorage.setItem(firstVisitKey, new Date().toISOString());
-      return;
-    }
-
-    if (hasCompletedDogNudge) return;
-
-    window.localStorage.setItem(nudgeCompletedKey, new Date().toISOString());
+    markDogNudgeSeenThisSession(user.id);
     navigate(createPageUrl("Dogs"), { replace: true });
   }, [dogs.length, isAuthenticated, isLoadingAuth, isLoadingDogs, navigate, user?.id]);
 
