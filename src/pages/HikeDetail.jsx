@@ -59,8 +59,7 @@ const difficultyColors = {
   "5": "bg-brand-100 text-brand-500"
 };
 
-const humanDifficultyChipClass =
-  "border-[#F07030]/55 bg-[#F9C030]/22 text-[#7C4A00]";
+const humanDifficultyChipClass = "";
 const dogDifficultyChipClass =
   "border-[#F07030]/55 bg-[#F9C030]/22 text-[#7C4A00]";
 const humanDifficultyDotClass = "bg-[#F07030]";
@@ -519,7 +518,7 @@ export default function HikeDetail() {
                     />
                   ))}
                 </div>
-                <div className="text-xs font-semibold text-[#7C4A00]">Mensch</div>
+                <div className="text-xs font-semibold text-[#C07820]">Mensch</div>
               </div>
             </div>
           )}
