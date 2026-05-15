@@ -945,16 +945,38 @@ export default function AddJournalEntry() {
 
   const handlePhotoUpload = async (e) => {
     const files = Array.from(e.target.files);
+    e.target.value = "";
     if (!files.length) return;
-    try {
-      files.forEach(validateImageUpload);
-    } catch (error) {
-      toast.error(getImageUploadErrorMessage(error));
+
+    const validFiles = [];
+    const skippedFiles = [];
+
+    files.forEach((file) => {
+      try {
+        validateImageUpload(file);
+        validFiles.push(file);
+      } catch (error) {
+        skippedFiles.push({ file, error });
+      }
+    });
+
+    if (skippedFiles.length > 0) {
+      toast.warning(
+        `${skippedFiles.length} Foto${skippedFiles.length > 1 ? "s" : ""} übersprungen`,
+        {
+          description: `Bitte wähle Bilder unter 15 MB. ${validFiles.length > 0 ? "Die anderen laden wir trotzdem hoch." : ""}`.trim(),
+        }
+      );
+    }
+
+    if (!validFiles.length) {
+      toast.error(getImageUploadErrorMessage(skippedFiles[0]?.error));
       return;
     }
+
     setPhotoUploading(true);
     try {
-      const urls = await Promise.all(files.map((f) => uploadJournalFile(user.id, f)));
+      const urls = await Promise.all(validFiles.map((f) => uploadJournalFile(user.id, f)));
       uploadedPhotosRef.current = [...uploadedPhotosRef.current, ...urls];
       setForm((p) => ({ ...p, photos: [...p.photos, ...urls] }));
       showUploadedFeedback(
