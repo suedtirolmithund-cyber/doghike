@@ -1,6 +1,7 @@
-﻿import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { motion } from "framer-motion";
 import { createPageUrl } from "@/utils";
 import {
@@ -1048,6 +1049,20 @@ export default function AddJournalEntry() {
     setPhotoPreviewUrls((prev) => moveItem(prev));
   };
 
+  const handlePhotoDragEnd = (result) => {
+    if (!result.destination || result.destination.index === result.source.index) return;
+
+    const reorder = (items) => {
+      const nextItems = [...items];
+      const [movedItem] = nextItems.splice(result.source.index, 1);
+      nextItems.splice(result.destination.index, 0, movedItem);
+      return nextItems;
+    };
+
+    set("photos", reorder(form.photos));
+    setPhotoPreviewUrls((prev) => reorder(prev));
+  };
+
   const handleGpxUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -1451,46 +1466,84 @@ export default function AddJournalEntry() {
             </h2>
 
             {form.photos.length > 0 && (
-              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                {photoPreviewUrls.map((url, i) => (
-                  <div key={`${form.photos[i] ?? url}-${i}`} className="relative group aspect-square overflow-hidden rounded-lg">
-                    <img src={url} alt="" className="w-full h-full object-cover rounded-lg" />
-                    {i === 0 && (
-                      <span className="absolute left-1 top-1 rounded-full bg-[#F9C030] px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
-                        Titelbild
-                      </span>
-                    )}
-                    <div className="absolute inset-x-1 bottom-1 flex items-center justify-between gap-1">
-                      <button
-                        type="button"
-                        onClick={() => moveUploadedPhoto(i, -1)}
-                        disabled={i === 0}
-                        title="Bild nach links"
-                        className="grid h-7 w-7 place-items-center rounded-full bg-[#FDF0E8]/95 text-[#7C3020] shadow-sm disabled:opacity-35"
-                      >
-                        <ChevronLeft className="h-4 w-4" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => void removeUploadedPhoto(i)}
-                        title="Foto löschen"
-                        className="grid h-7 w-7 place-items-center rounded-full bg-[#A8003C] text-white shadow-sm"
-                      >
-                        <X className="h-3.5 w-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => moveUploadedPhoto(i, 1)}
-                        disabled={i === photoPreviewUrls.length - 1}
-                        title="Bild nach rechts"
-                        className="grid h-7 w-7 place-items-center rounded-full bg-[#FDF0E8]/95 text-[#7C3020] shadow-sm disabled:opacity-35"
-                      >
-                        <ChevronRight className="h-4 w-4" />
-                      </button>
+              <DragDropContext onDragEnd={handlePhotoDragEnd}>
+                <Droppable droppableId="journal-photo-upload" direction="horizontal">
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-2"
+                    >
+                      {photoPreviewUrls.map((url, i) => (
+                        <Draggable
+                          key={form.photos[i] ?? url}
+                          draggableId={String(form.photos[i] ?? url)}
+                          index={i}
+                        >
+                          {(dragProvided, snapshot) => (
+                            <div
+                              ref={dragProvided.innerRef}
+                              {...dragProvided.draggableProps}
+                              {...dragProvided.dragHandleProps}
+                              className={`relative aspect-square h-28 w-28 shrink-0 overflow-hidden rounded-lg border border-brand-100 bg-white shadow-sm transition-shadow sm:h-32 sm:w-32 ${
+                                snapshot.isDragging ? "z-20 shadow-[0_18px_42px_rgba(124,48,32,0.28)]" : ""
+                              }`}
+                            >
+                              <img src={url} alt="" className="h-full w-full rounded-lg object-cover" />
+                              {i === 0 && (
+                                <span className="absolute left-1 top-1 rounded-full bg-[#F9C030] px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
+                                  Titelbild
+                                </span>
+                              )}
+                              <span className="absolute right-1 top-1 rounded-full bg-[#FDF0E8]/95 px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
+                                Ziehen
+                              </span>
+                              <div className="absolute inset-x-1 bottom-1 flex items-center justify-between gap-1">
+                                <button
+                                  type="button"
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                    moveUploadedPhoto(i, -1);
+                                  }}
+                                  disabled={i === 0}
+                                  title="Bild nach links"
+                                  className="grid h-7 w-7 place-items-center rounded-full bg-[#FDF0E8]/95 text-[#7C3020] shadow-sm disabled:opacity-35"
+                                >
+                                  <ChevronLeft className="h-4 w-4" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                    void removeUploadedPhoto(i);
+                                  }}
+                                  title="Foto löschen"
+                                  className="grid h-7 w-7 place-items-center rounded-full bg-[#A8003C] text-white shadow-sm"
+                                >
+                                  <X className="h-3.5 w-3.5" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                    moveUploadedPhoto(i, 1);
+                                  }}
+                                  disabled={i === photoPreviewUrls.length - 1}
+                                  title="Bild nach rechts"
+                                  className="grid h-7 w-7 place-items-center rounded-full bg-[#FDF0E8]/95 text-[#7C3020] shadow-sm disabled:opacity-35"
+                                >
+                                  <ChevronRight className="h-4 w-4" />
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
                     </div>
-                  </div>
-                ))}
-              </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
             )}
 
             <label className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-brand-100 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
