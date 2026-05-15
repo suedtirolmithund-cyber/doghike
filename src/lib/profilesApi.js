@@ -114,6 +114,12 @@ export async function getDogs(userId) {
 }
 
 export async function getDogProfileCount() {
+  const { data: rpcCount, error: rpcError } = await supabase.rpc("get_public_dog_profile_count");
+
+  if (!rpcError && typeof rpcCount === "number") {
+    return rpcCount;
+  }
+
   const { count, error } = await supabase
     .from("dogs")
     .select("id", { count: "exact", head: true });
