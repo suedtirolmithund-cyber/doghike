@@ -45,8 +45,8 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
     <div className="doghike-glass-card p-4 md:p-6">
       <div className="mb-4 md:mb-6">
         <div className="flex items-baseline gap-2 mb-2">
-          <span className="text-3xl md:text-4xl font-bold text-slate-900">{averageRating}</span>
-          <span className="text-slate-500 text-sm md:text-base">/ 5</span>
+          <span className="text-3xl font-bold text-[#7C3020] md:text-4xl">{averageRating}</span>
+          <span className="text-sm text-[#C07820] md:text-base">/ 5</span>
         </div>
         <div className="flex items-center gap-1 mb-1">
           {[1, 2, 3, 4, 5].map((star) => (
@@ -55,19 +55,19 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
               className={`w-5 h-5 ${
                 star <= Math.round(averageRating)
                   ? "fill-brand-100 text-brand-100"
-                  : "text-slate-300"
+                  : "text-brand-100"
               }`}
             />
           ))}
         </div>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-[#C07820]">
           {ratings.length} Bewertung{ratings.length !== 1 ? "en" : ""}
         </p>
       </div>
 
       {isAuthenticated && (
         <div className="border-t border-brand-100 pt-4 md:pt-6">
-          <p className="font-semibold text-slate-900 mb-3 text-sm md:text-base">
+          <p className="mb-3 text-sm font-semibold text-[#7C3020] md:text-base">
             {userRating ? "Deine Bewertung ändern" : "Wanderung bewerten"}
           </p>
           <div className="flex items-center justify-center gap-1 mb-4">
@@ -85,7 +85,7 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
                   className={`w-10 h-10 md:w-8 md:h-8 transition-colors ${
                     star <= (hoverRating || selectedRating || userRating?.rating || 0)
                       ? "fill-brand-100 text-brand-100"
-                      : "text-slate-300 hover:text-brand-100"
+                      : "text-brand-100 hover:text-brand-200"
                   }`}
                 />
               </motion.button>
@@ -98,7 +98,7 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
               checked={consentPublic}
               onCheckedChange={setConsentPublic}
             />
-            <label htmlFor="rating-consent" className="text-sm text-slate-700 cursor-pointer flex-1">
+            <label htmlFor="rating-consent" className="flex-1 cursor-pointer text-sm text-[#7C3020]">
               Ich akzeptiere, dass meine Bewertung öffentlich sichtbar ist.
             </label>
           </div>
@@ -106,7 +106,7 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
           <Button
             onClick={() => ratingMutation.mutate()}
             disabled={selectedRating === 0 || ratingMutation.isPending || !consentPublic}
-            className="w-full bg-brand-400 hover:bg-brand-600"
+            className="w-full"
           >
             {ratingMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
             {userRating ? "Bewertung aktualisieren" : "Bewertung abgeben"}

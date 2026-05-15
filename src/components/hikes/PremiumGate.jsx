@@ -4,49 +4,69 @@ import { Lock, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
+const premiumItems = [
+  "Zugang zu allen Premium-Touren",
+  "Detaillierte Routenbeschreibungen & Karten",
+  "Exklusive Fotos & Insider-Tipps",
+  "Wetter- & Saisoninfos für Touren",
+];
+
+const inlineItems = [
+  "komplette Beschreibung und Tipps",
+  "weitere Fotos und Zusatzinfos",
+  "Parken, Einkehr und Hinweise",
+  "alle Premium-Touren in voller Ansicht",
+];
+
+function PremiumList({ title, items }) {
+  return (
+    <div className="mb-6 rounded-2xl border border-brand-100 bg-brand-50 p-5 text-left">
+      <p className="mb-3 flex items-center gap-2 font-semibold text-brand-700">
+        <Crown className="h-4 w-4" /> {title}
+      </p>
+      <ul className="space-y-2 text-sm text-brand-600">
+        {items.map((item) => (
+          <li key={item} className="flex items-center gap-2">
+            <span className="font-bold text-brand-400">✓</span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) {
   if (variant === "inline") {
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-3xl p-8 border border-brand-100 shadow-sm"
+        className="doghike-glass-card p-8"
       >
-        <div className="w-14 h-14 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-5">
-          <Crown className="w-7 h-7 text-brand-500" />
+        <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-brand-100">
+          <Crown className="h-7 w-7 text-brand-500" />
         </div>
 
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-semibold text-slate-900 mb-2">Mehr Infos mit Premium</h2>
-          <p className="text-slate-500">
-            Die Vorschau zu <span className="font-medium text-slate-700">{hikeName}</span> ist sichtbar.
+        <div className="mb-6 text-center">
+          <h2 className="mb-2 text-2xl font-semibold text-[#7C3020]">Mehr Infos mit Premium</h2>
+          <p className="text-sm leading-6 text-[#C07820]">
+            Die Vorschau zu <span className="font-semibold text-[#7C3020]">{hikeName}</span> ist sichtbar.
             Die ganzen Details, Fotos und Zusatzinfos gibt es mit Premium.
           </p>
         </div>
 
-        <div className="bg-brand-50 border border-brand-100 rounded-2xl p-5 mb-6 text-left">
-          <p className="font-semibold text-brand-700 mb-3 flex items-center gap-2">
-            <Crown className="w-4 h-4" /> Mit Premium siehst du:
-          </p>
-          <ul className="space-y-2 text-sm text-brand-600">
-            <li className="flex items-center gap-2">✓ komplette Beschreibung und Tipps</li>
-            <li className="flex items-center gap-2">✓ weitere Fotos und Zusatzinfos</li>
-            <li className="flex items-center gap-2">✓ Parken, Einkehr und Hinweise</li>
-            <li className="flex items-center gap-2">✓ alle Premium-Touren in voller Ansicht</li>
-          </ul>
-        </div>
+        <PremiumList title="Mit Premium siehst du:" items={inlineItems} />
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Link to={createPageUrl("Premium")}>
-            <Button className="bg-brand-500 hover:bg-brand-500 text-white">
-              <Crown className="w-5 h-5 mr-2" />
+            <Button>
+              <Crown className="mr-2 h-5 w-5" />
               Jetzt Premium werden
             </Button>
           </Link>
           <Link to={createPageUrl("Hikes")}>
-            <Button variant="outline">
-              Zurück zu allen Touren
-            </Button>
+            <Button variant="outline">Zurück zu allen Touren</Button>
           </Link>
         </div>
       </motion.div>
@@ -54,58 +74,47 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-slate-50">
-      {/* Blurred preview */}
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/60">
       {coverPhoto && (
         <div className="relative h-[40vh] overflow-hidden">
           <img
             src={coverPhoto}
             alt={hikeName}
-            className="w-full h-full object-cover blur-md scale-110"
+            className="h-full w-full scale-110 object-cover blur-md"
           />
-          <div className="absolute inset-0 bg-black/60" />
+          <div className="absolute inset-0 bg-brand-900/62" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <Lock className="w-16 h-16 text-white/50" />
+            <Lock className="h-16 w-16 text-white/55" />
           </div>
         </div>
       )}
 
-      <div className="max-w-xl mx-auto px-4 py-16 text-center">
+      <div className="mx-auto max-w-xl px-4 py-16 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-3xl p-10 border border-brand-100 shadow-xl"
+          className="doghike-glass-card p-10"
         >
-          <div className="w-16 h-16 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Crown className="w-8 h-8 text-brand-500" />
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-brand-100">
+            <Crown className="h-8 w-8 text-brand-500" />
           </div>
 
-          <h2 className="text-2xl font-semibold text-slate-900 mb-2">Premium-Tour</h2>
-          <p className="text-slate-500 mb-2 text-lg font-medium">{hikeName}</p>
-          <p className="text-slate-500 mb-8">
+          <h2 className="mb-2 text-2xl font-semibold text-[#7C3020]">Premium-Tour</h2>
+          <p className="mb-2 text-lg font-medium text-[#C07820]">{hikeName}</p>
+          <p className="mb-8 text-sm leading-6 text-[#C07820]">
             Diese Tour ist exklusiv für Premium-Mitglieder verfügbar. Schließe ein Abo ab, um alle Details, Karten, Fotos und Tipps zu sehen.
           </p>
 
-          <div className="bg-brand-50 border border-brand-100 rounded-2xl p-5 mb-8 text-left">
-            <p className="font-semibold text-brand-700 mb-3 flex items-center gap-2">
-              <Crown className="w-4 h-4" /> Premium beinhaltet:
-            </p>
-            <ul className="space-y-2 text-sm text-brand-600">
-              <li className="flex items-center gap-2">✓ Zugang zu allen Premium-Touren</li>
-              <li className="flex items-center gap-2">✓ Detaillierte Routenbeschreibungen & Karten</li>
-              <li className="flex items-center gap-2">✓ Exklusive Fotos & Insider-Tipps</li>
-              <li className="flex items-center gap-2">✓ Wetter- & Saisoninfos für Touren</li>
-            </ul>
-          </div>
+          <PremiumList title="Premium beinhaltet:" items={premiumItems} />
 
           <Link to={createPageUrl("Premium")}>
-            <Button className="w-full bg-brand-500 hover:bg-brand-500 text-white h-12 text-base font-medium mb-3">
-              <Crown className="w-5 h-5 mr-2" />
+            <Button className="mb-3 h-12 w-full text-base">
+              <Crown className="mr-2 h-5 w-5" />
               Jetzt Premium werden
             </Button>
           </Link>
           <Link to={createPageUrl("Hikes")}>
-            <Button variant="ghost" className="w-full text-slate-500">
+            <Button variant="ghost" className="w-full">
               Zurück zu allen Touren
             </Button>
           </Link>
