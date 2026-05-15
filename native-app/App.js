@@ -27,6 +27,7 @@ import {
   getStoredTrack,
   getTrackSummary,
 } from "./src/lib/trackingStorage";
+import RouteMapCanvas from "./src/components/RouteMapCanvas";
 
 const COLORS = {
   bg: "#fff7f3",
@@ -56,6 +57,57 @@ function formatDistance(distanceKm) {
 
 function getRouteDogName(route) {
   return route?.notes?.match(/Hund:\s(.+)/)?.[1]?.split("\n")?.[0] ?? null;
+}
+
+function normalizeRoutePoints(points) {
+  if (!Array.isArray(points)) return [];
+
+  return points
+    .map((point) => {
+      if (Array.isArray(point) && point.length >= 2) {
+        return {
+          latitude: Number(point[0]),
+          longitude: Number(point[1]),
+        };
+      }
+
+      if (
+        point &&
+        Number.isFinite(Number(point.latitude)) &&
+        Number.isFinite(Number(point.longitude))
+      ) {
+        return {
+          latitude: Number(point.latitude),
+          longitude: Number(point.longitude),
+        };
+      }
+
+      return null;
+    })
+    .filter(
+      (point) =>
+        point &&
+        Number.isFinite(point.latitude) &&
+        Number.isFinite(point.longitude)
+    );
+}
+
+function getRouteRegion(points) {
+  if (!points.length) return null;
+
+  const latitudes = points.map((point) => point.latitude);
+  const longitudes = points.map((point) => point.longitude);
+  const minLatitude = Math.min(...latitudes);
+  const maxLatitude = Math.max(...latitudes);
+  const minLongitude = Math.min(...longitudes);
+  const maxLongitude = Math.max(...longitudes);
+
+  return {
+    latitude: (minLatitude + maxLatitude) / 2,
+    longitude: (minLongitude + maxLongitude) / 2,
+    latitudeDelta: Math.max((maxLatitude - minLatitude) * 1.5, 0.012),
+    longitudeDelta: Math.max((maxLongitude - minLongitude) * 1.5, 0.012),
+  };
 }
 
 function StatCard({ label, value }) {
@@ -146,6 +198,30 @@ function MiniRoutePreview({ points, accent = COLORS.accent }) {
           </View>
         )}
       </View>
+    </View>
+  );
+}
+
+function RouteMapCard({ points, accent = COLORS.accent, title = "Streckenvorschau" }) {
+  const normalizedPoints = useMemo(() => normalizeRoutePoints(points), [points]);
+  const region = useMemo(() => getRouteRegion(normalizedPoints), [normalizedPoints]);
+
+  if (normalizedPoints.length < 2 || !region) {
+    return <MiniRoutePreview points={points} accent={accent} />;
+  }
+
+  return (
+    <View style={styles.previewCard}>
+      <View style={styles.previewHeader}>
+        <Text style={styles.previewTitle}>{title}</Text>
+        <Text style={styles.previewHint}>{normalizedPoints.length} Punkte</Text>
+      </View>
+      <RouteMapCanvas
+        points={normalizedPoints}
+        region={region}
+        accent={accent}
+        fallback={<MiniRoutePreview points={points} accent={accent} />}
+      />
     </View>
   );
 }
@@ -732,7 +808,7 @@ export default function App() {
               />
             </View>
 
-            <MiniRoutePreview points={trackerData?.samples ?? []} />
+            <RouteMapCard points={trackerData?.samples ?? []} title="Live-Strecke" />
 
             <View style={styles.card}>
               <Text style={styles.cardTitle}>3. In DogTrails speichern</Text>
@@ -784,10 +860,11 @@ export default function App() {
                         </Pressable>
                       </View>
 
-                      <MiniRoutePreview
-                        points={selectedRoute.waypoints ?? []}
-                        accent={COLORS.accentDark}
-                      />
+                        <RouteMapCard
+                          points={selectedRoute.waypoints ?? []}
+                          accent={COLORS.accentDark}
+                          title="Routenkarte"
+                        />
 
                       <View style={styles.routeInfoGrid}>
                         <RouteInfoChip label="Distanz" value={formatDistance(selectedRoute.distance_km)} />
@@ -860,7 +937,11 @@ export default function App() {
                           </Text>
                         </View>
 
-                        <MiniRoutePreview points={route.waypoints ?? []} accent={COLORS.accentDark} />
+                        <RouteMapCard
+                          points={route.waypoints ?? []}
+                          accent={COLORS.accentDark}
+                          title="Route"
+                        />
 
                         <View style={styles.routeMetrics}>
                           <Text style={styles.routeMetricText}>
