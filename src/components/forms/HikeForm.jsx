@@ -18,7 +18,7 @@ import {
 import { uploadJournalFile } from "@/lib/journalApi";
 import { getImageUploadErrorMessage, validateImageUpload } from "@/lib/uploadValidation";
 import { useAuth } from "@/lib/AuthContext";
-import { Upload, X, Loader2, Star, Map as MapIcon, Trash2, MapPin, HelpCircle } from "lucide-react";
+import { Upload, X, Loader2, Star, Map as MapIcon, Trash2, MapPin, HelpCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -167,6 +167,17 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       ...prev,
       photos: prev.photos.filter((_, i) => i !== index)
     }));
+  };
+
+  const movePhoto = (index, direction) => {
+    setFormData((prev) => {
+      const nextIndex = index + direction;
+      if (nextIndex < 0 || nextIndex >= (prev.photos || []).length) return prev;
+
+      const nextPhotos = [...prev.photos];
+      [nextPhotos[index], nextPhotos[nextIndex]] = [nextPhotos[nextIndex], nextPhotos[index]];
+      return { ...prev, photos: nextPhotos };
+    });
   };
 
   const toggleDog = (dogId) => {
@@ -709,20 +720,46 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
-                className="relative group"
+                className="relative group overflow-hidden rounded-xl"
               >
                 <img
                   src={url}
                   alt={`Foto ${index + 1}`}
                   className="w-24 h-24 object-cover rounded-xl"
                 />
-                <button
-                  type="button"
-                  onClick={() => removePhoto(index)}
-                  className="absolute -top-2 -right-2 p-1 bg-brand-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+                {index === 0 && (
+                  <span className="absolute left-1 top-1 rounded-full bg-[#F9C030] px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
+                    Titelbild
+                  </span>
+                )}
+                <div className="absolute inset-x-1 bottom-1 flex items-center justify-between gap-1">
+                  <button
+                    type="button"
+                    onClick={() => movePhoto(index, -1)}
+                    disabled={index === 0}
+                    title="Bild nach links"
+                    className="grid h-7 w-7 place-items-center rounded-full bg-[#FDF0E8]/95 text-[#7C3020] shadow-sm disabled:opacity-35"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removePhoto(index)}
+                    title="Foto löschen"
+                    className="grid h-7 w-7 place-items-center rounded-full bg-[#A8003C] text-white shadow-sm"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => movePhoto(index, 1)}
+                    disabled={index === (formData.photos || []).length - 1}
+                    title="Bild nach rechts"
+                    className="grid h-7 w-7 place-items-center rounded-full bg-[#FDF0E8]/95 text-[#7C3020] shadow-sm disabled:opacity-35"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
               </motion.div>
             ))}
           </AnimatePresence>

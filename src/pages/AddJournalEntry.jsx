@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { createPageUrl } from "@/utils";
 import {
   ArrowLeft, Upload, X, Loader2, Star, FileText,
-  Mountain, TrendingUp, MapPin, AlertTriangle, Dog, Search, Layers, CircleHelp
+  Mountain, TrendingUp, MapPin, AlertTriangle, Dog, Search, Layers, CircleHelp, ChevronLeft, ChevronRight
 } from "lucide-react";
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
 import L from "leaflet";
@@ -1034,6 +1034,20 @@ export default function AddJournalEntry() {
     set("photos", form.photos.filter((_, j) => j !== index));
   };
 
+  const moveUploadedPhoto = (index, direction) => {
+    const nextIndex = index + direction;
+    if (nextIndex < 0 || nextIndex >= form.photos.length) return;
+
+    const moveItem = (items) => {
+      const nextItems = [...items];
+      [nextItems[index], nextItems[nextIndex]] = [nextItems[nextIndex], nextItems[index]];
+      return nextItems;
+    };
+
+    set("photos", moveItem(form.photos));
+    setPhotoPreviewUrls((prev) => moveItem(prev));
+  };
+
   const handleGpxUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -1439,14 +1453,41 @@ export default function AddJournalEntry() {
             {form.photos.length > 0 && (
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                 {photoPreviewUrls.map((url, i) => (
-                  <div key={i} className="relative group aspect-square">
+                  <div key={`${form.photos[i] ?? url}-${i}`} className="relative group aspect-square overflow-hidden rounded-lg">
                     <img src={url} alt="" className="w-full h-full object-cover rounded-lg" />
-                    <button type="button"
-                      onClick={() => void removeUploadedPhoto(i)}
-                      className="absolute top-1 right-1 bg-brand-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
+                    {i === 0 && (
+                      <span className="absolute left-1 top-1 rounded-full bg-[#F9C030] px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
+                        Titelbild
+                      </span>
+                    )}
+                    <div className="absolute inset-x-1 bottom-1 flex items-center justify-between gap-1">
+                      <button
+                        type="button"
+                        onClick={() => moveUploadedPhoto(i, -1)}
+                        disabled={i === 0}
+                        title="Bild nach links"
+                        className="grid h-7 w-7 place-items-center rounded-full bg-[#FDF0E8]/95 text-[#7C3020] shadow-sm disabled:opacity-35"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => void removeUploadedPhoto(i)}
+                        title="Foto löschen"
+                        className="grid h-7 w-7 place-items-center rounded-full bg-[#A8003C] text-white shadow-sm"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => moveUploadedPhoto(i, 1)}
+                        disabled={i === photoPreviewUrls.length - 1}
+                        title="Bild nach rechts"
+                        className="grid h-7 w-7 place-items-center rounded-full bg-[#FDF0E8]/95 text-[#7C3020] shadow-sm disabled:opacity-35"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
