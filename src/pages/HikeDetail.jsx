@@ -56,6 +56,14 @@ const difficultyColors = {
   "5": "bg-brand-100 text-brand-500"
 };
 
+const humanDifficultyChipClass =
+  "border-[#A8003C]/45 bg-[#A8003C]/10 text-[#A8003C]";
+const dogDifficultyChipClass =
+  "border-[#F07030]/55 bg-[#F9C030]/22 text-[#7C4A00]";
+const humanDifficultyDotClass = "bg-[#A8003C]";
+const dogDifficultyDotClass = "bg-[#F07030]";
+const inactiveDifficultyDotClass = "bg-[#F9C030]/45";
+
 const weatherEmojis = {
   sunny: "☀️",
   cloudy: "☁️",
@@ -497,28 +505,34 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.difficulty && (
-            <div className="doghike-stat-chip min-w-0 justify-start border-brand-200 bg-brand-50/75 px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4">
+            <div className={`doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4 ${humanDifficultyChipClass}`}>
               <span className="text-lg">{TOUR_ICONS.human}</span>
               <div>
                 <div className="flex gap-0.5 mb-0.5">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <span key={i} className={`inline-block w-2 h-2 rounded-full ${i < Number(hike.difficulty) ? 'bg-brand-400' : 'bg-brand-200'}`} />
+                    <span
+                      key={i}
+                      className={`inline-block h-2 w-2 rounded-full ${i < Number(hike.difficulty) ? humanDifficultyDotClass : inactiveDifficultyDotClass}`}
+                    />
                   ))}
                 </div>
-                <div className="text-xs text-[#C07820]">Mensch</div>
+                <div className="text-xs font-semibold text-[#A8003C]">Mensch</div>
               </div>
             </div>
           )}
           {hike.dog_difficulty && (
-            <div className="doghike-stat-chip min-w-0 justify-start border-brand-200 bg-brand-50/75 px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4">
+            <div className={`doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4 ${dogDifficultyChipClass}`}>
               <span className="text-lg">{TOUR_ICONS.dog}</span>
               <div>
                 <div className="flex gap-0.5 mb-0.5">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <span key={i} className={`inline-block w-2 h-2 rounded-full ${i < Number(hike.dog_difficulty) ? 'bg-brand-600' : 'bg-brand-200'}`} />
+                    <span
+                      key={i}
+                      className={`inline-block h-2 w-2 rounded-full ${i < Number(hike.dog_difficulty) ? dogDifficultyDotClass : inactiveDifficultyDotClass}`}
+                    />
                   ))}
                 </div>
-                <div className="text-xs text-[#C07820]">Hund</div>
+                <div className="text-xs font-semibold text-[#7C4A00]">Hund</div>
               </div>
             </div>
           )}
