@@ -92,17 +92,17 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
           <div className="p-4">
             <div className="mb-3 flex flex-wrap items-center gap-2">
               {humanDifficultyLabel && (
-                <Badge className={`${getDifficultyBadgeClass(hike.difficulty)} min-h-8 border px-3 py-1.5 text-sm font-semibold md:text-xs`}>
+                <Badge className={`${getDifficultyBadgeClass(hike.difficulty)} min-h-8 border px-2.5 py-1.5 text-sm font-semibold md:px-3 md:text-xs`}>
                   {TOUR_ICONS.human} {humanDifficultyLabel}
                 </Badge>
               )}
               {dogDifficultyLabel && (
-                <Badge className={`${getDifficultyBadgeClass(hike.dog_difficulty)} min-h-8 border px-3 py-1.5 text-sm font-semibold md:text-xs`}>
+                <Badge className={`${getDifficultyBadgeClass(hike.dog_difficulty)} min-h-8 border px-2.5 py-1.5 text-sm font-semibold md:px-3 md:text-xs`}>
                   {TOUR_ICONS.dog} {dogDifficultyLabel}
                 </Badge>
               )}
               {hike.water_availability && (
-                <span className={`inline-flex min-h-8 items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-semibold md:text-xs ${getWaterBadgeClass(hike.water_availability)}`}>
+                <span className={`inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full border px-2.5 py-1.5 text-center text-sm font-semibold leading-tight whitespace-normal break-words md:px-3 md:text-xs ${getWaterBadgeClass(hike.water_availability)}`}>
                   <WaterIcon value={hike.water_availability} /> {getWaterLabel(hike.water_availability) ?? hike.water_availability}
                 </span>
               )}

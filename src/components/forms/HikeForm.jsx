@@ -434,7 +434,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             <button
               type="button"
               onClick={() => setFormData({ ...formData, grazing_animals: !formData.grazing_animals })}
-              className={`rounded-full border px-3 py-2 text-sm transition-all ${
+              className={`inline-flex max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full border px-2.5 py-2 text-center text-sm leading-tight transition-all sm:px-3 ${
                 formData.grazing_animals
                   ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
                   : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
@@ -445,7 +445,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             <button
               type="button"
               onClick={() => setFormData({ ...formData, muzzle_recommended: !formData.muzzle_recommended })}
-              className={`rounded-full border px-3 py-2 text-sm transition-all ${
+              className={`inline-flex max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full border px-2.5 py-2 text-center text-sm leading-tight transition-all sm:px-3 ${
                 formData.muzzle_recommended
                   ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
                   : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
