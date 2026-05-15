@@ -99,7 +99,7 @@ export default function Layout({ children, currentPageName }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-40 bg-[#7C3020]/35 backdrop-blur-[2px]"
+                className="fixed inset-0 z-40 bg-[#7C3020]/55"
                 onClick={() => setMoreOpen(false)}
               />
 
@@ -108,7 +108,7 @@ export default function Layout({ children, currentPageName }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                className="absolute bottom-full left-3 right-3 z-50 rounded-t-2xl border border-brand-200/80 bg-[#fff7ed]/98 px-4 pb-3 pt-4 shadow-[0_-18px_42px_rgba(124,48,32,0.24)] backdrop-blur-sm"
+                className="absolute bottom-full left-3 right-3 z-50 rounded-t-2xl border border-brand-300 bg-[#fff7ed] px-4 pb-3 pt-4 shadow-[0_-18px_42px_rgba(124,48,32,0.28)]"
               >
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-sm font-semibold text-[#7C3020]">Weitere Seiten</span>
@@ -127,7 +127,7 @@ export default function Layout({ children, currentPageName }) {
                         className={`flex min-h-[70px] flex-col items-center justify-center gap-1.5 rounded-xl border p-2.5 transition-all ${
                           active
                             ? "border-brand-300 bg-brand-100 text-[#7C3020] shadow-sm"
-                            : "border-brand-100 bg-white/88 text-brand-700 hover:bg-brand-50"
+                            : "border-brand-100 bg-white text-brand-700 hover:bg-brand-50"
                         }`}
                       >
                         <Icon className="w-5 h-5" />
@@ -141,7 +141,7 @@ export default function Layout({ children, currentPageName }) {
                       className={`flex min-h-[70px] flex-col items-center justify-center gap-1.5 rounded-xl border p-2.5 transition-all ${
                         isActive("AdminDashboard")
                           ? "border-brand-300 bg-brand-100 text-[#7C3020] shadow-sm"
-                          : "border-brand-100 bg-white/88 text-brand-700 hover:bg-brand-50"
+                          : "border-brand-100 bg-white text-brand-700 hover:bg-brand-50"
                       }`}
                     >
                       <ShieldCheck className="w-5 h-5" />
