@@ -60,8 +60,8 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
       animate={{ opacity: 1, y: 0 }}
       className="rounded-2xl border border-brand-100/70 bg-white/70 p-4 shadow-[0_12px_28px_rgba(168,0,60,0.08)] backdrop-blur-sm"
     >
-      <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900 sm:text-base">
-        <Cloud className="h-4 w-4" />
+      <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-[#7C3020] sm:text-base">
+        <Cloud className="h-4 w-4 text-brand-400" />
         Aktuelles Wetter{location ? ` in ${location}` : ""}
       </h3>
 
@@ -71,10 +71,10 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
             <WeatherIcon className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-2xl font-bold leading-none text-slate-900">
+            <p className="text-2xl font-bold leading-none text-[#7C3020]">
               {Math.round(cur.temperature_2m)}°C
             </p>
-            <p className="mt-1 text-xs text-slate-600">{label}</p>
+            <p className="mt-1 text-xs text-[#C07820]">{label}</p>
           </div>
         </div>
 
@@ -83,8 +83,8 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
             <div className="flex items-center gap-2 rounded-xl bg-white/45 px-3 py-2">
               <Droplets className="h-4 w-4 text-brand-600" />
               <div>
-                <p className="text-xs text-slate-500">Luftfeuchtigkeit</p>
-                <p className="text-sm font-semibold text-slate-900">
+                <p className="text-xs text-[#C07820]">Luftfeuchtigkeit</p>
+                <p className="text-sm font-semibold text-[#7C3020]">
                   {Math.round(cur.relative_humidity_2m)}%
                 </p>
               </div>
@@ -92,10 +92,10 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
           )}
           {cur.wind_speed_10m != null && (
             <div className="flex items-center gap-2 rounded-xl bg-white/45 px-3 py-2">
-              <Wind className="h-4 w-4 text-slate-600" />
+              <Wind className="h-4 w-4 text-brand-600" />
               <div>
-                <p className="text-xs text-slate-500">Wind</p>
-                <p className="text-sm font-semibold text-slate-900">
+                <p className="text-xs text-[#C07820]">Wind</p>
+                <p className="text-sm font-semibold text-[#7C3020]">
                   {Math.round(cur.wind_speed_10m)} km/h
                 </p>
               </div>
@@ -105,7 +105,7 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
       </div>
 
       <div className="mt-3 rounded-lg bg-white/50 px-3 py-2">
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-[#C07820]">
           Wetterbedingungen können sich schnell ändern. Prüfe die Vorhersagen vor deiner Wanderung! ·{" "}
           <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer" className="underline">Open-Meteo</a>
         </p>

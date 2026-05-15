@@ -39,7 +39,7 @@ export default function CookieBanner() {
           transition={{ type: "spring", stiffness: 260, damping: 24 }}
           className="fixed bottom-0 left-0 right-0 z-[9999] px-4 pb-4 md:pb-6"
         >
-          <div className="mx-auto max-w-2xl rounded-2xl border border-brand-400/30 bg-gradient-to-br from-brand-700 via-brand-600 to-[#2777b8] p-5 text-white shadow-[0_18px_42px_rgba(168,0,60,0.2)] md:p-6">
+          <div className="mx-auto max-w-2xl rounded-2xl border border-brand-100/70 bg-gradient-to-br from-brand-800 via-brand-400 to-brand-100 p-5 text-white shadow-[0_18px_42px_rgba(168,0,60,0.2)] md:p-6">
             <div className="flex items-start gap-3 mb-4">
               <div className="rounded-xl bg-white/16 p-2 shrink-0">
                 <Cookie className="w-5 h-5 text-white" />
@@ -48,7 +48,7 @@ export default function CookieBanner() {
                 <h3 className="font-semibold text-white text-sm mb-1">
                   Datenschutz & technisch notwendige Cookies
                 </h3>
-                <p className="text-xs text-brand-50 leading-relaxed">
+                <p className="text-xs leading-relaxed text-brand-50">
                   Diese App verwendet ausschließlich technisch notwendige Cookies und Browser-Speicher
                   für Anmeldung, Sicherheit und Einstellungen. Es gibt keine Werbe- oder Tracking-Cookies.{" "}
                   <Link
@@ -64,14 +64,14 @@ export default function CookieBanner() {
             <div className="flex flex-col sm:flex-row gap-2">
               <Button
                 onClick={acknowledge}
-                className="flex-1 bg-white text-brand-700 hover:bg-brand-50 h-10 text-sm"
+                className="h-10 flex-1 bg-white text-sm text-brand-700 hover:bg-brand-50"
               >
                 Verstanden
               </Button>
               <Button
                 onClick={closeNecessary}
                 variant="outline"
-                className="flex-1 border-white/35 bg-white/10 text-white hover:bg-white/18 h-10 text-sm"
+                className="h-10 flex-1 border-white/35 bg-white/10 text-sm text-white hover:bg-white/20"
               >
                 Schließen
               </Button>

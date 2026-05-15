@@ -321,7 +321,7 @@ export default function OfflineDownload({
       <Button
         onClick={downloadAsPDF}
         disabled={downloading}
-        className="bg-slate-700 text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+        className="bg-[#F07030] text-white hover:bg-brand-400 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {downloading ? (
           <>
