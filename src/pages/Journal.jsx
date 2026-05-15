@@ -48,7 +48,9 @@ const COUNTRY_ALIASES = [
   { label: "Deutschland", aliases: ["deutschland", "germany", "bayern", "bavaria"] },
   { label: "Schweiz", aliases: ["schweiz", "switzerland", "suisse", "svizzera"] },
   { label: "Frankreich", aliases: ["frankreich", "france"] },
-  { label: "Slowenien", aliases: ["slowenien", "slovenia"] },
+  { label: "Spanien", aliases: ["spanien", "spain", "espana", "españa"] },
+  { label: "Kroatien", aliases: ["kroatien", "croatia", "hrvatska"] },
+  { label: "Slowenien", aliases: ["slowenien", "slovenia", "slovenija"] },
 ];
 
 function getJournalCountry(entry) {

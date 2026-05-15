@@ -292,7 +292,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
     setIsSearching(true);
     try {
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&countrycodes=it,at,de`
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&countrycodes=it,at,de,ch,es,hr,si`
       );
       const data = await response.json();
       setSearchResults(data);

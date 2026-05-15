@@ -13,6 +13,9 @@ function getCountryLabel(country) {
   if (country === "austria") return "Österreich";
   if (country === "germany") return "Deutschland";
   if (country === "switzerland") return "Schweiz";
+  if (country === "spain") return "Spanien";
+  if (country === "croatia") return "Kroatien";
+  if (country === "slovenia") return "Slowenien";
   if (country === "other") return "Anderes";
   return country || null;
 }
