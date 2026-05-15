@@ -124,6 +124,7 @@ export default function HikeDetail() {
         await navigator.clipboard.writeText(url);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
+        toast.success("Link kopiert!");
         return;
       }
 
