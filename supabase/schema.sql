@@ -97,6 +97,16 @@ create policy "Eigene Hunde löschen"
   on public.dogs for delete
   using (auth.uid() = user_id);
 
+create or replace function public.get_public_dog_profile_count()
+returns integer
+language sql
+security definer
+stable
+as $$
+  select count(*)::integer
+  from public.dogs;
+$$;
+
 -- JOURNAL ENTRIES
 create table if not exists public.journal_entries (
   id                uuid default gen_random_uuid() primary key,
