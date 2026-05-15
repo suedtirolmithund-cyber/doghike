@@ -16,7 +16,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { uploadJournalFile } from "@/lib/journalApi";
-import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
+import { getImageUploadErrorMessage, validateImageUpload } from "@/lib/uploadValidation";
 import { useAuth } from "@/lib/AuthContext";
 import { Upload, X, Loader2, Star, Map as MapIcon, Trash2, MapPin, HelpCircle } from "lucide-react";
 import { createPageUrl } from "@/utils";
@@ -92,8 +92,33 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
     setUploading(true);
     try {
       const uploadedUrls = [];
+      const validFiles = [];
+      const skippedFiles = [];
 
       for (const file of files) {
+        try {
+          validateImageUpload(file);
+          validFiles.push(file);
+        } catch (error) {
+          skippedFiles.push({ file, error });
+        }
+      }
+
+      if (skippedFiles.length > 0) {
+        toast.warning(
+          `${skippedFiles.length} Foto${skippedFiles.length > 1 ? "s" : ""} übersprungen`,
+          {
+            description: `Bitte wähle Bilder unter 15 MB. ${validFiles.length > 0 ? "Die anderen laden wir trotzdem hoch." : ""}`.trim(),
+          }
+        );
+      }
+
+      if (!validFiles.length) {
+        toast.error(getImageUploadErrorMessage(skippedFiles[0]?.error));
+        return;
+      }
+
+      for (const file of validFiles) {
         const file_url = await uploadJournalFile(user?.id ?? "admin", file);
         uploadedUrls.push(file_url);
       }
