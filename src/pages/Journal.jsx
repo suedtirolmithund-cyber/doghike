@@ -73,7 +73,7 @@ function VisibilityStatusBadge({ visibility, status }) {
   if (visibility === "public") {
     if (status === "approved") {
       return (
-        <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-brand-100 text-brand-600 border border-brand-200">
+        <span className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-brand-200 bg-brand-100 px-3 py-1 text-sm font-semibold text-brand-600 md:text-xs">
           <Globe className="w-3 h-3" />
           Öffentlich sichtbar
         </span>
@@ -82,7 +82,7 @@ function VisibilityStatusBadge({ visibility, status }) {
 
     if (status === "rejected") {
       return (
-        <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-brand-100 text-brand-500 border border-brand-100">
+        <span className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-brand-100 bg-brand-100 px-3 py-1 text-sm font-semibold text-brand-500 md:text-xs">
           <Globe className="w-3 h-3" />
           Abgelehnt
         </span>
@@ -90,7 +90,7 @@ function VisibilityStatusBadge({ visibility, status }) {
     }
 
     return (
-      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-brand-100 text-brand-600 border border-brand-100">
+      <span className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-brand-100 bg-brand-100 px-3 py-1 text-sm font-semibold text-brand-600 md:text-xs">
         <Globe className="w-3 h-3" />
         Wartet auf Prüfung
       </span>
@@ -99,7 +99,7 @@ function VisibilityStatusBadge({ visibility, status }) {
 
   if (visibility === "friends") {
     return (
-      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 border border-brand-200">
+      <span className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-sm font-semibold text-brand-700 md:text-xs">
         <Users className="w-3 h-3" />
         Mit Freunden geteilt
       </span>
@@ -107,7 +107,7 @@ function VisibilityStatusBadge({ visibility, status }) {
   }
 
   return (
-    <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-brand-100/80 text-slate-500 border border-brand-100">
+    <span className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-brand-100 bg-brand-100/80 px-3 py-1 text-sm font-semibold text-slate-500 md:text-xs">
       <User className="w-3 h-3" />
       Privat
     </span>
@@ -127,14 +127,14 @@ function StarRating({ rating }) {
   );
 }
 
-function StatsChip({ icon, value, unit, color = "text-slate-600" }) {
+function StatsChip({ icon, value, unit, color = "text-[#C07820]" }) {
   if (!value) return null;
 
   return (
-    <div className={`flex items-center gap-1.5 text-xs ${color}`}>
+    <div className={`inline-flex min-h-8 items-center gap-1.5 rounded-full bg-brand-50/70 px-2.5 py-1 text-sm ${color}`}>
       <span className="text-sm leading-none shrink-0">{icon}</span>
       <span className="font-medium">{value}</span>
-      {unit && <span className="text-slate-400">{unit}</span>}
+      {unit && <span className="text-[#C07820]/75">{unit}</span>}
     </div>
   );
 }
@@ -252,17 +252,17 @@ export default function Journal() {
             {statsItems.map(({ icon, value, label, color }) => (
               <div
                 key={label}
-                className="doghike-glass-card rounded-xl border-brand-100/90 bg-gradient-to-br from-white/88 to-brand-50/45 px-2.5 py-2 md:px-3 md:py-2.5"
+                className="doghike-glass-card rounded-xl border-brand-100/90 bg-gradient-to-br from-white/88 to-brand-50/45 px-3 py-3 md:px-3 md:py-2.5"
               >
-                <div className="flex items-center justify-center gap-2">
+                <div className="flex items-center justify-center gap-2.5">
                   {typeof icon === "string" ? (
                     <span className={`block text-sm leading-none ${color} md:text-base`}>{icon}</span>
                   ) : (
                     <Mountain className={`h-4 w-4 ${color}`} />
                   )}
                   <div className="min-w-0 text-left">
-                    <p className="text-base font-bold leading-tight text-slate-900 md:text-lg">{value}</p>
-                    <p className="text-[11px] leading-tight text-slate-500 md:text-xs">{label}</p>
+                    <p className="text-lg font-bold leading-tight text-[#7C3020] md:text-lg">{value}</p>
+                    <p className="text-xs leading-tight text-[#C07820]">{label}</p>
                   </div>
                 </div>
               </div>
@@ -331,7 +331,7 @@ export default function Journal() {
                           {entry.rating && <StarRating rating={entry.rating} />}
                         </div>
 
-                        <div className="my-2 flex flex-wrap gap-x-3 gap-y-1.5">
+                        <div className="my-3 flex flex-wrap gap-2">
                           <StatsChip icon={TOUR_ICONS.distance} value={entry.distance_km} unit="km" />
                           <StatsChip icon={TOUR_ICONS.elevation} value={entry.elevation_m} unit="Hm" color="text-brand-500" />
                           <StatsChip
@@ -341,40 +341,40 @@ export default function Journal() {
                             color="text-brand-600"
                           />
                           {entry.difficulty && (
-                            <span className={`text-xs font-medium ${getDifficultyTextColor(entry.difficulty)}`}>
+                            <span className={`inline-flex min-h-8 items-center rounded-full bg-brand-50/70 px-2.5 py-1 text-sm font-medium ${getDifficultyTextColor(entry.difficulty)}`}>
                               {TOUR_ICONS.human} {getDifficultyLabel(entry.difficulty)}
                             </span>
                           )}
                           {entry.dog_difficulty && (
-                            <span className={`text-xs font-medium ${getDifficultyTextColor(entry.dog_difficulty)}`}>
+                            <span className={`inline-flex min-h-8 items-center rounded-full bg-brand-50/70 px-2.5 py-1 text-sm font-medium ${getDifficultyTextColor(entry.dog_difficulty)}`}>
                               {TOUR_ICONS.dog} {getDifficultyLabel(entry.dog_difficulty)}
                             </span>
                           )}
                         </div>
 
-                        <div className="flex flex-wrap gap-1.5 mb-2">
+                        <div className="mb-2 flex flex-wrap gap-2">
                           {entry.dog_suitable && (
-                            <Badge variant="secondary" className="text-xs bg-brand-50 text-brand-600 border-brand-200">
+                            <Badge variant="secondary" className="min-h-8 border-brand-200 bg-brand-50 px-3 py-1 text-sm text-brand-600 md:text-xs">
                               Hundefreundlich
                             </Badge>
                           )}
                           {entry.water_available !== null && entry.water_available !== undefined && (
                               <Badge
                                 variant="secondary"
-                                className={`text-xs border ${getWaterBadgeClass(entry.water_available)}`}
+                                className={`min-h-8 border px-3 py-1 text-sm md:text-xs ${getWaterBadgeClass(entry.water_available)}`}
                               >
                                 <WaterIcon value={entry.water_available} /> {getWaterLabel(entry.water_available) ?? getWaterLabel(0)}
                               </Badge>
                           )}
                           {entry.gpx_url && (
-                            <Badge variant="secondary" className="text-xs bg-brand-100/80 text-slate-600">
+                            <Badge variant="secondary" className="min-h-8 bg-brand-100/80 px-3 py-1 text-sm text-slate-600 md:text-xs">
                               GPX
                             </Badge>
                           )}
                         </div>
 
                         {entry.description && (
-                          <p className="text-xs text-slate-500 line-clamp-2">{entry.description}</p>
+                          <p className="line-clamp-3 text-sm leading-5 text-[#C07820]">{entry.description}</p>
                         )}
                       </div>
                     </div>
@@ -382,7 +382,7 @@ export default function Journal() {
                   <div className="px-4 md:px-5 pb-4 md:pb-5">
                     <div className="mt-3 flex gap-2">
                       <Link to={`${createPageUrl("AddJournalEntry")}?id=${entry.id}`}>
-                        <Button size="sm" variant="outline" className="doghike-secondary-action h-8 rounded-xl px-3 text-xs">
+                        <Button size="sm" variant="outline" className="doghike-secondary-action rounded-xl">
                           Bearbeiten
                         </Button>
                       </Link>
@@ -391,7 +391,7 @@ export default function Journal() {
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-7 text-xs text-brand-500 hover:text-brand-400 hover:bg-brand-50"
+                            className="min-h-10 text-sm text-brand-500 hover:bg-brand-50 hover:text-brand-400 md:min-h-9"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </Button>

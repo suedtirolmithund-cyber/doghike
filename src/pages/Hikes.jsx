@@ -211,10 +211,10 @@ export default function Hikes() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div>
                 <div className="mb-1 flex items-center gap-1.5">
-                  <label className="doghike-filter-label mb-0 text-xs sm:text-sm">{TOUR_ICONS.human} Mensch</label>
+                  <label className="doghike-filter-label mb-0">{TOUR_ICONS.human} Mensch</label>
                   <DifficultyInfoDialog
                     icon={<Mountain className="h-4 w-4 text-brand-500" />}
                     title="Schwierigkeit Mensch"
@@ -239,7 +239,7 @@ export default function Hikes() {
 
               <div>
                 <div className="mb-1 flex items-center gap-1.5">
-                  <label className="doghike-filter-label mb-0 text-xs sm:text-sm">{TOUR_ICONS.dog} Hund</label>
+                  <label className="doghike-filter-label mb-0">{TOUR_ICONS.dog} Hund</label>
                   <DifficultyInfoDialog
                     icon={<PawPrint className="h-4 w-4 text-brand-500" />}
                     title="Schwierigkeit Hund"
@@ -263,7 +263,7 @@ export default function Hikes() {
               </div>
 
               <div>
-                <label className="doghike-filter-label text-xs sm:text-sm">{TOUR_ICONS.season} Jahreszeit</label>
+                <label className="doghike-filter-label">{TOUR_ICONS.season} Jahreszeit</label>
                 <Select value={seasonFilter} onValueChange={setSeasonFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Alle" />
@@ -281,7 +281,7 @@ export default function Hikes() {
 
               <div>
                 <div className="mb-1 flex items-center gap-1.5">
-                  <label className="doghike-filter-label mb-0 text-xs sm:text-sm">
+                  <label className="doghike-filter-label mb-0">
                     <WaterIcon value="little" /> Wasser
                   </label>
                   <WaterInfoDialog />
@@ -303,24 +303,24 @@ export default function Hikes() {
                 </Select>
               </div>
 
-              <div className="col-span-2 sm:col-span-1">
-                <label className="doghike-filter-label text-xs sm:text-sm">{TOUR_ICONS.distance} Distanz (km)</label>
+              <div>
+                <label className="doghike-filter-label">{TOUR_ICONS.distance} Distanz (km)</label>
                 <div className="flex gap-2">
                   <Input type="number" placeholder="Min" value={distanceMin} onChange={(e) => setDistanceMin(e.target.value)} />
                   <Input type="number" placeholder="Max" value={distanceMax} onChange={(e) => setDistanceMax(e.target.value)} />
                 </div>
               </div>
 
-              <div className="col-span-2 sm:col-span-1">
-                <label className="doghike-filter-label text-xs sm:text-sm">{TOUR_ICONS.elevation} Höhenmeter (m)</label>
+              <div>
+                <label className="doghike-filter-label">{TOUR_ICONS.elevation} Höhenmeter (m)</label>
                 <div className="flex gap-2">
                   <Input type="number" placeholder="Min" value={elevationMin} onChange={(e) => setElevationMin(e.target.value)} />
                   <Input type="number" placeholder="Max" value={elevationMax} onChange={(e) => setElevationMax(e.target.value)} />
                 </div>
               </div>
 
-              <div className="col-span-2 lg:col-span-1">
-                <label className="doghike-filter-label text-xs sm:text-sm">Sortieren</label>
+              <div className="sm:col-span-2 lg:col-span-1">
+                <label className="doghike-filter-label">Sortieren</label>
                 <Select value={sortBy} onValueChange={(v) => { setSortBy(v); setLevelFilter("all"); }}>
                   <SelectTrigger>
                     <SelectValue placeholder="Neueste zuerst" />
@@ -337,7 +337,7 @@ export default function Hikes() {
             </div>
 
             <div className="flex flex-col gap-3 border-t border-brand-100/80 pt-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-xs text-slate-500">
+              <p className="text-sm leading-5 text-[#C07820]">
                 {hasPendingChanges
                   ? "Du hast Filter geändert. Tippe auf „Filter anwenden“, um die Ergebnisse zu aktualisieren."
                   : `${filteredHikes.length} Tour${filteredHikes.length === 1 ? "" : "en"} aktiv gefiltert.`}

@@ -50,7 +50,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/10 to-transparent" />
 
             {PREMIUM_FEATURES_ENABLED && hike.is_premium && (
-              <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/74 px-2.5 py-1 text-xs font-semibold text-[#7C3020] shadow-sm backdrop-blur-sm">
+              <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/74 px-3 py-1.5 text-sm font-semibold text-[#7C3020] shadow-sm backdrop-blur-sm">
                 Premium
               </span>
             )}
@@ -90,19 +90,19 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
           </div>
 
           <div className="p-4">
-            <div className="mb-3 flex flex-wrap items-center gap-1.5">
+            <div className="mb-3 flex flex-wrap items-center gap-2">
               {humanDifficultyLabel && (
-                <Badge className={`${getDifficultyBadgeClass(hike.difficulty)} border px-2.5 py-1 text-[11px] font-semibold`}>
+                <Badge className={`${getDifficultyBadgeClass(hike.difficulty)} min-h-8 border px-3 py-1.5 text-sm font-semibold md:text-xs`}>
                   {TOUR_ICONS.human} {humanDifficultyLabel}
                 </Badge>
               )}
               {dogDifficultyLabel && (
-                <Badge className={`${getDifficultyBadgeClass(hike.dog_difficulty)} border px-2.5 py-1 text-[11px] font-semibold`}>
+                <Badge className={`${getDifficultyBadgeClass(hike.dog_difficulty)} min-h-8 border px-3 py-1.5 text-sm font-semibold md:text-xs`}>
                   {TOUR_ICONS.dog} {dogDifficultyLabel}
                 </Badge>
               )}
               {hike.water_availability && (
-                <span className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold ${getWaterBadgeClass(hike.water_availability)}`}>
+                <span className={`inline-flex min-h-8 items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-semibold md:text-xs ${getWaterBadgeClass(hike.water_availability)}`}>
                   <WaterIcon value={hike.water_availability} /> {getWaterLabel(hike.water_availability) ?? hike.water_availability}
                 </span>
               )}
@@ -133,7 +133,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                       </div>
                     )}
                     {(hike.dog_name || hike.author_username) && (
-                      <span className="truncate text-xs font-medium text-[#C07820]">
+                      <span className="truncate text-sm font-medium text-[#C07820]">
                         {hike.dog_name && <span>{hike.dog_name}</span>}
                         {hike.dog_name && hike.author_username && " · "}
                         {hike.author_username && <span>@{hike.author_username}</span>}
