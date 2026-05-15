@@ -139,6 +139,18 @@ export default function OfflineDownload({
         yPosition += lines.length * 5 + 4;
       };
 
+      const addLegalNotice = () => {
+        addSectionTitle("Nutzung & Verantwortung");
+        addParagraph(
+          [
+            "© DogTrails. Alle Inhalte, Texte, Fotos, Tourdaten und Hinweise in diesem PDF sind urheberrechtlich geschützt.",
+            "Dieses PDF ist nur für deine persönliche Nutzung gedacht. Weitergabe, Veröffentlichung, Kopieren, Verkauf oder Hochladen in andere Dienste ist ohne schriftliche Zustimmung nicht erlaubt.",
+            "Die Tour ist eine Orientierung. Du bist selbst verantwortlich für Planung, Ausrüstung, Wetter, Sperren, Wege, deine Kondition, deinen Hund und die Regeln vor Ort.",
+            "Kartengrundlage: © OpenStreetMap-Mitwirkende / CARTO, je nach Kartenansicht.",
+          ].join("\n\n")
+        );
+      };
+
       const addKeyValueGrid = (items) => {
         const visibleItems = items.filter((item) => item.value);
         if (!visibleItems.length) return;
@@ -184,7 +196,11 @@ export default function OfflineDownload({
           pdf.setFont("helvetica", "normal");
           pdf.setFontSize(8);
           pdf.setTextColor(...PDF_COLORS.muted);
-          pdf.text(`Erstellt am ${format(new Date(), "dd.MM.yyyy HH:mm")} · DogTrails`, margin, pageHeight - 7);
+          pdf.text(
+            `© DogTrails · nur persönliche Nutzung · erstellt am ${format(new Date(), "dd.MM.yyyy HH:mm")}`,
+            margin,
+            pageHeight - 7
+          );
           pdf.text(`Seite ${page}/${totalPages}`, pageWidth - margin, pageHeight - 7, { align: "right" });
         }
       };
@@ -232,17 +248,19 @@ export default function OfflineDownload({
           });
 
           const imgData = canvas.toDataURL("image/jpeg", 0.88);
-          const imgHeight = Math.min((canvas.height * contentWidth) / canvas.width, 96);
+          const naturalHeight = (canvas.height * contentWidth) / canvas.width;
+          const imgHeight = Math.min(naturalHeight, 86);
+          const mapBlockHeight = imgHeight + 22;
 
           addSectionTitle("Karte");
-          ensureSpace(imgHeight + 10);
+          ensureSpace(mapBlockHeight);
           pdf.addImage(imgData, "JPEG", margin, yPosition, contentWidth, imgHeight);
-          yPosition += imgHeight + 5;
+          yPosition += imgHeight + 8;
           pdf.setFont("helvetica", "normal");
           pdf.setFontSize(8);
           pdf.setTextColor(...PDF_COLORS.muted);
-          pdf.text("Kartengrundlage: OpenStreetMap / CARTO", margin, yPosition);
-          yPosition += 6;
+          pdf.text("Kartengrundlage: © OpenStreetMap-Mitwirkende / CARTO", margin, yPosition);
+          yPosition += 10;
         } catch (error) {
           console.error("Fehler beim Erfassen der Karte:", error);
         }
@@ -303,6 +321,7 @@ export default function OfflineDownload({
         }
       }
 
+      addLegalNotice();
       addFooterToAllPages();
 
       const baseName = transliterateFilename(hike.trail_name || "tour");
