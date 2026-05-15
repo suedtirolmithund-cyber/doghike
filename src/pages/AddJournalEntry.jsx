@@ -199,7 +199,7 @@ function GrazingAnimalsInfoDialog() {
           className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-200 bg-white/80 text-brand-500 shadow-sm transition hover:border-brand-300 hover:text-brand-600"
           aria-label="Weidetiere erklären"
         >
-          <Layers className="h-3.5 w-3.5" />
+          <CircleHelp className="h-4 w-4" />
         </button>
       </DialogTrigger>
       <DialogContent className="grid-rows-[auto,minmax(0,1fr)] max-h-[85vh] overflow-hidden border-white/80 bg-white/95 p-0 sm:max-w-xl">
@@ -239,7 +239,7 @@ function MuzzleInfoDialog() {
           className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-200 bg-white/80 text-brand-500 shadow-sm transition hover:border-brand-300 hover:text-brand-600"
           aria-label="Maulkorb erklären"
         >
-          <Layers className="h-3.5 w-3.5" />
+          <CircleHelp className="h-4 w-4" />
         </button>
       </DialogTrigger>
       <DialogContent className="grid-rows-[auto,minmax(0,1fr)] max-h-[85vh] overflow-hidden border-white/80 bg-white/95 p-0 sm:max-w-xl">
