@@ -60,10 +60,10 @@ const difficultyColors = {
 };
 
 const humanDifficultyChipClass =
-  "border-[#A8003C]/45 bg-[#A8003C]/10 text-[#A8003C]";
+  "border-[#F07030]/55 bg-[#F9C030]/22 text-[#7C4A00]";
 const dogDifficultyChipClass =
   "border-[#F07030]/55 bg-[#F9C030]/22 text-[#7C4A00]";
-const humanDifficultyDotClass = "bg-[#A8003C]";
+const humanDifficultyDotClass = "bg-[#F07030]";
 const dogDifficultyDotClass = "bg-[#F07030]";
 const inactiveDifficultyDotClass = "bg-[#F9C030]/45";
 
@@ -519,7 +519,7 @@ export default function HikeDetail() {
                     />
                   ))}
                 </div>
-                <div className="text-xs font-semibold text-[#A8003C]">Mensch</div>
+                <div className="text-xs font-semibold text-[#7C4A00]">Mensch</div>
               </div>
             </div>
           )}
