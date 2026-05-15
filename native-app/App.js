@@ -58,6 +58,89 @@ function StatCard({ label, value }) {
   );
 }
 
+function MiniRoutePreview({ points, accent = COLORS.accent }) {
+  const [size, setSize] = useState({ width: 0, height: 0 });
+
+  const normalizedSegments = useMemo(() => {
+    if (!Array.isArray(points) || points.length < 2 || !size.width || !size.height) {
+      return [];
+    }
+
+    const normalizedPoints = points.map((point) => ({
+      x: Array.isArray(point) ? point[1] : point.longitude,
+      y: Array.isArray(point) ? point[0] : point.latitude,
+    }));
+
+    const xs = normalizedPoints.map((point) => point.x);
+    const ys = normalizedPoints.map((point) => point.y);
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+    const xRange = maxX - minX || 1;
+    const yRange = maxY - minY || 1;
+    const padding = 12;
+    const usableWidth = Math.max(size.width - padding * 2, 1);
+    const usableHeight = Math.max(size.height - padding * 2, 1);
+
+    const projectedPoints = normalizedPoints.map((point) => ({
+      x: padding + ((point.x - minX) / xRange) * usableWidth,
+      y: padding + (1 - (point.y - minY) / yRange) * usableHeight,
+    }));
+
+    return projectedPoints.slice(1).map((point, index) => {
+      const previousPoint = projectedPoints[index];
+      const deltaX = point.x - previousPoint.x;
+      const deltaY = point.y - previousPoint.y;
+      return {
+        x: previousPoint.x,
+        y: previousPoint.y,
+        width: Math.max(Math.sqrt(deltaX ** 2 + deltaY ** 2), 2),
+        angle: `${(Math.atan2(deltaY, deltaX) * 180) / Math.PI}deg`,
+      };
+    });
+  }, [points, size.height, size.width]);
+
+  const onLayout = useCallback((event) => {
+    const { width, height } = event.nativeEvent.layout;
+    setSize({ width, height });
+  }, []);
+
+  return (
+    <View style={styles.previewCard}>
+      <View style={styles.previewHeader}>
+        <Text style={styles.previewTitle}>Streckenvorschau</Text>
+        <Text style={styles.previewHint}>
+          {Array.isArray(points) ? `${points.length} Punkte` : "Noch keine Punkte"}
+        </Text>
+      </View>
+      <View onLayout={onLayout} style={styles.previewMap}>
+        {normalizedSegments.length > 0 ? (
+          normalizedSegments.map((segment, index) => (
+            <View
+              key={`${segment.x}-${segment.y}-${index}`}
+              style={[
+                styles.previewSegment,
+                {
+                  left: segment.x,
+                  top: segment.y,
+                  width: segment.width,
+                  backgroundColor: accent,
+                  transform: [{ rotate: segment.angle }],
+                },
+              ]}
+            />
+          ))
+        ) : (
+          <View style={styles.previewEmptyWrap}>
+            <Text style={styles.previewEmptyText}>Die Kartenlinie erscheint, sobald genug Punkte da sind.</Text>
+          </View>
+        )}
+      </View>
+    </View>
+  );
+}
+
 function DogChip({ dog, selected, onPress }) {
   return (
     <Pressable
@@ -116,6 +199,8 @@ export default function App() {
   const [dogsLoading, setDogsLoading] = useState(false);
   const [selectedDogId, setSelectedDogId] = useState(null);
   const [allowWithoutDog, setAllowWithoutDog] = useState(false);
+  const [routes, setRoutes] = useState([]);
+  const [routesLoading, setRoutesLoading] = useState(false);
 
   const [routeName, setRouteName] = useState("");
   const [trackerData, setTrackerData] = useState(null);
@@ -164,6 +249,30 @@ export default function App() {
     setDogsLoading(false);
   }, [user?.id]);
 
+  const loadRoutes = useCallback(async () => {
+    if (!user?.id) {
+      setRoutes([]);
+      return;
+    }
+
+    setRoutesLoading(true);
+    const { data, error } = await supabase
+      .from("user_routes")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(8);
+
+    if (error) {
+      console.error("[native-app] loadRoutes failed:", error);
+      setRoutes([]);
+    } else {
+      setRoutes(data ?? []);
+    }
+
+    setRoutesLoading(false);
+  }, [user?.id]);
+
   const loadTrackerState = useCallback(async () => {
     setTrackerLoading(true);
     const [storedTrack, active] = await Promise.all([
@@ -204,17 +313,19 @@ export default function App() {
 
     loadDogs();
     loadTrackerState();
-  }, [loadDogs, loadTrackerState, user?.id]);
+    loadRoutes();
+  }, [loadDogs, loadRoutes, loadTrackerState, user?.id]);
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextState) => {
       if (nextState === "active") {
         loadTrackerState();
+        loadRoutes();
       }
     });
 
     return () => subscription.remove();
-  }, [loadTrackerState]);
+  }, [loadRoutes, loadTrackerState]);
 
   const handleAuthSubmit = useCallback(async () => {
     if (!email.trim() || !password.trim()) {
@@ -338,10 +449,12 @@ export default function App() {
 
     await clearStoredTrack();
     await loadTrackerState();
+    await loadRoutes();
     setRouteName("");
     setSaveLoading(false);
     Alert.alert("Gespeichert", "Die Route ist jetzt in deinen DogTrails-Routen.");
   }, [
+    loadRoutes,
     loadTrackerState,
     routeName,
     selectedDog,
@@ -461,20 +574,54 @@ export default function App() {
           {dogsLoading ? (
             <ActivityIndicator color={COLORS.accent} />
           ) : dogs.length > 0 ? (
-            <View style={styles.dogsWrap}>
-              {dogs.map((dog) => (
-                <DogChip
-                  key={dog.id}
-                  dog={dog}
-                  selected={selectedDogId === dog.id}
-                  onPress={() =>
-                    setSelectedDogId((currentDogId) =>
-                      currentDogId === dog.id ? null : dog.id
-                    )
-                  }
-                />
-              ))}
-            </View>
+            <>
+              <View style={styles.selectedDogCard}>
+                <Text style={styles.selectedDogEyebrow}>Aktive Auswahl</Text>
+                <Text style={styles.selectedDogTitle}>
+                  {selectedDog ? selectedDog.name : "Ohne Hund"}
+                </Text>
+                <Text style={styles.selectedDogSubtitle}>
+                  {selectedDog
+                    ? selectedDog.breed || "Wird fuer die Route mitgespeichert"
+                    : "Praktisch zum Testen, wenn noch kein Hund mit soll"}
+                </Text>
+              </View>
+
+              <View style={styles.dogsWrap}>
+                <Pressable
+                  onPress={() => setSelectedDogId(null)}
+                  style={[
+                    styles.dogChip,
+                    styles.dogChipCompact,
+                    selectedDogId == null && styles.dogChipActive,
+                  ]}
+                >
+                  <Text style={styles.dogChipEmoji}>🦮</Text>
+                  <View style={styles.dogChipTextWrap}>
+                    <Text style={[styles.dogChipTitle, selectedDogId == null && styles.dogChipTitleActive]}>
+                      Ohne Hund
+                    </Text>
+                    <Text
+                      style={[
+                        styles.dogChipSubtitle,
+                        selectedDogId == null && styles.dogChipSubtitleActive,
+                      ]}
+                    >
+                      Nur Route testen
+                    </Text>
+                  </View>
+                </Pressable>
+
+                {dogs.map((dog) => (
+                  <DogChip
+                    key={dog.id}
+                    dog={dog}
+                    selected={selectedDogId === dog.id}
+                    onPress={() => setSelectedDogId(dog.id)}
+                  />
+                ))}
+              </View>
+            </>
           ) : allowWithoutDog ? (
             <Text style={styles.helper}>
               Noch kein Hund angelegt. Du kannst die Tracking-Basis trotzdem testen.
@@ -553,6 +700,8 @@ export default function App() {
               />
             </View>
 
+            <MiniRoutePreview points={trackerData?.samples ?? []} />
+
             <View style={styles.card}>
               <Text style={styles.cardTitle}>3. In DogTrails speichern</Text>
               <Text style={styles.paragraph}>
@@ -565,6 +714,68 @@ export default function App() {
                 loading={saveLoading}
                 disabled={!trackerData || trackingActive}
               />
+            </View>
+
+            <View style={styles.card}>
+              <View style={styles.routesHeader}>
+                <View style={styles.flexGrow}>
+                  <Text style={styles.cardTitle}>4. Gespeicherte Routen</Text>
+                  <Text style={styles.paragraph}>
+                    Deine neuesten Routen direkt in der nativen App.
+                  </Text>
+                </View>
+                <PrimaryButton
+                  title="Neu laden"
+                  onPress={loadRoutes}
+                  variant="outline"
+                  disabled={routesLoading}
+                />
+              </View>
+
+              {routesLoading ? (
+                <ActivityIndicator color={COLORS.accent} />
+              ) : routes.length > 0 ? (
+                <View style={styles.routesList}>
+                  {routes.map((route) => {
+                    const routeDogName =
+                      route.notes?.match(/Hund:\s(.+)/)?.[1]?.split("\n")?.[0] ?? null;
+                    return (
+                      <View key={route.id} style={styles.routeCard}>
+                        <View style={styles.routeCardTop}>
+                          <View style={styles.routeCardTextWrap}>
+                            <Text style={styles.routeCardTitle}>{route.name}</Text>
+                            <Text style={styles.routeCardMeta}>
+                              {route.route_type === "recorded" ? "Aufgezeichnet" : "Geplant"} ·{" "}
+                              {route.completed ? "Erledigt" : "Offen"}
+                            </Text>
+                          </View>
+                          <Text style={styles.routeCardDistance}>
+                            {route.distance_km ? `${Number(route.distance_km).toFixed(1)} km` : "–"}
+                          </Text>
+                        </View>
+
+                        <MiniRoutePreview points={route.waypoints ?? []} accent={COLORS.accentDark} />
+
+                        <View style={styles.routeMetrics}>
+                          <Text style={styles.routeMetricText}>
+                            {route.elevation_gain_m ? `+${route.elevation_gain_m} m` : "Kein Hm"}
+                          </Text>
+                          <Text style={styles.routeMetricText}>
+                            {formatDuration(route.completed_duration_minutes ?? route.duration_minutes ?? 0)}
+                          </Text>
+                          <Text style={styles.routeMetricText}>
+                            {routeDogName ? `🐾 ${routeDogName}` : "Ohne Hund"}
+                          </Text>
+                        </View>
+                      </View>
+                    );
+                  })}
+                </View>
+              ) : (
+                <Text style={styles.helper}>
+                  Noch keine gespeicherte Route. Sobald du einen Track speicherst, erscheint er hier.
+                </Text>
+              )}
             </View>
           </>
         )}
@@ -711,6 +922,34 @@ const styles = StyleSheet.create({
   dogsWrap: {
     gap: 10,
   },
+  dogChipCompact: {
+    minHeight: 72,
+  },
+  selectedDogCard: {
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    backgroundColor: COLORS.accentSoft,
+    padding: 14,
+  },
+  selectedDogEyebrow: {
+    fontSize: 12,
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
+    color: COLORS.accent,
+    marginBottom: 4,
+  },
+  selectedDogTitle: {
+    fontSize: 18,
+    fontWeight: "800",
+    color: COLORS.text,
+  },
+  selectedDogSubtitle: {
+    marginTop: 2,
+    fontSize: 13,
+    color: COLORS.muted,
+  },
   dogChip: {
     flexDirection: "row",
     alignItems: "center",
@@ -750,9 +989,59 @@ const styles = StyleSheet.create({
   buttonStack: {
     gap: 10,
   },
+  previewCard: {
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    backgroundColor: COLORS.card,
+    padding: 16,
+    gap: 12,
+  },
+  previewHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  previewTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: COLORS.text,
+  },
+  previewHint: {
+    fontSize: 13,
+    color: COLORS.muted,
+  },
+  previewMap: {
+    height: 150,
+    borderRadius: 18,
+    backgroundColor: COLORS.accentSoft,
+    overflow: "hidden",
+    position: "relative",
+  },
+  previewSegment: {
+    position: "absolute",
+    height: 4,
+    borderRadius: 999,
+    transformOrigin: "left center",
+  },
+  previewEmptyWrap: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 16,
+  },
+  previewEmptyText: {
+    textAlign: "center",
+    color: COLORS.muted,
+    fontSize: 13,
+    lineHeight: 18,
+  },
   statsRow: {
     flexDirection: "row",
     gap: 10,
+  },
+  flexGrow: {
+    flex: 1,
   },
   statCard: {
     flex: 1,
@@ -777,5 +1066,61 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: COLORS.muted,
     textAlign: "center",
+  },
+  routesHeader: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 12,
+  },
+  routesList: {
+    gap: 12,
+  },
+  routeCard: {
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    backgroundColor: COLORS.accentSoft,
+    padding: 14,
+    gap: 10,
+  },
+  routeCardTop: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  routeCardTextWrap: {
+    flex: 1,
+  },
+  routeCardTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: COLORS.text,
+  },
+  routeCardMeta: {
+    marginTop: 3,
+    fontSize: 12,
+    color: COLORS.muted,
+  },
+  routeCardDistance: {
+    fontSize: 15,
+    fontWeight: "800",
+    color: COLORS.accentDark,
+  },
+  routeMetrics: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  routeMetricText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: COLORS.muted,
+    backgroundColor: COLORS.card,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
   },
 });
