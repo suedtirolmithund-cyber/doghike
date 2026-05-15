@@ -13,7 +13,8 @@ export default function ExpandableText({
   text,
   lines = 3,
   minChars = 150,
-  baseClassName = "text-slate-600 text-sm leading-relaxed",
+  baseClassName = "text-sm font-normal leading-6 text-[#C07820]",
+  className,
 }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -38,7 +39,7 @@ export default function ExpandableText({
   return (
     <div>
       <p
-        className={baseClassName}
+        className={className || baseClassName}
         style={needsButton && !expanded ? clampedStyle : expandedStyle}
       >
         {text}
