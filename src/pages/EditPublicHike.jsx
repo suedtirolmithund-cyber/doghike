@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Camera, Loader2, Trash2 } from "lucide-react";
+import { ArrowLeft, Camera, CircleHelp, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -489,7 +489,7 @@ export default function EditPublicHike() {
                         : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
                     }`}
                   >
-                    {TOUR_ICONS.grazing} Weidetiere
+                    {TOUR_ICONS.grazing} Weidetiere <CircleHelp className="ml-1 inline h-3.5 w-3.5 align-[-2px]" />
                   </button>
                   <button
                     type="button"
@@ -500,7 +500,7 @@ export default function EditPublicHike() {
                         : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
                     }`}
                   >
-                    {TOUR_ICONS.muzzle} Maulkorb
+                    {TOUR_ICONS.muzzle} Maulkorb <CircleHelp className="ml-1 inline h-3.5 w-3.5 align-[-2px]" />
                   </button>
                 </div>
               </div>

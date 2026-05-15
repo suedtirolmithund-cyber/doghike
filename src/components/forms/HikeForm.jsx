@@ -440,7 +440,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
                   : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
               }`}
             >
-              {TOUR_ICONS.grazing} Weidetiere
+              {TOUR_ICONS.grazing} Weidetiere <HelpCircle className="ml-1 inline h-3.5 w-3.5 align-[-2px]" />
             </button>
             <button
               type="button"
@@ -451,7 +451,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
                   : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
               }`}
             >
-              {TOUR_ICONS.muzzle} Maulkorb
+              {TOUR_ICONS.muzzle} Maulkorb <HelpCircle className="ml-1 inline h-3.5 w-3.5 align-[-2px]" />
             </button>
           </div>
           <p className="text-xs text-slate-500">
