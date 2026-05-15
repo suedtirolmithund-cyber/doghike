@@ -1180,14 +1180,14 @@ export default function AddJournalEntry() {
                 placeholder="z.B. Pragser Wildsee Rundweg" required className="mt-1" />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <Label htmlFor="date">Datum *</Label>
+                <Label htmlFor="date" className="flex h-5 items-center">Datum *</Label>
                 <Input id="date" type="date" value={form.date} onChange={(e) => set("date", e.target.value)}
                   required className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="location" className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> Ort</Label>
+                <Label htmlFor="location" className="flex h-5 items-center gap-1"><MapPin className="w-3.5 h-3.5" /> Ort</Label>
                 <Input id="location" value={form.location} onChange={(e) => set("location", e.target.value)}
                   placeholder="z.B. Prags, Südtirol" className="mt-1" />
               </div>
