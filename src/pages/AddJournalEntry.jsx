@@ -976,7 +976,24 @@ export default function AddJournalEntry() {
 
     setPhotoUploading(true);
     try {
-      const urls = await Promise.all(validFiles.map((f) => uploadJournalFile(user.id, f)));
+      const uploadResults = await Promise.allSettled(validFiles.map((f) => uploadJournalFile(user.id, f)));
+      const urls = uploadResults
+        .filter((result) => result.status === "fulfilled" && result.value)
+        .map((result) => result.value);
+      const failedUploads = uploadResults.filter((result) => result.status === "rejected");
+
+      if (failedUploads.length > 0) {
+        toast.warning(
+          `${failedUploads.length} Foto${failedUploads.length > 1 ? "s" : ""} nicht hochgeladen`,
+          { description: urls.length > 0 ? "Die anderen Bilder sind trotzdem im Eintrag dabei." : "Bitte versuch es gleich noch einmal." }
+        );
+      }
+
+      if (!urls.length) {
+        toast.error("Kein Foto konnte gerade hochgeladen werden. Versuch es gleich noch einmal.");
+        return;
+      }
+
       uploadedPhotosRef.current = [...uploadedPhotosRef.current, ...urls];
       setForm((p) => ({ ...p, photos: [...p.photos, ...urls] }));
       showUploadedFeedback(
