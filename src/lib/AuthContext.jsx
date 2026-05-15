@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import { clearDogNudgeSession } from "@/lib/dogNudgeSession";
 
 const AuthContext = createContext();
 
@@ -82,6 +83,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const logout = async () => {
+    if (user?.id) {
+      clearDogNudgeSession(user.id);
+    }
     await supabase.auth.signOut();
     setUser(null);
     setIsAuthenticated(false);
