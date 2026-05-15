@@ -99,7 +99,7 @@ export default function Layout({ children, currentPageName }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-40 bg-slate-950/20 backdrop-blur-[1px]"
+                className="fixed inset-0 z-40 bg-[#7C3020]/35 backdrop-blur-[2px]"
                 onClick={() => setMoreOpen(false)}
               />
 
@@ -108,11 +108,11 @@ export default function Layout({ children, currentPageName }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                className="absolute bottom-full left-3 right-3 z-50 rounded-t-2xl border border-brand-100/70 bg-white/86 px-4 pb-3 pt-4 shadow-[0_-14px_34px_rgba(168,0,60,0.14)] backdrop-blur-md"
+                className="absolute bottom-full left-3 right-3 z-50 rounded-t-2xl border border-brand-200/80 bg-[#fff7ed]/98 px-4 pb-3 pt-4 shadow-[0_-18px_42px_rgba(124,48,32,0.24)] backdrop-blur-sm"
               >
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-sm font-semibold text-[#7C3020]">Weitere Seiten</span>
-                  <button onClick={() => setMoreOpen(false)} className="p-1 text-brand-700 hover:text-[#7C3020]">
+                  <button onClick={() => setMoreOpen(false)} className="flex h-9 w-9 items-center justify-center rounded-xl text-brand-700 hover:bg-brand-50 hover:text-[#7C3020]">
                     <X className="w-5 h-5" />
                   </button>
                 </div>
@@ -124,24 +124,28 @@ export default function Layout({ children, currentPageName }) {
                       <Link
                         key={name}
                         to={createPageUrl(name)}
-                        className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all ${
-                          active ? "bg-[#A8003C]/13 text-[#7C3020] shadow-sm" : "text-brand-700 hover:bg-[#A8003C]/8"
+                        className={`flex min-h-[70px] flex-col items-center justify-center gap-1.5 rounded-xl border p-2.5 transition-all ${
+                          active
+                            ? "border-brand-300 bg-brand-100 text-[#7C3020] shadow-sm"
+                            : "border-brand-100 bg-white/88 text-brand-700 hover:bg-brand-50"
                         }`}
                       >
                         <Icon className="w-5 h-5" />
-                        <span className="text-[10px] font-medium">{label}</span>
+                        <span className="text-[11px] font-semibold leading-tight">{label}</span>
                       </Link>
                     );
                   })}
                   {isAdmin && (
                     <Link
                       to={createPageUrl("AdminDashboard")}
-                      className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all ${
-                        isActive("AdminDashboard") ? "bg-[#A8003C]/13 text-[#7C3020] shadow-sm" : "text-brand-700 hover:bg-[#A8003C]/8"
+                      className={`flex min-h-[70px] flex-col items-center justify-center gap-1.5 rounded-xl border p-2.5 transition-all ${
+                        isActive("AdminDashboard")
+                          ? "border-brand-300 bg-brand-100 text-[#7C3020] shadow-sm"
+                          : "border-brand-100 bg-white/88 text-brand-700 hover:bg-brand-50"
                       }`}
                     >
                       <ShieldCheck className="w-5 h-5" />
-                      <span className="text-[10px] font-medium">Admin</span>
+                      <span className="text-[11px] font-semibold leading-tight">Admin</span>
                     </Link>
                   )}
                 </div>
