@@ -340,7 +340,7 @@ export default function Friends() {
                         {!existing || existing?.status === "rejected" ? (
                           <Button size="sm" onClick={() => sendMutation.mutate(profile.user_id)}
                             disabled={sendMutation.isPending}
-                            className="bg-brand-400 hover:bg-brand-600 h-8"
+                            className="bg-brand-400 hover:bg-brand-600"
                           >
                             <UserPlus className="w-3.5 h-3.5 mr-1" /> Anfrage senden
                           </Button>
@@ -359,7 +359,7 @@ export default function Friends() {
                         ) : (
                           <Button size="sm" onClick={() => sendMutation.mutate(profile.user_id)}
                             disabled={sendMutation.isPending}
-                            className="bg-brand-400 hover:bg-brand-600 h-8"
+                            className="bg-brand-400 hover:bg-brand-600"
                           >
                             <UserPlus className="w-3.5 h-3.5 mr-1" /> Anfrage senden
                           </Button>
@@ -420,7 +420,7 @@ export default function Friends() {
                       <Button size="sm" variant="ghost"
                         onClick={() => removeMutation.mutate(f.id)}
                         disabled={removeMutation.isPending}
-                        className="ml-auto h-9 w-9 rounded-xl p-0 text-slate-400 hover:bg-brand-50 hover:text-brand-500"
+                        className="ml-auto h-10 w-10 rounded-xl p-0 text-slate-400 hover:bg-brand-50 hover:text-brand-500 md:h-9 md:w-9"
                       >
                         <UserMinus className="w-3.5 h-3.5" />
                       </Button>
@@ -455,13 +455,13 @@ export default function Friends() {
                       <div className="flex gap-2 shrink-0">
                         <Button size="sm" onClick={() => acceptMutation.mutate(f.id)}
                           disabled={acceptMutation.isPending}
-                          className="bg-brand-400 hover:bg-brand-600 h-8"
+                          className="bg-brand-400 hover:bg-brand-600"
                         >
                           <Check className="w-3.5 h-3.5 mr-1" /> Annehmen
                         </Button>
                         <Button size="sm" variant="outline" onClick={() => rejectMutation.mutate(f.id)}
                           disabled={rejectMutation.isPending}
-                          className="border-brand-100 text-brand-500 hover:bg-brand-50 h-8"
+                          className="border-brand-100 text-brand-500 hover:bg-brand-50"
                         >
                           <X className="w-3.5 h-3.5" />
                         </Button>
@@ -498,7 +498,7 @@ export default function Friends() {
                       </div>
                       <Button size="sm" variant="ghost"
                         onClick={() => removeMutation.mutate(f.id)}
-                        className="ml-auto h-9 w-9 rounded-xl p-0 text-slate-400 hover:text-brand-500"
+                        className="ml-auto h-10 w-10 rounded-xl p-0 text-slate-400 hover:text-brand-500 md:h-9 md:w-9"
                       >
                         <X className="w-3.5 h-3.5" />
                       </Button>

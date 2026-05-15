@@ -209,7 +209,7 @@ export default function Dogs() {
                             setEditingDog(dog);
                             setDialogOpen(true);
                           }}
-                          className="bg-white/80 backdrop-blur-sm hover:bg-white w-8 h-8"
+                          className="h-10 w-10 bg-white/80 backdrop-blur-sm hover:bg-white md:h-9 md:w-9"
                         >
                           <Edit className="w-3.5 h-3.5 text-slate-600" />
                         </Button>
@@ -218,7 +218,7 @@ export default function Dogs() {
                             <Button
                               size="icon"
                               variant="ghost"
-                              className="bg-white/80 backdrop-blur-sm hover:bg-brand-50 w-8 h-8"
+                              className="h-10 w-10 bg-white/80 backdrop-blur-sm hover:bg-brand-50 md:h-9 md:w-9"
                             >
                               <Trash2 className="w-3.5 h-3.5 text-brand-500" />
                             </Button>

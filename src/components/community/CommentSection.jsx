@@ -281,7 +281,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
                     variant="ghost"
                     size="icon"
                     onClick={() => setDeleteId(comment.id)}
-                    className="h-7 w-7 text-[#C07820] hover:text-brand-400"
+                    className="h-10 w-10 text-[#C07820] hover:text-brand-400 md:h-9 md:w-9"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </Button>
