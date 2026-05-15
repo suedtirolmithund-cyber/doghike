@@ -71,16 +71,16 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               </div>
               {Array.isArray(hike.tags) && hike.tags.length > 0 && (
                 <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                  {hike.tags.slice(0, 3).map((tag, tagIndex) => (
-                    <div key={tag} className="flex items-center gap-1.5">
-                      {tagIndex > 0 && <span className="text-white/65">•</span>}
-                      <span className="text-[12px] font-medium tracking-wide text-white/92 drop-shadow-sm">
-                        {tag}
-                      </span>
-                    </div>
+                  {hike.tags.slice(0, 3).map((tag) => (
+                    <span
+                      key={tag}
+                      className="inline-flex min-h-7 items-center rounded-full border border-white/35 bg-white/18 px-2.5 py-1 text-xs font-semibold leading-none text-white/92 shadow-sm backdrop-blur-sm"
+                    >
+                      {tag}
+                    </span>
                   ))}
                   {hike.tags.length > 3 && (
-                    <span className="text-[12px] font-medium text-white/78 drop-shadow-sm">
+                    <span className="inline-flex min-h-7 items-center rounded-full border border-white/25 bg-white/12 px-2.5 py-1 text-xs font-semibold leading-none text-white/78 shadow-sm backdrop-blur-sm">
                       +{hike.tags.length - 3}
                     </span>
                   )}
