@@ -49,6 +49,15 @@ function formatDuration(minutes) {
   return `${hours} Std ${restMinutes} Min`;
 }
 
+function formatDistance(distanceKm) {
+  if (!Number.isFinite(Number(distanceKm))) return "–";
+  return `${Number(distanceKm).toFixed(1)} km`;
+}
+
+function getRouteDogName(route) {
+  return route?.notes?.match(/Hund:\s(.+)/)?.[1]?.split("\n")?.[0] ?? null;
+}
+
 function StatCard({ label, value }) {
   return (
     <View style={styles.statCard}>
@@ -186,6 +195,15 @@ function PrimaryButton({ title, onPress, loading, disabled, variant = "solid" })
   );
 }
 
+function RouteInfoChip({ label, value }) {
+  return (
+    <View style={styles.routeInfoChip}>
+      <Text style={styles.routeInfoValue}>{value}</Text>
+      <Text style={styles.routeInfoLabel}>{label}</Text>
+    </View>
+  );
+}
+
 export default function App() {
   const [session, setSession] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
@@ -201,6 +219,7 @@ export default function App() {
   const [allowWithoutDog, setAllowWithoutDog] = useState(false);
   const [routes, setRoutes] = useState([]);
   const [routesLoading, setRoutesLoading] = useState(false);
+  const [selectedRouteId, setSelectedRouteId] = useState(null);
 
   const [routeName, setRouteName] = useState("");
   const [trackerData, setTrackerData] = useState(null);
@@ -218,6 +237,11 @@ export default function App() {
   const trackerSummary = useMemo(
     () => getTrackSummary(trackerData),
     [trackerData]
+  );
+
+  const selectedRoute = useMemo(
+    () => routes.find((route) => route.id === selectedRouteId) ?? null,
+    [routes, selectedRouteId]
   );
 
   const loadDogs = useCallback(async () => {
@@ -252,6 +276,7 @@ export default function App() {
   const loadRoutes = useCallback(async () => {
     if (!user?.id) {
       setRoutes([]);
+      setSelectedRouteId(null);
       return;
     }
 
@@ -266,8 +291,15 @@ export default function App() {
     if (error) {
       console.error("[native-app] loadRoutes failed:", error);
       setRoutes([]);
+      setSelectedRouteId(null);
     } else {
       setRoutes(data ?? []);
+      setSelectedRouteId((currentRouteId) => {
+        if (currentRouteId && (data ?? []).some((route) => route.id === currentRouteId)) {
+          return currentRouteId;
+        }
+        return data?.[0]?.id ?? null;
+      });
     }
 
     setRoutesLoading(false);
@@ -736,11 +768,85 @@ export default function App() {
                 <ActivityIndicator color={COLORS.accent} />
               ) : routes.length > 0 ? (
                 <View style={styles.routesList}>
+                  {selectedRoute ? (
+                    <View style={styles.routeFocusCard}>
+                      <View style={styles.routeFocusHeader}>
+                        <View style={styles.flexGrow}>
+                          <Text style={styles.routeFocusEyebrow}>Route im Fokus</Text>
+                          <Text style={styles.routeFocusTitle}>{selectedRoute.name}</Text>
+                          <Text style={styles.routeFocusMeta}>
+                            {selectedRoute.route_type === "recorded" ? "Aufgezeichnet" : "Geplant"} ·{" "}
+                            {selectedRoute.completed ? "Erledigt" : "Offen"}
+                          </Text>
+                        </View>
+                        <Pressable onPress={() => setSelectedRouteId(null)} style={styles.routeFocusClose}>
+                          <Text style={styles.routeFocusCloseText}>Schliessen</Text>
+                        </Pressable>
+                      </View>
+
+                      <MiniRoutePreview
+                        points={selectedRoute.waypoints ?? []}
+                        accent={COLORS.accentDark}
+                      />
+
+                      <View style={styles.routeInfoGrid}>
+                        <RouteInfoChip label="Distanz" value={formatDistance(selectedRoute.distance_km)} />
+                        <RouteInfoChip
+                          label="Dauer"
+                          value={formatDuration(
+                            selectedRoute.completed_duration_minutes ??
+                              selectedRoute.duration_minutes ??
+                              0
+                          )}
+                        />
+                        <RouteInfoChip
+                          label="Hoehenmeter"
+                          value={
+                            selectedRoute.elevation_gain_m
+                              ? `+${selectedRoute.elevation_gain_m} m`
+                              : "Kein Hm"
+                          }
+                        />
+                        <RouteInfoChip
+                          label="Hund"
+                          value={getRouteDogName(selectedRoute) ?? "Ohne Hund"}
+                        />
+                      </View>
+
+                      <View style={styles.routeDetailStack}>
+                        <View style={styles.routeDetailRow}>
+                          <Text style={styles.routeDetailLabel}>Startpunkt</Text>
+                          <Text style={styles.routeDetailValue}>
+                            {selectedRoute.start_location || "Noch nicht gesetzt"}
+                          </Text>
+                        </View>
+                        <View style={styles.routeDetailRow}>
+                          <Text style={styles.routeDetailLabel}>Erstellt</Text>
+                          <Text style={styles.routeDetailValue}>
+                            {selectedRoute.created_at
+                              ? new Date(selectedRoute.created_at).toLocaleDateString("de-DE")
+                              : "–"}
+                          </Text>
+                        </View>
+                        {selectedRoute.notes ? (
+                          <View style={styles.routeDetailRow}>
+                            <Text style={styles.routeDetailLabel}>Notizen</Text>
+                            <Text style={styles.routeDetailValue}>{selectedRoute.notes}</Text>
+                          </View>
+                        ) : null}
+                      </View>
+                    </View>
+                  ) : null}
+
                   {routes.map((route) => {
-                    const routeDogName =
-                      route.notes?.match(/Hund:\s(.+)/)?.[1]?.split("\n")?.[0] ?? null;
+                    const routeDogName = getRouteDogName(route);
+                    const isActive = selectedRouteId === route.id;
                     return (
-                      <View key={route.id} style={styles.routeCard}>
+                      <Pressable
+                        key={route.id}
+                        onPress={() => setSelectedRouteId(route.id)}
+                        style={[styles.routeCard, isActive && styles.routeCardActive]}
+                      >
                         <View style={styles.routeCardTop}>
                           <View style={styles.routeCardTextWrap}>
                             <Text style={styles.routeCardTitle}>{route.name}</Text>
@@ -750,7 +856,7 @@ export default function App() {
                             </Text>
                           </View>
                           <Text style={styles.routeCardDistance}>
-                            {route.distance_km ? `${Number(route.distance_km).toFixed(1)} km` : "–"}
+                            {formatDistance(route.distance_km)}
                           </Text>
                         </View>
 
@@ -766,8 +872,11 @@ export default function App() {
                           <Text style={styles.routeMetricText}>
                             {routeDogName ? `🐾 ${routeDogName}` : "Ohne Hund"}
                           </Text>
+                          <Text style={styles.routeMetricText}>
+                            {isActive ? "Im Fokus" : "Antippen fuer Details"}
+                          </Text>
                         </View>
-                      </View>
+                      </Pressable>
                     );
                   })}
                 </View>
@@ -1075,6 +1184,94 @@ const styles = StyleSheet.create({
   routesList: {
     gap: 12,
   },
+  routeFocusCard: {
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    backgroundColor: COLORS.card,
+    padding: 16,
+    gap: 12,
+  },
+  routeFocusHeader: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 12,
+  },
+  routeFocusEyebrow: {
+    fontSize: 12,
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
+    color: COLORS.accent,
+    marginBottom: 4,
+  },
+  routeFocusTitle: {
+    fontSize: 19,
+    fontWeight: "800",
+    color: COLORS.text,
+  },
+  routeFocusMeta: {
+    marginTop: 4,
+    fontSize: 13,
+    color: COLORS.muted,
+  },
+  routeFocusClose: {
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    backgroundColor: COLORS.accentSoft,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  routeFocusCloseText: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: COLORS.accentDark,
+  },
+  routeInfoGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+  },
+  routeInfoChip: {
+    minWidth: "47%",
+    flexGrow: 1,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    backgroundColor: COLORS.accentSoft,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    gap: 4,
+  },
+  routeInfoValue: {
+    fontSize: 15,
+    fontWeight: "800",
+    color: COLORS.text,
+  },
+  routeInfoLabel: {
+    fontSize: 12,
+    color: COLORS.muted,
+    fontWeight: "600",
+  },
+  routeDetailStack: {
+    gap: 10,
+  },
+  routeDetailRow: {
+    gap: 4,
+  },
+  routeDetailLabel: {
+    fontSize: 12,
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+    color: COLORS.accent,
+  },
+  routeDetailValue: {
+    fontSize: 14,
+    lineHeight: 21,
+    color: COLORS.text,
+  },
   routeCard: {
     borderRadius: 18,
     borderWidth: 1,
@@ -1082,6 +1279,10 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.accentSoft,
     padding: 14,
     gap: 10,
+  },
+  routeCardActive: {
+    borderColor: COLORS.accent,
+    backgroundColor: "#fff1ee",
   },
   routeCardTop: {
     flexDirection: "row",
