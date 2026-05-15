@@ -260,6 +260,9 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               <SelectItem value="austria">🇦🇹 Österreich</SelectItem>
               <SelectItem value="germany">🇩🇪 Deutschland</SelectItem>
               <SelectItem value="switzerland">🇨🇭 Schweiz</SelectItem>
+              <SelectItem value="spain">🇪🇸 Spanien</SelectItem>
+              <SelectItem value="croatia">🇭🇷 Kroatien</SelectItem>
+              <SelectItem value="slovenia">🇸🇮 Slowenien</SelectItem>
               <SelectItem value="other">{TOUR_ICONS.country} Anderes</SelectItem>
             </SelectContent>
           </Select>

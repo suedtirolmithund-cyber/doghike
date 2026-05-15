@@ -57,6 +57,15 @@ function getCountryAliases(country) {
     case "switzerland":
     case "schweiz":
       return ["switzerland", "schweiz"];
+    case "spain":
+    case "spanien":
+      return ["spain", "spanien", "espana", "españa"];
+    case "croatia":
+    case "kroatien":
+      return ["croatia", "kroatien", "hrvatska"];
+    case "slovenia":
+    case "slowenien":
+      return ["slovenia", "slowenien", "slovenija"];
     default:
       return normalized ? [normalized] : [];
   }
