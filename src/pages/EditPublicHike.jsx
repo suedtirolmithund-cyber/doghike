@@ -189,6 +189,7 @@ export default function EditPublicHike() {
       ...prev,
       photoUrls: prev.photoUrls.filter((_, index) => index !== indexToRemove),
     }));
+    setPhotoPreviewUrls((prev) => prev.filter((_, index) => index !== indexToRemove));
 
     if (uploadedDuringEditRef.current.has(photoUrl)) {
       uploadedDuringEditRef.current.delete(photoUrl);
@@ -201,28 +202,44 @@ export default function EditPublicHike() {
   };
 
   const movePhotoUrl = (index, direction) => {
+    const moveItem = (items) => {
+      const nextIndex = index + direction;
+      if (nextIndex < 0 || nextIndex >= items.length) return items;
+
+      const nextItems = [...items];
+      [nextItems[index], nextItems[nextIndex]] = [nextItems[nextIndex], nextItems[index]];
+      return nextItems;
+    };
+
     setFormData((prev) => {
       const nextIndex = index + direction;
       const photoUrls = prev.photoUrls || [];
       if (nextIndex < 0 || nextIndex >= photoUrls.length) return prev;
 
-      const nextPhotoUrls = [...photoUrls];
-      [nextPhotoUrls[index], nextPhotoUrls[nextIndex]] = [nextPhotoUrls[nextIndex], nextPhotoUrls[index]];
-      return { ...prev, photoUrls: nextPhotoUrls };
+      return { ...prev, photoUrls: moveItem(photoUrls) };
     });
+    setPhotoPreviewUrls((prev) => moveItem(prev));
   };
 
   const movePhotoUrlToIndex = (fromIndex, toIndex) => {
+    const moveItemToIndex = (items) => {
+      if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0) return items;
+      if (fromIndex >= items.length || toIndex >= items.length) return items;
+
+      const nextItems = [...items];
+      const [movedItem] = nextItems.splice(fromIndex, 1);
+      nextItems.splice(toIndex, 0, movedItem);
+      return nextItems;
+    };
+
     setFormData((prev) => {
       const photoUrls = prev.photoUrls || [];
       if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0) return prev;
       if (fromIndex >= photoUrls.length || toIndex >= photoUrls.length) return prev;
 
-      const nextPhotoUrls = [...photoUrls];
-      const [movedPhoto] = nextPhotoUrls.splice(fromIndex, 1);
-      nextPhotoUrls.splice(toIndex, 0, movedPhoto);
-      return { ...prev, photoUrls: nextPhotoUrls };
+      return { ...prev, photoUrls: moveItemToIndex(photoUrls) };
     });
+    setPhotoPreviewUrls((prev) => moveItemToIndex(prev));
   };
 
   const saveMutation = useMutation({
