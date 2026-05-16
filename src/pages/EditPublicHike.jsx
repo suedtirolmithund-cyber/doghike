@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Camera, CircleHelp, Loader2, Trash2 } from "lucide-react";
+import { ArrowLeft, Camera, ChevronLeft, ChevronRight, CircleHelp, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -184,10 +184,10 @@ export default function EditPublicHike() {
     }
   };
 
-  const removePhotoUrl = async (photoUrl) => {
+  const removePhotoUrl = async (photoUrl, indexToRemove) => {
     setFormData((prev) => ({
       ...prev,
-      photoUrls: prev.photoUrls.filter((url) => url !== photoUrl),
+      photoUrls: prev.photoUrls.filter((_, index) => index !== indexToRemove),
     }));
 
     if (uploadedDuringEditRef.current.has(photoUrl)) {
@@ -198,6 +198,31 @@ export default function EditPublicHike() {
         toast.error("Das entfernte Bild hängt noch im Speicher.");
       }
     }
+  };
+
+  const movePhotoUrl = (index, direction) => {
+    setFormData((prev) => {
+      const nextIndex = index + direction;
+      const photoUrls = prev.photoUrls || [];
+      if (nextIndex < 0 || nextIndex >= photoUrls.length) return prev;
+
+      const nextPhotoUrls = [...photoUrls];
+      [nextPhotoUrls[index], nextPhotoUrls[nextIndex]] = [nextPhotoUrls[nextIndex], nextPhotoUrls[index]];
+      return { ...prev, photoUrls: nextPhotoUrls };
+    });
+  };
+
+  const movePhotoUrlToIndex = (fromIndex, toIndex) => {
+    setFormData((prev) => {
+      const photoUrls = prev.photoUrls || [];
+      if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0) return prev;
+      if (fromIndex >= photoUrls.length || toIndex >= photoUrls.length) return prev;
+
+      const nextPhotoUrls = [...photoUrls];
+      const [movedPhoto] = nextPhotoUrls.splice(fromIndex, 1);
+      nextPhotoUrls.splice(toIndex, 0, movedPhoto);
+      return { ...prev, photoUrls: nextPhotoUrls };
+    });
   };
 
   const saveMutation = useMutation({
@@ -630,32 +655,81 @@ export default function EditPublicHike() {
               </label>
 
               {Array.isArray(formData.photoUrls) && formData.photoUrls.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <>
+                  {formData.photoUrls.length > 1 && (
+                    <p className="text-xs leading-5 text-[#C07820]">
+                      Reihenfolge ändern: Nutze die Buttons unter dem Foto. Das erste Foto ist das Titelbild.
+                    </p>
+                  )}
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
                   {formData.photoUrls.map((photoUrl, index) => (
-                    <div key={`${photoUrl}-${index}`} className="relative overflow-hidden rounded-xl border border-white/70 bg-white/70 shadow-sm">
-                      {photoPreviewUrls[index] ? (
-                        <img
-                          src={photoPreviewUrls[index]}
-                          alt={`Foto ${index + 1}`}
-                          className="h-32 w-full object-cover"
-                        />
-                      ) : (
-                        <div className="flex h-32 w-full flex-col items-center justify-center px-4 text-center text-sm text-slate-400">
-                          <span>Bild wird geladen...</span>
-                          <PawLoadingTrail className="mt-2" />
-                        </div>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => removePhotoUrl(photoUrl)}
-                        className="absolute top-2 right-2 rounded-full bg-white/90 p-1.5 text-slate-700 shadow-sm hover:bg-white"
-                        title="Bild entfernen"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                    <div key={`${photoUrl}-${index}`} className="rounded-xl border border-brand-100 bg-white p-2 shadow-sm">
+                      <div className="relative overflow-hidden rounded-lg bg-[#FDF0E8]">
+                        {photoPreviewUrls[index] ? (
+                          <img
+                            src={photoPreviewUrls[index]}
+                            alt={`Foto ${index + 1}`}
+                            className="h-32 w-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-32 w-full flex-col items-center justify-center px-4 text-center text-sm text-slate-400">
+                            <span>Bild wird geladen...</span>
+                            <PawLoadingTrail className="mt-2" />
+                          </div>
+                        )}
+                        {index === 0 && (
+                          <span className="absolute left-2 top-2 rounded-full bg-[#F9C030] px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
+                            Titelbild
+                          </span>
+                        )}
+                        <span className="absolute right-2 top-2 rounded-full bg-[#FDF0E8]/95 px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
+                          Foto {index + 1}
+                        </span>
+                      </div>
+                      <div className="mt-2 grid grid-cols-2 gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => movePhotoUrl(index, -1)}
+                          disabled={index === 0}
+                          title="Bild nach links"
+                          className="flex h-8 items-center justify-center gap-1 rounded-lg border border-[#F9C030] bg-[#FDF0E8] text-[11px] font-bold text-[#7C3020] disabled:opacity-35"
+                        >
+                          <ChevronLeft className="h-3.5 w-3.5" />
+                          Links
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => movePhotoUrlToIndex(index, 0)}
+                          disabled={index === 0}
+                          title="Als Titelbild nutzen"
+                          className="flex h-8 items-center justify-center rounded-lg bg-[#F9C030] px-2 text-[11px] font-bold text-[#7C3020] disabled:opacity-35"
+                        >
+                          Titel
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => movePhotoUrl(index, 1)}
+                          disabled={index === formData.photoUrls.length - 1}
+                          title="Bild nach rechts"
+                          className="flex h-8 items-center justify-center gap-1 rounded-lg border border-[#F9C030] bg-[#FDF0E8] text-[11px] font-bold text-[#7C3020] disabled:opacity-35"
+                        >
+                          Rechts
+                          <ChevronRight className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => removePhotoUrl(photoUrl, index)}
+                          className="flex h-8 items-center justify-center gap-1 rounded-lg border border-[#A8003C]/25 bg-white text-[11px] font-bold text-[#A8003C]"
+                          title="Bild entfernen"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          Löschen
+                        </button>
+                      </div>
                     </div>
                   ))}
-                </div>
+                  </div>
+                </>
               ) : (
                 <p className="text-sm text-slate-500">Noch keine Fotos ausgewählt.</p>
               )}
