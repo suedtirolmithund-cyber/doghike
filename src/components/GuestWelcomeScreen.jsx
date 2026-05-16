@@ -272,8 +272,8 @@ export default function GuestWelcomeScreen() {
               <button
                 type="button"
                 onClick={() => switchMode("register")}
-                className={`h-10 rounded-[10px] text-[16px] font-medium text-white ${
-                  mode === "register" ? "bg-[#A8003C]" : "bg-white/15"
+                className={`h-10 rounded-[10px] text-[16px] font-medium ${
+                  mode === "register" ? "bg-[#A8003C] text-white" : "bg-white/55 text-[#7C3020]"
                 }`}
               >
                 Registrieren
@@ -281,8 +281,8 @@ export default function GuestWelcomeScreen() {
               <button
                 type="button"
                 onClick={() => switchMode("login")}
-                className={`h-10 rounded-[10px] text-[16px] font-medium text-white ${
-                  mode === "login" ? "bg-[#A8003C]" : "bg-white/15"
+                className={`h-10 rounded-[10px] text-[16px] font-medium ${
+                  mode === "login" ? "bg-[#A8003C] text-white" : "bg-white/55 text-[#7C3020]"
                 }`}
               >
                 Login
@@ -432,7 +432,7 @@ export default function GuestWelcomeScreen() {
                 type="button"
                 onClick={handleGoogle}
                 disabled={googleLoading || loading}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-white/15 text-sm font-medium text-white disabled:opacity-70"
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-white/55 text-sm font-semibold text-[#7C3020] disabled:opacity-70"
               >
                 {googleLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <GoogleIcon />}
                 Mit Google {mode === "login" ? "anmelden" : "registrieren"}
