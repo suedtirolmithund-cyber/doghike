@@ -180,6 +180,19 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
     });
   };
 
+  const movePhotoToIndex = (fromIndex, toIndex) => {
+    setFormData((prev) => {
+      const photos = prev.photos || [];
+      if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0) return prev;
+      if (fromIndex >= photos.length || toIndex >= photos.length) return prev;
+
+      const nextPhotos = [...photos];
+      const [movedPhoto] = nextPhotos.splice(fromIndex, 1);
+      nextPhotos.splice(toIndex, 0, movedPhoto);
+      return { ...prev, photos: nextPhotos };
+    });
+  };
+
   const toggleDog = (dogId) => {
     setFormData(prev => ({
       ...prev,
@@ -712,6 +725,11 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
 
       <div className="space-y-3">
         <Label>Fotos</Label>
+        {(formData.photos || []).length > 1 && (
+          <p className="text-xs leading-5 text-[#C07820]">
+            Reihenfolge ändern: Nutze die Buttons unter dem Foto. Das erste Foto ist das Titelbild.
+          </p>
+        )}
         <div className="flex flex-wrap gap-4">
           <AnimatePresence>
             {formData.photos?.map((url, index) => (
@@ -720,44 +738,61 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
-                className="relative group overflow-hidden rounded-xl"
+                className="w-44 rounded-xl border border-brand-100 bg-white p-2 shadow-sm sm:w-48"
               >
-                <img
-                  src={url}
-                  alt={`Foto ${index + 1}`}
-                  className="w-24 h-24 object-cover rounded-xl"
-                />
-                {index === 0 && (
-                  <span className="absolute left-1 top-1 rounded-full bg-[#F9C030] px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
-                    Titelbild
+                <div className="relative aspect-square overflow-hidden rounded-lg bg-[#FDF0E8]">
+                  <img
+                    src={url}
+                    alt={`Foto ${index + 1}`}
+                    className="h-full w-full object-cover rounded-lg"
+                  />
+                  {index === 0 && (
+                    <span className="absolute left-1 top-1 rounded-full bg-[#F9C030] px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
+                      Titelbild
+                    </span>
+                  )}
+                  <span className="absolute right-1 top-1 rounded-full bg-[#FDF0E8]/95 px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
+                    Foto {index + 1}
                   </span>
-                )}
-                <div className="absolute inset-x-1 bottom-1 flex items-center justify-between gap-1">
+                </div>
+                <div className="mt-2 grid grid-cols-2 gap-1.5">
                   <button
                     type="button"
                     onClick={() => movePhoto(index, -1)}
                     disabled={index === 0}
                     title="Bild nach links"
-                    className="grid h-7 w-7 place-items-center rounded-full bg-[#FDF0E8]/95 text-[#7C3020] shadow-sm disabled:opacity-35"
+                    className="flex h-8 items-center justify-center gap-1 rounded-lg border border-[#F9C030] bg-[#FDF0E8] text-[11px] font-bold text-[#7C3020] disabled:opacity-35"
                   >
-                    <ChevronLeft className="h-4 w-4" />
+                    <ChevronLeft className="h-3.5 w-3.5" />
+                    Links
                   </button>
                   <button
                     type="button"
-                    onClick={() => removePhoto(index)}
-                    title="Foto löschen"
-                    className="grid h-7 w-7 place-items-center rounded-full bg-[#A8003C] text-white shadow-sm"
+                    onClick={() => movePhotoToIndex(index, 0)}
+                    disabled={index === 0}
+                    title="Als Titelbild nutzen"
+                    className="flex h-8 items-center justify-center rounded-lg bg-[#F9C030] px-2 text-[11px] font-bold text-[#7C3020] disabled:opacity-35"
                   >
-                    <X className="h-3.5 w-3.5" />
+                    Titel
                   </button>
                   <button
                     type="button"
                     onClick={() => movePhoto(index, 1)}
                     disabled={index === (formData.photos || []).length - 1}
                     title="Bild nach rechts"
-                    className="grid h-7 w-7 place-items-center rounded-full bg-[#FDF0E8]/95 text-[#7C3020] shadow-sm disabled:opacity-35"
+                    className="flex h-8 items-center justify-center gap-1 rounded-lg border border-[#F9C030] bg-[#FDF0E8] text-[11px] font-bold text-[#7C3020] disabled:opacity-35"
                   >
-                    <ChevronRight className="h-4 w-4" />
+                    Rechts
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removePhoto(index)}
+                    title="Foto löschen"
+                    className="flex h-8 items-center justify-center gap-1 rounded-lg border border-[#A8003C]/25 bg-white text-[11px] font-bold text-[#A8003C]"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                    Löschen
                   </button>
                 </div>
               </motion.div>
