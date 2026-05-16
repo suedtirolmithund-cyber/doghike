@@ -1174,7 +1174,7 @@ export default function AddJournalEntry() {
       dog_difficulty: form.dog_difficulty || null,
       grazing_animals: !!form.grazing_animals,
       muzzle_recommended: !!form.muzzle_recommended,
-      dog_mood_tags: form.visibility === "private" ? (form.dog_mood_tags ?? []) : [],
+      dog_mood_tags: form.dog_mood_tags ?? [],
       latitude: form.latitude !== "" ? Number(form.latitude) : null,
       longitude: form.longitude !== "" ? Number(form.longitude) : null,
       // public -> pending admin review (admins can keep approved entries approved)
@@ -1394,33 +1394,31 @@ export default function AddJournalEntry() {
               </p>
             </div>
 
-            {form.visibility === "private" && (
-              <div>
-                <Label className="text-sm text-slate-600 mb-2 block">Wie war dein Hund drauf? (optional, nur privat)</Label>
-                <div className="flex flex-wrap gap-2">
-                  {DOG_PRIVATE_TAGS.map((tag) => {
-                    const isActive = form.dog_mood_tags.includes(tag);
-                    return (
-                      <button
-                        key={tag}
-                        type="button"
-                        onClick={() => toggleDogMoodTag(tag)}
-                        className={`inline-flex max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full border px-2.5 py-2 text-center text-sm leading-tight transition-all sm:px-3 ${
-                          isActive
-                            ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
-                            : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
-                        }`}
-                      >
-                        {tag}
-                      </button>
-                    );
-                  })}
-                </div>
-                <p className="mt-2 text-xs text-slate-400">
-                  Du kannst eine oder mehrere Angaben wählen. Diese Infos bleiben nur in privaten Einträgen und werden bei Freunde oder öffentlich nicht mitgeteilt.
-                </p>
+            <div>
+              <Label className="text-sm text-slate-600 mb-2 block">Wie war dein Hund drauf? (optional, nur für dich)</Label>
+              <div className="flex flex-wrap gap-2">
+                {DOG_PRIVATE_TAGS.map((tag) => {
+                  const isActive = form.dog_mood_tags.includes(tag);
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => toggleDogMoodTag(tag)}
+                      className={`inline-flex max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full border px-2.5 py-2 text-center text-sm leading-tight transition-all sm:px-3 ${
+                        isActive
+                          ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
+                          : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
+                      }`}
+                    >
+                      {tag}
+                    </button>
+                  );
+                })}
               </div>
-            )}
+              <p className="mt-2 text-xs text-slate-400">
+                Du kannst eine oder mehrere Angaben wählen. Diese Infos werden nur dir im Tagebuch angezeigt.
+              </p>
+            </div>
 
             {/* Dog picker */}
             {userDogs.length > 0 && (

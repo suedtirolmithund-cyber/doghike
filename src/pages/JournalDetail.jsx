@@ -362,7 +362,7 @@ export default function JournalDetail() {
                 </div>
               </div>
             )}
-            {isOwner && entry.visibility === "private" && Array.isArray(entry.dog_mood_tags) && entry.dog_mood_tags.length > 0 && (
+            {isOwner && Array.isArray(entry.dog_mood_tags) && entry.dog_mood_tags.length > 0 && (
               <div className="flex items-start gap-2 flex-wrap">
                 <span className="text-xs text-slate-500 w-28">Hund heute</span>
                 <div className="flex flex-wrap gap-1.5">
