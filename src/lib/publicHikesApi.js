@@ -284,20 +284,21 @@ async function createPublicHikePhotoDisplayUrl(photoReference) {
 }
 
 export async function resolvePublicHikePhotoReferences(photoReferences = []) {
-  const resolvedPhotos = await Promise.all(
+  return Promise.all(
     photoReferences.map((photoReference) => createPublicHikePhotoDisplayUrl(photoReference))
   );
-
-  return resolvedPhotos.filter(Boolean);
 }
 
 export async function uploadPublicHikePhoto(userId, file) {
   validateImageUpload(file);
   const sanitizedName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const path = `${PUBLIC_HIKE_PREFIX}${userId}/${Date.now()}_${sanitizedName}`;
+  const uniqueId =
+    globalThis.crypto?.randomUUID?.() ??
+    `${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  const path = `${PUBLIC_HIKE_PREFIX}${userId}/${uniqueId}_${sanitizedName}`;
   const { data, error } = await supabase.storage
     .from(PUBLIC_HIKE_BUCKET)
-    .upload(path, file, { upsert: true });
+    .upload(path, file, { upsert: false });
 
   if (error) throw error;
   return data.path;
@@ -346,7 +347,7 @@ export async function getPublicHikeById(hikeId) {
     _source: "sheets",
     _photo_references: photoReferences,
     tags: normalizeTags(...getLegacyTagColumns(hikeRow)),
-    photos: resolvedPhotos,
+    photos: resolvedPhotos.filter(Boolean),
     hazard_notes: pickFirstText(hikeRow, ["hazard_notes", "hazards", "danger_notes", "danger", "warning", "warnings", "achtung", "gefahr", "gefahren"]),
     parking_info: pickFirstText(hikeRow, ["parking_info", "parking", "parking_notes", "parken", "ausgangspunkt"]),
     restaurant_info: pickFirstText(hikeRow, ["restaurant_info", "restaurant", "restaurant_notes", "einkehr", "hutte", "hütte"]),
