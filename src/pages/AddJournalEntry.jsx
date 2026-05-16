@@ -1487,12 +1487,12 @@ export default function AddJournalEntry() {
             </h2>
             {form.photos.length > 1 && (
               <p className="text-xs leading-5 text-[#C07820]">
-                Reihenfolge ändern: Foto antippen, dann Zielposition antippen. Das erste Foto ist das Titelbild.
+                Reihenfolge ändern: Nutze die Buttons unter dem Foto. Das erste Foto ist das Titelbild.
               </p>
             )}
 
             {form.photos.length > 0 && (
-              <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-2">
+              <div className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-2">
                 {photoPreviewUrls.map((url, i) => {
                   const isSelected = selectedPhotoIndex === i;
 
@@ -1500,7 +1500,7 @@ export default function AddJournalEntry() {
                     <div
                       key={`${form.photos[i] ?? url}-${i}`}
                       onClick={(event) => handlePhotoSelect(event, i)}
-                      className={`relative aspect-square h-28 w-28 shrink-0 select-none overflow-hidden rounded-lg border bg-white shadow-sm transition-all sm:h-32 sm:w-32 ${
+                      className={`w-44 shrink-0 select-none rounded-xl border bg-white p-2 shadow-sm transition-all sm:w-48 ${
                         isSelected
                           ? "scale-[0.98] border-[#F07030] ring-2 ring-[#F9C030]"
                           : selectedPhotoIndex !== null
@@ -1509,57 +1509,73 @@ export default function AddJournalEntry() {
                       }`}
                       title="Erst auswählen, dann Zielposition anklicken"
                     >
-                      <img
-                        src={url}
-                        alt=""
-                        className="pointer-events-none h-full w-full rounded-lg object-cover"
-                      />
-                      {i === 0 && (
-                        <span className="pointer-events-none absolute left-1 top-1 rounded-full bg-[#F9C030] px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
-                          Titelbild
+                      <div className="relative aspect-square overflow-hidden rounded-lg bg-[#FDF0E8]">
+                        <img
+                          src={url}
+                          alt=""
+                          className="pointer-events-none h-full w-full rounded-lg object-cover"
+                        />
+                        {i === 0 && (
+                          <span className="pointer-events-none absolute left-1 top-1 rounded-full bg-[#F9C030] px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
+                            Titelbild
+                          </span>
+                        )}
+                        <span className="pointer-events-none absolute right-1 top-1 rounded-full bg-[#FDF0E8]/95 px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
+                          {isSelected ? "Ausgewählt" : `Foto ${i + 1}`}
                         </span>
-                      )}
-                      <span className="pointer-events-none absolute right-1 top-1 rounded-full bg-[#FDF0E8]/95 px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
-                        {isSelected ? "Ausgewählt" : "Wählen"}
-                      </span>
-                      <div className="absolute inset-x-1 bottom-1 flex items-center justify-between gap-1">
+                      </div>
+
+                      <div className="mt-2 grid grid-cols-2 gap-1.5">
                         <button
                           type="button"
-                          onPointerDown={(event) => event.stopPropagation()}
                           onClick={(event) => {
                             event.stopPropagation();
                             moveUploadedPhoto(i, -1);
                           }}
                           disabled={i === 0}
                           title="Bild nach links"
-                          className="grid h-7 w-7 place-items-center rounded-full bg-[#FDF0E8]/95 text-[#7C3020] shadow-sm disabled:opacity-35"
+                          className="flex h-8 items-center justify-center gap-1 rounded-lg border border-[#F9C030] bg-[#FDF0E8] text-[11px] font-bold text-[#7C3020] disabled:opacity-35"
                         >
-                          <ChevronLeft className="h-4 w-4" />
+                          <ChevronLeft className="h-3.5 w-3.5" />
+                          Links
                         </button>
                         <button
                           type="button"
-                          onPointerDown={(event) => event.stopPropagation()}
                           onClick={(event) => {
                             event.stopPropagation();
-                            void removeUploadedPhoto(i);
+                            moveUploadedPhotoToIndex(i, 0);
+                            setSelectedPhotoIndex(null);
                           }}
-                          title="Foto löschen"
-                          className="grid h-7 w-7 place-items-center rounded-full bg-[#A8003C] text-white shadow-sm"
+                          disabled={i === 0}
+                          title="Als Titelbild nutzen"
+                          className="flex h-8 items-center justify-center rounded-lg bg-[#F9C030] px-2 text-[11px] font-bold text-[#7C3020] disabled:opacity-35"
                         >
-                          <X className="h-3.5 w-3.5" />
+                          Titel
                         </button>
                         <button
                           type="button"
-                          onPointerDown={(event) => event.stopPropagation()}
                           onClick={(event) => {
                             event.stopPropagation();
                             moveUploadedPhoto(i, 1);
                           }}
                           disabled={i === photoPreviewUrls.length - 1}
                           title="Bild nach rechts"
-                          className="grid h-7 w-7 place-items-center rounded-full bg-[#FDF0E8]/95 text-[#7C3020] shadow-sm disabled:opacity-35"
+                          className="flex h-8 items-center justify-center gap-1 rounded-lg border border-[#F9C030] bg-[#FDF0E8] text-[11px] font-bold text-[#7C3020] disabled:opacity-35"
                         >
-                          <ChevronRight className="h-4 w-4" />
+                          Rechts
+                          <ChevronRight className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            void removeUploadedPhoto(i);
+                          }}
+                          title="Foto löschen"
+                          className="flex h-8 items-center justify-center gap-1 rounded-lg border border-[#A8003C]/25 bg-white text-[11px] font-bold text-[#A8003C]"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                          Löschen
                         </button>
                       </div>
                     </div>
