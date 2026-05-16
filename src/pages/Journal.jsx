@@ -133,9 +133,9 @@ function StatsChip({ icon, value, unit, color = "text-[#C07820]" }) {
   if (!value) return null;
 
   return (
-    <div className={`flex min-h-8 w-full min-w-0 items-center justify-center gap-1 rounded-full bg-brand-50/70 px-2 py-1 text-center text-sm leading-tight ${color}`}>
+    <div className={`flex min-h-8 w-full min-w-0 max-w-full items-center justify-center gap-1 overflow-hidden rounded-full bg-brand-50/70 px-1.5 py-1 text-center text-xs leading-tight sm:w-auto sm:px-2 sm:text-sm ${color}`}>
       <span className="text-sm leading-none shrink-0">{icon}</span>
-      <span className="min-w-0 break-words font-medium">{value}</span>
+      <span className="min-w-0 truncate font-medium">{value}</span>
       {unit && <span className="shrink-0 text-[#C07820]/75">{unit}</span>}
     </div>
   );
@@ -254,17 +254,17 @@ export default function Journal() {
             {statsItems.map(({ icon, value, label, color }) => (
               <div
                 key={label}
-                className="doghike-glass-card rounded-xl border-brand-100/90 bg-gradient-to-br from-white/88 to-brand-50/45 px-3 py-3 md:px-3 md:py-2.5"
+                className="doghike-glass-card min-w-0 overflow-hidden rounded-xl border-brand-100/90 bg-gradient-to-br from-white/88 to-brand-50/45 px-2 py-3 md:px-3 md:py-2.5"
               >
-                <div className="flex items-center justify-center gap-2.5">
+                <div className="flex min-w-0 flex-col items-center justify-center gap-1 text-center sm:flex-row sm:gap-2.5 sm:text-left">
                   {typeof icon === "string" ? (
-                    <span className={`block text-sm leading-none ${color} md:text-base`}>{icon}</span>
+                    <span className={`block shrink-0 text-sm leading-none ${color} md:text-base`}>{icon}</span>
                   ) : (
-                    <Mountain className={`h-4 w-4 ${color}`} />
+                    <Mountain className={`h-4 w-4 shrink-0 ${color}`} />
                   )}
-                  <div className="min-w-0 text-left">
-                    <p className="text-lg font-bold leading-tight text-[#7C3020] md:text-lg">{value}</p>
-                    <p className="text-xs leading-tight text-[#C07820]">{label}</p>
+                  <div className="min-w-0 max-w-full">
+                    <p className="max-w-full truncate text-base font-bold leading-tight text-[#7C3020] md:text-lg">{value}</p>
+                    <p className="max-w-full truncate text-[11px] leading-tight text-[#C07820] sm:text-xs">{label}</p>
                   </div>
                 </div>
               </div>
