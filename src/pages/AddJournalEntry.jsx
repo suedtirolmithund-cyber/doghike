@@ -1070,7 +1070,19 @@ export default function AddJournalEntry() {
     event.preventDefault();
     draggedPhotoIndexRef.current = index;
     setDraggedPhotoIndex(index);
-    event.currentTarget.setPointerCapture?.(event.pointerId);
+  };
+
+  const handlePhotoPointerMove = (event) => {
+    if (draggedPhotoIndexRef.current === null) return;
+
+    const target = document
+      .elementFromPoint(event.clientX, event.clientY)
+      ?.closest("[data-photo-index]");
+    if (!target) return;
+
+    const targetIndex = Number(target.dataset.photoIndex);
+    if (!Number.isInteger(targetIndex)) return;
+    handlePhotoPointerEnter(targetIndex);
   };
 
   const handlePhotoPointerEnter = (targetIndex) => {
@@ -1489,14 +1501,18 @@ export default function AddJournalEntry() {
             </h2>
 
             {form.photos.length > 0 && (
-              <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-2">
+              <div
+                className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-2"
+                onPointerMove={handlePhotoPointerMove}
+                onPointerUp={endPhotoPointerDrag}
+                onPointerCancel={endPhotoPointerDrag}
+                onPointerLeave={endPhotoPointerDrag}
+              >
                 {photoPreviewUrls.map((url, i) => (
                   <div
                     key={`${form.photos[i] ?? url}-${i}`}
+                    data-photo-index={i}
                     onPointerDown={(event) => handlePhotoPointerDown(event, i)}
-                    onPointerEnter={() => handlePhotoPointerEnter(i)}
-                    onPointerUp={endPhotoPointerDrag}
-                    onPointerCancel={endPhotoPointerDrag}
                     className={`relative aspect-square h-28 w-28 shrink-0 touch-none select-none cursor-grab overflow-hidden rounded-lg border bg-white shadow-sm transition-all active:cursor-grabbing sm:h-32 sm:w-32 ${
                       draggedPhotoIndex === i
                         ? "scale-[0.98] border-[#F07030] opacity-70"
