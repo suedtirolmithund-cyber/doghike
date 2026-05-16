@@ -133,10 +133,10 @@ function StatsChip({ icon, value, unit, color = "text-[#C07820]" }) {
   if (!value) return null;
 
   return (
-    <div className={`inline-flex min-h-8 items-center gap-1.5 rounded-full bg-brand-50/70 px-2.5 py-1 text-sm ${color}`}>
+    <div className={`flex min-h-8 w-full min-w-0 items-center justify-center gap-1 rounded-full bg-brand-50/70 px-2 py-1 text-center text-sm leading-tight ${color}`}>
       <span className="text-sm leading-none shrink-0">{icon}</span>
-      <span className="font-medium">{value}</span>
-      {unit && <span className="text-[#C07820]/75">{unit}</span>}
+      <span className="min-w-0 break-words font-medium">{value}</span>
+      {unit && <span className="shrink-0 text-[#C07820]/75">{unit}</span>}
     </div>
   );
 }
@@ -333,7 +333,7 @@ export default function Journal() {
                           {entry.rating && <StarRating rating={entry.rating} />}
                         </div>
 
-                        <div className="my-3 flex flex-wrap gap-2">
+                        <div className="my-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
                           <StatsChip icon={TOUR_ICONS.distance} value={entry.distance_km} unit="km" />
                           <StatsChip icon={TOUR_ICONS.elevation} value={entry.elevation_m} unit="Hm" color="text-brand-500" />
                           <StatsChip
@@ -343,33 +343,33 @@ export default function Journal() {
                             color="text-brand-600"
                           />
                           {entry.difficulty && (
-                            <span className={`inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full bg-brand-50/70 px-2.5 py-1 text-center text-sm font-medium leading-tight whitespace-normal break-words ${getDifficultyTextColor(entry.difficulty)}`}>
+                            <span className={`inline-flex min-h-8 w-full max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full bg-brand-50/70 px-2 py-1 text-center text-sm font-medium leading-tight whitespace-normal break-words sm:w-auto sm:px-2.5 ${getDifficultyTextColor(entry.difficulty)}`}>
                               {TOUR_ICONS.human} {getDifficultyLabel(entry.difficulty)}
                             </span>
                           )}
                           {entry.dog_difficulty && (
-                            <span className={`inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full bg-brand-50/70 px-2.5 py-1 text-center text-sm font-medium leading-tight whitespace-normal break-words ${getDifficultyTextColor(entry.dog_difficulty)}`}>
+                            <span className={`inline-flex min-h-8 w-full max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full bg-brand-50/70 px-2 py-1 text-center text-sm font-medium leading-tight whitespace-normal break-words sm:w-auto sm:px-2.5 ${getDifficultyTextColor(entry.dog_difficulty)}`}>
                               {TOUR_ICONS.dog} {getDifficultyLabel(entry.dog_difficulty)}
                             </span>
                           )}
                         </div>
 
-                        <div className="mb-2 flex flex-wrap gap-2">
+                        <div className="mb-2 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
                           {entry.dog_suitable && (
-                            <Badge variant="secondary" className="min-h-8 border-brand-200 bg-brand-50 px-2.5 py-1 text-sm text-brand-600 md:px-3 md:text-xs">
+                            <Badge variant="secondary" className="min-h-8 w-full border-brand-200 bg-brand-50 px-2 py-1 text-sm text-brand-600 sm:w-auto md:px-3 md:text-xs">
                               Hundefreundlich
                             </Badge>
                           )}
                           {entry.water_available !== null && entry.water_available !== undefined && (
                               <Badge
                                 variant="secondary"
-                                className={`min-h-8 border px-2.5 py-1 text-sm md:px-3 md:text-xs ${getWaterBadgeClass(entry.water_available)}`}
+                                className={`min-h-8 w-full border px-2 py-1 text-sm sm:w-auto md:px-3 md:text-xs ${getWaterBadgeClass(entry.water_available)}`}
                               >
                                 <WaterIcon value={entry.water_available} /> {getWaterLabel(entry.water_available) ?? getWaterLabel(0)}
                               </Badge>
                           )}
                           {entry.gpx_url && (
-                            <Badge variant="secondary" className="min-h-8 bg-brand-100/80 px-3 py-1 text-sm text-slate-600 md:text-xs">
+                            <Badge variant="secondary" className="min-h-8 w-full bg-brand-100/80 px-2 py-1 text-sm text-slate-600 sm:w-auto md:px-3 md:text-xs">
                               GPX
                             </Badge>
                           )}
