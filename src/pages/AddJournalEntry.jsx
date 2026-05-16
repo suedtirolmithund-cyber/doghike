@@ -820,8 +820,7 @@ export default function AddJournalEntry() {
   const [gpxUploading, setGpxUploading] = useState(false);
   const [photoConsent, setPhotoConsent] = useState(false);
   const [photoPreviewUrls, setPhotoPreviewUrls] = useState([]);
-  const [draggedPhotoIndex, setDraggedPhotoIndex] = useState(null);
-  const draggedPhotoIndexRef = useRef(null);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(null);
   const uploadedPhotosRef = useRef([]);
   const uploadedGpxRef = useRef([]);
   const originalPhotosRef = useRef([]);
@@ -1034,6 +1033,7 @@ export default function AddJournalEntry() {
     }
 
     set("photos", form.photos.filter((_, j) => j !== index));
+    setSelectedPhotoIndex(null);
   };
 
   const moveUploadedPhoto = (index, direction) => {
@@ -1048,6 +1048,7 @@ export default function AddJournalEntry() {
 
     set("photos", moveItem(form.photos));
     setPhotoPreviewUrls((prev) => moveItem(prev));
+    setSelectedPhotoIndex(null);
   };
 
   const moveUploadedPhotoToIndex = (fromIndex, toIndex) => {
@@ -1065,37 +1066,22 @@ export default function AddJournalEntry() {
     setPhotoPreviewUrls((prev) => reorder(prev));
   };
 
-  const handlePhotoPointerDown = (event, index) => {
+  const handlePhotoSelect = (event, index) => {
     if (event.target.closest("button")) return;
     event.preventDefault();
-    draggedPhotoIndexRef.current = index;
-    setDraggedPhotoIndex(index);
-  };
 
-  const handlePhotoPointerMove = (event) => {
-    if (draggedPhotoIndexRef.current === null) return;
+    if (selectedPhotoIndex === null) {
+      setSelectedPhotoIndex(index);
+      return;
+    }
 
-    const target = document
-      .elementFromPoint(event.clientX, event.clientY)
-      ?.closest("[data-photo-index]");
-    if (!target) return;
+    if (selectedPhotoIndex === index) {
+      setSelectedPhotoIndex(null);
+      return;
+    }
 
-    const targetIndex = Number(target.dataset.photoIndex);
-    if (!Number.isInteger(targetIndex)) return;
-    handlePhotoPointerEnter(targetIndex);
-  };
-
-  const handlePhotoPointerEnter = (targetIndex) => {
-    const fromIndex = draggedPhotoIndexRef.current;
-    if (fromIndex === null || fromIndex === targetIndex) return;
-    moveUploadedPhotoToIndex(fromIndex, targetIndex);
-    draggedPhotoIndexRef.current = targetIndex;
-    setDraggedPhotoIndex(targetIndex);
-  };
-
-  const endPhotoPointerDrag = () => {
-    draggedPhotoIndexRef.current = null;
-    setDraggedPhotoIndex(null);
+    moveUploadedPhotoToIndex(selectedPhotoIndex, index);
+    setSelectedPhotoIndex(null);
   };
 
   const handleGpxUpload = async (e) => {
@@ -1499,82 +1485,86 @@ export default function AddJournalEntry() {
             <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide flex items-center gap-2">
               <Upload className="w-4 h-4" /> Fotos
             </h2>
+            {form.photos.length > 1 && (
+              <p className="text-xs leading-5 text-[#C07820]">
+                Reihenfolge ändern: Foto antippen, dann Zielposition antippen. Das erste Foto ist das Titelbild.
+              </p>
+            )}
 
             {form.photos.length > 0 && (
-              <div
-                className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-2"
-                onPointerMove={handlePhotoPointerMove}
-                onPointerUp={endPhotoPointerDrag}
-                onPointerCancel={endPhotoPointerDrag}
-                onPointerLeave={endPhotoPointerDrag}
-              >
-                {photoPreviewUrls.map((url, i) => (
-                  <div
-                    key={`${form.photos[i] ?? url}-${i}`}
-                    data-photo-index={i}
-                    onPointerDown={(event) => handlePhotoPointerDown(event, i)}
-                    className={`relative aspect-square h-28 w-28 shrink-0 touch-none select-none cursor-grab overflow-hidden rounded-lg border bg-white shadow-sm transition-all active:cursor-grabbing sm:h-32 sm:w-32 ${
-                      draggedPhotoIndex === i
-                        ? "scale-[0.98] border-[#F07030] opacity-70"
-                        : "border-brand-100"
-                    }`}
-                    title="Gedrückt halten und über ein anderes Bild ziehen"
-                  >
-                    <img
-                      src={url}
-                      alt=""
-                      className="pointer-events-none h-full w-full rounded-lg object-cover"
-                    />
-                    {i === 0 && (
-                      <span className="pointer-events-none absolute left-1 top-1 rounded-full bg-[#F9C030] px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
-                        Titelbild
+              <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-2">
+                {photoPreviewUrls.map((url, i) => {
+                  const isSelected = selectedPhotoIndex === i;
+
+                  return (
+                    <div
+                      key={`${form.photos[i] ?? url}-${i}`}
+                      onClick={(event) => handlePhotoSelect(event, i)}
+                      className={`relative aspect-square h-28 w-28 shrink-0 select-none overflow-hidden rounded-lg border bg-white shadow-sm transition-all sm:h-32 sm:w-32 ${
+                        isSelected
+                          ? "scale-[0.98] border-[#F07030] ring-2 ring-[#F9C030]"
+                          : selectedPhotoIndex !== null
+                            ? "border-brand-100 ring-1 ring-[#F9C030]/45"
+                            : "border-brand-100"
+                      }`}
+                      title="Erst auswählen, dann Zielposition anklicken"
+                    >
+                      <img
+                        src={url}
+                        alt=""
+                        className="pointer-events-none h-full w-full rounded-lg object-cover"
+                      />
+                      {i === 0 && (
+                        <span className="pointer-events-none absolute left-1 top-1 rounded-full bg-[#F9C030] px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
+                          Titelbild
+                        </span>
+                      )}
+                      <span className="pointer-events-none absolute right-1 top-1 rounded-full bg-[#FDF0E8]/95 px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
+                        {isSelected ? "Ausgewählt" : "Wählen"}
                       </span>
-                    )}
-                    <span className="pointer-events-none absolute right-1 top-1 rounded-full bg-[#FDF0E8]/95 px-2 py-0.5 text-[10px] font-bold text-[#7C3020] shadow-sm">
-                      Ziehen
-                    </span>
-                    <div className="absolute inset-x-1 bottom-1 flex items-center justify-between gap-1">
-                      <button
-                        type="button"
-                        onPointerDown={(event) => event.stopPropagation()}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          moveUploadedPhoto(i, -1);
-                        }}
-                        disabled={i === 0}
-                        title="Bild nach links"
-                        className="grid h-7 w-7 place-items-center rounded-full bg-[#FDF0E8]/95 text-[#7C3020] shadow-sm disabled:opacity-35"
-                      >
-                        <ChevronLeft className="h-4 w-4" />
-                      </button>
-                      <button
-                        type="button"
-                        onPointerDown={(event) => event.stopPropagation()}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          void removeUploadedPhoto(i);
-                        }}
-                        title="Foto löschen"
-                        className="grid h-7 w-7 place-items-center rounded-full bg-[#A8003C] text-white shadow-sm"
-                      >
-                        <X className="h-3.5 w-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        onPointerDown={(event) => event.stopPropagation()}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          moveUploadedPhoto(i, 1);
-                        }}
-                        disabled={i === photoPreviewUrls.length - 1}
-                        title="Bild nach rechts"
-                        className="grid h-7 w-7 place-items-center rounded-full bg-[#FDF0E8]/95 text-[#7C3020] shadow-sm disabled:opacity-35"
-                      >
-                        <ChevronRight className="h-4 w-4" />
-                      </button>
+                      <div className="absolute inset-x-1 bottom-1 flex items-center justify-between gap-1">
+                        <button
+                          type="button"
+                          onPointerDown={(event) => event.stopPropagation()}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            moveUploadedPhoto(i, -1);
+                          }}
+                          disabled={i === 0}
+                          title="Bild nach links"
+                          className="grid h-7 w-7 place-items-center rounded-full bg-[#FDF0E8]/95 text-[#7C3020] shadow-sm disabled:opacity-35"
+                        >
+                          <ChevronLeft className="h-4 w-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onPointerDown={(event) => event.stopPropagation()}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            void removeUploadedPhoto(i);
+                          }}
+                          title="Foto löschen"
+                          className="grid h-7 w-7 place-items-center rounded-full bg-[#A8003C] text-white shadow-sm"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onPointerDown={(event) => event.stopPropagation()}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            moveUploadedPhoto(i, 1);
+                          }}
+                          disabled={i === photoPreviewUrls.length - 1}
+                          title="Bild nach rechts"
+                          className="grid h-7 w-7 place-items-center rounded-full bg-[#FDF0E8]/95 text-[#7C3020] shadow-sm disabled:opacity-35"
+                        >
+                          <ChevronRight className="h-4 w-4" />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
 
