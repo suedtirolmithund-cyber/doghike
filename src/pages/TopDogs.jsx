@@ -153,12 +153,12 @@ function Podium({ top3, metric }) {
             )}
 
             {/* Value */}
-            <p className={`font-extrabold ${isFirst ? "text-lg sm:text-xl" : "text-sm sm:text-base"} ${style.num}`}>
+            <p className={`font-extrabold leading-tight ${isFirst ? "text-xl sm:text-2xl" : "text-base sm:text-lg"} ${style.num}`}>
               {metric === "tours"     && entry.tourCount}
               {metric === "distance"  && `${entry.totalDistance}`}
               {metric === "elevation" && entry.totalElevation.toLocaleString()}
             </p>
-            <p className="text-[10px] text-slate-400">
+            <p className="text-xs font-semibold leading-tight text-slate-500">
               {metric === "tours" ? "Touren" : metric === "distance" ? "km" : "Hm"}
             </p>
 
@@ -219,12 +219,12 @@ function RankRow({ entry, rank, metric, isMyDog }) {
 
       {/* Wert */}
       <div className="ml-auto text-right shrink-0">
-        <p className="text-base font-bold text-slate-900">
+        <p className="text-lg font-bold leading-tight text-slate-900">
           {metric === "tours"     && entry.tourCount}
           {metric === "distance"  && entry.totalDistance}
           {metric === "elevation" && entry.totalElevation.toLocaleString()}
         </p>
-        <p className="text-[10px] text-slate-400">
+        <p className="text-xs font-semibold leading-tight text-slate-500">
           {metric === "tours" ? "Touren" : metric === "distance" ? "km" : "Hm"}
         </p>
       </div>
@@ -278,12 +278,12 @@ function CompactRankRow({ entry, rank, metric, isMyDog }) {
           )}
         </div>
         <div className="shrink-0 text-right">
-          <p className="text-sm font-bold text-slate-900">
+          <p className="text-base font-bold leading-tight text-slate-900">
             {metric === "tours" && entry.tourCount}
             {metric === "distance" && entry.totalDistance}
             {metric === "elevation" && entry.totalElevation.toLocaleString()}
           </p>
-          <p className="text-[10px] text-slate-400">
+          <p className="text-xs font-semibold leading-tight text-slate-500">
             {metric === "tours" ? "Touren" : metric === "distance" ? "km" : "Hm"}
           </p>
         </div>
@@ -310,12 +310,12 @@ function MyDogCard({ entry, rank, metric }) {
         <p className="text-xs text-slate-500">Aktuell Platz <strong>#{rank}</strong> in dieser Kategorie</p>
       </div>
       <div className="text-right shrink-0">
-        <p className="text-lg font-extrabold text-brand-600">
+        <p className="text-xl font-extrabold leading-tight text-brand-600">
           {metric === "tours"     && entry.tourCount}
           {metric === "distance"  && entry.totalDistance}
           {metric === "elevation" && entry.totalElevation.toLocaleString()}
         </p>
-        <p className="text-xs text-slate-400">
+        <p className="text-sm font-semibold leading-tight text-slate-500">
           {metric === "tours" ? "Touren" : metric === "distance" ? "km" : "Hm"}
         </p>
       </div>
@@ -338,8 +338,8 @@ function CommunityStats({ rows }) {
       ].map(({ icon: Icon, value, label, color }) => (
         <div key={label} className={`rounded-xl border p-3 text-center sm:text-left ${color}`}>
           <Icon className="mx-auto mb-1 h-4 w-4 opacity-70 sm:mx-0" />
-          <p className="text-base font-bold leading-tight">{value}</p>
-          <p className="text-[11px] opacity-70">{label}</p>
+          <p className="text-lg font-bold leading-tight">{value}</p>
+          <p className="text-xs font-semibold opacity-75">{label}</p>
         </div>
       ))}
     </div>
@@ -489,13 +489,13 @@ export default function TopDogs() {
 
             <Tabs defaultValue="tours">
               <TabsList className="grid w-full grid-cols-3 border border-white/70 bg-white/65 backdrop-blur-xl mb-4">
-                <TabsTrigger value="tours" className="text-xs md:text-sm">
+                <TabsTrigger value="tours" className="text-[13px] font-bold md:text-sm">
                   🎯 <span className="hidden sm:inline ml-1">Meiste</span> Touren
                 </TabsTrigger>
-                <TabsTrigger value="distance" className="text-xs md:text-sm">
+                <TabsTrigger value="distance" className="text-[13px] font-bold md:text-sm">
                   {TOUR_ICONS.distance} <span className="hidden sm:inline ml-1">Meiste</span> km
                 </TabsTrigger>
-                <TabsTrigger value="elevation" className="text-xs md:text-sm">
+                <TabsTrigger value="elevation" className="text-[13px] font-bold md:text-sm">
                   {TOUR_ICONS.elevation} <span className="hidden sm:inline ml-1">Meiste</span> Hm
                 </TabsTrigger>
               </TabsList>
