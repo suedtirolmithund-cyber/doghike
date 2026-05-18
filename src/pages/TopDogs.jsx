@@ -330,16 +330,16 @@ function CommunityStats({ rows }) {
   const totalHm    = rows.reduce((s, r) => s + r.totalElevation, 0);
 
   return (
-    <div className="mb-6 grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
+    <div className="mb-6 grid grid-cols-3 gap-2 sm:gap-3">
       {[
-        { icon: Dog,       value: rows.length, label: "Hunde", color: "bg-brand-50 text-brand-600 border-brand-100" },
-        { icon: Ruler,     value: `${totalKm.toFixed(0)} km`, label: "gesamt", color: "bg-brand-50 text-brand-700 border-brand-200" },
-        { icon: TrendingUp,value: `${(totalHm/1000).toFixed(1)}k`, label: "Höhenmeter", color: "bg-brand-50 text-brand-600 border-brand-200" },
+        { icon: Dog,       value: rows.length, label: "Hunde", color: "border-brand-100 bg-white/78 text-[#A8003C]" },
+        { icon: Ruler,     value: totalKm.toFixed(0), label: "km", color: "border-[#F9C030]/80 bg-[#FDF0E8]/82 text-[#7C3020]" },
+        { icon: TrendingUp,value: `${(totalHm/1000).toFixed(1)}k`, label: "Höhenmeter", color: "border-[#F07030]/45 bg-white/78 text-[#7C3020]" },
       ].map(({ icon: Icon, value, label, color }) => (
-        <div key={label} className={`rounded-xl border p-3 text-center sm:text-left ${color}`}>
-          <Icon className="mx-auto mb-1 h-4 w-4 opacity-70 sm:mx-0" />
-          <p className="text-lg font-bold leading-tight">{value}</p>
-          <p className="text-xs font-semibold opacity-75">{label}</p>
+        <div key={label} className={`min-w-0 rounded-2xl border px-2 py-3 text-center shadow-[0_10px_24px_rgba(168,0,60,0.07)] ${color}`}>
+          <Icon className="mx-auto mb-1 h-4 w-4 opacity-80" />
+          <p className="break-words text-lg font-extrabold leading-tight sm:text-xl">{value}</p>
+          <p className="break-words text-[11px] font-bold leading-tight opacity-80 sm:text-xs">{label}</p>
         </div>
       ))}
     </div>
