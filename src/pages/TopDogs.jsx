@@ -489,13 +489,13 @@ export default function TopDogs() {
 
             <Tabs defaultValue="tours">
               <TabsList className="grid w-full grid-cols-3 border border-white/70 bg-white/65 backdrop-blur-xl mb-4">
-                <TabsTrigger value="tours" className="text-[13px] font-bold md:text-sm">
+                <TabsTrigger value="tours" className="text-[13px] font-bold md:text-lg">
                   🎯 <span className="hidden sm:inline ml-1">Meiste</span> Touren
                 </TabsTrigger>
-                <TabsTrigger value="distance" className="text-[13px] font-bold md:text-sm">
+                <TabsTrigger value="distance" className="text-[13px] font-bold md:text-lg">
                   {TOUR_ICONS.distance} <span className="hidden sm:inline ml-1">Meiste</span> km
                 </TabsTrigger>
-                <TabsTrigger value="elevation" className="text-[13px] font-bold md:text-sm">
+                <TabsTrigger value="elevation" className="text-[13px] font-bold md:text-lg">
                   {TOUR_ICONS.elevation} <span className="hidden sm:inline ml-1">Meiste</span> Hm
                 </TabsTrigger>
               </TabsList>

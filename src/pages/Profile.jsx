@@ -462,8 +462,8 @@ export default function Profile() {
         <Tabs defaultValue="dogs" className="space-y-4 md:space-y-6">
           <div className="-mx-4 overflow-x-auto px-4 pb-1 sm:mx-0 sm:overflow-visible sm:px-0">
             <TabsList className="inline-flex h-11 min-w-max gap-1 rounded-2xl border border-white/70 bg-white/65 p-1 backdrop-blur-xl sm:grid sm:h-auto sm:w-full sm:min-w-0 sm:grid-cols-4 md:gap-1.5">
-              <TabsTrigger value="dogs" className="h-9 min-w-[84px] px-3 text-sm sm:h-11 sm:min-w-0 md:px-4 md:text-base">Hunde</TabsTrigger>
-              <TabsTrigger value="routes" className="flex h-9 min-w-[96px] items-center gap-1.5 px-3 text-sm sm:h-11 sm:min-w-0 md:px-4 md:text-base">
+              <TabsTrigger value="dogs" className="h-9 min-w-[84px] px-3 text-sm sm:h-11 sm:min-w-0 md:px-6 md:text-lg">Hunde</TabsTrigger>
+              <TabsTrigger value="routes" className="flex h-9 min-w-[96px] items-center gap-1.5 px-3 text-sm sm:h-11 sm:min-w-0 md:px-6 md:text-lg">
                 <Navigation className="h-4 w-4" />
                 Routen
                 {userRoutes.length > 0 && (
@@ -472,7 +472,7 @@ export default function Profile() {
                   </span>
                 )}
               </TabsTrigger>
-              <TabsTrigger value="saved" className="flex h-9 min-w-[126px] items-center gap-1.5 px-3 text-sm sm:h-11 sm:min-w-0 md:px-4 md:text-base">
+              <TabsTrigger value="saved" className="flex h-9 min-w-[126px] items-center gap-1.5 px-3 text-sm sm:h-11 sm:min-w-0 md:px-6 md:text-lg">
                 <Heart className="h-4 w-4" />
                 Gespeichert
                 {savedHikes.length > 0 && (
@@ -481,7 +481,7 @@ export default function Profile() {
                   </span>
                 )}
               </TabsTrigger>
-              <TabsTrigger value="settings" className="h-9 min-w-[78px] px-3 text-sm sm:h-11 sm:min-w-0 md:px-4 md:text-base">Konto</TabsTrigger>
+              <TabsTrigger value="settings" className="h-9 min-w-[78px] px-3 text-sm sm:h-11 sm:min-w-0 md:px-6 md:text-lg">Konto</TabsTrigger>
             </TabsList>
           </div>
 
