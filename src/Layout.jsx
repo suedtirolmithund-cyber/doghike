@@ -91,7 +91,7 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </footer>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-brand-100 bg-[#fff7ed]/96 shadow-[0_-12px_32px_rgba(124,48,32,0.18)] backdrop-blur-sm md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#F9C030]/70 bg-[#fff7ed] shadow-[0_-14px_34px_rgba(124,48,32,0.22)] md:hidden">
         <AnimatePresence>
           {moreOpen && (
             <>
@@ -162,11 +162,11 @@ export default function Layout({ children, currentPageName }) {
                 key={name}
                 to={createPageUrl(name)}
                 className={`flex min-w-0 flex-col items-center gap-1 rounded-xl px-2 py-2 transition-all ${
-                  active ? "bg-[#A8003C]/13 text-[#7C3020] shadow-sm" : "text-brand-700 hover:bg-[#A8003C]/8 hover:text-[#7C3020]"
+                  active ? "bg-[#F9C030]/35 text-[#A8003C] shadow-sm" : "text-[#7C3020] hover:bg-[#F9C030]/20 hover:text-[#A8003C]"
                 }`}
               >
                 <Icon className={`h-5 w-5 shrink-0 text-current ${active ? "stroke-[2.5]" : "stroke-[2]"}`} />
-                <span className={`text-[10px] font-medium leading-none ${active ? "" : "opacity-80"}`}>
+                <span className="text-[10px] font-bold leading-none">
                   {label}
                 </span>
               </Link>
@@ -176,11 +176,11 @@ export default function Layout({ children, currentPageName }) {
           <button
             onClick={() => setMoreOpen((value) => !value)}
             className={`flex min-w-0 flex-col items-center gap-1 rounded-xl px-2 py-2 transition-all ${
-              moreOpen ? "bg-[#A8003C]/13 text-[#7C3020] shadow-sm" : "text-brand-700 hover:bg-[#A8003C]/8 hover:text-[#7C3020]"
+              moreOpen ? "bg-[#F9C030]/35 text-[#A8003C] shadow-sm" : "text-[#7C3020] hover:bg-[#F9C030]/20 hover:text-[#A8003C]"
             }`}
           >
             <Grid className={`w-5 h-5 ${moreOpen ? "stroke-[2.5]" : "stroke-[2]"}`} />
-            <span className="text-[10px] font-medium leading-none opacity-80">Mehr</span>
+            <span className="text-[10px] font-bold leading-none">Mehr</span>
           </button>
         </div>
       </nav>
