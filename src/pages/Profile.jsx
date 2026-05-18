@@ -356,11 +356,11 @@ export default function Profile() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="doghike-glass-card p-6 mb-6 md:mb-8"
+          className="doghike-glass-card mb-6 p-4 md:mb-8 md:p-6"
         >
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
-            <div className="relative mx-auto shrink-0 sm:mx-0">
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-white shadow-md bg-brand-100/80">
+          <div className="flex items-start gap-4 md:gap-5">
+            <div className="relative shrink-0">
+              <div className="h-24 w-24 overflow-hidden rounded-full border-4 border-white bg-brand-100/80 shadow-md md:h-24 md:w-24">
                 {avatarUploading ? (
                   <div className="w-full h-full flex items-center justify-center bg-brand-100/80">
                     <Loader2 className="w-6 h-6 text-slate-400 animate-spin" />
@@ -375,7 +375,7 @@ export default function Profile() {
               </label>
             </div>
 
-            <div className="min-w-0 flex-1 text-center sm:text-left">
+            <div className="min-w-0 flex-1 text-left">
               {editingProfile ? (
                 <div className="space-y-2">
                   <div>
@@ -413,12 +413,12 @@ export default function Profile() {
                 </div>
               ) : (
                 <div>
-                  <h1 className="text-2xl md:text-3xl font-bold text-slate-900 truncate">{displayName}</h1>
+                  <h1 className="truncate text-2xl font-bold leading-tight text-slate-900 md:text-3xl">{displayName}</h1>
                   {profile?.username && (
-                    <p className="text-sm text-slate-400">@{profile.username}</p>
+                    <p className="truncate text-sm font-semibold text-[#C07820] md:text-base">@{profile.username}</p>
                   )}
-                  <p className="text-xs text-slate-400 mt-0.5 truncate">{user?.email}</p>
-                  <div className="mt-2 flex flex-wrap justify-center gap-2 sm:justify-start">
+                  <p className="mt-0.5 break-all text-xs leading-tight text-slate-500 md:text-sm">{user?.email}</p>
+                  <div className="mt-3 hidden flex-wrap gap-2 md:flex">
                     <Button size="sm" variant="outline" className="h-7 text-xs" onClick={startEditProfile}>
                       <Edit className="w-3 h-3 mr-1" /> Profil bearbeiten
                     </Button>
@@ -445,7 +445,7 @@ export default function Profile() {
               )}
             </div>
 
-            <div className="flex justify-center sm:justify-end">
+            <div className="hidden justify-center md:flex md:justify-end">
               <Button
                 variant="outline"
                 size="sm"
@@ -457,6 +457,43 @@ export default function Profile() {
               </Button>
             </div>
           </div>
+
+          {!editingProfile && (
+            <div className="mt-4 grid grid-cols-3 gap-2 md:hidden">
+              <Button size="sm" variant="outline" className="h-11 rounded-xl px-2 text-xs font-bold" onClick={startEditProfile}>
+                <Edit className="h-4 w-4" />
+                Profil
+              </Button>
+              <Link to={createPageUrl("Notifications")} className="min-w-0">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className={`relative h-11 w-full rounded-xl px-2 text-xs font-bold ${
+                    notificationCount > 0
+                      ? "border-brand-300 bg-brand-50 text-brand-700 hover:bg-brand-100"
+                      : ""
+                  }`}
+                >
+                  <Bell className="h-4 w-4" />
+                  Meldungen
+                  {notificationCount > 0 && (
+                    <span className="ml-0.5 inline-flex min-w-5 items-center justify-center rounded-full bg-brand-500 px-1.5 py-0.5 text-[10px] font-semibold leading-none text-white">
+                      {notificationCount > 99 ? "99+" : notificationCount}
+                    </span>
+                  )}
+                </Button>
+              </Link>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={logout}
+                className="h-11 rounded-xl border-brand-100 bg-white/70 px-2 text-xs font-bold text-brand-600 shadow-sm hover:border-brand-100 hover:bg-brand-50 hover:text-brand-400"
+              >
+                <LogOut className="h-4 w-4" />
+                Abmelden
+              </Button>
+            </div>
+          )}
         </motion.div>
 
         <Tabs defaultValue="dogs" className="space-y-4 md:space-y-6">
@@ -493,7 +530,7 @@ export default function Profile() {
                   setEditingDog(null);
                   setDialogOpen(true);
                 }}
-                className="bg-brand-400 hover:bg-brand-600 text-sm"
+                className="bg-brand-400 text-sm font-bold hover:bg-brand-600 md:h-11 md:px-5 md:text-base"
                 size="sm"
               >
                 <Plus className="w-4 h-4 md:mr-2" />
