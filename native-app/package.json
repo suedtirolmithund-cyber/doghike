@@ -8,8 +8,8 @@
     "android:dev": "expo start --dev-client",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "build:android:preview": "eas build --platform android --profile preview",
-    "build:android:dev": "eas build --platform android --profile development"
+    "build:android:preview": "npx eas-cli@latest build --platform android --profile preview",
+    "build:android:dev": "npx eas-cli@latest build --platform android --profile development"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.2.0",
