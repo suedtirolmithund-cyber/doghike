@@ -110,6 +110,28 @@
   select {
     font: inherit;
   }
+
+  button,
+  [role="button"] {
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+  button[class*="px-"],
+  [role="button"][class*="px-"],
+  a[class*="rounded"][class*="px-"] {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  button > span,
+  [role="button"] > span {
+    max-width: 100%;
+    min-width: 0;
+  }
 }
 
 @layer components {
@@ -181,11 +203,19 @@
   }
 
   .doghike-stat-chip {
-    @apply inline-flex min-h-11 max-w-full min-w-0 flex-wrap items-center gap-2 rounded-full border border-brand-100/55 bg-brand-50/65 px-3 py-2 text-sm font-normal leading-tight text-[#C07820] shadow-sm backdrop-blur-sm sm:gap-2.5 sm:px-3.5 sm:py-2.5;
+    @apply inline-flex min-h-11 max-w-full min-w-0 flex-wrap items-center gap-2 rounded-full border border-brand-100/55 bg-brand-50/65 px-3 py-2 text-center text-sm font-normal leading-tight text-[#C07820] shadow-sm backdrop-blur-sm whitespace-normal break-words sm:gap-2.5 sm:px-3.5 sm:py-2.5;
+    overflow-wrap: anywhere;
   }
 
   .doghike-stat-chip > div {
-    @apply min-w-0;
+    @apply min-w-0 flex-1;
+    max-width: 100%;
+  }
+
+  .doghike-stat-chip > div > * {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
 
   .doghike-stat-chip > span:first-child {
@@ -198,6 +228,21 @@
 
   .doghike-icon-chip {
     @apply inline-flex min-h-9 max-w-full min-w-0 flex-wrap items-center justify-center gap-1.5 rounded-full border border-brand-100/70 bg-brand-50/70 px-3 py-1.5 text-center text-xs font-semibold leading-tight text-brand-400 whitespace-normal break-words;
+    overflow-wrap: anywhere;
+  }
+
+  [class*="rounded-full"][class*="px-"] {
+    max-width: 100%;
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  [class*="rounded-full"][class*="px-"] > * {
+    max-width: 100%;
+    min-width: 0;
   }
 
   .doghike-empty-state {

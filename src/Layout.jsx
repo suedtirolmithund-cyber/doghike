@@ -208,7 +208,7 @@ export default function Layout({ children, currentPageName }) {
                   <Link
                     key={name}
                     to={createPageUrl(name)}
-                    className={`flex min-w-[118px] items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-center transition-all whitespace-nowrap ${
+                    className={`flex min-w-[118px] items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-center leading-tight transition-all ${
                       active ? "bg-[#A8003C]/13 text-[#7C3020] shadow-sm" : "text-brand-700 hover:bg-[#A8003C]/8 hover:text-[#7C3020]"
                     }`}
                   >
@@ -220,7 +220,7 @@ export default function Layout({ children, currentPageName }) {
               {isAdmin && (
                 <Link
                   to={createPageUrl("AdminDashboard")}
-                  className={`flex min-w-[118px] items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-center transition-all whitespace-nowrap ${
+                  className={`flex min-w-[118px] items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-center leading-tight transition-all ${
                     isActive("AdminDashboard") ? "bg-[#A8003C]/13 text-[#7C3020] shadow-sm" : "text-brand-700 hover:bg-[#A8003C]/8 hover:text-[#7C3020]"
                   }`}
                 >
