@@ -75,7 +75,7 @@ function VisibilityStatusBadge({ visibility, status }) {
   if (visibility === "public") {
     if (status === "approved") {
       return (
-        <span className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-brand-200 bg-brand-100 px-3 py-1 text-sm font-semibold text-brand-600 md:text-xs">
+        <span className="inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1.5 rounded-full border border-brand-200 bg-brand-100 px-3 py-1 text-center text-sm font-semibold leading-tight text-brand-600 whitespace-normal break-words md:text-xs">
           <Globe className="w-3 h-3" />
           Öffentlich sichtbar
         </span>
@@ -84,7 +84,7 @@ function VisibilityStatusBadge({ visibility, status }) {
 
     if (status === "rejected") {
       return (
-        <span className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-brand-100 bg-brand-100 px-3 py-1 text-sm font-semibold text-brand-500 md:text-xs">
+        <span className="inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1.5 rounded-full border border-brand-100 bg-brand-100 px-3 py-1 text-center text-sm font-semibold leading-tight text-brand-500 whitespace-normal break-words md:text-xs">
           <Globe className="w-3 h-3" />
           Abgelehnt
         </span>
@@ -92,7 +92,7 @@ function VisibilityStatusBadge({ visibility, status }) {
     }
 
     return (
-      <span className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-brand-100 bg-brand-100 px-3 py-1 text-sm font-semibold text-brand-600 md:text-xs">
+      <span className="inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1.5 rounded-full border border-brand-100 bg-brand-100 px-3 py-1 text-center text-sm font-semibold leading-tight text-brand-600 whitespace-normal break-words md:text-xs">
         <Globe className="w-3 h-3" />
         Wartet auf Prüfung
       </span>
@@ -101,7 +101,7 @@ function VisibilityStatusBadge({ visibility, status }) {
 
   if (visibility === "friends") {
     return (
-      <span className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-sm font-semibold text-brand-700 md:text-xs">
+      <span className="inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1.5 rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-center text-sm font-semibold leading-tight text-brand-700 whitespace-normal break-words md:text-xs">
         <Users className="w-3 h-3" />
         Mit Freunden geteilt
       </span>
@@ -109,7 +109,7 @@ function VisibilityStatusBadge({ visibility, status }) {
   }
 
   return (
-    <span className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-brand-100 bg-brand-100/80 px-3 py-1 text-sm font-semibold text-slate-500 md:text-xs">
+    <span className="inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1.5 rounded-full border border-brand-100 bg-brand-100/80 px-3 py-1 text-center text-sm font-semibold leading-tight text-slate-500 whitespace-normal break-words md:text-xs">
       <User className="w-3 h-3" />
       Privat
     </span>
@@ -133,10 +133,10 @@ function StatsChip({ icon, value, unit, color = "text-[#C07820]" }) {
   if (!value) return null;
 
   return (
-    <div className={`flex min-h-8 w-full min-w-0 max-w-full items-center justify-center gap-1 overflow-hidden rounded-full bg-brand-50/70 px-1.5 py-1 text-center text-xs leading-tight sm:w-auto sm:px-2 sm:text-sm ${color}`}>
+    <div className={`flex min-h-8 w-full min-w-0 max-w-full flex-wrap items-center justify-center gap-1 rounded-full bg-brand-50/70 px-1.5 py-1 text-center text-xs leading-tight whitespace-normal break-words sm:w-auto sm:px-2 sm:text-sm ${color}`}>
       <span className="text-sm leading-none shrink-0">{icon}</span>
-      <span className="min-w-0 truncate font-medium">{value}</span>
-      {unit && <span className="shrink-0 text-[#C07820]/75">{unit}</span>}
+      <span className="min-w-0 max-w-full break-words font-medium">{value}</span>
+      {unit && <span className="min-w-0 max-w-full break-words text-[#C07820]/75">{unit}</span>}
     </div>
   );
 }
