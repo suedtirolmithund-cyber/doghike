@@ -51,7 +51,7 @@ import {
   deleteStoredFile,
 } from "@/lib/profilesApi";
 import { getSavedHikes } from "@/lib/communityApi";
-import { loadNotifications } from "@/lib/notificationsApi";
+import { loadUnreadNotificationCount } from "@/lib/notificationsApi";
 import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
 import { getAllHikes } from "@/api/sheetsClient";
 import { getUserRoutes } from "@/lib/routesApi";
@@ -130,16 +130,14 @@ export default function Profile() {
     refetchOnWindowFocus: false,
   });
 
-  const { data: notifications = [] } = useQuery({
-    queryKey: ["notifications", user?.id],
-    queryFn: () => loadNotifications(user.id),
+  const { data: notificationCount = 0 } = useQuery({
+    queryKey: ["notificationsUnread", user?.id],
+    queryFn: () => loadUnreadNotificationCount(user.id),
     enabled: !!user?.id,
     staleTime: 2 * 60_000,
     refetchOnWindowFocus: false,
     refetchInterval: 10 * 60_000,
   });
-
-  const notificationCount = notifications.length;
 
   const dogBadgeMeta = useMemo(() => {
     const tourRanking = [...topDogs].sort((a, b) => b.tourCount - a.tourCount);
