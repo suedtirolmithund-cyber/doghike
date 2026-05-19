@@ -141,11 +141,11 @@ export default function Notifications() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center px-4">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-50 via-white to-brand-50/20 px-4">
         <div className="doghike-glass-card p-8 text-center">
-          <Bell className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-          <p className="text-slate-600 font-medium mb-4">Bitte anmelden</p>
-          <Link to={createPageUrl("Login")} className="text-brand-400 underline text-sm">
+          <Bell className="mx-auto mb-3 h-12 w-12 text-slate-300" />
+          <p className="mb-4 font-medium text-slate-600">Bitte anmelden</p>
+          <Link to={createPageUrl("Login")} className="text-sm text-brand-400 underline">
             Zur Anmeldung
           </Link>
         </div>
@@ -155,15 +155,17 @@ export default function Notifications() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10">
-        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="doghike-page-header">
+      <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 md:py-10">
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="doghike-page-header"
+        >
           <div className="doghike-page-icon">
             <Bell className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="doghike-page-title">
-              Benachrichtigungen
-            </h1>
+            <h1 className="doghike-page-title">Benachrichtigungen</h1>
             {notifications.length > 0 && (
               <p className="doghike-page-subtitle">
                 {notifications.length} Benachrichtigung{notifications.length !== 1 ? "en" : ""}
@@ -178,16 +180,18 @@ export default function Notifications() {
             animate={{ opacity: 1, y: 0 }}
             className="doghike-glass-card mb-5 flex items-center gap-3 p-4"
           >
-            <Bell className="w-5 h-5 text-brand-400 shrink-0" />
+            <Bell className="h-5 w-5 shrink-0 text-brand-400" />
             <div className="flex-1">
               <p className="text-sm font-medium text-brand-700">Web-Push aktivieren</p>
-              <p className="text-xs text-brand-400">Erhalte Hinweise auch dann, wenn DogTrails gerade nicht geöffnet ist.</p>
+              <p className="text-xs text-brand-400">
+                Erhalte Hinweise auch dann, wenn DogTrails gerade nicht geöffnet ist.
+              </p>
             </div>
             <Button
               size="sm"
               onClick={handleActivate}
               disabled={subscriptionLoading}
-              className="bg-brand-400 hover:bg-brand-600 text-white shrink-0"
+              className="shrink-0 bg-brand-400 text-white hover:bg-brand-600"
             >
               {subscriptionLoading ? "Aktiviert..." : "Aktivieren"}
             </Button>
@@ -196,12 +200,20 @@ export default function Notifications() {
 
         {webPushSupported() && hasWebPushConfig() && permission === "granted" && subscriptionEnabled && (
           <div className="doghike-glass-card mb-5 flex items-center gap-3 p-4">
-            <CheckCircle2 className="w-5 h-5 text-brand-500 shrink-0" />
+            <CheckCircle2 className="h-5 w-5 shrink-0 text-brand-500" />
             <div className="flex-1">
               <p className="text-sm font-medium text-slate-700">Web-Push ist aktiv</p>
-              <p className="text-xs text-slate-500">Freundschaftsanfragen und Bestätigungen können jetzt auch bei geschlossener App ankommen.</p>
+              <p className="text-xs text-slate-500">
+                Freundschaftsanfragen und Bestätigungen können jetzt auch bei geschlossener App ankommen.
+              </p>
             </div>
-            <Button size="sm" variant="outline" disabled={subscriptionLoading} onClick={handleDeactivate} className="shrink-0">
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={subscriptionLoading}
+              onClick={handleDeactivate}
+              className="shrink-0"
+            >
               Deaktivieren
             </Button>
           </div>
@@ -209,7 +221,7 @@ export default function Notifications() {
 
         {webPushSupported() && hasWebPushConfig() && permission === "denied" && (
           <div className="doghike-glass-card mb-5 flex items-center gap-3 p-4">
-            <BellOff className="w-5 h-5 text-slate-400 shrink-0" />
+            <BellOff className="h-5 w-5 shrink-0 text-slate-400" />
             <p className="text-xs text-slate-500">
               Benachrichtigungen sind blockiert. Erlaube sie in den Browser-Einstellungen, wenn du Hinweise zu Anfragen und Freigaben erhalten möchtest.
             </p>
@@ -218,7 +230,7 @@ export default function Notifications() {
 
         {isLoading ? (
           <div className="flex justify-center py-20">
-            <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
+            <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
           </div>
         ) : isError ? (
           <div className="doghike-glass-card p-5 text-center">
@@ -231,8 +243,8 @@ export default function Notifications() {
         ) : notifications.length === 0 ? (
           <div className="doghike-empty-state">
             <Bell className="doghike-empty-icon" />
-            <h3 className="text-lg font-medium text-slate-700 mb-1">Alles auf dem neuesten Stand</h3>
-            <p className="text-slate-400 text-sm">Sobald etwas Neues passiert, erscheint es hier.</p>
+            <h3 className="mb-1 text-lg font-medium text-slate-700">Alles auf dem neuesten Stand</h3>
+            <p className="text-sm text-slate-400">Sobald etwas Neues passiert, erscheint es hier.</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -248,12 +260,12 @@ export default function Notifications() {
                     transition={{ delay: index * 0.04 }}
                     className="doghike-glass-card-hover flex items-start gap-4 p-4"
                   >
-                    <div className={`rounded-xl p-2 shrink-0 ${presentation.color}`}>
-                      <Icon className="w-5 h-5" />
+                    <div className={`shrink-0 rounded-xl p-2 ${presentation.color}`}>
+                      <Icon className="h-5 w-5" />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-slate-900 leading-snug">{notification.title}</p>
-                      <p className="text-xs text-slate-400 mt-1">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium leading-snug text-slate-900">{notification.title}</p>
+                      <p className="mt-1 text-xs text-slate-400">
                         {format(new Date(notification.time), "d. MMM, HH:mm", { locale: de })}
                       </p>
                     </div>
