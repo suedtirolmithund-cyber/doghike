@@ -7,7 +7,7 @@ import {
   ArrowLeft, Upload, X, Loader2, Star, FileText,
   Mountain, TrendingUp, MapPin, AlertTriangle, Dog, Search, Layers, CircleHelp, ChevronLeft, ChevronRight
 } from "lucide-react";
-import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
+import { TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Button } from "@/components/ui/button";
@@ -32,6 +32,7 @@ import { getDogs } from "@/lib/profilesApi";
 import { getImageUploadErrorMessage, validateImageUpload } from "@/lib/uploadValidation";
 import { Link } from "react-router-dom";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
+import SafeMapContainer from "@/components/map/SafeMapContainer";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import {
   DIFFICULTY_APP_EXPLANATIONS,
@@ -415,6 +416,7 @@ function LocationPicker({ lat, lng, onChange }) {
   const [searchResults, setSearchResults] = useState([]);
   const topoTileFallbackRef = useRef(false);
   const tile = LOCATION_PICKER_TILES[mapType];
+  const mapResetKey = `journal-location-${mapType}`;
 
   useEffect(() => {
     if (lat && lng) {
@@ -554,7 +556,8 @@ function LocationPicker({ lat, lng, onChange }) {
             {mapType === "standard" ? "Topo" : "Standard"}
           </Button>
         </div>
-        <MapContainer
+        <SafeMapContainer
+          resetKey={mapResetKey}
           center={[46.5, 11.3]}
           zoom={9}
           maxZoom={tile.maxZoom}
@@ -571,7 +574,7 @@ function LocationPicker({ lat, lng, onChange }) {
           <MapClickHandler onMapClick={handleMapClick} />
           {flyTarget && <MapFlyTo center={flyTarget.center} zoom={flyTarget.zoom} />}
           {markerPos && <Marker position={markerPos} icon={markerIcon} />}
-        </MapContainer>
+        </SafeMapContainer>
       </div>
 
       <p className="text-xs text-slate-400">

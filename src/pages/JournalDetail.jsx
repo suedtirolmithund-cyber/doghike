@@ -8,7 +8,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { motion } from "framer-motion";
-import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
+import { TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 import {
@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import WaterIcon from "@/components/icons/WaterIcon";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
+import SafeMapContainer from "@/components/map/SafeMapContainer";
 import {
   getDifficultyLabel,
   getDifficultyTextColor,
@@ -402,7 +403,8 @@ export default function JournalDetail() {
             <div className="doghike-glass-card p-4">
               <h2 className="text-sm font-semibold text-slate-600 uppercase tracking-wide mb-3">Standort</h2>
               <div className="h-48 rounded-xl overflow-hidden">
-                <MapContainer
+                <SafeMapContainer
+                  resetKey={`journal-detail-${entry.id}-${entry.latitude}-${entry.longitude}`}
                   center={[entry.latitude, entry.longitude]}
                   zoom={13}
                   style={{ height: "100%", width: "100%" }}
@@ -412,7 +414,7 @@ export default function JournalDetail() {
                   <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png" />
                   <Marker position={[entry.latitude, entry.longitude]} />
                   <Circle center={[entry.latitude, entry.longitude]} radius={300} color="#16a34a" fillOpacity={0.1} />
-                </MapContainer>
+                </SafeMapContainer>
               </div>
             </div>
           )}
