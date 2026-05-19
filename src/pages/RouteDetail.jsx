@@ -5,8 +5,9 @@ import { getRoute, updateRoute, deleteRoute } from "@/lib/routesApi";
 import { deleteJournalFiles, uploadJournalFile } from "@/lib/journalApi";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { MapContainer, TileLayer, Polyline, Marker } from "react-leaflet";
+import { TileLayer, Polyline, Marker } from "react-leaflet";
 import EditableRouteDrawer from "@/components/routes/EditableRouteDrawer";
+import SafeMapContainer from "@/components/map/SafeMapContainer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -228,6 +229,7 @@ export default function RouteDetail() {
   const visibilityLabel =
     route.route_type === "gpx" ? "Private Import-Route" : "Private Planung";
   const effectiveDurationMinutes = route.completed_duration_minutes ?? route.duration_minutes ?? null;
+  const routeMapResetKey = `route-detail-${route.id}-${editingRoute ? "edit" : "view"}-${route.waypoints?.length ?? 0}`;
 
   const buildJournalPrefill = () => ({
     title: route.name || "",
@@ -404,7 +406,8 @@ export default function RouteDetail() {
             ) : (
               <div className="h-96 md:h-[500px] rounded-xl overflow-hidden border border-brand-100">
                 {route.waypoints?.length > 0 ? (
-                  <MapContainer
+                  <SafeMapContainer
+                    resetKey={routeMapResetKey}
                     center={route.waypoints[0]}
                     zoom={13}
                     style={{ height: "100%", width: "100%" }}
@@ -419,7 +422,7 @@ export default function RouteDetail() {
                     {route.waypoints.length > 1 && (
                       <Marker position={route.waypoints[route.waypoints.length - 1]} />
                     )}
-                  </MapContainer>
+                  </SafeMapContainer>
                 ) : (
                   <div className="flex h-full items-center justify-center bg-brand-50/35 text-sm text-slate-500">
                     Keine Wegpunkte vorhanden

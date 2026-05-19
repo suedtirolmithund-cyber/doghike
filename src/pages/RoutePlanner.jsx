@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { createRoute } from "@/lib/routesApi";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { MapContainer, TileLayer, Polyline, Marker, useMapEvents, useMap, Popup } from "react-leaflet";
+import { TileLayer, Polyline, Marker, useMapEvents, useMap, Popup } from "react-leaflet";
 import L from "leaflet";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 import "leaflet/dist/leaflet.css";
@@ -19,6 +19,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianG
 import { motion, AnimatePresence } from "framer-motion";
 import GPSTracker from "@/components/routes/GPSTracker";
 import GPXUploader from "@/components/routes/GPXUploader";
+import SafeMapContainer from "@/components/map/SafeMapContainer";
 import { deleteJournalFiles, uploadJournalFile } from "@/lib/journalApi";
 import { toast } from "sonner";
 
@@ -258,6 +259,7 @@ function SmartRoutePlanner({ onRouteReady }) {
   const [routingMode, setRoutingMode] = useState("hike");
   const routeRef = useRef(null);
   const topoTileFallbackRef = useRef(false);
+  const mapResetKey = `planner-${mapType}-${routingMode}`;
 
   const tile = TILES[mapType];
 
@@ -460,7 +462,8 @@ function SmartRoutePlanner({ onRouteReady }) {
 
       {/* Map */}
       <div className="relative h-[68vw] min-h-[310px] max-h-[500px] overflow-hidden rounded-xl border border-brand-100 shadow-sm md:h-[440px] md:max-h-none">
-        <MapContainer
+        <SafeMapContainer
+          resetKey={mapResetKey}
           center={[46.5, 11.3]}
           zoom={10}
           maxZoom={tile.maxZoom}
@@ -517,7 +520,7 @@ function SmartRoutePlanner({ onRouteReady }) {
               </Popup>
             </Marker>
           ))}
-        </MapContainer>
+        </SafeMapContainer>
 
         {waypoints.length === 0 && (
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 text-xs text-slate-600 shadow pointer-events-none">

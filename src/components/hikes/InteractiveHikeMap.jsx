@@ -1,8 +1,9 @@
-import { MapContainer, TileLayer, Marker, Polyline, Popup, useMap } from "react-leaflet";
+import { TileLayer, Marker, Polyline, Popup, useMap } from "react-leaflet";
 import { useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
+import SafeMapContainer from "@/components/map/SafeMapContainer";
 
 
 configureLeafletDefaultIcon();
@@ -60,11 +61,13 @@ export default function InteractiveHikeMap({
 
   const center = [latitude, longitude];
   const hasRoute = routeCoordinates && routeCoordinates.length > 1;
+  const mapResetKey = `hike-${latitude}-${longitude}-${routeCoordinates?.length ?? 0}`;
 
   return (
     <div className="doghike-glass-card overflow-hidden rounded-2xl p-2 shadow-sm">
       <div className="relative h-[360px] overflow-hidden rounded-xl border border-white/70 shadow-sm md:h-[500px]">
-        <MapContainer
+        <SafeMapContainer
+          resetKey={mapResetKey}
           center={center}
           zoom={13}
           style={{ height: "100%", width: "100%" }}
@@ -95,7 +98,7 @@ export default function InteractiveHikeMap({
               opacity={0.82}
             />
           )}
-        </MapContainer>
+        </SafeMapContainer>
 
         {hasRoute && (
           <div className="absolute right-3 top-3 z-[1000] rounded-xl border border-white/70 bg-white/90 px-3 py-2 shadow-sm backdrop-blur-md">

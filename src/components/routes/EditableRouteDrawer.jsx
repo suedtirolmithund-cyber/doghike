@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { MapContainer, TileLayer, Polyline, Marker, useMapEvents, Popup, useMap } from "react-leaflet";
+import { useEffect, useState } from "react";
+import { TileLayer, Polyline, Marker, useMapEvents, Popup, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Undo, Trash2, Save, Loader2, Edit2, Move, X, Search } from "lucide-react";
@@ -9,6 +9,7 @@ import L from "leaflet";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 import { formatDurationHours } from "@/lib/duration";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
+import SafeMapContainer from "@/components/map/SafeMapContainer";
 
 const GH_API_KEY = import.meta.env.VITE_GRAPHHOPPER_KEY || "";
 
@@ -154,7 +155,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchCenter, setSearchCenter] = useState(null);
-  const mapRef = useRef();
+  const mapResetKey = `editable-route-${isEditing ? "edit" : "view"}-${waypoints.length}`;
 
   // Fetch route using GraphHopper public API with hiking profile
   // Uses OSM data, prefers marked hiking trails (foot-hiking), allows side paths
@@ -425,12 +426,12 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
       </div>
 
       <div className="relative h-[60vw] min-h-64 max-h-72 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-brand-100">
-        <MapContainer
+        <SafeMapContainer
+          resetKey={mapResetKey}
           center={waypoints.length > 0 ? waypoints[0] : [46.5, 11.9]}
           zoom={waypoints.length > 0 ? 12 : 10}
           style={{ height: "100%", width: "100%" }}
           scrollWheelZoom={false}
-          ref={mapRef}
         >
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
@@ -443,7 +444,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
             isEditing={isEditing}
             searchCenter={searchCenter}
           />
-        </MapContainer>
+        </SafeMapContainer>
         
         {isEditing && (
           <div className="absolute top-4 left-4 bg-brand-400 text-white px-3 py-2 rounded-lg shadow-lg text-xs md:text-sm font-medium z-[1000]">
