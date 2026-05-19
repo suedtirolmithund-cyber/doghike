@@ -67,7 +67,7 @@ function FeedCard({ entry }) {
   const authorName = profile?.full_name || profile?.username || "Jemand";
 
   return (
-    <Link to={`${createPageUrl("JournalDetail")}?id=${entry.id}`}>
+    <Link to={`${createPageUrl("JournalDetail")}?id=${entry.id}`} className="block">
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -703,7 +703,7 @@ export default function Friends() {
                 </p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-5">
                 {selectedFriendProfile && (
                   <div className="doghike-glass-card flex flex-col gap-3 rounded-2xl px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex items-center gap-3">
@@ -740,9 +740,11 @@ export default function Friends() {
                     </p>
                   </div>
                 ) : (
-                  filteredFeedEntries.slice(0, feedVisible).map((entry) => (
-                    <FeedCard key={entry.id} entry={entry} />
-                  ))
+                  <div className="space-y-7 md:space-y-8">
+                    {filteredFeedEntries.slice(0, feedVisible).map((entry) => (
+                      <FeedCard key={entry.id} entry={entry} />
+                    ))}
+                  </div>
                 )}
 
                 {feedVisible < filteredFeedEntries.length && (
