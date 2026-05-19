@@ -141,7 +141,7 @@ function Podium({ top3, metric }) {
                 decoding="async"
                 className={`w-full h-full rounded-full object-cover border-4 border-white shadow-md ${style.ring}`}
               />
-              <span className="absolute -top-2 -right-1 text-xl leading-none">{style.medal}</span>
+              <span className="absolute -top-2.5 -right-1.5 text-[22px] leading-none sm:text-2xl">{style.medal}</span>
             </div>
 
             {/* Name */}
