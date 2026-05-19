@@ -86,7 +86,14 @@ export default function Dogs() {
       setDialogOpen(false);
       toast.success(`${dog?.name || "Dein Hund"} ist jetzt dabei.`);
     },
-    onError: () => toast.error("Das hat gerade nicht geklappt. Versuch es gleich noch einmal."),
+    onError: (error) => {
+      console.error("Dog create failed:", error);
+      toast.error(
+        error?.code === "42501"
+          ? "Dein Konto durfte den Hund gerade nicht speichern. Bitte melde dich einmal neu an."
+          : "Der Hund konnte gerade nicht gespeichert werden. Versuch es gleich noch einmal."
+      );
+    },
   });
 
   const updateMutation = useMutation({

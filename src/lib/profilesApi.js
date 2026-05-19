@@ -19,6 +19,25 @@ function getStorageDescriptor(fileUrl, bucket) {
   };
 }
 
+function normalizeNullableText(value) {
+  if (typeof value !== "string") return value ?? null;
+  const trimmed = value.trim();
+  return trimmed || null;
+}
+
+function sanitizeDogPayload(dogData = {}) {
+  return {
+    ...dogData,
+    name: typeof dogData.name === "string" ? dogData.name.trim() : dogData.name,
+    breed: normalizeNullableText(dogData.breed),
+    birth_date: normalizeNullableText(dogData.birth_date),
+    character: normalizeNullableText(dogData.character),
+    notes: normalizeNullableText(dogData.notes),
+    favorite_food: normalizeNullableText(dogData.favorite_food),
+    photo_url: normalizeNullableText(dogData.photo_url),
+  };
+}
+
 // ── File upload ──────────────────────────────────────────────
 export async function uploadFile(bucket, userId, file) {
   validateImageUpload(file);
@@ -137,9 +156,10 @@ export async function getDogProfileCount() {
 }
 
 export async function createDog(userId, dogData) {
+  const payload = sanitizeDogPayload(dogData);
   const { data, error } = await supabase
     .from("dogs")
-    .insert({ user_id: userId, ...dogData })
+    .insert({ user_id: userId, ...payload })
     .select()
     .single();
   if (error) throw error;
@@ -149,10 +169,11 @@ export async function createDog(userId, dogData) {
 export async function updateDog(dogId, dogData) {
   // Strip system fields that must not appear in an UPDATE payload
   const { id, user_id, created_at, updated_at, ...safeData } = dogData;
+  const payload = sanitizeDogPayload(safeData);
 
   const { data, error } = await supabase
     .from("dogs")
-    .update(safeData)
+    .update(payload)
     .eq("id", dogId)
     .select()
     .single();
