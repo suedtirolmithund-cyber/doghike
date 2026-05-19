@@ -551,7 +551,7 @@ export default function HikeDetail() {
             <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4">
               <span className="text-lg">{TOUR_ICONS.grazing}</span>
               <div>
-                <div className="text-sm font-bold leading-tight text-[#7C3020]">Weidetiere</div>
+                <div className="text-sm font-bold leading-tight text-[#7C3020]">Achtung Weidetiere</div>
                 <div className="text-xs text-[#C07820]">Hinweis</div>
               </div>
             </div>
@@ -560,7 +560,7 @@ export default function HikeDetail() {
             <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4">
               <span className="text-lg">{TOUR_ICONS.muzzle}</span>
               <div>
-                <div className="text-sm font-bold leading-tight text-[#7C3020]">Maulkorb</div>
+                <div className="text-sm font-bold leading-tight text-[#7C3020]">Maulkorb empfohlen</div>
                 <div className="text-xs text-[#C07820]">Hinweis</div>
               </div>
             </div>
