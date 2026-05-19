@@ -212,7 +212,14 @@ export default function Profile() {
       setDialogOpen(false);
       showDogFeedback(`${dog?.name || "Dein Hund"} ist jetzt dabei`, "Dein Wanderbuddy wurde gespeichert.");
     },
-    onError: () => toast.error("Das hat gerade nicht geklappt. Dein Hund bleibt bei dir, wir versuchen es gleich noch einmal."),
+    onError: (error) => {
+      console.error("Profile dog create failed:", error);
+      toast.error(
+        error?.code === "42501"
+          ? "Dein Konto durfte den Hund gerade nicht speichern. Bitte melde dich einmal neu an."
+          : "Der Hund konnte gerade nicht gespeichert werden. Versuch es gleich noch einmal."
+      );
+    },
   });
 
   const updateDogMutation = useMutation({
