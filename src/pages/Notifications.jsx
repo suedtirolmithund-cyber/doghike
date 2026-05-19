@@ -92,7 +92,7 @@ export default function Notifications() {
       if (!granted) return;
 
       if (!user?.id) {
-        toast.error("Melde dich an, dann k?nnen Hinweise ankommen.");
+        toast.error("Melde dich an, dann können Hinweise ankommen.");
         return;
       }
 
