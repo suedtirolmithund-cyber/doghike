@@ -217,7 +217,7 @@ export default function Dashboard() {
         {hikesWithCoords.length > 0 && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="mb-12">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-light text-slate-900">Übersichtskarte</h2>
+              <h2 className="doghike-section-title">Übersichtskarte</h2>
               <Link to={createPageUrl("MapView")}>
                 <Button variant="ghost" className="text-slate-600 hover:text-slate-900">
                   <Map className="w-4 h-4 mr-2" /> Große Karte
@@ -232,7 +232,7 @@ export default function Dashboard() {
         <div className="mb-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <div>
-              <h2 className="text-2xl font-light text-slate-900">
+              <h2 className="doghike-section-title">
                 {searchQuery ? "Suchergebnisse" : "Unsere Wandertipps für dich"}
               </h2>
               {!searchQuery && (
@@ -289,7 +289,7 @@ export default function Dashboard() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               className="doghike-empty-state">
               <Mountain className="doghike-empty-icon" />
-              <h3 className="text-xl font-medium text-slate-700 mb-2">
+              <h3 className="doghike-empty-title">
                 {searchQuery ? "Da ist noch nicht der richtige Weg dabei" : "Noch keine Touren"}
               </h3>
               <p className="mx-auto max-w-xs text-sm text-slate-500">

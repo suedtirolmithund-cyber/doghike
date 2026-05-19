@@ -334,7 +334,7 @@ export default function Profile() {
             <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border border-brand-100 bg-white/78 text-brand-400 shadow-[0_14px_35px_rgba(168,0,60,0.09)]">
               <Dog className="h-9 w-9" />
             </div>
-            <h2 className="text-2xl font-light text-slate-900 mb-2">Willkommen!</h2>
+            <h2 className="doghike-page-title mb-2">Willkommen!</h2>
             <p className="text-slate-500 mb-6">
               Melde dich an, um deine Hunde zu verwalten und dein Profil zu pflegen.
             </p>
@@ -413,7 +413,7 @@ export default function Profile() {
                 </div>
               ) : (
                 <div>
-                  <h1 className="truncate text-2xl font-bold leading-tight text-slate-900 md:text-3xl">{displayName}</h1>
+                  <h1 className="truncate text-2xl font-bold leading-tight text-[#7C3020]">{displayName}</h1>
                   {profile?.username && (
                     <p className="truncate text-sm font-semibold text-[#C07820] md:text-base">@{profile.username}</p>
                   )}
@@ -524,7 +524,7 @@ export default function Profile() {
 
           <TabsContent value="dogs">
             <div className="flex items-center justify-between mb-4 md:mb-6">
-              <h2 className="text-lg md:text-xl font-medium text-slate-900">Meine Hunde</h2>
+              <h2 className="doghike-section-title">Meine Hunde</h2>
               <Button
                 onClick={() => {
                   setEditingDog(null);
@@ -602,7 +602,7 @@ export default function Profile() {
 
                       <div className="p-4 md:p-5">
                         <div className="flex items-center justify-between mb-1">
-                          <h2 className="text-xl font-semibold text-slate-900">{dog.name}</h2>
+                          <h2 className="doghike-card-title">{dog.name}</h2>
                           {dog.breed && (
                           <span className="text-xs text-brand-700 bg-brand-50 border border-brand-100 px-2 py-0.5 rounded-full">{dog.breed}</span>
                           )}
@@ -639,7 +639,7 @@ export default function Profile() {
                 <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full border border-white/80 bg-gradient-to-br from-brand-50 via-white to-stone-100 text-5xl shadow-[0_16px_34px_rgba(120,90,66,0.14)]">
                   🐕
                 </div>
-                <h3 className="text-xl font-medium text-slate-700 mb-2">Wer läuft mit dir?</h3>
+                <h3 className="doghike-empty-title">Wer läuft mit dir?</h3>
                 <p className="text-slate-500 mb-6">Lege deinen ersten Hund an, damit du gemeinsame Touren später leichter zuordnen kannst.</p>
                 <Button
                   onClick={() => {
@@ -658,7 +658,7 @@ export default function Profile() {
           <TabsContent value="routes">
             <div className="flex items-center justify-between mb-4 md:mb-6">
               <div>
-                <h2 className="text-lg md:text-xl font-medium text-slate-900 mb-1 flex items-center gap-2">
+                <h2 className="doghike-section-title mb-1 flex items-center gap-2">
                   <Navigation className="w-5 h-5 text-brand-600" />
                   Meine Routen
                 </h2>
@@ -729,7 +729,7 @@ export default function Profile() {
             ) : (
               <div className="doghike-empty-state">
                 <Navigation className="doghike-empty-icon" />
-                <h3 className="text-xl font-medium text-slate-700 mb-2">Noch kein Weg geplant</h3>
+                <h3 className="doghike-empty-title">Noch kein Weg geplant</h3>
                 <p className="text-slate-500 text-sm mb-6">Plane den ersten Weg. Dein Hund kommt später im Tagebuch dazu.</p>
                 <Link to={createPageUrl("RoutePlanner")}>
                   <Button className="doghike-primary-action">
@@ -743,7 +743,7 @@ export default function Profile() {
 
           <TabsContent value="saved">
             <div className="mb-4 md:mb-6">
-              <h2 className="text-lg md:text-xl font-medium text-slate-900 mb-1 flex items-center gap-2">
+              <h2 className="doghike-section-title mb-1 flex items-center gap-2">
                 <Heart className="w-5 h-5 text-brand-400" />
                 Gespeicherte Touren
               </h2>
@@ -763,7 +763,7 @@ export default function Profile() {
             ) : (
               <div className="doghike-empty-state">
                 <Heart className="doghike-empty-icon" />
-                <h3 className="text-xl font-medium text-slate-700 mb-2">Noch keine Lieblingstouren</h3>
+                <h3 className="doghike-empty-title">Noch keine Lieblingstouren</h3>
                 <p className="text-slate-500 text-sm mb-6 max-w-xs mx-auto">
                   Tippe bei einer Tour aufs Herz. Dann wartet sie hier auf dich.
                 </p>
@@ -779,7 +779,7 @@ export default function Profile() {
 
           <TabsContent value="settings">
             <div className="mb-4 md:mb-6">
-              <h2 className="text-lg md:text-xl font-medium text-slate-900 mb-1">Kontoeinstellungen</h2>
+              <h2 className="doghike-section-title mb-1">Kontoeinstellungen</h2>
               <p className="text-slate-500 text-sm">Datenschutz und Konto löschen</p>
             </div>
             <AccountSettings user={user} />

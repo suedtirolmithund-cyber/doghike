@@ -87,7 +87,7 @@ export default function Premium() {
             <div className="doghike-page-icon mx-auto mb-6 h-16 w-16">
               <Crown className="h-8 w-8" />
             </div>
-            <h2 className="mb-3 text-3xl font-semibold text-slate-900">Du bist Premium!</h2>
+            <h2 className="doghike-page-title mb-3">Du bist Premium!</h2>
             <p className="mb-8 text-slate-500">
               Du hast Zugang zu allen exklusiven Premium-Touren auf DogTrails.
             </p>

@@ -844,7 +844,7 @@ export default function AdminDashboard() {
             ) : entries.length === 0 ? (
               <div className="doghike-empty-state">
                 <CheckCircle2 className="doghike-empty-icon text-brand-400" />
-                <h3 className="mb-2 text-xl font-medium text-slate-700">Keine offenen Einträge</h3>
+                <h3 className="doghike-empty-title">Keine offenen Einträge</h3>
                 <p className="text-sm text-slate-500">Alle Einträge wurden geprüft.</p>
               </div>
             ) : (
@@ -913,7 +913,7 @@ export default function AdminDashboard() {
             ) : filteredComments.length === 0 ? (
               <div className="doghike-empty-state">
                 <CheckCircle2 className="doghike-empty-icon text-brand-400" />
-                <h3 className="mb-2 text-xl font-medium text-slate-700">Keine passenden Kommentare</h3>
+                <h3 className="doghike-empty-title">Keine passenden Kommentare</h3>
                 <p className="text-sm text-slate-500">Mit den aktuellen Filtern wurde nichts gefunden.</p>
               </div>
             ) : (
@@ -998,7 +998,7 @@ export default function AdminDashboard() {
             ) : filteredPublicHikes.length === 0 ? (
               <div className="doghike-empty-state">
                 <CheckCircle2 className="doghike-empty-icon text-brand-400" />
-                <h3 className="mb-2 text-xl font-medium text-slate-700">Keine passenden Touren</h3>
+                <h3 className="doghike-empty-title">Keine passenden Touren</h3>
                 <p className="text-sm text-slate-500">Mit den aktuellen Filtern wurde nichts gefunden.</p>
               </div>
             ) : (
@@ -1046,7 +1046,7 @@ export default function AdminDashboard() {
             ) : filteredUsers.length === 0 ? (
               <div className="doghike-empty-state">
                 <CheckCircle2 className="doghike-empty-icon text-brand-400" />
-                <h3 className="mb-2 text-xl font-medium text-slate-700">Keine passenden Nutzer</h3>
+                <h3 className="doghike-empty-title">Keine passenden Nutzer</h3>
                 <p className="text-sm text-slate-500">Mit der aktuellen Suche wurde nichts gefunden.</p>
               </div>
             ) : (
