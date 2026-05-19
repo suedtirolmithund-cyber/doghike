@@ -5,7 +5,7 @@ import { createPageUrl } from "@/utils";
 import ExpandableText from "@/components/ExpandableText";
 import WaterIcon from "@/components/icons/WaterIcon";
 import DifficultyScaleChip from "@/components/difficulty/DifficultyScale";
-import { TOUR_ICONS, getDifficultyBadgeClass, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
+import { TOUR_ICONS, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { formatDurationHours } from "@/lib/duration";
@@ -13,6 +13,11 @@ import { formatDurationHours } from "@/lib/duration";
 const METRIC_FORMATTER = new Intl.NumberFormat("de-DE", {
   maximumFractionDigits: 1,
 });
+
+const HUMAN_DIFFICULTY_CHIP_CLASS = "!border-[#D4547A]/55 !bg-[#FDF0E8] !text-[#A8003C]";
+const DOG_DIFFICULTY_CHIP_CLASS = "!border-[#F9C030]/70 !bg-[#FFF8F0] !text-[#7C3020]";
+const ROUTE_STAT_CHIP_CLASS =
+  "inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-full border border-[#F9C030]/65 bg-[#FFF8F0]/92 px-2.5 py-1.5 text-center text-xs font-bold leading-tight text-[#7C3020] shadow-sm sm:text-sm md:px-3 md:text-xs";
 
 function hasMetricValue(value) {
   if (value === null || value === undefined || value === "") return false;
@@ -123,10 +128,10 @@ export default function HikeCard({ hike, dogs = [], index = 0, waterInStatsRow =
             <div className="mb-3 space-y-2">
               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                 {humanDifficultyLabel && (
-                  <DifficultyScaleChip level={hike.difficulty} type="human" className={getDifficultyBadgeClass(hike.difficulty)} />
+                  <DifficultyScaleChip level={hike.difficulty} type="human" className={HUMAN_DIFFICULTY_CHIP_CLASS} />
                 )}
                 {dogDifficultyLabel && (
-                  <DifficultyScaleChip level={hike.dog_difficulty} type="dog" className={getDifficultyBadgeClass(hike.dog_difficulty)} />
+                  <DifficultyScaleChip level={hike.dog_difficulty} type="dog" className={DOG_DIFFICULTY_CHIP_CLASS} />
                 )}
                 {!waterInStatsRow && waterChip}
               </div>
@@ -136,7 +141,7 @@ export default function HikeCard({ hike, dogs = [], index = 0, waterInStatsRow =
                   {routeStats.map((stat) => (
                     <span
                       key={stat.label}
-                      className="inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-full border border-[#F9C030]/75 bg-[#FDF0E8]/90 px-2.5 py-1.5 text-center text-xs font-bold leading-tight text-[#7C3020] shadow-sm sm:text-sm md:px-3 md:text-xs"
+                      className={ROUTE_STAT_CHIP_CLASS}
                       aria-label={`${stat.label}: ${stat.value}`}
                     >
                       <span className="text-sm leading-none">{stat.icon}</span>
