@@ -1,5 +1,5 @@
 import { supabase } from "./supabaseClient";
-import { validateImageUpload } from "./uploadValidation";
+import { optimizeImageForUpload, validateImageUpload } from "./uploadValidation";
 
 function sanitizeUsername(username) {
   if (typeof username !== "string") return null;
@@ -41,11 +41,12 @@ function sanitizeDogPayload(dogData = {}) {
 // ── File upload ──────────────────────────────────────────────
 export async function uploadFile(bucket, userId, file) {
   validateImageUpload(file);
-  const ext = file.name.split(".").pop();
+  const preparedFile = await optimizeImageForUpload(file);
+  const ext = preparedFile.name.split(".").pop();
   const path = `${userId}/${Date.now()}.${ext}`;
   const { data, error } = await supabase.storage
     .from(bucket)
-    .upload(path, file, { upsert: true });
+    .upload(path, preparedFile, { upsert: true, contentType: preparedFile.type });
   if (error) throw error;
   const { data: { publicUrl } } = supabase.storage
     .from(bucket)

@@ -1,5 +1,5 @@
 import { supabase } from "./supabaseClient";
-import { validateImageUpload } from "./uploadValidation";
+import { optimizeImageForUpload, validateImageUpload } from "./uploadValidation";
 
 const COMMENT_SIGNED_URL_TTL_SECONDS = 60 * 60;
 
@@ -328,12 +328,13 @@ export function commentNeedsReview(text) {
 
 export async function uploadCommentPhoto(userId, file, { needsReview = false } = {}) {
   validateImageUpload(file);
+  const preparedFile = await optimizeImageForUpload(file);
   const bucket = needsReview ? "comments-pending" : "comments";
-  const sanitizedName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const sanitizedName = preparedFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
   const path = `${userId}/${Date.now()}_${sanitizedName}`;
   const { data, error } = await supabase.storage
     .from(bucket)
-    .upload(path, file, { upsert: true });
+    .upload(path, preparedFile, { upsert: true, contentType: preparedFile.type });
   if (error) throw error;
 
   if (needsReview) {

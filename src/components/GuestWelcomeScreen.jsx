@@ -515,10 +515,10 @@ function FourToePaw({ className = "" }) {
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <circle cx="16" cy="23" r="7.6" />
-      <circle cx="27" cy="14" r="7.8" />
-      <circle cx="39" cy="14" r="7.8" />
-      <circle cx="50" cy="23" r="7.6" />
+      <circle cx="11.5" cy="25" r="6.5" />
+      <circle cx="24" cy="13.5" r="6.8" />
+      <circle cx="40" cy="13.5" r="6.8" />
+      <circle cx="52.5" cy="25" r="6.5" />
       <path d="M17.3 48.7c0-10.5 7.3-18.4 15.7-18.4s15.7 7.9 15.7 18.4c0 6.1-3.6 8.8-8.1 7.4-2.6-.8-4.8-1.7-7.6-1.7s-5 0.9-7.6 1.7c-4.5 1.4-8.1-1.3-8.1-7.4Z" />
     </svg>
   );

@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
-import { validateImageUpload } from "@/lib/uploadValidation";
+import { optimizeImageForUpload, validateImageUpload } from "@/lib/uploadValidation";
 
 const PUBLIC_HIKE_BUCKET = "journal";
 const PUBLIC_HIKE_PREFIX = "public-hikes/";
@@ -291,14 +291,15 @@ export async function resolvePublicHikePhotoReferences(photoReferences = []) {
 
 export async function uploadPublicHikePhoto(userId, file) {
   validateImageUpload(file);
-  const sanitizedName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const preparedFile = await optimizeImageForUpload(file);
+  const sanitizedName = preparedFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
   const uniqueId =
     globalThis.crypto?.randomUUID?.() ??
     `${Date.now()}_${Math.random().toString(36).slice(2)}`;
   const path = `${PUBLIC_HIKE_PREFIX}${userId}/${uniqueId}_${sanitizedName}`;
   const { data, error } = await supabase.storage
     .from(PUBLIC_HIKE_BUCKET)
-    .upload(path, file, { upsert: false });
+    .upload(path, preparedFile, { upsert: false, contentType: preparedFile.type });
 
   if (error) throw error;
   return data.path;
