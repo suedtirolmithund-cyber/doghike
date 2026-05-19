@@ -33,7 +33,7 @@ import PawLoadingTrail from "@/components/PawLoadingTrail";
 import PremiumGate from "@/components/hikes/PremiumGate";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { supabase } from "@/lib/supabaseClient";
-import { TOUR_ICONS, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
+import { TOUR_ICONS, getDifficultyChipLabel, getDifficultyLabel, getDifficultyScaleLabel, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { formatDurationHours } from "@/lib/duration";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
@@ -62,10 +62,6 @@ const difficultyColors = {
 const humanDifficultyChipClass = "";
 const dogDifficultyChipClass =
   "border-[#F07030]/55 bg-[#F9C030]/22 text-[#7C4A00]";
-const humanDifficultyDotClass = "bg-[#F07030]";
-const dogDifficultyDotClass = "bg-[#F07030]";
-const inactiveDifficultyDotClass = "bg-[#F9C030]/45";
-
 const weatherEmojis = {
   sunny: "☀️",
   cloudy: "☁️",
@@ -386,12 +382,12 @@ export default function HikeDetail() {
               )}
               {hike.difficulty && (
                 <Badge className={difficultyColors[hike.difficulty]}>
-                  {TOUR_ICONS.human} Stufe {hike.difficulty}
+                  {TOUR_ICONS.human} {getDifficultyChipLabel("Mensch", hike.difficulty)}
                 </Badge>
               )}
               {hike.dog_difficulty && (
                 <Badge className={difficultyColors[hike.dog_difficulty]}>
-                  {TOUR_ICONS.dog} Stufe {hike.dog_difficulty}
+                  {TOUR_ICONS.dog} {getDifficultyChipLabel("Hund", hike.dog_difficulty)}
                 </Badge>
               )}
             </div>
@@ -510,15 +506,12 @@ export default function HikeDetail() {
             <div className={`doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4 ${humanDifficultyChipClass}`}>
               <span className="text-lg">{TOUR_ICONS.human}</span>
               <div>
-                <div className="flex gap-0.5 mb-0.5">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <span
-                      key={i}
-                      className={`inline-block h-2 w-2 rounded-full ${i < Number(hike.difficulty) ? humanDifficultyDotClass : inactiveDifficultyDotClass}`}
-                    />
-                  ))}
+                <div className="text-sm font-bold leading-tight text-[#7C3020]">
+                  {getDifficultyScaleLabel(hike.difficulty)}
                 </div>
-                <div className="text-xs font-semibold text-[#C07820]">Mensch</div>
+                {getDifficultyLabel(hike.difficulty) && (
+                  <div className="text-xs text-[#C07820]">Mensch</div>
+                )}
               </div>
             </div>
           )}
@@ -526,15 +519,12 @@ export default function HikeDetail() {
             <div className={`doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4 ${dogDifficultyChipClass}`}>
               <span className="text-lg">{TOUR_ICONS.dog}</span>
               <div>
-                <div className="flex gap-0.5 mb-0.5">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <span
-                      key={i}
-                      className={`inline-block h-2 w-2 rounded-full ${i < Number(hike.dog_difficulty) ? dogDifficultyDotClass : inactiveDifficultyDotClass}`}
-                    />
-                  ))}
+                <div className="text-sm font-bold leading-tight text-[#7C3020]">
+                  {getDifficultyScaleLabel(hike.dog_difficulty)}
                 </div>
-                <div className="text-xs font-semibold text-[#7C4A00]">Hund</div>
+                {getDifficultyLabel(hike.dog_difficulty) && (
+                  <div className="text-xs text-[#7C4A00]">Hund</div>
+                )}
               </div>
             </div>
           )}
