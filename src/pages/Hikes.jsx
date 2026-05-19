@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
+import PawLoadingTrail from "@/components/PawLoadingTrail";
 import WaterIcon from "@/components/icons/WaterIcon";
 import {
   DIFFICULTY_APP_EXPLANATIONS,
@@ -134,7 +135,7 @@ function WaterInfoDialog() {
 }
 
 export default function Hikes() {
-  const { data: hikes = [] } = useQuery({
+  const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
     staleTime: 5 * 60_000,
@@ -171,6 +172,7 @@ export default function Hikes() {
     resetFilters,
     filteredHikes,
   } = useHikeFilters(hikes);
+  const isHikesLoading = isLoading && hikes.length === 0;
 
   return (
     <div className="doghike-page-shell">
@@ -355,7 +357,7 @@ export default function Hikes() {
           </div>
         </motion.div>
 
-        {filteredHikes.length > 0 && (
+        {!isHikesLoading && filteredHikes.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -379,7 +381,24 @@ export default function Hikes() {
           </motion.div>
         )}
 
-        {filteredHikes.length > 0 ? (
+        {isHikesLoading ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="doghike-glass-card flex flex-col items-center justify-center gap-3 rounded-3xl px-6 py-12 text-center"
+          >
+            <div className="text-sm font-semibold uppercase tracking-[0.18em] text-[#C07820]">
+              Lädt...
+            </div>
+            <PawLoadingTrail />
+            <div className="space-y-1">
+              <p className="text-lg font-semibold text-slate-800">Wanderungen werden aktualisiert</p>
+              <p className="max-w-md text-sm text-slate-500">
+                Wir sortieren gerade die passenden Wege für dich.
+              </p>
+            </div>
+          </motion.div>
+        ) : filteredHikes.length > 0 ? (
           <div className="doghike-card-grid pb-20 md:pb-0">
             {filteredHikes.map((hike, index) => (
               <HikeCard key={`${hike._source ?? "sheets"}-${hike.id}`} hike={hike} index={index} />

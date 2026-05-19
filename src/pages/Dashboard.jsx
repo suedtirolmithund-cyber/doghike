@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import StatsCard from "@/components/stats/StatsCard";
 import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
+import PawLoadingTrail from "@/components/PawLoadingTrail";
 import { getDogProfileCount, getDogs } from "@/lib/profilesApi";
 import { matchesHikeSearch } from "@/lib/hikeSearch";
 import { hasSeenDogNudgeThisSession, markDogNudgeSeenThisSession } from "@/lib/dogNudgeSession";
@@ -99,6 +100,7 @@ export default function Dashboard() {
   }, [hikes]);
 
   const safeDogProfileCount = Number.isFinite(dogProfileCount) ? dogProfileCount : 0;
+  const isHikesLoading = isLoading && hikes.length === 0;
 
   const visibleHikes   = filteredHikes.slice(0, visibleCount);
   const hasMore        = visibleCount < filteredHikes.length;
@@ -257,12 +259,23 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="h-72 bg-brand-100/80 rounded-2xl animate-pulse" />
-              ))}
-            </div>
+          {isHikesLoading ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="doghike-glass-card flex flex-col items-center justify-center gap-3 rounded-3xl px-6 py-12 text-center"
+            >
+              <div className="text-sm font-semibold uppercase tracking-[0.18em] text-[#C07820]">
+                Lädt...
+              </div>
+              <PawLoadingTrail />
+              <div className="space-y-1">
+                <p className="text-lg font-semibold text-slate-800">Wanderungen werden aktualisiert</p>
+                <p className="max-w-md text-sm text-slate-500">
+                  Wir holen gerade die schönsten Wege für dich.
+                </p>
+              </div>
+            </motion.div>
           ) : visibleHikes.length > 0 ? (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
