@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TileLayer, Polyline, Marker, useMapEvents, Popup, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -143,8 +143,13 @@ function RouteDrawerMap({ waypoints, setWaypoints, routeCoordinates, isEditing, 
   );
 }
 
-export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
-  const [waypoints, setWaypoints] = useState(initialRoute);
+export default function EditableRouteDrawer({ onSave, initialRoute = [], initialCoordinates = null }) {
+  const normalizedInitialRoute = Array.isArray(initialRoute) && initialRoute.length > 0
+    ? initialRoute
+    : Array.isArray(initialCoordinates)
+      ? initialCoordinates
+      : [];
+  const [waypoints, setWaypoints] = useState(normalizedInitialRoute);
   const [routeCoordinates, setRouteCoordinates] = useState([]);
   const [isCalculating, setIsCalculating] = useState(false);
   const [routeDistance, setRouteDistance] = useState(0);
@@ -156,6 +161,10 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [] }) {
   const [isSearching, setIsSearching] = useState(false);
   const [searchCenter, setSearchCenter] = useState(null);
   const mapResetKey = `editable-route-${isEditing ? "edit" : "view"}-${waypoints.length}`;
+
+  useEffect(() => {
+    setWaypoints(normalizedInitialRoute);
+  }, [normalizedInitialRoute]);
 
   // Fetch route using GraphHopper public API with hiking profile
   // Uses OSM data, prefers marked hiking trails (foot-hiking), allows side paths

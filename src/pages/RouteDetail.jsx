@@ -389,7 +389,7 @@ export default function RouteDetail() {
             {editingRoute ? (
               <div className="space-y-4">
                 <EditableRouteDrawer
-                  initialCoordinates={route.waypoints}
+                  initialRoute={route.waypoints}
                   onSave={(routeData) => {
                     updateCoordinatesMutation.mutate({
                       waypoints: routeData.coordinates,

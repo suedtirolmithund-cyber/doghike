@@ -160,11 +160,11 @@ const DogProfileRedirect = () => {
 
   useEffect(() => {
     if (!isAuthenticated || !isFetched || isError || dogs.length > 0) return;
-    if (location.pathname === "/Profile") return;
+    if (location.pathname === createPageUrl("Dogs")) return;
     if (window.sessionStorage.getItem(DOG_PROFILE_REDIRECT_KEY) === user.id) return;
 
     window.sessionStorage.setItem(DOG_PROFILE_REDIRECT_KEY, user.id);
-    navigate("/Profile", { replace: true });
+    navigate(createPageUrl("Dogs"), { replace: true });
   }, [dogs.length, isAuthenticated, isError, isFetched, location.pathname, navigate, user?.id]);
 
   return null;
