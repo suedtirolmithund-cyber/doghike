@@ -12,6 +12,7 @@ import PawLoadingTrail from '@/components/PawLoadingTrail';
 import { Loader2 } from 'lucide-react';
 import GuestWelcomeScreen from '@/components/GuestWelcomeScreen';
 import { getDogs } from '@/lib/profilesApi';
+import { hasSeenDogNudgeThisSession, markDogNudgeSeenThisSession } from '@/lib/dogNudgeSession';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Suspense, lazy } from 'react';
@@ -19,8 +20,6 @@ import { Suspense, lazy } from 'react';
 const CHUNK_RELOAD_KEY = "doghike_chunk_reload_attempted";
 const REACT130_RELOAD_KEY = "doghike_react130_reload_attempted";
 const CACHE_BUST_PARAM = "__doghike_reload";
-const DOG_PROFILE_REDIRECT_KEY = "dogtrails_no_dog_profile_redirected";
-
 function hardReloadWithCacheBust() {
   const url = new URL(window.location.href);
   url.searchParams.set(CACHE_BUST_PARAM, String(Date.now()));
@@ -161,9 +160,9 @@ const DogProfileRedirect = () => {
   useEffect(() => {
     if (!isAuthenticated || !isFetched || isError || dogs.length > 0) return;
     if (location.pathname === createPageUrl("Dogs")) return;
-    if (window.sessionStorage.getItem(DOG_PROFILE_REDIRECT_KEY) === user.id) return;
+    if (hasSeenDogNudgeThisSession(user.id)) return;
 
-    window.sessionStorage.setItem(DOG_PROFILE_REDIRECT_KEY, user.id);
+    markDogNudgeSeenThisSession(user.id);
     navigate(createPageUrl("Dogs"), { replace: true });
   }, [dogs.length, isAuthenticated, isError, isFetched, location.pathname, navigate, user?.id]);
 

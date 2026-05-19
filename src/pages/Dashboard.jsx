@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
 import { Mountain, Route, Map, ArrowRight, Search, LogIn, UserPlus, ChevronDown, Plus, Globe, Dog } from "lucide-react";
@@ -12,9 +12,8 @@ import StatsCard from "@/components/stats/StatsCard";
 import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
-import { getDogProfileCount, getDogs } from "@/lib/profilesApi";
+import { getDogProfileCount } from "@/lib/profilesApi";
 import { matchesHikeSearch } from "@/lib/hikeSearch";
-import { hasSeenDogNudgeThisSession, markDogNudgeSeenThisSession } from "@/lib/dogNudgeSession";
 
 const PAGE_SIZE = 10;
 
@@ -42,8 +41,7 @@ function sortBySeason(hikes, season) {
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const { isAuthenticated, user, isLoadingAuth } = useAuth();
-  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const submitHikeUrl = isAuthenticated
     ? createPageUrl("AddJournalEntry")
     : createPageUrl("Login");
@@ -56,31 +54,12 @@ export default function Dashboard() {
     refetchOnWindowFocus: false,
   });
 
-  const { data: dogs = [], isLoading: isLoadingDogs } = useQuery({
-    queryKey: ["dogs", user?.id],
-    queryFn: () => getDogs(user.id),
-    enabled: !!user?.id,
-    staleTime: 5 * 60_000,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  });
-
   const { data: dogProfileCount = 0 } = useQuery({
     queryKey: ["dogProfileCount"],
     queryFn: getDogProfileCount,
     staleTime: 5 * 60_000,
     refetchOnWindowFocus: false,
   });
-
-  useEffect(() => {
-    if (isLoadingAuth || isLoadingDogs) return;
-    if (!isAuthenticated || !user?.id) return;
-    if (dogs.length > 0) return;
-    if (hasSeenDogNudgeThisSession(user.id)) return;
-
-    markDogNudgeSeenThisSession(user.id);
-    navigate(createPageUrl("Dogs"), { replace: true });
-  }, [dogs.length, isAuthenticated, isLoadingAuth, isLoadingDogs, navigate, user?.id]);
 
   const season = getCurrentSeason();
 
