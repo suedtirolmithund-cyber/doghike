@@ -8,6 +8,25 @@ import WaterIcon from "@/components/icons/WaterIcon";
 import { TOUR_ICONS, getDifficultyBadgeClass, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
+import { formatDurationHours } from "@/lib/duration";
+
+const METRIC_FORMATTER = new Intl.NumberFormat("de-DE", {
+  maximumFractionDigits: 1,
+});
+
+function hasMetricValue(value) {
+  if (value === null || value === undefined || value === "") return false;
+  const numericValue = Number(value);
+  return Number.isFinite(numericValue) && numericValue > 0;
+}
+
+function formatDistance(value) {
+  return `${METRIC_FORMATTER.format(Number(value))} km`;
+}
+
+function formatElevation(value) {
+  return `${METRIC_FORMATTER.format(Number(value))} Hm`;
+}
 
 export default function HikeCard({ hike, dogs = [], index = 0 }) {
   const hikeDogs = dogs.filter((dog) => hike.dogs?.includes(dog.id));
@@ -25,6 +44,12 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
         : dogDifficultyLabel
           ? TOUR_ICONS.dog
           : null;
+  const elevationValue = hike.elevation_gain_m ?? hike.elevation_m;
+  const routeStats = [
+    hasMetricValue(hike.distance_km) ? { icon: TOUR_ICONS.distance, value: formatDistance(hike.distance_km), label: "Strecke" } : null,
+    hasMetricValue(elevationValue) ? { icon: TOUR_ICONS.elevation, value: formatElevation(elevationValue), label: "Höhenmeter" } : null,
+    hasMetricValue(hike.duration_minutes) ? { icon: TOUR_ICONS.duration, value: formatDurationHours(hike.duration_minutes), label: "Gehzeit" } : null,
+  ].filter(Boolean);
 
   return (
     <motion.div
@@ -90,22 +115,32 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
           </div>
 
           <div className="p-4">
-            <div className="mb-3 flex flex-wrap items-center gap-2">
+            <div className="mb-3 flex flex-wrap items-center gap-1.5 sm:gap-2">
               {humanDifficultyLabel && (
-                <Badge className={`${getDifficultyBadgeClass(hike.difficulty)} min-h-8 border px-2.5 py-1.5 text-sm font-semibold md:px-3 md:text-xs`}>
+                <Badge className={`${getDifficultyBadgeClass(hike.difficulty)} min-h-8 border px-2.5 py-1.5 text-xs font-semibold sm:text-sm md:px-3 md:text-xs`}>
                   {TOUR_ICONS.human} {humanDifficultyLabel}
                 </Badge>
               )}
               {dogDifficultyLabel && (
-                <Badge className={`${getDifficultyBadgeClass(hike.dog_difficulty)} min-h-8 border px-2.5 py-1.5 text-sm font-semibold md:px-3 md:text-xs`}>
+                <Badge className={`${getDifficultyBadgeClass(hike.dog_difficulty)} min-h-8 border px-2.5 py-1.5 text-xs font-semibold sm:text-sm md:px-3 md:text-xs`}>
                   {TOUR_ICONS.dog} {dogDifficultyLabel}
                 </Badge>
               )}
               {hike.water_availability && (
-                <span className={`inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full border px-2.5 py-1.5 text-center text-sm font-semibold leading-tight whitespace-normal break-words md:px-3 md:text-xs ${getWaterBadgeClass(hike.water_availability)}`}>
+                <span className={`inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full border px-2.5 py-1.5 text-center text-xs font-semibold leading-tight whitespace-normal break-words sm:text-sm md:px-3 md:text-xs ${getWaterBadgeClass(hike.water_availability)}`}>
                   <WaterIcon value={hike.water_availability} /> {getWaterLabel(hike.water_availability) ?? hike.water_availability}
                 </span>
               )}
+              {routeStats.map((stat) => (
+                <span
+                  key={stat.label}
+                  className="inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-full border border-[#F9C030]/75 bg-[#FDF0E8]/90 px-2.5 py-1.5 text-center text-xs font-bold leading-tight text-[#7C3020] shadow-sm sm:text-sm md:px-3 md:text-xs"
+                  aria-label={`${stat.label}: ${stat.value}`}
+                >
+                  <span className="text-sm leading-none">{stat.icon}</span>
+                  <span className="min-w-0 whitespace-nowrap">{stat.value}</span>
+                </span>
+              ))}
             </div>
             {hike.notes && (
               <div className="mb-3">
