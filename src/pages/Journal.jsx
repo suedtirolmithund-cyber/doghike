@@ -36,7 +36,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/lib/AuthContext";
 import { getJournalEntriesForDisplay, deleteJournalEntry } from "@/lib/journalApi";
 import WaterIcon from "@/components/icons/WaterIcon";
-import { getDifficultyLabel, getDifficultyTextColor, getWaterBadgeClass, getWaterLabel, TOUR_ICONS } from "@/lib/difficultyConfig";
+import { getDifficultyChipLabel, getDifficultyTextColor, getWaterBadgeClass, getWaterLabel, TOUR_ICONS } from "@/lib/difficultyConfig";
 import { formatDurationHours } from "@/lib/duration";
 import { matchesTextSearch } from "@/lib/hikeSearch";
 
@@ -344,12 +344,12 @@ export default function Journal() {
                           />
                           {entry.difficulty && (
                             <span className={`inline-flex min-h-8 w-full max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full bg-brand-50/70 px-2 py-1 text-center text-sm font-medium leading-tight whitespace-normal break-words sm:w-auto sm:px-2.5 ${getDifficultyTextColor(entry.difficulty)}`}>
-                              {TOUR_ICONS.human} {getDifficultyLabel(entry.difficulty)}
+                              {TOUR_ICONS.human} {getDifficultyChipLabel("Mensch", entry.difficulty)}
                             </span>
                           )}
                           {entry.dog_difficulty && (
                             <span className={`inline-flex min-h-8 w-full max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full bg-brand-50/70 px-2 py-1 text-center text-sm font-medium leading-tight whitespace-normal break-words sm:w-auto sm:px-2.5 ${getDifficultyTextColor(entry.dog_difficulty)}`}>
-                              {TOUR_ICONS.dog} {getDifficultyLabel(entry.dog_difficulty)}
+                              {TOUR_ICONS.dog} {getDifficultyChipLabel("Hund", entry.dog_difficulty)}
                             </span>
                           )}
                         </div>

@@ -176,6 +176,24 @@ export function getDifficultyLabel(level) {
   return DIFFICULTY_LABELS[level] ?? null;
 }
 
+export function getDifficultyLevel(level) {
+  const numericLevel = Number(level);
+  if (!Number.isInteger(numericLevel) || numericLevel < 1 || numericLevel > 5) return null;
+  return String(numericLevel);
+}
+
+export function getDifficultyScaleLabel(level) {
+  const difficultyLevel = getDifficultyLevel(level);
+  const difficultyLabel = getDifficultyLabel(level);
+  if (!difficultyLevel || !difficultyLabel) return difficultyLabel;
+  return `${difficultyLevel}/5 · ${difficultyLabel}`;
+}
+
+export function getDifficultyChipLabel(prefix, level) {
+  const scaleLabel = getDifficultyScaleLabel(level);
+  return scaleLabel ? `${prefix} ${scaleLabel}` : prefix;
+}
+
 export function getDifficultyTextColor(level) {
   return DIFFICULTY_TEXT_COLORS[level] ?? "text-slate-500";
 }

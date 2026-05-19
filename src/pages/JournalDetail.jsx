@@ -21,7 +21,7 @@ import WaterIcon from "@/components/icons/WaterIcon";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
 import {
-  getDifficultyLabel,
+  getDifficultyScaleLabel,
   getDifficultyTextColor,
   getSeasonIcon,
   getSeasonLabel,
@@ -306,7 +306,7 @@ export default function JournalDetail() {
               <div className="flex items-center gap-2">
                 <span className="text-xs text-slate-500 w-28">{TOUR_ICONS.human} Mensch</span>
                 <span className={`text-sm font-medium ${getDifficultyTextColor(entry.difficulty)}`}>
-                  {getDifficultyLabel(entry.difficulty)}
+                  {getDifficultyScaleLabel(entry.difficulty)}
                 </span>
               </div>
             )}
@@ -314,7 +314,7 @@ export default function JournalDetail() {
               <div className="flex items-center gap-2">
                 <span className="text-xs text-slate-500 w-28">{TOUR_ICONS.dog} Hund</span>
                 <span className={`text-sm font-medium ${getDifficultyTextColor(entry.dog_difficulty)}`}>
-                  {getDifficultyLabel(entry.dog_difficulty)}
+                  {getDifficultyScaleLabel(entry.dog_difficulty)}
                 </span>
               </div>
             )}

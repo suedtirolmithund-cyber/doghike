@@ -5,7 +5,7 @@ import jsPDF from "jspdf";
 import { Check, FileDown, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { getDifficultyLabel, getWaterLabel } from "@/lib/difficultyConfig";
+import { getDifficultyScaleLabel, getWaterLabel } from "@/lib/difficultyConfig";
 import { formatDurationHours } from "@/lib/duration";
 
 function getCountryLabel(country) {
@@ -230,8 +230,8 @@ export default function OfflineDownload({
         { label: "Strecke", value: hike.distance_km ? `${hike.distance_km} km` : null },
         { label: "Höhenmeter", value: hike.elevation_gain_m ? `${hike.elevation_gain_m} m` : null },
         { label: "Gehzeit", value: hike.duration_minutes ? formatDurationHours(hike.duration_minutes) : null },
-        { label: "Mensch", value: hike.difficulty ? getDifficultyLabel(hike.difficulty) : null },
-        { label: "Hund", value: hike.dog_difficulty ? getDifficultyLabel(hike.dog_difficulty) : null },
+        { label: "Mensch", value: hike.difficulty ? getDifficultyScaleLabel(hike.difficulty) : null },
+        { label: "Hund", value: hike.dog_difficulty ? getDifficultyScaleLabel(hike.dog_difficulty) : null },
         { label: "Wasser", value: hike.water_availability ? getWaterLabel(hike.water_availability) : null },
         { label: "Jahreszeit", value: hike.season ? seasonLabels[hike.season] || hike.season : null },
         { label: "Datum", value: hike.date ? format(new Date(hike.date), "dd.MM.yyyy") : null },

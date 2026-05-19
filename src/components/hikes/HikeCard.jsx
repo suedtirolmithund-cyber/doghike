@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import ExpandableText from "@/components/ExpandableText";
 import WaterIcon from "@/components/icons/WaterIcon";
-import { TOUR_ICONS, getDifficultyBadgeClass, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
+import { TOUR_ICONS, getDifficultyBadgeClass, getDifficultyChipLabel, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { formatDurationHours } from "@/lib/duration";
@@ -118,12 +118,12 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
             <div className="mb-3 flex flex-wrap items-center gap-1.5 sm:gap-2">
               {humanDifficultyLabel && (
                 <Badge className={`${getDifficultyBadgeClass(hike.difficulty)} min-h-8 border px-2.5 py-1.5 text-xs font-semibold sm:text-sm md:px-3 md:text-xs`}>
-                  {TOUR_ICONS.human} {humanDifficultyLabel}
+                  {TOUR_ICONS.human} {getDifficultyChipLabel("Mensch", hike.difficulty)}
                 </Badge>
               )}
               {dogDifficultyLabel && (
                 <Badge className={`${getDifficultyBadgeClass(hike.dog_difficulty)} min-h-8 border px-2.5 py-1.5 text-xs font-semibold sm:text-sm md:px-3 md:text-xs`}>
-                  {TOUR_ICONS.dog} {dogDifficultyLabel}
+                  {TOUR_ICONS.dog} {getDifficultyChipLabel("Hund", hike.dog_difficulty)}
                 </Badge>
               )}
               {hike.water_availability && (
