@@ -36,7 +36,9 @@
         "ACCESS_FINE_LOCATION",
         "ACCESS_BACKGROUND_LOCATION",
         "FOREGROUND_SERVICE",
-        "FOREGROUND_SERVICE_LOCATION"
+        "FOREGROUND_SERVICE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
       ]
     },
     "web": {
@@ -46,6 +48,11 @@
       "expo-dev-client",
       "expo-secure-store",
       "expo-location"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "b94b5078-2332-42a5-8924-e26353745ca6"
+      }
+    }
   }
 }
