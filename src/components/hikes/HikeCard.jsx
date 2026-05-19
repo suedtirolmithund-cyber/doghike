@@ -14,8 +14,6 @@ const METRIC_FORMATTER = new Intl.NumberFormat("de-DE", {
   maximumFractionDigits: 1,
 });
 
-const HUMAN_DIFFICULTY_CHIP_CLASS = "!border-[#D4547A]/55 !bg-[#FDF0E8] !text-[#A8003C]";
-const DOG_DIFFICULTY_CHIP_CLASS = "!border-[#F9C030]/70 !bg-[#FFF8F0] !text-[#7C3020]";
 const ROUTE_STAT_CHIP_CLASS =
   "inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-full border border-[#F9C030]/65 bg-[#FFF8F0]/92 px-2.5 py-1.5 text-center text-xs font-bold leading-tight text-[#7C3020] shadow-sm sm:text-sm md:px-3 md:text-xs";
 
@@ -128,10 +126,10 @@ export default function HikeCard({ hike, dogs = [], index = 0, waterInStatsRow =
             <div className="mb-3 space-y-2">
               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                 {humanDifficultyLabel && (
-                  <DifficultyScaleChip level={hike.difficulty} type="human" className={HUMAN_DIFFICULTY_CHIP_CLASS} />
+                  <DifficultyScaleChip level={hike.difficulty} type="human" />
                 )}
                 {dogDifficultyLabel && (
-                  <DifficultyScaleChip level={hike.dog_difficulty} type="dog" className={DOG_DIFFICULTY_CHIP_CLASS} />
+                  <DifficultyScaleChip level={hike.dog_difficulty} type="dog" />
                 )}
                 {!waterInStatsRow && waterChip}
               </div>

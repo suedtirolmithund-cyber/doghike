@@ -37,7 +37,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { getJournalEntriesForDisplay, deleteJournalEntry } from "@/lib/journalApi";
 import WaterIcon from "@/components/icons/WaterIcon";
 import DifficultyScaleChip from "@/components/difficulty/DifficultyScale";
-import { getDifficultyBadgeClass, getWaterBadgeClass, getWaterLabel, TOUR_ICONS } from "@/lib/difficultyConfig";
+import { getWaterBadgeClass, getWaterLabel, TOUR_ICONS } from "@/lib/difficultyConfig";
 import { formatDurationHours } from "@/lib/duration";
 import { matchesTextSearch } from "@/lib/hikeSearch";
 
@@ -344,10 +344,10 @@ export default function Journal() {
                             color="text-brand-600"
                           />
                           {entry.difficulty && (
-                            <DifficultyScaleChip level={entry.difficulty} type="human" className={`${getDifficultyBadgeClass(entry.difficulty)} w-full sm:w-auto`} />
+                            <DifficultyScaleChip level={entry.difficulty} type="human" className="w-full sm:w-auto" />
                           )}
                           {entry.dog_difficulty && (
-                            <DifficultyScaleChip level={entry.dog_difficulty} type="dog" className={`${getDifficultyBadgeClass(entry.dog_difficulty)} w-full sm:w-auto`} />
+                            <DifficultyScaleChip level={entry.dog_difficulty} type="dog" className="w-full sm:w-auto" />
                           )}
                         </div>
 
