@@ -28,7 +28,7 @@ function formatElevation(value) {
   return `${METRIC_FORMATTER.format(Number(value))} Hm`;
 }
 
-export default function HikeCard({ hike, dogs = [], index = 0 }) {
+export default function HikeCard({ hike, dogs = [], index = 0, waterInStatsRow = false }) {
   const hikeDogs = dogs.filter((dog) => hike.dogs?.includes(dog.id));
   const coverPhoto = hike.photos?.[0];
   const hikeSource = hike._source ?? "sheets";
@@ -50,6 +50,11 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
     hasMetricValue(elevationValue) ? { icon: TOUR_ICONS.elevation, value: formatElevation(elevationValue), label: "Höhenmeter" } : null,
     hasMetricValue(hike.duration_minutes) ? { icon: TOUR_ICONS.duration, value: formatDurationHours(hike.duration_minutes), label: "Gehzeit" } : null,
   ].filter(Boolean);
+  const waterChip = hike.water_availability ? (
+    <span className={`inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full border px-2.5 py-1.5 text-center text-xs font-semibold leading-tight whitespace-normal break-words sm:text-sm md:px-3 md:text-xs ${getWaterBadgeClass(hike.water_availability)}`}>
+      <WaterIcon value={hike.water_availability} /> {getWaterLabel(hike.water_availability) ?? hike.water_availability}
+    </span>
+  ) : null;
 
   return (
     <motion.div
@@ -123,14 +128,11 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                 {dogDifficultyLabel && (
                   <DifficultyScaleChip level={hike.dog_difficulty} type="dog" className={getDifficultyBadgeClass(hike.dog_difficulty)} />
                 )}
-                {hike.water_availability && (
-                  <span className={`inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full border px-2.5 py-1.5 text-center text-xs font-semibold leading-tight whitespace-normal break-words sm:text-sm md:px-3 md:text-xs ${getWaterBadgeClass(hike.water_availability)}`}>
-                    <WaterIcon value={hike.water_availability} /> {getWaterLabel(hike.water_availability) ?? hike.water_availability}
-                  </span>
-                )}
+                {!waterInStatsRow && waterChip}
               </div>
-              {routeStats.length > 0 && (
+              {(waterInStatsRow && waterChip) || routeStats.length > 0 ? (
                 <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  {waterInStatsRow && waterChip}
                   {routeStats.map((stat) => (
                     <span
                       key={stat.label}
@@ -142,7 +144,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                     </span>
                   ))}
                 </div>
-              )}
+              ) : null}
             </div>
             {hike.notes && (
               <div className="mb-3">
