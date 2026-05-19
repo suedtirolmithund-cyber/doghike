@@ -115,28 +115,34 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
           </div>
 
           <div className="p-4">
-            <div className="mb-3 flex flex-wrap items-center gap-1.5 sm:gap-2">
-              {humanDifficultyLabel && (
-                <DifficultyScaleChip level={hike.difficulty} type="human" className={getDifficultyBadgeClass(hike.difficulty)} />
+            <div className="mb-3 space-y-2">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                {humanDifficultyLabel && (
+                  <DifficultyScaleChip level={hike.difficulty} type="human" className={getDifficultyBadgeClass(hike.difficulty)} />
+                )}
+                {dogDifficultyLabel && (
+                  <DifficultyScaleChip level={hike.dog_difficulty} type="dog" className={getDifficultyBadgeClass(hike.dog_difficulty)} />
+                )}
+                {hike.water_availability && (
+                  <span className={`inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full border px-2.5 py-1.5 text-center text-xs font-semibold leading-tight whitespace-normal break-words sm:text-sm md:px-3 md:text-xs ${getWaterBadgeClass(hike.water_availability)}`}>
+                    <WaterIcon value={hike.water_availability} /> {getWaterLabel(hike.water_availability) ?? hike.water_availability}
+                  </span>
+                )}
+              </div>
+              {routeStats.length > 0 && (
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  {routeStats.map((stat) => (
+                    <span
+                      key={stat.label}
+                      className="inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-full border border-[#F9C030]/75 bg-[#FDF0E8]/90 px-2.5 py-1.5 text-center text-xs font-bold leading-tight text-[#7C3020] shadow-sm sm:text-sm md:px-3 md:text-xs"
+                      aria-label={`${stat.label}: ${stat.value}`}
+                    >
+                      <span className="text-sm leading-none">{stat.icon}</span>
+                      <span className="min-w-0 whitespace-nowrap">{stat.value}</span>
+                    </span>
+                  ))}
+                </div>
               )}
-              {dogDifficultyLabel && (
-                <DifficultyScaleChip level={hike.dog_difficulty} type="dog" className={getDifficultyBadgeClass(hike.dog_difficulty)} />
-              )}
-              {hike.water_availability && (
-                <span className={`inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full border px-2.5 py-1.5 text-center text-xs font-semibold leading-tight whitespace-normal break-words sm:text-sm md:px-3 md:text-xs ${getWaterBadgeClass(hike.water_availability)}`}>
-                  <WaterIcon value={hike.water_availability} /> {getWaterLabel(hike.water_availability) ?? hike.water_availability}
-                </span>
-              )}
-              {routeStats.map((stat) => (
-                <span
-                  key={stat.label}
-                  className="inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-full border border-[#F9C030]/75 bg-[#FDF0E8]/90 px-2.5 py-1.5 text-center text-xs font-bold leading-tight text-[#7C3020] shadow-sm sm:text-sm md:px-3 md:text-xs"
-                  aria-label={`${stat.label}: ${stat.value}`}
-                >
-                  <span className="text-sm leading-none">{stat.icon}</span>
-                  <span className="min-w-0 whitespace-nowrap">{stat.value}</span>
-                </span>
-              ))}
             </div>
             {hike.notes && (
               <div className="mb-3">

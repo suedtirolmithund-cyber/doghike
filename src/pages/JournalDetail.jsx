@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -75,13 +75,49 @@ function PublicStatusBadge({ status, rejectionReason }) {
   );
 }
 
+function preloadPhoto(url) {
+  if (!url) return;
+  const image = new Image();
+  image.src = url;
+}
 
 function PhotoGallery({ photos }) {
   const [idx, setIdx] = useState(0);
+  const [isCurrentPhotoLoading, setIsCurrentPhotoLoading] = useState(true);
+
+  useEffect(() => {
+    if (!photos?.length) return;
+    setIsCurrentPhotoLoading(true);
+  }, [idx, photos]);
+
+  useEffect(() => {
+    if (!photos?.length) return;
+    preloadPhoto(photos[idx]);
+    if (photos.length > 1) {
+      preloadPhoto(photos[(idx + 1) % photos.length]);
+      preloadPhoto(photos[(idx - 1 + photos.length) % photos.length]);
+    }
+  }, [idx, photos]);
+
   if (!photos?.length) return null;
+
   return (
     <div className="relative rounded-2xl overflow-hidden bg-brand-100/80">
-      <img src={photos[idx]} alt="" className="w-full h-64 md:h-96 object-cover" />
+      {isCurrentPhotoLoading && (
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-brand-50/70 backdrop-blur-[1px]">
+          <Loader2 className="h-5 w-5 animate-spin text-brand-400" />
+          <p className="text-xs font-medium text-slate-500">Foto wird geladen...</p>
+        </div>
+      )}
+      <img
+        src={photos[idx]}
+        alt=""
+        loading="eager"
+        fetchPriority="high"
+        onLoad={() => setIsCurrentPhotoLoading(false)}
+        onError={() => setIsCurrentPhotoLoading(false)}
+        className="w-full h-64 md:h-96 object-cover"
+      />
       {photos.length > 1 && (
         <>
           <button onClick={() => setIdx((i) => (i - 1 + photos.length) % photos.length)}
