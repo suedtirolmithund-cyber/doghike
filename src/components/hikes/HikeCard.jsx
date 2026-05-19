@@ -72,7 +72,7 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/10 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#28140A]/78 via-[#28140A]/34 via-45% to-transparent" />
 
             {PREMIUM_FEATURES_ENABLED && hike.is_premium && (
               <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/74 px-3 py-1.5 text-sm font-semibold text-[#7C3020] shadow-sm backdrop-blur-sm">
@@ -86,11 +86,11 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
               </span>
             )}
 
-            <div className="absolute bottom-4 left-4 right-4">
-              <h3 className="mb-1 line-clamp-2 text-base font-semibold leading-tight text-white drop-shadow-sm">
+            <div className="absolute bottom-4 left-4 right-4 rounded-2xl bg-gradient-to-t from-[#28140A]/30 via-[#28140A]/12 to-transparent p-2.5 backdrop-blur-[1px]">
+              <h3 className="mb-1 line-clamp-2 text-base font-semibold leading-tight text-white drop-shadow-[0_2px_5px_rgba(0,0,0,0.65)]">
                 {hike.trail_name}
               </h3>
-              <div className="flex min-w-0 items-center gap-1.5 text-sm font-medium text-white/85">
+              <div className="flex min-w-0 items-center gap-1.5 text-sm font-semibold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]">
                 <span>{TOUR_ICONS.location}</span>
                 <span className="truncate">{hike.location || "Dolomites"}</span>
               </div>
@@ -99,13 +99,13 @@ export default function HikeCard({ hike, dogs = [], index = 0 }) {
                   {hike.tags.slice(0, 3).map((tag) => (
                     <span
                       key={tag}
-                      className="inline-flex min-h-7 items-center rounded-full border border-white/35 bg-white/18 px-2.5 py-1 text-xs font-semibold leading-none text-white/92 shadow-sm backdrop-blur-sm"
+                      className="inline-flex min-h-7 items-center rounded-full border border-[#F9C030]/70 bg-[#FDF0E8]/88 px-2.5 py-1 text-xs font-semibold leading-none text-[#7C3020] shadow-sm backdrop-blur-md"
                     >
                       {tag}
                     </span>
                   ))}
                   {hike.tags.length > 3 && (
-                    <span className="inline-flex min-h-7 items-center rounded-full border border-white/25 bg-white/12 px-2.5 py-1 text-xs font-semibold leading-none text-white/78 shadow-sm backdrop-blur-sm">
+                    <span className="inline-flex min-h-7 items-center rounded-full border border-[#F9C030]/60 bg-[#FDF0E8]/78 px-2.5 py-1 text-xs font-semibold leading-none text-[#7C3020]/82 shadow-sm backdrop-blur-md">
                       +{hike.tags.length - 3}
                     </span>
                   )}
