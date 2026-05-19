@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
-import { supabase } from "@/lib/supabaseClient";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -19,6 +18,7 @@ import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { loadNotifications, markNotificationsSeen } from "@/lib/notificationsApi";
 import {
   disableWebPushSubscription,
   ensureWebPushSubscription,
@@ -29,125 +29,32 @@ import {
   webPushSupported,
 } from "@/lib/browserNotifications";
 
-async function loadNotifications(userId) {
-  const results = [];
-
-  const { data: incoming } = await supabase
-    .from("friendships")
-    .select("id, requester_id, created_at")
-    .eq("receiver_id", userId)
-    .eq("status", "pending")
-    .order("created_at", { ascending: false });
-
-  if (incoming?.length) {
-    const requesterIds = incoming.map((friendship) => friendship.requester_id);
-    const { data: profiles } = await supabase
-      .from("profiles")
-      .select("user_id, full_name, username, avatar_url")
-      .in("user_id", requesterIds);
-
-    const profileMap = Object.fromEntries((profiles ?? []).map((profile) => [profile.user_id, profile]));
-
-    incoming.forEach((friendship) => {
-      const profile = profileMap[friendship.requester_id];
-
-      results.push({
-        id: `fr-${friendship.id}`,
-        type: "friend_request",
-        icon: UserPlus,
-        color: "text-brand-700 bg-brand-50 border-brand-200",
-        title: `${profile?.full_name || profile?.username || "Jemand"} möchte dein Freund sein`,
-        time: friendship.created_at,
-        link: createPageUrl("Friends"),
-      });
-    });
-  }
-
-  const { data: myEntries } = await supabase
-    .from("journal_entries")
-    .select("id, title, status, visibility, updated_at, created_at, rejection_reason")
-    .eq("user_id", userId)
-    .eq("visibility", "public")
-    .in("status", ["pending", "approved", "rejected"])
-    .order("updated_at", { ascending: false })
-    .limit(10);
-
-  (myEntries ?? []).forEach((entry) => {
-    const pending = entry.status === "pending";
-    const approved = entry.status === "approved";
-
-    results.push({
-      id: `je-${entry.id}`,
-      type: pending ? "pending" : approved ? "approved" : "rejected",
-      icon: pending ? Clock3 : approved ? CheckCircle2 : XCircle,
-      color: pending
-        ? "text-brand-300 bg-brand-50 border-brand-100"
-        : approved
-          ? "text-brand-400 bg-brand-50 border-brand-200"
-          : "text-brand-400 bg-brand-50 border-brand-100",
-      title: pending
-        ? `"${entry.title}" wartet auf die Admin-Prüfung`
-        : approved
-          ? `"${entry.title}" wurde genehmigt und ist jetzt öffentlich sichtbar`
-          : entry.rejection_reason?.trim()
-            ? `"${entry.title}" wurde abgelehnt: ${entry.rejection_reason.trim()}`
-            : `"${entry.title}" wurde abgelehnt`,
-      time: pending ? (entry.created_at || entry.updated_at) : entry.updated_at,
-      link: createPageUrl("Journal"),
-    });
-  });
-
-  const { data: acceptedFriendships } = await supabase
-    .from("friendships")
-    .select("requester_id, receiver_id")
-    .or(`requester_id.eq.${userId},receiver_id.eq.${userId}`)
-    .eq("status", "accepted");
-
-  const friendIds = (acceptedFriendships ?? []).map((friendship) =>
-    friendship.requester_id === userId ? friendship.receiver_id : friendship.requester_id
-  );
-
-  if (friendIds.length > 0) {
-    const since = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
-    const { data: friendEntries } = await supabase
-      .from("journal_entries")
-      .select("id, title, user_id, created_at")
-      .in("user_id", friendIds)
-      .or("and(visibility.eq.friends,status.in.(approved,draft)),and(visibility.eq.public,status.eq.approved)")
-      .gte("created_at", since)
-      .order("created_at", { ascending: false })
-      .limit(5);
-
-    if (friendEntries?.length) {
-      const profileIds = [...new Set(friendEntries.map((entry) => entry.user_id))];
-      const { data: profiles } = await supabase
-        .from("profiles")
-        .select("user_id, full_name, username")
-        .in("user_id", profileIds);
-
-      const profileMap = Object.fromEntries((profiles ?? []).map((profile) => [profile.user_id, profile]));
-
-      friendEntries.forEach((entry) => {
-        const profile = profileMap[entry.user_id];
-
-        results.push({
-          id: `fe-${entry.id}`,
-          type: "friend_entry",
-          icon: BookOpen,
-          color: "text-slate-600 bg-brand-50/70 border-brand-100",
-          title: `${profile?.full_name || profile?.username || "Freund"} hat "${entry.title}" geteilt`,
-          time: entry.created_at,
-          link: `${createPageUrl("JournalDetail")}?id=${entry.id}`,
-        });
-      });
-    }
-  }
-
-  return results.sort((a, b) => new Date(b.time) - new Date(a.time));
-}
+const NOTIFICATION_META = {
+  friend_request: {
+    icon: UserPlus,
+    color: "text-brand-700 bg-brand-50 border-brand-200",
+  },
+  pending: {
+    icon: Clock3,
+    color: "text-brand-300 bg-brand-50 border-brand-100",
+  },
+  approved: {
+    icon: CheckCircle2,
+    color: "text-brand-400 bg-brand-50 border-brand-200",
+  },
+  rejected: {
+    icon: XCircle,
+    color: "text-brand-400 bg-brand-50 border-brand-100",
+  },
+  friend_entry: {
+    icon: BookOpen,
+    color: "text-slate-600 bg-brand-50/70 border-brand-100",
+  },
+};
 
 export default function Notifications() {
   const { user, isAuthenticated } = useAuth();
+  const queryClient = useQueryClient();
   const [permission, setPermission] = useState(() => notificationPermission());
   const [subscriptionEnabled, setSubscriptionEnabled] = useState(false);
   const [subscriptionLoading, setSubscriptionLoading] = useState(false);
@@ -161,8 +68,13 @@ export default function Notifications() {
         return;
       }
 
-      const subscription = await getExistingPushSubscription();
-      if (!cancelled) setSubscriptionEnabled(Boolean(subscription));
+      try {
+        const subscription = await getExistingPushSubscription();
+        if (!cancelled) setSubscriptionEnabled(Boolean(subscription));
+      } catch (error) {
+        console.error("[Notifications] Subscription-Status fehlgeschlagen:", error);
+        if (!cancelled) setSubscriptionEnabled(false);
+      }
     }
 
     syncSubscriptionState();
@@ -207,14 +119,25 @@ export default function Notifications() {
     }
   };
 
-  const { data: notifications = [], isLoading } = useQuery({
+  const {
+    data: notifications = [],
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["notifications", user?.id],
     queryFn: () => loadNotifications(user.id),
     enabled: !!user?.id,
     staleTime: 2 * 60_000,
     refetchOnWindowFocus: false,
     refetchInterval: 10 * 60_000,
+    retry: 1,
   });
+
+  useEffect(() => {
+    if (!user?.id || isLoading || isError) return;
+    markNotificationsSeen(user.id);
+    queryClient.invalidateQueries({ queryKey: ["notificationsUnread", user.id] });
+  }, [user?.id, isLoading, isError, notifications, queryClient]);
 
   if (!isAuthenticated) {
     return (
@@ -297,6 +220,14 @@ export default function Notifications() {
           <div className="flex justify-center py-20">
             <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
           </div>
+        ) : isError ? (
+          <div className="doghike-glass-card p-5 text-center">
+            <BellOff className="mx-auto mb-3 h-10 w-10 text-slate-300" />
+            <h3 className="mb-1 text-lg font-medium text-slate-700">Benachrichtigungen laden gerade nicht</h3>
+            <p className="text-sm text-slate-500">
+              Versuch es kurz nochmal. Deine Hinweise bleiben erhalten und kommen später wieder rein.
+            </p>
+          </div>
         ) : notifications.length === 0 ? (
           <div className="doghike-empty-state">
             <Bell className="doghike-empty-icon" />
@@ -307,7 +238,8 @@ export default function Notifications() {
           <div className="space-y-3">
             <AnimatePresence>
               {notifications.map((notification, index) => {
-                const Icon = notification.icon;
+                const presentation = NOTIFICATION_META[notification.type] || NOTIFICATION_META.friend_entry;
+                const Icon = presentation.icon;
                 const content = (
                   <motion.div
                     key={notification.id}
@@ -316,7 +248,7 @@ export default function Notifications() {
                     transition={{ delay: index * 0.04 }}
                     className="doghike-glass-card-hover flex items-start gap-4 p-4"
                   >
-                    <div className={`rounded-xl p-2 shrink-0 ${notification.color}`}>
+                    <div className={`rounded-xl p-2 shrink-0 ${presentation.color}`}>
                       <Icon className="w-5 h-5" />
                     </div>
                     <div className="flex-1 min-w-0">

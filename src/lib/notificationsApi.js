@@ -1,22 +1,63 @@
 import { supabase } from "@/lib/supabaseClient";
 import { createPageUrl } from "@/utils";
 
+const NOTIFICATION_SEEN_KEY = "doghike:notifications-seen";
+
+function getSeenStorageKey(userId) {
+  return `${NOTIFICATION_SEEN_KEY}:${userId}`;
+}
+
+function readSeenAt(userId) {
+  if (!userId || typeof window === "undefined") return null;
+  try {
+    return window.localStorage.getItem(getSeenStorageKey(userId));
+  } catch {
+    return null;
+  }
+}
+
+function writeSeenAt(userId, value) {
+  if (!userId || typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(getSeenStorageKey(userId), value);
+  } catch {
+    // Ignore localStorage issues and keep notifications usable.
+  }
+}
+
+function getNotificationTime(notification) {
+  const timestamp = notification?.time ? new Date(notification.time).getTime() : NaN;
+  return Number.isFinite(timestamp) ? timestamp : 0;
+}
+
+export function getNotificationsSeenAt(userId) {
+  return readSeenAt(userId);
+}
+
+export function markNotificationsSeen(userId, seenAt = new Date().toISOString()) {
+  writeSeenAt(userId, seenAt);
+}
+
 export async function loadNotifications(userId) {
   const results = [];
 
-  const { data: incoming } = await supabase
+  const { data: incoming, error: incomingError } = await supabase
     .from("friendships")
     .select("id, requester_id, created_at")
     .eq("receiver_id", userId)
     .eq("status", "pending")
     .order("created_at", { ascending: false });
 
+  if (incomingError) throw incomingError;
+
   if (incoming?.length) {
     const requesterIds = incoming.map((friendship) => friendship.requester_id);
-    const { data: profiles } = await supabase
+    const { data: profiles, error: profileError } = await supabase
       .from("profiles")
       .select("user_id, full_name, username, avatar_url")
       .in("user_id", requesterIds);
+
+    if (profileError) throw profileError;
 
     const profileMap = Object.fromEntries((profiles ?? []).map((profile) => [profile.user_id, profile]));
 
@@ -33,7 +74,7 @@ export async function loadNotifications(userId) {
     });
   }
 
-  const { data: myEntries } = await supabase
+  const { data: myEntries, error: myEntriesError } = await supabase
     .from("journal_entries")
     .select("id, title, status, visibility, updated_at, created_at, rejection_reason")
     .eq("user_id", userId)
@@ -41,6 +82,8 @@ export async function loadNotifications(userId) {
     .in("status", ["pending", "approved", "rejected"])
     .order("updated_at", { ascending: false })
     .limit(10);
+
+  if (myEntriesError) throw myEntriesError;
 
   (myEntries ?? []).forEach((entry) => {
     const pending = entry.status === "pending";
@@ -61,19 +104,21 @@ export async function loadNotifications(userId) {
     });
   });
 
-  const { data: acceptedFriendships } = await supabase
+  const { data: acceptedFriendships, error: friendshipsError } = await supabase
     .from("friendships")
     .select("requester_id, receiver_id")
     .or(`requester_id.eq.${userId},receiver_id.eq.${userId}`)
     .eq("status", "accepted");
 
+  if (friendshipsError) throw friendshipsError;
+
   const friendIds = (acceptedFriendships ?? []).map((friendship) =>
-    friendship.requester_id === userId ? friendship.receiver_id : friendship.requester_id
+    friendship.requester_id === userId ? friendship.receiver_id : friendship.requester_id,
   );
 
   if (friendIds.length > 0) {
     const since = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
-    const { data: friendEntries } = await supabase
+    const { data: friendEntries, error: friendEntriesError } = await supabase
       .from("journal_entries")
       .select("id, title, user_id, created_at")
       .in("user_id", friendIds)
@@ -82,12 +127,16 @@ export async function loadNotifications(userId) {
       .order("created_at", { ascending: false })
       .limit(5);
 
+    if (friendEntriesError) throw friendEntriesError;
+
     if (friendEntries?.length) {
       const profileIds = [...new Set(friendEntries.map((entry) => entry.user_id))];
-      const { data: profiles } = await supabase
+      const { data: profiles, error: friendProfilesError } = await supabase
         .from("profiles")
         .select("user_id, full_name, username")
         .in("user_id", profileIds);
+
+      if (friendProfilesError) throw friendProfilesError;
 
       const profileMap = Object.fromEntries((profiles ?? []).map((profile) => [profile.user_id, profile]));
 
@@ -105,5 +154,16 @@ export async function loadNotifications(userId) {
     }
   }
 
-  return results.sort((a, b) => new Date(b.time) - new Date(a.time));
+  return results.sort((left, right) => getNotificationTime(right) - getNotificationTime(left));
+}
+
+export async function loadUnreadNotificationCount(userId) {
+  const notifications = await loadNotifications(userId);
+  const seenAt = readSeenAt(userId);
+  if (!seenAt) return notifications.length;
+
+  const seenTimestamp = new Date(seenAt).getTime();
+  if (!Number.isFinite(seenTimestamp)) return notifications.length;
+
+  return notifications.filter((notification) => getNotificationTime(notification) > seenTimestamp).length;
 }
