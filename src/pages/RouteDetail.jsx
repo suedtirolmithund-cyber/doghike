@@ -294,7 +294,7 @@ export default function RouteDetail() {
                     {routeTypeLabel}
                   </span>
                 </div>
-                <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
+                <h1 className="doghike-page-title mb-2">
                   {route.name}
                 </h1>
                 {route.start_location && (

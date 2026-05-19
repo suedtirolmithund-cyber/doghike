@@ -60,7 +60,7 @@ export default function SmartRecommendations({ allHikes = [] }) {
   return (
     <div className="mb-12">
       <div className="flex items-center gap-2 mb-6">
-        <h2 className="text-2xl font-light text-slate-900">
+        <h2 className="doghike-section-title">
           {isPersonalized ? "Empfohlen für dich" : "Ausgewählte Touren"}
         </h2>
         {isPersonalized && (

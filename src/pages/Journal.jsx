@@ -440,7 +440,7 @@ export default function Journal() {
             className="doghike-empty-state py-24"
           >
             <BookOpen className="doghike-empty-icon" />
-            <h3 className="text-xl font-medium text-slate-700 mb-2">Noch keine Wanderungen</h3>
+            <h3 className="doghike-empty-title">Noch keine Wanderungen</h3>
             <p className="text-slate-500 mb-6 text-sm max-w-xs mx-auto">
               Halte den ersten Tag mit deinem Hund fest. Fotos, Strecke, Gefühl.
             </p>
@@ -453,7 +453,7 @@ export default function Journal() {
         ) : (
           <div className="doghike-empty-state">
             <Search className="doghike-empty-icon" />
-            <p className="text-slate-600 font-medium mb-1">Nichts Passendes gefunden</p>
+            <h3 className="doghike-empty-title">Nichts Passendes gefunden</h3>
             <p className="text-slate-400 text-sm mb-4">Für „{search}“ wurde nichts gefunden.</p>
             <Button variant="outline" onClick={() => setSearch("")}>
               Suche zurücksetzen

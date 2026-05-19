@@ -13,7 +13,7 @@ export default function StatsCard({ icon: Icon, label, value, unit, description,
           <Icon className="h-4 w-4 text-white md:h-5 md:w-5" />
         </div>
         <div className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
-          <span className="text-2xl font-bold leading-none text-[#7C3020] md:text-3xl">{value}</span>
+          <span className="text-2xl font-bold leading-none text-[#7C3020]">{value}</span>
           <span className="min-w-0 whitespace-normal break-words text-[11px] font-semibold uppercase text-[#C07820] sm:text-xs md:text-sm">
             {label}
           </span>

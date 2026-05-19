@@ -296,7 +296,7 @@ export default function Dogs() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
               <div className="relative z-10">
-                <h2 className="text-3xl font-light tracking-[-0.03em] text-white md:text-4xl">
+                <h2 className="text-2xl font-bold leading-tight text-white">
                   Willkommen zurück
                 </h2>
                 <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-white/85 md:text-base">

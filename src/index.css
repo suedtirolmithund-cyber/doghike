@@ -189,6 +189,14 @@
     @apply text-sm font-normal leading-5 text-[#C07820];
   }
 
+  .doghike-card-title {
+    @apply text-base font-semibold leading-tight text-[#7C3020];
+  }
+
+  .doghike-empty-title {
+    @apply mb-2 text-base font-semibold leading-tight text-[#7C3020];
+  }
+
   .doghike-filter-panel {
     @apply rounded-2xl border border-brand-100/55 p-4 shadow-[0_14px_35px_rgba(168,0,60,0.08)] backdrop-blur-xl md:p-5;
     background-color: rgba(255, 255, 255, 0.78);
