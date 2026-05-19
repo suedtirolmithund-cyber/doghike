@@ -52,17 +52,10 @@ function getCountryLabel(country) {
   return country || null;
 }
 
-const difficultyColors = {
-  "1": "bg-brand-100 text-brand-600",
-  "2": "bg-brand-100 text-brand-600",
-  "3": "bg-brand-100 text-brand-600",
-  "4": "bg-brand-100 text-brand-400",
-  "5": "bg-brand-100 text-brand-500"
-};
-
-const humanDifficultyChipClass = "";
+const humanDifficultyChipClass =
+  "!border-[#D4547A]/45 !bg-[#FDF0E8]/90 text-[#A8003C]";
 const dogDifficultyChipClass =
-  "border-[#F07030]/55 bg-[#F9C030]/22 text-[#7C4A00]";
+  "!border-[#F9C030]/65 !bg-[#FFF8F0]/92 text-[#7C3020]";
 const weatherEmojis = {
   sunny: "☀️",
   cloudy: "☁️",
@@ -382,10 +375,10 @@ export default function HikeDetail() {
                 </Badge>
               )}
               {hike.difficulty && (
-                <DifficultyScaleChip level={hike.difficulty} type="human" className={difficultyColors[hike.difficulty]} />
+                <DifficultyScaleChip level={hike.difficulty} type="human" />
               )}
               {hike.dog_difficulty && (
-                <DifficultyScaleChip level={hike.dog_difficulty} type="dog" className={difficultyColors[hike.dog_difficulty]} />
+                <DifficultyScaleChip level={hike.dog_difficulty} type="dog" />
               )}
             </div>
             <h1 className="mb-2 text-3xl font-light leading-tight text-white sm:text-4xl md:text-5xl">{hike.trail_name}</h1>

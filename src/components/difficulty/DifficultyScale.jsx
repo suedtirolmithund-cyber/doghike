@@ -5,12 +5,14 @@ const DIFFICULTY_TYPE_META = {
   human: {
     icon: TOUR_ICONS.human,
     label: "Mensch",
+    chipClass: "border-[#D4547A]/55 bg-[#FDF0E8] text-[#A8003C]",
     activeBar: "bg-[#A8003C]",
     inactiveBar: "bg-[#D4547A]/20",
   },
   dog: {
     icon: TOUR_ICONS.dog,
     label: "Hund",
+    chipClass: "border-[#F9C030]/70 bg-[#FFF8F0] text-[#7C3020]",
     activeBar: "bg-[#C07820]",
     inactiveBar: "bg-[#F9C030]/30",
   },
@@ -48,6 +50,7 @@ export default function DifficultyScaleChip({ level, type = "human", className =
     <span
       className={cn(
         "inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1.5 rounded-full border px-2.5 py-1.5 text-center text-xs font-semibold leading-tight whitespace-normal break-words sm:text-sm md:px-3 md:text-xs",
+        meta.chipClass,
         className
       )}
       aria-label={`${meta.label} ${difficultyLevel} von 5: ${difficultyLabel}`}
