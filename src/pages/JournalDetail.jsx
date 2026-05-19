@@ -20,8 +20,10 @@ import { Badge } from "@/components/ui/badge";
 import WaterIcon from "@/components/icons/WaterIcon";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
+import { DifficultyBars } from "@/components/difficulty/DifficultyScale";
 import {
-  getDifficultyScaleLabel,
+  getDifficultyLabel,
+  getDifficultyLevel,
   getDifficultyTextColor,
   getSeasonIcon,
   getSeasonLabel,
@@ -305,16 +307,18 @@ export default function JournalDetail() {
             {entry.difficulty && (
               <div className="flex items-center gap-2">
                 <span className="text-xs text-slate-500 w-28">{TOUR_ICONS.human} Mensch</span>
-                <span className={`text-sm font-medium ${getDifficultyTextColor(entry.difficulty)}`}>
-                  {getDifficultyScaleLabel(entry.difficulty)}
+                <span className={`inline-flex items-center gap-1.5 text-sm font-medium ${getDifficultyTextColor(entry.difficulty)}`}>
+                  <DifficultyBars level={entry.difficulty} type="human" />
+                  {getDifficultyLabel(entry.difficulty)} · {getDifficultyLevel(entry.difficulty)}/5
                 </span>
               </div>
             )}
             {entry.dog_difficulty && (
               <div className="flex items-center gap-2">
                 <span className="text-xs text-slate-500 w-28">{TOUR_ICONS.dog} Hund</span>
-                <span className={`text-sm font-medium ${getDifficultyTextColor(entry.dog_difficulty)}`}>
-                  {getDifficultyScaleLabel(entry.dog_difficulty)}
+                <span className={`inline-flex items-center gap-1.5 text-sm font-medium ${getDifficultyTextColor(entry.dog_difficulty)}`}>
+                  <DifficultyBars level={entry.dog_difficulty} type="dog" />
+                  {getDifficultyLabel(entry.dog_difficulty)} · {getDifficultyLevel(entry.dog_difficulty)}/5
                 </span>
               </div>
             )}

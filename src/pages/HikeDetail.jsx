@@ -32,8 +32,9 @@ import ExpandableText from "@/components/ExpandableText";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 import PremiumGate from "@/components/hikes/PremiumGate";
 import WaterIcon from "@/components/icons/WaterIcon";
+import DifficultyScaleChip, { DifficultyBars } from "@/components/difficulty/DifficultyScale";
 import { supabase } from "@/lib/supabaseClient";
-import { TOUR_ICONS, getDifficultyChipLabel, getDifficultyLabel, getDifficultyScaleLabel, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
+import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { formatDurationHours } from "@/lib/duration";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
@@ -381,14 +382,10 @@ export default function HikeDetail() {
                 </Badge>
               )}
               {hike.difficulty && (
-                <Badge className={difficultyColors[hike.difficulty]}>
-                  {TOUR_ICONS.human} {getDifficultyChipLabel("Mensch", hike.difficulty)}
-                </Badge>
+                <DifficultyScaleChip level={hike.difficulty} type="human" className={difficultyColors[hike.difficulty]} />
               )}
               {hike.dog_difficulty && (
-                <Badge className={difficultyColors[hike.dog_difficulty]}>
-                  {TOUR_ICONS.dog} {getDifficultyChipLabel("Hund", hike.dog_difficulty)}
-                </Badge>
+                <DifficultyScaleChip level={hike.dog_difficulty} type="dog" className={difficultyColors[hike.dog_difficulty]} />
               )}
             </div>
             <h1 className="mb-2 text-3xl font-light leading-tight text-white sm:text-4xl md:text-5xl">{hike.trail_name}</h1>
@@ -505,12 +502,13 @@ export default function HikeDetail() {
           {hike.difficulty && (
             <div className={`doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4 ${humanDifficultyChipClass}`}>
               <span className="text-lg">{TOUR_ICONS.human}</span>
-              <div>
-                <div className="text-sm font-bold leading-tight text-[#7C3020]">
-                  {getDifficultyScaleLabel(hike.difficulty)}
+              <div className="min-w-0">
+                <div className="flex min-w-0 items-center gap-1.5">
+                  <DifficultyBars level={hike.difficulty} type="human" />
+                  <span className="text-sm font-bold leading-tight text-[#7C3020]">{getDifficultyLabel(hike.difficulty)}</span>
                 </div>
                 {getDifficultyLabel(hike.difficulty) && (
-                  <div className="text-xs text-[#C07820]">Mensch</div>
+                  <div className="text-xs text-[#C07820]">Mensch {getDifficultyLevel(hike.difficulty)}/5</div>
                 )}
               </div>
             </div>
@@ -518,12 +516,13 @@ export default function HikeDetail() {
           {hike.dog_difficulty && (
             <div className={`doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4 ${dogDifficultyChipClass}`}>
               <span className="text-lg">{TOUR_ICONS.dog}</span>
-              <div>
-                <div className="text-sm font-bold leading-tight text-[#7C3020]">
-                  {getDifficultyScaleLabel(hike.dog_difficulty)}
+              <div className="min-w-0">
+                <div className="flex min-w-0 items-center gap-1.5">
+                  <DifficultyBars level={hike.dog_difficulty} type="dog" />
+                  <span className="text-sm font-bold leading-tight text-[#7C3020]">{getDifficultyLabel(hike.dog_difficulty)}</span>
                 </div>
                 {getDifficultyLabel(hike.dog_difficulty) && (
-                  <div className="text-xs text-[#7C4A00]">Hund</div>
+                  <div className="text-xs text-[#7C4A00]">Hund {getDifficultyLevel(hike.dog_difficulty)}/5</div>
                 )}
               </div>
             </div>
