@@ -6,13 +6,13 @@ const DIFFICULTY_TYPE_META = {
     icon: TOUR_ICONS.human,
     label: "Mensch",
     activeBar: "bg-[#A8003C]",
-    inactiveBar: "bg-[#F9C030]/35",
+    inactiveBar: "bg-[#D4547A]/20",
   },
   dog: {
     icon: TOUR_ICONS.dog,
     label: "Hund",
-    activeBar: "bg-[#F07030]",
-    inactiveBar: "bg-[#F9C030]/35",
+    activeBar: "bg-[#C07820]",
+    inactiveBar: "bg-[#F9C030]/30",
   },
 };
 
