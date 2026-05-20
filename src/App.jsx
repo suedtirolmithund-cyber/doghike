@@ -13,6 +13,7 @@ import { Loader2 } from 'lucide-react';
 import GuestWelcomeScreen from '@/components/GuestWelcomeScreen';
 import { getDogs } from '@/lib/profilesApi';
 import { hasSeenDogNudgeThisSession, markDogNudgeSeenThisSession } from '@/lib/dogNudgeSession';
+import { createPageUrl } from '@/utils';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Suspense, lazy } from 'react';
