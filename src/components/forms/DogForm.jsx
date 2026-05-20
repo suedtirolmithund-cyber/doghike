@@ -6,8 +6,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { uploadFile, deleteStoredFile } from "@/lib/profilesApi";
 import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
 import { useAuth } from "@/lib/AuthContext";
-import { Dog, Upload, Loader2 } from "lucide-react";
+import { Dog, Upload, Loader2, Move } from "lucide-react";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
+import { createSquareCropFile } from "@/lib/imageCropping";
+import ImagePositionEditorDialog from "@/components/images/ImagePositionEditorDialog";
 
 export default function DogForm({ dog, onSave, onCancel }) {
   const { user } = useAuth();
@@ -26,16 +28,43 @@ export default function DogForm({ dog, onSave, onCancel }) {
   const [uploadError, setUploadError] = useState(null);
   const [validationError, setValidationError] = useState("");
   const [temporaryUploadedPhotoUrl, setTemporaryUploadedPhotoUrl] = useState(null);
+  const [editorOpen, setEditorOpen] = useState(false);
+  const [editorSourceUrl, setEditorSourceUrl] = useState(null);
+  const [editorSourceName, setEditorSourceName] = useState("hund.jpg");
 
   const handlePhotoUpload = async (event) => {
     const file = event.target.files[0];
     if (!file || !user) return;
+    const objectUrl = URL.createObjectURL(file);
+    setUploadError(null);
+    setEditorSourceUrl(objectUrl);
+    setEditorSourceName(file.name || "hund.jpg");
+    setEditorOpen(true);
+    event.target.value = "";
+  };
+
+  const closeEditor = () => {
+    if (editorSourceUrl?.startsWith("blob:")) {
+      URL.revokeObjectURL(editorSourceUrl);
+    }
+    setEditorOpen(false);
+    setEditorSourceUrl(null);
+    setEditorSourceName("hund.jpg");
+  };
+
+  const handleSaveAdjustedPhoto = async ({ focusX, focusY }) => {
+    if (!editorSourceUrl || !user) return;
 
     setUploading(true);
     setUploadError(null);
 
     try {
-      const url = await uploadFile("dog-photos", user.id, file);
+      const croppedFile = await createSquareCropFile(editorSourceUrl, {
+        focusX,
+        focusY,
+        fileName: editorSourceName.replace(/\.[^.]+$/, "") + ".jpg",
+      });
+      const url = await uploadFile("dog-photos", user.id, croppedFile);
       setFormData((previous) => ({ ...previous, photo_url: url }));
 
       if (temporaryUploadedPhotoUrl && temporaryUploadedPhotoUrl !== url) {
@@ -47,6 +76,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
       }
 
       setTemporaryUploadedPhotoUrl(url);
+      closeEditor();
     } catch (error) {
       setUploadError(getImageUploadErrorMessage(error));
       console.error("Dog photo upload error:", error);
@@ -99,9 +129,17 @@ export default function DogForm({ dog, onSave, onCancel }) {
     onCancel?.();
   };
 
+  const openExistingPhotoEditor = () => {
+    if (!formData.photo_url) return;
+    setEditorSourceUrl(formData.photo_url);
+    setEditorSourceName(`${formData.name || "hund"}.jpg`);
+    setEditorOpen(true);
+  };
+
   return (
+    <>
     <form onSubmit={handleSubmit} className="doghike-glass-card space-y-6 p-4 sm:p-5">
-      <div className="flex flex-col items-center gap-2">
+      <div className="flex flex-col items-center gap-3">
         <div className="relative">
           <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gradient-to-br from-brand-50 via-white to-brand-50">
             {formData.photo_url ? (
@@ -133,6 +171,12 @@ export default function DogForm({ dog, onSave, onCancel }) {
         </div>
         {uploadError && (
           <p className="text-xs text-brand-400 text-center max-w-xs">{uploadError}</p>
+        )}
+        {formData.photo_url && (
+          <Button type="button" variant="outline" size="sm" onClick={openExistingPhotoEditor} disabled={uploading}>
+            <Move className="mr-2 h-4 w-4" />
+            Bildausschnitt anpassen
+          </Button>
         )}
       </div>
 
@@ -227,5 +271,24 @@ export default function DogForm({ dog, onSave, onCancel }) {
         </Button>
       </div>
     </form>
+
+    <ImagePositionEditorDialog
+      open={editorOpen}
+      onOpenChange={(nextOpen) => {
+        if (!nextOpen) {
+          closeEditor();
+          return;
+        }
+        setEditorOpen(nextOpen);
+      }}
+      sourceUrl={editorSourceUrl}
+      title="Hundefoto ausrichten"
+      description="Passe den Ausschnitt so an, dass dein Hund im Kreis gut sitzt."
+      previewShape="circle"
+      confirmLabel="Hundefoto speichern"
+      isSaving={uploading}
+      onConfirm={handleSaveAdjustedPhoto}
+    />
+    </>
   );
 }
