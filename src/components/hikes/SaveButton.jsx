@@ -23,20 +23,39 @@ export default function SaveButton({ hikeId, hikeSource = "sheets", className })
 
   const saveMutation = useMutation({
     mutationFn: () => saveHike(user.id, normalizedHikeId, hikeSource),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] });
-      toast.success("Die Tour wartet jetzt in deiner Merkliste.");
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ["savedHikes", user?.id] });
+      const previous = queryClient.getQueryData(["savedHikes", user?.id]);
+      queryClient.setQueryData(["savedHikes", user?.id], (old = []) => [
+        ...old,
+        { hike_id: normalizedHikeId, hike_source: hikeSource },
+      ]);
+      return { previous };
     },
-    onError: () => toast.error("Das Merken hat gerade nicht geklappt."),
+    onError: (_err, _vars, context) => {
+      queryClient.setQueryData(["savedHikes", user?.id], context?.previous);
+      toast.error("Das Merken hat gerade nicht geklappt.");
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] }),
+    onSuccess: () => toast.success("Die Tour wartet jetzt in deiner Merkliste."),
   });
 
   const unsaveMutation = useMutation({
     mutationFn: () => unsaveHike(user.id, normalizedHikeId, hikeSource),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] });
-      toast.success("Die Tour ist aus deiner Merkliste raus.");
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ["savedHikes", user?.id] });
+      const previous = queryClient.getQueryData(["savedHikes", user?.id]);
+      queryClient.setQueryData(["savedHikes", user?.id], (old = []) =>
+        old.filter((s) => !(String(s.hike_id) === normalizedHikeId && s.hike_source === hikeSource))
+      );
+      return { previous };
     },
-    onError: () => toast.error("Das Entfernen hat gerade nicht geklappt."),
+    onError: (_err, _vars, context) => {
+      queryClient.setQueryData(["savedHikes", user?.id], context?.previous);
+      toast.error("Das Entfernen hat gerade nicht geklappt.");
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] }),
+    onSuccess: () => toast.success("Die Tour ist aus deiner Merkliste raus."),
   });
 
   const handleClick = (e) => {
