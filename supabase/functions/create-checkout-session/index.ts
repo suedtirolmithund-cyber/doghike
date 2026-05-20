@@ -111,6 +111,7 @@ Deno.serve(async (request) => {
     return jsonResponse({ url: session.url });
   } catch (error) {
     console.error("[create-checkout-session]", error);
-    return jsonResponse({ error: "Checkout konnte gerade nicht gestartet werden." }, 500);
+    const message = error instanceof Error ? error.message : "Checkout konnte gerade nicht gestartet werden.";
+    return jsonResponse({ error: message }, 500);
   }
 });
