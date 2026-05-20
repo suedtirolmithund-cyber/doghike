@@ -66,6 +66,18 @@ const humanDifficultyChipClass =
   "!border-[#D4547A]/45 !bg-[#FDF0E8]/90 text-[#A8003C]";
 const dogDifficultyChipClass =
   "!border-[#F9C030]/65 !bg-[#FFF8F0]/92 text-[#7C3020]";
+const detailStatChipClass =
+  "doghike-stat-chip min-h-[68px] min-w-0 justify-center gap-3 px-4 py-3 text-center sm:min-h-[72px] sm:px-5";
+const detailStatIconClass =
+  "shrink-0 text-lg leading-none";
+const detailStatTextClass =
+  "min-w-0 flex-1 text-center";
+const detailStatValueClass =
+  "text-sm font-bold leading-tight text-[#7C3020]";
+const detailStatLabelClass =
+  "text-xs leading-tight text-[#C07820]";
+const detailDifficultyRowClass =
+  "flex min-w-0 flex-wrap items-center justify-center gap-1.5";
 const weatherEmojis = {
   sunny: "☀️",
   cloudy: "☁️",
@@ -476,67 +488,67 @@ export default function HikeDetail() {
         >
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {countryLabel && (
-            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4">
-              <span className="text-lg">{TOUR_ICONS.country}</span>
-              <div>
-                <div className="text-sm font-bold leading-tight text-[#7C3020]">{countryLabel}</div>
-                <div className="text-xs text-[#C07820]">Land</div>
+            <div className={detailStatChipClass}>
+              <span className={detailStatIconClass}>{TOUR_ICONS.country}</span>
+              <div className={detailStatTextClass}>
+                <div className={detailStatValueClass}>{countryLabel}</div>
+                <div className={detailStatLabelClass}>Land</div>
               </div>
             </div>
           )}
           {hike.duration_minutes && (
-            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4">
-              <span className="text-lg">{TOUR_ICONS.duration}</span>
-              <div>
-                <div className="text-sm font-bold leading-tight text-[#7C3020]">
+            <div className={detailStatChipClass}>
+              <span className={detailStatIconClass}>{TOUR_ICONS.duration}</span>
+              <div className={detailStatTextClass}>
+                <div className={detailStatValueClass}>
                   {formatDurationHours(hike.duration_minutes)}
                 </div>
-                <div className="text-xs text-[#C07820]">Gehzeit</div>
+                <div className={detailStatLabelClass}>Gehzeit</div>
               </div>
             </div>
           )}
           {hike.distance_km && (
-            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4">
-              <span className="text-lg">{TOUR_ICONS.distance}</span>
-              <div>
-                <div className="text-sm font-bold leading-tight text-[#7C3020]">{hike.distance_km} km</div>
-                <div className="text-xs text-[#C07820]">Strecke</div>
+            <div className={detailStatChipClass}>
+              <span className={detailStatIconClass}>{TOUR_ICONS.distance}</span>
+              <div className={detailStatTextClass}>
+                <div className={detailStatValueClass}>{hike.distance_km} km</div>
+                <div className={detailStatLabelClass}>Strecke</div>
               </div>
             </div>
           )}
           {hike.elevation_gain_m && (
-            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4">
-              <span className="text-lg">{TOUR_ICONS.elevation}</span>
-              <div>
-                <div className="text-sm font-bold leading-tight text-[#7C3020]">{hike.elevation_gain_m} Hm</div>
-                <div className="text-xs text-[#C07820]">Aufstieg</div>
+            <div className={detailStatChipClass}>
+              <span className={detailStatIconClass}>{TOUR_ICONS.elevation}</span>
+              <div className={detailStatTextClass}>
+                <div className={detailStatValueClass}>{hike.elevation_gain_m} Hm</div>
+                <div className={detailStatLabelClass}>Aufstieg</div>
               </div>
             </div>
           )}
           {hike.difficulty && (
-            <div className={`doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4 ${humanDifficultyChipClass}`}>
-              <span className="text-lg">{TOUR_ICONS.human}</span>
-              <div className="min-w-0">
-                <div className="flex min-w-0 items-center gap-1.5">
+            <div className={`${detailStatChipClass} ${humanDifficultyChipClass}`}>
+              <span className={detailStatIconClass}>{TOUR_ICONS.human}</span>
+              <div className={detailStatTextClass}>
+                <div className={detailDifficultyRowClass}>
                   <DifficultyBars level={hike.difficulty} type="human" />
-                  <span className="text-sm font-bold leading-tight text-[#7C3020]">{getDifficultyLabel(hike.difficulty)}</span>
+                  <span className={detailStatValueClass}>{getDifficultyLabel(hike.difficulty)}</span>
                 </div>
                 {getDifficultyLabel(hike.difficulty) && (
-                  <div className="text-xs text-[#C07820]">Mensch {getDifficultyLevel(hike.difficulty)}/5</div>
+                  <div className={detailStatLabelClass}>Mensch {getDifficultyLevel(hike.difficulty)}/5</div>
                 )}
               </div>
             </div>
           )}
           {hike.dog_difficulty && (
-            <div className={`doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4 ${dogDifficultyChipClass}`}>
-              <span className="text-lg">{TOUR_ICONS.dog}</span>
-              <div className="min-w-0">
-                <div className="flex min-w-0 items-center gap-1.5">
+            <div className={`${detailStatChipClass} ${dogDifficultyChipClass}`}>
+              <span className={detailStatIconClass}>{TOUR_ICONS.dog}</span>
+              <div className={detailStatTextClass}>
+                <div className={detailDifficultyRowClass}>
                   <DifficultyBars level={hike.dog_difficulty} type="dog" />
-                  <span className="text-sm font-bold leading-tight text-[#7C3020]">{getDifficultyLabel(hike.dog_difficulty)}</span>
+                  <span className={detailStatValueClass}>{getDifficultyLabel(hike.dog_difficulty)}</span>
                 </div>
                 {getDifficultyLabel(hike.dog_difficulty) && (
-                  <div className="text-xs text-[#7C4A00]">Hund {getDifficultyLevel(hike.dog_difficulty)}/5</div>
+                  <div className="text-xs leading-tight text-[#7C4A00]">Hund {getDifficultyLevel(hike.dog_difficulty)}/5</div>
                 )}
               </div>
             </div>
@@ -545,31 +557,31 @@ export default function HikeDetail() {
             getSeasonLabel(season) ? (
               <div
                 key={season}
-                className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4"
+                className={detailStatChipClass}
               >
-                <span className="text-lg">{getSeasonIcon(season)}</span>
-                <div>
-                  <div className="text-sm font-bold leading-tight text-[#7C3020]">{getSeasonLabel(season)}</div>
-                  <div className="text-xs text-[#C07820]">Jahreszeit</div>
+                <span className={detailStatIconClass}>{getSeasonIcon(season)}</span>
+                <div className={detailStatTextClass}>
+                  <div className={detailStatValueClass}>{getSeasonLabel(season)}</div>
+                  <div className={detailStatLabelClass}>Jahreszeit</div>
                 </div>
               </div>
             ) : null
           ))}
           {hike.grazing_animals && (
-            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4">
-              <span className="text-lg">{TOUR_ICONS.grazing}</span>
-              <div>
-                <div className="text-sm font-bold leading-tight text-[#7C3020]">Achtung Weidetiere</div>
-                <div className="text-xs text-[#C07820]">Hinweis</div>
+            <div className={detailStatChipClass}>
+              <span className={detailStatIconClass}>{TOUR_ICONS.grazing}</span>
+              <div className={detailStatTextClass}>
+                <div className={detailStatValueClass}>Achtung Weidetiere</div>
+                <div className={detailStatLabelClass}>Hinweis</div>
               </div>
             </div>
           )}
           {hike.muzzle_recommended && (
-            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4">
-              <span className="text-lg">{TOUR_ICONS.muzzle}</span>
-              <div>
-                <div className="text-sm font-bold leading-tight text-[#7C3020]">Maulkorb empfohlen</div>
-                <div className="text-xs text-[#C07820]">Hinweis</div>
+            <div className={detailStatChipClass}>
+              <span className={detailStatIconClass}>{TOUR_ICONS.muzzle}</span>
+              <div className={detailStatTextClass}>
+                <div className={detailStatValueClass}>Maulkorb empfohlen</div>
+                <div className={detailStatLabelClass}>Hinweis</div>
               </div>
             </div>
           )}
