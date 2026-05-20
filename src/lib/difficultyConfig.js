@@ -203,10 +203,10 @@ export function getDifficultyBadgeClass(level) {
 }
 
 export const WATER_LEVELS = [
-  { value: "none", numeric: 0, label: "Kein Wasser", icon: "💧", textColor: "text-brand-500", badgeClass: "bg-brand-50 text-brand-500 border-brand-100" },
-  { value: "little", numeric: 1, label: "Wenig Wasser", icon: "💧", textColor: "text-brand-400", badgeClass: "bg-brand-50 text-brand-400 border-brand-100" },
-  { value: "moderate", numeric: 2, label: "Etwas Wasser", icon: "💧💧", textColor: "text-brand-700", badgeClass: "bg-brand-50 text-brand-700 border-brand-200" },
-  { value: "plenty", numeric: 3, label: "Viel Wasser", icon: "💧💧💧", textColor: "text-brand-300", badgeClass: "bg-brand-50 text-brand-300 border-brand-100" },
+  { value: "none", numeric: 0, label: "Kein Wasser", icon: "💧", textColor: "text-[#7C3020]", badgeClass: "bg-[#FFF8F0] text-[#7C3020] border-[#F9C030]" },
+  { value: "little", numeric: 1, label: "Wenig Wasser", icon: "💧", textColor: "text-[#7C3020]", badgeClass: "bg-[#FFF8F0] text-[#7C3020] border-[#F9C030]" },
+  { value: "moderate", numeric: 2, label: "Etwas Wasser", icon: "💧💧", textColor: "text-[#7C3020]", badgeClass: "bg-[#FFF8F0] text-[#7C3020] border-[#F9C030]" },
+  { value: "plenty", numeric: 3, label: "Viel Wasser", icon: "💧💧💧", textColor: "text-[#7C3020]", badgeClass: "bg-[#FFF8F0] text-[#7C3020] border-[#F9C030]" },
 ];
 
 export const WATER_GUIDE = [
@@ -319,9 +319,9 @@ export function getWaterIcon(value) {
 }
 
 export function getWaterBadgeClass(value) {
-  return getWaterLevel(value)?.badgeClass ?? "bg-brand-50 text-slate-600 border-brand-100";
+  return getWaterLevel(value)?.badgeClass ?? "bg-[#FFF8F0] text-[#7C3020] border-[#F9C030]";
 }
 
 export function getWaterTextColor(value) {
-  return getWaterLevel(value)?.textColor ?? "text-slate-600";
+  return getWaterLevel(value)?.textColor ?? "text-[#7C3020]";
 }
