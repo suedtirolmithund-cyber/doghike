@@ -48,7 +48,10 @@ export function useHikeFilters(hikes = []) {
     setAppliedFilters(INITIAL_FILTERS);
   };
 
-  const hasPendingChanges = JSON.stringify(draftFilters) !== JSON.stringify(appliedFilters);
+  const hasPendingChanges = useMemo(
+    () => JSON.stringify(draftFilters) !== JSON.stringify(appliedFilters),
+    [draftFilters, appliedFilters]
+  );
 
   const filteredHikes = useMemo(() => {
     return hikes
