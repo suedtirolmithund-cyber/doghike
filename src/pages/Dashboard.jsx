@@ -259,7 +259,14 @@ export default function Dashboard() {
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {visibleHikes.map((hike, i) => (
-                  <HikeCard key={`${hike._source ?? "sheets"}-${hike.id}`} hike={hike} index={i} waterInStatsRow />
+                  <HikeCard
+                    key={`${hike._source ?? "sheets"}-${hike.id}`}
+                    hike={hike}
+                    index={i}
+                    waterInStatsRow
+                    imageSize="home"
+                    descriptionLines={5}
+                  />
                 ))}
               </div>
 

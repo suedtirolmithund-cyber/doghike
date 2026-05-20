@@ -32,7 +32,14 @@ function formatElevation(value) {
   return `${METRIC_FORMATTER.format(Number(value))} Hm`;
 }
 
-export default function HikeCard({ hike, dogs = [], index = 0, waterInStatsRow = false }) {
+export default function HikeCard({
+  hike,
+  dogs = [],
+  index = 0,
+  waterInStatsRow = false,
+  imageSize = "default",
+  descriptionLines = 6,
+}) {
   const hikeDogs = dogs.filter((dog) => hike.dogs?.includes(dog.id));
   const coverPhoto = hike.photos?.[0];
   const hikeSource = hike._source ?? "sheets";
@@ -59,6 +66,7 @@ export default function HikeCard({ hike, dogs = [], index = 0, waterInStatsRow =
       <WaterIcon value={hike.water_availability} /> {getWaterLabel(hike.water_availability) ?? hike.water_availability}
     </span>
   ) : null;
+  const imageHeightClass = imageSize === "home" ? "h-56 sm:h-60" : "h-48 sm:h-52";
 
   return (
     <motion.div
@@ -71,7 +79,7 @@ export default function HikeCard({ hike, dogs = [], index = 0, waterInStatsRow =
         state={{ hike }}
       >
         <div className="group overflow-hidden rounded-[22px] border border-brand-100/80 bg-white/78 shadow-[0_12px_28px_rgba(168,0,60,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(240,112,48,0.12)]">
-          <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a] sm:h-52">
+          <div className={`relative overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a] ${imageHeightClass}`}>
             {coverPhoto && (
               <img
                 src={coverPhoto}
@@ -152,7 +160,7 @@ export default function HikeCard({ hike, dogs = [], index = 0, waterInStatsRow =
               <div className="mb-3">
                 <ExpandableText
                   text={hike.notes}
-                  lines={6}
+                  lines={descriptionLines}
                   className="text-sm font-normal leading-relaxed text-[#C07820]"
                 />
               </div>
