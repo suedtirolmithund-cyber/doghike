@@ -3,7 +3,6 @@ import { optimizeImageForUpload, validateImageUpload } from "@/lib/uploadValidat
 
 const PUBLIC_HIKE_BUCKET = "journal";
 const PUBLIC_HIKE_PREFIX = "public-hikes/";
-const SIGNED_URL_TTL_SECONDS = 60 * 60;
 
 function mapSupabaseWaterLevel(value) {
   if (value === 0 || value === "0") return "none";
@@ -271,16 +270,11 @@ async function createPublicHikePhotoDisplayUrl(photoReference) {
     return normalizeStoredPublicPhotoReference(photoReference);
   }
 
-  const { data, error } = await supabase.storage
+  const { data } = supabase.storage
     .from(storageDescriptor.bucket)
-    .createSignedUrl(storageDescriptor.path, SIGNED_URL_TTL_SECONDS);
+    .getPublicUrl(storageDescriptor.path);
 
-  if (error) {
-    console.error("[createPublicHikePhotoDisplayUrl] signed URL failed:", error.message);
-    return null;
-  }
-
-  return data?.signedUrl ?? null;
+  return data?.publicUrl ?? null;
 }
 
 export async function resolvePublicHikePhotoReferences(photoReferences = []) {
