@@ -465,9 +465,9 @@ export default function HikeDetail() {
           transition={{ delay: 0.15 }}
           className="mb-10"
         >
-          <div className="grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {countryLabel && (
-            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4">
+            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4">
               <span className="text-lg">{TOUR_ICONS.country}</span>
               <div>
                 <div className="text-sm font-bold leading-tight text-[#7C3020]">{countryLabel}</div>
@@ -476,7 +476,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.duration_minutes && (
-            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4">
+            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4">
               <span className="text-lg">{TOUR_ICONS.duration}</span>
               <div>
                 <div className="text-sm font-bold leading-tight text-[#7C3020]">
@@ -487,7 +487,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.distance_km && (
-            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4">
+            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4">
               <span className="text-lg">{TOUR_ICONS.distance}</span>
               <div>
                 <div className="text-sm font-bold leading-tight text-[#7C3020]">{hike.distance_km} km</div>
@@ -496,7 +496,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.elevation_gain_m && (
-            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4">
+            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4">
               <span className="text-lg">{TOUR_ICONS.elevation}</span>
               <div>
                 <div className="text-sm font-bold leading-tight text-[#7C3020]">{hike.elevation_gain_m} Hm</div>
@@ -505,7 +505,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.difficulty && (
-            <div className={`doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4 ${humanDifficultyChipClass}`}>
+            <div className={`doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4 ${humanDifficultyChipClass}`}>
               <span className="text-lg">{TOUR_ICONS.human}</span>
               <div className="min-w-0">
                 <div className="flex min-w-0 items-center gap-1.5">
@@ -519,7 +519,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.dog_difficulty && (
-            <div className={`doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4 ${dogDifficultyChipClass}`}>
+            <div className={`doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4 ${dogDifficultyChipClass}`}>
               <span className="text-lg">{TOUR_ICONS.dog}</span>
               <div className="min-w-0">
                 <div className="flex min-w-0 items-center gap-1.5">
@@ -536,7 +536,7 @@ export default function HikeDetail() {
             getSeasonLabel(season) ? (
               <div
                 key={season}
-                className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4"
+                className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4"
               >
                 <span className="text-lg">{getSeasonIcon(season)}</span>
                 <div>
@@ -547,7 +547,7 @@ export default function HikeDetail() {
             ) : null
           ))}
           {hike.grazing_animals && (
-            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4">
+            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4">
               <span className="text-lg">{TOUR_ICONS.grazing}</span>
               <div>
                 <div className="text-sm font-bold leading-tight text-[#7C3020]">Achtung Weidetiere</div>
@@ -556,7 +556,7 @@ export default function HikeDetail() {
             </div>
           )}
           {hike.muzzle_recommended && (
-            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4">
+            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:px-4">
               <span className="text-lg">{TOUR_ICONS.muzzle}</span>
               <div>
                 <div className="text-sm font-bold leading-tight text-[#7C3020]">Maulkorb empfohlen</div>
