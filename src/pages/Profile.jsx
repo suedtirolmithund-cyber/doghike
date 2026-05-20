@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -66,15 +66,41 @@ function normalizeHikeSource(value) {
   return value ?? "sheets";
 }
 
+const ROUTES_SEEN_KEY = "doghike:profile-routes-seen";
+
+function getRoutesSeenStorageKey(userId) {
+  return `${ROUTES_SEEN_KEY}:${userId}`;
+}
+
+function readRoutesSeenAt(userId) {
+  if (!userId || typeof window === "undefined") return null;
+  try {
+    return window.localStorage.getItem(getRoutesSeenStorageKey(userId));
+  } catch {
+    return null;
+  }
+}
+
+function writeRoutesSeenAt(userId, value) {
+  if (!userId || typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(getRoutesSeenStorageKey(userId), value);
+  } catch {
+    // Ignore localStorage issues and keep the profile usable.
+  }
+}
+
 export default function Profile() {
   const { user, isAuthenticated, logout } = useAuth();
   const queryClient = useQueryClient();
 
+  const [activeTab, setActiveTab] = useState("dogs");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingDog, setEditingDog] = useState(null);
   const [editingProfile, setEditingProfile] = useState(false);
   const [profileDraft, setProfileDraft] = useState({ full_name: "", username: "" });
   const [avatarUploading, setAvatarUploading] = useState(false);
+  const [routesSeenAt, setRoutesSeenAt] = useState(null);
 
   const { data: profile } = useQuery({
     queryKey: ["profile", user?.id],
@@ -138,6 +164,30 @@ export default function Profile() {
     refetchOnWindowFocus: false,
     refetchInterval: 10 * 60_000,
   });
+
+  useEffect(() => {
+    setRoutesSeenAt(readRoutesSeenAt(user?.id));
+  }, [user?.id]);
+
+  const unseenRouteCount = useMemo(() => {
+    if (!userRoutes.length) return 0;
+    if (!routesSeenAt) return userRoutes.length;
+
+    const seenTimestamp = new Date(routesSeenAt).getTime();
+    if (!Number.isFinite(seenTimestamp)) return userRoutes.length;
+
+    return userRoutes.filter((route) => {
+      const routeTimestamp = new Date(route.updated_at || route.created_at || 0).getTime();
+      return Number.isFinite(routeTimestamp) && routeTimestamp > seenTimestamp;
+    }).length;
+  }, [routesSeenAt, userRoutes]);
+
+  useEffect(() => {
+    if (activeTab !== "routes" || unseenRouteCount === 0 || !user?.id) return;
+    const seenAt = new Date().toISOString();
+    writeRoutesSeenAt(user.id, seenAt);
+    setRoutesSeenAt(seenAt);
+  }, [activeTab, unseenRouteCount, user?.id]);
 
   const dogBadgeMeta = useMemo(() => {
     const tourRanking = [...topDogs].sort((a, b) => b.tourCount - a.tourCount);
@@ -501,16 +551,16 @@ export default function Profile() {
           )}
         </motion.div>
 
-        <Tabs defaultValue="dogs" className="space-y-4 md:space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 md:space-y-6">
           <div className="pb-1">
             <TabsList className="!grid h-auto w-full grid-cols-2 gap-1 rounded-2xl border border-white/70 bg-white/65 p-1 backdrop-blur-xl sm:grid-cols-4 md:gap-1.5">
               <TabsTrigger value="dogs" className="h-11 min-w-0 px-3 text-sm md:px-5 md:text-base">Hunde</TabsTrigger>
               <TabsTrigger value="routes" className="flex h-11 min-w-0 items-center gap-1.5 px-3 text-sm md:px-5 md:text-base">
                 <Navigation className="h-4 w-4" />
                 Routen
-                {userRoutes.length > 0 && (
+                {unseenRouteCount > 0 && (
                   <span className="rounded-full bg-brand-100 px-1.5 py-0.5 text-xs font-bold leading-none text-brand-700 md:px-2">
-                    {userRoutes.length}
+                    {unseenRouteCount}
                   </span>
                 )}
               </TabsTrigger>
