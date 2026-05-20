@@ -30,7 +30,6 @@ import OfflineDownload from "@/components/hikes/OfflineDownload";
 import CommentSection from "@/components/community/CommentSection";
 import RatingSection from "@/components/community/RatingSection";
 import ExpandableText from "@/components/ExpandableText";
-import PawLoadingTrail from "@/components/PawLoadingTrail";
 import PremiumGate from "@/components/hikes/PremiumGate";
 import WaterIcon from "@/components/icons/WaterIcon";
 import DifficultyScaleChip, { DifficultyBars } from "@/components/difficulty/DifficultyScale";
