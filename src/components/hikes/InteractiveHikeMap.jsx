@@ -65,7 +65,7 @@ export default function InteractiveHikeMap({
 
   return (
     <div className="doghike-glass-card overflow-hidden rounded-2xl p-2 shadow-sm">
-      <div className="relative h-[360px] overflow-hidden rounded-xl border border-white/70 shadow-sm md:h-[500px]">
+      <div className="relative h-[260px] sm:h-[360px] overflow-hidden rounded-xl border border-white/70 shadow-sm md:h-[500px]">
         <SafeMapContainer
           resetKey={mapResetKey}
           center={center}
