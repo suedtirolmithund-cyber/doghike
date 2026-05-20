@@ -26,6 +26,7 @@ import {
   getSignedJournalUrls,
   uploadJournalFile,
   deleteJournalFiles,
+  getMissingPrivateJournalFields,
   getMissingSharedJournalFields,
 } from "@/lib/journalApi";
 import { getDogs } from "@/lib/profilesApi";
@@ -403,6 +404,19 @@ function MapClickHandler({ onMapClick }) {
   return null;
 }
 
+function getReadableLocationLabel(result) {
+  return (
+    result?.address?.village ||
+    result?.address?.town ||
+    result?.address?.city ||
+    result?.address?.hamlet ||
+    result?.address?.suburb ||
+    result?.name ||
+    (typeof result?.display_name === "string" ? result.display_name.split(",")[0]?.trim() : "") ||
+    ""
+  );
+}
+
 // Location Picker Komponente
 function LocationPicker({ lat, lng, onChange }) {
   const [markerPos, setMarkerPos] = useState(
@@ -430,10 +444,21 @@ function LocationPicker({ lat, lng, onChange }) {
     topoTileFallbackRef.current = false;
   }, [mapType]);
 
-  const handleMapClick = ({ lat: clickLat, lng: clickLng }) => {
+  const handleMapClick = async ({ lat: clickLat, lng: clickLng }) => {
     setMarkerPos([clickLat, clickLng]);
     setSearchResults([]);
-    onChange(clickLat, clickLng);
+    try {
+      const url = `https://nominatim.openstreetmap.org/reverse?lat=${encodeURIComponent(clickLat)}&lon=${encodeURIComponent(clickLng)}&format=json&accept-language=de&addressdetails=1`;
+      const resp = await fetch(url, { headers: { "Accept-Language": "de" } });
+      const result = await resp.json();
+      const nextLocation = getReadableLocationLabel(result);
+      if (nextLocation) {
+        setSearchText(nextLocation);
+      }
+      onChange(clickLat, clickLng, nextLocation);
+    } catch {
+      onChange(clickLat, clickLng, "");
+    }
   };
 
   const handleSearch = async (e) => {
@@ -451,9 +476,13 @@ function LocationPicker({ lat, lng, onChange }) {
         if (results.length === 1) {
           const { lat: rLat, lon: rLon } = results[0];
           const pos = [parseFloat(rLat), parseFloat(rLon)];
+          const nextLocation = getReadableLocationLabel(results[0]);
           setMarkerPos(pos);
           setFlyTarget({ center: pos, zoom: 13 });
-          onChange(pos[0], pos[1]);
+          if (nextLocation) {
+            setSearchText(nextLocation);
+          }
+          onChange(pos[0], pos[1], nextLocation);
         } else {
           setSearchResults(results);
         }
@@ -469,12 +498,13 @@ function LocationPicker({ lat, lng, onChange }) {
 
   const handleSelectSearchResult = (result) => {
     const pos = [parseFloat(result.lat), parseFloat(result.lon)];
+    const nextLocation = getReadableLocationLabel(result);
     setMarkerPos(pos);
     setFlyTarget({ center: pos, zoom: 13 });
     setSearchResults([]);
     setSearchError(null);
-    setSearchText(result.display_name ?? searchText);
-    onChange(pos[0], pos[1]);
+    setSearchText(result.display_name ?? nextLocation ?? searchText);
+    onChange(pos[0], pos[1], nextLocation);
   };
 
   const dismissSearchResults = () => {
@@ -1140,6 +1170,16 @@ export default function AddJournalEntry() {
       return;
     }
 
+    if (form.visibility === "private") {
+      const missing = getMissingPrivateJournalFields(form);
+      if (missing.length > 0) {
+        toast.error(`Bitte fülle noch diese Pflichtfelder aus: ${missing.join(", ")}`, {
+          duration: 6000,
+        });
+        return;
+      }
+    }
+
     if (form.visibility === "friends" || form.visibility === "public") {
       const missing = getMissingSharedJournalFields(form);
       if (missing.length > 0) {
@@ -1279,7 +1319,7 @@ export default function AddJournalEntry() {
                   required className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="location" className="flex h-5 items-center gap-1"><MapPin className="w-3.5 h-3.5" /> Ort</Label>
+                <Label htmlFor="location" className="flex h-5 items-center gap-1"><MapPin className="w-3.5 h-3.5" /> Ort *</Label>
                 <Input id="location" value={form.location} onChange={(e) => set("location", e.target.value)}
                   placeholder="z.B. Prags, Südtirol" className="mt-1" />
               </div>
@@ -1287,14 +1327,17 @@ export default function AddJournalEntry() {
 
             <div>
               <Label className="flex items-center gap-1 mb-2">
-                <MapPin className="w-3.5 h-3.5" /> Startpunkt auf Karte
+                <MapPin className="w-3.5 h-3.5" /> Startpunkt auf Karte *
               </Label>
               <LocationPicker
                 lat={form.latitude}
                 lng={form.longitude}
-                onChange={(lat, lng) => {
+                onChange={(lat, lng, locationName) => {
                   set("latitude", lat);
                   set("longitude", lng);
+                  if (locationName) {
+                    set("location", locationName);
+                  }
                 }}
               />
             </div>

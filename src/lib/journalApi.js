@@ -3,6 +3,18 @@ import { optimizeImageForUpload, validateImageUpload } from "./uploadValidation"
 
 const JOURNAL_SIGNED_URL_TTL_SECONDS = 60 * 60;
 
+export function getMissingPrivateJournalFields(entry) {
+  const missing = [];
+
+  if (!entry?.title?.trim()) missing.push("Titel");
+  if (!entry?.location?.trim()) missing.push("Ort");
+  if (entry?.latitude === "" || entry?.latitude == null || entry?.longitude === "" || entry?.longitude == null) {
+    missing.push("Startpunkt auf Karte");
+  }
+
+  return missing;
+}
+
 export function getMissingSharedJournalFields(entry) {
   const missing = [];
 
