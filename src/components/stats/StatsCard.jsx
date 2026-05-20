@@ -6,15 +6,15 @@ export default function StatsCard({ icon: Icon, label, value, unit, description,
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.5 }}
-      className="doghike-glass-card-hover p-4 md:p-5"
+      className="doghike-glass-card-hover p-2.5 sm:p-4 md:p-5"
     >
-      <div className="flex items-center gap-2.5">
-        <div className="rounded-xl bg-gradient-to-br from-[#F9C030] to-[#A8003C] p-2 shadow-sm">
-          <Icon className="h-4 w-4 text-white md:h-5 md:w-5" />
+      <div className="flex min-h-[58px] flex-col items-center justify-center gap-1.5 sm:min-h-0 sm:flex-row sm:justify-start sm:gap-2.5">
+        <div className="rounded-lg bg-gradient-to-br from-[#F9C030] to-[#A8003C] p-1.5 shadow-sm sm:rounded-xl sm:p-2">
+          <Icon className="h-3.5 w-3.5 text-white sm:h-4 sm:w-4 md:h-5 md:w-5" />
         </div>
-        <div className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
-          <span className="text-2xl font-bold leading-none text-[#7C3020]">{value}</span>
-          <span className="min-w-0 whitespace-normal break-words text-[11px] font-semibold uppercase text-[#C07820] sm:text-xs md:text-sm">
+        <div className="flex min-w-0 flex-col items-center gap-0 sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-1.5 sm:gap-y-0.5">
+          <span className="text-xl font-bold leading-none text-[#7C3020] sm:text-2xl">{value}</span>
+          <span className="min-w-0 text-center text-[9px] font-semibold uppercase leading-tight text-[#C07820] sm:text-left sm:text-xs md:text-sm">
             {label}
           </span>
           {unit && <span className="text-xs text-[#C07820]/75 md:text-sm">{unit}</span>}
