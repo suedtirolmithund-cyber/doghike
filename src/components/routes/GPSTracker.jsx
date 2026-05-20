@@ -27,7 +27,7 @@ const myLocationIcon = L.divIcon({
   iconAnchor: [10, 10],
 });
 
-const MAX_ACCEPTED_ACCURACY_METERS = 25;
+const MAX_ACCEPTED_ACCURACY_METERS = 15;
 const MIN_POINT_DISTANCE_METERS = 2;
 const MAX_REASONABLE_SPEED_KMH = 12;
 const MIN_ELEVATION_GAIN_STEP_METERS = 3;
@@ -366,9 +366,20 @@ export default function GPSTracker({ onSave }) {
 
     if (accuracy && accuracy > MAX_ACCEPTED_ACCURACY_METERS) return;
 
-    const newPoint = [latitude, longitude];
     const prev = routePointsRef.current;
     const sampleTime = position.timestamp || Date.now();
+
+    // Smooth GPS jitter: weighted average with last 2 accepted points
+    let lat = latitude;
+    let lon = longitude;
+    if (prev.length >= 2) {
+      lat = latitude * 0.6 + prev[prev.length - 1][0] * 0.3 + prev[prev.length - 2][0] * 0.1;
+      lon = longitude * 0.6 + prev[prev.length - 1][1] * 0.3 + prev[prev.length - 2][1] * 0.1;
+    } else if (prev.length === 1) {
+      lat = latitude * 0.7 + prev[prev.length - 1][0] * 0.3;
+      lon = longitude * 0.7 + prev[prev.length - 1][1] * 0.3;
+    }
+    const newPoint = [lat, lon];
 
     if (prev.length > 0) {
       const dist = haversineDistance(prev[prev.length - 1], newPoint) * 1000;
@@ -445,7 +456,7 @@ export default function GPSTracker({ onSave }) {
     pollIntervalRef.current = setInterval(() => {
       if (isPausedRef.current) return;
       requestFreshPosition();
-    }, 2000);
+    }, 1000);
 
     intervalRef.current = setInterval(computeStats, 1000);
     requestFreshPosition();
