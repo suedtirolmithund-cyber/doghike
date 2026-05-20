@@ -205,7 +205,7 @@ export default function Friends() {
     queryKey: ["friendships", user?.id],
     queryFn: () => getFriendships(user.id),
     enabled: !!user?.id,
-    refetchInterval: 30_000,
+    refetchInterval: 2 * 60_000,
   });
 
   const { data: friendIds = [] } = useQuery({
