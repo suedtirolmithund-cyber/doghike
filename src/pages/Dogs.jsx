@@ -205,7 +205,8 @@ export default function Dogs() {
                         alt={dog.name}
                         className="w-full h-full object-cover"
                         onError={(event) => {
-                          event.target.src = getAvatarDataUrl(dog.name);
+                          event.target.onerror = null;
+                          event.target.src = getAvatarDataUrl(dog.name) || "/dog-placeholder.svg";
                         }}
                       />
                       <div className="absolute top-3 right-3 flex gap-2">
