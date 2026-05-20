@@ -527,17 +527,30 @@ function LocationPicker({ lat, lng, locationName = "", onChange }) {
   return (
     <div className="space-y-2">
       {/* Search bar */}
-      <form onSubmit={handleSearch} className="flex gap-2">
+      <div className="flex gap-2">
         <Input
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              void handleSearch();
+            }
+          }}
           placeholder="Ort suchen, z.B. Pragser Wildsee..."
           className="flex-1 h-9 text-sm"
         />
-        <Button type="submit" size="sm" variant="outline" disabled={searching} className="h-9 px-3">
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          disabled={searching}
+          className="h-9 px-3"
+          onClick={() => void handleSearch()}
+        >
           {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
         </Button>
-      </form>
+      </div>
 
       {searchError && (
         <p className="text-xs text-brand-500">{searchError}</p>
