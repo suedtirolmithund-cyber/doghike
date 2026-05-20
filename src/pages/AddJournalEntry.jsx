@@ -430,6 +430,7 @@ function LocationPicker({ lat, lng, locationName = "", onChange }) {
   const [searchError, setSearchError] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const topoTileFallbackRef = useRef(false);
+  const skipNextAutoSearchRef = useRef(false);
   const tile = LOCATION_PICKER_TILES[mapType];
   const mapResetKey = `journal-location-${mapType}`;
 
@@ -452,6 +453,7 @@ function LocationPicker({ lat, lng, locationName = "", onChange }) {
   const handleMapClick = async ({ lat: clickLat, lng: clickLng }) => {
     setMarkerPos([clickLat, clickLng]);
     setSearchResults([]);
+    skipNextAutoSearchRef.current = true;
     try {
       const url = `https://nominatim.openstreetmap.org/reverse?lat=${encodeURIComponent(clickLat)}&lon=${encodeURIComponent(clickLng)}&format=json&accept-language=de&addressdetails=1`;
       const resp = await fetch(url, { headers: { "Accept-Language": "de" } });
@@ -466,22 +468,23 @@ function LocationPicker({ lat, lng, locationName = "", onChange }) {
     }
   };
 
-  const handleSearch = async (e) => {
-    e?.preventDefault();
-    const query = searchText.trim();
+  const runLocationSearch = async (query, { auto = false } = {}) => {
     if (!query) return;
     setSearching(true);
-    setSearchError(null);
-    setSearchResults([]);
+    if (!auto) {
+      setSearchError(null);
+      setSearchResults([]);
+    }
     try {
       const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&accept-language=de&addressdetails=1`;
       const resp = await fetch(url, { headers: { "Accept-Language": "de" } });
       const results = await resp.json();
       if (results.length > 0) {
-        if (results.length === 1) {
+        if (!auto && results.length === 1) {
           const { lat: rLat, lon: rLon } = results[0];
           const pos = [parseFloat(rLat), parseFloat(rLon)];
           const nextLocation = getReadableLocationLabel(results[0]);
+          skipNextAutoSearchRef.current = true;
           setMarkerPos(pos);
           setFlyTarget({ center: pos, zoom: 13 });
           if (nextLocation) {
@@ -490,20 +493,50 @@ function LocationPicker({ lat, lng, locationName = "", onChange }) {
           onChange(pos[0], pos[1], nextLocation);
         } else {
           setSearchResults(results);
+          setSearchError(null);
         }
-      } else {
+      } else if (!auto) {
         setSearchError("Ort nicht gefunden. Bitte genauere Suche eingeben.");
+      } else {
+        setSearchResults([]);
       }
     } catch {
-      setSearchError("Suche fehlgeschlagen. Bitte Karte manuell tippen.");
+      if (!auto) {
+        setSearchError("Suche fehlgeschlagen. Bitte Karte manuell tippen.");
+      }
     } finally {
       setSearching(false);
     }
   };
 
+  const handleSearch = async (e) => {
+    e?.preventDefault();
+    await runLocationSearch(searchText.trim(), { auto: false });
+  };
+
+  useEffect(() => {
+    const query = searchText.trim();
+    if (skipNextAutoSearchRef.current) {
+      skipNextAutoSearchRef.current = false;
+      return;
+    }
+    if (query.length < 3) {
+      setSearchResults([]);
+      setSearchError(null);
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      void runLocationSearch(query, { auto: true });
+    }, 300);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [searchText]);
+
   const handleSelectSearchResult = (result) => {
     const pos = [parseFloat(result.lat), parseFloat(result.lon)];
     const nextLocation = getReadableLocationLabel(result);
+    skipNextAutoSearchRef.current = true;
     setMarkerPos(pos);
     setFlyTarget({ center: pos, zoom: 13 });
     setSearchResults([]);
