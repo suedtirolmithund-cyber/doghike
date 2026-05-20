@@ -79,10 +79,10 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
                 onClick={() => setSelectedRating(star)}
                 onMouseEnter={() => setHoverRating(star)}
                 onMouseLeave={() => setHoverRating(0)}
-                className="focus:outline-none touch-manipulation"
+                className="flex items-center justify-center min-w-[44px] min-h-[44px] focus:outline-none touch-manipulation"
               >
                 <Star
-                  className={`w-10 h-10 md:w-8 md:h-8 transition-colors ${
+                  className={`w-8 h-8 transition-colors ${
                     star <= (hoverRating || selectedRating || userRating?.rating || 0)
                       ? "fill-brand-100 text-brand-100"
                       : "text-brand-100 hover:text-brand-200"
