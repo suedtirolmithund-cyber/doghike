@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useSearchParams } from "react-router-dom";
@@ -38,6 +38,30 @@ import {
 } from "@/lib/friendsApi";
 
 const DOG_AVATAR_EMOJIS = ["🐕", "🐩", "🦮", "🐕‍🦺", "🐶"];
+
+const FRIEND_REQUESTS_SEEN_KEY = "doghike:friend-requests-seen";
+
+function getFriendRequestsSeenStorageKey(userId) {
+  return `${FRIEND_REQUESTS_SEEN_KEY}:${userId}`;
+}
+
+function readFriendRequestsSeenAt(userId) {
+  if (!userId || typeof window === "undefined") return null;
+  try {
+    return window.localStorage.getItem(getFriendRequestsSeenStorageKey(userId));
+  } catch {
+    return null;
+  }
+}
+
+function writeFriendRequestsSeenAt(userId, value) {
+  if (!userId || typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(getFriendRequestsSeenStorageKey(userId), value);
+  } catch {
+    // Ignore localStorage issues and keep the friends page usable.
+  }
+}
 
 function getDogAvatarEmoji(seed) {
   const value = String(seed || "dogtrails");
@@ -175,6 +199,7 @@ export default function Friends() {
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
   const [feedVisible, setFeedVisible] = useState(10);
+  const [friendRequestsSeenAt, setFriendRequestsSeenAt] = useState(null);
 
   const { data: friendships = [], isLoading } = useQuery({
     queryKey: ["friendships", user?.id],
@@ -209,6 +234,30 @@ export default function Friends() {
   const defaultTab = incoming.length > 0 ? "requests" : "friends";
   const activeTab = searchParams.get("tab") || defaultTab;
   const selectedFriendId = searchParams.get("friend") || "";
+
+  useEffect(() => {
+    setFriendRequestsSeenAt(readFriendRequestsSeenAt(user?.id));
+  }, [user?.id]);
+
+  const unseenIncomingCount = useMemo(() => {
+    if (!incoming.length) return 0;
+    if (!friendRequestsSeenAt) return incoming.length;
+
+    const seenTimestamp = new Date(friendRequestsSeenAt).getTime();
+    if (!Number.isFinite(seenTimestamp)) return incoming.length;
+
+    return incoming.filter((friendship) => {
+      const requestTimestamp = new Date(friendship.created_at || 0).getTime();
+      return Number.isFinite(requestTimestamp) && requestTimestamp > seenTimestamp;
+    }).length;
+  }, [friendRequestsSeenAt, incoming]);
+
+  useEffect(() => {
+    if (activeTab !== "requests" || unseenIncomingCount === 0 || !user?.id) return;
+    const seenAt = new Date().toISOString();
+    writeFriendRequestsSeenAt(user.id, seenAt);
+    setFriendRequestsSeenAt(seenAt);
+  }, [activeTab, unseenIncomingCount, user?.id]);
 
   const allIds = [...new Set(friendships.flatMap((friendship) => [friendship.requester_id, friendship.receiver_id]))];
   const stableAllIds = [...allIds].sort();
@@ -499,9 +548,9 @@ export default function Friends() {
             <TabsTrigger value="requests" className="relative h-11 px-2 text-sm">
               <span className="sm:hidden">Anfragen</span>
               <span className="hidden sm:inline">Offene Anfragen</span>
-              {incoming.length > 0 && (
+              {unseenIncomingCount > 0 && (
                 <span className="ml-1.5 rounded-full bg-brand-500 px-1.5 py-0.5 text-[10px] font-bold text-white">
-                  {incoming.length}
+                  {unseenIncomingCount}
                 </span>
               )}
             </TabsTrigger>
