@@ -52,6 +52,16 @@ function getCountryLabel(country) {
   return country || null;
 }
 
+function getSeasonValues(hike) {
+  const values = Array.isArray(hike?.seasons) && hike.seasons.length > 0
+    ? hike.seasons
+    : hike?.season
+      ? [hike.season]
+      : [];
+
+  return Array.from(new Set(values.filter(Boolean)));
+}
+
 const humanDifficultyChipClass =
   "!border-[#D4547A]/45 !bg-[#FDF0E8]/90 text-[#A8003C]";
 const dogDifficultyChipClass =
@@ -271,7 +281,7 @@ export default function HikeDetail() {
       : [];
   
   const countryLabel = getCountryLabel(hike.country);
-  const seasonValue = hike.season || (Array.isArray(hike.seasons) ? hike.seasons[0] : null);
+  const seasonValues = getSeasonValues(hike);
 
   const nextPhoto = () => setCurrentPhotoIndex((prev) => (prev + 1) % photos.length);
   const prevPhoto = () => setCurrentPhotoIndex((prev) => (prev - 1 + photos.length) % photos.length);
@@ -369,11 +379,13 @@ export default function HikeDetail() {
             )}
 
             <div className="flex flex-wrap items-center gap-2 mb-3">
-              {hike.season && getSeasonLabel(hike.season) && (
-                <Badge className={getSeasonBadgeClass(hike.season)}>
-                  {getSeasonIcon(hike.season)} {getSeasonLabel(hike.season)}
-                </Badge>
-              )}
+              {seasonValues.map((season) => (
+                getSeasonLabel(season) ? (
+                  <Badge key={season} className={getSeasonBadgeClass(season)}>
+                    {getSeasonIcon(season)} {getSeasonLabel(season)}
+                  </Badge>
+                ) : null
+              ))}
               {hike.difficulty && (
                 <DifficultyScaleChip level={hike.difficulty} type="human" />
               )}
@@ -520,15 +532,20 @@ export default function HikeDetail() {
               </div>
             </div>
           )}
-          {seasonValue && getSeasonLabel(seasonValue) && (
-            <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4">
-              <span className="text-lg">{getSeasonIcon(seasonValue)}</span>
-              <div>
-                <div className="text-sm font-bold leading-tight text-[#7C3020]">{getSeasonLabel(seasonValue)}</div>
-                <div className="text-xs text-[#C07820]">Jahreszeit</div>
+          {seasonValues.map((season) => (
+            getSeasonLabel(season) ? (
+              <div
+                key={season}
+                className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4"
+              >
+                <span className="text-lg">{getSeasonIcon(season)}</span>
+                <div>
+                  <div className="text-sm font-bold leading-tight text-[#7C3020]">{getSeasonLabel(season)}</div>
+                  <div className="text-xs text-[#C07820]">Jahreszeit</div>
+                </div>
               </div>
-            </div>
-          )}
+            ) : null
+          ))}
           {hike.grazing_animals && (
             <div className="doghike-stat-chip min-w-0 justify-start px-3 py-3 sm:min-w-[128px] sm:flex-1 sm:justify-center sm:px-4">
               <span className="text-lg">{TOUR_ICONS.grazing}</span>
