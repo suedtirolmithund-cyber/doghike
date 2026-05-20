@@ -114,7 +114,9 @@ function matchesRecognizedFilters(hike, query) {
   const wantsShort = hasAnyTerm(query, SHORT_TERMS);
   const wantsLowElevation = hasAnyTerm(query, LOW_ELEVATION_TERMS);
 
-  const matchedSeason = Object.entries(SEASON_TERMS).find(([, terms]) => hasAnyTerm(query, terms))?.[0] ?? null;
+  const matchedSeasons = Object.entries(SEASON_TERMS)
+    .filter(([, terms]) => hasAnyTerm(query, terms))
+    .map(([season]) => season);
 
   if (wantsEasy) {
     const humanDifficulty = getDifficultyNumber(hike?.difficulty);
@@ -143,9 +145,10 @@ function matchesRecognizedFilters(hike, query) {
     if (Number.isFinite(elevation) && elevation > 350) return false;
   }
 
-  if (matchedSeason) {
+  if (matchedSeasons.length > 0) {
     const seasons = getSeasonValues(hike);
-    if (!seasons.includes(matchedSeason) && !seasons.includes("all_year")) {
+    const matchesAnySelectedSeason = matchedSeasons.some((season) => seasons.includes(season));
+    if (!matchesAnySelectedSeason && !seasons.includes("all_year")) {
       return false;
     }
   }
