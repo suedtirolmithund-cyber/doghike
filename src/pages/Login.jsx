@@ -49,6 +49,7 @@ export default function Login() {
     loginWithGoogle,
     resetPasswordForEmail,
     updatePassword,
+    resendConfirmationEmail,
     authError,
   } = useAuth();
   const navigate = useNavigate();
@@ -63,6 +64,8 @@ export default function Login() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [localError, setLocalError] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
+  const [showResend, setShowResend] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
 
   const error = localError || authError;
 
@@ -126,6 +129,7 @@ export default function Login() {
 
     if (err) {
       setLocalError(mapAuthError(err.message));
+      setShowResend(String(err.message).toLowerCase().includes("email not confirmed"));
     } else {
       navigate("/");
     }
@@ -445,6 +449,28 @@ export default function Login() {
                 </AnimatePresence>
 
                 <Feedback error={error} success={successMsg} />
+
+                {showResend && email && (
+                  <button
+                    type="button"
+                    disabled={resendLoading}
+                    onClick={async () => {
+                      setResendLoading(true);
+                      const { error: err } = await resendConfirmationEmail(email);
+                      setResendLoading(false);
+                      if (err) {
+                        setLocalError("E-Mail konnte nicht gesendet werden.");
+                      } else {
+                        setShowResend(false);
+                        setSuccessMsg("Bestätigungsmail gesendet. Bitte prüfe deinen Posteingang.");
+                      }
+                    }}
+                    className="w-full text-sm text-white/80 underline underline-offset-2 hover:text-white flex items-center justify-center gap-1"
+                  >
+                    {resendLoading && <Loader2 className="w-3 h-3 animate-spin" />}
+                    Bestätigungsmail erneut senden
+                  </button>
+                )}
 
                 <button
                   type="submit"
