@@ -233,10 +233,29 @@ export default function HikeDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-pulse text-brand-500">Lädt...</div>
-          <PawLoadingTrail />
+      <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20">
+        {/* Hero skeleton */}
+        <div className="h-64 md:h-80 lg:h-96 bg-slate-200 animate-pulse" />
+        <div className="mx-auto max-w-4xl px-4 py-6 space-y-6">
+          {/* Title */}
+          <div className="space-y-2">
+            <div className="h-7 w-2/3 rounded-lg bg-slate-200 animate-pulse" />
+            <div className="h-4 w-1/3 rounded-lg bg-slate-100 animate-pulse" />
+          </div>
+          {/* Stats row */}
+          <div className="grid grid-cols-3 gap-3">
+            {[1,2,3].map((i) => (
+              <div key={i} className="h-16 rounded-xl bg-slate-100 animate-pulse" />
+            ))}
+          </div>
+          {/* Description */}
+          <div className="space-y-2">
+            <div className="h-4 w-full rounded bg-slate-100 animate-pulse" />
+            <div className="h-4 w-5/6 rounded bg-slate-100 animate-pulse" />
+            <div className="h-4 w-4/6 rounded bg-slate-100 animate-pulse" />
+          </div>
+          {/* Map placeholder */}
+          <div className="h-48 rounded-xl bg-slate-200 animate-pulse" />
         </div>
       </div>
     );
