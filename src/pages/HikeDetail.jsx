@@ -193,7 +193,7 @@ export default function HikeDetail() {
 
       const { data, error } = await supabase
         .from("profiles")
-        .select("is_premium")
+        .select("is_premium, premium_current_period_end")
         .eq("user_id", currentUser.id)
         .maybeSingle();
 
@@ -275,7 +275,11 @@ export default function HikeDetail() {
   }
   // Premium gate: block non-premium users from admin-created premium hikes
   const isPremiumHike = PREMIUM_FEATURES_ENABLED && hike.is_premium && !isAdmin && !isOwnHike;
-  const userHasPremium = currentProfile?.is_premium === true;
+  const premiumEndDate = currentProfile?.premium_current_period_end
+    ? new Date(currentProfile.premium_current_period_end)
+    : null;
+  const userHasPremium = currentProfile?.is_premium === true
+    && (!premiumEndDate || premiumEndDate.getTime() > Date.now());
   const showPremiumPreviewOnly = isPremiumHike && !userHasPremium;
 
   const hikeDogs = dogs.filter(d => hike.dogs?.includes(d.id));

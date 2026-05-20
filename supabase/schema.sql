@@ -12,6 +12,12 @@ create table if not exists public.profiles (
   avatar_url   text,
   is_premium   boolean default false,
   role         text default 'user' check (role in ('user', 'admin')),
+  is_premium   boolean not null default false,
+  stripe_customer_id text unique,
+  stripe_subscription_id text unique,
+  subscription_status text,
+  premium_current_period_end timestamptz,
+  premium_updated_at timestamptz,
   created_at   timestamptz default now()
 );
 
@@ -46,6 +52,13 @@ create unique index if not exists profiles_username_normalized_unique
 -- Falls die Tabelle bereits existiert:
 -- alter table public.profiles
 --   add column if not exists role text default 'user' check (role in ('user','admin'));
+alter table public.profiles
+  add column if not exists is_premium boolean not null default false,
+  add column if not exists stripe_customer_id text unique,
+  add column if not exists stripe_subscription_id text unique,
+  add column if not exists subscription_status text,
+  add column if not exists premium_current_period_end timestamptz,
+  add column if not exists premium_updated_at timestamptz;
 
 alter table public.profiles enable row level security;
 
@@ -164,6 +177,35 @@ as $$
     where user_id = auth.uid() and role = 'admin'
   );
 $$;
+
+create or replace function public.prevent_profile_billing_self_update()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if auth.role() = 'service_role' or public.is_admin() then
+    return new;
+  end if;
+
+  if new.is_premium is distinct from old.is_premium
+    or new.stripe_customer_id is distinct from old.stripe_customer_id
+    or new.stripe_subscription_id is distinct from old.stripe_subscription_id
+    or new.subscription_status is distinct from old.subscription_status
+    or new.premium_current_period_end is distinct from old.premium_current_period_end
+    or new.premium_updated_at is distinct from old.premium_updated_at then
+    raise exception 'Premium billing fields cannot be updated directly';
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists protect_profile_billing_fields on public.profiles;
+create trigger protect_profile_billing_fields
+  before update on public.profiles
+  for each row execute function public.prevent_profile_billing_self_update();
 
 create policy "Eigene Einträge lesen"
   on public.journal_entries for select
