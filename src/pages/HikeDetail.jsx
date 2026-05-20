@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getAllHikes } from "@/api/sheetsClient";
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -63,9 +63,9 @@ function getSeasonValues(hike) {
 }
 
 const humanDifficultyChipClass =
-  "!border-[#F9C030] !bg-[#FFF8F0] !text-[#7C3020]";
+  "!border-[#D4547A]/60 !bg-[#FFF3F7] !text-[#7C3020]";
 const dogDifficultyChipClass =
-  "!border-[#F9C030] !bg-[#FFF8F0] !text-[#7C3020]";
+  "!border-[#F9C030] !bg-[#FFF8E0] !text-[#7C3020]";
 const detailStatChipClass =
   "doghike-stat-chip min-h-[68px] min-w-0 justify-center gap-3 px-4 py-3 text-center sm:min-h-[72px] sm:px-5";
 const detailStatIconClass =
@@ -97,6 +97,7 @@ export default function HikeDetail() {
   
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [heroPhotoIndex, setHeroPhotoIndex] = useState(0);
   const [copied, setCopied] = useState(false);
   const normalizedHikeId = hikeId ? String(hikeId) : null;
   const prefetchedHike = location.state?.hike;
@@ -187,6 +188,15 @@ export default function HikeDetail() {
   });
 
   const { user: currentUser, isAdmin } = useAuth();
+
+  const heroPhotosKey = useMemo(
+    () => (Array.isArray(hike?.photos) ? hike.photos.filter(Boolean).join("|") : ""),
+    [hike?.photos]
+  );
+
+  useEffect(() => {
+    setHeroPhotoIndex(0);
+  }, [heroPhotosKey]);
 
   const { data: dogs = [] } = useQuery({
     queryKey: ["dogs", currentUser?.id],
@@ -295,8 +305,8 @@ export default function HikeDetail() {
   const showPremiumPreviewOnly = isPremiumHike && !userHasPremium;
 
   const hikeDogs = dogs.filter(d => hike.dogs?.includes(d.id));
-  const photos = hike.photos || [];
-  const coverPhoto = photos[0] || "/splash/autumn-hero.jpg";
+  const photos = Array.isArray(hike.photos) ? hike.photos.filter(Boolean) : [];
+  const coverPhoto = heroPhotoIndex >= 0 ? photos[heroPhotoIndex] || "/splash/autumn-hero.jpg" : "/splash/autumn-hero.jpg";
   const detailId = hike?._source === "sheets" && hike?._public_hike_id
     ? hike.route_id || String(hike._public_hike_id)
     : hike.id;
@@ -336,6 +346,12 @@ export default function HikeDetail() {
         <img
           src={coverPhoto}
           alt={hike.trail_name}
+          onError={() => {
+            setHeroPhotoIndex((currentIndex) => {
+              const nextIndex = currentIndex + 1;
+              return nextIndex < photos.length ? nextIndex : -1;
+            });
+          }}
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />

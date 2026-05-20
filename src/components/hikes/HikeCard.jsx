@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import ExpandableText from "@/components/ExpandableText";
@@ -16,7 +17,7 @@ const METRIC_FORMATTER = new Intl.NumberFormat("de-DE", {
 });
 
 const ROUTE_STAT_CHIP_CLASS =
-  "inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-full border border-[#F9C030] bg-[#FFF8F0] px-2.5 py-1.5 text-center text-xs font-bold leading-tight text-[#7C3020] shadow-sm sm:text-sm md:px-3 md:text-xs";
+  "inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-full border border-[#F9C030]/75 bg-white/82 px-2.5 py-1.5 text-center text-xs font-bold leading-tight text-[#7C3020] shadow-sm sm:text-sm md:px-3 md:text-xs";
 
 function hasMetricValue(value) {
   if (value === null || value === undefined || value === "") return false;
@@ -41,7 +42,12 @@ export default function HikeCard({
   descriptionLines = 6,
 }) {
   const hikeDogs = dogs.filter((dog) => hike.dogs?.includes(dog.id));
-  const coverPhoto = hike.photos?.[0];
+  const photoList = useMemo(
+    () => (Array.isArray(hike.photos) ? hike.photos.map((photo) => (typeof photo === "string" ? photo.trim() : "")).filter(Boolean) : []),
+    [hike.photos]
+  );
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const coverPhoto = photoIndex >= 0 ? photoList[photoIndex] : null;
   const hikeSource = hike._source ?? "sheets";
   const detailId = hikeSource === "sheets" && hike._public_hike_id ? hike.route_id || String(hike._public_hike_id) : hike.id;
   const dogDifficultyLabel = getDifficultyLabel(hike.dog_difficulty);
@@ -68,6 +74,17 @@ export default function HikeCard({
   ) : null;
   const imageHeightClass = imageSize === "home" ? "h-56 sm:h-60" : "h-48 sm:h-52";
 
+  useEffect(() => {
+    setPhotoIndex(0);
+  }, [photoList]);
+
+  const handleCoverPhotoError = () => {
+    setPhotoIndex((currentIndex) => {
+      const nextIndex = currentIndex + 1;
+      return nextIndex < photoList.length ? nextIndex : -1;
+    });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -84,8 +101,9 @@ export default function HikeCard({
               <img
                 src={coverPhoto}
                 alt={hike.trail_name}
-                loading="lazy"
+                loading={index < 4 ? "eager" : "lazy"}
                 decoding="async"
+                onError={handleCoverPhotoError}
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
             )}
