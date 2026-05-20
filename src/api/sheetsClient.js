@@ -374,6 +374,12 @@ function mergePhotoLists(...photoLists) {
 }
 
 function publicHikeRowToHike(row, photos = []) {
+  const seasons = Array.isArray(row.seasons) && row.seasons.length > 0
+    ? row.seasons.filter(Boolean)
+    : row.season
+      ? [row.season]
+      : [];
+
   return {
     // Keep the old external id shape stable so saved hikes, comments, and ratings keep matching.
     id: slugify(row.title || String(row.id)),
@@ -403,8 +409,8 @@ function publicHikeRowToHike(row, photos = []) {
     status: row.status,
     visibility: "public",
 
-    season: row.season || null,
-    seasons: row.season ? [row.season] : [],
+    season: seasons[0] || null,
+    seasons,
     availability: null,
 
     hazard_notes: pickFirstText(row, ["hazard_notes", "hazards", "danger_notes", "danger", "warning", "warnings", "achtung", "gefahr", "gefahren"]),

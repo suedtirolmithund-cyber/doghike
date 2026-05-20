@@ -582,3 +582,15 @@ create table if not exists public.support_requests (
 );
 
 alter table public.support_requests enable row level security;
+
+-- PUBLIC HIKES
+-- Falls die Tabelle bereits existiert und mehrere Jahreszeiten speichern soll:
+-- alter table public.public_hikes
+--   add column if not exists seasons text[] default '{}';
+--
+-- update public.public_hikes
+-- set seasons = case
+--   when season is null then '{}'::text[]
+--   else array[season]
+-- end
+-- where seasons is null or array_length(seasons, 1) is null;

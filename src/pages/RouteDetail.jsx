@@ -31,7 +31,8 @@ import { toast } from "sonner";
 import ExpandableText from "@/components/ExpandableText";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 import WaterIcon from "@/components/icons/WaterIcon";
-import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
+import SeasonMultiPicker from "@/components/season/SeasonMultiPicker";
+import { DIFFICULTY_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 import { formatDurationHours, hoursInputToMinutes } from "@/lib/duration";
 import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
@@ -57,7 +58,7 @@ export default function RouteDetail() {
     completed_rating: 0,
     difficulty: "",
     dog_difficulty: "",
-    season: "",
+    seasons: [],
     water_availability: "",
     hazard_notes: "",
     parking_info: "",
@@ -257,7 +258,7 @@ export default function RouteDetail() {
       completeData.water_availability === "plenty" ? 3 : 0,
     hazard_notes: completeData.hazard_notes || "",
     rating: completeData.completed_rating || 0,
-    seasons: completeData.season ? [completeData.season] : [],
+    seasons: completeData.seasons,
     photos: completeData.photos || [],
     dog_id: completeData.dogs?.length === 1 ? completeData.dogs[0] : null,
     gpx_url: route.gpx_url || "",
@@ -610,17 +611,12 @@ export default function RouteDetail() {
                       {/* Season & Water */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="text-sm font-medium text-slate-700 mb-1 block">Beste Jahreszeit {TOUR_ICONS.season}</label>
-                          <Select value={completeData.season} onValueChange={(v) => setCompleteData({ ...completeData, season: v })}>
-                            <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
-                            <SelectContent>
-                              {SEASON_LEVELS.map((season) => (
-                                <SelectItem key={season.value} value={season.value}>
-                                  {season.icon} {season.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                          <SeasonMultiPicker
+                            label={`Beste Jahreszeit ${TOUR_ICONS.season}`}
+                            value={completeData.seasons}
+                            onChange={(value) => setCompleteData({ ...completeData, seasons: value })}
+                            emptyHint="Du kannst eine oder mehrere Jahreszeiten auswählen."
+                          />
                         </div>
                         <div>
                           <label className="mb-1 flex items-center gap-1 text-sm font-medium text-slate-700">
