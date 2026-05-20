@@ -118,8 +118,8 @@ export default function EditRoute() {
           <div className="flex items-start gap-3 mb-6">
             <Map className="w-6 h-6 text-brand-700 flex-shrink-0 mt-1" />
             <div>
-              <h1 className="text-xl md:text-2xl font-bold text-slate-900">Route bearbeiten</h1>
-              <p className="text-xs text-slate-500 mt-0.5">Ändere den Streckenverlauf oder die Details</p>
+              <h1 className="doghike-page-title">Route bearbeiten</h1>
+              <p className="doghike-page-subtitle">Ändere den Streckenverlauf oder die Details</p>
             </div>
           </div>
 

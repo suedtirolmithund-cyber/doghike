@@ -1262,7 +1262,7 @@ export default function AddJournalEntry() {
 
           {/* Basis-Infos */}
           <section className="doghike-glass-card p-5 space-y-4">
-            <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide flex items-center gap-2">
+            <h2 className="doghike-form-section-title flex items-center gap-2">
               <FileText className="w-4 h-4" /> Allgemein
             </h2>
 
@@ -1309,7 +1309,7 @@ export default function AddJournalEntry() {
 
           {/* Stats */}
           <section className="doghike-glass-card p-5 space-y-4">
-            <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide flex items-center gap-2">
+            <h2 className="doghike-form-section-title flex items-center gap-2">
               <TrendingUp className="w-4 h-4" /> Statistiken
             </h2>
 
@@ -1339,7 +1339,7 @@ export default function AddJournalEntry() {
 
           {/* Hund */}
           <section className="doghike-glass-card p-5 space-y-4">
-            <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide flex items-center gap-2">
+            <h2 className="doghike-form-section-title flex items-center gap-2">
               <Dog className="w-4 h-4" /> Mit dem Hund
             </h2>
 
@@ -1475,7 +1475,7 @@ export default function AddJournalEntry() {
 
           {/* Bewertung */}
           <section className="doghike-glass-card p-5">
-            <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
+            <h2 className="doghike-form-section-title mb-4 flex items-center gap-2">
               <Star className="w-4 h-4" /> Gesamtbewertung
             </h2>
             <StarPicker label="Wie hat dir die Wanderung gefallen?" value={form.rating} onChange={(v) => set("rating", v)} />
@@ -1483,7 +1483,7 @@ export default function AddJournalEntry() {
 
           {/* Fotos */}
           <section className="doghike-glass-card p-5 space-y-4">
-            <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide flex items-center gap-2">
+            <h2 className="doghike-form-section-title flex items-center gap-2">
               <Upload className="w-4 h-4" /> Fotos
             </h2>
             {form.photos.length > 1 && (
@@ -1603,7 +1603,7 @@ export default function AddJournalEntry() {
 
           {/* GPX */}
           <section className="doghike-glass-card p-5 space-y-3">
-            <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide flex items-center gap-2">
+            <h2 className="doghike-form-section-title flex items-center gap-2">
               <MapPin className="w-4 h-4" /> GPX-Route (optional)
             </h2>
 
@@ -1635,7 +1635,7 @@ export default function AddJournalEntry() {
 
           {/* Jahreszeit */}
           <section className="doghike-glass-card p-5">
-            <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
+            <h2 className="doghike-form-section-title mb-4 flex items-center gap-2">
               {TOUR_ICONS.season} Jahreszeit
             </h2>
             <SeasonPicker
@@ -1649,7 +1649,7 @@ export default function AddJournalEntry() {
 
           {/* Sichtbarkeit */}
           <section className="doghike-glass-card p-5">
-            <h2 className="font-semibold text-slate-700 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
+            <h2 className="doghike-form-section-title mb-4 flex items-center gap-2">
               Sichtbarkeit
             </h2>
             <VisibilityPicker value={form.visibility} onChange={(v) => { set("visibility", v); }} />

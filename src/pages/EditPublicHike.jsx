@@ -354,8 +354,8 @@ export default function EditPublicHike() {
 
         <div className="doghike-glass-card p-6 md:p-8">
           <div className="mb-6">
-            <h1 className="text-2xl font-semibold text-slate-900">Öffentliche Tour bearbeiten</h1>
-            <p className="text-slate-500 mt-1">Änderungen werden direkt in Supabase gespeichert.</p>
+            <h1 className="doghike-page-title">Öffentliche Tour bearbeiten</h1>
+            <p className="doghike-page-subtitle">Änderungen werden direkt in Supabase gespeichert.</p>
           </div>
 
           <form

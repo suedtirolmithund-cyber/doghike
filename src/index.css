@@ -193,6 +193,14 @@
     @apply text-base font-semibold leading-tight text-[#7C3020];
   }
 
+  .doghike-card-subtitle {
+    @apply text-sm font-normal leading-5 text-[#C07820];
+  }
+
+  .doghike-form-section-title {
+    @apply text-sm font-semibold uppercase tracking-wide text-[#7C3020];
+  }
+
   .doghike-empty-title {
     @apply mb-2 text-base font-semibold leading-tight text-[#7C3020];
   }

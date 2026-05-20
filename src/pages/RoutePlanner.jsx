@@ -193,7 +193,7 @@ function ElevationChart({ profile }) {
   return (
     <div className="doghike-glass-card mt-4 rounded-xl p-3">
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-xs font-semibold text-slate-600 uppercase tracking-wide flex items-center gap-1">
+        <h4 className="doghike-form-section-title flex items-center gap-1">
           <Mountain className="w-3.5 h-3.5" /> Höhenprofil
         </h4>
         <div className="flex gap-3 text-xs text-slate-500">
@@ -764,7 +764,7 @@ export default function RoutePlanner() {
               onSubmit={handleSubmit}
               className="doghike-glass-card mt-6 space-y-4 p-5"
             >
-              <h3 className="text-base font-semibold text-slate-900">
+              <h3 className="doghike-card-title">
                 {activeTab === "track"
                   ? "Aufzeichnung ins Tagebuch übernehmen"
                   : activeTab === "gpx"

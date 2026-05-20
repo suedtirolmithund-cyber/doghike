@@ -94,7 +94,7 @@ export default function RouteElevationProfile({ coordinates, distance }) {
 
       {/* Elevation Chart */}
       <div className="doghike-glass-card rounded-xl p-3 md:p-4 overflow-x-auto">
-        <h3 className="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
+        <h3 className="doghike-card-title mb-3 flex items-center gap-2">
           <Mountain className="w-4 h-4" />
           Höhenprofil
         </h3>

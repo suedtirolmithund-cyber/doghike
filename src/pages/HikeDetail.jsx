@@ -435,7 +435,7 @@ export default function HikeDetail() {
                   <MapPin className="h-4 w-4" />
                   Ausgangspunkt: {hike.location || hike.trail_name}
                 </div>
-                <h2 className="text-2xl font-semibold text-slate-900">
+                <h2 className="doghike-section-title">
                   {hike.route_coordinates?.length > 0 ? "Karte & Routenverlauf" : "Karte"}
                 </h2>
               </div>
@@ -587,7 +587,7 @@ export default function HikeDetail() {
             className="mb-10"
           >
             <div className="doghike-glass-card p-6">
-              <h2 className="text-lg font-medium text-slate-900 mb-4">Vorschau</h2>
+              <h2 className="doghike-card-title mb-4">Vorschau</h2>
               <div className="space-y-4">
                 {previewNotes ? (
                   <p className="text-slate-600 leading-relaxed">{previewNotes}</p>
@@ -643,7 +643,7 @@ export default function HikeDetail() {
                 transition={{ delay: 0.15 }}
                 className="doghike-glass-card p-6"
               >
-                <h2 className="text-lg font-medium text-slate-900 mb-3 flex items-center gap-2">
+                <h2 className="doghike-card-title mb-3 flex items-center gap-2">
                   {TOUR_ICONS.parking} Ausgangspunkt & Parken
                 </h2>
                 <ExpandableText text={hike.parking_info} />
@@ -658,7 +658,7 @@ export default function HikeDetail() {
                 transition={{ delay: 0.16 }}
                 className="doghike-glass-card p-6"
               >
-                <h2 className="text-lg font-medium text-slate-900 mb-3 flex items-center gap-2">
+                <h2 className="doghike-card-title mb-3 flex items-center gap-2">
                   {TOUR_ICONS.restaurant} Einkehrmöglichkeiten
                 </h2>
                 <ExpandableText text={hike.restaurant_info} />
@@ -672,7 +672,7 @@ export default function HikeDetail() {
               transition={{ delay: 0.17 }}
               className="doghike-glass-card p-6"
             >
-              <h2 className="text-lg font-medium text-slate-900 mb-4">{TOUR_ICONS.dog} Infos für Hundebesitzer</h2>
+              <h2 className="doghike-card-title mb-4">{TOUR_ICONS.dog} Infos für Hundebesitzer</h2>
               <div className="space-y-4">
                 {/* Wasser: immer anzeigen */}
                 {hike.water_availability ? (
@@ -728,7 +728,7 @@ export default function HikeDetail() {
                 transition={{ delay: 0.2 }}
                 className="doghike-glass-card p-6"
               >
-                <h2 className="text-lg font-medium text-slate-900 mb-4">{TOUR_ICONS.dog} Mit dabei</h2>
+                <h2 className="doghike-card-title mb-4">{TOUR_ICONS.dog} Mit dabei</h2>
                 <div className="flex flex-wrap gap-4">
                   {hikeDogs.map((dog) => (
                     <div key={dog.id} className="doghike-soft-panel flex items-center gap-3 p-3">
@@ -755,7 +755,7 @@ export default function HikeDetail() {
                 transition={{ delay: 0.3 }}
                 className="doghike-glass-card p-6"
               >
-                <h2 className="text-lg font-medium text-slate-900 mb-4">Beschreibung & Tipps</h2>
+                <h2 className="doghike-card-title mb-4">Beschreibung & Tipps</h2>
                 <ExpandableText text={hike.notes} lines={6} minChars={320} />
               </motion.div>
             )}
@@ -768,7 +768,7 @@ export default function HikeDetail() {
                 transition={{ delay: 0.4 }}
                 className="doghike-glass-card p-6"
               >
-                <h2 className="text-lg font-medium text-slate-900 mb-4">Fotos</h2>
+                <h2 className="doghike-card-title mb-4">Fotos</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {photos.map((photo, index) => (
                     <div

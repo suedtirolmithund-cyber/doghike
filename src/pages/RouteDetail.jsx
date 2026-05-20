@@ -377,7 +377,7 @@ export default function RouteDetail() {
             className="doghike-glass-card p-4 md:p-5"
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-slate-900">Routenverlauf</h2>
+              <h2 className="doghike-card-title">Routenverlauf</h2>
               {isOwner && route.route_type === "planned" && !editingRoute && (
                 <Button variant="outline" size="sm" onClick={() => setEditingRoute(true)}>
                   <Pencil className="w-4 h-4 mr-2" />
@@ -439,7 +439,7 @@ export default function RouteDetail() {
             transition={{ delay: 0.2 }}
             className="doghike-glass-card p-5"
           >
-            <h2 className="text-lg font-semibold text-slate-900 mb-4">Details</h2>
+            <h2 className="doghike-card-title mb-4">Details</h2>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               <div className="doghike-soft-panel text-center p-3">
@@ -477,14 +477,14 @@ export default function RouteDetail() {
 
             {route.description && (
               <div className="mb-4">
-                <h3 className="font-medium text-slate-900 mb-2">Beschreibung</h3>
+                <h3 className="doghike-card-title mb-2">Beschreibung</h3>
                 <ExpandableText text={route.description} lines={6} minChars={320} />
               </div>
             )}
 
             {route.notes && (
               <div>
-                <h3 className="font-medium text-slate-900 mb-2">Notizen</h3>
+                <h3 className="doghike-card-title mb-2">Notizen</h3>
                 <ExpandableText text={route.notes} lines={6} minChars={320} />
               </div>
             )}
@@ -531,7 +531,7 @@ export default function RouteDetail() {
               ) : (
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <h3 className="font-semibold text-slate-900">Tour gemacht?</h3>
+                    <h3 className="doghike-card-title">Tour gemacht?</h3>
                     <p className="text-sm text-slate-500">Markiere diese Route als erledigt</p>
                   </div>
                   <Button
@@ -553,7 +553,7 @@ export default function RouteDetail() {
                     className="overflow-hidden"
                   >
                     <div className="border-t border-brand-100 mt-4 pt-4 space-y-4">
-                      <h4 className="font-medium text-slate-900">Tour-Details ergänzen</h4>
+                      <h4 className="doghike-card-title">Tour-Details ergänzen</h4>
 
                       {/* Date */}
                       <div>
@@ -806,7 +806,7 @@ export default function RouteDetail() {
             >
               <div className="text-center mb-5">
                 <div className="text-4xl mb-3">🎉</div>
-                <h3 className="text-lg font-semibold text-slate-900">Tour erledigt!</h3>
+                <h3 className="doghike-card-title">Tour erledigt!</h3>
                 <p className="text-slate-500 text-sm mt-2">
                   Möchtest du einen Tagebucheintrag für diese Wanderung erstellen?
                 </p>

@@ -99,7 +99,7 @@ function FeedCard({ entry }) {
             </span>
           </div>
 
-          <h3 className="mb-1 font-semibold text-slate-900">{entry.title}</h3>
+          <h3 className="doghike-card-title mb-1">{entry.title}</h3>
           {entry.location && <p className="mb-2 text-xs text-slate-500">Ort: {entry.location}</p>}
 
           <div className="mb-2 flex flex-wrap gap-3 text-xs text-slate-500">
@@ -380,7 +380,7 @@ export default function Friends() {
           animate={{ opacity: 1, y: 0 }}
           className="doghike-glass-card mb-5 p-3.5 sm:p-4"
         >
-          <h2 className="mb-2.5 flex items-center gap-2 text-sm font-semibold text-slate-700">
+          <h2 className="doghike-form-section-title mb-2.5 flex items-center gap-2">
             <Search className="h-4 w-4" /> Freunde suchen
           </h2>
 

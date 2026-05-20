@@ -253,7 +253,7 @@ export default function Dogs() {
 
                     <div className="p-5">
                       <div className="flex items-center justify-between mb-2">
-                        <h2 className="text-xl font-semibold text-slate-900">{dog.name}</h2>
+                        <h2 className="doghike-card-title">{dog.name}</h2>
                         {dog.breed && (
                           <span className="text-xs text-brand-700 bg-brand-50 border border-brand-100 px-2.5 py-1 rounded-full">
                             {dog.breed}
