@@ -22,13 +22,13 @@ import { toast } from "sonner";
 import { PremiumPawMark } from "@/components/premium/PremiumPawBadge";
 
 const features = [
-  "Zugang zu allen Premium-Touren",
-  "Tourdetails nur fuer Premium-Mitglieder",
-  "Kartenansicht und Tourinfos fuer freigeschaltete Touren",
-  "Wetterinfos, wenn sie fuer eine Tour verfuegbar sind",
-  "Ausgewaehlte Hinweise und Tipps zu einzelnen Touren",
-  "PDF-Download fuer Premium-Touren",
-  "Neue Premium-Touren werden nach und nach ergaenzt",
+  "Entdecke ausgewaehlte Premium-Touren, die du in der kostenlosen Version nicht voll sehen kannst",
+  "Erhalte mehr Details zur Tour, damit du deine Wanderung entspannter planen kannst",
+  "Nutze Kartenansicht und Tourinfos fuer freigeschaltete Premium-Touren",
+  "Sieh Wetterinfos direkt bei der Tour, wenn sie verfuegbar sind",
+  "Profitiere von sorgfaeltig ergaenzten Hinweisen und Tipps zu einzelnen Touren",
+  "Speichere Premium-Touren als PDF fuer unterwegs",
+  "Freue dich auf neue Premium-Touren, die nach und nach dazukommen",
 ];
 
 async function getFunctionErrorMessage(error, fallback) {
