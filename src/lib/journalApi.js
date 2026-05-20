@@ -15,6 +15,24 @@ export function getMissingPrivateJournalFields(entry) {
   return missing;
 }
 
+export function getMissingFriendsJournalFields(entry) {
+  const missing = [];
+
+  if (!entry?.title?.trim()) missing.push("Titel");
+  if (!entry?.location?.trim()) missing.push("Ort");
+  if (entry?.latitude === "" || entry?.latitude == null || entry?.longitude === "" || entry?.longitude == null) {
+    missing.push("Startpunkt auf Karte");
+  }
+  if (entry?.distance_km === "" || entry?.distance_km == null) missing.push("Distanz (km)");
+  if (entry?.elevation_m === "" || entry?.elevation_m == null) missing.push("Höhenmeter");
+  if (entry?.duration_minutes === "" || entry?.duration_minutes == null) missing.push("Dauer (Stunden)");
+  if (!entry?.difficulty) missing.push("Schwierigkeit (Mensch)");
+  if (!entry?.dog_difficulty) missing.push("Schwierigkeit (Hund)");
+  if (entry?.water_available === "" || entry?.water_available == null) missing.push("Wasserverfügbarkeit");
+
+  return missing;
+}
+
 export function getMissingSharedJournalFields(entry) {
   const missing = [];
 
@@ -28,6 +46,7 @@ export function getMissingSharedJournalFields(entry) {
   if (entry?.duration_minutes === "" || entry?.duration_minutes == null) missing.push("Dauer (Stunden)");
   if (!entry?.difficulty) missing.push("Schwierigkeit (Mensch)");
   if (!entry?.dog_difficulty) missing.push("Schwierigkeit (Hund)");
+  if (entry?.water_available === "" || entry?.water_available == null) missing.push("WasserverfÃ¼gbarkeit");
   if (!entry?.description?.trim()) missing.push("Beschreibung");
   if (!Array.isArray(entry?.photos) || entry.photos.length === 0) missing.push("Mindestens 1 Foto");
   if (!Array.isArray(entry?.seasons) || entry.seasons.length === 0) missing.push("Empfohlene Jahreszeit");

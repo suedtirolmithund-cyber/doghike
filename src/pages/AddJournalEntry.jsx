@@ -26,6 +26,7 @@ import {
   getSignedJournalUrls,
   uploadJournalFile,
   deleteJournalFiles,
+  getMissingFriendsJournalFields,
   getMissingPrivateJournalFields,
   getMissingSharedJournalFields,
 } from "@/lib/journalApi";
@@ -776,7 +777,7 @@ const EMPTY_FORM = {
   gpx_url: "",
   rating: 0,
   dog_suitable: true,
-  water_available: 0,
+  water_available: null,
   dog_difficulty: 0,
   grazing_animals: false,
   muzzle_recommended: false,
@@ -810,7 +811,7 @@ export default function AddJournalEntry() {
     difficulty: routePrefill?.difficulty ?? 0,
     rating: routePrefill?.rating ?? 0,
     dog_difficulty: routePrefill?.dog_difficulty ?? 0,
-    water_available: routePrefill?.water_available ?? 0,
+    water_available: routePrefill?.water_available ?? null,
     grazing_animals: routePrefill?.grazing_animals ?? false,
     muzzle_recommended: routePrefill?.muzzle_recommended ?? false,
     hazard_notes: routePrefill?.hazard_notes ?? "",
@@ -896,7 +897,7 @@ export default function AddJournalEntry() {
         gpx_url: existing.gpx_url ?? "",
         rating: existing.rating ?? 0,
         dog_suitable: existing.dog_suitable ?? true,
-        water_available: existing.water_available ?? 0,
+        water_available: existing.water_available ?? null,
         dog_difficulty: existing.dog_difficulty ?? 0,
         grazing_animals: existing.grazing_animals ?? false,
         muzzle_recommended: existing.muzzle_recommended ?? false,
@@ -1181,7 +1182,9 @@ export default function AddJournalEntry() {
     }
 
     if (form.visibility === "friends" || form.visibility === "public") {
-      const missing = getMissingSharedJournalFields(form);
+      const missing = form.visibility === "public"
+        ? getMissingSharedJournalFields(form)
+        : getMissingFriendsJournalFields(form);
       if (missing.length > 0) {
         const targetLabel = form.visibility === "public" ? "öffentlich" : "mit Freunden geteilt";
         toast.error(
