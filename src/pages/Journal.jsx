@@ -156,16 +156,27 @@ export default function Journal() {
 
   const deleteMutation = useMutation({
     mutationFn: deleteJournalEntry,
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ["journal", user?.id] });
+      const previous = queryClient.getQueryData(["journal", user?.id]);
+      queryClient.setQueryData(["journal", user?.id], (old) =>
+        Array.isArray(old) ? old.filter((e) => e.id !== id) : old
+      );
+      return { previous };
+    },
+    onError: (_err, _id, context) => {
+      queryClient.setQueryData(["journal", user?.id], context?.previous);
+      toast.error("Das Löschen hat gerade nicht geklappt.");
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["journal", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["allHikes"] });
       queryClient.invalidateQueries({ queryKey: ["journalEntry"] });
       queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["notifications", user?.id] });
       toast.success("Der Eintrag ist weg.");
     },
-    onError: () => {
-      toast.error("Das Löschen hat gerade nicht geklappt.");
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["journal", user?.id] });
     },
   });
 
