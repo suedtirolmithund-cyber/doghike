@@ -30,6 +30,22 @@ const features = [
   "Neue Premium-Touren jeden Monat",
 ];
 
+async function getFunctionErrorMessage(error, fallback) {
+  const response = error?.context;
+
+  if (response && typeof response.clone === "function") {
+    const cloned = response.clone();
+    const data = await cloned.json().catch(() => null);
+    if (data?.error) return data.error;
+    if (data?.message) return data.message;
+
+    const text = await response.clone().text().catch(() => "");
+    if (text) return text;
+  }
+
+  return error?.message || fallback;
+}
+
 export default function Premium() {
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
@@ -75,7 +91,9 @@ export default function Premium() {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        throw new Error(await getFunctionErrorMessage(error, "Checkout konnte gerade nicht gestartet werden."));
+      }
       if (data?.error) throw new Error(data.error);
       if (!data?.url) throw new Error("Stripe hat keine Checkout-URL zurueckgegeben.");
 
@@ -97,7 +115,9 @@ export default function Premium() {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        throw new Error(await getFunctionErrorMessage(error, "Kundenportal konnte gerade nicht geoeffnet werden."));
+      }
       if (data?.error) throw new Error(data.error);
       if (!data?.url) throw new Error("Stripe hat keine Portal-URL zurueckgegeben.");
 
