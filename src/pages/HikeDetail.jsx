@@ -32,9 +32,9 @@ import RatingSection from "@/components/community/RatingSection";
 import ExpandableText from "@/components/ExpandableText";
 import PremiumGate from "@/components/hikes/PremiumGate";
 import WaterIcon from "@/components/icons/WaterIcon";
-import DifficultyScaleChip, { DifficultyBars } from "@/components/difficulty/DifficultyScale";
+import { DifficultyBars } from "@/components/difficulty/DifficultyScale";
 import { supabase } from "@/lib/supabaseClient";
-import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
+import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { formatDurationHours } from "@/lib/duration";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
@@ -402,21 +402,6 @@ export default function HikeDetail() {
               </div>
             )}
 
-            <div className="flex flex-wrap items-center gap-2 mb-3">
-              {seasonValues.map((season) => (
-                getSeasonLabel(season) ? (
-                  <Badge key={season} className={getSeasonBadgeClass(season)}>
-                    {getSeasonIcon(season)} {getSeasonLabel(season)}
-                  </Badge>
-                ) : null
-              ))}
-              {hike.difficulty && (
-                <DifficultyScaleChip level={hike.difficulty} type="human" />
-              )}
-              {hike.dog_difficulty && (
-                <DifficultyScaleChip level={hike.dog_difficulty} type="dog" />
-              )}
-            </div>
             <h1 className="mb-2 text-3xl font-light leading-tight text-white sm:text-4xl md:text-5xl">{hike.trail_name}</h1>
             <div className="flex flex-wrap items-center gap-2.5 text-white/85 sm:gap-3">
               <div className="flex min-w-0 items-center gap-2 text-sm font-medium sm:text-base md:text-lg">
