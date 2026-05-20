@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   XCircle,
   BookOpen,
+  Mountain,
   Loader2,
   BellOff,
   Clock3,
@@ -49,6 +50,10 @@ const NOTIFICATION_META = {
   friend_entry: {
     icon: BookOpen,
     color: "text-slate-600 bg-brand-50/70 border-brand-100",
+  },
+  premium_hike: {
+    icon: Mountain,
+    color: "text-amber-700 bg-amber-50 border-amber-200",
   },
 };
 
@@ -265,6 +270,9 @@ export default function Notifications() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium leading-snug text-slate-900">{notification.title}</p>
+                      {notification.body && (
+                        <p className="mt-1 text-xs leading-relaxed text-slate-500">{notification.body}</p>
+                      )}
                       <p className="mt-1 text-xs text-slate-400">
                         {format(new Date(notification.time), "d. MMM, HH:mm", { locale: de })}
                       </p>
