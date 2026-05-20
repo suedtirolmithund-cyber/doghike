@@ -1,6 +1,7 @@
 import { supabase } from "./supabaseClient";
 import { publishPendingCommentPhoto } from "./communityApi";
 import { hydrateJournalEntriesMedia, validatePublicJournalEntry } from "./journalApi";
+import { resolvePublicHikePhotoReferences } from "./publicHikesApi";
 
 function normalizeHikeSource(value) {
   return value ?? "sheets";
@@ -84,14 +85,22 @@ export async function getAdminPublicHikes() {
 
   if (error) throw error;
 
-  return (data ?? []).map((hike) => ({
-    ...hike,
-    trail_name: hike.title,
-    route_id: String(hike.id),
-    _public_hike_id: hike.id,
-    _source: "sheets",
-    cover_photo: hike.image ?? null,
-  }));
+  return Promise.all(
+    (data ?? []).map(async (hike) => {
+      const [coverPhoto] = await resolvePublicHikePhotoReferences(
+        hike.image ? [hike.image] : []
+      );
+
+      return {
+        ...hike,
+        trail_name: hike.title,
+        route_id: String(hike.id),
+        _public_hike_id: hike.id,
+        _source: "sheets",
+        cover_photo: coverPhoto ?? hike.image ?? null,
+      };
+    })
+  );
 }
 
 export async function approveEntry(id) {
