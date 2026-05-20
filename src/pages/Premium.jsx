@@ -23,11 +23,10 @@ import { PremiumPawMark } from "@/components/premium/PremiumPawBadge";
 
 const features = [
   "Zugang zu allen Premium-Touren",
-  "Detaillierte Routenbeschreibungen und Karten",
-  "Exklusive Fotos und Insider-Tipps",
-  "Wetter- und Saisoninfos fuer jeden Trail",
-  "Routenprofil und Hoehendiagramme",
-  "Neue Premium-Touren jeden Monat",
+  "Tourdetails nur fuer Premium-Mitglieder",
+  "Kartenansicht und Tourinfos fuer freigeschaltete Touren",
+  "PDF-Download fuer Premium-Touren",
+  "Premium kann monatlich oder fuer 1 Monat gebucht werden",
 ];
 
 async function getFunctionErrorMessage(error, fallback) {
