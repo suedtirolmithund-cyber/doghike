@@ -285,10 +285,10 @@ export default function JournalDetail() {
               </div>
             )}
 
-            <h1 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">{entry.title}</h1>
+            <h1 className="doghike-page-title mb-2">{entry.title}</h1>
 
             {entry.location && (
-              <p className="flex items-center gap-1.5 text-slate-500 text-sm mb-3">
+              <p className="doghike-card-subtitle mb-3 flex items-center gap-1.5">
                 <span className="text-sm leading-none shrink-0">{TOUR_ICONS.location}</span> {entry.location}
               </p>
             )}
@@ -320,14 +320,14 @@ export default function JournalDetail() {
           {/* Description */}
           {entry.description && (
             <div className="doghike-glass-card p-5">
-              <h2 className="text-sm font-semibold text-slate-600 uppercase tracking-wide mb-3">Beschreibung</h2>
+              <h2 className="doghike-card-title mb-3">Beschreibung</h2>
               <p className="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap">{entry.description}</p>
             </div>
           )}
 
           {/* Details */}
           <div className="doghike-glass-card p-5 space-y-3">
-            <h2 className="text-sm font-semibold text-slate-600 uppercase tracking-wide">Details</h2>
+            <h2 className="doghike-card-title">Details</h2>
 
             {entry.rating > 0 && (
               <div className="flex items-center gap-2">
@@ -440,7 +440,7 @@ export default function JournalDetail() {
           {/* Map */}
           {entry.latitude && entry.longitude && (
             <div className="doghike-glass-card p-4">
-              <h2 className="text-sm font-semibold text-slate-600 uppercase tracking-wide mb-3">Standort</h2>
+              <h2 className="doghike-card-title mb-3">Standort</h2>
               <div className="h-48 rounded-xl overflow-hidden">
                 <SafeMapContainer
                   resetKey={`journal-detail-${entry.id}-${entry.latitude}-${entry.longitude}`}

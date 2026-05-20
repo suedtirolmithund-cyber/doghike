@@ -170,14 +170,14 @@ export default function Support() {
           </div>
 
           <div className="doghike-glass-card p-6 md:p-8">
-            <h2 className="text-xl font-semibold text-slate-900 mb-6">Häufig gestellte Fragen (FAQ)</h2>
+            <h2 className="doghike-section-title mb-6">Häufig gestellte Fragen (FAQ)</h2>
             {faqs.map((category, index) => {
               const Icon = category.icon;
               return (
                 <div key={index} className="mb-6 last:mb-0">
                   <div className="flex items-center gap-2 mb-3">
                     <Icon className="w-5 h-5 text-brand-600" />
-                    <h3 className="font-medium text-slate-900">{category.category}</h3>
+                    <h3 className="doghike-card-title">{category.category}</h3>
                   </div>
                   <Accordion type="single" collapsible className="space-y-2">
                     {category.questions.map((item, questionIndex) => (
@@ -203,13 +203,13 @@ export default function Support() {
           <div className="doghike-glass-card p-6 md:p-8">
             <div className="flex items-center gap-2 mb-6">
               <Mail className="w-6 h-6 text-brand-700" />
-              <h2 className="text-xl font-semibold text-slate-900">Nachricht senden</h2>
+              <h2 className="doghike-section-title">Nachricht senden</h2>
             </div>
 
             {submitted ? (
               <div className="text-center py-12">
                 <CheckCircle2 className="w-16 h-16 text-brand-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-slate-900 mb-2">Nachricht angekommen!</h3>
+                <h3 className="doghike-section-title mb-2">Nachricht angekommen!</h3>
                 <p className="text-slate-500 text-sm mb-6">
                   Wir haben deine Nachricht gespeichert. Falls du noch etwas ergänzen willst, schreib direkt an{" "}
                   <a href={`mailto:${SUPPORT_EMAIL}`} className="text-brand-600 underline">{SUPPORT_EMAIL}</a>.
@@ -289,7 +289,7 @@ export default function Support() {
           </div>
 
           <div className="rounded-2xl bg-gradient-to-br from-[#501F14] via-[#A8003C] to-[#F9C030] p-6 md:p-8 text-white shadow-[0_18px_42px_rgba(168,0,60,0.16)]">
-            <h2 className="text-xl font-semibold mb-4">Weitere Ressourcen</h2>
+            <h2 className="mb-4 text-xl font-semibold">Weitere Ressourcen</h2>
             <div className="grid md:grid-cols-3 gap-4">
               {[
                 { page: "Datenschutz", icon: Shield, label: "Datenschutz", desc: "Wie wir deine Daten schützen" },

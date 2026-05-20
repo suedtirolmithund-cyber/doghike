@@ -235,7 +235,7 @@ export default function Notifications() {
         ) : isError ? (
           <div className="doghike-glass-card p-5 text-center">
             <BellOff className="mx-auto mb-3 h-10 w-10 text-slate-300" />
-            <h3 className="mb-1 text-lg font-medium text-slate-700">Benachrichtigungen laden gerade nicht</h3>
+            <h3 className="doghike-card-title mb-1">Benachrichtigungen laden gerade nicht</h3>
             <p className="text-sm text-slate-500">
               Versuch es kurz nochmal. Deine Hinweise bleiben erhalten und kommen später wieder rein.
             </p>
@@ -243,7 +243,7 @@ export default function Notifications() {
         ) : notifications.length === 0 ? (
           <div className="doghike-empty-state">
             <Bell className="doghike-empty-icon" />
-            <h3 className="mb-1 text-lg font-medium text-slate-700">Alles auf dem neuesten Stand</h3>
+            <h3 className="doghike-empty-title mb-1">Alles auf dem neuesten Stand</h3>
             <p className="text-sm text-slate-400">Sobald etwas Neues passiert, erscheint es hier.</p>
           </div>
         ) : (

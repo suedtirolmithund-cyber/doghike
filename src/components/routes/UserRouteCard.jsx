@@ -62,7 +62,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
       </div>
 
       <div className="p-4">
-        <h3 className="mb-2 text-lg font-semibold text-[#7C3020]">{route.name}</h3>
+        <h3 className="doghike-card-title mb-2">{route.name}</h3>
 
         {route.description && (
           <p className="mb-3 line-clamp-2 text-sm text-[#C07820]">{route.description}</p>

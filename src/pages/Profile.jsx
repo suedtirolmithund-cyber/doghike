@@ -667,7 +667,7 @@ export default function Profile() {
                   <Navigation className="w-5 h-5 text-brand-600" />
                   Meine Routen
                 </h2>
-                <p className="text-slate-500 text-sm">Geplante und aufgezeichnete Wanderrouten</p>
+                <p className="doghike-section-subtitle">Geplante und aufgezeichnete Wanderrouten</p>
               </div>
               <Link to={createPageUrl("RoutePlanner")}>
                 <Button className="bg-brand-400 hover:bg-brand-600" size="sm">
@@ -752,7 +752,7 @@ export default function Profile() {
                 <Heart className="w-5 h-5 text-brand-400" />
                 Gespeicherte Touren
               </h2>
-              <p className="text-slate-500 text-sm">Touren die du mit dem Herz-Button markiert hast</p>
+              <p className="doghike-section-subtitle">Touren die du mit dem Herz-Button markiert hast</p>
             </div>
 
             {(savedLoading || (savedHikes.length > 0 && allHikesLoading)) ? (
@@ -785,7 +785,7 @@ export default function Profile() {
           <TabsContent value="settings">
             <div className="mb-4 md:mb-6">
               <h2 className="doghike-section-title mb-1">Kontoeinstellungen</h2>
-              <p className="text-slate-500 text-sm">Datenschutz und Konto löschen</p>
+              <p className="doghike-section-subtitle">Datenschutz und Konto löschen</p>
             </div>
             <AccountSettings user={user} />
           </TabsContent>

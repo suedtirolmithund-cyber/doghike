@@ -202,8 +202,8 @@ export default function Journal() {
           className="doghike-glass-card p-8 text-center max-w-md w-full"
         >
           <BookOpen className="w-12 h-12 text-brand-400 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-slate-900 mb-2">Wandertagebuch</h2>
-          <p className="text-slate-500 mb-6 text-sm">
+          <h2 className="doghike-section-title mb-2">Wandertagebuch</h2>
+          <p className="doghike-section-subtitle mb-6">
             Melde dich an, um deine persönlichen Wandererlebnisse festzuhalten.
           </p>
           <Link to={createPageUrl("Login")}>
@@ -317,7 +317,7 @@ export default function Journal() {
                       <div className="flex-1 p-4 md:p-5 min-w-0">
                         <div className="flex items-start justify-between gap-2 mb-1">
                           <div className="min-w-0 flex-1">
-                            <h3 className="font-semibold text-slate-900 text-base md:text-lg truncate">{entry.title}</h3>
+                            <h3 className="doghike-card-title truncate">{entry.title}</h3>
                             <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                               <span className="text-xs text-slate-400">
                                 {format(new Date(entry.date), "d. MMMM yyyy", { locale: de })}

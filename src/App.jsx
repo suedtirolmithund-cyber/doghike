@@ -85,9 +85,9 @@ class ErrorBoundary extends React.Component {
       }
 
       return (
-        <div style={{ padding: '2rem', fontFamily: 'monospace' }}>
-          <h2>Fehler beim Laden der App</h2>
-          <pre style={{ color: 'red', whiteSpace: 'pre-wrap' }}>{String(this.state.error)}</pre>
+        <div className="min-h-screen bg-brand-50 p-8 text-[#7C3020]">
+          <h2 className="doghike-section-title mb-3">Fehler beim Laden der App</h2>
+          <pre style={{ color: 'red', whiteSpace: 'pre-wrap', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' }}>{String(this.state.error)}</pre>
         </div>
       );
     }

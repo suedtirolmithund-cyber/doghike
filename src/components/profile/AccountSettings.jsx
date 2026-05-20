@@ -53,7 +53,7 @@ export default function AccountSettings({ user }) {
   return (
     <div className="space-y-6">
       <div className="doghike-glass-card p-5">
-        <h3 className="text-base font-semibold text-slate-900 mb-4 flex items-center gap-2">
+        <h3 className="doghike-card-title mb-4 flex items-center gap-2">
           <User className="w-4 h-4" /> Profildaten
         </h3>
         <div>
@@ -73,7 +73,7 @@ export default function AccountSettings({ user }) {
       </div>
 
       <div className="doghike-glass-card p-5">
-        <h3 className="text-base font-semibold text-slate-900 mb-3 flex items-center gap-2">
+        <h3 className="doghike-card-title mb-3 flex items-center gap-2">
           <Shield className="w-4 h-4" /> Datenschutz & deine Rechte
         </h3>
         <div className="space-y-3 text-sm text-slate-600">
@@ -99,7 +99,7 @@ export default function AccountSettings({ user }) {
       </div>
 
       <div className="doghike-glass-card p-5">
-        <h3 className="text-base font-semibold text-slate-900 mb-3 flex items-center gap-2">
+        <h3 className="doghike-card-title mb-3 flex items-center gap-2">
           <MessageCircle className="w-4 h-4" /> Feedback & Fehler melden
         </h3>
         <div className="space-y-3 text-sm text-slate-600">
@@ -124,12 +124,12 @@ export default function AccountSettings({ user }) {
       </div>
 
       <div className="rounded-2xl border border-brand-100 bg-brand-50/50 p-5 shadow-[0_14px_35px_rgba(168,0,60,0.08)] backdrop-blur-xl">
-        <h3 className="text-base font-semibold text-brand-500 mb-2 flex items-center gap-2">
+        <h3 className="doghike-card-title mb-2 flex items-center gap-2 text-brand-500">
           <Trash2 className="w-4 h-4" /> Konto & alle Daten löschen
         </h3>
         <p className="text-sm text-slate-600 mb-4">
           Du kannst die vollständige Löschung deines Kontos und <strong>aller deiner Daten</strong>{" "}
-          direkt ausfuehren.
+          direkt ausführen.
         </p>
         <AlertDialog>
           <AlertDialogTrigger asChild>

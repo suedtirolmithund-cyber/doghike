@@ -49,7 +49,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
         </div>
 
         <div className="mb-6 text-center">
-          <h2 className="mb-2 text-2xl font-semibold text-[#7C3020]">Mehr Infos mit Premium</h2>
+          <h2 className="doghike-page-title mb-2">Mehr Infos mit Premium</h2>
           <p className="text-sm leading-6 text-[#C07820]">
             Die Vorschau zu <span className="font-semibold text-[#7C3020]">{hikeName}</span> ist sichtbar.
             Die ganzen Details, Fotos und Zusatzinfos gibt es mit Premium.
@@ -99,7 +99,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
             <Crown className="h-8 w-8 text-brand-500" />
           </div>
 
-          <h2 className="mb-2 text-2xl font-semibold text-[#7C3020]">Premium-Tour</h2>
+          <h2 className="doghike-page-title mb-2">Premium-Tour</h2>
           <p className="mb-2 text-lg font-medium text-[#C07820]">{hikeName}</p>
           <p className="mb-8 text-sm leading-6 text-[#C07820]">
             Diese Tour ist exklusiv für Premium-Mitglieder verfügbar. Schließe ein Abo ab, um alle Details, Karten, Fotos und Tipps zu sehen.
