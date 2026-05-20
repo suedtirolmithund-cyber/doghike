@@ -837,7 +837,7 @@ export default function Profile() {
               <h2 className="doghike-section-title mb-1">Kontoeinstellungen</h2>
               <p className="doghike-section-subtitle">Datenschutz und Konto löschen</p>
             </div>
-            <AccountSettings user={user} />
+            <AccountSettings user={user} profile={profile} />
           </TabsContent>
         </Tabs>
       </div>
