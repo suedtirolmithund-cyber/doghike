@@ -21,7 +21,6 @@ import {
   Search,
   Users,
   Map,
-  Crown,
   Pencil,
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -47,6 +46,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { PremiumPawBadge } from "@/components/premium/PremiumPawBadge";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -421,13 +421,7 @@ function PublicHikeCard({ hike }) {
               <div className="mb-2 flex flex-wrap items-center gap-2">
                 <StatusBadge status={hike.status} />
                 {hike.is_premium && (
-                  <Badge
-                    variant="outline"
-                    className="border-[#e5c595] bg-[#fff4e2] text-[#a96b20]"
-                  >
-                    <Crown className="mr-1 h-3 w-3" />
-                    Premium
-                  </Badge>
+                  <PremiumPawBadge className="min-h-7 px-2.5 py-1 text-xs" />
                 )}
               </div>
               <h3 className="truncate text-lg font-semibold text-slate-900">
@@ -496,13 +490,7 @@ function UserCard({ profile, deleting, onDelete }) {
                 </Badge>
               )}
               {profile.is_premium && (
-                <Badge
-                  variant="outline"
-                  className="border-[#e5c595] bg-[#fff4e2] text-[#a96b20]"
-                >
-                  <Crown className="mr-1 h-3 w-3" />
-                  Premium
-                </Badge>
+                <PremiumPawBadge className="min-h-7 px-2.5 py-1 text-xs" />
               )}
             </div>
             {profile.username && (

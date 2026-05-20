@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Lock, Crown } from "lucide-react";
+import { Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { PremiumPawBadge, PremiumPawMark } from "@/components/premium/PremiumPawBadge";
 
 const premiumItems = [
   "Zugang zu allen Premium-Touren",
@@ -22,7 +23,7 @@ function PremiumList({ title, items }) {
   return (
     <div className="mb-6 rounded-2xl border border-brand-100 bg-brand-50 p-5 text-left">
       <p className="mb-3 flex items-center gap-2 font-semibold text-brand-700">
-        <Crown className="h-4 w-4" /> {title}
+        <PremiumPawBadge label={title} className="min-h-7 px-2.5 py-1 text-xs" />
       </p>
       <ul className="space-y-2 text-sm text-brand-600">
         {items.map((item) => (
@@ -44,9 +45,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
         animate={{ opacity: 1, y: 0 }}
         className="doghike-glass-card p-8"
       >
-        <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-brand-100">
-          <Crown className="h-7 w-7 text-brand-500" />
-        </div>
+        <PremiumPawMark className="mx-auto mb-5" />
 
         <div className="mb-6 text-center">
           <h2 className="doghike-page-title mb-2">Mehr Infos mit Premium</h2>
@@ -61,7 +60,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Link to={createPageUrl("Premium")}>
             <Button>
-              <Crown className="mr-2 h-5 w-5" />
+              <span className="mr-2" aria-hidden="true">🐾</span>
               Jetzt Premium werden
             </Button>
           </Link>
@@ -95,9 +94,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
           animate={{ opacity: 1, y: 0 }}
           className="doghike-glass-card p-10"
         >
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-brand-100">
-            <Crown className="h-8 w-8 text-brand-500" />
-          </div>
+          <PremiumPawMark className="mx-auto mb-6 h-16 w-16 text-3xl" />
 
           <h2 className="doghike-page-title mb-2">Premium-Tour</h2>
           <p className="mb-2 text-lg font-medium text-[#C07820]">{hikeName}</p>
@@ -109,7 +106,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
 
           <Link to={createPageUrl("Premium")}>
             <Button className="mb-3 h-12 w-full text-base">
-              <Crown className="mr-2 h-5 w-5" />
+              <span className="mr-2" aria-hidden="true">🐾</span>
               Jetzt Premium werden
             </Button>
           </Link>
