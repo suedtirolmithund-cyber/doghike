@@ -10,7 +10,6 @@ import {
   CalendarClock,
   Check,
   CreditCard,
-  Crown,
   Loader2,
   Mountain,
   Settings,
@@ -20,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { toast } from "sonner";
+import { PremiumPawMark } from "@/components/premium/PremiumPawBadge";
 
 const features = [
   "Zugang zu allen Premium-Touren",
@@ -125,11 +125,11 @@ export default function Premium() {
   if (!PREMIUM_FEATURES_ENABLED) {
     return (
       <div className="doghike-page-shell">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
+        <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
             <Link to={createPageUrl("Hikes")}>
               <Button variant="ghost" className="mb-6 text-slate-600">
-                <ArrowLeft className="w-4 h-4 mr-2" /> Zurueck
+                <ArrowLeft className="mr-2 h-4 w-4" /> Zurueck
               </Button>
             </Link>
           </motion.div>
@@ -139,9 +139,7 @@ export default function Premium() {
             animate={{ opacity: 1, y: 0 }}
             className="doghike-empty-state"
           >
-            <div className="doghike-page-icon mx-auto mb-5 h-14 w-14 text-slate-500">
-              <Crown className="h-7 w-7" />
-            </div>
+            <PremiumPawMark className="mx-auto mb-5 h-14 w-14 text-2xl" />
             <h1 className="doghike-page-title mb-3">Premium ist noch nicht aktiv</h1>
             <p className="text-slate-500">
               Die Premium-Funktionen sind vorbereitet, aber fuer Nutzer noch nicht freigeschaltet.
@@ -154,11 +152,11 @@ export default function Premium() {
 
   return (
     <div className="doghike-page-shell">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
+      <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
           <Link to={createPageUrl("Hikes")}>
             <Button variant="ghost" className="mb-6 text-slate-600">
-              <ArrowLeft className="w-4 h-4 mr-2" /> Zurueck
+              <ArrowLeft className="mr-2 h-4 w-4" /> Zurueck
             </Button>
           </Link>
         </motion.div>
@@ -169,11 +167,9 @@ export default function Premium() {
             animate={{ opacity: 1, scale: 1 }}
             className="doghike-glass-card p-8 text-center md:p-10"
           >
-            <div className="doghike-page-icon mx-auto mb-6 h-16 w-16">
-              <Crown className="h-8 w-8" />
-            </div>
-            <h2 className="doghike-page-title mb-3">Du bist Premium</h2>
-            <p className="mb-2 text-slate-500">
+            <PremiumPawMark className="mx-auto mb-6 h-16 w-16 text-3xl" />
+            <h2 className="doghike-page-title mb-3">Du bist Premium!</h2>
+            <p className="mb-8 text-slate-500">
               Du hast Zugang zu allen exklusiven Premium-Touren auf DogTrails.
             </p>
             {currentPeriodEnd && (
@@ -182,7 +178,7 @@ export default function Premium() {
             <div className="grid gap-3 sm:grid-cols-2">
               <Link to={createPageUrl("Hikes")}>
                 <Button className="doghike-primary-action h-12 w-full">
-                  <Mountain className="w-5 h-5 mr-2" /> Touren entdecken
+                  <Mountain className="mr-2 h-5 w-5" /> Touren entdecken
                 </Button>
               </Link>
               {canOpenPortal && (
@@ -193,9 +189,9 @@ export default function Premium() {
                   disabled={portalMutation.isPending}
                 >
                   {portalMutation.isPending ? (
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   ) : (
-                    <Settings className="w-4 h-4 mr-2" />
+                    <Settings className="mr-2 h-4 w-4" />
                   )}
                   Abo verwalten
                 </Button>
@@ -205,9 +201,7 @@ export default function Premium() {
         ) : (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="mb-8 text-center">
-              <div className="doghike-page-icon mx-auto mb-4 h-14 w-14">
-                <Crown className="h-7 w-7" />
-              </div>
+              <PremiumPawMark className="mx-auto mb-4 h-14 w-14 text-2xl" />
               <h1 className="doghike-page-title mb-3">Premium Mitgliedschaft</h1>
               <p className="doghike-page-subtitle">Entdecke exklusive hundefreundliche Touren in Suedtirol</p>
             </div>
@@ -238,7 +232,7 @@ export default function Premium() {
                 </div>
               </div>
 
-              <ul className="space-y-3 mb-10">
+              <ul className="mb-10 space-y-3">
                 {features.map((feature) => (
                   <li key={feature} className="flex items-center gap-3 text-white/90">
                     <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/20">
@@ -256,9 +250,9 @@ export default function Premium() {
                   disabled={checkoutMutation.isPending || isFetching}
                 >
                   {isStartingMonthly ? (
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   ) : (
-                    <CreditCard className="w-4 h-4 mr-2" />
+                    <CreditCard className="mr-2 h-4 w-4" />
                   )}
                   Monatliches Abo starten
                 </Button>
@@ -269,9 +263,9 @@ export default function Premium() {
                   disabled={checkoutMutation.isPending || isFetching}
                 >
                   {isStartingOneTime ? (
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   ) : (
-                    <CalendarClock className="w-4 h-4 mr-2" />
+                    <CalendarClock className="mr-2 h-4 w-4" />
                   )}
                   1 Monat einmalig kaufen
                 </Button>
@@ -283,9 +277,9 @@ export default function Premium() {
                     disabled={portalMutation.isPending}
                   >
                     {portalMutation.isPending ? (
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
-                      <Settings className="w-4 h-4 mr-2" />
+                      <Settings className="mr-2 h-4 w-4" />
                     )}
                     Bestehendes Abo verwalten
                   </Button>
@@ -297,12 +291,12 @@ export default function Premium() {
               </div>
             </div>
 
-            <div className="flex justify-center gap-1 mb-4">
+            <div className="mb-4 flex justify-center gap-1">
               {[1, 2, 3, 4, 5].map((star) => (
-                <Star key={star} className="w-5 h-5 fill-[#A8003C] text-[#A8003C]" />
+                <Star key={star} className="h-5 w-5 fill-[#A8003C] text-[#A8003C]" />
               ))}
             </div>
-            <p className="text-center text-slate-500 text-sm italic">
+            <p className="text-center text-sm italic text-slate-500">
               "Endlich eine App, die wirklich auf unsere Hunde ausgerichtet ist!" - Martina S.
             </p>
           </motion.div>

@@ -5,6 +5,7 @@ import { createPageUrl } from "@/utils";
 import ExpandableText from "@/components/ExpandableText";
 import WaterIcon from "@/components/icons/WaterIcon";
 import DifficultyScaleChip from "@/components/difficulty/DifficultyScale";
+import { PremiumPawBadge } from "@/components/premium/PremiumPawBadge";
 import { TOUR_ICONS, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
@@ -83,9 +84,7 @@ export default function HikeCard({ hike, dogs = [], index = 0, waterInStatsRow =
             <div className="absolute inset-0 bg-gradient-to-t from-[#28140A]/78 via-[#28140A]/34 via-45% to-transparent" />
 
             {PREMIUM_FEATURES_ENABLED && hike.is_premium && (
-              <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/74 px-3 py-1.5 text-sm font-semibold text-[#7C3020] shadow-sm backdrop-blur-sm">
-                Premium
-              </span>
+              <PremiumPawBadge className="absolute left-4 top-4 min-h-9 border-white/65 px-3.5 py-2 text-sm shadow-sm" />
             )}
 
             {previewIcon && (
