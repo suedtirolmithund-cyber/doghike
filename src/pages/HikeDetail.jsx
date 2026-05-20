@@ -309,7 +309,8 @@ export default function HikeDetail() {
   const nextPhoto = () => setCurrentPhotoIndex((prev) => (prev + 1) % photos.length);
   const prevPhoto = () => setCurrentPhotoIndex((prev) => (prev - 1 + photos.length) % photos.length);
   const canComment = hike?._source === "sheets" || hike?.visibility === "public";
-  const canDownloadPdf = hike?._source === "sheets" || isOwnJournalHike || hike?.visibility === "public";
+  const canDownloadPdf = (hike?._source === "sheets" || isOwnJournalHike || hike?.visibility === "public")
+    && (!isPremiumHike || userHasPremium);
   const includePhotosInPdf = hike?._source === "sheets" || isOwnJournalHike;
   const previewNotes = hike.notes
     ? hike.notes.length > 220
