@@ -1,7 +1,22 @@
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { User, Mail, Trash2, AlertTriangle, Shield, ExternalLink, MessageCircle, Bug } from "lucide-react";
+import {
+  AlertTriangle,
+  Bug,
+  CalendarClock,
+  CreditCard,
+  Crown,
+  ExternalLink,
+  Loader2,
+  Mail,
+  MessageCircle,
+  Settings,
+  Shield,
+  Trash2,
+  User,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,10 +37,83 @@ import { useAuth } from "@/lib/AuthContext";
 
 const SUPPORT_EMAIL = "suedtirolmithund@gmail.com";
 
-export default function AccountSettings({ user }) {
+async function getFunctionErrorMessage(error, fallback) {
+  const response = error?.context;
+
+  if (response && typeof response.clone === "function") {
+    const data = await response.clone().json().catch(() => null);
+    if (data?.error) return data.error;
+    if (data?.message) return data.message;
+
+    const text = await response.clone().text().catch(() => "");
+    if (text) return text;
+  }
+
+  return error?.message || fallback;
+}
+
+export default function AccountSettings({ user, profile }) {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const [isDeleting, setIsDeleting] = useState(false);
+  const premiumEndDate = profile?.premium_current_period_end ? new Date(profile.premium_current_period_end) : null;
+  const premiumHasTimeLeft = !premiumEndDate || premiumEndDate.getTime() > Date.now();
+  const isPremium = profile?.is_premium === true && premiumHasTimeLeft;
+  const canOpenPortal = !!profile?.stripe_customer_id;
+  const currentPeriodEnd = premiumEndDate
+    ? new Intl.DateTimeFormat("de-DE", { dateStyle: "medium" }).format(premiumEndDate)
+    : null;
+
+  const checkoutMutation = useMutation({
+    mutationFn: async (plan = "monthly") => {
+      const premiumUrl = `${window.location.origin}${createPageUrl("Premium")}`;
+      const { data, error } = await supabase.functions.invoke("create-checkout-session", {
+        body: {
+          plan,
+          successUrl: `${premiumUrl}?checkout=success`,
+          cancelUrl: `${premiumUrl}?checkout=cancelled`,
+        },
+      });
+
+      if (error) {
+        throw new Error(await getFunctionErrorMessage(error, "Checkout konnte gerade nicht gestartet werden."));
+      }
+      if (data?.error) throw new Error(data.error);
+      if (!data?.url) throw new Error("Stripe hat keine Checkout-URL zurueckgegeben.");
+
+      return data.url;
+    },
+    onSuccess: (url) => {
+      window.location.assign(url);
+    },
+    onError: (error) => {
+      toast.error(error?.message || "Checkout konnte gerade nicht gestartet werden.");
+    },
+  });
+
+  const portalMutation = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.functions.invoke("create-billing-portal-session", {
+        body: {
+          returnUrl: `${window.location.origin}${createPageUrl("Profile")}`,
+        },
+      });
+
+      if (error) {
+        throw new Error(await getFunctionErrorMessage(error, "Abo-Verwaltung konnte gerade nicht geoeffnet werden."));
+      }
+      if (data?.error) throw new Error(data.error);
+      if (!data?.url) throw new Error("Stripe hat keine Portal-URL zurueckgegeben.");
+
+      return data.url;
+    },
+    onSuccess: (url) => {
+      window.location.assign(url);
+    },
+    onError: (error) => {
+      toast.error(error?.message || "Abo-Verwaltung konnte gerade nicht geoeffnet werden.");
+    },
+  });
 
   const handleDeleteAccount = async () => {
     setIsDeleting(true);
@@ -52,6 +140,85 @@ export default function AccountSettings({ user }) {
 
   return (
     <div className="space-y-6">
+      <div className="doghike-glass-card p-5">
+        <h3 className="doghike-card-title mb-3 flex items-center gap-2">
+          <Crown className="w-4 h-4" /> Premium & Abo
+        </h3>
+        <div className="space-y-4 text-sm text-slate-600">
+          <div className="rounded-2xl border border-brand-100 bg-brand-50/60 p-4">
+            <p className="font-semibold text-slate-900">
+              {isPremium ? "Premium ist aktiv" : "Du nutzt aktuell die kostenlose Version"}
+            </p>
+            <p className="mt-1 text-slate-500">
+              {isPremium
+                ? currentPeriodEnd
+                  ? `Dein aktueller Premium-Zeitraum laeuft bis ${currentPeriodEnd}.`
+                  : "Dein Premium-Zugang ist aktiv."
+                : "Starte Premium monatlich oder kaufe einmalig 1 Monat Zugang."}
+            </p>
+          </div>
+
+          <div className="grid gap-2 sm:grid-cols-2">
+            {!isPremium && (
+              <>
+                <Button
+                  className="doghike-primary-action h-11"
+                  onClick={() => checkoutMutation.mutate("monthly")}
+                  disabled={checkoutMutation.isPending}
+                >
+                  {checkoutMutation.isPending && checkoutMutation.variables === "monthly" ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <CreditCard className="mr-2 h-4 w-4" />
+                  )}
+                  Abo starten
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-11"
+                  onClick={() => checkoutMutation.mutate("one_time")}
+                  disabled={checkoutMutation.isPending}
+                >
+                  {checkoutMutation.isPending && checkoutMutation.variables === "one_time" ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <CalendarClock className="mr-2 h-4 w-4" />
+                  )}
+                  1 Monat kaufen
+                </Button>
+              </>
+            )}
+
+            <Link to={createPageUrl("Premium")}>
+              <Button variant="outline" className="h-11 w-full">
+                <Crown className="mr-2 h-4 w-4" />
+                Premium ansehen
+              </Button>
+            </Link>
+
+            {canOpenPortal && (
+              <Button
+                variant="outline"
+                className="h-11"
+                onClick={() => portalMutation.mutate()}
+                disabled={portalMutation.isPending}
+              >
+                {portalMutation.isPending ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Settings className="mr-2 h-4 w-4" />
+                )}
+                Abo verwalten / kuendigen
+              </Button>
+            )}
+          </div>
+
+          <p className="text-xs text-slate-400">
+            Aenderungen, Kuendigung und Zahlungsmethode laufen sicher ueber Stripe.
+          </p>
+        </div>
+      </div>
+
       <div className="doghike-glass-card p-5">
         <h3 className="doghike-card-title mb-4 flex items-center gap-2">
           <User className="w-4 h-4" /> Profildaten
