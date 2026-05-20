@@ -50,6 +50,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
   const { data: comments = [], isLoading, isError, refetch } = useQuery({
     queryKey: ["comments", hikeSource, normalizedHikeId, ...hikeAliases],
     queryFn: () => getComments(normalizedHikeId, hikeSource, hikeAliases),
+    refetchOnWindowFocus: false,
   });
 
   const createMutation = useMutation({
@@ -79,7 +80,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
     },
     onSuccess: () => {
       const needsReview = commentNeedsReview(text);
-      queryClient.invalidateQueries({ queryKey: ["comments"] });
+      queryClient.invalidateQueries({ queryKey: ["comments", hikeSource, normalizedHikeId] });
       setText("");
       if (photoPreviewUrl) {
         URL.revokeObjectURL(photoPreviewUrl);
@@ -101,7 +102,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
   const deleteMutation = useMutation({
     mutationFn: (id) => deleteComment(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments"] });
+      queryClient.invalidateQueries({ queryKey: ["comments", hikeSource, normalizedHikeId] });
       setDeleteId(null);
       toast.success("Der Tipp ist weg.");
     },
@@ -203,15 +204,21 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
               </Button>
             </div>
 
-            <div className="doghike-soft-panel flex items-center gap-3 p-3">
+            <div className="doghike-soft-panel flex items-start gap-3 p-3">
               <Checkbox
                 id="comment-consent"
                 checked={consentPublic}
                 onCheckedChange={setConsentPublic}
+                className="mt-0.5"
               />
-              <label htmlFor="comment-consent" className="flex-1 cursor-pointer text-sm text-[#7C3020]">
-                Ich akzeptiere, dass mein Kommentar und meine Fotos öffentlich sichtbar sein können.
-              </label>
+              <div className="flex-1">
+                <label htmlFor="comment-consent" className="cursor-pointer text-sm text-[#7C3020]">
+                  Ich akzeptiere, dass mein Kommentar und meine Fotos öffentlich sichtbar sein können.
+                </label>
+                {text.trim() && !consentPublic && (
+                  <p className="mt-1 text-xs text-brand-400">Bitte Zustimmung aktivieren um zu senden.</p>
+                )}
+              </div>
             </div>
           </div>
         </div>

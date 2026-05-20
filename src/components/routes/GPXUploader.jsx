@@ -81,6 +81,10 @@ function parseGPX(text) {
     }
   });
 
+  if (points.length === 0) {
+    throw new Error("Keine Wegpunkte im GPX gefunden.");
+  }
+
   let distKm = 0;
   for (let i = 1; i < points.length; i += 1) {
     distKm += haversine(points[i - 1].lat, points[i - 1].lon, points[i].lat, points[i].lon);

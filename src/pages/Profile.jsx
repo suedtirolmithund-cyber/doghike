@@ -867,7 +867,7 @@ export default function Profile() {
               <p className="doghike-section-subtitle">Touren die du mit dem Herz-Button markiert hast</p>
             </div>
 
-            {(savedLoading || (savedHikes.length > 0 && allHikesLoading)) ? (
+            {(savedLoading || (savedHikes.length > 0 && allHikesLoading && savedHikeObjects.length === 0)) ? (
               <div className="flex justify-center py-16">
                 <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
               </div>

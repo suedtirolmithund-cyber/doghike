@@ -11,9 +11,8 @@ export default function MapView() {
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
-    staleTime: 0,
-    refetchOnMount: "always",
-    refetchOnWindowFocus: true,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const hikesWithCoords = hikes.filter(h => h.latitude && h.longitude);

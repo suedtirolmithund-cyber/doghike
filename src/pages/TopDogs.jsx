@@ -13,24 +13,24 @@ import { getAvatarDataUrl } from "@/lib/fallbackImages";
 
 // Badge-Definitionen
 const BADGE_DEFS = {
-  champion:    { emoji: "🏆", label: "Champion",        desc: "Platz 1 im Ranking" },
-  veteran:     { emoji: "🏅", label: "Veteran",         desc: "50+ Touren" },
-  explorer:    { emoji: "🧭", label: "Entdecker",       desc: "10+ Touren" },
-  ultra:       { emoji: "⚡", label: "Ultra-Läufer",    desc: "500+ km" },
-  marathoner:  { emoji: "🏃", label: "Kilometerfresser", desc: "100+ km" },
-  mountaineer: { emoji: TOUR_ICONS.elevation, label: "Gipfelstürmer",   desc: "1.000+ Höhenmeter" },
-  popular:     { emoji: "⭐", label: "Liebling",        desc: "Ø 4,5 Sterne (3+ Bewertungen)" },
+  champion:    { emoji: "🏆", label: "Champion",         desc: "Platz 1 im Ranking" },
+  veteran:     { emoji: "🏅", label: "Veteran",          desc: "50+ Touren",          threshold: { field: "tourCount",     min: 50  } },
+  explorer:    { emoji: "🧭", label: "Entdecker",        desc: "10+ Touren",          threshold: { field: "tourCount",     min: 10  } },
+  ultra:       { emoji: "⚡", label: "Ultra-Läufer",     desc: "500+ km",             threshold: { field: "totalDistance", min: 500 } },
+  marathoner:  { emoji: "🏃", label: "Kilometerfresser", desc: "100+ km",             threshold: { field: "totalDistance", min: 100 } },
+  mountaineer: { emoji: TOUR_ICONS.elevation, label: "Gipfelstürmer", desc: "1.000+ Höhenmeter", threshold: { field: "totalElevation", min: 1000 } },
+  popular:     { emoji: "⭐", label: "Liebling",         desc: "Ø 4,5 Sterne (3+ Bewertungen)" },
 };
 
 function getBadges(s, isChampion) {
   const b = [];
-  if (isChampion)             b.push("champion");
-  if (s.tourCount >= 50)      b.push("veteran");
-  else if (s.tourCount >= 10) b.push("explorer");
-  if (s.totalDistance >= 500) b.push("ultra");
-  else if (s.totalDistance >= 100) b.push("marathoner");
-  if (s.totalElevation >= 1000)    b.push("mountaineer");
-  if (s.avgRating >= 4.5 && s.ratingCount >= 3) b.push("popular");
+  if (isChampion) b.push("champion");
+  if (s.tourCount >= BADGE_DEFS.veteran.threshold.min)         b.push("veteran");
+  else if (s.tourCount >= BADGE_DEFS.explorer.threshold.min)   b.push("explorer");
+  if (s.totalDistance >= BADGE_DEFS.ultra.threshold.min)       b.push("ultra");
+  else if (s.totalDistance >= BADGE_DEFS.marathoner.threshold.min) b.push("marathoner");
+  if (s.totalElevation >= BADGE_DEFS.mountaineer.threshold.min) b.push("mountaineer");
+  if (s.avgRating >= 4.5 && s.ratingCount >= 3)                b.push("popular");
   return b;
 }
 
