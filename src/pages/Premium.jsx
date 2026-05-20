@@ -25,8 +25,10 @@ const features = [
   "Zugang zu allen Premium-Touren",
   "Tourdetails nur fuer Premium-Mitglieder",
   "Kartenansicht und Tourinfos fuer freigeschaltete Touren",
+  "Wetterinfos, wenn sie fuer eine Tour verfuegbar sind",
+  "Ausgewaehlte Hinweise und Tipps zu einzelnen Touren",
   "PDF-Download fuer Premium-Touren",
-  "Premium kann monatlich oder fuer 1 Monat gebucht werden",
+  "Neue Premium-Touren werden nach und nach ergaenzt",
 ];
 
 async function getFunctionErrorMessage(error, fallback) {
