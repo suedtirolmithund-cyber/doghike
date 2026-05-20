@@ -1,31 +1,47 @@
-import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { supabase } from "@/lib/supabaseClient";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Crown, Check, ArrowLeft, Mountain, Star, Mail } from "lucide-react";
+import {
+  ArrowLeft,
+  CalendarClock,
+  Check,
+  CreditCard,
+  Crown,
+  Loader2,
+  Mountain,
+  Settings,
+  ShieldCheck,
+  Star,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
+import { toast } from "sonner";
 
 const features = [
   "Zugang zu allen Premium-Touren",
-  "Detaillierte Routenbeschreibungen & Karten",
-  "Exklusive Fotos & Insider-Tipps",
-  "Wetter- & Saisoninfos für jeden Trail",
-  "Routenprofil & Höhendiagramme",
+  "Detaillierte Routenbeschreibungen und Karten",
+  "Exklusive Fotos und Insider-Tipps",
+  "Wetter- und Saisoninfos fuer jeden Trail",
+  "Routenprofil und Hoehendiagramme",
   "Neue Premium-Touren jeden Monat",
 ];
 
 export default function Premium() {
   const { user } = useAuth();
+  const [searchParams] = useSearchParams();
+  const queryClient = useQueryClient();
+  const checkoutStatus = searchParams.get("checkout");
 
-  const { data: profile } = useQuery({
+  const { data: profile, isFetching } = useQuery({
     queryKey: ["profile", user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("is_premium")
+        .select("is_premium, stripe_customer_id, subscription_status, premium_current_period_end")
         .eq("user_id", user.id)
         .maybeSingle();
 
@@ -35,7 +51,76 @@ export default function Premium() {
     enabled: !!user?.id,
   });
 
-  const isPremium = profile?.is_premium === true;
+  useEffect(() => {
+    if (!user?.id || checkoutStatus !== "success") return;
+
+    toast.success("Zahlung abgeschlossen. Dein Premium-Status wird aktualisiert.");
+    queryClient.invalidateQueries({ queryKey: ["profile", user.id] });
+  }, [checkoutStatus, queryClient, user?.id]);
+
+  useEffect(() => {
+    if (checkoutStatus === "cancelled") {
+      toast.info("Checkout wurde abgebrochen. Du kannst jederzeit neu starten.");
+    }
+  }, [checkoutStatus]);
+
+  const checkoutMutation = useMutation({
+    mutationFn: async (plan = "monthly") => {
+      const premiumUrl = `${window.location.origin}${createPageUrl("Premium")}`;
+      const { data, error } = await supabase.functions.invoke("create-checkout-session", {
+        body: {
+          plan,
+          successUrl: `${premiumUrl}?checkout=success`,
+          cancelUrl: `${premiumUrl}?checkout=cancelled`,
+        },
+      });
+
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data?.url) throw new Error("Stripe hat keine Checkout-URL zurueckgegeben.");
+
+      return data.url;
+    },
+    onSuccess: (url) => {
+      window.location.assign(url);
+    },
+    onError: (error) => {
+      toast.error(error?.message || "Checkout konnte gerade nicht gestartet werden.");
+    },
+  });
+
+  const portalMutation = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.functions.invoke("create-billing-portal-session", {
+        body: {
+          returnUrl: `${window.location.origin}${createPageUrl("Premium")}`,
+        },
+      });
+
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data?.url) throw new Error("Stripe hat keine Portal-URL zurueckgegeben.");
+
+      return data.url;
+    },
+    onSuccess: (url) => {
+      window.location.assign(url);
+    },
+    onError: (error) => {
+      toast.error(error?.message || "Kundenportal konnte gerade nicht geoeffnet werden.");
+    },
+  });
+
+  const premiumEndDate = profile?.premium_current_period_end ? new Date(profile.premium_current_period_end) : null;
+  const premiumHasTimeLeft = !premiumEndDate || premiumEndDate.getTime() > Date.now();
+  const isPremium = profile?.is_premium === true && premiumHasTimeLeft;
+  const isStartingMonthly = checkoutMutation.isPending && checkoutMutation.variables === "monthly";
+  const isStartingOneTime = checkoutMutation.isPending && checkoutMutation.variables === "one_time";
+  const canOpenPortal = !!profile?.stripe_customer_id;
+  const currentPeriodEnd = premiumEndDate
+    ? new Intl.DateTimeFormat("de-DE", { dateStyle: "medium" }).format(premiumEndDate)
+    : null;
+  const checkoutPending = checkoutStatus === "success" && !isPremium;
 
   if (!PREMIUM_FEATURES_ENABLED) {
     return (
@@ -44,7 +129,7 @@ export default function Premium() {
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
             <Link to={createPageUrl("Hikes")}>
               <Button variant="ghost" className="mb-6 text-slate-600">
-                <ArrowLeft className="w-4 h-4 mr-2" /> Zurück
+                <ArrowLeft className="w-4 h-4 mr-2" /> Zurueck
               </Button>
             </Link>
           </motion.div>
@@ -59,7 +144,7 @@ export default function Premium() {
             </div>
             <h1 className="doghike-page-title mb-3">Premium ist noch nicht aktiv</h1>
             <p className="text-slate-500">
-              Die Premium-Funktionen sind im Code vorbereitet, werden für die aktuelle Testphase aber noch nicht für Nutzer freigeschaltet.
+              Die Premium-Funktionen sind vorbereitet, aber fuer Nutzer noch nicht freigeschaltet.
             </p>
           </motion.div>
         </div>
@@ -73,7 +158,7 @@ export default function Premium() {
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
           <Link to={createPageUrl("Hikes")}>
             <Button variant="ghost" className="mb-6 text-slate-600">
-              <ArrowLeft className="w-4 h-4 mr-2" /> Zurück
+              <ArrowLeft className="w-4 h-4 mr-2" /> Zurueck
             </Button>
           </Link>
         </motion.div>
@@ -87,15 +172,35 @@ export default function Premium() {
             <div className="doghike-page-icon mx-auto mb-6 h-16 w-16">
               <Crown className="h-8 w-8" />
             </div>
-            <h2 className="doghike-page-title mb-3">Du bist Premium!</h2>
-            <p className="mb-8 text-slate-500">
+            <h2 className="doghike-page-title mb-3">Du bist Premium</h2>
+            <p className="mb-2 text-slate-500">
               Du hast Zugang zu allen exklusiven Premium-Touren auf DogTrails.
             </p>
-            <Link to={createPageUrl("Hikes")}>
-              <Button className="doghike-primary-action h-12 px-8">
-                <Mountain className="w-5 h-5 mr-2" /> Alle Touren entdecken
-              </Button>
-            </Link>
+            {currentPeriodEnd && (
+              <p className="mb-8 text-sm text-slate-400">Aktueller Zeitraum bis {currentPeriodEnd}</p>
+            )}
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Link to={createPageUrl("Hikes")}>
+                <Button className="doghike-primary-action h-12 w-full">
+                  <Mountain className="w-5 h-5 mr-2" /> Touren entdecken
+                </Button>
+              </Link>
+              {canOpenPortal && (
+                <Button
+                  variant="outline"
+                  className="h-12"
+                  onClick={() => portalMutation.mutate()}
+                  disabled={portalMutation.isPending}
+                >
+                  {portalMutation.isPending ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <Settings className="w-4 h-4 mr-2" />
+                  )}
+                  Abo verwalten
+                </Button>
+              )}
+            </div>
           </motion.div>
         ) : (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
@@ -104,15 +209,34 @@ export default function Premium() {
                 <Crown className="h-7 w-7" />
               </div>
               <h1 className="doghike-page-title mb-3">Premium Mitgliedschaft</h1>
-              <p className="doghike-page-subtitle">Entdecke exklusive hundefreundliche Touren in Südtirol</p>
+              <p className="doghike-page-subtitle">Entdecke exklusive hundefreundliche Touren in Suedtirol</p>
             </div>
 
-            <div className="mb-6 overflow-hidden rounded-2xl border border-brand-100/70 bg-gradient-to-br from-[#501F14] via-[#A8003C] to-[#F9C030] p-8 text-white shadow-[0_20px_46px_rgba(168,0,60,0.16)]">
-              <div className="flex items-baseline gap-2 mb-1">
-                <span className="text-5xl font-bold">4,99 €</span>
-                <span className="text-white/75">/ Monat</span>
+            {checkoutPending && (
+              <div className="mb-6 rounded-2xl border border-brand-100 bg-brand-50 p-4 text-sm text-brand-800">
+                Deine Zahlung war erfolgreich. Der Stripe-Webhook aktualisiert deinen Premium-Status gleich automatisch.
               </div>
-              <p className="mb-8 text-sm text-white/70">Jederzeit kündbar</p>
+            )}
+
+            <div className="mb-6 overflow-hidden rounded-2xl border border-brand-100/70 bg-gradient-to-br from-[#501F14] via-[#A8003C] to-[#F9C030] p-8 text-white shadow-[0_20px_46px_rgba(168,0,60,0.16)]">
+              <div className="mb-8 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-2xl border border-white/22 bg-white/14 p-4 backdrop-blur-md">
+                  <p className="mb-1 text-sm font-medium text-white/84">Monatliches Abo</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-bold">3,99 EUR</span>
+                    <span className="text-white/75">/ Monat</span>
+                  </div>
+                  <p className="mt-1 text-xs text-white/70">Automatisch, jederzeit kuendbar</p>
+                </div>
+                <div className="rounded-2xl border border-white/22 bg-white/10 p-4 backdrop-blur-md">
+                  <p className="mb-1 text-sm font-medium text-white/84">Einmalig</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-bold">4,99 EUR</span>
+                    <span className="text-white/75">/ 1 Monat</span>
+                  </div>
+                  <p className="mt-1 text-xs text-white/70">Einmal zahlen, laeuft nach 1 Monat aus</p>
+                </div>
+              </div>
 
               <ul className="space-y-3 mb-10">
                 {features.map((feature) => (
@@ -125,20 +249,50 @@ export default function Premium() {
                 ))}
               </ul>
 
-              <div className="rounded-2xl border border-white/22 bg-white/14 p-5 text-center backdrop-blur-md">
-                <Crown className="mx-auto mb-3 h-8 w-8 text-white" />
-                <p className="mb-1 font-semibold text-white">Online-Zahlung kommt bald</p>
-                <p className="mb-4 text-sm text-white/72">
-                  Stripe-Integration wird gerade eingerichtet. Interesse an Premium?
-                </p>
-                <a href="mailto:suedtirolmithund@gmail.com?subject=Premium Mitgliedschaft">
-                  <Button className="h-12 w-full rounded-xl bg-white text-[#7C3020] hover:bg-white/90">
-                    <Mail className="w-4 h-4 mr-2" />
-                    Jetzt per E-Mail anfragen
+              <div className="space-y-3 rounded-2xl border border-white/22 bg-white/14 p-5 text-center backdrop-blur-md">
+                <Button
+                  className="h-12 w-full rounded-xl bg-white text-[#7C3020] hover:bg-white/90"
+                  onClick={() => checkoutMutation.mutate("monthly")}
+                  disabled={checkoutMutation.isPending || isFetching}
+                >
+                  {isStartingMonthly ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <CreditCard className="w-4 h-4 mr-2" />
+                  )}
+                  Monatliches Abo starten
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-12 w-full rounded-xl border-white/30 bg-white/10 text-white hover:bg-white/20"
+                  onClick={() => checkoutMutation.mutate("one_time")}
+                  disabled={checkoutMutation.isPending || isFetching}
+                >
+                  {isStartingOneTime ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <CalendarClock className="w-4 h-4 mr-2" />
+                  )}
+                  1 Monat einmalig kaufen
+                </Button>
+                {canOpenPortal && (
+                  <Button
+                    variant="outline"
+                    className="h-12 w-full rounded-xl border-white/30 bg-white/10 text-white hover:bg-white/20"
+                    onClick={() => portalMutation.mutate()}
+                    disabled={portalMutation.isPending}
+                  >
+                    {portalMutation.isPending ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <Settings className="w-4 h-4 mr-2" />
+                    )}
+                    Bestehendes Abo verwalten
                   </Button>
-                </a>
-                <p className="mt-3 text-xs text-white/62">
-                  Wir schalten dein Premium-Konto manuell frei.
+                )}
+                <p className="flex items-center justify-center gap-2 text-xs text-white/62">
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  Sichere Zahlung und Aboverwaltung ueber Stripe.
                 </p>
               </div>
             </div>
@@ -149,7 +303,7 @@ export default function Premium() {
               ))}
             </div>
             <p className="text-center text-slate-500 text-sm italic">
-              "Endlich eine App, die wirklich auf unsere Vierbeiner ausgerichtet ist!" - Martina S.
+              "Endlich eine App, die wirklich auf unsere Hunde ausgerichtet ist!" - Martina S.
             </p>
           </motion.div>
         )}
