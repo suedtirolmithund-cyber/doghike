@@ -16,7 +16,7 @@ const METRIC_FORMATTER = new Intl.NumberFormat("de-DE", {
 });
 
 const ROUTE_STAT_CHIP_CLASS =
-  "inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-full border border-[#F9C030]/65 bg-[#FFF8F0]/92 px-2.5 py-1.5 text-center text-xs font-bold leading-tight text-[#7C3020] shadow-sm sm:text-sm md:px-3 md:text-xs";
+  "inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-full border border-[#F9C030] bg-[#FFF8F0] px-2.5 py-1.5 text-center text-xs font-bold leading-tight text-[#7C3020] shadow-sm sm:text-sm md:px-3 md:text-xs";
 
 function hasMetricValue(value) {
   if (value === null || value === undefined || value === "") return false;

@@ -63,9 +63,9 @@ function getSeasonValues(hike) {
 }
 
 const humanDifficultyChipClass =
-  "!border-[#D4547A]/45 !bg-[#FDF0E8]/90 text-[#A8003C]";
+  "!border-[#F9C030] !bg-[#FFF8F0] !text-[#7C3020]";
 const dogDifficultyChipClass =
-  "!border-[#F9C030]/65 !bg-[#FFF8F0]/92 text-[#7C3020]";
+  "!border-[#F9C030] !bg-[#FFF8F0] !text-[#7C3020]";
 const detailStatChipClass =
   "doghike-stat-chip min-h-[68px] min-w-0 justify-center gap-3 px-4 py-3 text-center sm:min-h-[72px] sm:px-5";
 const detailStatIconClass =

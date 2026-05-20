@@ -5,16 +5,16 @@ const DIFFICULTY_TYPE_META = {
   human: {
     icon: TOUR_ICONS.human,
     label: "Mensch",
-    chipClass: "border-[#D4547A]/55 bg-[#FDF0E8] text-[#A8003C]",
+    chipClass: "border-[#F9C030] bg-[#FFF8F0] text-[#7C3020]",
     activeBar: "bg-[#A8003C]",
-    inactiveBar: "bg-[#D4547A]/20",
+    inactiveBar: "bg-[#F4DFA8]",
   },
   dog: {
     icon: TOUR_ICONS.dog,
     label: "Hund",
-    chipClass: "border-[#F9C030]/70 bg-[#FFF8F0] text-[#7C3020]",
+    chipClass: "border-[#F9C030] bg-[#FFF8F0] text-[#7C3020]",
     activeBar: "bg-[#C07820]",
-    inactiveBar: "bg-[#F9C030]/30",
+    inactiveBar: "bg-[#F4DFA8]",
   },
 };
 
