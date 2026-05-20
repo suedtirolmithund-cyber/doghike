@@ -58,9 +58,11 @@ import { getUserRoutes } from "@/lib/routesApi";
 import DogForm from "@/components/forms/DogForm";
 import HikeCard from "@/components/hikes/HikeCard";
 import AccountSettings from "@/components/profile/AccountSettings";
+import ImagePositionEditorDialog from "@/components/images/ImagePositionEditorDialog";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { BADGE_DEFS, getBadges, loadLeaderboard } from "@/lib/topDogs";
 import { showDogFeedback, showSavedFeedback, showUploadedFeedback } from "@/lib/feedbackToast";
+import { createSquareCropFile } from "@/lib/imageCropping";
 
 function normalizeHikeSource(value) {
   return value ?? "sheets";
@@ -100,6 +102,9 @@ export default function Profile() {
   const [editingProfile, setEditingProfile] = useState(false);
   const [profileDraft, setProfileDraft] = useState({ full_name: "", username: "" });
   const [avatarUploading, setAvatarUploading] = useState(false);
+  const [avatarEditorOpen, setAvatarEditorOpen] = useState(false);
+  const [avatarEditorSource, setAvatarEditorSource] = useState(null);
+  const [avatarEditorSourceName, setAvatarEditorSourceName] = useState("profilbild.jpg");
   const [routesSeenAt, setRoutesSeenAt] = useState(null);
 
   const { data: profile } = useQuery({
@@ -300,13 +305,37 @@ export default function Profile() {
   const handleAvatarUpload = async (event) => {
     const file = event.target.files[0];
     if (!file || !user) return;
+    const objectUrl = URL.createObjectURL(file);
+    setAvatarEditorSource(objectUrl);
+    setAvatarEditorSourceName(file.name || "profilbild.jpg");
+    setAvatarEditorOpen(true);
+    event.target.value = "";
+  };
+
+  const closeAvatarEditor = () => {
+    if (avatarEditorSource?.startsWith("blob:")) {
+      URL.revokeObjectURL(avatarEditorSource);
+    }
+    setAvatarEditorOpen(false);
+    setAvatarEditorSource(null);
+    setAvatarEditorSourceName("profilbild.jpg");
+  };
+
+  const saveAvatarCrop = async ({ focusX, focusY }) => {
+    if (!avatarEditorSource || !user) return;
 
     setAvatarUploading(true);
     let uploadedAvatarUrl = null;
 
     try {
       const previousAvatarUrl = profile?.avatar_url || null;
-      const url = await uploadFile("avatars", user.id, file);
+      const croppedFile = await createSquareCropFile(avatarEditorSource, {
+        focusX,
+        focusY,
+        fileName: avatarEditorSourceName.replace(/\.[^.]+$/, "") + ".jpg",
+      });
+
+      const url = await uploadFile("avatars", user.id, croppedFile);
       uploadedAvatarUrl = url;
       await upsertProfile(user.id, { avatar_url: url });
 
@@ -322,7 +351,8 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ["friendProfiles"] });
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
       queryClient.invalidateQueries({ queryKey: ["comments"] });
-      showUploadedFeedback("Profilbild hochgeladen", "Dein neues Profilbild ist jetzt sichtbar.");
+      showUploadedFeedback("Profilbild gespeichert", "Der Bildausschnitt sitzt jetzt besser.");
+      closeAvatarEditor();
     } catch (error) {
       if (uploadedAvatarUrl) {
         try {
@@ -334,12 +364,19 @@ export default function Profile() {
       toast.error(
         getImageUploadErrorMessage(
           error,
-          "Das Foto wollte gerade nicht hochladen. Versuch es gleich noch einmal."
+          "Der Bildausschnitt wollte gerade nicht gespeichert werden. Versuch es gleich noch einmal."
         )
       );
     } finally {
       setAvatarUploading(false);
     }
+  };
+
+  const openExistingAvatarEditor = () => {
+    if (!avatarUrl) return;
+    setAvatarEditorSource(avatarUrl);
+    setAvatarEditorSourceName("profilbild.jpg");
+    setAvatarEditorOpen(true);
   };
 
   const startEditProfile = () => {
@@ -477,6 +514,9 @@ export default function Profile() {
                     <Button size="sm" variant="outline" className="h-7 text-xs" onClick={startEditProfile}>
                       <Edit className="w-3 h-3 mr-1" /> Profil bearbeiten
                     </Button>
+                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={openExistingAvatarEditor} disabled={avatarUploading || !avatarUrl}>
+                      <Camera className="w-3 h-3 mr-1" /> Bildausschnitt
+                    </Button>
                     <Link to={createPageUrl("Notifications")}>
                       <Button
                         size="sm"
@@ -514,10 +554,14 @@ export default function Profile() {
           </div>
 
           {!editingProfile && (
-            <div className="mt-4 grid grid-cols-3 gap-2 md:hidden">
+            <div className="mt-4 grid grid-cols-4 gap-2 md:hidden">
               <Button size="sm" variant="outline" className="h-11 rounded-xl px-2 text-xs font-bold" onClick={startEditProfile}>
                 <Edit className="h-4 w-4" />
                 Profil
+              </Button>
+              <Button size="sm" variant="outline" className="h-11 rounded-xl px-2 text-xs font-bold" onClick={openExistingAvatarEditor} disabled={avatarUploading || !avatarUrl}>
+                <Camera className="h-4 w-4" />
+                Bild
               </Button>
               <Link to={createPageUrl("Notifications")} className="min-w-0">
                 <Button
@@ -550,6 +594,24 @@ export default function Profile() {
             </div>
           )}
         </motion.div>
+
+        <ImagePositionEditorDialog
+          open={avatarEditorOpen}
+          onOpenChange={(nextOpen) => {
+            if (!nextOpen) {
+              closeAvatarEditor();
+              return;
+            }
+            setAvatarEditorOpen(nextOpen);
+          }}
+          sourceUrl={avatarEditorSource}
+          title="Profilbild ausrichten"
+          description="Passe den Ausschnitt so an, dass dein Gesicht im Kreis gut sitzt."
+          previewShape="circle"
+          confirmLabel="Profilbild speichern"
+          isSaving={avatarUploading}
+          onConfirm={saveAvatarCrop}
+        />
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 md:space-y-6">
           <div className="pb-1">
