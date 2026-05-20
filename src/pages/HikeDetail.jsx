@@ -22,6 +22,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import RouteProfile from "@/components/hikes/RouteProfile";
+import SmartRecommendations from "@/components/hikes/SmartRecommendations";
 import HikeWeatherInfo from "@/components/weather/HikeWeatherInfo";
 import InteractiveHikeMap from "@/components/hikes/InteractiveHikeMap";
 import SaveButton from "@/components/hikes/SaveButton";
@@ -825,6 +826,17 @@ export default function HikeDetail() {
         </div>
         )}
       </div>
+
+      {/* Ähnliche Touren */}
+      {!showPremiumPreviewOnly && hike && (
+        <div className="mx-auto max-w-4xl px-4 pb-8">
+          <SmartRecommendations
+            allHikes={(queryClient.getQueryData(["allHikes"]) ?? []).filter(
+              (h) => String(h._public_hike_id ?? h.route_id ?? h.id) !== normalizedHikeId
+            )}
+          />
+        </div>
+      )}
 
       {/* Lightbox */}
       <AnimatePresence>
