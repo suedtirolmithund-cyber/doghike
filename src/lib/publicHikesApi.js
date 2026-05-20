@@ -392,18 +392,38 @@ export async function updatePublicHike(hikeId, values) {
   if (existingPhotosError) throw existingPhotosError;
   const existingPhotoUrls = existingPhotos.map((photo) => photo.photo_url).filter(Boolean);
 
-  const { data, error } = await supabase
+  const cleanedSeasons = Array.isArray(seasons) ? seasons.filter(Boolean) : [];
+  const basePayload = {
+    ...hikeValues,
+    season: cleanedSeasons[0] || hikeValues.season || null,
+    ...legacyPhotoColumns,
+    tags,
+  };
+
+  let updateResult = await supabase
     .from("public_hikes")
     .update({
-      ...hikeValues,
-      seasons: Array.isArray(seasons) ? seasons.filter(Boolean) : [],
-      ...legacyPhotoColumns,
-      tags,
+      ...basePayload,
+      seasons: cleanedSeasons,
     })
     .eq("id", hikeId)
     .select()
     .single();
 
+  const missingSeasonsColumn =
+    updateResult.error?.message?.includes("Could not find the 'seasons' column") ||
+    updateResult.error?.message?.includes("column public_hikes.seasons does not exist");
+
+  if (missingSeasonsColumn) {
+    updateResult = await supabase
+      .from("public_hikes")
+      .update(basePayload)
+      .eq("id", hikeId)
+      .select()
+      .single();
+  }
+
+  const { data, error } = updateResult;
   if (error) throw error;
 
   const { error: deletePhotosError } = await supabase
