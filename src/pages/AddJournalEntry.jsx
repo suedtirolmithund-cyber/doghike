@@ -419,7 +419,7 @@ function getReadableLocationLabel(result) {
 }
 
 // Location Picker Komponente
-function LocationPicker({ lat, lng, onChange }) {
+function LocationPicker({ lat, lng, locationName = "", onChange }) {
   const [markerPos, setMarkerPos] = useState(
     lat && lng ? [Number(lat), Number(lng)] : null
   );
@@ -440,6 +440,10 @@ function LocationPicker({ lat, lng, onChange }) {
     }
     setMarkerPos(null);
   }, [lat, lng]);
+
+  useEffect(() => {
+    setSearchText(locationName || "");
+  }, [locationName]);
 
   useEffect(() => {
     topoTileFallbackRef.current = false;
@@ -1335,6 +1339,7 @@ export default function AddJournalEntry() {
               <LocationPicker
                 lat={form.latitude}
                 lng={form.longitude}
+                locationName={form.location}
                 onChange={(lat, lng, locationName) => {
                   set("latitude", lat);
                   set("longitude", lng);
