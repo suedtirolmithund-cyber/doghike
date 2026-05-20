@@ -347,13 +347,12 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="date">Datum *</Label>
+          <Label htmlFor="date">Datum</Label>
           <Input
             id="date"
             type="date"
             value={formData.date}
             onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-            required
           />
         </div>
 
