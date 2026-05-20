@@ -325,8 +325,8 @@ export default function HikeDetail() {
     && (!isPremiumHike || userHasPremium);
   const includePhotosInPdf = hike?._source === "sheets" || isOwnJournalHike;
   const previewNotes = hike.notes
-    ? hike.notes.length > 220
-      ? `${hike.notes.slice(0, 220).trim()}...`
+    ? hike.notes.length > 360
+      ? `${hike.notes.slice(0, 360).trim()}...`
       : hike.notes
     : null;
   return (
@@ -615,16 +615,6 @@ export default function HikeDetail() {
                 ) : (
                   <p className="text-slate-500">Zu dieser Premium-Tour ist eine Kurzvorschau sichtbar. Die ganzen Details kannst du mit Premium freischalten.</p>
                 )}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="rounded-xl border border-brand-100 bg-brand-50/70 p-4">
-                    <p className="text-xs uppercase tracking-wide text-slate-400 mb-1">Ort</p>
-                    <p className="font-medium text-slate-900">{hike.location || "Nicht angegeben"}</p>
-                  </div>
-                  <div className="rounded-xl border border-brand-100 bg-brand-50/70 p-4">
-                    <p className="text-xs uppercase tracking-wide text-slate-400 mb-1">Land</p>
-                    <p className="font-medium text-slate-900">{countryLabel || "Nicht angegeben"}</p>
-                  </div>
-                </div>
               </div>
             </div>
           </motion.div>
