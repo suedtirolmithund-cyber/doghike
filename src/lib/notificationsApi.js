@@ -30,6 +30,14 @@ function getNotificationTime(notification) {
   return Number.isFinite(timestamp) ? timestamp : 0;
 }
 
+function profileHasActivePremium(profile) {
+  if (!profile?.is_premium) return false;
+  if (!profile?.premium_current_period_end) return true;
+
+  const premiumEndTimestamp = new Date(profile.premium_current_period_end).getTime();
+  return Number.isFinite(premiumEndTimestamp) && premiumEndTimestamp > Date.now();
+}
+
 export function getNotificationsSeenAt(userId) {
   return readSeenAt(userId);
 }
@@ -40,6 +48,14 @@ export function markNotificationsSeen(userId, seenAt = new Date().toISOString())
 
 export async function loadNotifications(userId) {
   const results = [];
+
+  const { data: currentProfile, error: currentProfileError } = await supabase
+    .from("profiles")
+    .select("is_premium, premium_current_period_end")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (currentProfileError) throw currentProfileError;
 
   const { data: incoming, error: incomingError } = await supabase
     .from("friendships")
@@ -152,6 +168,31 @@ export async function loadNotifications(userId) {
         });
       });
     }
+  }
+
+  if (profileHasActivePremium(currentProfile)) {
+    const since = new Date(Date.now() - 14 * 24 * 3600 * 1000).toISOString();
+    const { data: premiumHikes, error: premiumHikesError } = await supabase
+      .from("public_hikes")
+      .select("id, title, location, updated_at, created_at, status, is_premium")
+      .eq("status", "approved")
+      .eq("is_premium", true)
+      .gte("created_at", since)
+      .order("created_at", { ascending: false })
+      .limit(6);
+
+    if (premiumHikesError) throw premiumHikesError;
+
+    (premiumHikes ?? []).forEach((hike) => {
+      results.push({
+        id: `ph-${hike.id}`,
+        type: "premium_hike",
+        title: `Neue Premium-Tour: "${hike.title}"`,
+        body: hike.location ? `Jetzt neu in ${hike.location}` : "Jetzt neu f\u00fcr Premium-Mitglieder",
+        time: hike.created_at || hike.updated_at,
+        link: `${createPageUrl("HikeDetail")}?id=${encodeURIComponent(String(hike.id))}&source=sheets`,
+      });
+    });
   }
 
   return results.sort((left, right) => getNotificationTime(right) - getNotificationTime(left));
