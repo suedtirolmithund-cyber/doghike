@@ -356,6 +356,12 @@ export async function getPublicHikeById(hikeId) {
     water_availability: mapSupabaseWaterLevel(hikeRow.water_availability),
     difficulty: hikeRow.difficulty != null ? String(hikeRow.difficulty) : null,
     dog_difficulty: hikeRow.dog_difficulty != null ? String(hikeRow.dog_difficulty) : null,
+    season: Array.isArray(hikeRow.seasons) && hikeRow.seasons.length > 0 ? hikeRow.seasons[0] : hikeRow.season || null,
+    seasons: Array.isArray(hikeRow.seasons) && hikeRow.seasons.length > 0
+      ? hikeRow.seasons.filter(Boolean)
+      : hikeRow.season
+        ? [hikeRow.season]
+        : [],
     grazing_animals: !!hikeRow.grazing_animals,
     muzzle_recommended: !!hikeRow.muzzle_recommended,
   };
@@ -365,6 +371,7 @@ export async function updatePublicHike(hikeId, values) {
   const {
     photoUrls = [],
     tags = [],
+    seasons = [],
     ...hikeValues
   } = values;
   const cleanedPhotoUrls = photoUrls
@@ -389,6 +396,7 @@ export async function updatePublicHike(hikeId, values) {
     .from("public_hikes")
     .update({
       ...hikeValues,
+      seasons: Array.isArray(seasons) ? seasons.filter(Boolean) : [],
       ...legacyPhotoColumns,
       tags,
     })

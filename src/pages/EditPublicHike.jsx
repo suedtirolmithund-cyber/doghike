@@ -19,7 +19,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 import WaterIcon from "@/components/icons/WaterIcon";
-import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
+import SeasonMultiPicker from "@/components/season/SeasonMultiPicker";
+import { DIFFICULTY_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 import { hoursInputToMinutes, minutesToHoursInput } from "@/lib/duration";
 import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
 
@@ -35,7 +36,11 @@ function buildInitialFormData(hike) {
     difficulty: hike?.difficulty || "unset",
     dog_difficulty: hike?.dog_difficulty || "unset",
     water_availability: hike?.water_availability || "unset",
-    season: hike?.season || "unset",
+    seasons: Array.isArray(hike?.seasons) && hike.seasons.length > 0
+      ? hike.seasons
+      : hike?.season
+        ? [hike.season]
+        : [],
     grazing_animals: hike?.grazing_animals ?? false,
     muzzle_recommended: hike?.muzzle_recommended ?? false,
     hazard_notes: hike?.hazard_notes || "",
@@ -269,7 +274,8 @@ export default function EditPublicHike() {
         water_availability: formData.water_availability === "unset"
           ? null
           : WATER_LEVELS.find((level) => level.value === formData.water_availability)?.numeric ?? null,
-        season: formData.season === "unset" ? null : formData.season || null,
+        season: formData.seasons[0] || null,
+        seasons: formData.seasons,
         grazing_animals: !!formData.grazing_animals,
         muzzle_recommended: !!formData.muzzle_recommended,
         hazard_notes: formData.hazard_notes.trim() || null,
@@ -448,20 +454,12 @@ export default function EditPublicHike() {
               </div>
 
               <div className="space-y-2">
-                <Label>{TOUR_ICONS.season} Jahreszeit</Label>
-                <Select value={formData.season} onValueChange={(value) => setFormData((prev) => ({ ...prev, season: value }))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Nicht gesetzt" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="unset">Nicht gesetzt</SelectItem>
-                    {SEASON_LEVELS.map((season) => (
-                      <SelectItem key={season.value} value={season.value}>
-                        {season.icon} {season.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <SeasonMultiPicker
+                  label={`${TOUR_ICONS.season} Jahreszeit`}
+                  value={formData.seasons}
+                  onChange={(value) => setFormData((prev) => ({ ...prev, seasons: value }))}
+                  emptyHint="Du kannst eine oder mehrere Jahreszeiten auswählen."
+                />
               </div>
 
               <div className="space-y-2">

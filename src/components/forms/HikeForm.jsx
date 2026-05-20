@@ -26,7 +26,8 @@ import RouteEditor from "@/components/map/RouteEditor";
 import StartPointPicker from "@/components/map/StartPointPicker";
 import ConsentDialog from "@/components/ConsentDialog";
 import WaterIcon from "@/components/icons/WaterIcon";
-import { DIFFICULTY_LEVELS, SEASON_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
+import SeasonMultiPicker from "@/components/season/SeasonMultiPicker";
+import { DIFFICULTY_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 import { hoursInputToMinutes, minutesToHoursInput } from "@/lib/duration";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
 
@@ -42,7 +43,7 @@ function buildInitialFormData(hike) {
       duration_minutes: "",
       difficulty: "3",
       dog_difficulty: "3",
-      season: "all_year",
+      seasons: ["all_year"],
       water_availability: "moderate",
       grazing_animals: false,
       muzzle_recommended: false,
@@ -62,6 +63,11 @@ function buildInitialFormData(hike) {
 
   return {
     ...hike,
+    seasons: Array.isArray(hike?.seasons) && hike.seasons.length > 0
+      ? hike.seasons
+      : hike?.season
+        ? [hike.season]
+        : ["all_year"],
     grazing_animals: hike?.grazing_animals ?? false,
     muzzle_recommended: hike?.muzzle_recommended ?? false,
     duration_minutes: minutesToHoursInput(hike.duration_minutes),
@@ -251,7 +257,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       if (!formData.difficulty) missing.push("Schwierigkeit (Mensch)");
       if (!formData.dog_difficulty) missing.push("Schwierigkeit (Hund)");
       if (!formData.water_availability) missing.push("Wasser unterwegs");
-      if (!formData.season) missing.push("Beste Jahreszeit");
+      if (!Array.isArray(formData.seasons) || formData.seasons.length === 0) missing.push("Beste Jahreszeit");
       if (!formData.notes?.trim()) missing.push("Beschreibung & Tipps");
       if (!Array.isArray(formData.photos) || formData.photos.length === 0) missing.push("Mindestens 1 Foto");
     }
@@ -281,6 +287,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
     
     const dataToSave = {
       ...formData,
+      season: formData.seasons?.[0] || null,
       distance_km: formData.distance_km ? Number(formData.distance_km) : null,
       elevation_gain_m: formData.elevation_gain_m ? Number(formData.elevation_gain_m) : null,
       duration_minutes: hoursInputToMinutes(formData.duration_minutes),
@@ -395,22 +402,12 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="season">Beste Jahreszeit {TOUR_ICONS.season}</Label>
-          <Select
-            value={formData.season}
-            onValueChange={(value) => setFormData({ ...formData, season: value })}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Wählen" />
-            </SelectTrigger>
-            <SelectContent>
-              {SEASON_LEVELS.map((season) => (
-                <SelectItem key={season.value} value={season.value}>
-                  {season.icon} {season.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <SeasonMultiPicker
+            label={`Beste Jahreszeit ${TOUR_ICONS.season}`}
+            value={formData.seasons || []}
+            onChange={(value) => setFormData({ ...formData, seasons: value })}
+            emptyHint="Du kannst eine oder mehrere Jahreszeiten auswählen."
+          />
         </div>
 
         <div className="space-y-2">
