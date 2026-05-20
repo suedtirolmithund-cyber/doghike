@@ -36,7 +36,10 @@ export function useRealtimeNotifications(userId) {
       })
       .subscribe();
 
-    return () => { supabase.removeChannel(channel); };
+    return () => {
+      channel.unsubscribe();
+      supabase.removeChannel(channel);
+    };
   }, [userId]);
 }
 
