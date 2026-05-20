@@ -22,13 +22,12 @@ import { toast } from "sonner";
 import { PremiumPawMark } from "@/components/premium/PremiumPawBadge";
 
 const features = [
-  "Entdecke ausgewaehlte Premium-Touren, die du in der kostenlosen Version nicht voll sehen kannst",
-  "Erhalte mehr Details zur Tour, damit du deine Wanderung entspannter planen kannst",
-  "Nutze Kartenansicht und Tourinfos fuer freigeschaltete Premium-Touren",
-  "Sieh Wetterinfos direkt bei der Tour, wenn sie verfuegbar sind",
-  "Profitiere von sorgfaeltig ergaenzten Hinweisen und Tipps zu einzelnen Touren",
-  "Speichere Premium-Touren als PDF fuer unterwegs",
-  "Freue dich auf neue Premium-Touren, die nach und nach dazukommen",
+  "Schalte ausgewählte Touren frei, die du sonst nur als Vorschau siehst",
+  "Plane entspannter mit mehr Details, Kartenansicht und hilfreichen Tourinfos",
+  "Sieh Wetterinfos direkt dort, wo du deine Tour planst",
+  "Entdecke sorgfältig ergänzte Hinweise und Tipps, die unterwegs wirklich zählen",
+  "Speichere Premium-Touren als PDF, wenn du offline oder ohne Empfang unterwegs bist",
+  "Freue dich auf neue Premium-Touren, die regelmäßig dazukommen",
 ];
 
 async function getFunctionErrorMessage(error, fallback) {
@@ -96,7 +95,7 @@ export default function Premium() {
         throw new Error(await getFunctionErrorMessage(error, "Checkout konnte gerade nicht gestartet werden."));
       }
       if (data?.error) throw new Error(data.error);
-      if (!data?.url) throw new Error("Stripe hat keine Checkout-URL zurueckgegeben.");
+      if (!data?.url) throw new Error("Stripe hat keine Checkout-URL zurückgegeben.");
 
       return data.url;
     },
@@ -117,10 +116,10 @@ export default function Premium() {
       });
 
       if (error) {
-        throw new Error(await getFunctionErrorMessage(error, "Kundenportal konnte gerade nicht geoeffnet werden."));
+        throw new Error(await getFunctionErrorMessage(error, "Kundenportal konnte gerade nicht geöffnet werden."));
       }
       if (data?.error) throw new Error(data.error);
-      if (!data?.url) throw new Error("Stripe hat keine Portal-URL zurueckgegeben.");
+      if (!data?.url) throw new Error("Stripe hat keine Portal-URL zurückgegeben.");
 
       return data.url;
     },
@@ -150,7 +149,7 @@ export default function Premium() {
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
             <Link to={createPageUrl("Hikes")}>
               <Button variant="ghost" className="mb-6 text-slate-600">
-                <ArrowLeft className="mr-2 h-4 w-4" /> Zurueck
+                <ArrowLeft className="mr-2 h-4 w-4" /> Zurück
               </Button>
             </Link>
           </motion.div>
@@ -163,7 +162,7 @@ export default function Premium() {
             <PremiumPawMark className="mx-auto mb-5 h-14 w-14 text-2xl" />
             <h1 className="doghike-page-title mb-3">Premium ist noch nicht aktiv</h1>
             <p className="text-slate-500">
-              Die Premium-Funktionen sind vorbereitet, aber fuer Nutzer noch nicht freigeschaltet.
+              Die Premium-Funktionen sind vorbereitet, aber für Nutzer noch nicht freigeschaltet.
             </p>
           </motion.div>
         </div>
@@ -177,7 +176,7 @@ export default function Premium() {
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
           <Link to={createPageUrl("Hikes")}>
             <Button variant="ghost" className="mb-6 text-slate-600">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Zurueck
+              <ArrowLeft className="mr-2 h-4 w-4" /> Zurück
             </Button>
           </Link>
         </motion.div>
@@ -224,7 +223,7 @@ export default function Premium() {
             <div className="mb-8 text-center">
               <PremiumPawMark className="mx-auto mb-4 h-14 w-14 text-2xl" />
               <h1 className="doghike-page-title mb-3">Premium Mitgliedschaft</h1>
-              <p className="doghike-page-subtitle">Entdecke exklusive hundefreundliche Touren in Suedtirol</p>
+              <p className="doghike-page-subtitle">Entdecke exklusive hundefreundliche Touren in Südtirol</p>
             </div>
 
             {checkoutPending && (
@@ -241,7 +240,7 @@ export default function Premium() {
                     <span className="text-3xl font-bold">3,99 EUR</span>
                     <span className="text-white/75">/ Monat</span>
                   </div>
-                  <p className="mt-1 text-xs text-white/70">Automatisch, jederzeit kuendbar</p>
+                  <p className="mt-1 text-xs text-white/70">Automatisch, jederzeit kündbar</p>
                 </div>
                 <div className="rounded-2xl border border-white/22 bg-white/10 p-4 backdrop-blur-md">
                   <p className="mb-1 text-sm font-medium text-white/84">Einmalig</p>
@@ -249,7 +248,7 @@ export default function Premium() {
                     <span className="text-3xl font-bold">4,99 EUR</span>
                     <span className="text-white/75">/ 1 Monat</span>
                   </div>
-                  <p className="mt-1 text-xs text-white/70">Einmal zahlen, laeuft nach 1 Monat aus</p>
+                  <p className="mt-1 text-xs text-white/70">Einmal zahlen, läuft nach 1 Monat aus</p>
                 </div>
               </div>
 
