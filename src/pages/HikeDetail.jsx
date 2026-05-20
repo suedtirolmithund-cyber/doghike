@@ -176,7 +176,7 @@ export default function HikeDetail() {
         if ((h._source ?? "sheets") !== hikeSource) return false;
 
         if (hikeSource === "sheets") {
-          return String(h._public_hike_id ?? h.route_id ?? "") === normalizedHikeId || String(h.id) === normalizedHikeId;
+          return String(h.route_id ?? h._public_hike_id ?? "") === normalizedHikeId || String(h.id) === normalizedHikeId;
         }
 
         return String(h.id) === normalizedHikeId;
