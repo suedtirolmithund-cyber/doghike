@@ -38,6 +38,7 @@ import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getSeasonIcon, getS
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { formatDurationHours } from "@/lib/duration";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
+import { getDisplayImageUrl } from "@/lib/imageProxy";
 import { toast } from "sonner";
 
 function getCountryLabel(country) {
@@ -307,6 +308,7 @@ export default function HikeDetail() {
   const hikeDogs = dogs.filter(d => hike.dogs?.includes(d.id));
   const photos = Array.isArray(hike.photos) ? hike.photos.filter(Boolean) : [];
   const coverPhoto = heroPhotoIndex >= 0 ? photos[heroPhotoIndex] || "/splash/autumn-hero.jpg" : "/splash/autumn-hero.jpg";
+  const heroPreviewPhoto = getDisplayImageUrl(coverPhoto, { width: 1600, quality: 80 }) || coverPhoto;
   const detailId = hike?._source === "sheets" && hike?._public_hike_id
     ? hike.route_id || String(hike._public_hike_id)
     : hike.id;
@@ -344,7 +346,7 @@ export default function HikeDetail() {
       {/* Hero Image */}
       <div className="relative h-[50vh] overflow-hidden">
         <img
-          src={coverPhoto}
+          src={heroPreviewPhoto}
           alt={hike.trail_name}
           onError={() => {
             setHeroPhotoIndex((currentIndex) => {
@@ -760,7 +762,7 @@ export default function HikeDetail() {
                   {hikeDogs.map((dog) => (
                     <div key={dog.id} className="doghike-soft-panel flex items-center gap-3 p-3">
                       <img
-                        src={dog.photo_url || getAvatarDataUrl(dog.name)}
+                        src={getDisplayImageUrl(dog.photo_url, { width: 128, quality: 70 }) || getAvatarDataUrl(dog.name)}
                         alt={dog.name}
                         className="w-12 h-12 rounded-full object-cover"
                       />
@@ -807,9 +809,10 @@ export default function HikeDetail() {
                       }}
                     >
                       <img
-                        src={photo}
+                        src={getDisplayImageUrl(photo, { width: 640, quality: 72 }) || photo}
                         alt={`Photo ${index + 1}`}
                         loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                       />
                     </div>
