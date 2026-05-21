@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
-import { ArrowLeft, Mail, MessageCircle, Send, CheckCircle2, HelpCircle, Book, Shield, Bug } from "lucide-react";
+import { ArrowLeft, Loader2, Mail, MessageCircle, Send, CheckCircle2, HelpCircle, Book, Shield, Bug } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -121,7 +121,7 @@ export default function Support() {
         },
         {
           q: "Werden meine GPS-Daten gespeichert?",
-          a: "GPS-Koordinaten werden nur für die Routen gespeichert, die du bewusst erstellst. Es findet kein Background-Tracking statt.",
+          a: "GPS-Koordinaten werden nur für Routen gespeichert, die du bewusst aufzeichnest oder erstellst. Beim GPS-Tracker wird dein Standort während der aktiven Aufzeichnung genutzt, um die Route zu erfassen. Es findet kein automatisches Tracking im Hintergrund ohne dein Zutun statt.",
         },
       ],
     },
@@ -270,7 +270,7 @@ export default function Support() {
 
                 <Button type="submit" disabled={submitting} className="w-full bg-brand-400 hover:bg-brand-600 disabled:opacity-60">
                   {submitting ? (
-                    <>Wird gesendet...</>
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Wird gesendet...</>
                   ) : (
                     <>
                       <Send className="w-4 h-4 mr-2" /> Nachricht senden
