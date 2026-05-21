@@ -61,10 +61,10 @@ export function useHikeFilters(hikes = []) {
 
         if (appliedFilters.humanDifficultyFilter !== "all" && hike.difficulty !== appliedFilters.humanDifficultyFilter) return false;
         if (appliedFilters.dogDifficultyFilter !== "all" && hike.dog_difficulty !== appliedFilters.dogDifficultyFilter) return false;
-        if (appliedFilters.distanceMin && (hike.distance_km || 0) < parseFloat(appliedFilters.distanceMin)) return false;
-        if (appliedFilters.distanceMax && (hike.distance_km || 0) > parseFloat(appliedFilters.distanceMax)) return false;
-        if (appliedFilters.elevationMin && (hike.elevation_gain_m || 0) < parseFloat(appliedFilters.elevationMin)) return false;
-        if (appliedFilters.elevationMax && (hike.elevation_gain_m || 0) > parseFloat(appliedFilters.elevationMax)) return false;
+        if (appliedFilters.distanceMin !== "" && (hike.distance_km || 0) < parseFloat(appliedFilters.distanceMin)) return false;
+        if (appliedFilters.distanceMax !== "" && (hike.distance_km || 0) > parseFloat(appliedFilters.distanceMax)) return false;
+        if (appliedFilters.elevationMin !== "" && (hike.elevation_gain_m || 0) < parseFloat(appliedFilters.elevationMin)) return false;
+        if (appliedFilters.elevationMax !== "" && (hike.elevation_gain_m || 0) > parseFloat(appliedFilters.elevationMax)) return false;
         if (appliedFilters.seasonFilter !== "all") {
           const seasons = getSeasonValues(hike);
           if (!seasons.includes(appliedFilters.seasonFilter) && !seasons.includes("all_year")) return false;
