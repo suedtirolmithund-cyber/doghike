@@ -63,6 +63,7 @@ import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { BADGE_DEFS, getBadges, loadLeaderboard } from "@/lib/topDogs";
 import { showDogFeedback, showSavedFeedback, showUploadedFeedback } from "@/lib/feedbackToast";
 import { createSquareCropFile } from "@/lib/imageCropping";
+import { getDisplayImageUrl } from "@/lib/imageProxy";
 
 function normalizeHikeSource(value) {
   return value ?? "sheets";
@@ -417,6 +418,7 @@ export default function Profile() {
     profile?.avatar_url ||
     (hasResolvedProfile ? user?.user_metadata?.avatar_url : null) ||
     fallbackAvatarUrl;
+  const avatarPreviewUrl = getDisplayImageUrl(avatarUrl, { width: 192, quality: 72 }) || fallbackAvatarUrl;
 
   if (!isAuthenticated) {
     return (
@@ -458,7 +460,7 @@ export default function Profile() {
                     <Loader2 className="w-6 h-6 text-slate-400 animate-spin" />
                   </div>
                 ) : (
-                  <img src={avatarUrl} alt={displayName} className="w-full h-full object-cover" />
+                  <img src={avatarPreviewUrl} alt={displayName} className="w-full h-full object-cover" />
                 )}
               </div>
               <label className="absolute bottom-0 right-0 p-1.5 bg-brand-400 text-white rounded-full cursor-pointer hover:bg-brand-600 shadow">
@@ -673,7 +675,7 @@ export default function Profile() {
                     >
                       <div className="relative h-40 bg-gradient-to-br from-brand-50 via-white to-stone-100 md:h-44">
                         <img
-                          src={dog.photo_url || getAvatarDataUrl(dog.name)}
+                          src={getDisplayImageUrl(dog.photo_url, { width: 720, quality: 76 }) || getAvatarDataUrl(dog.name)}
                           alt={dog.name}
                           className="w-full h-full object-cover"
                           onError={(event) => {

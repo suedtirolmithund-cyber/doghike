@@ -10,6 +10,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
+import { getDisplayImageUrl } from "@/lib/imageProxy";
 
 // Badge-Definitionen
 const BADGE_DEFS = {
@@ -111,6 +112,10 @@ function dogPhoto(dog) {
   return dog?.photo_url || getAvatarDataUrl(dog?.name ?? "dog");
 }
 
+function dogPreviewPhoto(dog, width = 160) {
+  return getDisplayImageUrl(dog?.photo_url, { width, quality: 70 }) || getAvatarDataUrl(dog?.name ?? "dog");
+}
+
 // Podium (Top 3)
 function Podium({ top3, metric }) {
   if (!top3.length) return null;
@@ -135,7 +140,7 @@ function Podium({ top3, metric }) {
             {/* Dog avatar */}
             <div className={`relative ${isFirst ? "h-16 w-16 sm:h-20 sm:w-20" : "h-12 w-12 sm:h-14 sm:w-14"}`}>
               <img
-                src={dogPhoto(entry.dog)}
+                src={dogPreviewPhoto(entry.dog, isFirst ? 224 : 160)}
                 alt={entry.dog.name}
                 loading="lazy"
                 decoding="async"
@@ -190,7 +195,7 @@ function RankRow({ entry, rank, metric, isMyDog }) {
 
       {/* Avatar */}
       <img
-        src={dogPhoto(entry.dog)}
+        src={dogPreviewPhoto(entry.dog, 128)}
         alt={entry.dog.name}
         loading="lazy"
         decoding="async"
@@ -247,7 +252,7 @@ function CompactRankRow({ entry, rank, metric, isMyDog }) {
       <div className="flex items-center gap-3">
         <span className="w-7 shrink-0 text-center text-sm font-bold text-slate-500">#{rank}</span>
         <img
-          src={dogPhoto(entry.dog)}
+          src={dogPreviewPhoto(entry.dog, 144)}
           alt={entry.dog.name}
           loading="lazy"
           decoding="async"
@@ -301,7 +306,7 @@ function MyDogCard({ entry, rank, metric }) {
       animate={{ opacity: 1, y: 0 }}
       className="mt-4 flex flex-wrap items-center gap-4 rounded-2xl border-2 border-brand-300 bg-brand-50/70 p-4 shadow-sm backdrop-blur-xl"
     >
-      <img src={dogPhoto(entry.dog)} alt={entry.dog.name}
+      <img src={dogPreviewPhoto(entry.dog, 160)} alt={entry.dog.name}
         loading="lazy"
         decoding="async"
         className="w-12 h-12 rounded-full object-cover border-2 border-white shadow" />
