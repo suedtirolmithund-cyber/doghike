@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
-import { supabase } from "@/lib/supabaseClient";
 import { motion } from "framer-motion";
 import {
   Trophy, TrendingUp, Ruler,
@@ -11,95 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { getDisplayImageUrl } from "@/lib/imageProxy";
-
-// Badge-Definitionen
-const BADGE_DEFS = {
-  champion:    { emoji: "🏆", label: "Champion",         desc: "Platz 1 im Ranking" },
-  veteran:     { emoji: "🏅", label: "Veteran",          desc: "50+ Touren",          threshold: { field: "tourCount",     min: 50  } },
-  explorer:    { emoji: "🧭", label: "Entdecker",        desc: "10+ Touren",          threshold: { field: "tourCount",     min: 10  } },
-  ultra:       { emoji: "⚡", label: "Ultra-Läufer",     desc: "500+ km",             threshold: { field: "totalDistance", min: 500 } },
-  marathoner:  { emoji: "🏃", label: "Kilometerfresser", desc: "100+ km",             threshold: { field: "totalDistance", min: 100 } },
-  mountaineer: { emoji: TOUR_ICONS.elevation, label: "Gipfelstürmer", desc: "1.000+ Höhenmeter", threshold: { field: "totalElevation", min: 1000 } },
-  popular:     { emoji: "⭐", label: "Liebling",         desc: "Ø 4,5 Sterne (3+ Bewertungen)" },
-};
-
-function getBadges(s, isChampion) {
-  const b = [];
-  if (isChampion) b.push("champion");
-  if (s.tourCount >= BADGE_DEFS.veteran.threshold.min)         b.push("veteran");
-  else if (s.tourCount >= BADGE_DEFS.explorer.threshold.min)   b.push("explorer");
-  if (s.totalDistance >= BADGE_DEFS.ultra.threshold.min)       b.push("ultra");
-  else if (s.totalDistance >= BADGE_DEFS.marathoner.threshold.min) b.push("marathoner");
-  if (s.totalElevation >= BADGE_DEFS.mountaineer.threshold.min) b.push("mountaineer");
-  if (s.avgRating >= 4.5 && s.ratingCount >= 3)                b.push("popular");
-  return b;
-}
-
-// Daten laden
-async function loadLeaderboard() {
-  // 1. Alle Tour-Einträge mit dog_id
-  const { data: entries, error: eErr } = await supabase
-    .from("journal_entries")
-    .select("dog_id, distance_km, elevation_m, rating, date")
-    .not("dog_id", "is", null);
-  if (eErr) throw eErr;
-  if (!entries?.length) return [];
-
-  // 2. Unique dog IDs
-  const dogIds = [...new Set(entries.map((e) => e.dog_id))];
-
-  // 3. Hunde-Daten
-  const { data: dogs, error: dErr } = await supabase
-    .from("dogs")
-    .select("id, name, breed, photo_url, user_id")
-    .in("id", dogIds);
-  if (dErr) throw dErr;
-
-  // 4. Besitzer-Profile
-  const ownerIds = [...new Set((dogs ?? []).map((d) => d.user_id))];
-  const { data: profiles } = ownerIds.length
-    ? await supabase
-        .from("profiles")
-        .select("user_id, username, full_name, avatar_url")
-        .in("user_id", ownerIds)
-    : { data: [] };
-
-  const profileMap = Object.fromEntries((profiles ?? []).map((p) => [p.user_id, p]));
-  const dogMap     = Object.fromEntries((dogs ?? []).map((d) => [d.id, d]));
-
-  // 5. Aggregieren
-  const statsMap = {};
-  for (const e of entries) {
-    if (!statsMap[e.dog_id]) {
-      statsMap[e.dog_id] = {
-        totalDistance: 0, totalElevation: 0,
-        tourCount: 0, ratingSum: 0, ratingCount: 0,
-      };
-    }
-    const s = statsMap[e.dog_id];
-    s.tourCount      += 1;
-    s.totalDistance  += e.distance_km  ?? 0;
-    s.totalElevation += e.elevation_m  ?? 0;
-    if (e.rating) { s.ratingSum += e.rating; s.ratingCount += 1; }
-  }
-
-  return dogIds
-    .map((id) => {
-      const dog     = dogMap[id];
-      const profile = dog ? profileMap[dog.user_id] : null;
-      const s       = statsMap[id];
-      return {
-        dog,
-        profile,
-        tourCount:      s.tourCount,
-        totalDistance:  +s.totalDistance.toFixed(1),
-        totalElevation: Math.round(s.totalElevation),
-        avgRating:      s.ratingCount ? +(s.ratingSum / s.ratingCount).toFixed(1) : 0,
-        ratingCount:    s.ratingCount,
-      };
-    })
-    .filter((r) => r.dog);
-}
+import { BADGE_DEFS, getBadges, loadLeaderboard } from "@/lib/topDogs";
 
 // Hilfsfunktionen UI
 const RANK_STYLE = [

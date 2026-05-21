@@ -3,31 +3,25 @@ import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { supabase } from "@/lib/supabaseClient";
 
 export const BADGE_DEFS = {
-  champion: { emoji: "🏆", label: "Champion", desc: "Platz 1 im Ranking" },
-  veteran: { emoji: "🏅", label: "Veteran", desc: "50+ Touren" },
-  explorer: { emoji: "🧭", label: "Entdecker", desc: "10+ Touren" },
-  ultra: { emoji: "⚡", label: "Ultra-Läufer", desc: "500+ km" },
-  marathoner: { emoji: "🏃", label: "Kilometerfresser", desc: "100+ km" },
-  mountaineer: { emoji: TOUR_ICONS.elevation, label: "Gipfelstürmer", desc: "1.000+ Höhenmeter" },
-  popular: { emoji: "⭐", label: "Liebling", desc: "Ø 4,5 Sterne (3+ Bewertungen)" },
+  champion:    { emoji: "🏆", label: "Champion",         desc: "Platz 1 im Ranking" },
+  veteran:     { emoji: "🏅", label: "Veteran",          desc: "50+ Touren",          threshold: { field: "tourCount",      min: 50   } },
+  explorer:    { emoji: "🧭", label: "Entdecker",        desc: "10+ Touren",          threshold: { field: "tourCount",      min: 10   } },
+  ultra:       { emoji: "⚡", label: "Ultra-Läufer",     desc: "500+ km",             threshold: { field: "totalDistance",  min: 500  } },
+  marathoner:  { emoji: "🏃", label: "Kilometerfresser", desc: "100+ km",             threshold: { field: "totalDistance",  min: 100  } },
+  mountaineer: { emoji: TOUR_ICONS.elevation, label: "Gipfelstürmer", desc: "1.000+ Höhenmeter", threshold: { field: "totalElevation", min: 1000 } },
+  popular:     { emoji: "⭐", label: "Liebling",         desc: "Ø 4,5 Sterne (3+ Bewertungen)" },
 };
 
 export function getBadges(stats, isChampion = false) {
   const badges = [];
-
   if (isChampion) badges.push("champion");
-  if (stats.tourCount >= 50) badges.push("veteran");
-  else if (stats.tourCount >= 10) badges.push("explorer");
-  if (stats.totalDistance >= 500) badges.push("ultra");
-  else if (stats.totalDistance >= 100) badges.push("marathoner");
-  if (stats.totalElevation >= 1000) badges.push("mountaineer");
-  if (stats.avgRating >= 4.5 && stats.ratingCount >= 3) badges.push("popular");
-
+  if (stats.tourCount >= BADGE_DEFS.veteran.threshold.min)          badges.push("veteran");
+  else if (stats.tourCount >= BADGE_DEFS.explorer.threshold.min)    badges.push("explorer");
+  if (stats.totalDistance >= BADGE_DEFS.ultra.threshold.min)        badges.push("ultra");
+  else if (stats.totalDistance >= BADGE_DEFS.marathoner.threshold.min) badges.push("marathoner");
+  if (stats.totalElevation >= BADGE_DEFS.mountaineer.threshold.min) badges.push("mountaineer");
+  if (stats.avgRating >= 4.5 && stats.ratingCount >= 3)             badges.push("popular");
   return badges;
-}
-
-export function getDogPhoto(dog) {
-  return dog?.photo_url || getAvatarDataUrl(dog?.name ?? "dog");
 }
 
 export async function loadLeaderboard() {
