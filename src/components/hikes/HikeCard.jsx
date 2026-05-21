@@ -18,6 +18,7 @@ const METRIC_FORMATTER = new Intl.NumberFormat("de-DE", {
 
 const ROUTE_STAT_CHIP_CLASS =
   "inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-full border border-[#F9C030]/75 bg-white/82 px-2.5 py-1.5 text-center text-xs font-bold leading-tight text-[#7C3020] shadow-sm sm:text-sm md:px-3 md:text-xs";
+const FALLBACK_HIKE_IMAGE = "/splash/autumn-hero.jpg";
 
 function hasMetricValue(value) {
   if (value === null || value === undefined || value === "") return false;
@@ -47,7 +48,7 @@ export default function HikeCard({
     [hike.photos]
   );
   const [photoIndex, setPhotoIndex] = useState(0);
-  const coverPhoto = photoIndex >= 0 ? photoList[photoIndex] : null;
+  const coverPhoto = photoIndex >= 0 ? photoList[photoIndex] || FALLBACK_HIKE_IMAGE : FALLBACK_HIKE_IMAGE;
   const hikeSource = hike._source ?? "sheets";
   const detailId = hikeSource === "sheets" && hike._public_hike_id ? hike.route_id || String(hike._public_hike_id) : hike.id;
   const dogDifficultyLabel = getDifficultyLabel(hike.dog_difficulty);
@@ -79,6 +80,8 @@ export default function HikeCard({
   }, [photoList]);
 
   const handleCoverPhotoError = () => {
+    if (photoIndex < 0) return;
+
     setPhotoIndex((currentIndex) => {
       const nextIndex = currentIndex + 1;
       return nextIndex < photoList.length ? nextIndex : -1;
