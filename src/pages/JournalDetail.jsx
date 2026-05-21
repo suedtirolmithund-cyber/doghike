@@ -91,10 +91,8 @@ function PhotoGallery({ photos }) {
 
   useEffect(() => {
     if (!photos?.length) return;
-    preloadPhoto(photos[idx]);
     if (photos.length > 1) {
       preloadPhoto(photos[(idx + 1) % photos.length]);
-      preloadPhoto(photos[(idx - 1 + photos.length) % photos.length]);
     }
   }, [idx, photos]);
 
@@ -113,6 +111,7 @@ function PhotoGallery({ photos }) {
         alt=""
         loading="eager"
         fetchPriority="high"
+        decoding="async"
         onLoad={() => setIsCurrentPhotoLoading(false)}
         onError={() => setIsCurrentPhotoLoading(false)}
         className="w-full h-64 md:h-96 object-cover"

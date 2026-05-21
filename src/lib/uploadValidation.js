@@ -1,8 +1,8 @@
 export const MAX_IMAGE_UPLOAD_MB = 15;
 export const MAX_IMAGE_UPLOAD_BYTES = MAX_IMAGE_UPLOAD_MB * 1024 * 1024;
-const MAX_IMAGE_DIMENSION = 2200;
-const IMAGE_OPTIMIZATION_MIN_BYTES = 1.5 * 1024 * 1024;
-const IMAGE_OPTIMIZATION_QUALITY = 0.82;
+const MAX_IMAGE_DIMENSION = 1920;
+const IMAGE_OPTIMIZATION_MIN_BYTES = 1.25 * 1024 * 1024;
+const IMAGE_OPTIMIZATION_QUALITY = 0.8;
 
 export function validateImageUpload(file) {
   if (!file || !file.type?.startsWith("image/")) return;
