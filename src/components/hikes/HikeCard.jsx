@@ -11,6 +11,7 @@ import { TOUR_ICONS, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getW
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { formatDurationHours } from "@/lib/duration";
+import { getDisplayImageUrl } from "@/lib/imageProxy";
 
 const METRIC_FORMATTER = new Intl.NumberFormat("de-DE", {
   maximumFractionDigits: 1,
@@ -49,10 +50,22 @@ export default function HikeCard({
   );
   const [photoIndex, setPhotoIndex] = useState(0);
   const coverPhoto = photoIndex >= 0 ? photoList[photoIndex] || FALLBACK_HIKE_IMAGE : FALLBACK_HIKE_IMAGE;
+  const previewCoverPhoto = useMemo(
+    () =>
+      getDisplayImageUrl(coverPhoto, {
+        width: imageSize === "home" ? 960 : 720,
+        quality: 74,
+      }),
+    [coverPhoto, imageSize],
+  );
   const hikeSource = hike._source ?? "sheets";
   const detailId = hikeSource === "sheets" && hike._public_hike_id ? hike.route_id || String(hike._public_hike_id) : hike.id;
   const dogDifficultyLabel = getDifficultyLabel(hike.dog_difficulty);
   const humanDifficultyLabel = getDifficultyLabel(hike.difficulty);
+  const authorPreviewPhoto = useMemo(
+    () => getDisplayImageUrl(hike.dog_photo_url || hike.author_avatar, { width: 128, quality: 70 }),
+    [hike.author_avatar, hike.dog_photo_url],
+  );
   const previewIcon = hike.season
     ? getSeasonIcon(hike.season)
     : hike.water_availability
@@ -102,7 +115,7 @@ export default function HikeCard({
           <div className={`relative overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a] ${imageHeightClass}`}>
             {coverPhoto && (
               <img
-                src={coverPhoto}
+                src={previewCoverPhoto}
                 alt={hike.trail_name}
                 loading={index < 4 ? "eager" : "lazy"}
                 decoding="async"
@@ -194,7 +207,7 @@ export default function HikeCard({
                     {(hike.dog_photo_url || hike.author_avatar) && (
                       <div className="h-8 w-8 overflow-hidden rounded-full border-2 border-white bg-brand-100/80 shadow-sm">
                         <img
-                          src={hike.dog_photo_url || hike.author_avatar}
+                          src={authorPreviewPhoto}
                           alt={hike.dog_name || hike.author_username || ""}
                           loading="lazy"
                           decoding="async"
@@ -219,7 +232,7 @@ export default function HikeCard({
                         style={{ marginLeft: dogIndex > 0 ? "-8px" : 0 }}
                       >
                         <img
-                          src={dog.photo_url || getAvatarDataUrl(dog.name)}
+                          src={getDisplayImageUrl(dog.photo_url, { width: 128, quality: 70 }) || getAvatarDataUrl(dog.name)}
                           alt={dog.name}
                           loading="lazy"
                           decoding="async"

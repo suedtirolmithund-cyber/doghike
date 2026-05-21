@@ -4,6 +4,27 @@ const PROXY_HOSTS = new Set([
   "jimcdn.com",
 ]);
 
+const SUPABASE_PUBLIC_OBJECT_MARKER = "/storage/v1/object/public/";
+const SUPABASE_PUBLIC_RENDER_MARKER = "/storage/v1/render/image/public/";
+
+function unwrapProxyUrl(url) {
+  if (!url || typeof url !== "string") return url;
+
+  if (url.startsWith("/api/image-proxy?")) {
+    const proxiedUrl = new URLSearchParams(url.slice(url.indexOf("?") + 1)).get("url");
+    return proxiedUrl ? decodeURIComponent(proxiedUrl) : url;
+  }
+
+  try {
+    const parsedUrl = new URL(url);
+    if (parsedUrl.pathname !== "/api/image-proxy") return url;
+    const proxiedUrl = parsedUrl.searchParams.get("url");
+    return proxiedUrl ? decodeURIComponent(proxiedUrl) : url;
+  } catch {
+    return url;
+  }
+}
+
 function isLocalAppHost() {
   if (typeof window === "undefined") return true;
   return ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
@@ -24,32 +45,47 @@ function shouldProxyImageUrl(url) {
   }
 }
 
-function getOptimizedSupabaseImageUrl(url) {
+function getOptimizedSupabaseImageUrl(url, options = {}) {
   try {
     const parsedUrl = new URL(url);
-    const publicStoragePrefix = "/storage/v1/object/public/journal/public-hikes/";
-    if (
-      parsedUrl.hostname !== "vaprabanohjkandbzvba.supabase.co" ||
-      !parsedUrl.pathname.startsWith(publicStoragePrefix)
-    ) {
+    if (parsedUrl.hostname !== "vaprabanohjkandbzvba.supabase.co") {
       return url;
     }
 
-    parsedUrl.pathname = parsedUrl.pathname.replace(
-      "/storage/v1/object/public/",
-      "/storage/v1/render/image/public/"
-    );
-    parsedUrl.searchParams.set("width", "1200");
-    parsedUrl.searchParams.set("quality", "78");
+    if (!parsedUrl.pathname.startsWith(SUPABASE_PUBLIC_OBJECT_MARKER)) {
+      return url;
+    }
+
+    const width = Number(options.width);
+    const height = Number(options.height);
+    const quality = Number(options.quality);
+
+    parsedUrl.pathname = parsedUrl.pathname.replace(SUPABASE_PUBLIC_OBJECT_MARKER, SUPABASE_PUBLIC_RENDER_MARKER);
+
+    if (Number.isFinite(width) && width > 0) {
+      parsedUrl.searchParams.set("width", String(Math.round(width)));
+    }
+
+    if (Number.isFinite(height) && height > 0) {
+      parsedUrl.searchParams.set("height", String(Math.round(height)));
+    }
+
+    if (Number.isFinite(quality) && quality > 0) {
+      parsedUrl.searchParams.set("quality", String(Math.round(quality)));
+    }
+
     return parsedUrl.toString();
   } catch {
     return url;
   }
 }
 
-export function getDisplayImageUrl(url) {
+export function getDisplayImageUrl(url, options = {}) {
   if (!url || typeof url !== "string") return url;
-  const optimizedUrl = getOptimizedSupabaseImageUrl(url.trim());
+
+  const rawUrl = unwrapProxyUrl(url.trim());
+  const optimizedUrl = getOptimizedSupabaseImageUrl(rawUrl, options);
+
   if (!shouldProxyImageUrl(optimizedUrl)) return optimizedUrl;
   return `/api/image-proxy?url=${encodeURIComponent(optimizedUrl)}`;
 }
