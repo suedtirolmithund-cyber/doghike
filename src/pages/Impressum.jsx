@@ -33,6 +33,7 @@ export default function Impressum() {
                 <p>39030 Kiens (BZ)</p>
                 <p>Trentino-Südtirol / Alto Adige, Italien</p>
                 <p className="pt-1"><strong>Codice Fiscale:</strong> SCHJLU93H69B220L</p>
+                <p className="text-xs text-slate-500 pt-1">Umsatzsteuer: nicht ausgewiesen, da kein umsatzsteuerpflichtiger Unternehmer im Sinne des D.P.R. 633/1972 (Kleinanbieter ohne regelmäßige Gewinnerzielungsabsicht).</p>
               </div>
             </section>
 
