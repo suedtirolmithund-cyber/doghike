@@ -1,11 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import { MapContainer, TileLayer, Polyline, Marker, useMapEvents } from "react-leaflet";
+import { useEffect, useState } from "react";
+import { TileLayer, Polyline, Marker, useMapEvents } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Undo, Trash2, Save, Loader2 } from "lucide-react";
 import RouteElevationProfile from "./RouteElevationProfile";
 import "leaflet/dist/leaflet.css";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
+import SafeMapContainer from "@/components/map/SafeMapContainer";
 
 
 configureLeafletDefaultIcon();
@@ -35,7 +36,6 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
   const [routeCoordinates, setRouteCoordinates] = useState([]);
   const [isCalculating, setIsCalculating] = useState(false);
   const [routeDistance, setRouteDistance] = useState(0);
-  const mapRef = useRef();
 
   // Fetch route from OSRM API
   const fetchRoute = async (points) => {
@@ -139,11 +139,11 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
       </div>
 
       <div className="relative h-64 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-brand-100">
-        <MapContainer
+        <SafeMapContainer
+          resetKey={`route-drawer-${waypoints.length}-${routeCoordinates.length}`}
           center={[46.5, 11.9]}
           zoom={10}
           style={{ height: "100%", width: "100%" }}
-          ref={mapRef}
         >
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
@@ -154,7 +154,7 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
             setWaypoints={setWaypoints}
             routeCoordinates={routeCoordinates}
           />
-        </MapContainer>
+        </SafeMapContainer>
       </div>
 
       <div className="flex gap-2 flex-wrap">

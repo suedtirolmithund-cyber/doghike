@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
-import { MapContainer, TileLayer, useMap } from "react-leaflet";
+import { TileLayer, useMap } from "react-leaflet";
 import { createPageUrl } from "@/utils";
+import SafeMapContainer from "@/components/map/SafeMapContainer";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
@@ -317,7 +318,8 @@ export default function HikeMap({
       className="relative overflow-hidden rounded-2xl border border-brand-100/50 shadow-sm"
       style={{ height }}
     >
-      <MapContainer
+      <SafeMapContainer
+        resetKey={`hike-map-${hikesWithCoords.length}-${center.join("-")}-${zoom}`}
         center={center}
         zoom={zoom}
         style={{ height: "100%", width: "100%" }}
@@ -328,7 +330,7 @@ export default function HikeMap({
           url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
         />
         <MarkersLayer hikes={hikesWithCoords} />
-      </MapContainer>
+      </SafeMapContainer>
 
       {showLegend && (
         <div className="absolute bottom-3 left-3 z-[1000] hidden flex-col gap-1 rounded-xl border border-brand-100/60 bg-white/90 px-3 py-2 text-xs text-slate-700 shadow backdrop-blur-sm md:flex">

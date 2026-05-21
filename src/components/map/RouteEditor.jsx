@@ -1,8 +1,9 @@
-import { MapContainer, TileLayer, Polyline, useMapEvents, Marker } from "react-leaflet";
+import { TileLayer, Polyline, useMapEvents, Marker } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Trash2, Undo } from "lucide-react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import SafeMapContainer from "@/components/map/SafeMapContainer";
 
 // Custom marker icon for route points
 const createPointIcon = (isStart = false) => {
@@ -75,7 +76,8 @@ export default function RouteEditor({ coordinates = [], startPoint = null, onCha
       </div>
 
       <div className="rounded-2xl overflow-hidden border border-brand-100 shadow-sm" style={{ height: "400px" }}>
-        <MapContainer
+        <SafeMapContainer
+          resetKey={`route-editor-${coordinates.length}-${center.join("-")}`}
           center={center}
           zoom={12}
           style={{ height: "100%", width: "100%" }}
@@ -105,7 +107,7 @@ export default function RouteEditor({ coordinates = [], startPoint = null, onCha
               ))}
             </>
           )}
-        </MapContainer>
+        </SafeMapContainer>
       </div>
 
       <p className="text-sm text-slate-500">

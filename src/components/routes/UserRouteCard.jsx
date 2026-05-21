@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Polyline } from "react-leaflet";
+import { TileLayer, Polyline } from "react-leaflet";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import { format } from "date-fns";
 import "leaflet/dist/leaflet.css";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import { formatDurationHours } from "@/lib/duration";
+import SafeMapContainer from "@/components/map/SafeMapContainer";
 
 function getRouteTypeLabel(routeType) {
   if (routeType === "recorded") return "GPS-Aufzeichnung";
@@ -35,7 +36,8 @@ export default function UserRouteCard({ route, index, onDelete }) {
       className="doghike-glass-card-hover overflow-hidden"
     >
       <div className="h-48 relative">
-        <MapContainer
+        <SafeMapContainer
+          resetKey={`user-route-${route.id}-${coordinates.length}`}
           center={coordinates[0] || [46.5, 11.9]}
           zoom={12}
           style={{ height: "100%", width: "100%" }}
@@ -46,7 +48,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <Polyline positions={coordinates} color="#A8003C" weight={4} />
-        </MapContainer>
+        </SafeMapContainer>
 
         <div className="absolute left-3 top-3 z-[1000] flex items-center gap-1 rounded-full border border-brand-100/80 bg-white/82 px-3 py-1 text-xs font-medium text-[#7C3020] shadow-sm backdrop-blur-sm">
           <RouteIcon className="w-3 h-3" />

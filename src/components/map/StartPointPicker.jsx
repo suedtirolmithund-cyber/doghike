@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import { TileLayer, Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
+import SafeMapContainer from "@/components/map/SafeMapContainer";
 
 const startPointIcon = L.divIcon({
   html: `
@@ -80,7 +81,8 @@ export default function StartPointPicker({ latitude, longitude, onSelect }) {
 
   return (
     <div className="relative rounded-xl overflow-hidden border border-brand-100" style={{ height: "400px" }}>
-      <MapContainer
+      <SafeMapContainer
+        resetKey={`start-point-${latitude ?? "none"}-${longitude ?? "none"}`}
         center={position}
         zoom={10}
         style={{ height: "100%", width: "100%" }}
@@ -94,7 +96,7 @@ export default function StartPointPicker({ latitude, longitude, onSelect }) {
         {latitude && longitude && (
           <Marker position={[latitude, longitude]} icon={startPointIcon} />
         )}
-      </MapContainer>
+      </SafeMapContainer>
       
       <div className="absolute top-4 left-4 right-4 bg-white/95 backdrop-blur-sm rounded-lg p-3 shadow-lg z-[1000] pointer-events-none">
         <p className="text-sm text-slate-700">
