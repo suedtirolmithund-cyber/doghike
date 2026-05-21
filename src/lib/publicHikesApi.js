@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { optimizeImageForUpload, validateImageUpload } from "@/lib/uploadValidation";
+import { getDisplayImageUrl } from "@/lib/imageProxy";
 
 const PUBLIC_HIKE_BUCKET = "journal";
 const PUBLIC_HIKE_PREFIX = "public-hikes/";
@@ -267,14 +268,14 @@ function getPublicHikeStorageDescriptor(photoUrl) {
 async function createPublicHikePhotoDisplayUrl(photoReference) {
   const storageDescriptor = getPublicHikeStorageDescriptor(photoReference);
   if (!storageDescriptor) {
-    return normalizeStoredPublicPhotoReference(photoReference);
+    return getDisplayImageUrl(normalizeStoredPublicPhotoReference(photoReference));
   }
 
   const { data } = supabase.storage
     .from(storageDescriptor.bucket)
     .getPublicUrl(storageDescriptor.path);
 
-  return data?.publicUrl ?? null;
+  return getDisplayImageUrl(data?.publicUrl ?? null);
 }
 
 export async function resolvePublicHikePhotoReferences(photoReferences = []) {
