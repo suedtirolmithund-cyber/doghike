@@ -29,6 +29,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { createPageUrl } from "@/utils";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import { matchesTextSearch } from "@/lib/hikeSearch";
+import { getDisplayImageUrl } from "@/lib/imageProxy";
 import {
   getPendingEntries,
   approveEntry,
@@ -315,7 +316,7 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
         <div className="min-w-0 flex items-center gap-3">
           {comment.profiles?.avatar_url && (
             <img
-              src={comment.profiles.avatar_url}
+              src={getDisplayImageUrl(comment.profiles.avatar_url, { width: 96, quality: 68 })}
               alt=""
               className="h-8 w-8 shrink-0 rounded-full object-cover"
             />
@@ -408,7 +409,11 @@ function PublicHikeCard({ hike }) {
       <div className="flex flex-col gap-4 p-4 md:flex-row">
         <div className="h-28 w-full shrink-0 overflow-hidden rounded-2xl bg-brand-100/80 md:w-44">
           {hike.cover_photo ? (
-            <img src={hike.cover_photo} alt="" className="h-full w-full object-cover" />
+            <img
+              src={getDisplayImageUrl(hike.cover_photo, { width: 720, quality: 74 })}
+              alt=""
+              className="h-full w-full object-cover"
+            />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-stone-100 to-stone-200 text-slate-400">
               <ImageIcon className="h-6 w-6" />
@@ -472,7 +477,7 @@ function UserCard({ profile, deleting, onDelete }) {
         <div className="flex min-w-0 items-center gap-3">
           {profile.avatar_url ? (
             <img
-              src={profile.avatar_url}
+              src={getDisplayImageUrl(profile.avatar_url, { width: 128, quality: 68 })}
               alt=""
               className="h-11 w-11 shrink-0 rounded-2xl object-cover"
             />
