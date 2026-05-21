@@ -373,6 +373,36 @@ function mergePhotoLists(...photoLists) {
   );
 }
 
+function isManagedPublicHikePhotoReference(photoReference) {
+  if (typeof photoReference !== "string") return false;
+  const trimmed = photoReference.trim();
+  if (!trimmed) return false;
+  if (trimmed.startsWith("public-hikes/")) return true;
+  if (trimmed.startsWith("journal/public-hikes/")) return true;
+
+  try {
+    const { pathname } = new URL(trimmed);
+    return /\/storage\/v1\/object\/(?:public|sign)\/journal\/public-hikes\//.test(pathname);
+  } catch {
+    return false;
+  }
+}
+
+function preferManagedPhotoReferences(photoReferences) {
+  const managed = [];
+  const external = [];
+
+  for (const photoReference of photoReferences) {
+    if (isManagedPublicHikePhotoReference(photoReference)) {
+      managed.push(photoReference);
+    } else {
+      external.push(photoReference);
+    }
+  }
+
+  return [...managed, ...external];
+}
+
 function publicHikeRowToHike(row, photos = []) {
   const seasons = Array.isArray(row.seasons) && row.seasons.length > 0
     ? row.seasons.filter(Boolean)
@@ -480,8 +510,11 @@ export async function getHikes() {
 
     const hikes = await Promise.all(
       hikeRows.map(async (row) => {
-        const resolvedPhotos = await resolvePublicHikePhotoReferences(
+        const photoReferences = preferManagedPhotoReferences(
           mergePhotoLists(photosByHikeId[row.id] ?? [], getLegacyPhotoColumns(row))
+        );
+        const resolvedPhotos = await resolvePublicHikePhotoReferences(
+          photoReferences
         );
 
         return publicHikeRowToHike(row, resolvedPhotos);
