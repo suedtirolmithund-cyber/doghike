@@ -26,11 +26,11 @@ export default function Datenschutz() {
           <div className="space-y-6 md:space-y-8">
             <section>
               <p className="text-sm md:text-base text-slate-600 leading-relaxed">
-                Der Schutz deiner persönlichen Daten ist uns wichtig. Wir verarbeiten
-                deine Daten nur auf Grundlage der gesetzlichen Bestimmungen der
-                EU-Datenschutz-Grundverordnung (DSGVO / Verordnung (EU) 2016/679) sowie des
-                italienischen Datenschutzgesetzes (D.Lgs. 196/2003 in der geänderten Fassung).
-                Hier erfährst du, welche Daten wir erheben, warum wir sie speichern, wer Zugriff hat und welche Rechte du hast.
+                Der Schutz deiner persönlichen Daten ist dem Betreiber wichtig. Personenbezogene Daten werden
+                ausschließlich auf Grundlage der EU-Datenschutz-Grundverordnung (DSGVO / Verordnung (EU) 2016/679)
+                sowie des italienischen Datenschutzgesetzes (D.Lgs. 196/2003 in der geänderten Fassung) verarbeitet.
+                Diese Erklärung informiert dich darüber, welche Daten erhoben werden, zu welchem Zweck, wer Zugriff hat
+                und welche Rechte dir zustehen (Art. 13 DSGVO).
               </p>
             </section>
 
@@ -41,10 +41,10 @@ export default function Datenschutz() {
               </h2>
               <div className="space-y-2 text-sm md:text-base text-slate-600 bg-brand-50/70 rounded-xl p-4">
                 <p><strong>Julia Schwärzer</strong></p>
-                <p>Südtirol, Italien</p>
+                <p>Kienerdorfweg 18, 39030 Kiens (BZ), Italien</p>
                 <p>E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-brand-600 underline"><strong>suedtirolmithund@gmail.com</strong></a></p>
-                <p>Website: <a href="https://www.mithundenunterwegsinsuedtirol.it" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">www.mithundenunterwegsinsuedtirol.it</a></p>
                 <p>App: <a href="https://doghike-suedtirol.vercel.app" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">doghike-suedtirol.vercel.app</a></p>
+                <p className="text-xs text-slate-400 pt-1">Ein Datenschutzbeauftragter ist gemäß Art. 37 DSGVO nicht bestellt, da die gesetzlichen Voraussetzungen nicht erfüllt sind.</p>
               </div>
             </section>
 
@@ -81,6 +81,8 @@ export default function Datenschutz() {
                     <li>Session-Token und technisch notwendige Browser-Speicher-Einträge</li>
                     <li>IP-Adresse (wird von Vercel- und Supabase-Infrastruktur protokolliert)</li>
                     <li>Browsertyp und Betriebssystem</li>
+                    <li><strong>Live-GPS-Koordinaten</strong> bei aktiver Tourenaufzeichnung: werden nur lokal im Browser verarbeitet und erst auf deinen ausdrücklichen Befehl hin gespeichert. Es erfolgt keine automatische Übertragung.</li>
+                    <li><strong>Web-Push-Abonnement-Token</strong> (falls du Benachrichtigungen erlaubst): wird in der Supabase-Datenbank gespeichert und dient ausschließlich dem Versand von In-App-Benachrichtigungen (z. B. Freundschaftsanfragen).</li>
                   </ul>
                 </div>
               </div>
@@ -188,7 +190,7 @@ export default function Datenschutz() {
                 5. Auftragsverarbeiter & externe Dienste
               </h2>
               <div className="space-y-3 text-sm md:text-base text-slate-600">
-                <p>Wir geben deine Daten <strong>nur an folgende Auftragsverarbeiter oder technische Dienste</strong> weiter:</p>
+                <p>Deine Daten werden <strong>nur an folgende Auftragsverarbeiter oder technische Dienste</strong> weitergegeben:</p>
 
                 <div className="space-y-3">
                   <div className="border border-brand-100 rounded-xl p-4">
@@ -245,9 +247,9 @@ export default function Datenschutz() {
                   </div>
 
                   <div className="border border-brand-100 rounded-xl p-4">
-                    <p className="font-semibold text-slate-900 mb-1">Stripe Inc. (Zahlungen, nur falls Premium-Zahlungen aktiviert werden)</p>
-                    <p>Stripe wird erst dann eingesetzt, wenn Online-Zahlungen für Premium technisch aktiviert werden. Sobald das der Fall ist, verarbeitet Stripe Zahlungsdaten direkt; wir speichern keine Kreditkartendaten selbst.</p>
-              <p className="mt-1 text-slate-500"><a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">stripe.com/privacy</a></p>
+                    <p className="font-semibold text-slate-900 mb-1">Stripe Inc. (Zahlungsabwicklung für Premium)</p>
+                    <p>Verarbeitet Zahlungsdaten bei Premium-Käufen direkt. Der Betreiber speichert keine Kreditkartendaten. Stripe erhält Name, E-Mail-Adresse und Zahlungsinformationen.</p>
+                    <p className="mt-1 text-slate-500"><a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">stripe.com/privacy</a></p>
                   </div>
 
                   <div className="border border-brand-200 rounded-xl p-4 bg-brand-50">
@@ -262,8 +264,54 @@ export default function Datenschutz() {
             </section>
 
             <section className="border-t border-brand-100 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                <Share2 className="w-5 h-5" />
+                6. Drittlandstransfers (Art. 44 ff. DSGVO)
+              </h2>
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
+                <p>
+                  Folgende Auftragsverarbeiter haben ihren Sitz in den <strong>USA</strong>, einem Land ohne
+                  EU-Angemessenheitsbeschluss im Sinne des Art. 45 DSGVO:
+                </p>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm text-slate-600 border-collapse">
+                    <thead>
+                      <tr className="bg-brand-100/80">
+                        <th className="text-left p-3 font-semibold text-slate-900 rounded-tl-lg">Anbieter</th>
+                        <th className="text-left p-3 font-semibold text-slate-900 rounded-tr-lg">Grundlage des Transfers</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-stone-100">
+                      <tr>
+                        <td className="p-3">Supabase Inc.</td>
+                        <td className="p-3">Standardvertragsklauseln gem. Art. 46 Abs. 2 lit. c DSGVO (SCCs)</td>
+                      </tr>
+                      <tr className="bg-brand-50/70">
+                        <td className="p-3">Vercel Inc.</td>
+                        <td className="p-3">Standardvertragsklauseln gem. Art. 46 Abs. 2 lit. c DSGVO (SCCs)</td>
+                      </tr>
+                      <tr>
+                        <td className="p-3">Google LLC</td>
+                        <td className="p-3">Standardvertragsklauseln gem. Art. 46 Abs. 2 lit. c DSGVO (SCCs)</td>
+                      </tr>
+                      <tr className="bg-brand-50/70">
+                        <td className="p-3">Stripe Inc.</td>
+                        <td className="p-3">Standardvertragsklauseln gem. Art. 46 Abs. 2 lit. c DSGVO (SCCs)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div className="rounded-xl border border-brand-200 bg-brand-50 p-4 text-sm text-brand-700">
+                  Trotz dieser Schutzmaßnahmen können US-Behörden unter bestimmten Umständen Zugang zu Daten erlangen.
+                  Durch die Nutzung der App stimmst du diesen Transfers auf Basis der genannten Rechtsgrundlagen zu.
+                  Du kannst deine Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen, indem du dein Konto löschst.
+                </div>
+              </div>
+            </section>
+
+            <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
-                6. Hochgeladene Fotos & Urheberrecht
+                7. Hochgeladene Fotos & Urheberrecht
               </h2>
               <div className="bg-brand-50 border border-brand-100 rounded-xl p-4 text-sm text-brand-700 leading-relaxed">
                 <p><strong>Beim Hochladen von Fotos bestätigst du:</strong></p>
@@ -278,7 +326,7 @@ export default function Datenschutz() {
 
             <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
-                7. Technisch notwendige Cookies & LocalStorage
+                8. Technisch notwendige Cookies & LocalStorage
               </h2>
               <div className="space-y-3 text-sm text-slate-600">
                 <p>Diese App verwendet <strong>ausschließlich technisch notwendige</strong> Browser-Speicher-Einträge und ein einzelnes technisch notwendiges Cookie:</p>
@@ -317,7 +365,7 @@ export default function Datenschutz() {
             <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
                 <Lock className="w-5 h-5" />
-                8. Deine Rechte (Art. 15-21 DSGVO)
+                9. Deine Rechte (Art. 15-21 DSGVO)
               </h2>
               <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
@@ -345,6 +393,10 @@ export default function Datenschutz() {
                     <p className="font-semibold text-slate-900 mb-1">Widerspruch (Art. 21)</p>
                     <p className="text-sm">Der Verarbeitung widersprechen.</p>
                   </div>
+                  <div className="bg-brand-50/70 rounded-xl p-4">
+                    <p className="font-semibold text-slate-900 mb-1">Einwilligung widerrufen (Art. 7 Abs. 3)</p>
+                    <p className="text-sm">Einwilligungen (z. B. für Fotos, Hundedaten, Push-Benachrichtigungen) jederzeit mit Wirkung für die Zukunft widerrufen — per E-Mail oder durch Löschen der Daten in der App.</p>
+                  </div>
                   <div className="bg-brand-50/70 rounded-xl p-4 sm:col-span-2">
                     <p className="font-semibold text-slate-900 mb-1">Beschwerde bei Aufsichtsbehörde</p>
                     <p className="text-sm">
@@ -359,7 +411,7 @@ export default function Datenschutz() {
           <div className="mt-4 rounded-xl bg-gradient-to-br from-[#501F14] to-[#A8003C] p-4 text-white shadow-[0_12px_24px_rgba(168,0,60,0.14)]">
                   <p className="font-semibold mb-1">Anfragen stellen:</p>
             <p className="text-brand-50 text-sm">
-                    Schreib an <strong>suedtirolmithund@gmail.com</strong>. Wir antworten innerhalb von 30 Tagen.
+                    Schreib an <strong>suedtirolmithund@gmail.com</strong>. Antwort innerhalb von 1 Monat (Art. 12 Abs. 3 DSGVO); bei komplexen Anfragen Verlängerung um weitere 2 Monate möglich.
                     Für Kontolöschung: Anfrage über die Profileinstellungen oder per E-Mail.
                   </p>
                 </div>
@@ -368,7 +420,7 @@ export default function Datenschutz() {
 
             <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
-                9. Datensicherheit
+                10. Datensicherheit
               </h2>
               <ul className="list-disc pl-6 space-y-2 text-sm md:text-base text-slate-600">
                 <li>Alle Übertragungen verschlüsselt über HTTPS/TLS</li>
