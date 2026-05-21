@@ -145,10 +145,15 @@ export default function Login() {
     }
 
     setGoogleLoading(true);
-    const result = await loginWithGoogle();
-    if (result?.error) {
+    try {
+      const result = await loginWithGoogle();
+      if (result?.error) {
+        setGoogleLoading(false);
+        setLocalError(mapAuthError(result.error.message));
+      }
+    } catch {
       setGoogleLoading(false);
-      setLocalError(mapAuthError(result.error.message));
+      setLocalError("Anmeldung fehlgeschlagen. Bitte versuche es noch einmal.");
     }
   };
 

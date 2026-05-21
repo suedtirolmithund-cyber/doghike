@@ -680,6 +680,8 @@ export default function GPSTracker({ onSave }) {
       stopWatchers();
       releaseWakeLock();
       stopSilentAudio();
+      burstTimersRef.current.forEach(clearTimeout);
+      burstTimersRef.current = [];
     };
   }, [releaseWakeLock, stopSilentAudio, stopWatchers]);
 
