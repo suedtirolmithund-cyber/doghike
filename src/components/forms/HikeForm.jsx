@@ -801,10 +801,9 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               accept="image/*"
               multiple
               onChange={(e) => {
-                const files = Array.from(e.target.files);
+                const files = Array.from(e.target.files || []);
                 if (files.length > 0) {
-                  const fileList = e.target.files;
-                  handlePhotoUploadConfirmed(fileList);
+                  handlePhotoUploadConfirmed(files);
                 }
               }}
               className="hidden"
@@ -827,10 +826,11 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
           type="photo"
           open={showPhotoConsent}
           onAccept={() => {
-          const input = document.getElementById('photo-input');
-          if (input?.files) {
-            handlePhotoUploadConfirmed(input.files);
-          }
+            const input = document.getElementById('photo-input');
+            const files = Array.from(input?.files || []);
+            if (files.length > 0) {
+              handlePhotoUploadConfirmed(files);
+            }
           }}
           onDecline={() => setShowPhotoConsent(false)}
           />

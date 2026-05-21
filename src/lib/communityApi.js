@@ -282,6 +282,7 @@ export async function createComment(
   photoUrl = null,
   needsReview = false
 ) {
+  if (!text?.trim()) throw new Error("Kommentar darf nicht leer sein.");
   const normalizedHikeId = String(hikeId);
   const { data, error } = await supabase
     .from("comments")
