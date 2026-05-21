@@ -60,23 +60,24 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setIsAuthenticated(!!session?.user);
-      setIsLoadingAuth(false);
-      if (session?.user) {
-        ensureProfile(session.user).then(() => fetchRole(session.user.id));
-      }
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const initSession = async (session) => {
       setUser(session?.user ?? null);
       setIsAuthenticated(!!session?.user);
       if (session?.user) {
-        ensureProfile(session.user).then(() => fetchRole(session.user.id));
+        await ensureProfile(session.user);
+        await fetchRole(session.user.id);
       } else {
         setIsAdmin(false);
       }
+    };
+
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      await initSession(session);
+      setIsLoadingAuth(false);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      initSession(session);
     });
 
     return () => subscription.unsubscribe();

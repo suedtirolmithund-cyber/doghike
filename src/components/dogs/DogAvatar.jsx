@@ -28,6 +28,7 @@ export default function DogAvatar({ dog, size = "md", showName = true, onClick }
           src={dog.photo_url || getAvatarDataUrl(dog.name)}
           alt={dog.name}
           className="w-full h-full object-cover"
+          onError={(e) => { e.target.onerror = null; e.target.src = getAvatarDataUrl(dog.name); }}
         />
       </div>
       {showName && (

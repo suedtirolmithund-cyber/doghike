@@ -56,6 +56,7 @@ export default function AccountSettings({ user, profile }) {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const [isDeleting, setIsDeleting] = useState(false);
+  const [pendingPlan, setPendingPlan] = useState(null);
   const premiumEndDate = profile?.premium_current_period_end ? new Date(profile.premium_current_period_end) : null;
   const premiumHasTimeLeft = !premiumEndDate || premiumEndDate.getTime() > Date.now();
   const isPremium = profile?.is_premium === true && premiumHasTimeLeft;
@@ -84,9 +85,11 @@ export default function AccountSettings({ user, profile }) {
       return data.url;
     },
     onSuccess: (url) => {
+      setPendingPlan(null);
       window.location.assign(url);
     },
     onError: (error) => {
+      setPendingPlan(null);
       toast.error(error?.message || "Checkout konnte gerade nicht gestartet werden.");
     },
   });
@@ -163,10 +166,10 @@ export default function AccountSettings({ user, profile }) {
               <>
                 <Button
                   className="doghike-primary-action h-11"
-                  onClick={() => checkoutMutation.mutate("monthly")}
-                  disabled={checkoutMutation.isPending}
+                  onClick={() => { setPendingPlan("monthly"); checkoutMutation.mutate("monthly"); }}
+                  disabled={!!pendingPlan}
                 >
-                  {checkoutMutation.isPending && checkoutMutation.variables === "monthly" ? (
+                  {pendingPlan === "monthly" ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   ) : (
                     <CreditCard className="mr-2 h-4 w-4" />
@@ -176,10 +179,10 @@ export default function AccountSettings({ user, profile }) {
                 <Button
                   variant="outline"
                   className="h-11"
-                  onClick={() => checkoutMutation.mutate("one_time")}
-                  disabled={checkoutMutation.isPending}
+                  onClick={() => { setPendingPlan("one_time"); checkoutMutation.mutate("one_time"); }}
+                  disabled={!!pendingPlan}
                 >
-                  {checkoutMutation.isPending && checkoutMutation.variables === "one_time" ? (
+                  {pendingPlan === "one_time" ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   ) : (
                     <CalendarClock className="mr-2 h-4 w-4" />
