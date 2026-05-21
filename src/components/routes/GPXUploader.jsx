@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { MapContainer, TileLayer, Polyline, Marker } from "react-leaflet";
+import { TileLayer, Polyline, Marker } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import {
   Upload,
@@ -13,6 +13,7 @@ import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import { formatDurationHours } from "@/lib/duration";
 import "leaflet/dist/leaflet.css";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
+import SafeMapContainer from "@/components/map/SafeMapContainer";
 
 
 configureLeafletDefaultIcon();
@@ -258,7 +259,7 @@ export default function GPXUploader({ onSave }) {
           </div>
 
           <div className="relative h-72 md:h-96 rounded-xl overflow-hidden border-2 border-brand-100">
-            <MapContainer center={mapCenter} zoom={12} style={{ height: "100%", width: "100%" }}>
+            <SafeMapContainer resetKey={`gpx-preview-${gpxData.coordinates.length}`} center={mapCenter} zoom={12} style={{ height: "100%", width: "100%" }}>
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution="&copy; OpenStreetMap"
@@ -270,7 +271,7 @@ export default function GPXUploader({ onSave }) {
                   <Marker position={gpxData.coordinates[gpxData.coordinates.length - 1]} />
                 </>
               )}
-            </MapContainer>
+            </SafeMapContainer>
           </div>
 
           <RouteElevationProfile

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { MapContainer, TileLayer, Polyline, Marker, useMap } from "react-leaflet";
+import { TileLayer, Polyline, Marker, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, Square, Crosshair, Loader2, Wifi, WifiOff } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -9,6 +9,7 @@ import RouteElevationProfile from "./RouteElevationProfile";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
+import SafeMapContainer from "@/components/map/SafeMapContainer";
 
 
 configureLeafletDefaultIcon();
@@ -753,7 +754,8 @@ export default function GPSTracker({ onSave }) {
       </div>
 
       <div className="relative h-[50vw] min-h-64 max-h-72 overflow-hidden rounded-xl border-2 border-brand-100 md:h-80 lg:h-[400px]">
-        <MapContainer
+        <SafeMapContainer
+          resetKey={`gps-tracker-${isTracking ? "live" : "idle"}-${routePoints.length}-${currentPosition ? "pos" : "none"}`}
           center={currentPosition || myLocation || [46.5, 11.9]}
           zoom={currentPosition || myLocation ? 14 : 10}
           style={{ height: "100%", width: "100%" }}
@@ -783,7 +785,7 @@ export default function GPSTracker({ onSave }) {
           {!currentPosition && myLocation && (
             <Marker position={myLocation} icon={myLocationIcon} />
           )}
-        </MapContainer>
+        </SafeMapContainer>
 
         {isTracking && (
           <div
