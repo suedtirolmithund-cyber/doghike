@@ -135,8 +135,8 @@ export default function Datenschutz() {
                     </tr>
                     <tr>
                       <td className="p-3">Technische Logs</td>
-                      <td className="p-3">Sicherheit, Fehlerbehebung</td>
-                      <td className="p-3">Art. 6 Abs. 1 lit. f DSGVO (Berechtigtes Interesse)</td>
+                      <td className="p-3">IT-Sicherheit, Missbrauchsschutz, Fehlerbehebung</td>
+                      <td className="p-3">Art. 6 Abs. 1 lit. f DSGVO – berechtigtes Interesse: Betrieb und Absicherung der IT-Infrastruktur</td>
                     </tr>
                   </tbody>
                 </table>
@@ -420,7 +420,24 @@ export default function Datenschutz() {
 
             <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
-                10. Datensicherheit
+                10. Datenprovisionspflicht & automatisierte Entscheidungen (Art. 13 Abs. 2 lit. e–f DSGVO)
+              </h2>
+              <div className="space-y-4 text-sm md:text-base text-slate-600 leading-relaxed">
+                <div className="bg-brand-50/70 rounded-xl p-4 space-y-2">
+                  <p className="font-semibold text-slate-900">Pflicht zur Datenprovision (Art. 13 Abs. 2 lit. e)</p>
+                  <p>Die Bereitstellung der E-Mail-Adresse ist für die Registrierung <strong>vertraglich erforderlich</strong>. Ohne diese Angabe kann kein Nutzerkonto erstellt und die App nicht vollständig genutzt werden.</p>
+                  <p>Alle weiteren Daten (Fotos, Hundedaten, GPS-Aufzeichnungen, Kommentare) sind <strong>freiwillig</strong>. Ihre Nichtangabe hat keine Nachteile für die Basisnutzung der App.</p>
+                </div>
+                <div className="bg-brand-50/70 rounded-xl p-4 space-y-2">
+                  <p className="font-semibold text-slate-900">Automatisierte Entscheidungen & Profiling (Art. 13 Abs. 2 lit. f)</p>
+                  <p>Es findet <strong>keine automatisierte Entscheidungsfindung und kein Profiling</strong> im Sinne des Art. 22 DSGVO statt. Es werden keine auf automatisierter Verarbeitung beruhenden Entscheidungen getroffen, die rechtliche oder ähnlich erhebliche Auswirkungen auf Nutzer haben.</p>
+                </div>
+              </div>
+            </section>
+
+            <section className="border-t border-brand-100 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
+                11. Datensicherheit
               </h2>
               <ul className="list-disc pl-6 space-y-2 text-sm md:text-base text-slate-600">
                 <li>Alle Übertragungen verschlüsselt über HTTPS/TLS</li>

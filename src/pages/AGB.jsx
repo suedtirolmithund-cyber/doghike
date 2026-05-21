@@ -227,8 +227,26 @@ export default function AGB() {
 
             <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
-            <FileText className="w-5 h-5 text-brand-600" />
-                9. Änderungen der Nutzungsbedingungen
+                <FileText className="w-5 h-5 text-brand-600" />
+                9. Anwendbares Recht & Gerichtsstand
+              </h2>
+              <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
+                <p>
+                  Es gilt <strong>italienisches Recht</strong> unter Ausschluss des UN-Kaufrechts (CISG).
+                  Gerichtsstand für Streitigkeiten mit Verbrauchern ist der <strong>Wohnsitz des Verbrauchers</strong>
+                  gemäß Art. 33 D.Lgs. 206/2005 (Codice del Consumo). Eine von dieser Regelung abweichende
+                  Gerichtsstandsvereinbarung zu Lasten des Verbrauchers ist unwirksam.
+                </p>
+                <p>
+                  Für Streitigkeiten mit Unternehmern gilt als Gerichtsstand <strong>Bruneck (BZ), Italien</strong>.
+                </p>
+              </div>
+            </section>
+
+            <section className="border-t border-brand-100 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                <FileText className="w-5 h-5 text-brand-600" />
+                10. Änderungen der Nutzungsbedingungen
               </h2>
               <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
@@ -241,7 +259,7 @@ export default function AGB() {
             <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <Mail className="w-5 h-5 text-brand-600" />
-                10. Kontakt & Beschwerden
+                11. Kontakt & Beschwerden
               </h2>
           <div className="rounded-xl bg-gradient-to-br from-[#501F14] to-[#A8003C] p-4 text-sm text-white shadow-[0_12px_24px_rgba(168,0,60,0.14)]">
                 <p className="font-semibold mb-1">Betreiberin: Julia Schwärzer</p>
