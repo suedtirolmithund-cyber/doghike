@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { supabase } from "@/lib/supabaseClient";
@@ -17,6 +17,7 @@ import {
   Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { toast } from "sonner";
 import { PremiumPawMark } from "@/components/premium/PremiumPawBadge";
@@ -49,6 +50,7 @@ async function getFunctionErrorMessage(error, fallback) {
 export default function Premium() {
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
+  const [withdrawalConsent, setWithdrawalConsent] = useState(false);
   const queryClient = useQueryClient();
   const checkoutStatus = searchParams.get("checkout");
 
@@ -263,11 +265,25 @@ export default function Premium() {
                 ))}
               </ul>
 
-              <div className="space-y-3 rounded-2xl border border-white/22 bg-white/14 p-5 text-center backdrop-blur-md">
+              <div className="space-y-3 rounded-2xl border border-white/22 bg-white/14 p-5 backdrop-blur-md">
+                <label className="flex items-start gap-3 cursor-pointer rounded-xl border border-white/20 bg-white/10 p-3 text-left">
+                  <Checkbox
+                    id="withdrawal-consent"
+                    checked={withdrawalConsent}
+                    onCheckedChange={setWithdrawalConsent}
+                    className="mt-0.5 shrink-0 border-white/50 data-[state=checked]:bg-white data-[state=checked]:text-[#7C3020]"
+                  />
+                  <span className="text-xs leading-relaxed text-white/85">
+                    Ich stimme zu, dass der Premium-Zugang sofort nach Zahlung freigeschaltet wird,
+                    und nehme zur Kenntnis, dass ich damit mein 14-tägiges Widerrufsrecht gemäß
+                    Art. 59 lit. a D.Lgs. 206/2005 verliere.
+                  </span>
+                </label>
+
                 <Button
-                  className="h-12 w-full rounded-xl bg-white text-[#7C3020] hover:bg-white/90"
+                  className="h-12 w-full rounded-xl bg-white text-[#7C3020] hover:bg-white/90 disabled:opacity-50"
                   onClick={() => checkoutMutation.mutate("monthly")}
-                  disabled={checkoutMutation.isPending || isFetching}
+                  disabled={checkoutMutation.isPending || isFetching || !withdrawalConsent}
                 >
                   {isStartingMonthly ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -278,9 +294,9 @@ export default function Premium() {
                 </Button>
                 <Button
                   variant="outline"
-                  className="h-12 w-full rounded-xl border-white/30 bg-white/10 text-white hover:bg-white/20"
+                  className="h-12 w-full rounded-xl border-white/30 bg-white/10 text-white hover:bg-white/20 disabled:opacity-50"
                   onClick={() => checkoutMutation.mutate("one_time")}
-                  disabled={checkoutMutation.isPending || isFetching}
+                  disabled={checkoutMutation.isPending || isFetching || !withdrawalConsent}
                 >
                   {isStartingOneTime ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -306,7 +322,7 @@ export default function Premium() {
                 )}
                 <p className="flex items-center justify-center gap-2 text-xs text-white/62">
                   <ShieldCheck className="h-3.5 w-3.5" />
-                  Sichere Zahlung und Aboverwaltung ueber Stripe.
+                  Sichere Zahlung und Aboverwaltung über Stripe.
                 </p>
               </div>
             </div>
