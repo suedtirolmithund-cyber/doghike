@@ -25,22 +25,14 @@ export default function Impressum() {
           <div className="space-y-6 md:space-y-8">
             <section>
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
-                Angaben gemäß D.Lgs. 70/2003 und Art. 13 DSGVO
+                Angaben gemäß D.Lgs. 70/2003 (E-Commerce-Gesetz)
               </h2>
               <div className="bg-brand-50/70 rounded-xl p-4 space-y-2 text-sm md:text-base text-slate-600">
                 <p className="font-semibold text-slate-900">Julia Schwärzer</p>
-                <p>Südtirol (Trentino-Südtirol / Alto Adige), Italien</p>
-                <p>
-                  <strong>Vollständige Postanschrift:</strong>{" "}
-                  <span className="font-medium text-brand-700">vor Veröffentlichung ergänzen</span>
-                </p>
-                <p>
-                  <strong>Codice Fiscale / Partita IVA:</strong>{" "}
-                  <span className="font-medium text-brand-700">vor Veröffentlichung prüfen und ergänzen, falls gesetzlich erforderlich</span>
-                </p>
-                <p className="text-xs text-brand-700 pt-2 leading-relaxed">
-                  Wichtig: Ein öffentliches, geschäftsmäßiges oder entgeltliches Angebot sollte eine vollständige geografische Anschrift und die gesetzlich erforderlichen Identifikationsangaben enthalten. Diese Angaben dürfen nicht nur auf Anfrage bereitgestellt werden.
-                </p>
+                <p>Kienerdorfweg 18</p>
+                <p>39030 Kiens (BZ)</p>
+                <p>Trentino-Südtirol / Alto Adige, Italien</p>
+                <p className="pt-1"><strong>Codice Fiscale:</strong> SCHJLU93H69B220L</p>
               </div>
             </section>
 
@@ -70,12 +62,12 @@ export default function Impressum() {
 
             <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-4">
-                Verantwortliche Person (Art. 4 Abs. 7 DSGVO)
+                Verantwortliche Person gem. Art. 4 Abs. 7 DSGVO
               </h2>
               <div className="space-y-1 text-sm md:text-base text-slate-600">
-                <p>Julia Schwärzer</p>
-                <p>Südtirol, Italien</p>
+                <p>Julia Schwärzer, Kienerdorfweg 18, 39030 Kiens (BZ), Italien</p>
                 <p>E-Mail: <a href="mailto:suedtirolmithund@gmail.com" className="text-brand-600 underline">suedtirolmithund@gmail.com</a></p>
+                <p className="pt-1 text-xs text-slate-400">Ein Datenschutzbeauftragter ist gemäß Art. 37 DSGVO nicht bestellt, da die gesetzlichen Voraussetzungen nicht erfüllt sind.</p>
               </div>
             </section>
 
@@ -84,7 +76,7 @@ export default function Impressum() {
                 Verbraucherstreitbeilegung
               </h2>
               <p className="text-sm md:text-base text-slate-600 leading-relaxed">
-                Wir sind nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen. Der frühere Hinweis auf die EU-ODR-Plattform wurde entfernt, da diese Plattform seit 20. Juli 2025 eingestellt ist.
+                Der Betreiber ist nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen. Für außergerichtliche Streitbeilegung in Italien ist das <a href="https://www.conciliaweb.agcom.it" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">AGCOM Conciliaweb-Verfahren</a> zuständig, soweit es sich um elektronische Kommunikationsdienste handelt.
               </p>
             </section>
 
@@ -94,9 +86,7 @@ export default function Impressum() {
               </h2>
               <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
-                  Als Diensteanbieter sind wir für eigene Inhalte nach den allgemeinen
-                  Gesetzen verantwortlich. Wir sind jedoch nicht verpflichtet, übermittelte
-                  oder gespeicherte fremde Informationen allgemein zu überwachen.
+                  Der Betreiber ist für eigene Inhalte nach den allgemeinen Gesetzen verantwortlich (Art. 14–17 D.Lgs. 70/2003). Eine Verpflichtung zur allgemeinen Überwachung übermittelter oder gespeicherter fremder Informationen besteht nicht. Bei Bekanntwerden konkreter Rechtsverletzungen werden betreffende Inhalte unverzüglich entfernt.
                 </p>
               </div>
             </section>
@@ -106,9 +96,7 @@ export default function Impressum() {
                 Haftung für externe Links
               </h2>
               <p className="text-sm md:text-base text-slate-600 leading-relaxed">
-                Unser Angebot enthält Links zu externen Websites. Für deren Inhalte ist
-                stets der jeweilige Betreiber verantwortlich. Rechtswidrige Inhalte waren
-                zum Zeitpunkt der Verlinkung nicht erkennbar.
+                Das Angebot enthält Links zu externen Websites Dritter. Für deren Inhalte ist stets der jeweilige Betreiber verantwortlich. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Bei Kenntnis von Rechtsverletzungen werden betreffende Links umgehend entfernt.
               </p>
             </section>
 
@@ -118,13 +106,10 @@ export default function Impressum() {
               </h2>
               <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
-                  Die durch den Betreiber erstellten Inhalte unterliegen dem
-                  italienischen und europäischen Urheberrecht. Jede Verwendung
-                  außerhalb der gesetzlichen Grenzen bedarf der schriftlichen Zustimmung.
+                  © 2026 Julia Schwärzer. Die vom Betreiber erstellten Inhalte unterliegen dem italienischen Urheberrecht (Legge 633/1941) und dem europäischen Urheberrecht. Jede Verwendung außerhalb der gesetzlichen Grenzen bedarf der vorherigen schriftlichen Zustimmung des Betreibers.
                 </p>
                 <p>
-                  Inhalte Dritter sind als solche gekennzeichnet. Bei Kenntnis einer
-                  Urheberrechtsverletzung werden diese Inhalte umgehend entfernt.
+                  Inhalte Dritter sind als solche gekennzeichnet. Bei Kenntnis einer Urheberrechtsverletzung werden betreffende Inhalte unverzüglich entfernt.
                 </p>
               </div>
             </section>
@@ -184,7 +169,7 @@ export default function Impressum() {
             </section>
 
             <section className="border-t border-brand-100 pt-6">
-              <p className="text-xs text-slate-400">Letzte Aktualisierung: Mai 2026</p>
+              <p className="text-xs text-slate-400">Letzte Aktualisierung: Mai 2026 · Angaben gemäß D.Lgs. 70/2003</p>
             </section>
           </div>
         </div>
