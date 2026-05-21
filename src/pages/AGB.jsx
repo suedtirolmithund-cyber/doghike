@@ -165,10 +165,10 @@ export default function AGB() {
                 <div className="bg-brand-50/70 rounded-xl p-4 space-y-3">
                   <p className="font-semibold text-slate-900">Folgen des Widerrufs</p>
                   <p>
-                    Wenn du diesen Vertrag widerrufst, erstatten wir dir alle Zahlungen, die wir von dir
-                    erhalten haben, unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag,
+                    Wenn du diesen Vertrag widerrufst, erstattet der Betreiber alle Zahlungen, die von dir
+                    erhalten wurden, unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag,
                     an dem die Mitteilung über deinen Widerruf eingegangen ist.
-                    Für diese Rückzahlung verwenden wir dasselbe Zahlungsmittel, das du bei der
+                    Für diese Rückzahlung wird dasselbe Zahlungsmittel verwendet, das du bei der
                     ursprünglichen Transaktion eingesetzt hast.
                   </p>
                 </div>
@@ -258,8 +258,18 @@ export default function AGB() {
 
             <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
-            <Mail className="w-5 h-5 text-brand-600" />
-                11. Kontakt & Beschwerden
+                <FileText className="w-5 h-5 text-brand-600" />
+                11. Salvatorische Klausel
+              </h2>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
+                Sollten einzelne Bestimmungen dieser Nutzungsbedingungen ganz oder teilweise unwirksam oder undurchführbar sein oder werden, berührt dies die Wirksamkeit der übrigen Bestimmungen nicht. An die Stelle der unwirksamen Bestimmung tritt eine wirksame Regelung, die dem wirtschaftlichen Zweck der unwirksamen Bestimmung am nächsten kommt.
+              </p>
+            </section>
+
+            <section className="border-t border-brand-100 pt-6 md:pt-8">
+              <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                <Mail className="w-5 h-5 text-brand-600" />
+                12. Kontakt & Beschwerden
               </h2>
           <div className="rounded-xl bg-gradient-to-br from-[#501F14] to-[#A8003C] p-4 text-sm text-white shadow-[0_12px_24px_rgba(168,0,60,0.14)]">
                 <p className="font-semibold mb-1">Betreiberin: Julia Schwärzer</p>
