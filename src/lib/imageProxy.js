@@ -25,15 +25,9 @@ function unwrapProxyUrl(url) {
   }
 }
 
-function isLocalAppHost() {
-  if (typeof window === "undefined") return true;
-  return ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
-}
-
 function shouldProxyImageUrl(url) {
   if (!url || typeof url !== "string") return false;
   if (url.startsWith("/") || url.startsWith("data:") || url.startsWith("blob:")) return false;
-  if (isLocalAppHost()) return false;
 
   try {
     const parsedUrl = new URL(url);

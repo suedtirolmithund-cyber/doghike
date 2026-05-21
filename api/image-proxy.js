@@ -15,17 +15,20 @@ function isAllowedImageUrl(rawUrl) {
   }
 }
 
-export default async function handler(req, res) {
-  if (req.method !== "GET" && req.method !== "HEAD") {
-    res.setHeader("Allow", "GET, HEAD");
-    res.status(405).end("Method not allowed");
-    return;
+export async function fetchProxiedImage(rawUrl, method = "GET") {
+  if (method !== "GET" && method !== "HEAD") {
+    return {
+      status: 405,
+      headers: { Allow: "GET, HEAD" },
+      body: "Method not allowed",
+    };
   }
 
-  const rawUrl = Array.isArray(req.query?.url) ? req.query.url[0] : req.query?.url;
   if (!rawUrl || !isAllowedImageUrl(rawUrl)) {
-    res.status(400).end("Invalid image URL");
-    return;
+    return {
+      status: 400,
+      body: "Invalid image URL",
+    };
   }
 
   const upstream = await fetch(rawUrl, {
@@ -36,24 +39,55 @@ export default async function handler(req, res) {
   });
 
   if (!upstream.ok) {
-    res.status(upstream.status).end("Image not available");
-    return;
+    return {
+      status: upstream.status,
+      body: "Image not available",
+    };
   }
 
   const contentType = upstream.headers.get("content-type") || "image/jpeg";
   if (!contentType.toLowerCase().startsWith("image/")) {
-    res.status(415).end("Unsupported media type");
-    return;
+    return {
+      status: 415,
+      body: "Unsupported media type",
+    };
   }
 
-  res.setHeader("Content-Type", contentType);
-  res.setHeader("Cache-Control", "public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800");
+  const headers = {
+    "Content-Type": contentType,
+    "Cache-Control": "public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800",
+  };
 
-  if (req.method === "HEAD") {
-    res.status(200).end();
-    return;
+  if (method === "HEAD") {
+    return {
+      status: 200,
+      headers,
+      body: null,
+    };
   }
 
   const imageBuffer = Buffer.from(await upstream.arrayBuffer());
-  res.status(200).send(imageBuffer);
+  return {
+    status: 200,
+    headers,
+    body: imageBuffer,
+  };
+}
+
+export default async function handler(req, res) {
+  const rawUrl = Array.isArray(req.query?.url) ? req.query.url[0] : req.query?.url;
+  const result = await fetchProxiedImage(rawUrl, req.method);
+
+  for (const [name, value] of Object.entries(result.headers ?? {})) {
+    res.setHeader(name, value);
+  }
+
+  res.status(result.status);
+
+  if (result.body === null || result.body === undefined) {
+    res.end();
+    return;
+  }
+
+  res.send(result.body);
 }
