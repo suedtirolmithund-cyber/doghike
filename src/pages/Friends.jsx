@@ -26,6 +26,7 @@ import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { useAuth } from "@/lib/AuthContext";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
+import { getDisplayImageUrl } from "@/lib/imageProxy";
 import {
   getFriendships,
   getFriendIds,
@@ -98,14 +99,22 @@ function FeedCard({ entry }) {
         className="doghike-glass-card-hover cursor-pointer overflow-hidden"
       >
         {entry.photos?.[0] && (
-          <img src={entry.photos[0]} alt={entry.title} className="h-44 w-full object-cover" />
+          <img
+            src={getDisplayImageUrl(entry.photos[0], { width: 760, quality: 74 })}
+            alt={entry.title}
+            className="h-44 w-full object-cover"
+          />
         )}
 
         <div className="p-4">
           <div className="mb-3 flex items-center gap-2">
             <div className="h-7 w-7 shrink-0 overflow-hidden rounded-full bg-brand-100/80">
               {profile?.avatar_url ? (
-                <img src={profile.avatar_url} alt="" className="h-full w-full object-cover" />
+                <img
+                  src={getDisplayImageUrl(profile.avatar_url, { width: 96, quality: 68 })}
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
               ) : (
                 <DogAvatarFallback
                   seed={profile?.user_id || entry.user_id || authorName}
@@ -172,7 +181,11 @@ function Avatar({ profile, size = "md" }) {
   return (
     <div className={`${classes} shrink-0 overflow-hidden rounded-full bg-brand-100/80`}>
       {profile?.avatar_url ? (
-        <img src={profile.avatar_url} alt="" className="h-full w-full object-cover" />
+        <img
+          src={getDisplayImageUrl(profile.avatar_url, { width: 128, quality: 68 })}
+          alt=""
+          className="h-full w-full object-cover"
+        />
       ) : (
         <DogAvatarFallback seed={seed} size={size} />
       )}
