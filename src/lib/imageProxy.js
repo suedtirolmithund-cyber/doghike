@@ -55,9 +55,5 @@ function encodeMediaSource(url) {
 
 export function getDisplayImageUrl(url, options = {}) {
   if (!url || typeof url !== "string") return url;
-
-  const rawUrl = unwrapProxyUrl(url.trim());
-
-  if (!shouldProxyImageUrl(rawUrl)) return rawUrl;
-  return `${MEDIA_ENDPOINT}?src=${encodeMediaSource(rawUrl)}`;
+  return unwrapProxyUrl(url.trim());
 }
