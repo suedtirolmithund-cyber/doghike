@@ -1,5 +1,4 @@
 const ALLOWED_HOSTS = new Set([
-  "vaprabanohjkandbzvba.supabase.co",
   "image.jimcdn.com",
   "jimcdn.com",
 ]);
