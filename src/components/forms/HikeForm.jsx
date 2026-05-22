@@ -288,6 +288,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
     const dataToSave = {
       ...formData,
       season: formData.seasons?.[0] || null,
+      seasons: Array.isArray(formData.seasons) ? formData.seasons.filter(Boolean) : [],
       distance_km: formData.distance_km ? Number(formData.distance_km) : null,
       elevation_gain_m: formData.elevation_gain_m ? Number(formData.elevation_gain_m) : null,
       duration_minutes: hoursInputToMinutes(formData.duration_minutes),

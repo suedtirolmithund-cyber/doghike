@@ -34,7 +34,7 @@ import PremiumGate from "@/components/hikes/PremiumGate";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { DifficultyBars } from "@/components/difficulty/DifficultyScale";
 import { supabase } from "@/lib/supabaseClient";
-import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
+import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { formatDurationHours } from "@/lib/duration";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
@@ -51,16 +51,6 @@ function getCountryLabel(country) {
   if (country === "slovenia") return "Slowenien";
   if (country === "other") return "Anderes";
   return country || null;
-}
-
-function getSeasonValues(hike) {
-  const values = Array.isArray(hike?.seasons) && hike.seasons.length > 0
-    ? hike.seasons
-    : hike?.season
-      ? [hike.season]
-      : [];
-
-  return Array.from(new Set(values.filter(Boolean)));
 }
 
 const humanDifficultyChipClass =
@@ -328,7 +318,7 @@ export default function HikeDetail() {
       : [];
   
   const countryLabel = getCountryLabel(hike.country);
-  const seasonValues = getSeasonValues(hike);
+  const seasonValues = normalizeSeasonValues(hike?.seasons, hike?.season);
 
   const nextPhoto = () => setCurrentPhotoIndex((prev) => (prev + 1) % photos.length);
   const prevPhoto = () => setCurrentPhotoIndex((prev) => (prev - 1 + photos.length) % photos.length);

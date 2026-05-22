@@ -1,3 +1,5 @@
+import { normalizeSeasonValues } from "@/lib/difficultyConfig";
+
 const EASY_TERMS = ["leicht", "einfach", "gemuetlich", "gemutlich", "easy"];
 const DOG_TERMS = ["hund", "hunde", "mit hund", "hundefreundlich", "dog"];
 const WATER_TERMS = ["bach", "wasser", "see", "fluss", "quelle", "teich"];
@@ -35,10 +37,7 @@ function removeTerms(query, terms) {
 }
 
 function getSeasonValues(hike) {
-  if (Array.isArray(hike?.seasons) && hike.seasons.length > 0) {
-    return hike.seasons;
-  }
-  return hike?.season ? [hike.season] : [];
+  return normalizeSeasonValues(hike?.seasons, hike?.season);
 }
 
 function getCountryAliases(country) {
