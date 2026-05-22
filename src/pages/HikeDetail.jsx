@@ -850,6 +850,7 @@ export default function HikeDetail() {
       {!showPremiumPreviewOnly && hike && (
         <div className="mx-auto max-w-4xl px-4 pb-8">
           <SmartRecommendations
+            currentHike={hike}
             allHikes={(queryClient.getQueryData(["allHikes"]) ?? []).filter(
               (h) => String(h._public_hike_id ?? h.route_id ?? h.id) !== normalizedHikeId
             )}
