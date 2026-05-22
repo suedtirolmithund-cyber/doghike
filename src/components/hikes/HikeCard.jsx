@@ -7,7 +7,7 @@ import ExpandableText from "@/components/ExpandableText";
 import WaterIcon from "@/components/icons/WaterIcon";
 import DifficultyScaleChip from "@/components/difficulty/DifficultyScale";
 import { PremiumPawBadge } from "@/components/premium/PremiumPawBadge";
-import { TOUR_ICONS, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterIcon, getWaterLabel } from "@/lib/difficultyConfig";
+import { TOUR_ICONS, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterIcon, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { formatDurationHours } from "@/lib/duration";
@@ -62,12 +62,13 @@ export default function HikeCard({
   const detailId = hikeSource === "sheets" && hike._public_hike_id ? hike.route_id || String(hike._public_hike_id) : hike.id;
   const dogDifficultyLabel = getDifficultyLabel(hike.dog_difficulty);
   const humanDifficultyLabel = getDifficultyLabel(hike.difficulty);
+  const seasonValues = useMemo(() => normalizeSeasonValues(hike.seasons, hike.season), [hike.season, hike.seasons]);
   const authorPreviewPhoto = useMemo(
     () => getDisplayImageUrl(hike.dog_photo_url || hike.author_avatar, { width: 128, quality: 70 }),
     [hike.author_avatar, hike.dog_photo_url],
   );
-  const previewIcon = hike.season
-    ? getSeasonIcon(hike.season)
+  const previewIcon = seasonValues[0]
+    ? getSeasonIcon(seasonValues[0])
     : hike.water_availability
       ? getWaterIcon(hike.water_availability)
       : humanDifficultyLabel

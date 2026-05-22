@@ -299,6 +299,32 @@ export function getSeasonBadgeClass(value) {
   return SEASON_BY_VALUE[value]?.color ?? "bg-brand-50 text-slate-600";
 }
 
+export function normalizeSeasonValues(...values) {
+  return Array.from(
+    new Set(
+      values.flatMap((value) => {
+        if (Array.isArray(value)) {
+          return value
+            .flatMap((entry) =>
+              typeof entry === "string" ? entry.split(/[,;|]/) : []
+            )
+            .map((entry) => entry.trim())
+            .filter(Boolean);
+        }
+
+        if (typeof value === "string") {
+          return value
+            .split(/[,;|]/)
+            .map((entry) => entry.trim())
+            .filter(Boolean);
+        }
+
+        return [];
+      })
+    )
+  );
+}
+
 export const WATER_BY_VALUE = Object.fromEntries(
   WATER_LEVELS.flatMap((level) => [
     [level.value, level],
