@@ -58,17 +58,17 @@ const humanDifficultyChipClass =
 const dogDifficultyChipClass =
   "!border-[#F9C030] !bg-[#FFF8E0] !text-[#7C3020]";
 const detailStatChipClass =
-  "doghike-stat-chip min-h-[68px] min-w-0 justify-center gap-3 px-4 py-3 text-center sm:min-h-[72px] sm:px-5";
+  "doghike-stat-chip min-h-[52px] min-w-0 justify-center gap-2 px-2.5 py-2 text-center sm:min-h-[66px] sm:gap-3 sm:px-4 sm:py-3 lg:min-h-[72px] lg:px-5";
 const detailStatIconClass =
-  "shrink-0 text-lg leading-none";
+  "shrink-0 text-base leading-none sm:text-lg";
 const detailStatTextClass =
   "min-w-0 flex-1 text-center";
 const detailStatValueClass =
-  "text-sm font-bold leading-tight text-[#7C3020]";
+  "text-[13px] font-bold leading-tight text-[#7C3020] sm:text-sm";
 const detailStatLabelClass =
-  "text-xs leading-tight text-[#C07820]";
+  "text-[11px] leading-tight text-[#C07820] sm:text-xs";
 const detailDifficultyRowClass =
-  "flex min-w-0 flex-wrap items-center justify-center gap-1.5";
+  "flex min-w-0 flex-wrap items-center justify-center gap-1 sm:gap-1.5";
 const weatherEmojis = {
   sunny: "☀️",
   cloudy: "☁️",
@@ -494,7 +494,7 @@ export default function HikeDetail() {
           transition={{ delay: 0.15 }}
           className="mb-10"
         >
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-3 lg:grid-cols-3">
           {countryLabel && (
             <div className={detailStatChipClass}>
               <span className={detailStatIconClass}>{TOUR_ICONS.country}</span>
