@@ -448,8 +448,16 @@ export default function GPSTracker({ onSave }) {
       handlePositionSample,
       (error) => {
         console.error("GPS error:", error);
-        toast.error("GPS findet dich gerade nicht. Prüfe die Freigabe.");
-        releaseWakeLock();
+        if (error.code === 1) {
+          toast.error("GPS-Zugriff wurde entzogen. Aufzeichnung pausiert.");
+          stopWatchers();
+          isPausedRef.current = true;
+          setIsPaused(true);
+          releaseWakeLock();
+        } else {
+          toast.error("GPS findet dich gerade nicht. Prüfe die Freigabe.");
+          releaseWakeLock();
+        }
       },
       { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 },
     );
