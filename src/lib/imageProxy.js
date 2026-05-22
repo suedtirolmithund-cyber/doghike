@@ -1,6 +1,8 @@
-// Only jimcdn.com (Google Sheets image CDN) needs proxying for CORS.
-// Supabase public storage URLs are already publicly accessible — no proxy needed.
+// Supabase images are proxied through Vercel CDN to reduce Supabase egress
+// (free tier: 5 GB/month). Vercel caches responses at edge for 7 days.
+// jimcdn.com also needs proxying for CORS (Google Sheets image CDN).
 const PROXY_HOSTS = new Set([
+  "vaprabanohjkandbzvba.supabase.co",
   "image.jimcdn.com",
   "jimcdn.com",
 ]);
