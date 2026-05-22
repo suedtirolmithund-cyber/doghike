@@ -6,6 +6,7 @@ const PROXY_HOSTS = new Set([
 
 const SUPABASE_PUBLIC_OBJECT_MARKER = "/storage/v1/object/public/";
 const SUPABASE_PUBLIC_RENDER_MARKER = "/storage/v1/render/image/public/";
+const MEDIA_ENDPOINT = "/api/media";
 
 function unwrapProxyUrl(url) {
   if (!url || typeof url !== "string") return url;
@@ -74,6 +75,18 @@ function getOptimizedSupabaseImageUrl(url, options = {}) {
   }
 }
 
+function encodeMediaSource(url) {
+  if (typeof globalThis.btoa === "function") {
+    return globalThis
+      .btoa(url)
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/g, "");
+  }
+
+  return encodeURIComponent(url);
+}
+
 export function getDisplayImageUrl(url, options = {}) {
   if (!url || typeof url !== "string") return url;
 
@@ -81,5 +94,5 @@ export function getDisplayImageUrl(url, options = {}) {
   const optimizedUrl = getOptimizedSupabaseImageUrl(rawUrl, options);
 
   if (!shouldProxyImageUrl(optimizedUrl)) return optimizedUrl;
-  return `/api/image-proxy?url=${encodeURIComponent(optimizedUrl)}`;
+  return `${MEDIA_ENDPOINT}?src=${encodeMediaSource(optimizedUrl)}`;
 }

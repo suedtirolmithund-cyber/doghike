@@ -74,10 +74,7 @@ export async function fetchProxiedImage(rawUrl, method = "GET") {
   };
 }
 
-export default async function handler(req, res) {
-  const rawUrl = Array.isArray(req.query?.url) ? req.query.url[0] : req.query?.url;
-  const result = await fetchProxiedImage(rawUrl, req.method);
-
+export function sendProxiedImageResult(res, result) {
   for (const [name, value] of Object.entries(result.headers ?? {})) {
     res.setHeader(name, value);
   }
@@ -90,4 +87,10 @@ export default async function handler(req, res) {
   }
 
   res.send(result.body);
+}
+
+export default async function handler(req, res) {
+  const rawUrl = Array.isArray(req.query?.url) ? req.query.url[0] : req.query?.url;
+  const result = await fetchProxiedImage(rawUrl, req.method);
+  sendProxiedImageResult(res, result);
 }
