@@ -187,6 +187,7 @@ export default function GPSTracker({ onSave }) {
   const [myLocation, setMyLocation] = useState(initialState.myLocation);
   const [locating, setLocating] = useState(false);
   const [gpsAccuracy, setGpsAccuracy] = useState(null);
+  const [trackingKey, setTrackingKey] = useState(0);
   const [liveElevationProfile, setLiveElevationProfile] = useState(() => {
     const samples = initialState.restoredSnapshot?.pointSamples ?? [];
     if (samples.length < 2) return [];
@@ -526,6 +527,7 @@ export default function GPSTracker({ onSave }) {
       return;
     }
 
+    setTrackingKey((k) => k + 1);
     setIsTracking(true);
     setIsPaused(false);
   };
@@ -765,7 +767,7 @@ export default function GPSTracker({ onSave }) {
 
       <div className="relative h-[50vw] min-h-64 max-h-72 overflow-hidden rounded-xl border-2 border-brand-100 md:h-80 lg:h-[400px]">
         <SafeMapContainer
-          resetKey={`gps-tracker-${isTracking ? "live" : "idle"}-${routePoints.length}-${currentPosition ? "pos" : "none"}`}
+          resetKey={`gps-tracker-${trackingKey}`}
           center={currentPosition || myLocation || [46.5, 11.9]}
           zoom={currentPosition || myLocation ? 14 : 10}
           style={{ height: "100%", width: "100%" }}
