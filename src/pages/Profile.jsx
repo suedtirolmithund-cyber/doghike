@@ -70,6 +70,14 @@ function normalizeHikeSource(value) {
 }
 
 const ROUTES_SEEN_KEY = "doghike:profile-routes-seen";
+const mobileProfileActionClass =
+  "h-12 w-full min-w-0 flex-col gap-1 overflow-hidden rounded-xl px-1 text-center text-[11px] font-bold leading-none";
+const profileTabTriggerClass =
+  "h-10 min-w-0 gap-1 overflow-hidden px-2 text-xs leading-tight sm:h-11 sm:px-3 sm:text-sm md:px-5 md:text-base";
+const profileTabBadgeClass =
+  "inline-flex min-w-4 shrink-0 items-center justify-center rounded-full bg-brand-100 px-1 py-0.5 text-[10px] font-bold leading-none text-brand-700 md:min-w-5 md:px-2 md:text-xs";
+const dogBreedPillClass =
+  "inline-flex max-w-full min-w-0 items-center justify-center rounded-full border border-brand-100 bg-brand-50 px-2 py-0.5 text-center text-[11px] font-semibold leading-tight text-brand-700 break-words sm:text-xs";
 
 function getRoutesSeenStorageKey(userId) {
   return `${ROUTES_SEEN_KEY}:${userId}`;
@@ -558,28 +566,28 @@ export default function Profile() {
 
           {!editingProfile && (
             <div className="mt-4 grid grid-cols-4 gap-2 md:hidden">
-              <Button size="sm" variant="outline" className="h-11 rounded-xl px-2 text-xs font-bold" onClick={startEditProfile}>
+              <Button size="sm" variant="outline" className={mobileProfileActionClass} onClick={startEditProfile}>
                 <Edit className="h-4 w-4" />
-                Profil
+                <span>Profil</span>
               </Button>
-              <Button size="sm" variant="outline" className="h-11 rounded-xl px-2 text-xs font-bold" onClick={openExistingAvatarEditor} disabled={avatarUploading || !avatarUrl}>
+              <Button size="sm" variant="outline" className={mobileProfileActionClass} onClick={openExistingAvatarEditor} disabled={avatarUploading || !avatarUrl}>
                 <Camera className="h-4 w-4" />
-                Bild
+                <span>Bild</span>
               </Button>
               <Link to={createPageUrl("Notifications")} className="min-w-0">
                 <Button
                   size="sm"
                   variant="outline"
-                  className={`relative h-11 w-full rounded-xl px-2 text-xs font-bold ${
+                  className={`relative w-full ${mobileProfileActionClass} ${
                     notificationCount > 0
                       ? "border-brand-300 bg-brand-50 text-brand-700 hover:bg-brand-100"
                       : ""
                   }`}
                 >
                   <Bell className="h-4 w-4" />
-                  Meldungen
+                  <span>Meldungen</span>
                   {notificationCount > 0 && (
-                    <span className="ml-0.5 inline-flex min-w-5 items-center justify-center rounded-full bg-brand-500 px-1.5 py-0.5 text-[10px] font-semibold leading-none text-white">
+                    <span className="absolute right-1 top-1 inline-flex min-w-4 items-center justify-center rounded-full bg-brand-500 px-1 py-0.5 text-[9px] font-semibold leading-none text-white">
                       {notificationCount > 99 ? "99+" : notificationCount}
                     </span>
                   )}
@@ -589,10 +597,10 @@ export default function Profile() {
                 variant="outline"
                 size="sm"
                 onClick={logout}
-                className="h-11 rounded-xl border-brand-100 bg-white/70 px-2 text-xs font-bold text-brand-600 shadow-sm hover:border-brand-100 hover:bg-brand-50 hover:text-brand-400"
+                className={`${mobileProfileActionClass} border-brand-100 bg-white/70 text-brand-600 shadow-sm hover:border-brand-100 hover:bg-brand-50 hover:text-brand-400`}
               >
                 <LogOut className="h-4 w-4" />
-                Abmelden
+                <span>Abmelden</span>
               </Button>
             </div>
           )}
@@ -619,26 +627,26 @@ export default function Profile() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 md:space-y-6">
           <div className="pb-1">
             <TabsList className="!grid h-auto w-full grid-cols-2 gap-1 rounded-2xl border border-white/70 bg-white/65 p-1 backdrop-blur-xl sm:grid-cols-4 md:gap-1.5">
-              <TabsTrigger value="dogs" className="h-11 min-w-0 px-3 text-sm md:px-5 md:text-base">Hunde</TabsTrigger>
-              <TabsTrigger value="routes" className="flex h-11 min-w-0 items-center gap-1.5 px-3 text-sm md:px-5 md:text-base">
+              <TabsTrigger value="dogs" className={profileTabTriggerClass}>Hunde</TabsTrigger>
+              <TabsTrigger value="routes" className={`flex items-center ${profileTabTriggerClass}`}>
                 <Navigation className="h-4 w-4" />
-                Routen
+                <span>Routen</span>
                 {unseenRouteCount > 0 && (
-                  <span className="rounded-full bg-brand-100 px-1.5 py-0.5 text-xs font-bold leading-none text-brand-700 md:px-2">
+                  <span className={profileTabBadgeClass}>
                     {unseenRouteCount}
                   </span>
                 )}
               </TabsTrigger>
-              <TabsTrigger value="saved" className="flex h-11 min-w-0 items-center gap-1.5 px-3 text-sm md:px-5 md:text-base">
+              <TabsTrigger value="saved" className={`flex items-center ${profileTabTriggerClass}`}>
                 <Heart className="h-4 w-4" />
-                Gespeichert
+                <span className="min-w-0">Gespeichert</span>
                 {savedHikes.length > 0 && (
-                  <span className="rounded-full bg-brand-100 px-1.5 py-0.5 text-xs font-bold leading-none text-brand-600 md:px-2">
+                  <span className={profileTabBadgeClass}>
                     {savedHikes.length}
                   </span>
                 )}
               </TabsTrigger>
-              <TabsTrigger value="settings" className="h-11 min-w-0 px-3 text-sm md:px-5 md:text-base">Konto</TabsTrigger>
+              <TabsTrigger value="settings" className={profileTabTriggerClass}>Konto</TabsTrigger>
             </TabsList>
           </div>
 
@@ -721,10 +729,10 @@ export default function Profile() {
                       </div>
 
                       <div className="p-4 md:p-5">
-                        <div className="flex items-center justify-between mb-1">
-                          <h2 className="doghike-card-title">{dog.name}</h2>
+                        <div className="mb-1 flex min-w-0 flex-wrap items-center gap-2">
+                          <h2 className="doghike-card-title min-w-0 flex-1 truncate">{dog.name}</h2>
                           {dog.breed && (
-                          <span className="text-xs text-brand-700 bg-brand-50 border border-brand-100 px-2 py-0.5 rounded-full">{dog.breed}</span>
+                          <span className={dogBreedPillClass}>{dog.breed}</span>
                           )}
                         </div>
                         {dogBadgeMeta[dog.id]?.badges?.length > 0 && (
