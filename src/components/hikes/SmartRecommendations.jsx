@@ -145,8 +145,8 @@ export default function SmartRecommendations({ allHikes = [], currentHike = null
         </div>
         <p className="text-sm leading-relaxed text-[#C07820]">
           {hasAreaMatches && areaLabel
-            ? `Wenn moglich zeigen wir dir hier zuerst Wanderungen aus der Gegend rund um ${areaLabel}.`
-            : "Hier findest du weitere Touren, die gut zu dieser Wanderung passen."}
+            ? `Rund um ${areaLabel} haben wir dir weitere passende Wanderungen zusammengestellt.`
+            : "Hier findest du weitere passende Wanderungen zu dieser Tour."}
         </p>
       </div>
 
