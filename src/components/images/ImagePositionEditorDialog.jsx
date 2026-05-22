@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Loader2, MoveHorizontal, MoveVertical } from "lucide-react";
+import { Loader2, Move, MoveHorizontal, MoveVertical, ZoomIn } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -18,11 +18,13 @@ export default function ImagePositionEditorDialog({
 }) {
   const [focusX, setFocusX] = useState(50);
   const [focusY, setFocusY] = useState(50);
+  const [zoom, setZoom] = useState(1.2);
 
   useEffect(() => {
     if (!open) return;
     setFocusX(50);
     setFocusY(50);
+    setZoom(1.2);
   }, [open, sourceUrl]);
 
   return (
@@ -46,7 +48,11 @@ export default function ImagePositionEditorDialog({
                   src={sourceUrl}
                   alt="Vorschau"
                   className="h-full w-full object-cover"
-                  style={{ objectPosition: `${focusX}% ${focusY}%` }}
+                  style={{
+                    objectPosition: `${focusX}% ${focusY}%`,
+                    transform: `scale(${zoom})`,
+                    transformOrigin: "center center",
+                  }}
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center text-sm text-slate-400">
@@ -57,6 +63,17 @@ export default function ImagePositionEditorDialog({
           </div>
 
           <div className="space-y-4">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between gap-3">
+                <Label className="flex items-center gap-2 text-sm text-slate-600">
+                  <ZoomIn className="h-4 w-4" />
+                  Zoom
+                </Label>
+                <span className="text-xs font-semibold text-slate-400">{zoom.toFixed(1)}x</span>
+              </div>
+              <Slider value={[zoom]} min={1} max={3} step={0.05} onValueChange={(value) => setZoom(value[0] ?? 1.2)} />
+            </div>
+
             <div className="space-y-2">
               <div className="flex items-center justify-between gap-3">
                 <Label className="flex items-center gap-2 text-sm text-slate-600">
@@ -80,6 +97,13 @@ export default function ImagePositionEditorDialog({
             </div>
           </div>
 
+          <div className="rounded-2xl border border-brand-100 bg-brand-50/60 px-3 py-2 text-xs leading-relaxed text-slate-500">
+            <div className="flex items-start gap-2">
+              <Move className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-500" />
+              <span>Wenn sich das Bild nur in eine Richtung bewegt, zuerst leicht reinzoomen. Danach kannst du den Ausschnitt frei verschieben.</span>
+            </div>
+          </div>
+
           <div className="flex justify-end gap-3">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSaving}>
               Abbrechen
@@ -88,7 +112,7 @@ export default function ImagePositionEditorDialog({
               type="button"
               className="bg-brand-400 hover:bg-brand-600"
               disabled={!sourceUrl || isSaving}
-              onClick={() => onConfirm?.({ focusX, focusY })}
+              onClick={() => onConfirm?.({ focusX, focusY, zoom })}
             >
               {isSaving ? (
                 <>

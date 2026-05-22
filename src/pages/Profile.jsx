@@ -322,7 +322,7 @@ export default function Profile() {
     setAvatarEditorSourceName("profilbild.jpg");
   };
 
-  const saveAvatarCrop = async ({ focusX, focusY }) => {
+  const saveAvatarCrop = async ({ focusX, focusY, zoom }) => {
     if (!avatarEditorSource || !user) return;
 
     setAvatarUploading(true);
@@ -333,6 +333,7 @@ export default function Profile() {
       const croppedFile = await createSquareCropFile(avatarEditorSource, {
         focusX,
         focusY,
+        zoom,
         fileName: avatarEditorSourceName.replace(/\.[^.]+$/, "") + ".jpg",
       });
 

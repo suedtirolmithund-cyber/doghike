@@ -13,6 +13,7 @@ export async function createSquareCropFile(
   {
     focusX = 50,
     focusY = 50,
+    zoom = 1,
     outputSize = 1200,
     fileName = "profile-image.jpg",
     mimeType = "image/jpeg",
@@ -20,7 +21,11 @@ export async function createSquareCropFile(
   } = {}
 ) {
   const image = await loadImage(sourceUrl);
-  const cropSize = Math.min(image.naturalWidth, image.naturalHeight);
+  const safeZoom = Math.max(1, Number(zoom) || 1);
+  const cropSize = Math.max(
+    1,
+    Math.round(Math.min(image.naturalWidth, image.naturalHeight) / safeZoom)
+  );
   const maxLeft = Math.max(0, image.naturalWidth - cropSize);
   const maxTop = Math.max(0, image.naturalHeight - cropSize);
   const sourceLeft = Math.min(maxLeft, Math.max(0, (maxLeft * focusX) / 100));

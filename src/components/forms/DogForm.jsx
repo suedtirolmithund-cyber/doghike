@@ -52,7 +52,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
     setEditorSourceName("hund.jpg");
   };
 
-  const handleSaveAdjustedPhoto = async ({ focusX, focusY }) => {
+  const handleSaveAdjustedPhoto = async ({ focusX, focusY, zoom }) => {
     if (!editorSourceUrl || !user) return;
 
     setUploading(true);
@@ -62,6 +62,7 @@ export default function DogForm({ dog, onSave, onCancel }) {
       const croppedFile = await createSquareCropFile(editorSourceUrl, {
         focusX,
         focusY,
+        zoom,
         fileName: editorSourceName.replace(/\.[^.]+$/, "") + ".jpg",
       });
       const url = await uploadFile("dog-photos", user.id, croppedFile);
