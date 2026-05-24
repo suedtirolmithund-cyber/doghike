@@ -9,7 +9,7 @@ import { useAuth } from "@/lib/AuthContext";
 const ONBOARDING_IMAGE = "/onboarding/A739105-desktop.webp";
 const ONBOARDING_IMAGE_MOBILE = "/onboarding/A739105-mobile.webp";
 const LOGIN_IMAGE = "/onboarding/A739195-2.jpg";
-const USE_IMAGE_BACKGROUNDS = false;
+const USE_IMAGE_BACKGROUNDS = true;
 
 function preloadImage(src) {
   return new Promise((resolve) => {
@@ -59,11 +59,6 @@ export default function GuestWelcomeScreen() {
   const error = localError || authError;
 
   useEffect(() => {
-    if (!USE_IMAGE_BACKGROUNDS) {
-      setLoginImageReady(true);
-      return undefined;
-    }
-
     let active = true;
     preloadImage(LOGIN_IMAGE).then(() => {
       if (active) setLoginImageReady(true);
@@ -236,13 +231,26 @@ export default function GuestWelcomeScreen() {
         transition={{ duration: 0.25 }}
         className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-[#FDF0E8] md:h-[812px] md:bg-transparent"
       >
-        <WarmGlassBackground mobileFrame />
+        {loginImageReady ? (
+          <>
+            <img
+              src={LOGIN_IMAGE}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.12)_0%,rgba(0,0,0,0.18)_30%,rgba(0,0,0,0.42)_100%)]" />
+          </>
+        ) : (
+          <WarmGlassBackground mobileFrame />
+        )}
 
         <p className="absolute left-[18px] top-[40px] h-[64px] w-[340px] text-center text-[30px] font-extrabold uppercase leading-[32px] tracking-[0.01em] text-white drop-shadow-[0_4px_14px_rgba(116,28,59,0.34)] sm:top-[70px] sm:text-[34px] sm:leading-[36px]">
           WILLKOMMEN BEI DOGTRAILS
         </p>
-        <div className="absolute left-[21px] top-[112px] w-[340px] text-center text-[18px] leading-none drop-shadow-[0_3px_10px_rgba(116,28,59,0.28)] sm:top-[152px]">
-          🐾 🐾 🐾
+        <div className="absolute left-[21px] top-[112px] flex w-[340px] items-center justify-center gap-2 text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.28)] sm:top-[152px]">
+          <FourToePaw className="h-6 w-6" />
+          <FourToePaw className="h-6 w-6" />
+          <FourToePaw className="h-6 w-6" />
         </div>
         <p className="absolute left-[21px] top-[136px] h-[48px] w-[340px] text-center text-[17px] font-semibold leading-[21px] text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.3)] sm:top-[188px] sm:text-[20px] sm:leading-[23px]">
           Plane hundefreundliche Touren, speichere deine Lieblingswege und entdecke neue Ziele
@@ -313,7 +321,11 @@ export default function GuestWelcomeScreen() {
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 Link senden
               </button>
-              <button type="button" onClick={() => switchMode("login")} className="min-h-10 w-full px-2 py-2 text-center text-sm leading-tight text-white/70">
+              <button
+                type="button"
+                onClick={() => switchMode("login")}
+                className="min-h-10 w-full px-2 py-2 text-center text-sm leading-tight text-white/70"
+              >
                 Zurück zur Anmeldung
               </button>
             </form>
@@ -553,7 +565,7 @@ function PasswordField({ showPassword, setShowPassword, value, onChange, placeho
       />
       <button
         type="button"
-        onClick={() => setShowPassword((value) => !value)}
+        onClick={() => setShowPassword((currentValue) => !currentValue)}
         className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
         tabIndex={-1}
         aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}

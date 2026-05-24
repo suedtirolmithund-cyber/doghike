@@ -1,6 +1,6 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { clearDogNudgeSession } from "@/lib/dogNudgeSession";
+import { supabase } from "@/lib/supabaseClient";
 
 const AuthContext = createContext();
 
@@ -13,32 +13,44 @@ export const AuthProvider = ({ children }) => {
   const [authError, setAuthError] = useState(null);
   const [appPublicSettings] = useState(null);
 
-  // Ensure a profile row exists — runs on every login, never overwrites existing data
-  const ensureProfile = async (user) => {
-    if (!user) return;
+  const applySessionState = (session) => {
+    setUser(session?.user ?? null);
+    setIsAuthenticated(!!session?.user);
+    setIsLoadingAuth(false);
+  };
+
+  // Ensure a profile row exists. This should never overwrite an existing profile.
+  const ensureProfile = async (nextUser) => {
+    if (!nextUser) return;
+
     try {
       const { error } = await supabase.from("profiles").upsert(
         {
-          user_id: user.id,
-          // Fall back to email prefix so the user is always searchable
+          user_id: nextUser.id,
           full_name:
-            user.user_metadata?.full_name ||
-            user.user_metadata?.name ||
-            user.email?.split("@")[0] ||
+            nextUser.user_metadata?.full_name ||
+            nextUser.user_metadata?.name ||
+            nextUser.email?.split("@")[0] ||
             null,
-          avatar_url: user.user_metadata?.avatar_url || null,
+          avatar_url: nextUser.user_metadata?.avatar_url || null,
         },
-        { onConflict: "user_id", ignoreDuplicates: true }
+        { onConflict: "user_id", ignoreDuplicates: true },
       );
-      if (error) console.error("[ensureProfile] error:", error.message);
-    } catch (err) {
-      console.error("[ensureProfile] exception:", err);
+
+      if (error) {
+        console.error("[ensureProfile] error:", error.message);
+      }
+    } catch (error) {
+      console.error("[ensureProfile] exception:", error);
     }
   };
 
-  // Fetch admin role from profiles table
   const fetchRole = async (userId) => {
-    if (!userId) { setIsAdmin(false); return; }
+    if (!userId) {
+      setIsAdmin(false);
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from("profiles")
@@ -53,16 +65,14 @@ export const AuthProvider = ({ children }) => {
       }
 
       setIsAdmin(data?.role === "admin");
-    } catch (err) {
-      console.error("[fetchRole] exception:", err);
+    } catch (error) {
+      console.error("[fetchRole] exception:", error);
       setIsAdmin(false);
     }
   };
 
   useEffect(() => {
-    const initSession = async (session) => {
-      setUser(session?.user ?? null);
-      setIsAuthenticated(!!session?.user);
+    const hydrateSessionData = async (session) => {
       if (session?.user) {
         await ensureProfile(session.user);
         await fetchRole(session.user.id);
@@ -72,12 +82,17 @@ export const AuthProvider = ({ children }) => {
     };
 
     supabase.auth.getSession().then(async ({ data: { session } }) => {
-      await initSession(session);
-      setIsLoadingAuth(false);
+      applySessionState(session);
+      await hydrateSessionData(session);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      await initSession(session);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      applySessionState(session);
+
+      // Keep the auth event itself light so login/logout can complete immediately.
+      window.setTimeout(() => {
+        void hydrateSessionData(session);
+      }, 0);
     });
 
     return () => subscription.unsubscribe();
@@ -96,14 +111,20 @@ export const AuthProvider = ({ children }) => {
   const loginWithEmail = async (email, password) => {
     setAuthError(null);
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) { setAuthError(error.message); return { error }; }
+    if (error) {
+      setAuthError(error.message);
+      return { error };
+    }
     return { data };
   };
 
   const signUpWithEmail = async (email, password) => {
     setAuthError(null);
     const { data, error } = await supabase.auth.signUp({ email, password });
-    if (error) { setAuthError(error.message); return { error }; }
+    if (error) {
+      setAuthError(error.message);
+      return { error };
+    }
     return { data };
   };
 
@@ -112,21 +133,30 @@ export const AuthProvider = ({ children }) => {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: window.location.origin + "/Login",
     });
-    if (error) { setAuthError(error.message); return { error }; }
+    if (error) {
+      setAuthError(error.message);
+      return { error };
+    }
     return {};
   };
 
   const updatePassword = async (password) => {
     setAuthError(null);
     const { data, error } = await supabase.auth.updateUser({ password });
-    if (error) { setAuthError(error.message); return { error }; }
+    if (error) {
+      setAuthError(error.message);
+      return { error };
+    }
     return { data };
   };
 
   const resendConfirmationEmail = async (email) => {
     setAuthError(null);
     const { error } = await supabase.auth.resend({ type: "signup", email });
-    if (error) { setAuthError(error.message); return { error }; }
+    if (error) {
+      setAuthError(error.message);
+      return { error };
+    }
     return {};
   };
 
@@ -136,16 +166,31 @@ export const AuthProvider = ({ children }) => {
       provider: "google",
       options: { redirectTo: window.location.origin + redirectPath },
     });
-    if (error) { setAuthError(error.message); return { error }; }
+    if (error) {
+      setAuthError(error.message);
+      return { error };
+    }
   };
 
   return (
-    <AuthContext.Provider value={{
-      user, isAuthenticated, isAdmin,
-      isLoadingAuth, isLoadingPublicSettings,
-      authError, appPublicSettings,
-      logout, loginWithEmail, signUpWithEmail, loginWithGoogle, resetPasswordForEmail, updatePassword, resendConfirmationEmail,
-    }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated,
+        isAdmin,
+        isLoadingAuth,
+        isLoadingPublicSettings,
+        authError,
+        appPublicSettings,
+        logout,
+        loginWithEmail,
+        signUpWithEmail,
+        loginWithGoogle,
+        resetPasswordForEmail,
+        updatePassword,
+        resendConfirmationEmail,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
