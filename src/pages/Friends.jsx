@@ -553,12 +553,12 @@ export default function Friends() {
           }}
         >
           <TabsList className="mb-4 grid h-auto w-full grid-cols-2 gap-1 border border-white/70 bg-white/65 p-1 backdrop-blur-xl sm:grid-cols-4">
-            <TabsTrigger value="friends" className="h-11 px-2 text-sm">
+            <TabsTrigger value="friends" className="min-h-11 px-2 py-2 text-sm">
               <span className="sm:hidden">Freunde</span>
               <span className="hidden sm:inline">Freunde ({accepted.length})</span>
             </TabsTrigger>
 
-            <TabsTrigger value="requests" className="relative h-11 px-2 text-sm">
+            <TabsTrigger value="requests" className="relative min-h-11 px-2 py-2 text-sm">
               <span className="sm:hidden">Anfragen</span>
               <span className="hidden sm:inline">Offene Anfragen</span>
               {unseenIncomingCount > 0 && (
@@ -568,12 +568,12 @@ export default function Friends() {
               )}
             </TabsTrigger>
 
-            <TabsTrigger value="sent" className="h-11 px-2 text-sm">
+            <TabsTrigger value="sent" className="min-h-11 px-2 py-2 text-sm">
               <span className="sm:hidden">Gesendet</span>
               <span className="hidden sm:inline">Gesendet ({outgoing.length})</span>
             </TabsTrigger>
 
-            <TabsTrigger value="feed" className="h-11 px-2 text-sm">
+            <TabsTrigger value="feed" className="min-h-11 px-2 py-2 text-sm">
               <span className="sm:hidden">Touren</span>
               <span className="hidden sm:inline">Touren von Freunden</span>
             </TabsTrigger>

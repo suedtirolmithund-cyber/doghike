@@ -165,7 +165,7 @@ export default function AccountSettings({ user, profile }) {
             {!isPremium && (
               <>
                 <Button
-                  className="doghike-primary-action h-11"
+                  className="doghike-primary-action min-h-11 py-2"
                   onClick={() => { setPendingPlan("monthly"); checkoutMutation.mutate("monthly"); }}
                   disabled={!!pendingPlan}
                 >
@@ -178,7 +178,7 @@ export default function AccountSettings({ user, profile }) {
                 </Button>
                 <Button
                   variant="outline"
-                  className="h-11"
+                  className="min-h-11 py-2"
                   onClick={() => { setPendingPlan("one_time"); checkoutMutation.mutate("one_time"); }}
                   disabled={!!pendingPlan}
                 >
@@ -193,7 +193,7 @@ export default function AccountSettings({ user, profile }) {
             )}
 
             <Link to={createPageUrl("Premium")}>
-              <Button variant="outline" className="h-11 w-full">
+              <Button variant="outline" className="min-h-11 w-full py-2">
                 <Crown className="mr-2 h-4 w-4" />
                 Premium ansehen
               </Button>
@@ -202,7 +202,7 @@ export default function AccountSettings({ user, profile }) {
             {canOpenPortal && (
               <Button
                 variant="outline"
-                className="h-11"
+                className="min-h-11 py-2"
                 onClick={() => portalMutation.mutate()}
                 disabled={portalMutation.isPending}
               >
