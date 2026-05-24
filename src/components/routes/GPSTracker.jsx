@@ -544,18 +544,27 @@ export default function GPSTracker({ onSave }) {
   };
 
   const resumeTracking = () => {
+    const pausedAt = lastPauseTimeRef.current;
+    const pausedDuration = pausedAt ? Date.now() - pausedAt : 0;
+
     isPausedRef.current = false;
     setIsPaused(false);
 
-    if (lastPauseTimeRef.current) {
-      pausedTimeRef.current += Date.now() - lastPauseTimeRef.current;
+    if (pausedAt) {
+      pausedTimeRef.current += pausedDuration;
       lastPauseTimeRef.current = null;
     }
 
-    intervalRef.current = setInterval(computeStats, 1000);
-    requestWakeLock();
-    startSilentAudio();
-    requestFreshPosition();
+    const trackingResumed = startWatchers();
+    if (!trackingResumed) {
+      isPausedRef.current = true;
+      setIsPaused(true);
+      if (pausedAt) {
+        pausedTimeRef.current -= pausedDuration;
+        lastPauseTimeRef.current = pausedAt;
+      }
+      return;
+    }
   };
 
   const resetTrackingState = useCallback(() => {
