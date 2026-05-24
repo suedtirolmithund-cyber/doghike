@@ -10,6 +10,14 @@ import "leaflet.markercluster";
 import { formatDurationHours } from "@/lib/duration";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
 
+function escapeHtml(str) {
+  return String(str ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 const seasonConfig = {
   spring: { color: "#ec9cf4", label: "Frühling" },
   summer: { color: "#d64545", label: "Sommer" },
@@ -185,7 +193,7 @@ function buildHikePopupItem(hike, isGrouped) {
   const season = seasonKey ? seasonConfig[seasonKey] : null;
 
   const imageHtml = hike.photos?.[0]
-    ? `<img src="${hike.photos[0]}" alt="${hike.trail_name}"
+    ? `<img src="${escapeHtml(hike.photos[0])}" alt="${escapeHtml(hike.trail_name)}"
          class="hike-popup-image" />`
     : `<div style="width:60px;height:60px;border-radius:8px;background:#f5f5f4;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${TOUR_ICONS.dog}</div>`;
 
@@ -207,9 +215,9 @@ function buildHikePopupItem(hike, isGrouped) {
         ${season ? `<span class="hike-popup-badge" style="background:${season.color}">${season.label}</span>` : ""}
       </div>
       <div class="hike-popup-content">
-        <div class="hike-popup-title">${hike.trail_name}</div>
-        ${hike.location ? `<div class="hike-popup-place">${hike.location}</div>` : ""}
-        ${hike.country ? `<div class="hike-popup-country">${getCountryLabel(hike.country)}</div>` : ""}
+        <div class="hike-popup-title">${escapeHtml(hike.trail_name)}</div>
+        ${hike.location ? `<div class="hike-popup-place">${escapeHtml(hike.location)}</div>` : ""}
+        ${hike.country ? `<div class="hike-popup-country">${escapeHtml(getCountryLabel(hike.country))}</div>` : ""}
         ${stats ? `<div class="hike-popup-stats">${stats}</div>` : ""}
       </div>
     </a>
