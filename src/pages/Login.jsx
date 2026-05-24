@@ -317,7 +317,7 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full h-11 rounded-xl text-white font-medium flex items-center justify-center gap-2"
+                className="flex min-h-11 w-full flex-wrap items-center justify-center gap-2 rounded-xl px-3 py-2 text-center font-medium leading-tight text-white"
                 style={{ background: BROWN, fontFamily: "Nunito, sans-serif" }}
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin" />}
@@ -372,7 +372,7 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full h-11 rounded-xl text-white font-medium flex items-center justify-center gap-2"
+                className="flex min-h-11 w-full flex-wrap items-center justify-center gap-2 rounded-xl px-3 py-2 text-center font-medium leading-tight text-white"
                 style={{ background: BROWN, fontFamily: "Nunito, sans-serif" }}
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin" />}
@@ -470,7 +470,7 @@ export default function Login() {
                         setSuccessMsg("Bestätigungsmail gesendet. Bitte prüfe deinen Posteingang.");
                       }
                     }}
-                    className="w-full text-sm text-white/80 underline underline-offset-2 hover:text-white flex items-center justify-center gap-1"
+                    className="flex min-h-10 w-full flex-wrap items-center justify-center gap-1 px-2 py-2 text-center text-sm leading-tight text-white/80 underline underline-offset-2 hover:text-white"
                   >
                     {resendLoading && <Loader2 className="w-3 h-3 animate-spin" />}
                     Bestätigungsmail erneut senden
@@ -480,7 +480,7 @@ export default function Login() {
                 <button
                   type="submit"
                   disabled={loading || googleLoading}
-                  className="w-full h-11 rounded-xl text-white font-medium flex items-center justify-center gap-2"
+                  className="flex min-h-11 w-full flex-wrap items-center justify-center gap-2 rounded-xl px-3 py-2 text-center font-medium leading-tight text-white"
                   style={{ background: BROWN, fontFamily: "Nunito, sans-serif" }}
                 >
                   {loading && <Loader2 className="w-4 h-4 animate-spin" />}
@@ -498,7 +498,7 @@ export default function Login() {
                 type="button"
                 onClick={handleGoogle}
                 disabled={googleLoading || loading}
-                className="w-full h-11 rounded-xl font-medium flex items-center justify-center gap-2 text-sm"
+                className="flex min-h-11 w-full flex-wrap items-center justify-center gap-2 rounded-xl px-3 py-2 text-center text-sm font-medium leading-tight"
                 style={{ background: "rgba(255,255,255,0.15)", color: "white", fontFamily: "Nunito, sans-serif" }}
               >
                 {googleLoading ? (
@@ -518,7 +518,7 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={() => switchMode("reset")}
-                  className="w-full text-center text-sm text-white/60 hover:text-white/90 mt-2"
+                  className="mt-2 min-h-10 w-full px-2 py-2 text-center text-sm leading-tight text-white/60 hover:text-white/90"
                   style={{ fontFamily: "Nunito, sans-serif" }}
                 >
                   Passwort oder E-Mail vergessen?

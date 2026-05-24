@@ -272,7 +272,7 @@ export default function GuestWelcomeScreen() {
               <button
                 type="button"
                 onClick={() => switchMode("register")}
-                className={`h-10 rounded-[10px] text-[16px] font-medium ${
+                className={`min-h-10 rounded-[10px] px-2 py-2 text-center text-[16px] font-medium leading-tight ${
                   mode === "register" ? "bg-[#A8003C] text-white" : "bg-white/55 text-[#7C3020]"
                 }`}
               >
@@ -281,7 +281,7 @@ export default function GuestWelcomeScreen() {
               <button
                 type="button"
                 onClick={() => switchMode("login")}
-                className={`h-10 rounded-[10px] text-[16px] font-medium ${
+                className={`min-h-10 rounded-[10px] px-2 py-2 text-center text-[16px] font-medium leading-tight ${
                   mode === "login" ? "bg-[#A8003C] text-white" : "bg-white/55 text-[#7C3020]"
                 }`}
               >
@@ -308,12 +308,12 @@ export default function GuestWelcomeScreen() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#A8003C] font-medium text-white disabled:opacity-70"
+                className="flex min-h-11 w-full flex-wrap items-center justify-center gap-2 rounded-[10px] bg-[#A8003C] px-3 py-2 text-center font-medium leading-tight text-white disabled:opacity-70"
               >
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 Link senden
               </button>
-              <button type="button" onClick={() => switchMode("login")} className="w-full text-center text-sm text-white/70">
+              <button type="button" onClick={() => switchMode("login")} className="min-h-10 w-full px-2 py-2 text-center text-sm leading-tight text-white/70">
                 Zurück zur Anmeldung
               </button>
             </form>
@@ -345,7 +345,7 @@ export default function GuestWelcomeScreen() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#A8003C] font-medium text-white disabled:opacity-70"
+                className="flex min-h-11 w-full flex-wrap items-center justify-center gap-2 rounded-[10px] bg-[#A8003C] px-3 py-2 text-center font-medium leading-tight text-white disabled:opacity-70"
               >
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 Passwort speichern
@@ -415,7 +415,7 @@ export default function GuestWelcomeScreen() {
                 <button
                   type="submit"
                   disabled={loading || googleLoading}
-                  className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#A8003C] font-medium text-white disabled:opacity-70"
+                  className="flex min-h-11 w-full flex-wrap items-center justify-center gap-2 rounded-[10px] bg-[#A8003C] px-3 py-2 text-center font-medium leading-tight text-white disabled:opacity-70"
                 >
                   {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                   {mode === "login" ? "Anmelden" : "Konto erstellen"}
@@ -432,7 +432,7 @@ export default function GuestWelcomeScreen() {
                 type="button"
                 onClick={handleGoogle}
                 disabled={googleLoading || loading}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-white/55 text-sm font-semibold text-[#7C3020] disabled:opacity-70"
+                className="flex min-h-11 w-full flex-wrap items-center justify-center gap-2 rounded-[10px] bg-white/55 px-3 py-2 text-center text-sm font-semibold leading-tight text-[#7C3020] disabled:opacity-70"
               >
                 {googleLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <GoogleIcon />}
                 Mit Google {mode === "login" ? "anmelden" : "registrieren"}
@@ -442,7 +442,7 @@ export default function GuestWelcomeScreen() {
                 <button
                   type="button"
                   onClick={() => switchMode("reset")}
-                  className="mt-3 w-full text-center text-sm text-white/75"
+                  className="mt-3 min-h-10 w-full px-2 py-2 text-center text-sm leading-tight text-white/75"
                 >
                   Passwort oder E-Mail vergessen?
                 </button>

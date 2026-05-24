@@ -73,7 +73,7 @@ const ROUTES_SEEN_KEY = "doghike:profile-routes-seen";
 const mobileProfileActionClass =
   "h-12 w-full min-w-0 flex-col gap-1 overflow-hidden rounded-xl px-1 text-center text-[11px] font-bold leading-none";
 const profileTabTriggerClass =
-  "h-10 min-w-0 gap-1 overflow-hidden px-2 text-xs leading-tight sm:h-11 sm:px-3 sm:text-sm md:px-5 md:text-base";
+  "min-h-10 min-w-0 gap-1 px-2 py-2 text-xs leading-tight sm:min-h-11 sm:px-3 sm:text-sm md:px-5 md:text-base";
 const profileTabBadgeClass =
   "inline-flex min-w-4 shrink-0 items-center justify-center rounded-full bg-brand-100 px-1 py-0.5 text-[10px] font-bold leading-none text-brand-700 md:min-w-5 md:px-2 md:text-xs";
 const dogBreedPillClass =
@@ -556,7 +556,7 @@ export default function Profile() {
                 variant="outline"
                 size="sm"
                 onClick={logout}
-                className="h-10 shrink-0 rounded-xl border-brand-100 bg-white/70 px-3 text-brand-600 shadow-sm hover:border-brand-100 hover:bg-brand-50 hover:text-brand-400"
+                className="min-h-10 shrink-0 rounded-xl border-brand-100 bg-white/70 px-3 py-2 text-brand-600 shadow-sm hover:border-brand-100 hover:bg-brand-50 hover:text-brand-400"
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Abmelden</span>
@@ -658,7 +658,7 @@ export default function Profile() {
                   setEditingDog(null);
                   setDialogOpen(true);
                 }}
-                className="bg-brand-400 text-sm font-bold hover:bg-brand-600 md:h-11 md:px-5 md:text-base"
+                className="bg-brand-400 text-sm font-bold hover:bg-brand-600 md:min-h-11 md:px-5 md:py-2 md:text-base"
                 size="sm"
               >
                 <Plus className="w-4 h-4 md:mr-2" />
