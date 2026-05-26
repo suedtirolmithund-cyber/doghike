@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowLeft, Edit, Trash2, ChevronLeft, ChevronRight, X, Share2, Check, MapPin
+  ArrowLeft, Edit, Trash2, X, Share2, Check, MapPin
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -90,8 +90,7 @@ export default function HikeDetail() {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [heroPhotoIndex, setHeroPhotoIndex] = useState(0);
   const [copied, setCopied] = useState(false);
-  const galleryDragStartX = useRef(null);
-  const galleryWasDragged = useRef(false);
+  const lightboxScrollerRef = useRef(null);
   const normalizedHikeId = hikeId ? String(hikeId) : null;
   const prefetchedHike = location.state?.hike;
   const initialHike = useMemo(() => {
@@ -221,6 +220,21 @@ export default function HikeDetail() {
     enabled: !!currentUser?.id,
   });
 
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const scroller = lightboxScrollerRef.current;
+    if (!scroller) return;
+
+    requestAnimationFrame(() => {
+      scroller.scrollTo({
+        left: currentPhotoIndex * scroller.clientWidth,
+        behavior: "auto",
+      });
+    });
+    // The selected index is set before opening. After that, scrolling updates it.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lightboxOpen]);
+
   // Sheets hikes are read-only
   const isOwnHike = false;
 
@@ -322,27 +336,18 @@ export default function HikeDetail() {
   const countryLabel = getCountryLabel(hike.country);
   const seasonValues = normalizeSeasonValues(hike?.seasons, hike?.season);
 
-  const nextPhoto = () => setCurrentPhotoIndex((prev) => (prev + 1) % photos.length);
-  const prevPhoto = () => setCurrentPhotoIndex((prev) => (prev - 1 + photos.length) % photos.length);
-  const handleGalleryPointerDown = (event) => {
-    galleryDragStartX.current = event.clientX;
-    galleryWasDragged.current = false;
-  };
-  const handleGalleryPointerMove = (event) => {
-    if (galleryDragStartX.current === null) return;
-    if (Math.abs(event.clientX - galleryDragStartX.current) > 8) {
-      galleryWasDragged.current = true;
-    }
-  };
-  const openGalleryPhoto = (event, index) => {
-    if (galleryWasDragged.current) {
-      event.preventDefault();
-      galleryWasDragged.current = false;
-      return;
-    }
-
+  const openGalleryPhoto = (index) => {
     setCurrentPhotoIndex(index);
     setLightboxOpen(true);
+  };
+  const handleLightboxScroll = () => {
+    const scroller = lightboxScrollerRef.current;
+    if (!scroller?.clientWidth) return;
+
+    const nextIndex = Math.round(scroller.scrollLeft / scroller.clientWidth);
+    if (nextIndex >= 0 && nextIndex < photos.length) {
+      setCurrentPhotoIndex((currentIndex) => (currentIndex === nextIndex ? currentIndex : nextIndex));
+    }
   };
   const canComment = hike?._source === "sheets" || hike?.visibility === "public";
   const canDownloadPdf = (hike?._source === "sheets" || isOwnJournalHike || hike?.visibility === "public")
@@ -353,6 +358,7 @@ export default function HikeDetail() {
       ? `${hike.notes.slice(0, 360).trim()}...`
       : hike.notes
     : null;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       {/* Hero Image */}
@@ -810,22 +816,13 @@ export default function HikeDetail() {
                 className="doghike-glass-card p-6"
               >
                 <h2 className="doghike-card-title mb-4">Fotos</h2>
-                <div
-                  className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-3 md:gap-3 md:overflow-visible md:px-0 md:pb-0"
-                  onPointerDown={handleGalleryPointerDown}
-                  onPointerMove={handleGalleryPointerMove}
-                  onPointerLeave={() => {
-                    galleryDragStartX.current = null;
-                  }}
-                  onPointerUp={() => {
-                    galleryDragStartX.current = null;
-                  }}
-                >
+                <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
                   {photos.map((photo, index) => (
-                    <div
+                    <button
+                      type="button"
                       key={index}
-                      className="aspect-[4/3] w-[78vw] max-w-[340px] shrink-0 snap-start overflow-hidden rounded-xl cursor-pointer ring-brand-300 transition-all hover:ring-2 md:aspect-square md:w-auto md:max-w-none"
-                      onClick={(event) => openGalleryPhoto(event, index)}
+                      className="aspect-square overflow-hidden rounded-xl border border-brand-100/70 bg-brand-50/70 p-0 ring-brand-300 transition-all hover:ring-2 focus-visible:outline-none focus-visible:ring-2"
+                      onClick={() => openGalleryPhoto(index)}
                     >
                       <img
                         src={getDisplayImageUrl(photo, { width: 640, quality: 72 }) || photo}
@@ -834,7 +831,7 @@ export default function HikeDetail() {
                         decoding="async"
                         className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                       />
-                    </div>
+                    </button>
                   ))}
                 </div>
               </motion.div>
@@ -894,41 +891,36 @@ export default function HikeDetail() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"
-            onClick={() => setLightboxOpen(false)}
+            className="fixed inset-0 z-50 bg-black/95"
           >
             <button
               onClick={() => setLightboxOpen(false)}
-              className="absolute top-4 right-4 p-2 text-white/70 hover:text-white"
+              className="absolute right-4 top-4 z-20 rounded-full bg-white/12 p-2 text-white/80 backdrop-blur-sm hover:bg-white/20 hover:text-white"
+              aria-label="Fotoansicht schließen"
             >
               <X className="w-8 h-8" />
             </button>
-            
-            {photos.length > 1 && (
-              <>
-                <button
-                  onClick={(e) => { e.stopPropagation(); prevPhoto(); }}
-                  className="absolute left-4 p-3 bg-white/10 rounded-full text-white hover:bg-white/20"
+
+            <div
+              ref={lightboxScrollerRef}
+              className="flex h-full snap-x snap-mandatory overflow-x-auto scroll-smooth"
+              onScroll={handleLightboxScroll}
+            >
+              {photos.map((photo, index) => (
+                <div
+                  key={index}
+                  className="flex h-full w-screen flex-none snap-center items-center justify-center px-4 py-16 sm:px-8"
                 >
-                  <ChevronLeft className="w-6 h-6" />
-                </button>
-                <button
-                  onClick={(e) => { e.stopPropagation(); nextPhoto(); }}
-                  className="absolute right-4 p-3 bg-white/10 rounded-full text-white hover:bg-white/20"
-                >
-                  <ChevronRight className="w-6 h-6" />
-                </button>
-              </>
-            )}
-            
-            <img
-              src={photos[currentPhotoIndex]}
-              alt={`Photo ${currentPhotoIndex + 1}`}
-              className="max-w-[90vw] max-h-[90vh] object-contain"
-              onClick={(e) => e.stopPropagation()}
-            />
-            
-            <div className="absolute bottom-4 text-white/70">
+                  <img
+                    src={getDisplayImageUrl(photo, { width: 1800, quality: 84 }) || photo}
+                    alt={`Photo ${index + 1}`}
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full bg-black/45 px-3 py-1 text-sm font-semibold text-white/80 backdrop-blur-sm">
               {currentPhotoIndex + 1} / {photos.length}
             </div>
           </motion.div>
