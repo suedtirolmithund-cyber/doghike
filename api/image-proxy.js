@@ -31,12 +31,27 @@ export async function fetchProxiedImage(rawUrl, method = "GET") {
     };
   }
 
-  const upstream = await fetch(rawUrl, {
-    headers: {
-      accept: "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
-      "user-agent": "DogTrails image proxy",
-    },
-  });
+  let upstream;
+  try {
+    upstream = await fetch(rawUrl, {
+      headers: {
+        accept: "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
+        "user-agent": "DogTrails image proxy",
+      },
+      signal: AbortSignal.timeout(15000),
+    });
+  } catch (error) {
+    const message = String(error?.message ?? "");
+    const isTimeout =
+      error?.name === "TimeoutError" ||
+      error?.name === "AbortError" ||
+      message.toLowerCase().includes("timeout");
+
+    return {
+      status: isTimeout ? 504 : 502,
+      body: isTimeout ? "Image upstream timeout" : "Image upstream unavailable",
+    };
+  }
 
   if (!upstream.ok) {
     return {
