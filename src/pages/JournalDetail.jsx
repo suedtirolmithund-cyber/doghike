@@ -168,22 +168,30 @@ export default function JournalDetail() {
     enabled: !!entry?.user_id,
   });
 
-  const { data: dog } = useQuery({
-    queryKey: ["dog", entry?.dog_id],
+  const selectedDogIds = useMemo(() => {
+    if (!entry) return [];
+    if (Array.isArray(entry.dog_ids) && entry.dog_ids.length > 0) {
+      return [...new Set(entry.dog_ids.filter(Boolean))];
+    }
+    return entry.dog_id ? [entry.dog_id] : [];
+  }, [entry]);
+
+  const { data: selectedDogs = [] } = useQuery({
+    queryKey: ["journalDogs", selectedDogIds.join(",")],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("dogs")
         .select("id, name, breed, photo_url")
-        .eq("id", entry.dog_id)
-        .maybeSingle();
+        .in("id", selectedDogIds);
 
       if (error) {
         throw error;
       }
 
-      return data;
+      const dogMap = Object.fromEntries((data ?? []).map((dog) => [dog.id, dog]));
+      return selectedDogIds.map((dogId) => dogMap[dogId]).filter(Boolean);
     },
-    enabled: !!entry?.dog_id,
+    enabled: selectedDogIds.length > 0,
   });
 
   const isOwner = user?.id === entry?.user_id;
@@ -422,17 +430,29 @@ export default function JournalDetail() {
           </div>
 
           {/* Dog */}
-          {dog && (
-            <div className="doghike-glass-card p-4 flex items-center gap-3">
-              <img
-                src={dog.photo_url || getAvatarDataUrl(dog.name)}
-                alt={dog.name} className="w-12 h-12 rounded-full object-cover border-2 border-white shadow"
-              />
-              <div>
-                <p className="font-semibold text-slate-900">{dog.name}</p>
-                {dog.breed && <p className="text-xs text-slate-400">{dog.breed}</p>}
+          {selectedDogs.length > 0 && (
+            <div className="doghike-glass-card p-4">
+              <div className="mb-3 flex items-center gap-2">
+                <Dog className="w-5 h-5 text-slate-300" />
+                <h2 className="font-semibold text-slate-900">
+                  {selectedDogs.length === 1 ? "Hund dabei" : "Hunde dabei"}
+                </h2>
               </div>
-              <Dog className="w-5 h-5 text-slate-300 ml-auto" />
+              <div className="space-y-3">
+                {selectedDogs.map((dog) => (
+                  <div key={dog.id} className="flex items-center gap-3">
+                    <img
+                      src={dog.photo_url || getAvatarDataUrl(dog.name)}
+                      alt={dog.name}
+                      className="w-12 h-12 rounded-full object-cover border-2 border-white shadow"
+                    />
+                    <div>
+                      <p className="font-semibold text-slate-900">{dog.name}</p>
+                      {dog.breed && <p className="text-xs text-slate-400">{dog.breed}</p>}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
