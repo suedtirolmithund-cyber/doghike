@@ -58,7 +58,7 @@ const humanDifficultyChipClass =
 const dogDifficultyChipClass =
   "!border-[#F9C030] !bg-[#FFF8E0] !text-[#7C3020]";
 const detailStatChipClass =
-  "doghike-stat-chip min-h-[52px] min-w-0 justify-center gap-2 px-2.5 py-2 text-center sm:min-h-[66px] sm:gap-3 sm:px-4 sm:py-3 lg:min-h-[72px] lg:px-5";
+  "doghike-stat-chip min-h-[52px] min-w-0 justify-center gap-2 px-2.5 py-2 text-center sm:min-h-[58px] sm:px-3 sm:py-2 lg:min-h-[60px] lg:px-3.5 lg:py-2.5";
 const detailStatIconClass =
   "shrink-0 text-base leading-none sm:text-lg";
 const detailStatTextClass =
@@ -514,9 +514,9 @@ export default function HikeDetail() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="mb-10"
+          className="mb-8 md:mb-9"
         >
-          <div className="grid grid-cols-2 gap-2.5 sm:gap-3 lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-3 xl:grid-cols-4">
           {countryLabel && (
             <div className={detailStatChipClass}>
               <span className={detailStatIconClass}>{TOUR_ICONS.country}</span>
