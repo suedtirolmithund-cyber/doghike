@@ -78,5 +78,11 @@ export function getDisplayImageUrl(url, options = {}) {
 
   const normalizedUrl = unwrapProxyUrl(url.trim());
   const managedStorageUrl = normalizeManagedStoragePath(normalizedUrl);
-  return managedStorageUrl || normalizedUrl;
+  const finalUrl = managedStorageUrl || normalizedUrl;
+
+  if (shouldProxyImageUrl(finalUrl)) {
+    return `${MEDIA_ENDPOINT}?src=${encodeMediaSource(finalUrl)}`;
+  }
+
+  return finalUrl;
 }
