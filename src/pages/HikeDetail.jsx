@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getAllHikes } from "@/api/sheetsClient";
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -90,6 +90,8 @@ export default function HikeDetail() {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [heroPhotoIndex, setHeroPhotoIndex] = useState(0);
   const [copied, setCopied] = useState(false);
+  const galleryDragStartX = useRef(null);
+  const galleryWasDragged = useRef(false);
   const normalizedHikeId = hikeId ? String(hikeId) : null;
   const prefetchedHike = location.state?.hike;
   const initialHike = useMemo(() => {
@@ -322,6 +324,26 @@ export default function HikeDetail() {
 
   const nextPhoto = () => setCurrentPhotoIndex((prev) => (prev + 1) % photos.length);
   const prevPhoto = () => setCurrentPhotoIndex((prev) => (prev - 1 + photos.length) % photos.length);
+  const handleGalleryPointerDown = (event) => {
+    galleryDragStartX.current = event.clientX;
+    galleryWasDragged.current = false;
+  };
+  const handleGalleryPointerMove = (event) => {
+    if (galleryDragStartX.current === null) return;
+    if (Math.abs(event.clientX - galleryDragStartX.current) > 8) {
+      galleryWasDragged.current = true;
+    }
+  };
+  const openGalleryPhoto = (event, index) => {
+    if (galleryWasDragged.current) {
+      event.preventDefault();
+      galleryWasDragged.current = false;
+      return;
+    }
+
+    setCurrentPhotoIndex(index);
+    setLightboxOpen(true);
+  };
   const canComment = hike?._source === "sheets" || hike?.visibility === "public";
   const canDownloadPdf = (hike?._source === "sheets" || isOwnJournalHike || hike?.visibility === "public")
     && (!isPremiumHike || userHasPremium);
@@ -788,15 +810,22 @@ export default function HikeDetail() {
                 className="doghike-glass-card p-6"
               >
                 <h2 className="doghike-card-title mb-4">Fotos</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <div
+                  className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-3 md:gap-3 md:overflow-visible md:px-0 md:pb-0"
+                  onPointerDown={handleGalleryPointerDown}
+                  onPointerMove={handleGalleryPointerMove}
+                  onPointerLeave={() => {
+                    galleryDragStartX.current = null;
+                  }}
+                  onPointerUp={() => {
+                    galleryDragStartX.current = null;
+                  }}
+                >
                   {photos.map((photo, index) => (
                     <div
                       key={index}
-                      className="aspect-square rounded-xl overflow-hidden cursor-pointer hover:ring-2 ring-brand-300 transition-all"
-                      onClick={() => {
-                        setCurrentPhotoIndex(index);
-                        setLightboxOpen(true);
-                      }}
+                      className="aspect-[4/3] w-[78vw] max-w-[340px] shrink-0 snap-start overflow-hidden rounded-xl cursor-pointer ring-brand-300 transition-all hover:ring-2 md:aspect-square md:w-auto md:max-w-none"
+                      onClick={(event) => openGalleryPhoto(event, index)}
                     >
                       <img
                         src={getDisplayImageUrl(photo, { width: 640, quality: 72 }) || photo}

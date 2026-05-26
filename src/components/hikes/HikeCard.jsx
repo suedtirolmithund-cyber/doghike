@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import ExpandableText from "@/components/ExpandableText";
@@ -49,6 +49,8 @@ export default function HikeCard({
     [hike.photos]
   );
   const [photoIndex, setPhotoIndex] = useState(0);
+  const photoDragStartX = useRef(null);
+  const photoWasDragged = useRef(false);
   const coverPhoto = photoIndex >= 0 ? photoList[photoIndex] || FALLBACK_HIKE_IMAGE : FALLBACK_HIKE_IMAGE;
   const previewCoverPhoto = useMemo(
     () =>
@@ -101,6 +103,44 @@ export default function HikeCard({
       return nextIndex < photoList.length ? nextIndex : -1;
     });
   };
+  const handlePhotoPointerDown = (event) => {
+    photoDragStartX.current = event.clientX;
+    photoWasDragged.current = false;
+  };
+  const handlePhotoPointerMove = (event) => {
+    if (photoDragStartX.current === null) return;
+    if (Math.abs(event.clientX - photoDragStartX.current) > 8) {
+      photoWasDragged.current = true;
+    }
+  };
+  const handlePhotoClickCapture = (event) => {
+    if (!photoWasDragged.current) return;
+    event.preventDefault();
+    event.stopPropagation();
+    photoWasDragged.current = false;
+  };
+  const renderCardImage = (photo, imageIndex = 0, isScrollable = false) => {
+    const imageUrl =
+      getDisplayImageUrl(photo, {
+        width: imageSize === "home" ? 960 : 720,
+        quality: 74,
+      }) || photo;
+
+    return (
+      <img
+        key={`${photo}-${imageIndex}`}
+        src={imageUrl}
+        alt={hike.trail_name}
+        loading={index < 4 && imageIndex === 0 ? "eager" : "lazy"}
+        decoding="async"
+        onError={(event) => {
+          event.currentTarget.onerror = null;
+          event.currentTarget.src = FALLBACK_HIKE_IMAGE;
+        }}
+        className={`${isScrollable ? "h-full w-full flex-none snap-start" : "h-full w-full"} object-cover transition-transform duration-700 group-hover:scale-105`}
+      />
+    );
+  };
 
   return (
     <motion.div
@@ -114,7 +154,23 @@ export default function HikeCard({
       >
         <div className="group overflow-hidden rounded-[22px] border border-brand-100/80 bg-white/78 shadow-[0_12px_28px_rgba(168,0,60,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(240,112,48,0.12)]">
           <div className={`relative overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a] ${imageHeightClass}`}>
-            {coverPhoto && (
+            {photoList.length > 1 ? (
+              <div
+                className="flex h-full snap-x snap-mandatory overflow-x-auto scroll-smooth [scrollbar-width:none] touch-pan-x [&::-webkit-scrollbar]:hidden"
+                onPointerDown={handlePhotoPointerDown}
+                onPointerMove={handlePhotoPointerMove}
+                onPointerLeave={() => {
+                  photoDragStartX.current = null;
+                }}
+                onPointerUp={() => {
+                  photoDragStartX.current = null;
+                }}
+                onClickCapture={handlePhotoClickCapture}
+                aria-label="Fotos horizontal ansehen"
+              >
+                {photoList.map((photo, imageIndex) => renderCardImage(photo, imageIndex, true))}
+              </div>
+            ) : coverPhoto ? (
               <img
                 src={previewCoverPhoto}
                 alt={hike.trail_name}
@@ -123,20 +179,23 @@ export default function HikeCard({
                 onError={handleCoverPhotoError}
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
+            ) : null}
+            {photoList.length > 1 && (
+              <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-black/22 to-transparent" />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#28140A]/78 via-[#28140A]/34 via-45% to-transparent" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#28140A]/78 via-[#28140A]/34 via-45% to-transparent" />
 
             {PREMIUM_FEATURES_ENABLED && hike.is_premium && (
-              <PremiumPawBadge className="absolute left-4 top-4 min-h-9 border-white/65 px-3.5 py-2 text-sm shadow-sm" />
+              <PremiumPawBadge className="pointer-events-none absolute left-4 top-4 min-h-9 border-white/65 px-3.5 py-2 text-sm shadow-sm" />
             )}
 
             {previewIcon && (
-              <span className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/74 text-xl shadow-sm backdrop-blur-sm">
+              <span className="pointer-events-none absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/74 text-xl shadow-sm backdrop-blur-sm">
                 {previewIcon}
               </span>
             )}
 
-            <div className="absolute bottom-4 left-4 right-4 rounded-2xl bg-gradient-to-t from-[#28140A]/30 via-[#28140A]/12 to-transparent p-2.5 backdrop-blur-[1px]">
+            <div className="pointer-events-none absolute bottom-4 left-4 right-4 rounded-2xl bg-gradient-to-t from-[#28140A]/30 via-[#28140A]/12 to-transparent p-2.5 backdrop-blur-[1px]">
               <h3 className="mb-1 line-clamp-2 text-base font-semibold leading-tight text-white drop-shadow-[0_2px_5px_rgba(0,0,0,0.65)]">
                 {hike.trail_name}
               </h3>
