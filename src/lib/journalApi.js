@@ -197,23 +197,57 @@ export async function getJournalEntryForDisplay(id) {
   return hydrateJournalEntryMedia(entry);
 }
 
+function withoutUnsupportedDogIds(entry = {}) {
+  const legacyEntry = { ...entry };
+  delete legacyEntry.dog_ids;
+  if (!legacyEntry.dog_id && Array.isArray(entry.dog_ids) && entry.dog_ids.length > 0) {
+    legacyEntry.dog_id = entry.dog_ids[0];
+  }
+  return legacyEntry;
+}
+
+function isMissingDogIdsColumnError(error) {
+  const message = String(error?.message ?? "");
+  return message.includes("dog_ids") && message.includes("column");
+}
+
 export async function createJournalEntry(userId, entry) {
-  const { data, error } = await supabase
+  const payload = { user_id: userId, ...entry };
+  let { data, error } = await supabase
     .from("journal_entries")
-    .insert({ user_id: userId, ...entry })
+    .insert(payload)
     .select()
     .single();
+
+  if (error && isMissingDogIdsColumnError(error)) {
+    ({ data, error } = await supabase
+      .from("journal_entries")
+      .insert(withoutUnsupportedDogIds(payload))
+      .select()
+      .single());
+  }
+
   if (error) throw error;
   return data;
 }
 
 export async function updateJournalEntry(id, entry) {
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from("journal_entries")
     .update(entry)
     .eq("id", id)
     .select()
     .single();
+
+  if (error && isMissingDogIdsColumnError(error)) {
+    ({ data, error } = await supabase
+      .from("journal_entries")
+      .update(withoutUnsupportedDogIds(entry))
+      .eq("id", id)
+      .select()
+      .single());
+  }
+
   if (error) throw error;
   return data;
 }

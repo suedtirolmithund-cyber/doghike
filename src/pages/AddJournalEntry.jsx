@@ -835,6 +835,7 @@ const EMPTY_FORM = {
   visibility: "private",
   seasons: [],
   dog_id: null,
+  dog_ids: [],
   dog_mood_tags: [],
 };
 
@@ -867,6 +868,11 @@ export default function AddJournalEntry() {
     hazard_notes: routePrefill?.hazard_notes ?? "",
     seasons: routePrefill?.seasons ?? [],
     dog_id: routePrefill?.dog_id ?? null,
+    dog_ids: Array.isArray(routePrefill?.dog_ids)
+      ? routePrefill.dog_ids
+      : routePrefill?.dog_id
+        ? [routePrefill.dog_id]
+        : [],
     dog_mood_tags: routePrefill?.dog_mood_tags ?? [],
     photos: routePrefill?.photos ?? [],
     gpx_url: routePrefill?.gpx_url ?? "",
@@ -895,6 +901,7 @@ export default function AddJournalEntry() {
       hazard_notes: prefill.hazard_notes || EMPTY_FORM.hazard_notes,
       seasons: Array.isArray(prefill.seasons) ? prefill.seasons : EMPTY_FORM.seasons,
       dog_id: prefill.dog_id ?? EMPTY_FORM.dog_id,
+      dog_ids: Array.isArray(prefill.dog_ids) ? prefill.dog_ids : EMPTY_FORM.dog_ids,
       dog_mood_tags: Array.isArray(prefill.dog_mood_tags) ? prefill.dog_mood_tags : EMPTY_FORM.dog_mood_tags,
       photos: Array.isArray(prefill.photos) ? prefill.photos : EMPTY_FORM.photos,
       gpx_url: prefill.gpx_url || EMPTY_FORM.gpx_url,
@@ -955,6 +962,11 @@ export default function AddJournalEntry() {
         visibility: existing.visibility ?? "private",
         seasons: existing.seasons ?? [],
         dog_id: existing.dog_id ?? null,
+        dog_ids: Array.isArray(existing.dog_ids)
+          ? existing.dog_ids
+          : existing.dog_id
+            ? [existing.dog_id]
+            : [],
         dog_mood_tags: existing.dog_mood_tags ?? [],
       });
     }
@@ -1015,11 +1027,13 @@ export default function AddJournalEntry() {
         queryClient.invalidateQueries({ queryKey: ["topDogs"] });
         queryClient.invalidateQueries({ queryKey: ["journalEntry"] });
         queryClient.invalidateQueries({ queryKey: ["notifications", user?.id] });
-      const selectedDog = userDogs.find((dog) => dog.id === form.dog_id);
+      const selectedDogs = userDogs.filter((dog) => form.dog_ids?.includes(dog.id));
       if (editId) {
         showSavedFeedback("Tagebuch gespeichert", "Dein Eintrag ist wieder rund.");
-      } else if (selectedDog) {
-        showSavedFeedback("Wanderung gespeichert", `${selectedDog.name} und du habt diesen Tag festgehalten.`);
+      } else if (selectedDogs.length === 1) {
+        showSavedFeedback("Wanderung gespeichert", `${selectedDogs[0].name} und du habt diesen Tag festgehalten.`);
+      } else if (selectedDogs.length > 1) {
+        showSavedFeedback("Wanderung gespeichert", `${selectedDogs.length} Hunde und du habt diesen Tag festgehalten.`);
       } else {
         showSavedFeedback("Wanderung gespeichert", "Diese Wanderung ist jetzt in deinem Tagebuch.");
       }
@@ -1262,6 +1276,8 @@ export default function AddJournalEntry() {
 
     saveMutation.mutate({
       ...form,
+      dog_ids: Array.isArray(form.dog_ids) ? [...new Set(form.dog_ids)].filter(Boolean) : [],
+      dog_id: Array.isArray(form.dog_ids) && form.dog_ids.length > 0 ? form.dog_ids[0] : null,
       distance_km: form.distance_km !== "" ? Number(form.distance_km) : null,
       elevation_m: form.elevation_m !== "" ? Number(form.elevation_m) : null,
       duration_minutes: hoursInputToMinutes(form.duration_minutes),
@@ -1288,6 +1304,19 @@ export default function AddJournalEntry() {
         ? prev.dog_mood_tags.filter((entry) => entry !== tag)
         : [...prev.dog_mood_tags, tag],
     }));
+  };
+  const toggleSelectedDog = (dogId) => {
+    setForm((prev) => {
+      const nextDogIds = prev.dog_ids.includes(dogId)
+        ? prev.dog_ids.filter((id) => id !== dogId)
+        : [...prev.dog_ids, dogId];
+
+      return {
+        ...prev,
+        dog_ids: nextDogIds,
+        dog_id: nextDogIds[0] ?? null,
+      };
+    });
   };
   const toggleDogHint = (field) => setForm((prev) => ({ ...prev, [field]: !prev[field] }));
 
@@ -1523,26 +1552,29 @@ export default function AddJournalEntry() {
             {/* Dog picker */}
             {userDogs.length > 0 && (
               <div>
-                <Label className="text-sm text-slate-600 mb-2 block">Welcher Hund war dabei?</Label>
+                <Label className="text-sm text-slate-600 mb-2 block">Welche Hunde waren dabei?</Label>
                 <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
-                    onClick={() => set("dog_id", null)}
+                    onClick={() => {
+                      set("dog_ids", []);
+                      set("dog_id", null);
+                    }}
                     className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 text-sm transition-all focus:outline-none ${
-                      form.dog_id === null
+                      form.dog_ids.length === 0
                         ? "border-brand-200 bg-brand-100/80 text-slate-700 font-medium"
                         : "border-brand-100 text-slate-400 hover:border-brand-100"
                     }`}
                   >
-                    Kein / unbekannt
+                    Kein Hund ausgewählt
                   </button>
                   {userDogs.map((dog) => (
                     <button
                       key={dog.id}
                       type="button"
-                      onClick={() => set("dog_id", dog.id)}
+                      onClick={() => toggleSelectedDog(dog.id)}
                       className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 text-sm transition-all focus:outline-none ${
-                        form.dog_id === dog.id
+                        form.dog_ids.includes(dog.id)
                           ? "border-brand-400 bg-brand-50 text-brand-700 font-medium"
                           : "border-brand-100 text-slate-600 hover:border-brand-300"
                       }`}
@@ -1558,6 +1590,9 @@ export default function AddJournalEntry() {
                     </button>
                   ))}
                 </div>
+                <p className="mt-2 text-xs text-slate-400">
+                  Du kannst einen oder mehrere Hunde auswÃ¤hlen.
+                </p>
               </div>
             )}
 
