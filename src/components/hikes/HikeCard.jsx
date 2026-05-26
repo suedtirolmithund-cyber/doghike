@@ -131,7 +131,7 @@ export default function HikeCard({
         key={`${photo}-${imageIndex}`}
         src={imageUrl}
         alt={hike.trail_name}
-        loading={index < 4 && imageIndex === 0 ? "eager" : "lazy"}
+        loading="eager"
         decoding="async"
         onError={(event) => {
           event.currentTarget.onerror = null;
@@ -174,7 +174,7 @@ export default function HikeCard({
               <img
                 src={previewCoverPhoto}
                 alt={hike.trail_name}
-                loading={index < 4 ? "eager" : "lazy"}
+                loading="eager"
                 decoding="async"
                 onError={handleCoverPhotoError}
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
