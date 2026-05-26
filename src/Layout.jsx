@@ -80,8 +80,8 @@ export default function Layout({ children, currentPageName }) {
   const isActive = (pageName) => currentPageName === pageName;
 
   return (
-    <div className="min-h-screen bg-brand-50/70 flex flex-col">
-      <div className="hidden md:block h-16 shrink-0" />
+    <div className="min-h-screen overflow-x-hidden bg-brand-50/70 flex flex-col">
+      <div className="hidden h-24 shrink-0 md:block xl:h-16" />
       <div className="flex-1">{children}</div>
 
       <footer className="bg-white/80 border-t border-brand-100 py-3 md:py-4 px-4 md:px-6 text-center mb-20 md:mb-0">
@@ -195,8 +195,8 @@ export default function Layout({ children, currentPageName }) {
       </nav>
 
       <nav className="fixed left-0 right-0 top-0 z-50 hidden border-b border-brand-100/70 bg-white/78 shadow-[0_10px_28px_rgba(168,0,60,0.12)] backdrop-blur-md md:block">
-        <div className="max-w-7xl mx-auto px-6 py-3">
-          <div className="flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 py-2 xl:px-6 xl:py-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 xl:flex-nowrap xl:gap-4">
             <Link
               to={createPageUrl("Dashboard")}
               className="flex shrink-0 items-center gap-2 transition-opacity hover:opacity-80"
@@ -210,31 +210,31 @@ export default function Layout({ children, currentPageName }) {
               </div>
             </Link>
 
-            <div className="flex items-center gap-1 overflow-x-auto min-w-0 flex-1 justify-center">
+            <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-1 overflow-visible">
               {DESKTOP_NAV.map(({ name, icon: Icon, label }) => {
                 const active = isActive(name);
                 return (
                   <Link
                     key={name}
                     to={createPageUrl(name)}
-                    className={`flex min-w-[118px] items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-center leading-tight transition-all ${
+                    className={`flex min-w-[92px] max-w-[132px] items-center justify-center gap-1.5 rounded-lg px-2.5 py-2 text-center leading-tight transition-all xl:min-w-[108px] xl:gap-2 xl:px-3 xl:py-2.5 ${
                       active ? "bg-[#A8003C]/13 text-[#7C3020] shadow-sm" : "text-brand-700 hover:bg-[#A8003C]/8 hover:text-[#7C3020]"
                     }`}
                   >
                     <Icon className={`h-4 w-4 shrink-0 text-current ${active ? "stroke-[2.5]" : ""}`} />
-                    <span className="text-sm font-medium">{label}</span>
+                    <span className="whitespace-nowrap text-[13px] font-semibold xl:text-sm">{label}</span>
                   </Link>
                 );
               })}
               {isAdmin && (
                 <Link
                   to={createPageUrl("AdminDashboard")}
-                  className={`flex min-w-[118px] items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-center leading-tight transition-all ${
+                  className={`flex min-w-[92px] max-w-[132px] items-center justify-center gap-1.5 rounded-lg px-2.5 py-2 text-center leading-tight transition-all xl:min-w-[108px] xl:gap-2 xl:px-3 xl:py-2.5 ${
                     isActive("AdminDashboard") ? "bg-[#A8003C]/13 text-[#7C3020] shadow-sm" : "text-brand-700 hover:bg-[#A8003C]/8 hover:text-[#7C3020]"
                   }`}
                 >
                   <ShieldCheck className="w-4 h-4" />
-                  <span className="text-sm font-medium">Admin</span>
+                  <span className="whitespace-nowrap text-[13px] font-semibold xl:text-sm">Admin</span>
                 </Link>
               )}
             </div>
