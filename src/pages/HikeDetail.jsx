@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowLeft, Edit, Trash2, X, Share2, Check, MapPin
+  ArrowLeft, Edit, Trash2, ChevronLeft, ChevronRight, X, Share2, Check, MapPin
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -340,6 +340,22 @@ export default function HikeDetail() {
     setCurrentPhotoIndex(index);
     setLightboxOpen(true);
   };
+  const scrollLightboxToIndex = (nextIndex) => {
+    if (!photos.length) return;
+
+    const normalizedIndex = (nextIndex + photos.length) % photos.length;
+    setCurrentPhotoIndex(normalizedIndex);
+
+    const scroller = lightboxScrollerRef.current;
+    if (!scroller) return;
+
+    scroller.scrollTo({
+      left: normalizedIndex * scroller.clientWidth,
+      behavior: "smooth",
+    });
+  };
+  const showPreviousLightboxPhoto = () => scrollLightboxToIndex(currentPhotoIndex - 1);
+  const showNextLightboxPhoto = () => scrollLightboxToIndex(currentPhotoIndex + 1);
   const handleLightboxScroll = () => {
     const scroller = lightboxScrollerRef.current;
     if (!scroller?.clientWidth) return;
@@ -895,11 +911,32 @@ export default function HikeDetail() {
           >
             <button
               onClick={() => setLightboxOpen(false)}
-              className="absolute right-4 top-4 z-20 rounded-full bg-white/12 p-2 text-white/80 backdrop-blur-sm hover:bg-white/20 hover:text-white"
+              className="absolute left-4 top-4 z-20 rounded-full bg-white/12 p-2 text-white/80 backdrop-blur-sm hover:bg-white/20 hover:text-white"
               aria-label="Fotoansicht schließen"
             >
               <X className="w-8 h-8" />
             </button>
+
+            {photos.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={showPreviousLightboxPhoto}
+                  className="absolute left-4 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/12 text-white/85 shadow-lg backdrop-blur-sm transition hover:bg-white/22 hover:text-white md:flex"
+                  aria-label="Vorheriges Foto"
+                >
+                  <ChevronLeft className="h-7 w-7" />
+                </button>
+                <button
+                  type="button"
+                  onClick={showNextLightboxPhoto}
+                  className="absolute right-4 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/12 text-white/85 shadow-lg backdrop-blur-sm transition hover:bg-white/22 hover:text-white md:flex"
+                  aria-label="NÃ¤chstes Foto"
+                >
+                  <ChevronRight className="h-7 w-7" />
+                </button>
+              </>
+            )}
 
             <div
               ref={lightboxScrollerRef}
