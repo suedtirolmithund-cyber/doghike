@@ -202,7 +202,7 @@ export default function Layout({ children, currentPageName }) {
               className="flex shrink-0 items-center gap-2 transition-opacity hover:opacity-80"
             >
               <img
-                src="/logo-mark.svg"
+                src="/icon.svg"
                 alt="DogTrails"
                 className="h-12 w-12 shrink-0 drop-shadow-sm"
               />
