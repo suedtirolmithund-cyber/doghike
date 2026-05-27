@@ -53,6 +53,15 @@ function getCountryLabel(country) {
   return country || null;
 }
 
+function isManagedPublicHikePhoto(value) {
+  if (typeof value !== "string") return false;
+  const trimmed = value.trim();
+  if (!trimmed) return false;
+  if (trimmed.startsWith("public-hikes/")) return true;
+  if (trimmed.startsWith("journal/public-hikes/")) return true;
+  return /\/storage\/v1\/object\/(?:public|sign)\/journal\/public-hikes\//.test(trimmed);
+}
+
 const humanDifficultyChipClass =
   "!border-[#D4547A]/60 !bg-[#FFF3F7] !text-[#7C3020]";
 const dogDifficultyChipClass =
@@ -182,7 +191,14 @@ export default function HikeDetail() {
   const { user: currentUser, isAdmin } = useAuth();
 
   const detailPhotoSource = useMemo(() => {
-    if (Array.isArray(hike?.photos) && hike.photos.length > 0) return hike.photos;
+    if (Array.isArray(hike?.photos) && hike.photos.length > 0) {
+      if (hike?._source === "sheets" && hike?._public_hike_id) {
+        const managedPhotos = hike.photos.filter(isManagedPublicHikePhoto);
+        const otherPhotos = hike.photos.filter((photo) => !isManagedPublicHikePhoto(photo));
+        return managedPhotos.length > 0 ? [...managedPhotos, ...otherPhotos] : hike.photos;
+      }
+      return hike.photos;
+    }
     if (typeof hike?.image === "string" && hike.image.trim()) return [hike.image.trim()];
     if (Array.isArray(hike?._photo_references) && hike._photo_references.length > 0) return hike._photo_references;
     return [];
