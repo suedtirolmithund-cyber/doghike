@@ -149,7 +149,13 @@ export default function HikeCard({
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
             ) : null}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#28140A]/78 via-[#28140A]/34 via-45% to-transparent" />
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(40, 20, 10, 0.78) 0%, rgba(40, 20, 10, 0.34) 45%, transparent 100%)",
+              }}
+            />
 
             {PREMIUM_FEATURES_ENABLED && hike.is_premium && (
               <PremiumPawBadge className="pointer-events-none absolute left-4 top-4 min-h-9 border-white/65 px-3.5 py-2 text-sm shadow-sm" />
