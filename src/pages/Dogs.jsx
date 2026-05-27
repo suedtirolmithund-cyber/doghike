@@ -322,14 +322,14 @@ export default function Dogs() {
                     setEditingDog(null);
                     setDialogOpen(true);
                   }}
-                  className="mt-4 flex w-full items-center justify-between rounded-[22px] border border-brand-100 bg-gradient-to-r from-white via-brand-50/70 to-brand-50 px-5 py-5 text-left shadow-[0_14px_26px_rgba(168,0,60,0.10)] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_30px_rgba(240,112,48,0.13)]"
+                  className="mt-4 flex w-full items-center justify-start gap-4 rounded-[22px] border border-brand-100 bg-gradient-to-r from-white via-brand-50/70 to-brand-50 px-5 py-5 text-left shadow-[0_14px_26px_rgba(168,0,60,0.10)] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_30px_rgba(240,112,48,0.13)]"
                 >
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#A8003C] text-white shadow-[0_10px_22px_rgba(240,112,48,0.28)]">
+                    <Dog className="h-5 w-5" />
+                  </div>
                   <div className="min-w-0">
                     <p className="text-xl font-semibold text-slate-900">Hund anlegen</p>
                     <p className="mt-1 text-sm leading-6 text-slate-500">Füge deinen ersten Wanderbegleiter hinzu.</p>
-                  </div>
-                  <div className="ml-4 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#A8003C] text-white shadow-[0_10px_22px_rgba(240,112,48,0.28)]">
-                    <Dog className="h-5 w-5" />
                   </div>
                 </button>
               </div>
