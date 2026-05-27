@@ -54,19 +54,10 @@ export default function HikeCard({
     () => cardPhotoSource.map((photo) => (typeof photo === "string" ? photo.trim() : "")).filter(Boolean),
     [cardPhotoSource]
   );
-  const [photoIndex, setPhotoIndex] = useState(0);
-  const coverPhoto = photoIndex >= 0 ? photoList[photoIndex] || FALLBACK_HIKE_IMAGE : FALLBACK_HIKE_IMAGE;
-  const previewCoverPhoto = useMemo(
-    () =>
-      getDisplayImageUrl(coverPhoto, {
-        width: imageSize === "home" ? 960 : 720,
-        quality: 74,
-      }),
-    [coverPhoto, imageSize],
-  );
-  const cardPreviewBackgroundStyle = previewCoverPhoto
+  const [resolvedCoverPhoto, setResolvedCoverPhoto] = useState(FALLBACK_HIKE_IMAGE);
+  const cardPreviewBackgroundStyle = resolvedCoverPhoto
     ? {
-        backgroundImage: `url("${previewCoverPhoto.replace(/"/g, '\\"')}")`,
+        backgroundImage: `url("${resolvedCoverPhoto.replace(/"/g, '\\"')}")`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }
@@ -103,17 +94,43 @@ export default function HikeCard({
   const imageHeightClass = imageSize === "home" ? "h-56 sm:h-60" : "h-48 sm:h-52";
 
   useEffect(() => {
-    setPhotoIndex(0);
-  }, [photoList]);
+    let cancelled = false;
+    const candidatePhotos = photoList.length > 0 ? photoList : [FALLBACK_HIKE_IMAGE];
 
-  const handleCoverPhotoError = () => {
-    if (photoIndex < 0) return;
+    const tryPhotoAtIndex = (index) => {
+      const rawPhoto = candidatePhotos[index] || FALLBACK_HIKE_IMAGE;
+      const candidateUrl =
+        getDisplayImageUrl(rawPhoto, {
+          width: imageSize === "home" ? 960 : 720,
+          quality: 74,
+        }) || rawPhoto;
 
-    setPhotoIndex((currentIndex) => {
-      const nextIndex = currentIndex + 1;
-      return nextIndex < photoList.length ? nextIndex : -1;
-    });
-  };
+      if (rawPhoto === FALLBACK_HIKE_IMAGE || typeof window === "undefined") {
+        if (!cancelled) setResolvedCoverPhoto(candidateUrl);
+        return;
+      }
+
+      const imageProbe = new window.Image();
+      imageProbe.onload = () => {
+        if (!cancelled) setResolvedCoverPhoto(candidateUrl);
+      };
+      imageProbe.onerror = () => {
+        if (cancelled) return;
+        if (index + 1 < candidatePhotos.length) {
+          tryPhotoAtIndex(index + 1);
+          return;
+        }
+        setResolvedCoverPhoto(FALLBACK_HIKE_IMAGE);
+      };
+      imageProbe.src = candidateUrl;
+    };
+
+    tryPhotoAtIndex(0);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [imageSize, photoList]);
 
   return (
     <motion.div
@@ -130,13 +147,12 @@ export default function HikeCard({
             className={`relative overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a] ${imageHeightClass}`}
             style={cardPreviewBackgroundStyle}
           >
-            {coverPhoto ? (
+            {resolvedCoverPhoto ? (
               <img
-                src={previewCoverPhoto}
+                src={resolvedCoverPhoto}
                 alt={hike.trail_name}
                 loading={index < 4 ? "eager" : "lazy"}
                 decoding="async"
-                onError={handleCoverPhotoError}
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
             ) : null}
