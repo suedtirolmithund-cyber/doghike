@@ -1,12 +1,6 @@
-// jimcdn.com needs proxying for CORS (Google Sheets image CDN).
-// Supabase public storage URLs are directly accessible — no proxy needed.
-const PROXY_HOSTS = new Set([
-  "image.jimcdn.com",
-  "jimcdn.com",
-]);
-
-const MEDIA_ENDPOINT = "/api/media";
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL?.replace(/\/+$/, "") || "";
+const SUPABASE_URL =
+  import.meta.env.VITE_SUPABASE_URL?.replace(/\/+$/, "") ||
+  "https://vaprabanohjkandbzvba.supabase.co";
 const PUBLIC_HIKE_PREFIX = "public-hikes/";
 const JOURNAL_BUCKET = "journal";
 
@@ -26,32 +20,6 @@ function unwrapProxyUrl(url) {
   } catch {
     return url;
   }
-}
-
-function shouldProxyImageUrl(url) {
-  if (!url || typeof url !== "string") return false;
-  if (url.startsWith("/") || url.startsWith("data:") || url.startsWith("blob:")) return false;
-
-  try {
-    const parsedUrl = new URL(url);
-    if (parsedUrl.protocol !== "https:") return false;
-    if (PROXY_HOSTS.has(parsedUrl.hostname)) return true;
-    return parsedUrl.hostname.endsWith(".jimcdn.com");
-  } catch {
-    return false;
-  }
-}
-
-function encodeMediaSource(url) {
-  if (typeof globalThis.btoa === "function") {
-    return globalThis
-      .btoa(url)
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_")
-      .replace(/=+$/g, "");
-  }
-
-  return encodeURIComponent(url);
 }
 
 function normalizeManagedStoragePath(url) {
@@ -78,11 +46,5 @@ export function getDisplayImageUrl(url, options = {}) {
 
   const normalizedUrl = unwrapProxyUrl(url.trim());
   const managedStorageUrl = normalizeManagedStoragePath(normalizedUrl);
-  const finalUrl = managedStorageUrl || normalizedUrl;
-
-  if (shouldProxyImageUrl(finalUrl)) {
-    return `${MEDIA_ENDPOINT}?src=${encodeMediaSource(finalUrl)}`;
-  }
-
-  return finalUrl;
+  return managedStorageUrl || normalizedUrl;
 }
