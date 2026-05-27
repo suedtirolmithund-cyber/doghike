@@ -332,14 +332,16 @@ export default function HikeDetail() {
       </div>
     );
   }
-  // Premium gate: admins may inspect premium hikes, but downloads still require active Premium.
+  // Admins always count as Premium while regular users need an active Premium period.
   const isPremiumContent = PREMIUM_FEATURES_ENABLED && hike.is_premium;
   const isPremiumHike = isPremiumContent && !isAdmin && !isOwnHike;
   const premiumEndDate = currentProfile?.premium_current_period_end
     ? new Date(currentProfile.premium_current_period_end)
     : null;
-  const userHasPremium = currentProfile?.is_premium === true
-    && (!premiumEndDate || premiumEndDate.getTime() > Date.now());
+  const userHasPremium = isAdmin || (
+    currentProfile?.is_premium === true
+    && (!premiumEndDate || premiumEndDate.getTime() > Date.now())
+  );
   const showPremiumPreviewOnly = isPremiumHike && !userHasPremium;
 
   const hikeDogs = dogs.filter(d => hike.dogs?.includes(d.id));
