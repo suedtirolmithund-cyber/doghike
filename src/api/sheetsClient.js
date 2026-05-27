@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { resolvePublicHikePhotoReferences } from "@/lib/publicHikesApi";
+import { normalizeSeasonValues } from "@/lib/difficultyConfig";
 
 const SHEETS_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vS6YeL4WqJZWHAQ8HBuodH98vwfIeaUV4p89bAvnM3TDavLKtnsmGUOfcSyAN0ID0rcVYd-OCQUkbiv/pub?gid=624993458&single=true&output=csv";
