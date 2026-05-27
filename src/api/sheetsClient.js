@@ -563,20 +563,34 @@ async function getSupabasePublicHikes() {
  */
 export async function getHikes() {
   try {
-    const [supabaseHikes, legacySheetHikes] = await Promise.all([
+    const [supabaseHikes, legacySheetHikes, allPublicHikeRowsResult] = await Promise.all([
       getSupabasePublicHikes(),
       getLegacySheetHikes(),
+      supabase
+        .from("public_hikes")
+        .select("title, location"),
     ]);
 
+    const allPublicHikeRows = Array.isArray(allPublicHikeRowsResult.data) ? allPublicHikeRowsResult.data : [];
+    const supabaseKeys = new Set(
+      allPublicHikeRows.map((row) =>
+        buildComparableHikeKey({
+          title: row.title,
+          location: row.location,
+        })
+      )
+    );
+
     if (!supabaseHikes.length) {
-      return legacySheetHikes;
+      return legacySheetHikes.filter(
+        (hike) => !supabaseKeys.has(buildComparableHikeKey(hike))
+      );
     }
 
     if (!legacySheetHikes.length) {
       return supabaseHikes;
     }
 
-    const supabaseKeys = new Set(supabaseHikes.map((hike) => buildComparableHikeKey(hike)));
     const missingLegacyHikes = legacySheetHikes.filter(
       (hike) => !supabaseKeys.has(buildComparableHikeKey(hike))
     );
