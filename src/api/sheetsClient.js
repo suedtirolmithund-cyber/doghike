@@ -202,7 +202,7 @@ function rowToHike(row, index) {
 
     is_premium: isTruthyFlag(row.is_premium),
 
-    status: normalizedStatus || "approved",
+    status: normalizedStatus || null,
     // Sheets hikes are always public
     visibility: "public",
 
@@ -503,10 +503,7 @@ async function getLegacySheetHikes() {
     const text = await response.text();
     const rows = parseCsv(text);
     const hikes = rows
-      .filter((row) => {
-        const normalizedStatus = normalizeStatusValue(row.status);
-        return !normalizedStatus || normalizedStatus === "approved";
-      })
+      .filter((row) => normalizeStatusValue(row.status) === "approved")
       .map((row, index) => rowToHike(row, index));
     return hikes;
   } catch (err) {
