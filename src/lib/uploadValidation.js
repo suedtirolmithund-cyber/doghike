@@ -2,10 +2,9 @@ export const MAX_IMAGE_UPLOAD_MB = 15;
 export const MAX_IMAGE_UPLOAD_BYTES = MAX_IMAGE_UPLOAD_MB * 1024 * 1024;
 const MAX_IMAGE_SOURCE_MB = 50;
 const MAX_IMAGE_SOURCE_BYTES = MAX_IMAGE_SOURCE_MB * 1024 * 1024;
-const MAX_IMAGE_DIMENSION = 2560;
-const IMAGE_OPTIMIZATION_MIN_BYTES = 1.25 * 1024 * 1024;
-const IMAGE_OPTIMIZATION_QUALITY_STEPS = [0.9, 0.86, 0.82, 0.78, 0.74, 0.7, 0.66];
-const IMAGE_OPTIMIZATION_SCALE_STEPS = [1, 0.92, 0.84, 0.76, 0.68];
+const MAX_IMAGE_DIMENSION = 3200;
+const IMAGE_OPTIMIZATION_QUALITY_STEPS = [0.94, 0.9, 0.86, 0.82, 0.78, 0.74];
+const IMAGE_OPTIMIZATION_SCALE_STEPS = [1, 0.96, 0.9, 0.84, 0.78];
 
 function createImageTooLargeError(limitMb) {
   const error = new Error(
@@ -93,10 +92,7 @@ export async function optimizeImageForUpload(file) {
   const sourceImage = await loadImageFromFile(file);
   const needsResize =
     sourceImage.width > MAX_IMAGE_DIMENSION || sourceImage.height > MAX_IMAGE_DIMENSION;
-  const shouldOptimize =
-    needsResize ||
-    file.size >= IMAGE_OPTIMIZATION_MIN_BYTES ||
-    file.size > MAX_IMAGE_UPLOAD_BYTES;
+  const shouldOptimize = needsResize || file.size > MAX_IMAGE_UPLOAD_BYTES;
 
   if (!shouldOptimize) {
     return file;
