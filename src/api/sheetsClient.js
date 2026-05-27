@@ -227,7 +227,7 @@ function rowToHike(row, index) {
     // water → water_availability (none | little | moderate | plenty)
     water_availability: (() => { const w = row.water?.trim(); if (!w) return null; return mapSupabaseWaterLevel(w) ?? w; })(),
 
-    is_premium: isTruthyFlag(row.is_premium),
+    is_premium: false,
 
     status: normalizedStatus || null,
     // Sheets hikes are always public
