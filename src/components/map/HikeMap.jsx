@@ -356,23 +356,28 @@ export default function HikeMap({
       </SafeMapContainer>
 
       {showLegend && (
-        <div className="absolute bottom-8 left-3 z-[1000] flex max-w-[calc(100%-1.5rem)] flex-wrap gap-1 rounded-xl border border-brand-100/60 bg-white/[0.92] px-2 py-1.5 text-[11px] text-slate-700 shadow backdrop-blur-sm md:bottom-3 md:flex-col md:px-3 md:py-2 md:text-xs">
-          {Object.entries(seasonConfig).map(([key, { color, label }]) => (
-            <div key={key} className="flex items-center gap-2">
-              <span
-                style={{
-                  background: color,
-                  width: 12,
-                  height: 12,
-                  borderRadius: "50%",
-                  display: "inline-block",
-                  border: "2px solid white",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-                }}
-              />
-              {label}
-            </div>
-          ))}
+        <div className="absolute bottom-8 left-3 z-[1000] max-w-[calc(100%-1.5rem)] rounded-2xl border border-[#F9C030]/70 bg-[#FFF8F0]/95 px-3 py-2 text-[#7C3020] shadow-lg backdrop-blur-sm md:bottom-3">
+          <div className="mb-1 text-[11px] font-extrabold uppercase tracking-[0.08em] text-[#A8003C]">
+            Farben nach Jahreszeit
+          </div>
+          <div className="flex flex-wrap gap-x-3 gap-y-1 text-[12px] font-semibold md:flex-col md:gap-y-1.5">
+            {Object.entries(seasonConfig).map(([key, { color, label }]) => (
+              <div key={key} className="flex items-center gap-2 whitespace-nowrap">
+                <span
+                  style={{
+                    background: color,
+                    width: 13,
+                    height: 13,
+                    borderRadius: "50%",
+                    display: "inline-block",
+                    border: "2px solid white",
+                    boxShadow: "0 1px 4px rgba(49, 21, 13, 0.22)",
+                  }}
+                />
+                {label}
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
