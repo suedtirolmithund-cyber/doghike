@@ -109,12 +109,21 @@ function buildComparableHikeKey(hike) {
 function mergeMissingLegacyFieldsIntoPublicHike(publicHike, legacyHike) {
   if (!publicHike || !legacyHike) return publicHike;
 
+  const hasPublicSeasons = Array.isArray(publicHike.seasons) && publicHike.seasons.length > 0;
+  const legacySeasons = Array.isArray(legacyHike.seasons)
+    ? legacyHike.seasons.filter(Boolean)
+    : legacyHike.season
+      ? [legacyHike.season]
+      : [];
+
   return {
     ...publicHike,
     notes: publicHike.notes || legacyHike.notes || null,
     hazard_notes: publicHike.hazard_notes || legacyHike.hazard_notes || null,
     parking_info: publicHike.parking_info || legacyHike.parking_info || null,
     restaurant_info: publicHike.restaurant_info || legacyHike.restaurant_info || null,
+    season: publicHike.season || legacyHike.season || null,
+    seasons: hasPublicSeasons ? publicHike.seasons : legacySeasons,
     tags: Array.isArray(publicHike.tags) && publicHike.tags.length > 0
       ? publicHike.tags
       : Array.isArray(legacyHike.tags)
