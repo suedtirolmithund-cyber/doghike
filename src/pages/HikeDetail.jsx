@@ -227,6 +227,29 @@ export default function HikeDetail() {
     enabled: !!currentUser?.id,
   });
 
+  const { data: adminEditablePublicHikeId = null } = useQuery({
+    queryKey: ["adminEditablePublicHikeId", hike?.trail_name, hike?.location],
+    enabled: !!isAdmin && hike?._source === "sheets" && !hike?._public_hike_id && !!hike?.trail_name,
+    queryFn: async () => {
+      let query = supabase
+        .from("public_hikes")
+        .select("id")
+        .eq("title", hike.trail_name);
+
+      if (hike.location) {
+        query = query.eq("location", hike.location);
+      }
+
+      const { data, error } = await query.maybeSingle();
+      if (error) {
+        console.error("[HikeDetail] admin public_hike fallback lookup error:", error.message);
+        return null;
+      }
+
+      return data?.id ? String(data.id) : null;
+    },
+  });
+
   useEffect(() => {
     if (!lightboxOpen) return;
     const scroller = lightboxScrollerRef.current;
@@ -326,6 +349,8 @@ export default function HikeDetail() {
   const detailId = hike?._source === "sheets" && hike?._public_hike_id
     ? hike.route_id || String(hike._public_hike_id)
     : hike.id;
+  const adminEditPublicHikeId =
+    hike?._public_hike_id ? String(hike._public_hike_id) : adminEditablePublicHikeId;
   const communityHikeId = hike?._source === "sheets"
     ? String(hike?._public_hike_id ?? hike?.route_id ?? hike?.id ?? "")
     : hike?.id;
@@ -413,15 +438,15 @@ export default function HikeDetail() {
             </Button>
           </div>
           <div className="flex flex-wrap gap-2 self-start sm:justify-end">
-            {(isOwnJournalHike || (isAdmin && hike?._source === "sheets" && hike?._public_hike_id)) && (
-              <>
-                <Link
-                  to={
-                    isOwnJournalHike
-                      ? createPageUrl("AddJournalEntry") + `?id=${hike?._journal_id}`
-                      : createPageUrl("EditPublicHike") + `?id=${encodeURIComponent(detailId ?? "")}`
-                  }
-                >
+            {(isOwnJournalHike || (isAdmin && hike?._source === "sheets" && adminEditPublicHikeId)) && (
+                <>
+                  <Link
+                    to={
+                      isOwnJournalHike
+                        ? createPageUrl("AddJournalEntry") + `?id=${hike?._journal_id}`
+                      : createPageUrl("EditPublicHike") + `?id=${encodeURIComponent(adminEditPublicHikeId ?? "")}`
+                    }
+                  >
                   <Button variant="ghost" className="h-10 bg-white/10 px-3 text-sm backdrop-blur-sm text-white hover:bg-white/20">
                     <Edit className="w-4 h-4 mr-1" />
                     Bearbeiten
