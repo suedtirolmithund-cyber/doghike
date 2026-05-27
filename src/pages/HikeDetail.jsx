@@ -199,17 +199,37 @@ export default function HikeDetail() {
   const { user: currentUser, isAdmin } = useAuth();
 
   const detailPhotoSource = useMemo(() => {
-    if (Array.isArray(hike?.photos) && hike.photos.length > 0) {
-      if (hike?._source === "sheets" && hike?._public_hike_id) {
-        const managedPhotos = hike.photos.filter(isManagedPublicHikePhoto);
-        const otherPhotos = hike.photos.filter((photo) => !isManagedPublicHikePhoto(photo));
-        return managedPhotos.length > 0 ? [...managedPhotos, ...otherPhotos] : hike.photos;
-      }
-      return hike.photos;
-    }
-    if (typeof hike?.image === "string" && hike.image.trim()) return [hike.image.trim()];
-    if (Array.isArray(hike?._photo_references) && hike._photo_references.length > 0) return hike._photo_references;
-    return [];
+    const normalizedPhotos = Array.isArray(hike?.photos)
+      ? hike.photos
+          .map((photo) => (typeof photo === "string" ? photo.trim() : ""))
+          .filter(Boolean)
+      : [];
+
+    const prioritizedPhotos =
+      hike?._source === "sheets" && hike?._public_hike_id
+        ? (() => {
+            const managedPhotos = normalizedPhotos.filter(isManagedPublicHikePhoto);
+            const otherPhotos = normalizedPhotos.filter((photo) => !isManagedPublicHikePhoto(photo));
+            return managedPhotos.length > 0 ? [...managedPhotos, ...otherPhotos] : normalizedPhotos;
+          })()
+        : normalizedPhotos;
+
+    const normalizedPhotoReferences = Array.isArray(hike?._photo_references)
+      ? hike._photo_references
+          .map((photo) => (typeof photo === "string" ? photo.trim() : ""))
+          .filter(Boolean)
+      : [];
+
+    const explicitTitleImage =
+      typeof hike?.image === "string" && hike.image.trim() ? hike.image.trim() : null;
+
+    return Array.from(
+      new Set([
+        explicitTitleImage,
+        ...prioritizedPhotos,
+        ...normalizedPhotoReferences,
+      ].filter(Boolean))
+    );
   }, [hike?._photo_references, hike?.image, hike?.photos]);
 
   const heroPhotosKey = useMemo(
