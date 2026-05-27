@@ -115,6 +115,36 @@ function normalizeOptionalText(value) {
   return trimmed;
 }
 
+function normalizeStatusValue(value) {
+  const normalized = String(value ?? "")
+    .trim()
+    .toLowerCase();
+
+  if (!normalized) return null;
+  if (["approved", "freigegeben", "public", "öffentlich", "oeffentlich"].includes(normalized)) {
+    return "approved";
+  }
+  if (["draft", "entwurf", "pending"].includes(normalized)) {
+    return normalized === "draft" ? "draft" : "pending";
+  }
+  if (["archived", "archiv", "archive"].includes(normalized)) {
+    return "archived";
+  }
+
+  return normalized;
+}
+
+function isTruthyFlag(value) {
+  if (typeof value === "boolean") return value;
+  if (typeof value === "number") return value === 1;
+
+  const normalized = String(value ?? "")
+    .trim()
+    .toLowerCase();
+
+  return ["true", "1", "yes", "ja", "premium"].includes(normalized);
+}
+
 function pickFirstText(row, keys) {
   for (const key of keys) {
     const value = normalizeOptionalText(row?.[key]);
@@ -135,6 +165,8 @@ function rowToHike(row, index) {
   const parsedDurationH = parseFloat(row.duration_h || row.dauer_h || row.duration_hours);
 
   const tags = normalizeTags(...getLegacyTagColumns(row));
+
+  const normalizedStatus = normalizeStatusValue(row.status);
 
   // Wrap single image URL in an array so photos[0] works consistently in the app
   const photos = row.image ? [row.image] : [];
@@ -168,9 +200,9 @@ function rowToHike(row, index) {
     // water → water_availability (none | little | moderate | plenty)
     water_availability: (() => { const w = row.water?.trim(); if (!w) return null; return mapSupabaseWaterLevel(w) ?? w; })(),
 
-    is_premium: row.is_premium === "true" || row.is_premium === "1",
+    is_premium: isTruthyFlag(row.is_premium),
 
-    status: row.status,
+    status: normalizedStatus || "approved",
     // Sheets hikes are always public
     visibility: "public",
 
@@ -471,7 +503,10 @@ async function getLegacySheetHikes() {
     const text = await response.text();
     const rows = parseCsv(text);
     const hikes = rows
-      .filter((row) => row.status === "approved")
+      .filter((row) => {
+        const normalizedStatus = normalizeStatusValue(row.status);
+        return !normalizedStatus || normalizedStatus === "approved";
+      })
       .map((row, index) => rowToHike(row, index));
     return hikes;
   } catch (err) {
