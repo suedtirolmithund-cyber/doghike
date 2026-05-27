@@ -65,7 +65,7 @@ function transliterateFilename(value) {
 export default function OfflineDownload({
   hike,
   dogs = [],
-  allowDownload = true,
+  allowDownload = false,
   includePhotos = false,
 }) {
   const [downloading, setDownloading] = useState(false);

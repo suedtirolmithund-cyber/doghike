@@ -309,8 +309,9 @@ export default function HikeDetail() {
       </div>
     );
   }
-  // Premium gate: block non-premium users from admin-created premium hikes
-  const isPremiumHike = PREMIUM_FEATURES_ENABLED && hike.is_premium && !isAdmin && !isOwnHike;
+  // Premium gate: admins may inspect premium hikes, but downloads still require active Premium.
+  const isPremiumContent = PREMIUM_FEATURES_ENABLED && hike.is_premium;
+  const isPremiumHike = isPremiumContent && !isAdmin && !isOwnHike;
   const premiumEndDate = currentProfile?.premium_current_period_end
     ? new Date(currentProfile.premium_current_period_end)
     : null;
@@ -374,7 +375,7 @@ export default function HikeDetail() {
   };
   const canComment = hike?._source === "sheets" || hike?.visibility === "public";
   const canDownloadPdf = (hike?._source === "sheets" || isOwnJournalHike || hike?.visibility === "public")
-    && (!isPremiumHike || userHasPremium);
+    && (!isPremiumContent || userHasPremium);
   const includePhotosInPdf = hike?._source === "sheets" || isOwnJournalHike;
   const previewNotes = hike.notes
     ? hike.notes.length > 360
