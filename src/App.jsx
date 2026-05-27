@@ -150,6 +150,10 @@ const DogProfileRedirect = () => {
   const { user, isAuthenticated } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const allowedWithoutDogPaths = React.useMemo(
+    () => new Set([createPageUrl("Dogs"), createPageUrl("TopDogs")]),
+    []
+  );
 
   const { data: dogs = [], isFetched, isError } = useQuery({
     queryKey: ["dogs", user?.id],
@@ -160,12 +164,12 @@ const DogProfileRedirect = () => {
 
   useEffect(() => {
     if (!isAuthenticated || !isFetched || isError || dogs.length > 0) return;
-    if (location.pathname === createPageUrl("Dogs")) return;
+    if (allowedWithoutDogPaths.has(location.pathname)) return;
     if (hasSeenDogNudgeThisSession(user.id)) return;
 
     markDogNudgeSeenThisSession(user.id);
     navigate(createPageUrl("Dogs"), { replace: true });
-  }, [dogs.length, isAuthenticated, isError, isFetched, location.pathname, navigate, user?.id]);
+  }, [allowedWithoutDogPaths, dogs.length, isAuthenticated, isError, isFetched, location.pathname, navigate, user?.id]);
 
   return null;
 };
