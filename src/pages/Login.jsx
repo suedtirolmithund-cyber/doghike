@@ -9,6 +9,41 @@ import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle2 } from "lucide-react";
 const BROWN = "#A8003C";
 const BROWN_DARK = "#7C3020";
 
+function LoginBrandCard() {
+  return (
+    <div className="relative mx-auto h-[270px] w-full max-w-sm overflow-hidden rounded-[34px] border border-[#E7CFB2]/70 bg-[#FFF8F0] shadow-[0_24px_58px_rgba(124,48,32,0.18)] sm:h-[360px]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(255,255,255,0.94)_0,rgba(255,248,240,0.76)_34%,rgba(253,240,232,0.46)_70%,rgba(249,192,48,0.16)_100%)]" />
+
+      <div className="relative z-10 flex h-[58%] flex-col items-center justify-center px-8 text-center sm:h-[62%]">
+        <img
+          src="/icon.svg?v=dogtrails-login"
+          alt="DogTrails"
+          className="h-24 w-24 sm:h-32 sm:w-32"
+        />
+        <div className="mt-1 text-[34px] font-extrabold leading-none tracking-[-0.03em] text-[#7C3020] sm:text-[44px]">
+          DogTrails
+        </div>
+        <div className="mt-3 text-[10px] font-extrabold uppercase tracking-[0.32em] text-[#F07030] sm:text-xs">
+          Entdecke. Wandere. Verbinde.
+        </div>
+      </div>
+
+      <svg
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 h-[44%] w-full"
+        viewBox="0 0 390 180"
+        preserveAspectRatio="none"
+      >
+        <circle cx="302" cy="70" r="19" fill="#F9C030" />
+        <path d="M0 92 C42 64 58 62 90 88 C127 119 151 61 199 90 C242 116 260 68 307 92 C344 111 363 102 390 84 L390 180 L0 180 Z" fill="#FFC3A5" />
+        <path d="M0 116 C41 92 74 90 116 116 C151 137 178 82 218 111 C257 139 285 92 329 111 C355 122 372 119 390 106 L390 180 L0 180 Z" fill="#F6865E" />
+        <path d="M0 134 C50 111 83 119 126 139 C166 158 191 107 236 132 C279 155 306 113 350 132 C368 139 380 139 390 132 L390 180 L0 180 Z" fill="#D4547A" />
+        <path d="M0 150 C46 134 82 134 125 150 C166 166 202 129 246 149 C287 168 322 139 390 151 L390 180 L0 180 Z" fill="#A8003C" />
+      </svg>
+    </div>
+  );
+}
+
 function mapAuthError(message) {
   const msg = String(message || "").toLowerCase();
 
@@ -221,7 +256,7 @@ export default function Login() {
   };
 
   return (
-    <div className="relative flex min-h-[100dvh] flex-col justify-between overflow-x-hidden overflow-y-auto px-4 py-6 sm:items-center sm:justify-end">
+    <div className="relative flex min-h-[100dvh] flex-col items-center justify-start gap-4 overflow-x-hidden overflow-y-auto px-4 py-5 sm:justify-center sm:gap-5 sm:py-8">
       <div className="absolute inset-0 overflow-hidden bg-[#FDF0E8]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(249,192,48,0.92)_0,rgba(249,192,48,0.45)_20%,transparent_46%),radial-gradient(circle_at_82%_8%,rgba(240,112,48,0.82)_0,rgba(240,112,48,0.34)_22%,transparent_49%),radial-gradient(circle_at_50%_96%,rgba(168,0,60,0.58)_0,rgba(240,112,48,0.3)_32%,transparent_62%),linear-gradient(145deg,#FDF0E8_0%,#ffe6bf_47%,#F07030_100%)]" />
         <div className="absolute -left-20 top-16 h-72 w-72 rounded-full bg-[#F9C030]/45 blur-3xl md:h-[34rem] md:w-[34rem]" />
@@ -238,16 +273,10 @@ export default function Login() {
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45 }}
-          className="relative z-10 mx-auto mt-4 w-full max-w-sm text-center sm:mt-10"
+          className="relative z-10 w-full max-w-sm"
           style={{ fontFamily: "Nunito, sans-serif" }}
         >
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/85">
-            Willkommen bei DogTrails
-          </p>
-          <div className="mt-3 text-lg leading-none text-white drop-shadow">🐾 🐾 🐾</div>
-          <h2 className="mt-3 text-[24px] font-extrabold leading-[29px] text-white drop-shadow md:text-[34px] md:leading-tight">
-            Plane Touren, die zu dir und deinem Hund passen.
-          </h2>
+          <LoginBrandCard />
         </motion.div>
       )}
 
@@ -255,7 +284,7 @@ export default function Login() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45 }}
-        className="relative z-10 mt-6 w-full max-w-sm rounded-3xl overflow-hidden sm:mb-8"
+        className="relative z-10 w-full max-w-sm rounded-3xl overflow-hidden sm:mb-0"
         style={{ background: "rgba(255,255,255,0.10)", backdropFilter: "blur(2px)" }}
       >
         <div className="px-6 pt-8 pb-6">
