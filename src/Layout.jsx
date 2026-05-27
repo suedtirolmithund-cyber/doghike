@@ -121,7 +121,7 @@ export default function Layout({ children, currentPageName }) {
               >
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-sm font-semibold text-[#7C3020]">Weitere Seiten</span>
-                  <button onClick={() => setMoreOpen(false)} className="flex h-9 w-9 items-center justify-center rounded-xl text-brand-700 hover:bg-brand-50 hover:text-[#7C3020]">
+                  <button onClick={() => setMoreOpen(false)} className="flex h-9 w-9 items-center justify-center rounded-xl text-[#7C3020] hover:bg-[#FFF8F0] hover:text-[#A8003C] active:bg-[#FFF8F0] active:text-[#A8003C]">
                     <X className="w-5 h-5" />
                   </button>
                 </div>
@@ -135,8 +135,8 @@ export default function Layout({ children, currentPageName }) {
                         to={createPageUrl(name)}
                         className={`flex min-h-[70px] flex-col items-center justify-center gap-1.5 rounded-xl border p-2.5 transition-all ${
                           active
-                            ? "border-brand-300 bg-brand-100 text-[#7C3020] shadow-sm"
-                            : "border-brand-100 bg-white text-brand-700 hover:bg-brand-50"
+                            ? "border-[#F9C030]/80 bg-[#FFF8F0] text-[#A8003C] shadow-sm"
+                            : "border-brand-100 bg-white text-[#7C3020] hover:bg-[#FFF8F0] hover:text-[#A8003C] active:bg-[#FFF8F0] active:text-[#A8003C]"
                         }`}
                       >
                         <Icon className="w-5 h-5" />
@@ -149,8 +149,8 @@ export default function Layout({ children, currentPageName }) {
                       to={createPageUrl("AdminDashboard")}
                       className={`flex min-h-[70px] flex-col items-center justify-center gap-1.5 rounded-xl border p-2.5 transition-all ${
                         isActive("AdminDashboard")
-                          ? "border-brand-300 bg-brand-100 text-[#7C3020] shadow-sm"
-                          : "border-brand-100 bg-white text-brand-700 hover:bg-brand-50"
+                          ? "border-[#F9C030]/80 bg-[#FFF8F0] text-[#A8003C] shadow-sm"
+                          : "border-brand-100 bg-white text-[#7C3020] hover:bg-[#FFF8F0] hover:text-[#A8003C] active:bg-[#FFF8F0] active:text-[#A8003C]"
                       }`}
                     >
                       <ShieldCheck className="w-5 h-5" />
@@ -171,7 +171,7 @@ export default function Layout({ children, currentPageName }) {
                 key={name}
                 to={createPageUrl(name)}
                 className={`flex min-w-0 flex-col items-center gap-1 rounded-xl px-2 py-2 transition-all ${
-                  active ? "bg-[#F9C030]/35 text-[#A8003C] shadow-sm" : "text-[#7C3020] hover:bg-[#F9C030]/20 hover:text-[#A8003C]"
+                  active ? "bg-[#FFF8F0] text-[#A8003C] shadow-sm ring-1 ring-[#F9C030]/70" : "text-[#7C3020] hover:bg-[#FFF8F0] hover:text-[#A8003C] active:bg-[#FFF8F0] active:text-[#A8003C]"
                 }`}
               >
                 <Icon className={`h-5 w-5 shrink-0 text-current ${active ? "stroke-[2.5]" : "stroke-[2]"}`} />
@@ -185,7 +185,7 @@ export default function Layout({ children, currentPageName }) {
           <button
             onClick={() => setMoreOpen((value) => !value)}
             className={`flex min-w-0 flex-col items-center gap-1 rounded-xl px-2 py-2 transition-all ${
-              moreOpen ? "bg-[#F9C030]/35 text-[#A8003C] shadow-sm" : "text-[#7C3020] hover:bg-[#F9C030]/20 hover:text-[#A8003C]"
+              moreOpen ? "bg-[#FFF8F0] text-[#A8003C] shadow-sm ring-1 ring-[#F9C030]/70" : "text-[#7C3020] hover:bg-[#FFF8F0] hover:text-[#A8003C] active:bg-[#FFF8F0] active:text-[#A8003C]"
             }`}
           >
             <Grid className={`w-5 h-5 ${moreOpen ? "stroke-[2.5]" : "stroke-[2]"}`} />
@@ -222,7 +222,7 @@ export default function Layout({ children, currentPageName }) {
                     key={name}
                     to={createPageUrl(name)}
                     className={`flex min-w-[92px] max-w-[132px] items-center justify-center gap-1.5 rounded-lg px-2.5 py-2 text-center leading-tight transition-all xl:min-w-[108px] xl:gap-2 xl:px-3 xl:py-2.5 ${
-                      active ? "bg-[#A8003C]/13 text-[#7C3020] shadow-sm" : "text-brand-700 hover:bg-[#A8003C]/8 hover:text-[#7C3020]"
+                      active ? "bg-[#FFF8F0] text-[#A8003C] shadow-sm ring-1 ring-[#F9C030]/60" : "text-[#7C3020] hover:bg-[#FFF8F0] hover:text-[#A8003C] active:bg-[#FFF8F0] active:text-[#A8003C]"
                     }`}
                   >
                     <Icon className={`h-4 w-4 shrink-0 text-current ${active ? "stroke-[2.5]" : ""}`} />
@@ -234,7 +234,7 @@ export default function Layout({ children, currentPageName }) {
                 <Link
                   to={createPageUrl("AdminDashboard")}
                   className={`flex min-w-[92px] max-w-[132px] items-center justify-center gap-1.5 rounded-lg px-2.5 py-2 text-center leading-tight transition-all xl:min-w-[108px] xl:gap-2 xl:px-3 xl:py-2.5 ${
-                    isActive("AdminDashboard") ? "bg-[#A8003C]/13 text-[#7C3020] shadow-sm" : "text-brand-700 hover:bg-[#A8003C]/8 hover:text-[#7C3020]"
+                    isActive("AdminDashboard") ? "bg-[#FFF8F0] text-[#A8003C] shadow-sm ring-1 ring-[#F9C030]/60" : "text-[#7C3020] hover:bg-[#FFF8F0] hover:text-[#A8003C] active:bg-[#FFF8F0] active:text-[#A8003C]"
                   }`}
                 >
                   <ShieldCheck className="w-4 h-4" />

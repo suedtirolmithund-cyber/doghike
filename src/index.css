@@ -114,6 +114,11 @@
     font: inherit;
   }
 
+  nav a,
+  nav button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
   button,
   [role="button"] {
     max-width: 100%;
