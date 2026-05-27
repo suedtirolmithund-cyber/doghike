@@ -52,6 +52,7 @@ import {
   getDifficultyLabel,
   getDifficultyTextColor,
   getWaterLabel,
+  normalizeSeasonValues,
 } from "@/lib/difficultyConfig";
 import { hoursInputToMinutes, minutesToHoursInput } from "@/lib/duration";
 
@@ -709,12 +710,12 @@ const SEASON_OPTIONS = SEASON_LEVELS.map((season) => ({
   value: season.value,
   emoji: season.icon,
   label: season.label,
-  color: {
-    spring: "#ec9cf4",
-    summer: "#d64545",
-    autumn: "#f19a4b",
-    winter: "#5b83f0",
-    all_year: "#38a062",
+  colors: {
+    spring: { border: "#D4547A", background: "rgba(212,84,122,0.14)", text: "#7C3020" },
+    summer: { border: "#F07030", background: "rgba(240,112,48,0.14)", text: "#7C3020" },
+    autumn: { border: "#C07820", background: "rgba(192,120,32,0.16)", text: "#7C3020" },
+    winter: { border: "#A8003C", background: "rgba(168,0,60,0.10)", text: "#7C3020" },
+    all_year: { border: "#F9C030", background: "rgba(249,192,48,0.24)", text: "#7C3020" },
   }[season.value],
 }));
 
@@ -737,9 +738,9 @@ function SeasonPicker({ value = [], onChange }) {
               type="button"
               onClick={() => toggle(opt.value)}
               style={active ? {
-                borderColor: opt.color,
-                backgroundColor: opt.color + "22",
-                color: opt.color,
+                borderColor: opt.colors.border,
+                backgroundColor: opt.colors.background,
+                color: opt.colors.text,
               } : {}}
               className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 text-sm font-medium transition-all focus:outline-none ${
                 active
@@ -757,6 +758,36 @@ function SeasonPicker({ value = [], onChange }) {
         <p className="text-xs text-slate-400 mt-1">Keine Auswahl = wird nicht angezeigt</p>
       )}
     </div>
+  );
+}
+
+function normalizeSelectedDogIds(value, fallbackDogId = null) {
+  const dogIds = Array.isArray(value)
+    ? value
+    : value
+      ? [value]
+      : [];
+
+  if (fallbackDogId) {
+    dogIds.push(fallbackDogId);
+  }
+
+  return Array.from(
+    new Set(
+      dogIds
+        .map((dogId) => String(dogId ?? "").trim())
+        .filter(Boolean)
+    )
+  );
+}
+
+function normalizeDogMoodTags(value) {
+  return Array.from(
+    new Set(
+      (Array.isArray(value) ? value : value ? [value] : [])
+        .map((tag) => String(tag ?? "").trim())
+        .filter(Boolean)
+    )
   );
 }
 
@@ -866,14 +897,10 @@ export default function AddJournalEntry() {
     grazing_animals: routePrefill?.grazing_animals ?? false,
     muzzle_recommended: routePrefill?.muzzle_recommended ?? false,
     hazard_notes: routePrefill?.hazard_notes ?? "",
-    seasons: routePrefill?.seasons ?? [],
+    seasons: normalizeSeasonValues(routePrefill?.seasons, routePrefill?.season),
     dog_id: routePrefill?.dog_id ?? null,
-    dog_ids: Array.isArray(routePrefill?.dog_ids)
-      ? routePrefill.dog_ids
-      : routePrefill?.dog_id
-        ? [routePrefill.dog_id]
-        : [],
-    dog_mood_tags: routePrefill?.dog_mood_tags ?? [],
+    dog_ids: normalizeSelectedDogIds(routePrefill?.dog_ids, routePrefill?.dog_id),
+    dog_mood_tags: normalizeDogMoodTags(routePrefill?.dog_mood_tags),
     photos: routePrefill?.photos ?? [],
     gpx_url: routePrefill?.gpx_url ?? "",
   };
@@ -899,10 +926,10 @@ export default function AddJournalEntry() {
       grazing_animals: prefill.grazing_animals ?? EMPTY_FORM.grazing_animals,
       muzzle_recommended: prefill.muzzle_recommended ?? EMPTY_FORM.muzzle_recommended,
       hazard_notes: prefill.hazard_notes || EMPTY_FORM.hazard_notes,
-      seasons: Array.isArray(prefill.seasons) ? prefill.seasons : EMPTY_FORM.seasons,
-      dog_id: prefill.dog_id ?? EMPTY_FORM.dog_id,
-      dog_ids: Array.isArray(prefill.dog_ids) ? prefill.dog_ids : EMPTY_FORM.dog_ids,
-      dog_mood_tags: Array.isArray(prefill.dog_mood_tags) ? prefill.dog_mood_tags : EMPTY_FORM.dog_mood_tags,
+      seasons: prefill.seasons,
+      dog_id: prefill.dog_ids[0] ?? prefill.dog_id ?? EMPTY_FORM.dog_id,
+      dog_ids: prefill.dog_ids,
+      dog_mood_tags: prefill.dog_mood_tags,
       photos: Array.isArray(prefill.photos) ? prefill.photos : EMPTY_FORM.photos,
       gpx_url: prefill.gpx_url || EMPTY_FORM.gpx_url,
     }),
@@ -935,6 +962,8 @@ export default function AddJournalEntry() {
 
   useEffect(() => {
     if (existing) {
+      const normalizedExistingSeasons = normalizeSeasonValues(existing.seasons, existing.season);
+      const normalizedExistingDogIds = normalizeSelectedDogIds(existing.dog_ids, existing.dog_id);
       originalPhotosRef.current = existing.photos ?? [];
       originalGpxRef.current = existing.gpx_url ?? "";
       removedExistingPhotosRef.current = [];
@@ -960,14 +989,10 @@ export default function AddJournalEntry() {
         muzzle_recommended: existing.muzzle_recommended ?? false,
         hazard_notes: existing.hazard_notes ?? "",
         visibility: existing.visibility ?? "private",
-        seasons: existing.seasons ?? [],
-        dog_id: existing.dog_id ?? null,
-        dog_ids: Array.isArray(existing.dog_ids)
-          ? existing.dog_ids
-          : existing.dog_id
-            ? [existing.dog_id]
-            : [],
-        dog_mood_tags: existing.dog_mood_tags ?? [],
+        seasons: normalizedExistingSeasons,
+        dog_id: normalizedExistingDogIds[0] ?? null,
+        dog_ids: normalizedExistingDogIds,
+        dog_mood_tags: normalizeDogMoodTags(existing.dog_mood_tags),
       });
     }
   }, [existing]);
@@ -1274,10 +1299,14 @@ export default function AddJournalEntry() {
           ? "approved"
           : "draft";
 
+    const normalizedDogIds = normalizeSelectedDogIds(form.dog_ids, form.dog_id);
+    const normalizedSeasons = normalizeSeasonValues(form.seasons, form.season);
+
     saveMutation.mutate({
       ...form,
-      dog_ids: Array.isArray(form.dog_ids) ? [...new Set(form.dog_ids)].filter(Boolean) : [],
-      dog_id: Array.isArray(form.dog_ids) && form.dog_ids.length > 0 ? form.dog_ids[0] : null,
+      seasons: normalizedSeasons,
+      dog_ids: normalizedDogIds,
+      dog_id: normalizedDogIds[0] ?? null,
       distance_km: form.distance_km !== "" ? Number(form.distance_km) : null,
       elevation_m: form.elevation_m !== "" ? Number(form.elevation_m) : null,
       duration_minutes: hoursInputToMinutes(form.duration_minutes),
@@ -1286,7 +1315,7 @@ export default function AddJournalEntry() {
       dog_difficulty: form.dog_difficulty || null,
       grazing_animals: !!form.grazing_animals,
       muzzle_recommended: !!form.muzzle_recommended,
-      dog_mood_tags: form.dog_mood_tags ?? [],
+      dog_mood_tags: normalizeDogMoodTags(form.dog_mood_tags),
       latitude: form.latitude !== "" ? Number(form.latitude) : null,
       longitude: form.longitude !== "" ? Number(form.longitude) : null,
       // public -> pending admin review (admins can keep approved entries approved)
@@ -1300,16 +1329,17 @@ export default function AddJournalEntry() {
   const toggleDogMoodTag = (tag) => {
     setForm((prev) => ({
       ...prev,
-      dog_mood_tags: prev.dog_mood_tags.includes(tag)
-        ? prev.dog_mood_tags.filter((entry) => entry !== tag)
-        : [...prev.dog_mood_tags, tag],
+      dog_mood_tags: normalizeDogMoodTags(prev.dog_mood_tags).includes(tag)
+        ? normalizeDogMoodTags(prev.dog_mood_tags).filter((entry) => entry !== tag)
+        : [...normalizeDogMoodTags(prev.dog_mood_tags), tag],
     }));
   };
   const toggleSelectedDog = (dogId) => {
     setForm((prev) => {
-      const nextDogIds = prev.dog_ids.includes(dogId)
-        ? prev.dog_ids.filter((id) => id !== dogId)
-        : [...prev.dog_ids, dogId];
+      const currentDogIds = normalizeSelectedDogIds(prev.dog_ids, prev.dog_id);
+      const nextDogIds = currentDogIds.includes(dogId)
+        ? currentDogIds.filter((id) => id !== dogId)
+        : [...currentDogIds, dogId];
 
       return {
         ...prev,

@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { optimizeImageForUpload, validateImageUpload } from "@/lib/uploadValidation";
+import { normalizeSeasonValues } from "@/lib/difficultyConfig";
 
 const PUBLIC_HIKE_BUCKET = "journal";
 const PUBLIC_HIKE_PREFIX = "public-hikes/";
@@ -350,12 +351,8 @@ export async function getPublicHikeById(hikeId) {
     water_availability: mapSupabaseWaterLevel(hikeRow.water_availability),
     difficulty: hikeRow.difficulty != null ? String(hikeRow.difficulty) : null,
     dog_difficulty: hikeRow.dog_difficulty != null ? String(hikeRow.dog_difficulty) : null,
-    season: Array.isArray(hikeRow.seasons) && hikeRow.seasons.length > 0 ? hikeRow.seasons[0] : hikeRow.season || null,
-    seasons: Array.isArray(hikeRow.seasons) && hikeRow.seasons.length > 0
-      ? hikeRow.seasons.filter(Boolean)
-      : hikeRow.season
-        ? [hikeRow.season]
-        : [],
+    season: normalizeSeasonValues(hikeRow.seasons, hikeRow.season)[0] || null,
+    seasons: normalizeSeasonValues(hikeRow.seasons, hikeRow.season),
     grazing_animals: !!hikeRow.grazing_animals,
     muzzle_recommended: !!hikeRow.muzzle_recommended,
   };
@@ -386,7 +383,7 @@ export async function updatePublicHike(hikeId, values) {
   if (existingPhotosError) throw existingPhotosError;
   const existingPhotoUrls = existingPhotos.map((photo) => photo.photo_url).filter(Boolean);
 
-  const cleanedSeasons = Array.isArray(seasons) ? seasons.filter(Boolean) : [];
+  const cleanedSeasons = normalizeSeasonValues(seasons, hikeValues.season);
   const basePayload = {
     ...hikeValues,
     season: cleanedSeasons[0] || hikeValues.season || null,

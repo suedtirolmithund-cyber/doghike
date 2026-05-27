@@ -197,18 +197,35 @@ export async function getJournalEntryForDisplay(id) {
   return hydrateJournalEntryMedia(entry);
 }
 
-function withoutUnsupportedDogIds(entry = {}) {
-  const legacyEntry = { ...entry };
-  delete legacyEntry.dog_ids;
-  if (!legacyEntry.dog_id && Array.isArray(entry.dog_ids) && entry.dog_ids.length > 0) {
-    legacyEntry.dog_id = entry.dog_ids[0];
+function withoutUnsupportedOptionalColumns(entry = {}, error) {
+  const fallbackEntry = { ...entry };
+  const message = String(error?.message ?? "");
+
+  if (message.includes("dog_ids") && message.includes("column")) {
+    delete fallbackEntry.dog_ids;
+    if (!fallbackEntry.dog_id && Array.isArray(entry.dog_ids) && entry.dog_ids.length > 0) {
+      fallbackEntry.dog_id = entry.dog_ids[0];
+    }
   }
-  return legacyEntry;
+
+  if (message.includes("dog_mood_tags") && message.includes("column")) {
+    delete fallbackEntry.dog_mood_tags;
+  }
+
+  if (message.includes("seasons") && message.includes("column")) {
+    delete fallbackEntry.seasons;
+  }
+
+  return fallbackEntry;
 }
 
-function isMissingDogIdsColumnError(error) {
+function isMissingOptionalJournalColumnError(error) {
   const message = String(error?.message ?? "");
-  return message.includes("dog_ids") && message.includes("column");
+  return (
+    (message.includes("dog_ids") && message.includes("column")) ||
+    (message.includes("dog_mood_tags") && message.includes("column")) ||
+    (message.includes("seasons") && message.includes("column"))
+  );
 }
 
 export async function createJournalEntry(userId, entry) {
@@ -219,10 +236,10 @@ export async function createJournalEntry(userId, entry) {
     .select()
     .single();
 
-  if (error && isMissingDogIdsColumnError(error)) {
+  if (error && isMissingOptionalJournalColumnError(error)) {
     ({ data, error } = await supabase
       .from("journal_entries")
-      .insert(withoutUnsupportedDogIds(payload))
+      .insert(withoutUnsupportedOptionalColumns(payload, error))
       .select()
       .single());
   }
@@ -239,10 +256,10 @@ export async function updateJournalEntry(id, entry) {
     .select()
     .single();
 
-  if (error && isMissingDogIdsColumnError(error)) {
+  if (error && isMissingOptionalJournalColumnError(error)) {
     ({ data, error } = await supabase
       .from("journal_entries")
-      .update(withoutUnsupportedDogIds(entry))
+      .update(withoutUnsupportedOptionalColumns(entry, error))
       .eq("id", id)
       .select()
       .single());

@@ -404,11 +404,7 @@ function preferManagedPhotoReferences(photoReferences) {
 }
 
 function publicHikeRowToHike(row, photos = [], photoReferences = []) {
-  const seasons = Array.isArray(row.seasons) && row.seasons.length > 0
-    ? row.seasons.filter(Boolean)
-    : row.season
-      ? [row.season]
-      : [];
+  const seasons = normalizeSeasonValues(row.seasons, row.season);
   const cleanedPhotos = Array.isArray(photos) ? photos.filter(Boolean) : [];
   const cleanedPhotoReferences = Array.isArray(photoReferences) ? photoReferences.filter(Boolean) : [];
   const effectivePhotos = cleanedPhotos.length > 0 ? cleanedPhotos : cleanedPhotoReferences;
@@ -540,9 +536,7 @@ export async function getHikes() {
  */
 // dog and profile are pre-fetched objects passed in from getApprovedJournalEntries
 function journalEntryToHike(entry, dog = null, profile = null) {
-  const seasons = Array.isArray(entry.seasons)
-    ? entry.seasons.filter(Boolean)
-    : [];
+  const seasons = normalizeSeasonValues(entry.seasons, entry.season);
 
   return {
     id: `journal-${entry.id}`,
@@ -601,6 +595,19 @@ function journalEntryToHike(entry, dog = null, profile = null) {
   };
 }
 
+function getJournalEntryDogIds(entry) {
+  return Array.from(
+    new Set(
+      [
+        ...(Array.isArray(entry?.dog_ids) ? entry.dog_ids : []),
+        entry?.dog_id,
+      ]
+        .map((dogId) => String(dogId ?? "").trim())
+        .filter(Boolean)
+    )
+  );
+}
+
 /**
  * Fetches approved journal entries from Supabase.
  * Returns [] gracefully if Supabase is unavailable.
@@ -625,8 +632,8 @@ async function getApprovedJournalEntries() {
 
     const hydratedEntries = await hydrateJournalEntriesMedia(entries);
 
-    // 2. Fetch dogs for entries that have a dog_id
-    const dogIds = [...new Set(hydratedEntries.filter((e) => e.dog_id).map((e) => e.dog_id))];
+    // 2. Fetch dogs for entries that have one or more selected dogs
+    const dogIds = [...new Set(hydratedEntries.flatMap((entry) => getJournalEntryDogIds(entry)))];
     const dogMap = {};
     if (dogIds.length > 0) {
       const { data: dogs } = await supabase
@@ -648,7 +655,7 @@ async function getApprovedJournalEntries() {
     return hydratedEntries.map((entry) =>
       journalEntryToHike(
         entry,
-        dogMap[entry.dog_id] ?? null,
+        dogMap[getJournalEntryDogIds(entry)[0]] ?? null,
         profileMap[entry.user_id] ?? null,
       )
     );
