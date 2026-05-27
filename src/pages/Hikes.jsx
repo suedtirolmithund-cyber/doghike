@@ -1,7 +1,8 @@
 import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { CircleHelp, Mountain, PawPrint, RotateCcw, Search } from "lucide-react";
+import { CircleHelp, List, Mountain, PawPrint, RotateCcw, Search, LayoutGrid } from "lucide-react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -10,6 +11,8 @@ import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 import WaterIcon from "@/components/icons/WaterIcon";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 import {
   DIFFICULTY_APP_EXPLANATIONS,
   DIFFICULTY_GUIDE_NOTE,
@@ -22,8 +25,14 @@ import {
   WATER_GUIDE,
   WATER_GUIDE_NOTE,
   WATER_LEVELS,
+  getDifficultyLabel,
+  getSeasonIcon,
+  getSeasonLabel,
+  normalizeSeasonValues,
 } from "@/lib/difficultyConfig";
 import { useHikeFilters } from "@/hooks/useHikeFilters";
+import { formatDurationHours } from "@/lib/duration";
+import { getDisplayImageUrl } from "@/lib/imageProxy";
 
 function DifficultyInfoDialog({ icon, title, description, levels }) {
   return (
@@ -135,6 +144,7 @@ function WaterInfoDialog() {
 }
 
 export default function Hikes() {
+  const [viewMode, setViewMode] = useState("grid");
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
@@ -381,6 +391,37 @@ export default function Hikes() {
           </motion.div>
         )}
 
+        {!isHikesLoading && filteredHikes.length > 0 && (
+          <div className="mb-5 flex justify-end">
+            <div className="inline-flex rounded-2xl border border-brand-100 bg-white/85 p-1 shadow-sm">
+              <button
+                type="button"
+                onClick={() => setViewMode("grid")}
+                className={`inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition ${
+                  viewMode === "grid"
+                    ? "bg-brand-500 text-white shadow-sm"
+                    : "text-[#7C3020] hover:bg-brand-50"
+                }`}
+              >
+                <LayoutGrid className="h-4 w-4" />
+                Kacheln
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode("list")}
+                className={`inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition ${
+                  viewMode === "list"
+                    ? "bg-brand-500 text-white shadow-sm"
+                    : "text-[#7C3020] hover:bg-brand-50"
+                }`}
+              >
+                <List className="h-4 w-4" />
+                Liste
+              </button>
+            </div>
+          </div>
+        )}
+
         {isHikesLoading ? (
           <motion.div
             initial={{ opacity: 0 }}
@@ -399,11 +440,102 @@ export default function Hikes() {
             </div>
           </motion.div>
         ) : filteredHikes.length > 0 ? (
+          viewMode === "grid" ? (
           <div className="doghike-card-grid pb-20 md:pb-0">
             {filteredHikes.map((hike, index) => (
               <HikeCard key={`${hike._source ?? "sheets"}-${hike.id}`} hike={hike} index={index} />
             ))}
           </div>
+          ) : (
+            <div className="space-y-3 pb-20 md:pb-0">
+              {filteredHikes.map((hike, index) => {
+                const hikeSource = hike._source ?? "sheets";
+                const detailId =
+                  hikeSource === "sheets" && hike._public_hike_id
+                    ? hike.route_id || String(hike._public_hike_id)
+                    : hike.id;
+                const seasonValues = normalizeSeasonValues(hike.seasons, hike.season);
+                const seasonIcon = seasonValues[0] ? getSeasonIcon(seasonValues[0]) : null;
+                const seasonLabel = seasonValues[0] ? getSeasonLabel(seasonValues[0]) : null;
+                const coverPhoto =
+                  getDisplayImageUrl(
+                    Array.isArray(hike.photos) && hike.photos.length > 0
+                      ? hike.photos[0]
+                      : hike.image,
+                    { width: 320, quality: 72 }
+                  ) ||
+                  (Array.isArray(hike.photos) && hike.photos.length > 0 ? hike.photos[0] : hike.image) ||
+                  "/splash/autumn-hero.jpg";
+
+                return (
+                  <motion.div
+                    key={`${hikeSource}-${hike.id}`}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.04, duration: 0.28 }}
+                  >
+                    <Link
+                      to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=${hikeSource}`}
+                      state={{ hike }}
+                      className="block"
+                    >
+                      <div className="overflow-hidden rounded-[22px] border border-brand-100/80 bg-white/82 shadow-[0_10px_24px_rgba(168,0,60,0.08)] transition hover:shadow-[0_14px_30px_rgba(240,112,48,0.12)]">
+                        <div className="flex flex-col sm:flex-row">
+                          <div className="relative h-36 w-full shrink-0 overflow-hidden bg-brand-50 sm:h-auto sm:w-48">
+                            <img
+                              src={coverPhoto}
+                              alt={hike.trail_name}
+                              loading="lazy"
+                              decoding="async"
+                              className="h-full w-full object-cover"
+                            />
+                            {seasonIcon && (
+                              <span className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/80 text-xl shadow-sm">
+                                {seasonIcon}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex min-w-0 flex-1 flex-col gap-3 p-4 sm:p-5">
+                            <div className="min-w-0">
+                              <h3 className="line-clamp-2 text-lg font-semibold leading-tight text-[#7C3020]">
+                                {hike.trail_name}
+                              </h3>
+                              <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#C07820]">
+                                <span className="inline-flex items-center gap-1">
+                                  <span>{TOUR_ICONS.location}</span>
+                                  <span>{hike.location || "Dolomites"}</span>
+                                </span>
+                                {seasonLabel && (
+                                  <span className="inline-flex items-center gap-1">
+                                    <span>{seasonIcon}</span>
+                                    <span>{seasonLabel}</span>
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+
+                            <div className="flex flex-wrap gap-2 text-sm text-[#7C3020]">
+                              {hike.distance_km ? <span className="rounded-full border border-brand-100 bg-brand-50/70 px-2.5 py-1">{TOUR_ICONS.distance} {hike.distance_km} km</span> : null}
+                              {hike.elevation_gain_m || hike.elevation_m ? <span className="rounded-full border border-brand-100 bg-brand-50/70 px-2.5 py-1">{TOUR_ICONS.elevation} {hike.elevation_gain_m ?? hike.elevation_m} Hm</span> : null}
+                              {hike.duration_minutes ? <span className="rounded-full border border-brand-100 bg-brand-50/70 px-2.5 py-1">{TOUR_ICONS.duration} {formatDurationHours(hike.duration_minutes)}</span> : null}
+                              {hike.difficulty ? <span className="rounded-full border border-brand-100 bg-brand-50/70 px-2.5 py-1">{TOUR_ICONS.human} {getDifficultyLabel(hike.difficulty)}</span> : null}
+                              {hike.dog_difficulty ? <span className="rounded-full border border-brand-100 bg-brand-50/70 px-2.5 py-1">{TOUR_ICONS.dog} {getDifficultyLabel(hike.dog_difficulty)}</span> : null}
+                            </div>
+
+                            {hike.notes && (
+                              <p className="line-clamp-2 text-sm leading-relaxed text-[#A56A46]">
+                                {hike.notes}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.div>
+                );
+              })}
+            </div>
+          )
         ) : (
           <motion.div
             initial={{ opacity: 0 }}
