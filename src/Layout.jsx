@@ -195,50 +195,50 @@ export default function Layout({ children, currentPageName }) {
       </nav>
 
       <nav className="fixed left-0 right-0 top-0 z-50 hidden border-b border-brand-100/70 bg-white/78 shadow-[0_10px_28px_rgba(168,0,60,0.12)] backdrop-blur-md md:block">
-        <div className="mx-auto max-w-[1600px] px-4 py-2 2xl:px-6 2xl:py-3">
-          <div className="flex flex-wrap items-center justify-between gap-3 2xl:flex-nowrap 2xl:gap-4">
+        <div className="mx-auto w-full max-w-[1600px] py-2 pl-6 pr-3 lg:pl-8 lg:pr-4 xl:pl-10 xl:pr-6 2xl:px-8 2xl:py-3">
+          <div className="flex flex-wrap items-center justify-between gap-2 lg:gap-3 2xl:flex-nowrap 2xl:gap-4">
             <Link
               to={createPageUrl("Dashboard")}
-              className="flex shrink-0 items-center gap-2 transition-opacity hover:opacity-80"
+              className="flex min-w-0 shrink-0 items-center gap-2.5 transition-opacity hover:opacity-80 lg:gap-3"
             >
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-[15px] border border-[#E7CFB2]/90 bg-[#FFF8F0] shadow-[0_8px_18px_rgba(124,48,32,0.16)]">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-[14px] border border-[#E7CFB2]/90 bg-[#FFF8F0] shadow-[0_8px_18px_rgba(124,48,32,0.16)] lg:h-12 lg:w-12 lg:rounded-[15px]">
                 <img
                   src="/dogtrails-logo-pin.png?v=exact-brand-logo"
                   alt="DogTrails"
-                  className="h-12 w-12 object-contain"
+                  className="h-11 w-11 object-contain lg:h-12 lg:w-12"
                 />
               </span>
-              <div>
-                <span className="block text-lg font-semibold leading-none text-[#7d4f3f]">DogTrails</span>
-                <span className="text-xs text-[#9a6c58]">Hundefreundliche Wanderungen</span>
+              <div className="min-w-0">
+                <span className="block text-base font-semibold leading-none text-[#7d4f3f] lg:text-lg">DogTrails</span>
+                <span className="block truncate text-[11px] text-[#9a6c58] lg:text-xs">Hundefreundliche Wanderungen</span>
               </div>
             </Link>
 
-            <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-1 overflow-visible 2xl:flex-nowrap">
+            <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-1 overflow-visible lg:gap-1.5 2xl:flex-nowrap">
               {DESKTOP_NAV.map(({ name, icon: Icon, label }) => {
                 const active = isActive(name);
                 return (
                   <Link
                     key={name}
                     to={createPageUrl(name)}
-                    className={`flex min-w-[92px] max-w-[132px] items-center justify-center gap-1.5 rounded-lg px-2.5 py-2 text-center leading-tight transition-all xl:min-w-[108px] xl:gap-2 xl:px-3 xl:py-2.5 ${
+                    className={`flex min-w-[86px] max-w-[126px] items-center justify-center gap-1 rounded-lg px-2 py-2 text-center leading-tight transition-all lg:min-w-[96px] lg:gap-1.5 xl:min-w-[104px] xl:gap-2 xl:px-2.5 xl:py-2.5 2xl:min-w-[108px] ${
                       active ? "bg-[#FFF8F0] text-[#A8003C] shadow-sm ring-1 ring-[#F9C030]/60" : "text-[#7C3020] hover:bg-[#FFF8F0] hover:text-[#A8003C] active:bg-[#FFF8F0] active:text-[#A8003C]"
                     }`}
                   >
                     <Icon className={`h-4 w-4 shrink-0 text-current ${active ? "stroke-[2.5]" : ""}`} />
-                    <span className="whitespace-nowrap text-[13px] font-semibold xl:text-sm">{label}</span>
+                    <span className="whitespace-nowrap text-[12px] font-semibold lg:text-[13px] xl:text-sm">{label}</span>
                   </Link>
                 );
               })}
               {isAdmin && (
                 <Link
                   to={createPageUrl("AdminDashboard")}
-                  className={`flex min-w-[92px] max-w-[132px] items-center justify-center gap-1.5 rounded-lg px-2.5 py-2 text-center leading-tight transition-all xl:min-w-[108px] xl:gap-2 xl:px-3 xl:py-2.5 ${
+                  className={`flex min-w-[86px] max-w-[126px] items-center justify-center gap-1 rounded-lg px-2 py-2 text-center leading-tight transition-all lg:min-w-[96px] lg:gap-1.5 xl:min-w-[104px] xl:gap-2 xl:px-2.5 xl:py-2.5 2xl:min-w-[108px] ${
                     isActive("AdminDashboard") ? "bg-[#FFF8F0] text-[#A8003C] shadow-sm ring-1 ring-[#F9C030]/60" : "text-[#7C3020] hover:bg-[#FFF8F0] hover:text-[#A8003C] active:bg-[#FFF8F0] active:text-[#A8003C]"
                   }`}
                 >
                   <ShieldCheck className="w-4 h-4" />
-                  <span className="whitespace-nowrap text-[13px] font-semibold xl:text-sm">Admin</span>
+                  <span className="whitespace-nowrap text-[12px] font-semibold lg:text-[13px] xl:text-sm">Admin</span>
                 </Link>
               )}
             </div>
