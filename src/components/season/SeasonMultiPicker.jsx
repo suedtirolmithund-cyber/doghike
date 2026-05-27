@@ -5,12 +5,12 @@ const SEASON_OPTIONS = SEASON_LEVELS.map((season) => ({
   value: season.value,
   emoji: season.icon,
   label: season.label,
-  color: {
-    spring: "#ec9cf4",
-    summer: "#d64545",
-    autumn: "#f19a4b",
-    winter: "#5b83f0",
-    all_year: "#38a062",
+  colors: {
+    spring: { border: "#D4547A", background: "rgba(212,84,122,0.14)", text: "#7C3020" },
+    summer: { border: "#F07030", background: "rgba(240,112,48,0.14)", text: "#7C3020" },
+    autumn: { border: "#C07820", background: "rgba(192,120,32,0.16)", text: "#7C3020" },
+    winter: { border: "#A8003C", background: "rgba(168,0,60,0.10)", text: "#7C3020" },
+    all_year: { border: "#F9C030", background: "rgba(249,192,48,0.24)", text: "#7C3020" },
   }[season.value],
 }));
 
@@ -41,9 +41,9 @@ export default function SeasonMultiPicker({
               type="button"
               onClick={() => toggle(option.value)}
               style={active ? {
-                borderColor: option.color,
-                backgroundColor: `${option.color}22`,
-                color: option.color,
+                borderColor: option.colors.border,
+                backgroundColor: option.colors.background,
+                color: option.colors.text,
               } : {}}
               className={`flex items-center gap-1.5 rounded-xl border-2 px-3 py-2 text-sm font-medium transition-all focus:outline-none ${
                 active

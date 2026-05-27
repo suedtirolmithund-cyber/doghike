@@ -820,9 +820,9 @@ export default function GPSTracker({ onSave }) {
 
         {isTracking && gpsAccuracy !== null && (
           <div className={`absolute left-3 top-12 z-[1000] flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium shadow ${
-            gpsAccuracy <= 10 ? "bg-green-500 text-white" :
-            gpsAccuracy <= 25 ? "bg-amber-400 text-white" :
-            "bg-red-500 text-white"
+            gpsAccuracy <= 10 ? "bg-[#F9C030] text-[#7C3020]" :
+            gpsAccuracy <= 25 ? "bg-[#F07030] text-white" :
+            "bg-[#A8003C] text-white"
           }`}>
             {gpsAccuracy <= 25 ? <Wifi className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
             ±{Math.round(gpsAccuracy)}m

@@ -86,7 +86,7 @@ function FilterButton({ active, children, onClick }) {
 function StatusBadge({ status }) {
   const normalized = (status ?? "").toLowerCase();
   const config = {
-    approved: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    approved: "bg-[#FFF8E0] text-[#7C3020] border-[#F9C030]",
     draft: "bg-brand-50 text-brand-600 border-brand-100",
     archived: "bg-brand-100/80 text-slate-600 border-brand-100",
   };

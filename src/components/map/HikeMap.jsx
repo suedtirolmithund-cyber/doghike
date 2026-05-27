@@ -18,13 +18,28 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
-const seasonConfig = {
-  spring: { color: "#ec9cf4", label: "Frühling" },
-  summer: { color: "#d64545", label: "Sommer" },
-  autumn: { color: "#f19a4b", label: "Herbst" },
-  winter: { color: "#5b83f0", label: "Winter" },
-  all_year: { color: "#38a062", label: "Ganzjährig" },
+const seasonPalette = {
+  spring: { color: "#D4547A", background: "rgba(212,84,122,0.14)", text: "#7C3020" },
+  summer: { color: "#F07030", background: "rgba(240,112,48,0.14)", text: "#7C3020" },
+  autumn: { color: "#C07820", background: "rgba(192,120,32,0.16)", text: "#7C3020" },
+  winter: { color: "#A8003C", background: "rgba(168,0,60,0.10)", text: "#7C3020" },
+  all_year: { color: "#F9C030", background: "rgba(249,192,48,0.24)", text: "#7C3020" },
 };
+
+const rawSeasonConfig = {
+  spring: { label: "Frühling" },
+  summer: { label: "Sommer" },
+  autumn: { label: "Herbst" },
+  winter: { label: "Winter" },
+  all_year: { label: "Ganzjährig" },
+};
+
+const seasonConfig = Object.fromEntries(
+  Object.entries(rawSeasonConfig).map(([key, value]) => [
+    key,
+    { ...value, ...seasonPalette[key] },
+  ])
+);
 
 const legacyAvailabilityMap = {
   SommerOnly: "summer",
@@ -34,7 +49,7 @@ const legacyAvailabilityMap = {
   YearRound: "all_year",
 };
 
-const DEFAULT_COLOR = "#38a062";
+const DEFAULT_COLOR = "#A8003C";
 
 function getCountryLabel(country) {
   if (country === "italy") return "Italien";
@@ -89,7 +104,7 @@ function createGroupedIcon({ color, photoUrl, count }) {
             min-width:20px;
             height:20px;
             border-radius:999px;
-            background:#1e293b;
+            background:#A8003C;
             color:white;
             font-size:11px;
             font-weight:700;
@@ -135,7 +150,7 @@ function createGroupedIcon({ color, photoUrl, count }) {
           min-width:20px;
           height:20px;
           border-radius:999px;
-          background:#1e293b;
+          background:#A8003C;
           color:white;
           font-size:11px;
           font-weight:700;
@@ -212,7 +227,7 @@ function buildHikePopupItem(hike, isGrouped) {
     >
       <div class="hike-popup-photo">
         ${imageHtml}
-        ${season ? `<span class="hike-popup-badge" style="background:${season.color}">${season.label}</span>` : ""}
+        ${season ? `<span class="hike-popup-badge" style="background:${season.background};border-color:${season.color};color:${season.text}">${season.label}</span>` : ""}
       </div>
       <div class="hike-popup-content">
         <div class="hike-popup-title">${escapeHtml(hike.trail_name)}</div>
@@ -423,18 +438,19 @@ export default function HikeMap({
           color: #9f6f52;
           font-size: 13px;
           font-weight: 800;
-          background: #d6ebff;
+          background: #FDF0E8;
         }
         .hike-popup-badge {
           position: absolute;
           left: 10px;
           bottom: 10px;
+          border: 1px solid #F9C030;
           border-radius: 999px;
           padding: 5px 8px;
-          color: white;
           font-size: 11px;
           font-weight: 800;
           box-shadow: 0 6px 14px rgba(41,37,36,0.18);
+          backdrop-filter: blur(10px);
         }
         .hike-popup-content {
           padding: 12px;
@@ -482,9 +498,9 @@ export default function HikeMap({
           box-shadow: 0 2px 8px rgba(0,0,0,0.3);
           border: 3px solid white;
         }
-        .cluster-small { width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6, #2563eb); font-size: 14px; }
-        .cluster-medium { width: 50px; height: 50px; background: linear-gradient(135deg, #f59e0b, #d97706); font-size: 16px; }
-        .cluster-large { width: 60px; height: 60px; background: linear-gradient(135deg, #ef4444, #dc2626); font-size: 18px; }
+        .cluster-small { width: 40px; height: 40px; background: linear-gradient(135deg, #F9C030, #F07030); color: #7C3020; font-size: 14px; }
+        .cluster-medium { width: 50px; height: 50px; background: linear-gradient(135deg, #F07030, #D4547A); font-size: 16px; }
+        .cluster-large { width: 60px; height: 60px; background: linear-gradient(135deg, #A8003C, #7C3020); font-size: 18px; }
       `}</style>
     </div>
   );
