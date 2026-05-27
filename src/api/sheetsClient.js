@@ -106,6 +106,23 @@ function buildComparableHikeKey(hike) {
   return `${slugify(title)}::${location.trim().toLowerCase()}`;
 }
 
+function mergeMissingLegacyFieldsIntoPublicHike(publicHike, legacyHike) {
+  if (!publicHike || !legacyHike) return publicHike;
+
+  return {
+    ...publicHike,
+    notes: publicHike.notes || legacyHike.notes || null,
+    hazard_notes: publicHike.hazard_notes || legacyHike.hazard_notes || null,
+    parking_info: publicHike.parking_info || legacyHike.parking_info || null,
+    restaurant_info: publicHike.restaurant_info || legacyHike.restaurant_info || null,
+    tags: Array.isArray(publicHike.tags) && publicHike.tags.length > 0
+      ? publicHike.tags
+      : Array.isArray(legacyHike.tags)
+        ? legacyHike.tags
+        : [],
+  };
+}
+
 function normalizeOptionalText(value) {
   if (typeof value !== "string") return value ?? null;
 
@@ -591,11 +608,22 @@ export async function getHikes() {
       return supabaseHikes;
     }
 
+    const legacyHikesByKey = new Map(
+      legacySheetHikes.map((hike) => [buildComparableHikeKey(hike), hike])
+    );
+
+    const mergedSupabaseHikes = supabaseHikes.map((hike) =>
+      mergeMissingLegacyFieldsIntoPublicHike(
+        hike,
+        legacyHikesByKey.get(buildComparableHikeKey(hike))
+      )
+    );
+
     const missingLegacyHikes = legacySheetHikes.filter(
       (hike) => !supabaseKeys.has(buildComparableHikeKey(hike))
     );
 
-    return [...supabaseHikes, ...missingLegacyHikes];
+    return [...mergedSupabaseHikes, ...missingLegacyHikes];
   } catch (err) {
     console.error("[sheetsClient] public_hikes fetch failed, falling back to sheet:", err);
     return getLegacySheetHikes();
