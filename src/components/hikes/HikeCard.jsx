@@ -153,7 +153,7 @@ export default function HikeCard({
               className="pointer-events-none absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(to top, rgba(40, 20, 10, 0.78) 0%, rgba(40, 20, 10, 0.34) 45%, transparent 100%)",
+                  "linear-gradient(to top, rgba(40, 20, 10, 0.72) 0%, rgba(40, 20, 10, 0.28) 42%, rgba(40, 20, 10, 0.08) 68%, transparent 100%)",
               }}
             />
 
@@ -167,7 +167,7 @@ export default function HikeCard({
               </span>
             )}
 
-            <div className="pointer-events-none absolute bottom-4 left-4 right-4 rounded-2xl bg-gradient-to-t from-[#28140A]/30 via-[#28140A]/12 to-transparent p-2.5 backdrop-blur-[1px]">
+            <div className="pointer-events-none absolute bottom-4 left-4 right-4 rounded-2xl border border-white/10 bg-[rgba(40,20,10,0.18)] p-3 shadow-[0_10px_24px_rgba(0,0,0,0.16)] backdrop-blur-[2px]">
               <h3 className="mb-1 line-clamp-2 text-base font-semibold leading-tight text-white drop-shadow-[0_2px_5px_rgba(0,0,0,0.65)]">
                 {hike.trail_name}
               </h3>
