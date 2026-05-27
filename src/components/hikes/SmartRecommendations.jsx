@@ -34,6 +34,24 @@ function getAreaLabel(hike) {
   return hike?.location?.trim() || hike?.country?.trim() || "";
 }
 
+function hasCoordinates(hike) {
+  return Number.isFinite(Number(hike?.latitude)) && Number.isFinite(Number(hike?.longitude));
+}
+
+function getDistanceInKm(left, right) {
+  if (!hasCoordinates(left) || !hasCoordinates(right)) return Number.POSITIVE_INFINITY;
+
+  const leftLat = Number(left.latitude) * (Math.PI / 180);
+  const rightLat = Number(right.latitude) * (Math.PI / 180);
+  const latDiff = rightLat - leftLat;
+  const lngDiff = (Number(right.longitude) - Number(left.longitude)) * (Math.PI / 180);
+  const haversine =
+    Math.sin(latDiff / 2) ** 2 +
+    Math.cos(leftLat) * Math.cos(rightLat) * Math.sin(lngDiff / 2) ** 2;
+
+  return 6371 * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
+}
+
 export default function SmartRecommendations({ allHikes = [], currentHike = null }) {
   const { user } = useAuth();
 
@@ -72,26 +90,38 @@ export default function SmartRecommendations({ allHikes = [], currentHike = null
     const currentSeasonValues = normalizeSeasonValues(currentHike?.seasons, currentHike?.season);
 
     const scoredRecommendations = allHikes
+      .filter((hike) => hike?.id !== currentHike?.id)
       .map((hike) => {
         const hikeLocationTokens = getUniqueTokens(hike.location, hike.country);
         const hikeTagTokens = getUniqueTokens(hike.tags);
         const hikeSeasonValues = normalizeSeasonValues(hike.seasons, hike.season);
+        const distanceInKm = getDistanceInKm(currentHike, hike);
+        const hasExactLocationMatch =
+          currentHike?.location &&
+          hike.location &&
+          String(currentHike.location).trim().toLowerCase() === String(hike.location).trim().toLowerCase();
+        const hasExactCountryMatch =
+          currentHike?.country &&
+          hike.country &&
+          String(currentHike.country).trim().toLowerCase() === String(hike.country).trim().toLowerCase();
 
         let areaScore = 0;
 
-        if (
-          currentHike?.location &&
-          hike.location &&
-          String(currentHike.location).trim().toLowerCase() === String(hike.location).trim().toLowerCase()
-        ) {
-          areaScore += 8;
-        }
+        if (hasExactLocationMatch) areaScore += 16;
+        else if (hasExactCountryMatch) areaScore += 4;
 
         areaScore += getOverlapScore(currentLocationTokens, hikeLocationTokens, 3);
         areaScore += getOverlapScore(currentTagTokens, hikeTagTokens, 2);
         areaScore += getOverlapScore(currentSeasonValues, hikeSeasonValues, 1);
 
         let score = areaScore;
+
+        if (Number.isFinite(distanceInKm)) {
+          if (distanceInKm <= 10) score += 12;
+          else if (distanceInKm <= 25) score += 9;
+          else if (distanceInKm <= 50) score += 6;
+          else if (distanceInKm <= 100) score += 3;
+        }
 
         if (preferredDiff && String(hike.difficulty) === String(preferredDiff)) {
           score += 3;
@@ -109,16 +139,26 @@ export default function SmartRecommendations({ allHikes = [], currentHike = null
 
         return {
           ...hike,
+          _distanceInKm: distanceInKm,
+          _hasExactLocationMatch: hasExactLocationMatch,
           _areaScore: areaScore,
           _score: score,
         };
       })
       .sort((a, b) => {
+        if (a._hasExactLocationMatch !== b._hasExactLocationMatch) {
+          return a._hasExactLocationMatch ? -1 : 1;
+        }
+        if (a._distanceInKm !== b._distanceInKm) {
+          return a._distanceInKm - b._distanceInKm;
+        }
         if (b._areaScore !== a._areaScore) return b._areaScore - a._areaScore;
         return b._score - a._score;
       });
 
-    const sameAreaRecommendations = scoredRecommendations.filter((hike) => hike._areaScore > 0);
+    const sameAreaRecommendations = scoredRecommendations.filter(
+      (hike) => hike._hasExactLocationMatch || hike._areaScore > 0 || Number.isFinite(hike._distanceInKm)
+    );
     if (sameAreaRecommendations.length >= 3) {
       return sameAreaRecommendations.slice(0, 3);
     }
@@ -136,7 +176,7 @@ export default function SmartRecommendations({ allHikes = [], currentHike = null
     <section className="mb-12 space-y-5 rounded-[28px] border border-brand-100/70 bg-white/72 px-4 py-5 shadow-[0_12px_28px_rgba(168,0,60,0.06)] backdrop-blur-sm sm:px-6 sm:py-6">
       <div className="space-y-2">
         <div className="flex flex-wrap items-center gap-2">
-          <h2 className="doghike-section-title">Weitere spannende Wanderungen</h2>
+          <h2 className="doghike-section-title">Weitere spannende Wanderungen in dieser Region</h2>
           {isPersonalized && (
             <span className="inline-flex items-center gap-1 rounded-full bg-brand-100/80 px-2 py-1 text-xs text-slate-500">
               <Sparkles className="h-3 w-3" /> passend zu deinen Touren
@@ -145,8 +185,8 @@ export default function SmartRecommendations({ allHikes = [], currentHike = null
         </div>
         <p className="text-sm leading-relaxed text-[#C07820]">
           {hasAreaMatches && areaLabel
-            ? `Rund um ${areaLabel} haben wir dir weitere passende Wanderungen zusammengestellt.`
-            : "Hier findest du weitere passende Wanderungen zu dieser Tour."}
+            ? `Diese Vorschläge liegen rund um ${areaLabel} und sind der Tour auf der Karte besonders nahe.`
+            : "Hier findest du weitere spannende Wanderungen, die dieser Tour auf der Karte möglichst nahe liegen."}
         </p>
       </div>
 
