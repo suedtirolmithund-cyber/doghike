@@ -45,16 +45,37 @@ export default function HikeCard({
 }) {
   const hikeDogs = dogs.filter((dog) => hike.dogs?.includes(dog.id));
   const cardPhotoSource = useMemo(() => {
-    if (Array.isArray(hike.photos) && hike.photos.length > 0) return hike.photos;
-    if (typeof hike.image === "string" && hike.image.trim()) return [hike.image.trim()];
-    if (Array.isArray(hike._photo_references) && hike._photo_references.length > 0) return hike._photo_references;
-    return [];
+    const orderedPhotos = [];
+
+    if (typeof hike.image === "string" && hike.image.trim()) {
+      orderedPhotos.push(hike.image.trim());
+    }
+
+    if (Array.isArray(hike.photos) && hike.photos.length > 0) {
+      orderedPhotos.push(...hike.photos);
+    }
+
+    if (Array.isArray(hike._photo_references) && hike._photo_references.length > 0) {
+      orderedPhotos.push(...hike._photo_references);
+    }
+
+    return Array.from(
+      new Set(
+        orderedPhotos
+          .map((photo) => (typeof photo === "string" ? photo.trim() : ""))
+          .filter(Boolean)
+      )
+    );
   }, [hike._photo_references, hike.image, hike.photos]);
-  const photoList = useMemo(
-    () => cardPhotoSource.map((photo) => (typeof photo === "string" ? photo.trim() : "")).filter(Boolean),
-    [cardPhotoSource]
-  );
-  const [resolvedCoverPhoto, setResolvedCoverPhoto] = useState(FALLBACK_HIKE_IMAGE);
+  const [coverPhotoIndex, setCoverPhotoIndex] = useState(0);
+  const coverPhotosKey = useMemo(() => cardPhotoSource.join("|"), [cardPhotoSource]);
+  const currentCoverPhoto =
+    coverPhotoIndex >= 0 ? cardPhotoSource[coverPhotoIndex] || FALLBACK_HIKE_IMAGE : FALLBACK_HIKE_IMAGE;
+  const resolvedCoverPhoto =
+    getDisplayImageUrl(currentCoverPhoto, {
+      width: imageSize === "home" ? 960 : 720,
+      quality: 74,
+    }) || currentCoverPhoto;
   const cardPreviewBackgroundStyle = resolvedCoverPhoto
     ? {
         backgroundImage: `url("${resolvedCoverPhoto.replace(/"/g, '\\"')}")`,
@@ -94,43 +115,8 @@ export default function HikeCard({
   const imageHeightClass = imageSize === "home" ? "h-56 sm:h-60" : "h-48 sm:h-52";
 
   useEffect(() => {
-    let cancelled = false;
-    const candidatePhotos = photoList.length > 0 ? photoList : [FALLBACK_HIKE_IMAGE];
-
-    const tryPhotoAtIndex = (index) => {
-      const rawPhoto = candidatePhotos[index] || FALLBACK_HIKE_IMAGE;
-      const candidateUrl =
-        getDisplayImageUrl(rawPhoto, {
-          width: imageSize === "home" ? 960 : 720,
-          quality: 74,
-        }) || rawPhoto;
-
-      if (rawPhoto === FALLBACK_HIKE_IMAGE || typeof window === "undefined") {
-        if (!cancelled) setResolvedCoverPhoto(candidateUrl);
-        return;
-      }
-
-      const imageProbe = new window.Image();
-      imageProbe.onload = () => {
-        if (!cancelled) setResolvedCoverPhoto(candidateUrl);
-      };
-      imageProbe.onerror = () => {
-        if (cancelled) return;
-        if (index + 1 < candidatePhotos.length) {
-          tryPhotoAtIndex(index + 1);
-          return;
-        }
-        setResolvedCoverPhoto(FALLBACK_HIKE_IMAGE);
-      };
-      imageProbe.src = candidateUrl;
-    };
-
-    tryPhotoAtIndex(0);
-
-    return () => {
-      cancelled = true;
-    };
-  }, [imageSize, photoList]);
+    setCoverPhotoIndex(0);
+  }, [coverPhotosKey]);
 
   return (
     <motion.div
@@ -153,6 +139,12 @@ export default function HikeCard({
                 alt={hike.trail_name}
                 loading={index < 4 ? "eager" : "lazy"}
                 decoding="async"
+                onError={() => {
+                  setCoverPhotoIndex((currentIndex) => {
+                    const nextIndex = currentIndex + 1;
+                    return nextIndex < cardPhotoSource.length ? nextIndex : -1;
+                  });
+                }}
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
             ) : null}
