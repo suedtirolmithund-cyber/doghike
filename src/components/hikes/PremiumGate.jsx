@@ -20,7 +20,7 @@ const inlineItems = [
   "Parken & Einkehr",
   "Tipps & Hinweise",
   "PDF-Download",
-  "Premium-Touren",
+  "Immer neue Touren",
 ];
 
 function PremiumList({ title, items }) {
