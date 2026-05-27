@@ -19,11 +19,11 @@ function escapeHtml(str) {
 }
 
 const seasonPalette = {
-  spring: { color: "#D4547A", background: "rgba(212,84,122,0.14)", text: "#7C3020" },
-  summer: { color: "#F07030", background: "rgba(240,112,48,0.14)", text: "#7C3020" },
-  autumn: { color: "#C07820", background: "rgba(192,120,32,0.16)", text: "#7C3020" },
-  winter: { color: "#A8003C", background: "rgba(168,0,60,0.10)", text: "#7C3020" },
-  all_year: { color: "#F9C030", background: "rgba(249,192,48,0.24)", text: "#7C3020" },
+  spring: { color: "#ec9cf4", background: "rgba(236,156,244,0.18)", text: "#292524" },
+  summer: { color: "#d64545", background: "rgba(214,69,69,0.14)", text: "#292524" },
+  autumn: { color: "#f19a4b", background: "rgba(241,154,75,0.18)", text: "#292524" },
+  winter: { color: "#5b83f0", background: "rgba(91,131,240,0.16)", text: "#292524" },
+  all_year: { color: "#38a062", background: "rgba(56,160,98,0.16)", text: "#292524" },
 };
 
 const rawSeasonConfig = {
@@ -49,7 +49,7 @@ const legacyAvailabilityMap = {
   YearRound: "all_year",
 };
 
-const DEFAULT_COLOR = "#A8003C";
+const DEFAULT_COLOR = "#38a062";
 
 function getCountryLabel(country) {
   if (country === "italy") return "Italien";
@@ -356,7 +356,7 @@ export default function HikeMap({
       </SafeMapContainer>
 
       {showLegend && (
-        <div className="absolute bottom-3 left-3 z-[1000] hidden flex-col gap-1 rounded-xl border border-brand-100/60 bg-white/90 px-3 py-2 text-xs text-slate-700 shadow backdrop-blur-sm md:flex">
+        <div className="absolute bottom-8 left-3 z-[1000] flex max-w-[calc(100%-1.5rem)] flex-wrap gap-1 rounded-xl border border-brand-100/60 bg-white/[0.92] px-2 py-1.5 text-[11px] text-slate-700 shadow backdrop-blur-sm md:bottom-3 md:flex-col md:px-3 md:py-2 md:text-xs">
           {Object.entries(seasonConfig).map(([key, { color, label }]) => (
             <div key={key} className="flex items-center gap-2">
               <span
