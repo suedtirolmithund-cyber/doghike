@@ -181,9 +181,16 @@ export default function HikeDetail() {
 
   const { user: currentUser, isAdmin } = useAuth();
 
+  const detailPhotoSource = useMemo(() => {
+    if (Array.isArray(hike?.photos) && hike.photos.length > 0) return hike.photos;
+    if (typeof hike?.image === "string" && hike.image.trim()) return [hike.image.trim()];
+    if (Array.isArray(hike?._photo_references) && hike._photo_references.length > 0) return hike._photo_references;
+    return [];
+  }, [hike?._photo_references, hike?.image, hike?.photos]);
+
   const heroPhotosKey = useMemo(
-    () => (Array.isArray(hike?.photos) ? hike.photos.filter(Boolean).join("|") : ""),
-    [hike?.photos]
+    () => detailPhotoSource.filter(Boolean).join("|"),
+    [detailPhotoSource]
   );
 
   useEffect(() => {
@@ -312,7 +319,7 @@ export default function HikeDetail() {
   const showPremiumPreviewOnly = isPremiumHike && !userHasPremium;
 
   const hikeDogs = dogs.filter(d => hike.dogs?.includes(d.id));
-  const photos = Array.isArray(hike.photos) ? hike.photos.filter(Boolean) : [];
+  const photos = detailPhotoSource.filter(Boolean);
   const coverPhoto = heroPhotoIndex >= 0 ? photos[heroPhotoIndex] || "/splash/autumn-hero.jpg" : "/splash/autumn-hero.jpg";
   const heroPreviewPhoto = getDisplayImageUrl(coverPhoto, { width: 1600, quality: 80 }) || coverPhoto;
   const detailId = hike?._source === "sheets" && hike?._public_hike_id

@@ -44,9 +44,15 @@ export default function HikeCard({
   descriptionLines = 6,
 }) {
   const hikeDogs = dogs.filter((dog) => hike.dogs?.includes(dog.id));
+  const cardPhotoSource = useMemo(() => {
+    if (Array.isArray(hike.photos) && hike.photos.length > 0) return hike.photos;
+    if (typeof hike.image === "string" && hike.image.trim()) return [hike.image.trim()];
+    if (Array.isArray(hike._photo_references) && hike._photo_references.length > 0) return hike._photo_references;
+    return [];
+  }, [hike._photo_references, hike.image, hike.photos]);
   const photoList = useMemo(
-    () => (Array.isArray(hike.photos) ? hike.photos.map((photo) => (typeof photo === "string" ? photo.trim() : "")).filter(Boolean) : []),
-    [hike.photos]
+    () => cardPhotoSource.map((photo) => (typeof photo === "string" ? photo.trim() : "")).filter(Boolean),
+    [cardPhotoSource]
   );
   const [photoIndex, setPhotoIndex] = useState(0);
   const coverPhoto = photoIndex >= 0 ? photoList[photoIndex] || FALLBACK_HIKE_IMAGE : FALLBACK_HIKE_IMAGE;

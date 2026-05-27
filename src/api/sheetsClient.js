@@ -403,12 +403,15 @@ function preferManagedPhotoReferences(photoReferences) {
   return [...managed, ...external];
 }
 
-function publicHikeRowToHike(row, photos = []) {
+function publicHikeRowToHike(row, photos = [], photoReferences = []) {
   const seasons = Array.isArray(row.seasons) && row.seasons.length > 0
     ? row.seasons.filter(Boolean)
     : row.season
       ? [row.season]
       : [];
+  const cleanedPhotos = Array.isArray(photos) ? photos.filter(Boolean) : [];
+  const cleanedPhotoReferences = Array.isArray(photoReferences) ? photoReferences.filter(Boolean) : [];
+  const effectivePhotos = cleanedPhotos.length > 0 ? cleanedPhotos : cleanedPhotoReferences;
 
   return {
     // Keep the old external id shape stable so saved hikes, comments, and ratings keep matching.
@@ -421,7 +424,8 @@ function publicHikeRowToHike(row, photos = []) {
     latitude: row.latitude != null ? Number(row.latitude) : null,
     longitude: row.longitude != null ? Number(row.longitude) : null,
 
-    photos,
+    photos: effectivePhotos,
+    image: row.image || effectivePhotos[0] || null,
     link: null,
     gpx_url: null,
 
@@ -451,6 +455,7 @@ function publicHikeRowToHike(row, photos = []) {
 
     _source: "sheets",
     _public_hike_id: row.id,
+    _photo_references: cleanedPhotoReferences,
   };
 }
 
@@ -516,8 +521,9 @@ export async function getHikes() {
         const resolvedPhotos = await resolvePublicHikePhotoReferences(
           photoReferences
         );
+        const cleanedResolvedPhotos = Array.isArray(resolvedPhotos) ? resolvedPhotos.filter(Boolean) : [];
 
-        return publicHikeRowToHike(row, resolvedPhotos);
+        return publicHikeRowToHike(row, cleanedResolvedPhotos, photoReferences);
       })
     );
 
