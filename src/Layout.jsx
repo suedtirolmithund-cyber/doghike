@@ -201,11 +201,13 @@ export default function Layout({ children, currentPageName }) {
               to={createPageUrl("Dashboard")}
               className="flex shrink-0 items-center gap-2 transition-opacity hover:opacity-80"
             >
-              <img
-                src="/icon.svg"
-                alt="DogTrails"
-                className="h-12 w-12 shrink-0 drop-shadow-sm"
-              />
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-[15px] border border-[#E7CFB2]/90 bg-[#FFF8F0] shadow-[0_8px_18px_rgba(124,48,32,0.16)]">
+                <img
+                  src="/icon.svg?v=dogtrails-app-icon"
+                  alt="DogTrails"
+                  className="h-12 w-12"
+                />
+              </span>
               <div>
                 <span className="block text-lg font-semibold leading-none text-[#7d4f3f]">DogTrails</span>
                 <span className="text-xs text-[#9a6c58]">Hundefreundliche Wanderungen</span>
