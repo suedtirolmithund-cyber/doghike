@@ -214,7 +214,7 @@ export default function GuestWelcomeScreen() {
           <FourToePaw className="h-6 w-6" />
           <FourToePaw className="h-6 w-6" />
         </div>
-        <p className="absolute left-[21px] top-[136px] h-[48px] w-[340px] text-center text-[17px] font-semibold leading-[21px] text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.3)] sm:top-[188px] sm:text-[20px] sm:leading-[23px]">
+        <p className="absolute left-[21px] top-[144px] h-[54px] w-[340px] text-center text-[18px] font-semibold leading-[22px] text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.3)] sm:top-[196px] sm:text-[21px] sm:leading-[24px]">
           Plane hundefreundliche Touren, speichere deine Lieblingswege und entdecke neue Ziele
         </p>
 
