@@ -100,6 +100,12 @@ function slugify(title) {
     .replace(/^-+|-+$/g, "");
 }
 
+function buildComparableHikeKey(hike) {
+  const title = pickFirstText(hike, ["trail_name", "title", "name", "tour", "tour_name"]) || hike?.trail_name || hike?.title || hike?.name || "";
+  const location = normalizeOptionalText(hike?.location) || "";
+  return `${slugify(title)}::${location.trim().toLowerCase()}`;
+}
+
 function normalizeOptionalText(value) {
   if (typeof value !== "string") return value ?? null;
 
@@ -474,56 +480,76 @@ async function getLegacySheetHikes() {
   }
 }
 
+async function getSupabasePublicHikes() {
+  const { data: hikeRows, error: hikesError } = await supabase
+    .from("public_hikes")
+    .select("*")
+    .eq("status", "approved")
+    .order("date", { ascending: false, nullsFirst: false })
+    .order("created_at", { ascending: false });
+
+  if (hikesError) throw hikesError;
+  if (!hikeRows?.length) return [];
+
+  const hikeIds = hikeRows.map((row) => row.id);
+  const { data: photoRows, error: photosError } = await supabase
+    .from("public_hike_photos")
+    .select("hike_id, photo_url, sort_order")
+    .in("hike_id", hikeIds)
+    .order("sort_order", { ascending: true });
+
+  if (photosError) {
+    console.error("[sheetsClient] public_hike_photos fetch failed, continuing without table photos:", photosError);
+  }
+
+  const photosByHikeId = {};
+  for (const photoRow of photoRows ?? []) {
+    if (!photosByHikeId[photoRow.hike_id]) {
+      photosByHikeId[photoRow.hike_id] = [];
+    }
+    photosByHikeId[photoRow.hike_id].push(photoRow.photo_url);
+  }
+
+  return Promise.all(
+    hikeRows.map(async (row) => {
+      const photoReferences = preferManagedPhotoReferences(
+        mergePhotoLists(photosByHikeId[row.id] ?? [], getLegacyPhotoColumns(row))
+      );
+      const resolvedPhotos = await resolvePublicHikePhotoReferences(
+        photoReferences
+      );
+      const cleanedResolvedPhotos = Array.isArray(resolvedPhotos) ? resolvedPhotos.filter(Boolean) : [];
+
+      return publicHikeRowToHike(row, cleanedResolvedPhotos, photoReferences);
+    })
+  );
+}
+
 /**
- * Fetches all approved hikes from Supabase.
- * Falls back to the old public Google Sheet if the new source is not readable yet.
+ * Fetches approved hikes from Supabase and supplements them with older sheet hikes
+ * that are not yet present in public_hikes.
  */
 export async function getHikes() {
   try {
-    const { data: hikeRows, error: hikesError } = await supabase
-      .from("public_hikes")
-      .select("*")
-      .eq("status", "approved")
-      .order("date", { ascending: false, nullsFirst: false })
-      .order("created_at", { ascending: false });
+    const [supabaseHikes, legacySheetHikes] = await Promise.all([
+      getSupabasePublicHikes(),
+      getLegacySheetHikes(),
+    ]);
 
-    if (hikesError) throw hikesError;
-    if (!hikeRows?.length) return [];
-
-    const hikeIds = hikeRows.map((row) => row.id);
-    const { data: photoRows, error: photosError } = await supabase
-      .from("public_hike_photos")
-      .select("hike_id, photo_url, sort_order")
-      .in("hike_id", hikeIds)
-      .order("sort_order", { ascending: true });
-
-    if (photosError) {
-      console.error("[sheetsClient] public_hike_photos fetch failed, continuing without table photos:", photosError);
+    if (!supabaseHikes.length) {
+      return legacySheetHikes;
     }
 
-    const photosByHikeId = {};
-    for (const photoRow of photoRows ?? []) {
-      if (!photosByHikeId[photoRow.hike_id]) {
-        photosByHikeId[photoRow.hike_id] = [];
-      }
-      photosByHikeId[photoRow.hike_id].push(photoRow.photo_url);
+    if (!legacySheetHikes.length) {
+      return supabaseHikes;
     }
 
-    const hikes = await Promise.all(
-      hikeRows.map(async (row) => {
-        const photoReferences = preferManagedPhotoReferences(
-          mergePhotoLists(photosByHikeId[row.id] ?? [], getLegacyPhotoColumns(row))
-        );
-        const resolvedPhotos = await resolvePublicHikePhotoReferences(
-          photoReferences
-        );
-        const cleanedResolvedPhotos = Array.isArray(resolvedPhotos) ? resolvedPhotos.filter(Boolean) : [];
-
-        return publicHikeRowToHike(row, cleanedResolvedPhotos, photoReferences);
-      })
+    const supabaseKeys = new Set(supabaseHikes.map((hike) => buildComparableHikeKey(hike)));
+    const missingLegacyHikes = legacySheetHikes.filter(
+      (hike) => !supabaseKeys.has(buildComparableHikeKey(hike))
     );
 
-    return hikes;
+    return [...supabaseHikes, ...missingLegacyHikes];
   } catch (err) {
     console.error("[sheetsClient] public_hikes fetch failed, falling back to sheet:", err);
     return getLegacySheetHikes();
