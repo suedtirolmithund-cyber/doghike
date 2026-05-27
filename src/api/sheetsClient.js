@@ -142,7 +142,7 @@ function isTruthyFlag(value) {
     .trim()
     .toLowerCase();
 
-  return ["true", "1", "yes", "ja", "premium"].includes(normalized);
+  return ["true", "1"].includes(normalized);
 }
 
 function pickFirstText(row, keys) {
