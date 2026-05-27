@@ -64,23 +64,28 @@ export default function HikeCard({
 }) {
   const hikeDogs = dogs.filter((dog) => hike.dogs?.includes(dog.id));
   const cardPhotoSource = useMemo(() => {
-    if (Array.isArray(hike.photos) && hike.photos.length > 0) {
-      return hike.photos
-        .map((photo) => (typeof photo === "string" ? photo.trim() : ""))
-        .filter(Boolean);
-    }
+    const normalizedPhotos = Array.isArray(hike.photos)
+      ? hike.photos
+          .map((photo) => (typeof photo === "string" ? photo.trim() : ""))
+          .filter(Boolean)
+      : [];
 
-    if (typeof hike.image === "string" && hike.image.trim()) {
-      return [hike.image.trim()];
-    }
+    const normalizedPhotoReferences = Array.isArray(hike._photo_references)
+      ? hike._photo_references
+          .map((photo) => (typeof photo === "string" ? photo.trim() : ""))
+          .filter(Boolean)
+      : [];
 
-    if (Array.isArray(hike._photo_references) && hike._photo_references.length > 0) {
-      return hike._photo_references
-        .map((photo) => (typeof photo === "string" ? photo.trim() : ""))
-        .filter(Boolean);
-    }
+    const explicitTitleImage =
+      typeof hike.image === "string" && hike.image.trim() ? hike.image.trim() : null;
 
-    return [];
+    return Array.from(
+      new Set([
+        explicitTitleImage,
+        ...normalizedPhotos,
+        ...normalizedPhotoReferences,
+      ].filter(Boolean))
+    );
   }, [hike._photo_references, hike.image, hike.photos]);
   const [coverPhotoIndex, setCoverPhotoIndex] = useState(0);
   const coverPhotosKey = useMemo(() => cardPhotoSource.join("|"), [cardPhotoSource]);
