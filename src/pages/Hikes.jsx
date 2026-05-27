@@ -2,7 +2,7 @@ import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { CircleHelp, List, Mountain, PawPrint, RotateCcw, Search, LayoutGrid } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -33,6 +33,8 @@ import {
 import { useHikeFilters } from "@/hooks/useHikeFilters";
 import { formatDurationHours } from "@/lib/duration";
 import { getDisplayImageUrl } from "@/lib/imageProxy";
+
+const HIKES_PAGE_SIZE = 15;
 
 function DifficultyInfoDialog({ icon, title, description, levels }) {
   return (
@@ -145,6 +147,7 @@ function WaterInfoDialog() {
 
 export default function Hikes() {
   const [viewMode, setViewMode] = useState("grid");
+  const [currentPage, setCurrentPage] = useState(1);
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
@@ -183,6 +186,15 @@ export default function Hikes() {
     filteredHikes,
   } = useHikeFilters(hikes);
   const isHikesLoading = isLoading && hikes.length === 0;
+  const totalPages = Math.max(1, Math.ceil(filteredHikes.length / HIKES_PAGE_SIZE));
+  const visibleHikes = filteredHikes.slice(
+    (currentPage - 1) * HIKES_PAGE_SIZE,
+    currentPage * HIKES_PAGE_SIZE
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filteredHikes]);
 
   return (
     <div className="doghike-page-shell">
@@ -352,7 +364,7 @@ export default function Hikes() {
               <p className="text-sm leading-5 text-[#C07820]">
                 {hasPendingChanges
                   ? "Du hast Filter geändert. Tippe auf „Filter anwenden“, um die Ergebnisse zu aktualisieren."
-                  : `${filteredHikes.length} Tour${filteredHikes.length === 1 ? "" : "en"} aktiv gefiltert.`}
+                  : `${filteredHikes.length} Tour${filteredHikes.length === 1 ? "" : "en"} aktiv gefiltert. Seite ${currentPage} von ${totalPages}.`}
               </p>
               <div className="flex gap-2">
                 <Button type="button" variant="outline" onClick={resetFilters}>
@@ -442,13 +454,13 @@ export default function Hikes() {
         ) : filteredHikes.length > 0 ? (
           viewMode === "grid" ? (
           <div className="doghike-card-grid pb-20 md:pb-0">
-            {filteredHikes.map((hike, index) => (
+            {visibleHikes.map((hike, index) => (
               <HikeCard key={`${hike._source ?? "sheets"}-${hike.id}`} hike={hike} index={index} />
             ))}
           </div>
           ) : (
             <div className="space-y-3 pb-20 md:pb-0">
-              {filteredHikes.map((hike, index) => {
+              {visibleHikes.map((hike, index) => {
                 const hikeSource = hike._source ?? "sheets";
                 const detailId =
                   hikeSource === "sheets" && hike._public_hike_id
@@ -548,6 +560,41 @@ export default function Hikes() {
               Stell die Suche etwas weiter. Dann tauchen neue Wege auf.
             </p>
           </motion.div>
+        )}
+
+        {!isHikesLoading && filteredHikes.length > HIKES_PAGE_SIZE && (
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2 pb-20 md:pb-0">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+              disabled={currentPage === 1}
+            >
+              Zurück
+            </Button>
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+              <button
+                key={page}
+                type="button"
+                onClick={() => setCurrentPage(page)}
+                className={`inline-flex h-10 min-w-10 items-center justify-center rounded-xl border px-3 text-sm font-medium transition ${
+                  page === currentPage
+                    ? "border-brand-500 bg-brand-500 text-white"
+                    : "border-brand-100 bg-white/85 text-[#7C3020] hover:bg-brand-50"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+              disabled={currentPage === totalPages}
+            >
+              Weiter
+            </Button>
+          </div>
         )}
       </div>
     </div>
