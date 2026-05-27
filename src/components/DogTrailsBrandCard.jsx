@@ -8,7 +8,6 @@ export default function DogTrailsBrandCard({ className = "", compact = false }) 
       className={`relative mx-auto ${heightClass} w-full max-w-sm overflow-hidden rounded-[34px] border border-[#F9C030]/45 bg-[#FFF8F0] shadow-[0_24px_58px_rgba(124,48,32,0.18)] ${className}`}
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_12%,rgba(255,255,255,0.96)_0,rgba(255,248,240,0.82)_38%,rgba(253,240,232,0.56)_72%,rgba(249,192,48,0.18)_100%)]" />
-      <div className="absolute inset-0 opacity-[0.28] [background-image:url('/brand-pattern.svg')]" />
 
       <div className="relative z-10 flex h-[62%] flex-col items-center justify-center px-8 text-center sm:h-[64%]">
         <img

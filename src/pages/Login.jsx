@@ -231,7 +231,6 @@ export default function Login() {
         <div className="absolute inset-x-[-8%] bottom-[12%] h-40 rotate-[-5deg] rounded-[50%] border-t border-white/35 bg-white/12 backdrop-blur-[2px]" />
         <div className="absolute inset-x-[-10%] bottom-[20%] h-28 rotate-[4deg] rounded-[50%] border-t border-[#7C3020]/10" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.45)_0%,rgba(255,248,240,0.12)_42%,rgba(116,28,59,0.18)_100%)]" />
-        <div className="absolute inset-0 opacity-[0.24] [background-image:url('/brand-pattern.svg')] [background-size:560px_360px]" />
       </div>
 
       {mode !== "reset" && mode !== "update-password" && (
