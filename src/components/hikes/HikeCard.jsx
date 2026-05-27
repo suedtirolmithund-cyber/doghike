@@ -21,6 +21,25 @@ const ROUTE_STAT_CHIP_CLASS =
   "inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-full border border-[#F9C030]/75 bg-white/82 px-2.5 py-1.5 text-center text-xs font-bold leading-tight text-[#7C3020] shadow-sm sm:text-sm md:px-3 md:text-xs";
 const FALLBACK_HIKE_IMAGE = "/splash/autumn-hero.jpg";
 
+function resolveCardPhotoUrl(photo) {
+  if (!photo || typeof photo !== "string") return FALLBACK_HIKE_IMAGE;
+
+  const trimmed = photo.trim();
+  if (!trimmed) return FALLBACK_HIKE_IMAGE;
+
+  if (
+    trimmed.startsWith("http://")
+    || trimmed.startsWith("https://")
+    || trimmed.startsWith("data:")
+    || trimmed.startsWith("blob:")
+    || trimmed.startsWith("/")
+  ) {
+    return trimmed;
+  }
+
+  return getDisplayImageUrl(trimmed) || trimmed;
+}
+
 function hasMetricValue(value) {
   if (value === null || value === undefined || value === "") return false;
   const numericValue = Number(value);
@@ -67,18 +86,7 @@ export default function HikeCard({
   const coverPhotosKey = useMemo(() => cardPhotoSource.join("|"), [cardPhotoSource]);
   const currentCoverPhoto =
     coverPhotoIndex >= 0 ? cardPhotoSource[coverPhotoIndex] || FALLBACK_HIKE_IMAGE : FALLBACK_HIKE_IMAGE;
-  const resolvedCoverPhoto =
-    getDisplayImageUrl(currentCoverPhoto, {
-      width: imageSize === "home" ? 960 : 720,
-      quality: 74,
-    }) || currentCoverPhoto;
-  const cardPreviewBackgroundStyle = resolvedCoverPhoto
-    ? {
-        backgroundImage: `url("${resolvedCoverPhoto.replace(/"/g, '\\"')}")`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }
-    : undefined;
+  const resolvedCoverPhoto = resolveCardPhotoUrl(currentCoverPhoto);
   const hikeSource = hike._source ?? "sheets";
   const detailId = hikeSource === "sheets" && hike._public_hike_id ? hike.route_id || String(hike._public_hike_id) : hike.id;
   const dogDifficultyLabel = getDifficultyLabel(hike.dog_difficulty);
@@ -125,10 +133,7 @@ export default function HikeCard({
         state={{ hike }}
       >
         <div className="group overflow-hidden rounded-[22px] border border-brand-100/80 bg-white/78 shadow-[0_12px_28px_rgba(168,0,60,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(240,112,48,0.12)]">
-          <div
-            className={`relative overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a] ${imageHeightClass}`}
-            style={cardPreviewBackgroundStyle}
-          >
+          <div className={`relative overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a] ${imageHeightClass}`}>
             {resolvedCoverPhoto ? (
               <img
                 src={resolvedCoverPhoto}
