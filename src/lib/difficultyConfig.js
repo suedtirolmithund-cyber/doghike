@@ -299,6 +299,23 @@ export function getSeasonBadgeClass(value) {
   return SEASON_BY_VALUE[value]?.color ?? "bg-brand-50 text-slate-600";
 }
 
+function normalizeSingleSeasonValue(value) {
+  const normalized = String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/^[\[\(\{"']+|[\]\)\}"']+$/g, "")
+    .replace(/\s+/g, "_");
+
+  if (!normalized) return null;
+  if (["spring", "fruehling", "frühling"].includes(normalized)) return "spring";
+  if (["summer", "sommer"].includes(normalized)) return "summer";
+  if (["autumn", "fall", "herbst"].includes(normalized)) return "autumn";
+  if (["winter"].includes(normalized)) return "winter";
+  if (["all_year", "all-year", "ganzjaehrig", "ganzjährig", "ganzes_jahr", "yearround", "year_round"].includes(normalized)) return "all_year";
+
+  return SEASON_BY_VALUE[normalized] ? normalized : null;
+}
+
 export function normalizeSeasonValues(...values) {
   return Array.from(
     new Set(
@@ -308,14 +325,14 @@ export function normalizeSeasonValues(...values) {
             .flatMap((entry) =>
               typeof entry === "string" ? entry.split(/[,;|]/) : []
             )
-            .map((entry) => entry.trim())
+            .map((entry) => normalizeSingleSeasonValue(entry))
             .filter(Boolean);
         }
 
         if (typeof value === "string") {
           return value
             .split(/[,;|]/)
-            .map((entry) => entry.trim())
+            .map((entry) => normalizeSingleSeasonValue(entry))
             .filter(Boolean);
         }
 
