@@ -10,11 +10,16 @@ export default function SafeMapContainer({
   ...props
 }) {
   const [isReady, setIsReady] = useState(false);
+  const [instanceKey, setInstanceKey] = useState(0);
   const shellRef = useRef(null);
 
   useEffect(() => {
     const shell = shellRef.current;
     if (!shell) return;
+
+    if (typeof shell === "object" && "_leaflet_id" in shell) {
+      delete shell._leaflet_id;
+    }
 
     shell.querySelectorAll(".leaflet-container").forEach((node) => {
       if (node && typeof node === "object" && "_leaflet_id" in node) {
@@ -22,6 +27,8 @@ export default function SafeMapContainer({
       }
       node.innerHTML = "";
     });
+
+    setInstanceKey((current) => current + 1);
   }, [resetKey]);
 
   useEffect(() => {
@@ -46,7 +53,12 @@ export default function SafeMapContainer({
   return (
     <div ref={shellRef} className={fallbackClassName ?? className} style={style}>
       {isReady ? (
-        <MapContainer key={resetKey} style={{ height: "100%", width: "100%" }} className={className} {...props}>
+        <MapContainer
+          key={`${resetKey}-${instanceKey}`}
+          style={{ height: "100%", width: "100%" }}
+          className={className}
+          {...props}
+        >
           {children}
         </MapContainer>
       ) : null}
