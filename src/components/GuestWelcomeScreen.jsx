@@ -212,10 +212,14 @@ export default function GuestWelcomeScreen() {
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35 }}
-            className="absolute left-4 right-4 top-4 z-10 sm:top-7"
+            className="absolute left-4 right-4 top-4 z-10 md:hidden"
           >
             <DogTrailsBrandCard compact className="max-w-none" />
           </motion.div>
+        )}
+
+        {mode !== "reset" && mode !== "update-password" && (
+          <LoginWelcomeIntro />
         )}
 
         <motion.div
@@ -498,13 +502,42 @@ function FourToePaw({ className = "" }) {
   );
 }
 
+function LoginWelcomeIntro() {
+  return (
+    <div className="pointer-events-none absolute left-[21px] right-[21px] top-[58px] z-10 hidden text-center md:block">
+      <p className="text-[32px] font-extrabold uppercase leading-[34px] tracking-[0.01em] text-white drop-shadow-[0_4px_14px_rgba(116,28,59,0.34)]">
+        WILLKOMMEN BEI DOGTRAILS
+      </p>
+      <div className="mt-4 flex items-center justify-center gap-3 text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.28)]">
+        <FourToePaw className="h-6 w-6" />
+        <FourToePaw className="h-6 w-6" />
+        <FourToePaw className="h-6 w-6" />
+      </div>
+      <p className="mt-5 text-[20px] font-semibold leading-[24px] text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.3)]">
+        Plane hundefreundliche Touren, speichere deine Lieblingswege und entdecke neue Ziele
+      </p>
+    </div>
+  );
+}
+
 function WarmGlassBackground({ mobileFrame = false }) {
   return (
     <div className={`absolute inset-0 overflow-hidden ${mobileFrame ? "" : "hidden md:block"}`} aria-hidden="true">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(249,192,48,0.92)_0,rgba(249,192,48,0.45)_20%,transparent_46%),radial-gradient(circle_at_82%_8%,rgba(240,112,48,0.82)_0,rgba(240,112,48,0.34)_22%,transparent_49%),radial-gradient(circle_at_50%_96%,rgba(168,0,60,0.58)_0,rgba(240,112,48,0.3)_32%,transparent_62%),linear-gradient(145deg,#FDF0E8_0%,#ffe6bf_47%,#F07030_100%)]" />
+      <div className="absolute inset-0 opacity-[0.15] [background-image:url('/brand-pattern.svg')] [background-size:560px_360px]" />
       <div className="absolute -left-20 top-16 h-72 w-72 rounded-full bg-[#F9C030]/45 blur-3xl md:h-[34rem] md:w-[34rem]" />
       <div className="absolute -right-24 top-28 h-80 w-80 rounded-full bg-[#F07030]/35 blur-3xl md:h-[36rem] md:w-[36rem]" />
       <div className="absolute bottom-[-8rem] left-1/2 h-96 w-[34rem] -translate-x-1/2 rounded-[50%] bg-[#A8003C]/30 blur-3xl md:w-[54rem]" />
+      <svg
+        className="absolute inset-x-[-8%] bottom-0 h-[38%] w-[116%] opacity-70"
+        viewBox="0 0 430 170"
+        preserveAspectRatio="none"
+      >
+        <path d="M0 84 C46 54 72 60 106 86 C146 116 176 56 222 84 C265 111 294 63 340 86 C376 104 400 98 430 78 L430 170 L0 170 Z" fill="#FFD8BD" opacity="0.8" />
+        <path d="M0 112 C48 86 84 88 128 112 C166 134 198 79 241 107 C284 136 315 90 360 108 C389 120 407 117 430 103 L430 170 L0 170 Z" fill="#F6865E" opacity="0.78" />
+        <path d="M0 136 C52 112 92 121 140 139 C184 155 213 106 260 130 C306 154 335 114 382 132 C402 139 416 139 430 132 L430 170 L0 170 Z" fill="#D4547A" opacity="0.76" />
+        <path d="M0 153 C50 137 91 137 139 153 C183 168 222 130 270 150 C315 168 354 140 430 153 L430 170 L0 170 Z" fill="#A8003C" opacity="0.78" />
+      </svg>
       <div className="absolute inset-x-[-8%] bottom-[12%] h-40 rotate-[-5deg] rounded-[50%] border-t border-white/35 bg-white/12 backdrop-blur-[2px]" />
       <div className="absolute inset-x-[-10%] bottom-[20%] h-28 rotate-[4deg] rounded-[50%] border-t border-[#7C3020]/10" />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.45)_0%,rgba(255,248,240,0.12)_42%,rgba(116,28,59,0.18)_100%)]" />
