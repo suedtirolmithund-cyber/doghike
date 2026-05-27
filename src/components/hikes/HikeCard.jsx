@@ -137,7 +137,7 @@ export default function HikeCard({
           event.currentTarget.onerror = null;
           event.currentTarget.src = FALLBACK_HIKE_IMAGE;
         }}
-        className={`${isScrollable ? "h-full w-full flex-none snap-start" : "h-full w-full"} object-cover transition-transform duration-700 group-hover:scale-105`}
+        className={`${isScrollable ? "h-full min-w-full flex-none snap-start" : "h-full w-full"} object-cover transition-transform duration-700 group-hover:scale-105`}
       />
     );
   };
