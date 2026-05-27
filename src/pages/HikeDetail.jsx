@@ -332,8 +332,8 @@ export default function HikeDetail() {
       </div>
     );
   }
-  // Admins always count as Premium while regular users need an active Premium period.
-  const isPremiumContent = PREMIUM_FEATURES_ENABLED && hike.is_premium;
+  // Premium gate: admins may inspect premium hikes, but downloads still require active Premium.
+  const isPremiumContent = PREMIUM_FEATURES_ENABLED && hike.is_premium === true;
   const isPremiumHike = isPremiumContent && !isAdmin && !isOwnHike;
   const premiumEndDate = currentProfile?.premium_current_period_end
     ? new Date(currentProfile.premium_current_period_end)

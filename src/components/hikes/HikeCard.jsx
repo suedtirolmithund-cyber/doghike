@@ -96,6 +96,7 @@ export default function HikeCard({
     () => getDisplayImageUrl(hike.dog_photo_url || hike.author_avatar, { width: 128, quality: 70 }),
     [hike.author_avatar, hike.dog_photo_url],
   );
+  const isPremiumHike = hike.is_premium === true;
   const previewIcon = seasonValues[0] ? getSeasonIcon(seasonValues[0]) : null;
   const elevationValue = hike.elevation_gain_m ?? hike.elevation_m;
   const routeStats = [
@@ -141,7 +142,7 @@ export default function HikeCard({
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
             ) : null}
-            {PREMIUM_FEATURES_ENABLED && hike.is_premium && (
+            {PREMIUM_FEATURES_ENABLED && isPremiumHike && (
               <PremiumPawBadge className="pointer-events-none absolute left-4 top-4 min-h-9 border-white/65 px-3.5 py-2 text-sm shadow-sm" />
             )}
 
