@@ -8,18 +8,6 @@ import { useAuth } from "@/lib/AuthContext";
 
 const ONBOARDING_IMAGE = "/onboarding/A739105-desktop.webp";
 const ONBOARDING_IMAGE_MOBILE = "/onboarding/A739105-mobile.webp";
-const LOGIN_IMAGE = "/onboarding/A739195-2.jpg";
-const USE_IMAGE_BACKGROUNDS = true;
-
-function preloadImage(src) {
-  return new Promise((resolve) => {
-    const image = new Image();
-    image.onload = resolve;
-    image.onerror = resolve;
-    image.src = src;
-    if (image.complete) resolve();
-  });
-}
 
 function mapAuthError(message) {
   const msg = String(message || "").toLowerCase();
@@ -53,20 +41,9 @@ export default function GuestWelcomeScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-  const [loginImageReady, setLoginImageReady] = useState(false);
   const [localError, setLocalError] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
   const error = localError || authError;
-
-  useEffect(() => {
-    let active = true;
-    preloadImage(LOGIN_IMAGE).then(() => {
-      if (active) setLoginImageReady(true);
-    });
-    return () => {
-      active = false;
-    };
-  }, []);
 
   useEffect(() => {
     const hash = window.location.hash || "";
@@ -141,12 +118,8 @@ export default function GuestWelcomeScreen() {
   };
 
   const handleOnboardingContinue = useCallback(async () => {
-    if (!loginImageReady) {
-      await preloadImage(LOGIN_IMAGE);
-      setLoginImageReady(true);
-    }
     setShowAuth(true);
-  }, [loginImageReady]);
+  }, []);
 
   const handleReset = async (event) => {
     event.preventDefault();
@@ -231,18 +204,7 @@ export default function GuestWelcomeScreen() {
         transition={{ duration: 0.25 }}
         className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-[#FDF0E8] md:h-[812px] md:bg-transparent"
       >
-        {loginImageReady ? (
-          <>
-            <img
-              src={LOGIN_IMAGE}
-              alt=""
-              className="absolute inset-0 h-full w-full object-cover object-center"
-            />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.12)_0%,rgba(0,0,0,0.18)_30%,rgba(0,0,0,0.42)_100%)]" />
-          </>
-        ) : (
-          <WarmGlassBackground mobileFrame />
-        )}
+        <WarmGlassBackground mobileFrame />
 
         <p className="absolute left-[18px] top-[40px] h-[64px] w-[340px] text-center text-[30px] font-extrabold uppercase leading-[32px] tracking-[0.01em] text-white drop-shadow-[0_4px_14px_rgba(116,28,59,0.34)] sm:top-[70px] sm:text-[34px] sm:leading-[36px]">
           WILLKOMMEN BEI DOGTRAILS

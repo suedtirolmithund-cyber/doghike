@@ -6,8 +6,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle2 } from "lucide-react";
 
-const BG_IMAGE = "/log_in.jpg";
-
 const BROWN = "#A8003C";
 const BROWN_DARK = "#7C3020";
 
@@ -224,9 +222,15 @@ export default function Login() {
 
   return (
     <div className="relative flex min-h-[100dvh] flex-col justify-between overflow-x-hidden overflow-y-auto px-4 py-6 sm:items-center sm:justify-end">
-      <div className="absolute inset-0">
-        <img src={BG_IMAGE} alt="" className="w-full h-full object-cover object-center" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+      <div className="absolute inset-0 overflow-hidden bg-[#FDF0E8]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(249,192,48,0.92)_0,rgba(249,192,48,0.45)_20%,transparent_46%),radial-gradient(circle_at_82%_8%,rgba(240,112,48,0.82)_0,rgba(240,112,48,0.34)_22%,transparent_49%),radial-gradient(circle_at_50%_96%,rgba(168,0,60,0.58)_0,rgba(240,112,48,0.3)_32%,transparent_62%),linear-gradient(145deg,#FDF0E8_0%,#ffe6bf_47%,#F07030_100%)]" />
+        <div className="absolute -left-20 top-16 h-72 w-72 rounded-full bg-[#F9C030]/45 blur-3xl md:h-[34rem] md:w-[34rem]" />
+        <div className="absolute -right-24 top-28 h-80 w-80 rounded-full bg-[#F07030]/35 blur-3xl md:h-[36rem] md:w-[36rem]" />
+        <div className="absolute bottom-[-8rem] left-1/2 h-96 w-[34rem] -translate-x-1/2 rounded-[50%] bg-[#A8003C]/30 blur-3xl md:w-[54rem]" />
+        <div className="absolute inset-x-[-8%] bottom-[12%] h-40 rotate-[-5deg] rounded-[50%] border-t border-white/35 bg-white/12 backdrop-blur-[2px]" />
+        <div className="absolute inset-x-[-10%] bottom-[20%] h-28 rotate-[4deg] rounded-[50%] border-t border-[#7C3020]/10" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.45)_0%,rgba(255,248,240,0.12)_42%,rgba(116,28,59,0.18)_100%)]" />
+        <div className="absolute inset-0 opacity-[0.18] [background-image:linear-gradient(120deg,rgba(255,255,255,0.7)_1px,transparent_1px),linear-gradient(30deg,rgba(116,28,59,0.28)_1px,transparent_1px)] [background-size:92px_92px,130px_130px]" />
       </div>
 
       {mode !== "reset" && mode !== "update-password" && (
