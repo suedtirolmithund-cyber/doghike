@@ -64,6 +64,13 @@ export default function HikeCard({
       }),
     [coverPhoto, imageSize],
   );
+  const cardPreviewBackgroundStyle = previewCoverPhoto
+    ? {
+        backgroundImage: `url("${previewCoverPhoto.replace(/"/g, '\\"')}")`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }
+    : undefined;
   const hikeSource = hike._source ?? "sheets";
   const detailId = hikeSource === "sheets" && hike._public_hike_id ? hike.route_id || String(hike._public_hike_id) : hike.id;
   const dogDifficultyLabel = getDifficultyLabel(hike.dog_difficulty);
@@ -119,7 +126,10 @@ export default function HikeCard({
         state={{ hike }}
       >
         <div className="group overflow-hidden rounded-[22px] border border-brand-100/80 bg-white/78 shadow-[0_12px_28px_rgba(168,0,60,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(240,112,48,0.12)]">
-          <div className={`relative overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a] ${imageHeightClass}`}>
+          <div
+            className={`relative overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a] ${imageHeightClass}`}
+            style={cardPreviewBackgroundStyle}
+          >
             {coverPhoto ? (
               <img
                 src={previewCoverPhoto}
