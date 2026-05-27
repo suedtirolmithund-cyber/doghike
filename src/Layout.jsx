@@ -203,9 +203,9 @@ export default function Layout({ children, currentPageName }) {
             >
               <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-[15px] border border-[#E7CFB2]/90 bg-[#FFF8F0] shadow-[0_8px_18px_rgba(124,48,32,0.16)]">
                 <img
-                  src="/icon.svg?v=dogtrails-app-icon"
+                  src="/dogtrails-logo-pin.png?v=exact-brand-logo"
                   alt="DogTrails"
-                  className="h-12 w-12"
+                  className="h-12 w-12 object-contain"
                 />
               </span>
               <div>

@@ -1,4 +1,4 @@
-export const APP_ICON = "/icon.svg";
+export const APP_ICON = "/dogtrails-app-icon.png";
 
 export function getAvatarDataUrl(seed = "DogTrails") {
   const text = String(seed || "DT")
