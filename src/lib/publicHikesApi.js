@@ -218,6 +218,11 @@ function mergePhotoLists(...photoLists) {
   );
 }
 
+function arePhotoListsEqual(left = [], right = []) {
+  if (left.length !== right.length) return false;
+  return left.every((value, index) => value === right[index]);
+}
+
 function getPublicHikeStorageDescriptor(photoUrl) {
   if (!photoUrl || typeof photoUrl !== "string") return null;
 
@@ -416,6 +421,10 @@ export async function updatePublicHike(hikeId, values) {
 
   const { data, error } = updateResult;
   if (error) throw error;
+
+  if (arePhotoListsEqual(existingPhotoUrls, cleanedPhotoUrls)) {
+    return data;
+  }
 
   const { error: deletePhotosError } = await supabase
     .from("public_hike_photos")
