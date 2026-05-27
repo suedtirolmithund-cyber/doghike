@@ -1,14 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
   <defs>
-    <filter id="iconShadow" x="30" y="34" width="452" height="452" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#7C3020" flood-opacity="0.12"/>
-      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#7C3020" flood-opacity="0.10"/>
+    <filter id="iconShadow" x="4" y="4" width="504" height="504" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#7C3020" flood-opacity="0.16"/>
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#7C3020" flood-opacity="0.12"/>
     </filter>
   </defs>
-  <rect width="512" height="512" fill="#FDF0E8"/>
-  <rect x="58" y="58" width="396" height="396" rx="86" fill="#FFF8F0" filter="url(#iconShadow)"/>
-  <rect x="58.5" y="58.5" width="395" height="395" rx="85.5" fill="none" stroke="#F9C030" stroke-opacity="0.18"/>
-  <g transform="translate(82 64) scale(0.68)">
+  <rect x="24" y="24" width="464" height="464" rx="104" fill="#FFF8F0" filter="url(#iconShadow)"/>
+  <rect x="25.5" y="25.5" width="461" height="461" rx="102.5" fill="none" stroke="#E7CFB2" stroke-opacity="0.8" stroke-width="3"/>
+  <g transform="translate(98 82) scale(0.62)">
     <path fill="#A8003C" d="M256 34C157.7 34 78 113.7 78 212c0 129.5 157.5 248.4 178 264.1C276.5 460.4 434 341.5 434 212 434 113.7 354.3 34 256 34Z"/>
     <circle cx="256" cy="204" r="124" fill="#FFF8F0"/>
     <ellipse cx="190" cy="186" rx="22" ry="34" fill="#A8003C" transform="rotate(-15 190 186)"/>
