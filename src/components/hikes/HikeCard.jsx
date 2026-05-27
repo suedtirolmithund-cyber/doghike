@@ -7,7 +7,7 @@ import ExpandableText from "@/components/ExpandableText";
 import WaterIcon from "@/components/icons/WaterIcon";
 import DifficultyScaleChip from "@/components/difficulty/DifficultyScale";
 import { PremiumPawBadge } from "@/components/premium/PremiumPawBadge";
-import { TOUR_ICONS, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterIcon, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { TOUR_ICONS, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { formatDurationHours } from "@/lib/duration";
@@ -96,15 +96,7 @@ export default function HikeCard({
     () => getDisplayImageUrl(hike.dog_photo_url || hike.author_avatar, { width: 128, quality: 70 }),
     [hike.author_avatar, hike.dog_photo_url],
   );
-  const previewIcon = seasonValues[0]
-    ? getSeasonIcon(seasonValues[0])
-    : hike.water_availability
-      ? getWaterIcon(hike.water_availability)
-      : humanDifficultyLabel
-        ? TOUR_ICONS.human
-        : dogDifficultyLabel
-          ? TOUR_ICONS.dog
-          : null;
+  const previewIcon = seasonValues[0] ? getSeasonIcon(seasonValues[0]) : null;
   const elevationValue = hike.elevation_gain_m ?? hike.elevation_m;
   const routeStats = [
     hasMetricValue(hike.distance_km) ? { icon: TOUR_ICONS.distance, value: formatDistance(hike.distance_km), label: "Strecke" } : null,

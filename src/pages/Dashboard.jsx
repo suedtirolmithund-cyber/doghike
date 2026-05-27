@@ -70,13 +70,13 @@ export default function Dashboard() {
 
   const countryCount = useMemo(() => {
     const uniqueCountries = new Set(
-      filteredHikes
+      hikes
         .map((hike) => hike.country)
         .filter(Boolean)
         .map((country) => String(country).trim().toLowerCase())
     );
     return uniqueCountries.size;
-  }, [filteredHikes]);
+  }, [hikes]);
 
   const safeDogProfileCount = Number.isFinite(dogProfileCount) ? dogProfileCount : 0;
   const isHikesLoading = isLoading && hikes.length === 0;
@@ -184,7 +184,7 @@ export default function Dashboard() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 pb-32 pt-8 sm:px-6 sm:pt-10 md:pb-20 lg:px-8">
         {/* Stats */}
         <div className="mb-7 grid grid-cols-3 gap-2 text-center sm:mb-10 sm:gap-4 md:mb-12">
-          <StatsCard icon={Route} label="Wanderungen" value={filteredHikes.length} delay={0} />
+          <StatsCard icon={Route} label="Wanderungen" value={hikes.length} delay={0} />
           <StatsCard icon={Globe} label="Länder" value={countryCount} delay={0.08} />
           <StatsCard
             icon={Dog}
