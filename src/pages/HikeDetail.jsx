@@ -872,7 +872,7 @@ export default function HikeDetail() {
                     )}
                   </div>
                 )}
-                  {hike.hazard_notes && (
+                  {typeof hike.hazard_notes === "string" && hike.hazard_notes.trim() && (
                     <div className="p-3 bg-brand-50 border border-brand-100 rounded-xl">
                       <p className="font-medium text-brand-700 mb-1">{TOUR_ICONS.hazard} Achtung</p>
                       <ExpandableText
