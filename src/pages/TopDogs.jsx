@@ -222,8 +222,10 @@ function MyDogCard({ entry, rank, metric }) {
         decoding="async"
         className="w-12 h-12 rounded-full object-cover border-2 border-white shadow" />
       <div className="flex-1 min-w-0">
-        <p className="font-bold text-slate-900">{entry.dog.name}</p>
-        <p className="text-xs text-slate-500">Aktuell Platz <strong>#{rank}</strong> in dieser Kategorie</p>
+        <p className="font-bold text-slate-900">Deine beste Platzierung</p>
+        <p className="text-xs text-slate-500">
+          Mit <strong>{entry.dog.name}</strong> aktuell Platz <strong>#{rank}</strong> in dieser Kategorie
+        </p>
       </div>
       <div className="text-right shrink-0">
         <p className="text-xl font-extrabold leading-tight text-brand-600">
