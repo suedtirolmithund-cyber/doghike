@@ -97,10 +97,13 @@
     background-color: #FDF0E8;
     color: #7C3020;
     background-image:
+      url('/brand-pattern.svg'),
       radial-gradient(circle at top left, rgba(249, 192, 48, 0.34), transparent 27rem),
       radial-gradient(circle at top right, rgba(168, 0, 60, 0.13), transparent 24rem),
       radial-gradient(circle at 20% 85%, rgba(240, 112, 48, 0.18), transparent 24rem),
       linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(253, 240, 232, 0.54));
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+    background-size: 420px 260px, auto, auto, auto, auto;
     min-height: 100vh;
   }
 
@@ -155,6 +158,13 @@
 
   .doghike-page-shell {
     @apply min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/60 pb-24 md:pb-8;
+  }
+
+  .doghike-page-shell,
+  [class*="min-h-screen"][class*="bg-gradient-to-br"] {
+    background-image: url('/brand-pattern.svg'), linear-gradient(to bottom right, var(--tw-gradient-stops));
+    background-repeat: repeat, no-repeat;
+    background-size: 420px 260px, auto;
   }
 
   .doghike-content-shell {

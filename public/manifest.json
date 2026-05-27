@@ -4,8 +4,8 @@
   "description": "DogTrails: Hundefreundliche Wanderungen in Südtirol und den Dolomiten",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#fafaf9",
-  "theme_color": "#1c1917",
+  "background_color": "#FDF0E8",
+  "theme_color": "#F9C030",
   "orientation": "portrait-primary",
   "icons": [
     {

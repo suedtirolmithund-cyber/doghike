@@ -201,9 +201,11 @@ export default function Layout({ children, currentPageName }) {
               to={createPageUrl("Dashboard")}
               className="flex shrink-0 items-center gap-2 transition-opacity hover:opacity-80"
             >
-              <div className="rounded-lg bg-[#A8003C] p-2 shadow-sm">
-                <Mountain className="w-5 h-5 text-white" />
-              </div>
+              <img
+                src="/logo-mark.svg"
+                alt="DogTrails"
+                className="h-12 w-12 shrink-0 drop-shadow-sm"
+              />
               <div>
                 <span className="block text-lg font-semibold leading-none text-[#7d4f3f]">DogTrails</span>
                 <span className="text-xs text-[#9a6c58]">Hundefreundliche Wanderungen</span>
