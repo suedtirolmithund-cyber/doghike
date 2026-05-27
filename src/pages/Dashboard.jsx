@@ -25,6 +25,24 @@ function getCurrentSeason() {
   return "winter";
 }
 
+function normalizeCountryKey(country) {
+  const normalized = String(country ?? "")
+    .trim()
+    .toLowerCase();
+
+  if (!normalized) return null;
+  if (["italy", "italien", "it"].includes(normalized)) return "italy";
+  if (["austria", "österreich", "oesterreich", "at"].includes(normalized)) return "austria";
+  if (["germany", "deutschland", "de"].includes(normalized)) return "germany";
+  if (["switzerland", "schweiz", "ch"].includes(normalized)) return "switzerland";
+  if (["spain", "spanien", "es"].includes(normalized)) return "spain";
+  if (["croatia", "kroatien", "hr"].includes(normalized)) return "croatia";
+  if (["slovenia", "slowenien", "si"].includes(normalized)) return "slovenia";
+  if (["other", "anderes"].includes(normalized)) return "other";
+
+  return normalized;
+}
+
 function sortBySeason(hikes, season) {
   return [...hikes].sort((a, b) => {
     const score = (h) => {
@@ -71,9 +89,8 @@ export default function Dashboard() {
   const countryCount = useMemo(() => {
     const uniqueCountries = new Set(
       hikes
-        .map((hike) => hike.country)
+        .map((hike) => normalizeCountryKey(hike.country))
         .filter(Boolean)
-        .map((country) => String(country).trim().toLowerCase())
     );
     return uniqueCountries.size;
   }, [hikes]);
