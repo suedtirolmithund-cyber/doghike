@@ -223,13 +223,23 @@ export default function HikeDetail() {
     const explicitTitleImage =
       typeof hike?.image === "string" && hike.image.trim() ? hike.image.trim() : null;
 
-    return Array.from(
-      new Set([
-        explicitTitleImage,
-        ...prioritizedPhotos,
-        ...normalizedPhotoReferences,
-      ].filter(Boolean))
-    );
+    const uniquePhotos = [];
+    const seenDisplayUrls = new Set();
+
+    [
+      explicitTitleImage,
+      ...prioritizedPhotos,
+      ...normalizedPhotoReferences,
+    ]
+      .filter(Boolean)
+      .forEach((photo) => {
+        const resolvedPhoto = getDisplayImageUrl(photo) || photo;
+        if (seenDisplayUrls.has(resolvedPhoto)) return;
+        seenDisplayUrls.add(resolvedPhoto);
+        uniquePhotos.push(photo);
+      });
+
+    return uniquePhotos;
   }, [hike?._photo_references, hike?.image, hike?.photos]);
 
   const heroPhotosKey = useMemo(
