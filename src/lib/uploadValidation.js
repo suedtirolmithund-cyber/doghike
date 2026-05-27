@@ -1,18 +1,25 @@
 export const MAX_IMAGE_UPLOAD_MB = 15;
 export const MAX_IMAGE_UPLOAD_BYTES = MAX_IMAGE_UPLOAD_MB * 1024 * 1024;
+const MAX_IMAGE_SOURCE_MB = 50;
+const MAX_IMAGE_SOURCE_BYTES = MAX_IMAGE_SOURCE_MB * 1024 * 1024;
 const MAX_IMAGE_DIMENSION = 1920;
 const IMAGE_OPTIMIZATION_MIN_BYTES = 1.25 * 1024 * 1024;
-const IMAGE_OPTIMIZATION_QUALITY = 0.8;
+const IMAGE_OPTIMIZATION_QUALITY_STEPS = [0.82, 0.78, 0.74, 0.7, 0.66, 0.62, 0.58];
+const IMAGE_OPTIMIZATION_SCALE_STEPS = [1, 0.92, 0.84, 0.76, 0.68];
+
+function createImageTooLargeError(limitMb) {
+  const error = new Error(
+    `Das Foto ist zu groß. Bitte wähle ein Bild unter ${limitMb} MB.`
+  );
+  error.code = "IMAGE_TOO_LARGE";
+  return error;
+}
 
 export function validateImageUpload(file) {
   if (!file || !file.type?.startsWith("image/")) return;
 
-  if (file.size > MAX_IMAGE_UPLOAD_BYTES) {
-    const error = new Error(
-      `Das Foto ist zu groß. Bitte wähle ein Bild unter ${MAX_IMAGE_UPLOAD_MB} MB.`
-    );
-    error.code = "IMAGE_TOO_LARGE";
-    throw error;
+  if (file.size > MAX_IMAGE_SOURCE_BYTES) {
+    throw createImageTooLargeError(MAX_IMAGE_SOURCE_MB);
   }
 }
 
@@ -55,6 +62,19 @@ async function canvasToBlob(canvas, type, quality) {
   });
 }
 
+function buildTargetDimensions(sourceImage) {
+  const baseScale = Math.min(
+    1,
+    MAX_IMAGE_DIMENSION / Math.max(sourceImage.width, sourceImage.height)
+  );
+
+  return IMAGE_OPTIMIZATION_SCALE_STEPS.map((step) => {
+    const scaledWidth = Math.max(1, Math.round(sourceImage.width * baseScale * step));
+    const scaledHeight = Math.max(1, Math.round(sourceImage.height * baseScale * step));
+    return { width: scaledWidth, height: scaledHeight };
+  });
+}
+
 export async function optimizeImageForUpload(file) {
   validateImageUpload(file);
 
@@ -64,50 +84,84 @@ export async function optimizeImageForUpload(file) {
     typeof HTMLCanvasElement === "undefined" ||
     !file?.type?.startsWith("image/")
   ) {
+    if (file.size > MAX_IMAGE_UPLOAD_BYTES) {
+      throw createImageTooLargeError(MAX_IMAGE_UPLOAD_MB);
+    }
     return file;
   }
 
   const sourceImage = await loadImageFromFile(file);
   const needsResize =
     sourceImage.width > MAX_IMAGE_DIMENSION || sourceImage.height > MAX_IMAGE_DIMENSION;
-  const shouldOptimize = needsResize || file.size >= IMAGE_OPTIMIZATION_MIN_BYTES;
+  const shouldOptimize =
+    needsResize ||
+    file.size >= IMAGE_OPTIMIZATION_MIN_BYTES ||
+    file.size > MAX_IMAGE_UPLOAD_BYTES;
 
   if (!shouldOptimize) {
     return file;
   }
 
-  const scale = Math.min(
-    1,
-    MAX_IMAGE_DIMENSION / Math.max(sourceImage.width, sourceImage.height)
-  );
-  const targetWidth = Math.max(1, Math.round(sourceImage.width * scale));
-  const targetHeight = Math.max(1, Math.round(sourceImage.height * scale));
-
   const canvas = document.createElement("canvas");
-  canvas.width = targetWidth;
-  canvas.height = targetHeight;
-
   const context = canvas.getContext("2d");
   if (!context) {
+    if (file.size > MAX_IMAGE_UPLOAD_BYTES) {
+      throw createImageTooLargeError(MAX_IMAGE_UPLOAD_MB);
+    }
     return file;
   }
 
-  context.drawImage(sourceImage, 0, 0, targetWidth, targetHeight);
-
   const preferredType = file.type === "image/png" ? "image/webp" : "image/jpeg";
-  const optimizedBlob =
-    (await canvasToBlob(canvas, preferredType, IMAGE_OPTIMIZATION_QUALITY)) ||
-    (await canvasToBlob(canvas, "image/jpeg", IMAGE_OPTIMIZATION_QUALITY));
+  let bestBlob = null;
 
-  if (!optimizedBlob || optimizedBlob.size >= file.size * 0.95) {
+  for (const dimension of buildTargetDimensions(sourceImage)) {
+    canvas.width = dimension.width;
+    canvas.height = dimension.height;
+    context.clearRect(0, 0, dimension.width, dimension.height);
+    context.drawImage(sourceImage, 0, 0, dimension.width, dimension.height);
+
+    for (const quality of IMAGE_OPTIMIZATION_QUALITY_STEPS) {
+      const candidateBlob =
+        (await canvasToBlob(canvas, preferredType, quality)) ||
+        (await canvasToBlob(canvas, "image/jpeg", quality));
+
+      if (!candidateBlob) continue;
+
+      if (!bestBlob || candidateBlob.size < bestBlob.size) {
+        bestBlob = candidateBlob;
+      }
+
+      if (candidateBlob.size <= MAX_IMAGE_UPLOAD_BYTES) {
+        bestBlob = candidateBlob;
+        break;
+      }
+    }
+
+    if (bestBlob?.size <= MAX_IMAGE_UPLOAD_BYTES) {
+      break;
+    }
+  }
+
+  if (!bestBlob) {
+    if (file.size > MAX_IMAGE_UPLOAD_BYTES) {
+      throw createImageTooLargeError(MAX_IMAGE_UPLOAD_MB);
+    }
+    return file;
+  }
+
+  if (bestBlob.size > MAX_IMAGE_UPLOAD_BYTES) {
+    throw createImageTooLargeError(MAX_IMAGE_UPLOAD_MB);
+  }
+
+  if (bestBlob.size >= file.size * 0.98 && file.size <= MAX_IMAGE_UPLOAD_BYTES) {
     return file;
   }
 
   return new File(
-    [optimizedBlob],
-    buildOptimizedFileName(file.name, optimizedBlob.type || preferredType),
+    [bestBlob],
+    buildOptimizedFileName(file.name, bestBlob.type || preferredType),
     {
-      type: optimizedBlob.type || preferredType,
+      type: bestBlob.type || preferredType,
       lastModified: Date.now(),
     }
   );
