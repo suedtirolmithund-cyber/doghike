@@ -81,7 +81,7 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-brand-50/70 flex flex-col">
-      <div className="hidden h-24 shrink-0 md:block xl:h-16" />
+      <div className="hidden h-28 shrink-0 md:block 2xl:h-16" />
       <div className="flex-1">{children}</div>
 
       <footer className="bg-white/80 border-t border-brand-100 py-3 md:py-4 px-4 md:px-6 text-center mb-20 md:mb-0">
@@ -195,8 +195,8 @@ export default function Layout({ children, currentPageName }) {
       </nav>
 
       <nav className="fixed left-0 right-0 top-0 z-50 hidden border-b border-brand-100/70 bg-white/78 shadow-[0_10px_28px_rgba(168,0,60,0.12)] backdrop-blur-md md:block">
-        <div className="max-w-7xl mx-auto px-4 py-2 xl:px-6 xl:py-3">
-          <div className="flex flex-wrap items-center justify-between gap-3 xl:flex-nowrap xl:gap-4">
+        <div className="mx-auto max-w-[1600px] px-4 py-2 2xl:px-6 2xl:py-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 2xl:flex-nowrap 2xl:gap-4">
             <Link
               to={createPageUrl("Dashboard")}
               className="flex shrink-0 items-center gap-2 transition-opacity hover:opacity-80"
@@ -210,7 +210,7 @@ export default function Layout({ children, currentPageName }) {
               </div>
             </Link>
 
-            <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-1 overflow-visible">
+            <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-1 overflow-visible 2xl:flex-nowrap">
               {DESKTOP_NAV.map(({ name, icon: Icon, label }) => {
                 const active = isActive(name);
                 return (
