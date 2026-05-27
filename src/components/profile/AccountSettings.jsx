@@ -80,7 +80,7 @@ export default function AccountSettings({ user, profile }) {
         throw new Error(await getFunctionErrorMessage(error, "Checkout konnte gerade nicht gestartet werden."));
       }
       if (data?.error) throw new Error(data.error);
-      if (!data?.url) throw new Error("Stripe hat keine Checkout-URL zurueckgegeben.");
+      if (!data?.url) throw new Error("Stripe hat keine Checkout-URL zurückgegeben.");
 
       return data.url;
     },
@@ -103,10 +103,10 @@ export default function AccountSettings({ user, profile }) {
       });
 
       if (error) {
-        throw new Error(await getFunctionErrorMessage(error, "Abo-Verwaltung konnte gerade nicht geoeffnet werden."));
+        throw new Error(await getFunctionErrorMessage(error, "Abo-Verwaltung konnte gerade nicht geöffnet werden."));
       }
       if (data?.error) throw new Error(data.error);
-      if (!data?.url) throw new Error("Stripe hat keine Portal-URL zurueckgegeben.");
+      if (!data?.url) throw new Error("Stripe hat keine Portal-URL zurückgegeben.");
 
       return data.url;
     },
@@ -114,7 +114,7 @@ export default function AccountSettings({ user, profile }) {
       window.location.assign(url);
     },
     onError: (error) => {
-      toast.error(error?.message || "Abo-Verwaltung konnte gerade nicht geoeffnet werden.");
+      toast.error(error?.message || "Abo-Verwaltung konnte gerade nicht geöffnet werden.");
     },
   });
 
@@ -155,7 +155,7 @@ export default function AccountSettings({ user, profile }) {
             <p className="mt-1 text-slate-500">
               {isPremium
                 ? currentPeriodEnd
-                  ? `Dein aktueller Premium-Zeitraum laeuft bis ${currentPeriodEnd}.`
+                  ? `Dein aktueller Premium-Zeitraum läuft bis ${currentPeriodEnd}.`
                   : "Dein Premium-Zugang ist aktiv."
                 : "Starte Premium monatlich oder kaufe einmalig 1 Monat Zugang."}
             </p>
@@ -211,13 +211,13 @@ export default function AccountSettings({ user, profile }) {
                 ) : (
                   <Settings className="mr-2 h-4 w-4" />
                 )}
-                Abo verwalten / kuendigen
+                Abo verwalten / kündigen
               </Button>
             )}
           </div>
 
           <p className="text-xs text-slate-400">
-            Aenderungen, Kuendigung und Zahlungsmethode laufen sicher ueber Stripe.
+            Änderungen, Kündigung und Zahlungsmethode laufen sicher über Stripe.
           </p>
         </div>
       </div>
