@@ -159,7 +159,7 @@ export default function HikeCard({
               </span>
             )}
 
-            <div className="pointer-events-none absolute bottom-4 left-4 right-4 rounded-2xl border border-white/10 bg-[rgba(40,20,10,0.18)] p-3 shadow-[0_10px_24px_rgba(0,0,0,0.16)] backdrop-blur-[2px]">
+            <div className="pointer-events-none absolute bottom-4 left-4 right-4 p-3">
               <h3 className="mb-1 line-clamp-2 text-base font-semibold leading-tight text-white drop-shadow-[0_2px_5px_rgba(0,0,0,0.65)]">
                 {hike.trail_name}
               </h3>
