@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
-  ArrowLeft, Map, Navigation, Loader2, Upload, Search, RotateCcw, Layers, Mountain, X, Info
+  Map, Navigation, Loader2, Upload, Search, RotateCcw, Layers, Mountain, X, Info
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { motion, AnimatePresence } from "framer-motion";
@@ -696,14 +696,6 @@ export default function RoutePlanner() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
-        <Link to={createPageUrl("Profile")}>
-          <Button variant="ghost" className="mb-3 h-8 rounded-xl px-2 text-slate-600 hover:bg-brand-50/60 hover:text-slate-900 md:mb-4" size="sm">
-            <ArrowLeft className="w-4 h-4 mr-1.5" />
-            <span className="hidden sm:inline">Zurück zum Profil</span>
-            <span className="sm:hidden">Zurück</span>
-          </Button>
-        </Link>
-
         <div className="doghike-page-header mb-5">
           <div className="doghike-page-icon">
             <Map className="h-5 w-5" />
@@ -819,3 +811,4 @@ export default function RoutePlanner() {
     </div>
   );
 }
+
