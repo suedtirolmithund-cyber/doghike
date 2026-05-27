@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { motion } from "framer-motion";
@@ -239,6 +239,33 @@ function MyDogCard({ entry, rank, metric }) {
   );
 }
 
+function TimeframeFilter({ timeframe, onChange }) {
+  const options = [
+    { id: "week", label: "Diese Woche" },
+    { id: "month", label: "Dieser Monat" },
+    { id: "overall", label: "Gesamt" },
+  ];
+
+  return (
+    <div className="mb-4 flex flex-wrap gap-2">
+      {options.map((option) => (
+        <button
+          key={option.id}
+          type="button"
+          onClick={() => onChange(option.id)}
+          className={`rounded-full border px-3 py-1.5 text-sm font-semibold transition ${
+            timeframe === option.id
+              ? "border-brand-300 bg-brand-100 text-brand-700 shadow-sm"
+              : "border-white/70 bg-white/78 text-slate-500 shadow-sm backdrop-blur-xl hover:text-slate-700"
+          }`}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 // Community-Stats
 function CommunityStats({ rows }) {
   const totalTours = rows.reduce((s, r) => s + r.tourCount, 0);
@@ -294,7 +321,6 @@ function RankingTab({ rows, metric, myDogIds }) {
   const ownDogIdSet = new Set(myDogIds ?? []);
   const myIdx = sorted.findIndex((r) => ownDogIdSet.has(r.dog?.id));
   const myEntry = myIdx >= 0 ? sorted[myIdx] : null;
-  const myInTop10 = myIdx >= 0 && myIdx < 10;
 
   if (!sorted.length) {
     return (
@@ -336,7 +362,7 @@ function RankingTab({ rows, metric, myDogIds }) {
         ))}
       </div>
       {/* Dein Hund falls außerhalb Top 10 */}
-      {myEntry && !myInTop10 && (
+      {myEntry && (
         <MyDogCard entry={myEntry} rank={myIdx + 1} metric={metric} />
       )}
     </div>
@@ -346,10 +372,11 @@ function RankingTab({ rows, metric, myDogIds }) {
 // Main Page
 export default function TopDogs() {
   const { user } = useAuth();
+  const [timeframe, setTimeframe] = useState("overall");
 
   const { data: rows = [], isLoading, error } = useQuery({
-    queryKey: ["topDogs"],
-    queryFn:  loadLeaderboard,
+    queryKey: ["topDogs", timeframe],
+    queryFn:  () => loadLeaderboard(timeframe),
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
@@ -402,6 +429,7 @@ export default function TopDogs() {
         {!isLoading && !error && (
           <>
             {rows.length > 0 && <CommunityStats rows={rows} />}
+            <TimeframeFilter timeframe={timeframe} onChange={setTimeframe} />
 
             <Tabs defaultValue="tours">
               <TabsList className="grid w-full grid-cols-3 border border-white/70 bg-white/65 backdrop-blur-xl mb-4">

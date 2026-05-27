@@ -24,16 +24,56 @@ export function getBadges(stats, isChampion = false) {
   return badges;
 }
 
-export async function loadLeaderboard() {
+function getEntryDogIds(entry) {
+  const legacyDogId = entry?.dog_id ? [entry.dog_id] : [];
+  const multiDogIds = Array.isArray(entry?.dog_ids) ? entry.dog_ids.filter(Boolean) : [];
+  return [...new Set([...multiDogIds, ...legacyDogId])];
+}
+
+function getEntryDate(entry) {
+  const rawDate = entry?.date || entry?.created_at;
+  if (!rawDate) return null;
+  const parsed = new Date(rawDate);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function matchesTimeframe(entry, timeframe) {
+  if (timeframe === "overall") return true;
+
+  const entryDate = getEntryDate(entry);
+  if (!entryDate) return false;
+
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  if (timeframe === "week") {
+    const weekday = today.getDay();
+    const mondayOffset = weekday === 0 ? 6 : weekday - 1;
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - mondayOffset);
+    return entryDate >= startOfWeek;
+  }
+
+  if (timeframe === "month") {
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    return entryDate >= startOfMonth;
+  }
+
+  return true;
+}
+
+export async function loadLeaderboard(timeframe = "overall") {
   const { data: entries, error: entriesError } = await supabase
     .from("journal_entries")
-    .select("dog_id, distance_km, elevation_m, rating, date")
-    .not("dog_id", "is", null);
+    .select("dog_id, dog_ids, distance_km, elevation_m, rating, date, created_at");
 
   if (entriesError) throw entriesError;
-  if (!entries?.length) return [];
+  const filteredEntries = (entries ?? []).filter(
+    (entry) => getEntryDogIds(entry).length > 0 && matchesTimeframe(entry, timeframe)
+  );
+  if (!filteredEntries.length) return [];
 
-  const dogIds = [...new Set(entries.map((entry) => entry.dog_id))];
+  const dogIds = [...new Set(filteredEntries.flatMap(getEntryDogIds))];
 
   const { data: dogs, error: dogsError } = await supabase
     .from("dogs")
@@ -54,24 +94,26 @@ export async function loadLeaderboard() {
   const dogMap = Object.fromEntries((dogs ?? []).map((dog) => [dog.id, dog]));
 
   const statsMap = {};
-  for (const entry of entries) {
-    if (!statsMap[entry.dog_id]) {
-      statsMap[entry.dog_id] = {
-        totalDistance: 0,
-        totalElevation: 0,
-        tourCount: 0,
-        ratingSum: 0,
-        ratingCount: 0,
-      };
-    }
+  for (const entry of filteredEntries) {
+    for (const dogId of getEntryDogIds(entry)) {
+      if (!statsMap[dogId]) {
+        statsMap[dogId] = {
+          totalDistance: 0,
+          totalElevation: 0,
+          tourCount: 0,
+          ratingSum: 0,
+          ratingCount: 0,
+        };
+      }
 
-    const stats = statsMap[entry.dog_id];
-    stats.tourCount += 1;
-    stats.totalDistance += entry.distance_km ?? 0;
-    stats.totalElevation += entry.elevation_m ?? 0;
-    if (entry.rating) {
-      stats.ratingSum += entry.rating;
-      stats.ratingCount += 1;
+      const stats = statsMap[dogId];
+      stats.tourCount += 1;
+      stats.totalDistance += entry.distance_km ?? 0;
+      stats.totalElevation += entry.elevation_m ?? 0;
+      if (entry.rating) {
+        stats.ratingSum += entry.rating;
+        stats.ratingCount += 1;
+      }
     }
   }
 
