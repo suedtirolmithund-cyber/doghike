@@ -81,7 +81,7 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-brand-50/70 flex flex-col">
-      <div className="hidden h-28 shrink-0 md:block 2xl:h-16" />
+      <div className="hidden h-28 shrink-0 md:block lg:h-20 xl:h-16" />
       <div className="flex-1">{children}</div>
 
       <footer className="bg-white/80 border-t border-brand-100 py-3 md:py-4 px-4 md:px-6 text-center mb-20 md:mb-0">
