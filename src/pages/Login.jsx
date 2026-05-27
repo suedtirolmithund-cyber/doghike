@@ -5,44 +5,10 @@ import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle2 } from "lucide-react";
+import DogTrailsBrandCard from "@/components/DogTrailsBrandCard";
 
 const BROWN = "#A8003C";
 const BROWN_DARK = "#7C3020";
-
-function LoginBrandCard() {
-  return (
-    <div className="relative mx-auto h-[270px] w-full max-w-sm overflow-hidden rounded-[34px] border border-[#E7CFB2]/70 bg-[#FFF8F0] shadow-[0_24px_58px_rgba(124,48,32,0.18)] sm:h-[360px]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(255,255,255,0.94)_0,rgba(255,248,240,0.76)_34%,rgba(253,240,232,0.46)_70%,rgba(249,192,48,0.16)_100%)]" />
-
-      <div className="relative z-10 flex h-[58%] flex-col items-center justify-center px-8 text-center sm:h-[62%]">
-        <img
-          src="/icon.svg?v=dogtrails-login"
-          alt="DogTrails"
-          className="h-24 w-24 sm:h-32 sm:w-32"
-        />
-        <div className="mt-1 text-[34px] font-extrabold leading-none tracking-[-0.03em] text-[#7C3020] sm:text-[44px]">
-          DogTrails
-        </div>
-        <div className="mt-3 text-[10px] font-extrabold uppercase tracking-[0.32em] text-[#F07030] sm:text-xs">
-          Entdecke. Wandere. Verbinde.
-        </div>
-      </div>
-
-      <svg
-        aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 h-[44%] w-full"
-        viewBox="0 0 390 180"
-        preserveAspectRatio="none"
-      >
-        <circle cx="302" cy="70" r="19" fill="#F9C030" />
-        <path d="M0 92 C42 64 58 62 90 88 C127 119 151 61 199 90 C242 116 260 68 307 92 C344 111 363 102 390 84 L390 180 L0 180 Z" fill="#FFC3A5" />
-        <path d="M0 116 C41 92 74 90 116 116 C151 137 178 82 218 111 C257 139 285 92 329 111 C355 122 372 119 390 106 L390 180 L0 180 Z" fill="#F6865E" />
-        <path d="M0 134 C50 111 83 119 126 139 C166 158 191 107 236 132 C279 155 306 113 350 132 C368 139 380 139 390 132 L390 180 L0 180 Z" fill="#D4547A" />
-        <path d="M0 150 C46 134 82 134 125 150 C166 166 202 129 246 149 C287 168 322 139 390 151 L390 180 L0 180 Z" fill="#A8003C" />
-      </svg>
-    </div>
-  );
-}
 
 function mapAuthError(message) {
   const msg = String(message || "").toLowerCase();
@@ -276,7 +242,7 @@ export default function Login() {
           className="relative z-10 w-full max-w-sm"
           style={{ fontFamily: "Nunito, sans-serif" }}
         >
-          <LoginBrandCard />
+          <DogTrailsBrandCard />
         </motion.div>
       )}
 

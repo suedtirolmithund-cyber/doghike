@@ -5,6 +5,7 @@ import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
+import DogTrailsBrandCard from "@/components/DogTrailsBrandCard";
 
 const ONBOARDING_IMAGE = "/onboarding/A739105-desktop.webp";
 const ONBOARDING_IMAGE_MOBILE = "/onboarding/A739105-mobile.webp";
@@ -206,23 +207,22 @@ export default function GuestWelcomeScreen() {
       >
         <WarmGlassBackground mobileFrame />
 
-        <p className="absolute left-[18px] top-[40px] h-[64px] w-[340px] text-center text-[30px] font-extrabold uppercase leading-[32px] tracking-[0.01em] text-white drop-shadow-[0_4px_14px_rgba(116,28,59,0.34)] sm:top-[70px] sm:text-[34px] sm:leading-[36px]">
-          WILLKOMMEN BEI DOGTRAILS
-        </p>
-        <div className="absolute left-[21px] top-[112px] flex w-[340px] items-center justify-center gap-2 text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.28)] sm:top-[152px]">
-          <FourToePaw className="h-6 w-6" />
-          <FourToePaw className="h-6 w-6" />
-          <FourToePaw className="h-6 w-6" />
-        </div>
-        <p className="absolute left-[21px] top-[144px] h-[54px] w-[340px] text-center text-[18px] font-semibold leading-[22px] text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.3)] sm:top-[196px] sm:text-[21px] sm:leading-[24px]">
-          Plane hundefreundliche Touren, speichere deine Lieblingswege und entdecke neue Ziele
-        </p>
+        {mode !== "reset" && mode !== "update-password" && (
+          <motion.div
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+            className="absolute left-4 right-4 top-4 z-10 sm:top-7"
+          >
+            <DogTrailsBrandCard compact className="max-w-none" />
+          </motion.div>
+        )}
 
         <motion.div
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="absolute bottom-4 left-4 right-4 max-h-[476px] overflow-y-auto rounded-[24px] bg-white/10 px-5 py-5 shadow-2xl ring-1 ring-white/20 backdrop-blur-[2px]"
+          className="absolute bottom-4 left-4 right-4 max-h-[calc(100dvh-312px)] overflow-y-auto rounded-[24px] bg-white/10 px-5 py-5 shadow-2xl ring-1 ring-white/20 backdrop-blur-[2px] sm:max-h-[476px]"
         >
           <h1
             className="mb-4 text-[36px] font-semibold leading-none"
