@@ -534,14 +534,16 @@ function WarmGlassBackground({ mobileFrame = false }) {
       <div className="absolute -right-24 top-28 h-80 w-80 rounded-full bg-[#F07030]/35 blur-3xl md:h-[36rem] md:w-[36rem]" />
       <div className="absolute bottom-[-8rem] left-1/2 h-96 w-[34rem] -translate-x-1/2 rounded-[50%] bg-[#A8003C]/30 blur-3xl md:w-[54rem]" />
       <svg
-        className="absolute inset-x-[-8%] bottom-0 h-[38%] w-[116%] opacity-70"
+        className="absolute inset-x-[-8%] bottom-0 h-[43%] w-[116%] opacity-75"
         viewBox="0 0 430 170"
         preserveAspectRatio="none"
       >
-        <path d="M0 84 C46 54 72 60 106 86 C146 116 176 56 222 84 C265 111 294 63 340 86 C376 104 400 98 430 78 L430 170 L0 170 Z" fill="#FFD8BD" opacity="0.8" />
-        <path d="M0 112 C48 86 84 88 128 112 C166 134 198 79 241 107 C284 136 315 90 360 108 C389 120 407 117 430 103 L430 170 L0 170 Z" fill="#F6865E" opacity="0.78" />
-        <path d="M0 136 C52 112 92 121 140 139 C184 155 213 106 260 130 C306 154 335 114 382 132 C402 139 416 139 430 132 L430 170 L0 170 Z" fill="#D4547A" opacity="0.76" />
-        <path d="M0 153 C50 137 91 137 139 153 C183 168 222 130 270 150 C315 168 354 140 430 153 L430 170 L0 170 Z" fill="#A8003C" opacity="0.78" />
+        <path d="M0 96 L34 82 L70 92 L112 64 L152 88 L198 50 L239 90 L286 60 L329 92 L375 70 L430 88 L430 170 L0 170 Z" fill="#FFD8BD" opacity="0.78" />
+        <path d="M0 121 L43 108 L83 126 L126 94 L169 119 L215 84 L259 123 L311 98 L355 126 L430 107 L430 170 L0 170 Z" fill="#F6865E" opacity="0.8" />
+        <path d="M0 142 L47 131 L93 142 L141 116 L188 144 L234 111 L281 144 L334 123 L386 143 L430 134 L430 170 L0 170 Z" fill="#D4547A" opacity="0.76" />
+        <path d="M0 158 L54 150 L108 158 L160 141 L215 160 L270 138 L331 158 L430 148 L430 170 L0 170 Z" fill="#A8003C" opacity="0.82" />
+        <path d="M18 107 L68 95 L113 114 L159 87 L204 111 L247 80 L292 112 L343 94 L409 109" fill="none" stroke="#FFFFFF" strokeOpacity="0.28" strokeWidth="1.3" />
+        <path d="M28 136 L79 127 L128 139 L178 117 L226 139 L277 115 L326 138 L391 127" fill="none" stroke="#7C3020" strokeOpacity="0.1" strokeWidth="1.1" />
       </svg>
       <div className="absolute inset-x-[-8%] bottom-[12%] h-40 rotate-[-5deg] rounded-[50%] border-t border-white/35 bg-white/12 backdrop-blur-[2px]" />
       <div className="absolute inset-x-[-10%] bottom-[20%] h-28 rotate-[4deg] rounded-[50%] border-t border-[#7C3020]/10" />
