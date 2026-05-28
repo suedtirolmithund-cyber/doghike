@@ -31,6 +31,21 @@ const features = [
   "Freue dich auf neue Premium-Touren, die regelmäßig dazukommen",
 ];
 
+const testimonials = [
+  {
+    quote: "Endlich eine App, die wirklich auf unsere Hunde ausgerichtet ist!",
+    author: "Martina S.",
+  },
+  {
+    quote: "Ideal für unseren Urlaub mit Hund in Südtirol.",
+    author: "Axel F.",
+  },
+  {
+    quote: "Endlich weiß ich, welche Wanderungen für meinen Timmy geeignet sind und welche nicht.",
+    author: "Martina W.",
+  },
+];
+
 async function getFunctionErrorMessage(error, fallback) {
   const response = error?.context;
 
@@ -51,6 +66,7 @@ export default function Premium() {
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const [withdrawalConsent, setWithdrawalConsent] = useState(false);
+  const [testimonialIndex, setTestimonialIndex] = useState(0);
   const queryClient = useQueryClient();
   const checkoutStatus = searchParams.get("checkout");
 
@@ -81,6 +97,14 @@ export default function Premium() {
       toast.info("Checkout wurde abgebrochen. Du kannst jederzeit neu starten.");
     }
   }, [checkoutStatus]);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setTestimonialIndex((currentIndex) => (currentIndex + 1) % testimonials.length);
+    }, 5000);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
 
   const checkoutMutation = useMutation({
     mutationFn: async (plan = "monthly") => {
@@ -334,9 +358,23 @@ export default function Premium() {
                 <Star key={star} className="h-5 w-5 fill-[#A8003C] text-[#A8003C]" />
               ))}
             </div>
-            <p className="text-center text-sm italic text-slate-500">
-              "Endlich eine App, die wirklich auf unsere Hunde ausgerichtet ist!" - Martina S.
-            </p>
+            <div className="overflow-hidden">
+              <div
+                className="flex transition-transform duration-700 ease-out"
+                style={{ transform: `translateX(-${testimonialIndex * 100}%)` }}
+              >
+                {testimonials.map((testimonial) => (
+                  <figure key={testimonial.author} className="w-full shrink-0 px-2 text-center">
+                    <blockquote className="text-sm italic leading-6 text-slate-500">
+                      "{testimonial.quote}"
+                    </blockquote>
+                    <figcaption className="mt-1 text-sm font-semibold text-[#7C3020]">
+                      {testimonial.author}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
           </motion.div>
         )}
       </div>
