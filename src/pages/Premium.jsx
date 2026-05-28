@@ -343,7 +343,7 @@ export default function Premium() {
                     ) : (
                       <Settings className="mr-2 h-4 w-4" />
                     )}
-                    Bestehendes Abo verwalten
+                    Abo verwalten / kündigen
                   </Button>
                 )}
                 <p className="flex items-center justify-center gap-2 text-xs text-white/62">
