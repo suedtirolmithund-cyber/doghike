@@ -11,7 +11,7 @@ export default function DogTrailsBrandCard({ className = "", compact = false }) 
 
       <div className="relative z-10 flex h-[62%] flex-col items-center justify-center px-8 text-center sm:h-[64%]">
         <img
-          src="/dogtrails-logo-pin.png?v=exact-brand-logo"
+          src="/dogtrails-logo-pin.png?v=transparent-brand-logo"
           alt="DogTrails"
           className={`${logoClass} object-contain drop-shadow-[0_10px_18px_rgba(124,48,32,0.16)]`}
         />

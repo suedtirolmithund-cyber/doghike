@@ -506,7 +506,7 @@ function LoginWelcomeIntro() {
   return (
     <div className="pointer-events-none absolute left-[21px] right-[21px] top-[24px] z-10 hidden text-center md:block">
       <img
-        src="/dogtrails-logo-pin.png?v=exact-brand-logo"
+        src="/dogtrails-logo-pin.png?v=transparent-brand-logo"
         alt=""
         aria-hidden="true"
         className="mx-auto mb-3 h-[74px] w-[74px] object-contain drop-shadow-[0_10px_22px_rgba(116,28,59,0.28)]"

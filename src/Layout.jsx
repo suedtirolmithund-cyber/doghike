@@ -203,7 +203,7 @@ export default function Layout({ children, currentPageName }) {
             >
               <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-[14px] border border-[#E7CFB2]/90 bg-[#FFF8F0] shadow-[0_8px_18px_rgba(124,48,32,0.16)] lg:h-12 lg:w-12 lg:rounded-[15px]">
                 <img
-                  src="/dogtrails-logo-pin.png?v=exact-brand-logo"
+                  src="/dogtrails-logo-pin.png?v=transparent-brand-logo"
                   alt="DogTrails"
                   className="h-11 w-11 object-contain lg:h-12 lg:w-12"
                 />
