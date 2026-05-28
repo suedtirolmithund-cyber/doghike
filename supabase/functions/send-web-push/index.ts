@@ -159,6 +159,57 @@ Deno.serve(async (request) => {
       title = "Neue Tour von einem Freund";
       body = `${actorName} hat "${entry.title}" geteilt.`;
       url = `/JournalDetail?id=${encodeURIComponent(String(entry.id))}`;
+    } else if (type === "free_hike") {
+      if (!hikeId) {
+        return json({ error: "invalid_payload" }, 400);
+      }
+
+      const { data: requesterProfile, error: requesterProfileError } = await admin
+        .from("profiles")
+        .select("role")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (requesterProfileError || requesterProfile?.role !== "admin") {
+        return json({ error: "not_allowed" }, 403);
+      }
+
+      const { data: hike, error: hikeError } = await admin
+        .from("public_hikes")
+        .select("id, title, location, status, is_premium")
+        .eq("id", hikeId)
+        .maybeSingle();
+
+      if (hikeError || !hike) {
+        return json({ error: "hike_not_found" }, 404);
+      }
+
+      if (hike.status !== "approved" || hike.is_premium === true) {
+        return json({ error: "hike_not_published_free" }, 400);
+      }
+
+      const { data: publicProfiles, error: publicProfilesError } = await admin
+        .from("profiles")
+        .select("user_id")
+        .neq("user_id", user.id);
+
+      if (publicProfilesError) {
+        return json({ error: "public_profiles_load_failed" }, 500);
+      }
+
+      targetUserIds = (publicProfiles ?? [])
+        .map((profile) => profile.user_id)
+        .filter(Boolean);
+
+      if (!targetUserIds.length) {
+        return json({ sent: 0, skipped: true });
+      }
+
+      title = "Neue kostenlose Tour";
+      body = hike.location
+        ? `"${hike.title}" ist jetzt neu in ${hike.location}.`
+        : `"${hike.title}" ist jetzt neu verfugbar.`;
+      url = `/HikeDetail?id=${encodeURIComponent(String(hike.id))}&source=sheets`;
     } else if (type === "premium_hike") {
       if (!hikeId) {
         return json({ error: "invalid_payload" }, 400);

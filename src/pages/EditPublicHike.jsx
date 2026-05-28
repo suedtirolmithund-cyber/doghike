@@ -9,6 +9,7 @@ import {
   deleteUploadedPublicHikePhoto,
   getPublicHikeById,
   resolvePublicHikePhotoReferences,
+  triggerFreeHikeWebPush,
   triggerPremiumHikeWebPush,
   updatePublicHike,
   uploadPublicHikePhoto,
@@ -364,6 +365,8 @@ export default function EditPublicHike() {
     onSuccess: () => {
       const wasPublishedPremium = hike?.status === "approved" && hike?.is_premium === true;
       const isPublishedPremium = formData.status === "approved" && formData.is_premium === "true";
+      const wasPublishedFree = hike?.status === "approved" && hike?.is_premium !== true;
+      const isPublishedFree = formData.status === "approved" && formData.is_premium !== "true";
       const finalPhotoUrls = formData.photoUrls.filter(Boolean);
       const savedPhotoUrls = savedPhotoUrlsRef.current;
       uploadedDuringEditRef.current.forEach((photoUrl) => {
@@ -379,6 +382,10 @@ export default function EditPublicHike() {
       if (!wasPublishedPremium && isPublishedPremium) {
         triggerPremiumHikeWebPush(hike._public_hike_id).catch((error) => {
           console.error("[EditPublicHike] premium push failed:", error);
+        });
+      } else if (!wasPublishedFree && isPublishedFree) {
+        triggerFreeHikeWebPush(hike._public_hike_id).catch((error) => {
+          console.error("[EditPublicHike] free push failed:", error);
         });
       }
       toast.success("Die öffentliche Tour ist wieder rund.");
