@@ -368,6 +368,8 @@ export async function updatePublicHike(hikeId, values) {
     photoUrls = [],
     tags = [],
     seasons = [],
+    dog_ids = [],
+    dog_mood_tags = [],
     ...hikeValues
   } = values;
   const cleanedPhotoUrls = photoUrls
@@ -389,11 +391,27 @@ export async function updatePublicHike(hikeId, values) {
   const existingPhotoUrls = existingPhotos.map((photo) => photo.photo_url).filter(Boolean);
 
   const cleanedSeasons = normalizeSeasonValues(seasons, hikeValues.season);
+  const cleanedDogIds = Array.from(
+    new Set(
+      (Array.isArray(dog_ids) ? dog_ids : [])
+        .map((dogId) => String(dogId ?? "").trim())
+        .filter(Boolean)
+    )
+  );
+  const cleanedDogMoodTags = Array.from(
+    new Set(
+      (Array.isArray(dog_mood_tags) ? dog_mood_tags : [])
+        .map((tag) => String(tag ?? "").trim())
+        .filter(Boolean)
+    )
+  );
   const basePayload = {
     ...hikeValues,
     season: cleanedSeasons[0] || hikeValues.season || null,
     ...legacyPhotoColumns,
     tags,
+    dog_ids: cleanedDogIds,
+    dog_mood_tags: cleanedDogMoodTags,
   };
 
   let updateResult = await supabase
@@ -409,11 +427,30 @@ export async function updatePublicHike(hikeId, values) {
   const missingSeasonsColumn =
     updateResult.error?.message?.includes("Could not find the 'seasons' column") ||
     updateResult.error?.message?.includes("column public_hikes.seasons does not exist");
+  const missingDogFields =
+    updateResult.error?.message?.includes("dog_ids") ||
+    updateResult.error?.message?.includes("dog_mood_tags");
 
   if (missingSeasonsColumn) {
     updateResult = await supabase
       .from("public_hikes")
       .update(basePayload)
+      .eq("id", hikeId)
+      .select()
+      .single();
+  }
+
+  if (missingDogFields) {
+    const fallbackPayload = { ...basePayload };
+    delete fallbackPayload.dog_ids;
+    delete fallbackPayload.dog_mood_tags;
+
+    updateResult = await supabase
+      .from("public_hikes")
+      .update(missingSeasonsColumn ? fallbackPayload : {
+        ...fallbackPayload,
+        seasons: cleanedSeasons,
+      })
       .eq("id", hikeId)
       .select()
       .single();

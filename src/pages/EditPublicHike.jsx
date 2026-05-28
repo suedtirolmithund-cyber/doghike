@@ -20,9 +20,40 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 import WaterIcon from "@/components/icons/WaterIcon";
 import SeasonMultiPicker from "@/components/season/SeasonMultiPicker";
-import { DIFFICULTY_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
+import { DIFFICULTY_LEVELS, DOG_PRIVATE_TAGS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 import { hoursInputToMinutes, minutesToHoursInput } from "@/lib/duration";
+import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
+
+function normalizeSelectedDogIds(value, fallbackDogId = null) {
+  const dogIds = Array.isArray(value)
+    ? value
+    : value
+      ? [value]
+      : [];
+
+  if (fallbackDogId) {
+    dogIds.push(fallbackDogId);
+  }
+
+  return Array.from(
+    new Set(
+      dogIds
+        .map((dogId) => String(dogId ?? "").trim())
+        .filter(Boolean)
+    )
+  );
+}
+
+function normalizeDogMoodTags(value) {
+  return Array.from(
+    new Set(
+      (Array.isArray(value) ? value : value ? [value] : [])
+        .map((tag) => String(tag ?? "").trim())
+        .filter(Boolean)
+    )
+  );
+}
 
 function buildInitialFormData(hike) {
   return {
@@ -47,6 +78,8 @@ function buildInitialFormData(hike) {
     parking_info: hike?.parking_info || "",
     restaurant_info: hike?.restaurant_info || "",
     notes: hike?.notes || "",
+    dog_ids: normalizeSelectedDogIds(hike?.dog_ids, hike?.dog_id),
+    dog_mood_tags: normalizeDogMoodTags(hike?.dog_mood_tags),
     tagsText: Array.isArray(hike?.tags) ? hike.tags.join(", ") : "",
     status: hike?.status || "approved",
     is_premium: hike?.is_premium ? "true" : "false",
@@ -105,6 +138,18 @@ export default function EditPublicHike() {
   const [isUploadingPhotos, setIsUploadingPhotos] = useState(false);
   const uploadedDuringEditRef = useRef(new Set());
   const savedPhotoUrlsRef = useRef(new Set());
+
+  const { data: userDogs = [] } = useQuery({
+    queryKey: ["dogs", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return [];
+      const { getDogs } = await import("@/lib/profilesApi");
+      return getDogs(user.id);
+    },
+    enabled: !!user?.id,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
 
   const { data: hike, isLoading } = useQuery({
     queryKey: ["publicHikeEditor", hikeId],
@@ -247,6 +292,29 @@ export default function EditPublicHike() {
     setPhotoPreviewUrls((prev) => moveItemToIndex(prev));
   };
 
+  const toggleDogMoodTag = (tag) => {
+    setFormData((prev) => ({
+      ...prev,
+      dog_mood_tags: normalizeDogMoodTags(prev.dog_mood_tags).includes(tag)
+        ? normalizeDogMoodTags(prev.dog_mood_tags).filter((entry) => entry !== tag)
+        : [...normalizeDogMoodTags(prev.dog_mood_tags), tag],
+    }));
+  };
+
+  const toggleSelectedDog = (dogId) => {
+    setFormData((prev) => {
+      const currentDogIds = normalizeSelectedDogIds(prev.dog_ids, prev.dog_id);
+      const nextDogIds = currentDogIds.includes(dogId)
+        ? currentDogIds.filter((id) => id !== dogId)
+        : [...currentDogIds, dogId];
+
+      return {
+        ...prev,
+        dog_ids: nextDogIds,
+      };
+    });
+  };
+
   const saveMutation = useMutation({
     mutationFn: async () => {
       if (!hike?._public_hike_id) {
@@ -276,6 +344,8 @@ export default function EditPublicHike() {
           : WATER_LEVELS.find((level) => level.value === formData.water_availability)?.numeric ?? null,
         season: formData.seasons[0] || null,
         seasons: formData.seasons,
+        dog_ids: normalizeSelectedDogIds(formData.dog_ids),
+        dog_mood_tags: normalizeDogMoodTags(formData.dog_mood_tags),
         grazing_animals: !!formData.grazing_animals,
         muzzle_recommended: !!formData.muzzle_recommended,
         hazard_notes: formData.hazard_notes.trim() || null,
@@ -544,6 +614,69 @@ export default function EditPublicHike() {
                   </button>
                 </div>
               </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <Label className="text-sm text-slate-600">Wie waren deine Hunde drauf?</Label>
+                <div className="flex flex-wrap gap-2">
+                  {DOG_PRIVATE_TAGS.map((tag) => {
+                    const isActive = formData.dog_mood_tags.includes(tag);
+                    return (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => toggleDogMoodTag(tag)}
+                        className={`inline-flex max-w-full min-w-0 flex-wrap items-center justify-center gap-1 rounded-full border px-2.5 py-2 text-center text-sm leading-tight transition-all sm:px-3 ${
+                          isActive
+                            ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
+                            : "border-brand-100 bg-white/70 text-slate-500 hover:border-brand-200 hover:bg-brand-50/70"
+                        }`}
+                      >
+                        {tag}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {userDogs.length > 0 && (
+                <div className="space-y-2 md:col-span-2">
+                  <Label className="text-sm text-slate-600">Welche Hunde waren dabei?</Label>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setFormData((prev) => ({ ...prev, dog_ids: [] }))}
+                      className={`flex items-center gap-2 rounded-xl border-2 px-3 py-2 text-sm transition-all focus:outline-none ${
+                        formData.dog_ids.length === 0
+                          ? "border-brand-200 bg-brand-100/80 font-medium text-slate-700"
+                          : "border-brand-100 text-slate-400 hover:border-brand-100"
+                      }`}
+                    >
+                      Kein Hund ausgewählt
+                    </button>
+                    {userDogs.map((dog) => (
+                      <button
+                        key={dog.id}
+                        type="button"
+                        onClick={() => toggleSelectedDog(dog.id)}
+                        className={`flex items-center gap-2 rounded-xl border-2 px-3 py-2 text-sm transition-all focus:outline-none ${
+                          formData.dog_ids.includes(dog.id)
+                            ? "border-brand-400 bg-brand-50 font-medium text-brand-700"
+                            : "border-brand-100 text-slate-600 hover:border-brand-300"
+                        }`}
+                      >
+                        <div className="h-6 w-6 shrink-0 overflow-hidden rounded-full bg-brand-100/80">
+                          <img
+                            src={dog.photo_url || getAvatarDataUrl(dog.name)}
+                            alt={dog.name}
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                        <span>{dog.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-2">
                 <Label>Status</Label>
