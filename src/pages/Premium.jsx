@@ -307,7 +307,7 @@ export default function Premium() {
                 </label>
 
                 <Button
-                  className="h-12 w-full rounded-xl bg-white text-[#7C3020] hover:bg-white/90 disabled:opacity-50"
+                  className="h-12 w-full rounded-xl bg-white text-[#7C3020] hover:bg-white/90 disabled:opacity-50 md:h-14 md:text-lg"
                   onClick={() => checkoutMutation.mutate("monthly")}
                   disabled={checkoutMutation.isPending || isFetching || !withdrawalConsent}
                 >
@@ -320,7 +320,7 @@ export default function Premium() {
                 </Button>
                 <Button
                   variant="outline"
-                  className="h-12 w-full rounded-xl border-white/30 bg-white/10 text-white hover:bg-white/20 disabled:opacity-50"
+                  className="h-12 w-full rounded-xl border-white/30 bg-white/10 text-white hover:bg-white/20 disabled:opacity-50 md:h-14 md:text-lg"
                   onClick={() => checkoutMutation.mutate("one_time")}
                   disabled={checkoutMutation.isPending || isFetching || !withdrawalConsent}
                 >
@@ -334,7 +334,7 @@ export default function Premium() {
                 {canOpenPortal && (
                   <Button
                     variant="outline"
-                    className="h-12 w-full rounded-xl border-white/30 bg-white/10 text-white hover:bg-white/20"
+                    className="h-12 w-full rounded-xl border-white/30 bg-white/10 text-white hover:bg-white/20 md:h-14 md:text-lg"
                     onClick={() => portalMutation.mutate()}
                     disabled={portalMutation.isPending}
                   >
