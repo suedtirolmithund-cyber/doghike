@@ -62,6 +62,42 @@ function isManagedPublicHikePhoto(value) {
   return /\/storage\/v1\/object\/(?:public|sign)\/journal\/public-hikes\//.test(trimmed);
 }
 
+function getCanonicalGalleryPhotoKey(value) {
+  if (typeof value !== "string") return "";
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+
+  if (trimmed.startsWith("public-hikes/")) {
+    return trimmed;
+  }
+
+  if (trimmed.startsWith("journal/public-hikes/")) {
+    return trimmed.slice("journal/".length);
+  }
+
+  try {
+    const parsedUrl = new URL(trimmed);
+    const publicMarker = "/storage/v1/object/public/journal/";
+    const signedMarker = "/storage/v1/object/sign/journal/";
+
+    if (parsedUrl.pathname.includes(publicMarker)) {
+      return decodeURIComponent(
+        parsedUrl.pathname.slice(parsedUrl.pathname.indexOf(publicMarker) + publicMarker.length)
+      );
+    }
+
+    if (parsedUrl.pathname.includes(signedMarker)) {
+      return decodeURIComponent(
+        parsedUrl.pathname.slice(parsedUrl.pathname.indexOf(signedMarker) + signedMarker.length)
+      );
+    }
+
+    return `${parsedUrl.origin}${parsedUrl.pathname}`;
+  } catch {
+    return trimmed;
+  }
+}
+
 function mapWaterAvailabilityToJournalValue(value) {
   if (value === "none" || value === 0 || value === "0") return 0;
   if (value === "little" || value === 1 || value === "1") return 1;
@@ -224,7 +260,7 @@ export default function HikeDetail() {
       typeof hike?.image === "string" && hike.image.trim() ? hike.image.trim() : null;
 
     const uniquePhotos = [];
-    const seenDisplayUrls = new Set();
+    const seenPhotoKeys = new Set();
 
     [
       explicitTitleImage,
@@ -233,9 +269,11 @@ export default function HikeDetail() {
     ]
       .filter(Boolean)
       .forEach((photo) => {
-        const resolvedPhoto = getDisplayImageUrl(photo) || photo;
-        if (seenDisplayUrls.has(resolvedPhoto)) return;
-        seenDisplayUrls.add(resolvedPhoto);
+        const canonicalKey =
+          getCanonicalGalleryPhotoKey(photo) ||
+          getCanonicalGalleryPhotoKey(getDisplayImageUrl(photo) || photo);
+        if (seenPhotoKeys.has(canonicalKey)) return;
+        seenPhotoKeys.add(canonicalKey);
         uniquePhotos.push(photo);
       });
 
