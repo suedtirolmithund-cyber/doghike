@@ -414,46 +414,55 @@ export async function updatePublicHike(hikeId, values) {
     dog_mood_tags: cleanedDogMoodTags,
   };
 
-  let updateResult = await supabase
-    .from("public_hikes")
-    .update({
-      ...basePayload,
-      seasons: cleanedSeasons,
-    })
-    .eq("id", hikeId)
-    .select()
-    .single();
+  const payloadWithFallbacks = {
+    ...basePayload,
+    seasons: cleanedSeasons,
+  };
 
-  const missingSeasonsColumn =
-    updateResult.error?.message?.includes("Could not find the 'seasons' column") ||
-    updateResult.error?.message?.includes("column public_hikes.seasons does not exist");
-  const missingDogFields =
-    updateResult.error?.message?.includes("dog_ids") ||
-    updateResult.error?.message?.includes("dog_mood_tags");
+  let updatePayload = { ...payloadWithFallbacks };
+  let updateResult = null;
 
-  if (missingSeasonsColumn) {
+  // Some existing projects still do not have newer optional columns yet.
+  // Retry narrowly by removing only the unknown fields the API reports.
+  while (true) {
     updateResult = await supabase
       .from("public_hikes")
-      .update(basePayload)
+      .update(updatePayload)
       .eq("id", hikeId)
       .select()
       .single();
-  }
 
-  if (missingDogFields) {
-    const fallbackPayload = { ...basePayload };
-    delete fallbackPayload.dog_ids;
-    delete fallbackPayload.dog_mood_tags;
+    const errorMessage = String(updateResult.error?.message || "");
+    const missingSeasonsColumn =
+      errorMessage.includes("Could not find the 'seasons' column") ||
+      errorMessage.includes("column public_hikes.seasons does not exist");
+    const missingDogIdsColumn =
+      errorMessage.includes("Could not find the 'dog_ids' column") ||
+      errorMessage.includes("column public_hikes.dog_ids does not exist");
+    const missingDogMoodTagsColumn =
+      errorMessage.includes("Could not find the 'dog_mood_tags' column") ||
+      errorMessage.includes("column public_hikes.dog_mood_tags does not exist");
 
-    updateResult = await supabase
-      .from("public_hikes")
-      .update(missingSeasonsColumn ? fallbackPayload : {
-        ...fallbackPayload,
-        seasons: cleanedSeasons,
-      })
-      .eq("id", hikeId)
-      .select()
-      .single();
+    let removedUnsupportedField = false;
+
+    if (missingSeasonsColumn && Object.prototype.hasOwnProperty.call(updatePayload, "seasons")) {
+      delete updatePayload.seasons;
+      removedUnsupportedField = true;
+    }
+
+    if (missingDogIdsColumn && Object.prototype.hasOwnProperty.call(updatePayload, "dog_ids")) {
+      delete updatePayload.dog_ids;
+      removedUnsupportedField = true;
+    }
+
+    if (missingDogMoodTagsColumn && Object.prototype.hasOwnProperty.call(updatePayload, "dog_mood_tags")) {
+      delete updatePayload.dog_mood_tags;
+      removedUnsupportedField = true;
+    }
+
+    if (!updateResult.error || !removedUnsupportedField) {
+      break;
+    }
   }
 
   const { data, error } = updateResult;
