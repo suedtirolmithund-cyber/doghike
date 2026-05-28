@@ -209,7 +209,7 @@ function CompactRankRow({ entry, rank, metric, isMyDog }) {
 }
 
 // Dein Hund - falls nicht in Top 10
-function MyDogCard({ entry, rank, metric }) {
+function MyDogCard({ entry, rank, totalCount, metric }) {
   if (!entry) return null;
   return (
     <motion.div
@@ -224,7 +224,7 @@ function MyDogCard({ entry, rank, metric }) {
       <div className="flex-1 min-w-0">
         <p className="font-bold text-slate-900">Deine beste Platzierung</p>
         <p className="text-xs text-slate-500">
-          Mit <strong>{entry.dog.name}</strong> aktuell Platz <strong>#{rank}</strong> in dieser Kategorie
+          Mit <strong>{entry.dog.name}</strong> aktuell Platz <strong>#{rank}</strong> von <strong>{totalCount}</strong> in dieser Kategorie
         </p>
       </div>
       <div className="text-right shrink-0">
@@ -323,6 +323,7 @@ function RankingTab({ rows, metric, myDogIds }) {
   const ownDogIdSet = new Set(myDogIds ?? []);
   const myIdx = sorted.findIndex((r) => ownDogIdSet.has(r.dog?.id));
   const myEntry = myIdx >= 0 ? sorted[myIdx] : null;
+  const showOwnRankCard = myIdx >= 3;
 
   if (!sorted.length) {
     return (
@@ -364,8 +365,8 @@ function RankingTab({ rows, metric, myDogIds }) {
         ))}
       </div>
       {/* Dein Hund falls außerhalb Top 10 */}
-      {myEntry && (
-        <MyDogCard entry={myEntry} rank={myIdx + 1} metric={metric} />
+      {showOwnRankCard && myEntry && (
+        <MyDogCard entry={myEntry} rank={myIdx + 1} totalCount={sorted.length} metric={metric} />
       )}
     </div>
   );

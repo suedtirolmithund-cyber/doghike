@@ -169,6 +169,78 @@ create table if not exists public.journal_entries (
 
 alter table public.journal_entries enable row level security;
 
+create or replace function public.get_top_dogs_leaderboard(timeframe_value text default 'overall')
+returns table (
+  dog_id uuid,
+  user_id uuid,
+  dog_name text,
+  dog_breed text,
+  dog_photo_url text,
+  tour_count integer,
+  total_distance numeric,
+  total_elevation integer,
+  avg_rating numeric,
+  rating_count integer
+)
+language sql
+security definer
+stable
+set search_path = public
+as $$
+  with filtered_entries as (
+    select je.*
+    from public.journal_entries je
+    where (
+      timeframe_value = 'overall'
+      or (
+        timeframe_value = 'week'
+        and coalesce(je.date::timestamptz, je.created_at) >=
+          date_trunc('day', now()) - (((extract(dow from now())::int + 6) % 7) * interval '1 day')
+      )
+      or (
+        timeframe_value = 'month'
+        and coalesce(je.date::timestamptz, je.created_at) >= date_trunc('month', now())
+      )
+    )
+  ),
+  entry_dogs as (
+    select
+      je.distance_km,
+      je.elevation_m,
+      je.rating,
+      selected_dogs.dog_id
+    from filtered_entries je
+    cross join lateral (
+      select distinct dog_id
+      from unnest(
+        array_cat(
+          coalesce(je.dog_ids, '{}'::uuid[]),
+          case when je.dog_id is not null then array[je.dog_id] else '{}'::uuid[] end
+        )
+      ) as dog_id
+    ) selected_dogs
+  )
+  select
+    d.id as dog_id,
+    d.user_id,
+    d.name as dog_name,
+    d.breed as dog_breed,
+    d.photo_url as dog_photo_url,
+    count(*)::integer as tour_count,
+    round(coalesce(sum(ed.distance_km), 0)::numeric, 1) as total_distance,
+    round(coalesce(sum(ed.elevation_m), 0))::integer as total_elevation,
+    case
+      when count(ed.rating) > 0 then round(avg(ed.rating)::numeric, 1)
+      else 0
+    end as avg_rating,
+    count(ed.rating)::integer as rating_count
+  from entry_dogs ed
+  join public.dogs d on d.id = ed.dog_id
+  group by d.id, d.user_id, d.name, d.breed, d.photo_url;
+$$;
+
+grant execute on function public.get_top_dogs_leaderboard(text) to authenticated;
+
 -- Helper: Prüft ob der aktuelle Nutzer Admin ist
 create or replace function public.is_admin()
 returns boolean

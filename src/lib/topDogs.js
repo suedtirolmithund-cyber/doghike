@@ -63,11 +63,33 @@ function matchesTimeframe(entry, timeframe) {
 }
 
 export async function loadLeaderboard(timeframe = "overall") {
+  const { data: rpcRows, error: rpcError } = await supabase.rpc("get_top_dogs_leaderboard", {
+    timeframe_value: timeframe,
+  });
+
+  if (!rpcError && Array.isArray(rpcRows) && rpcRows.length > 0) {
+    return rpcRows
+      .map((row) => ({
+        dog: {
+          id: row.dog_id,
+          user_id: row.user_id,
+          name: row.dog_name,
+          breed: row.dog_breed,
+          photo_url: row.dog_photo_url,
+        },
+        profile: null,
+        tourCount: Number(row.tour_count || 0),
+        totalDistance: Number(row.total_distance || 0),
+        totalElevation: Number(row.total_elevation || 0),
+        avgRating: Number(row.avg_rating || 0),
+        ratingCount: Number(row.rating_count || 0),
+      }))
+      .filter((row) => row.dog?.id);
+  }
+
   const { data: entries, error: entriesError } = await supabase
     .from("journal_entries")
-    .select("dog_id, dog_ids, distance_km, elevation_m, rating, date, created_at")
-    .eq("visibility", "public")
-    .eq("status", "approved");
+    .select("dog_id, dog_ids, distance_km, elevation_m, rating, date, created_at");
 
   if (entriesError) throw entriesError;
   const filteredEntries = (entries ?? []).filter(
