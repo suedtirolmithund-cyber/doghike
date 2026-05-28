@@ -19,6 +19,7 @@ import WaterIcon from "@/components/icons/WaterIcon";
 import { toast } from "sonner";
 import { showSavedFeedback, showUploadedFeedback } from "@/lib/feedbackToast";
 import { useAuth } from "@/lib/AuthContext";
+import { supabase } from "@/lib/supabaseClient";
 import {
   createJournalEntry,
   updateJournalEntry,
@@ -1030,7 +1031,7 @@ export default function AddJournalEntry() {
       editId
         ? updateJournalEntry(editId, data)
         : createJournalEntry(user.id, data),
-    onSuccess: async () => {
+    onSuccess: async (savedEntry) => {
       const filesToDelete = [
         ...removedExistingPhotosRef.current,
         ...removedExistingGpxRef.current,
@@ -1061,6 +1062,25 @@ export default function AddJournalEntry() {
         showSavedFeedback("Wanderung gespeichert", `${selectedDogs.length} Hunde und du habt diesen Tag festgehalten.`);
       } else {
         showSavedFeedback("Wanderung gespeichert", "Diese Wanderung ist jetzt in deinem Tagebuch.");
+      }
+      if (
+        !editId &&
+        savedEntry?.id &&
+        (
+          savedEntry.visibility === "friends" ||
+          (savedEntry.visibility === "public" && savedEntry.status === "approved")
+        )
+      ) {
+        try {
+          await supabase.functions.invoke("send-web-push", {
+            body: {
+              type: "friend_entry",
+              entryId: savedEntry.id,
+            },
+          });
+        } catch (error) {
+          console.error("[WebPush] Freundes-Tour Versand fehlgeschlagen:", error);
+        }
       }
       navigate(createPageUrl("Journal"));
     },

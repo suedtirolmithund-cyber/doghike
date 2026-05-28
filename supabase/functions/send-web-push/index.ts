@@ -62,7 +62,7 @@ Deno.serve(async (request) => {
       return json({ error: "invalid_auth" }, 401);
     }
 
-    const { type, friendshipId, hikeId } = await request.json();
+    const { type, friendshipId, hikeId, entryId } = await request.json();
     if (!type) {
       return json({ error: "invalid_payload" }, 400);
     }
@@ -115,6 +115,50 @@ Deno.serve(async (request) => {
         body = `${actorName} hat deine Anfrage angenommen.`;
         url = "/Friends";
       }
+    } else if (type === "friend_entry") {
+      if (!entryId) {
+        return json({ error: "invalid_payload" }, 400);
+      }
+
+      const { data: entry, error: entryError } = await admin
+        .from("journal_entries")
+        .select("id, user_id, title, visibility, status")
+        .eq("id", entryId)
+        .maybeSingle();
+
+      if (entryError || !entry) {
+        return json({ error: "entry_not_found" }, 404);
+      }
+
+      const isVisibleToFriends =
+        (entry.visibility === "friends" && (entry.status === "approved" || entry.status === "draft"))
+        || (entry.visibility === "public" && entry.status === "approved");
+
+      if (entry.user_id !== user.id || !isVisibleToFriends) {
+        return json({ error: "not_allowed" }, 403);
+      }
+
+      const { data: friendships, error: friendshipsError } = await admin
+        .from("friendships")
+        .select("requester_id, receiver_id")
+        .or(`requester_id.eq.${user.id},receiver_id.eq.${user.id}`)
+        .eq("status", "accepted");
+
+      if (friendshipsError) {
+        return json({ error: "friendships_load_failed" }, 500);
+      }
+
+      targetUserIds = (friendships ?? [])
+        .map((friendship) => (friendship.requester_id === user.id ? friendship.receiver_id : friendship.requester_id))
+        .filter(Boolean);
+
+      if (!targetUserIds.length) {
+        return json({ sent: 0, skipped: true });
+      }
+
+      title = "Neue Tour von einem Freund";
+      body = `${actorName} hat "${entry.title}" geteilt.`;
+      url = `/JournalDetail?id=${encodeURIComponent(String(entry.id))}`;
     } else if (type === "premium_hike") {
       if (!hikeId) {
         return json({ error: "invalid_payload" }, 400);
