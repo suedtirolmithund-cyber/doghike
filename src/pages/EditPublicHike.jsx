@@ -9,6 +9,7 @@ import {
   deleteUploadedPublicHikePhoto,
   getPublicHikeById,
   resolvePublicHikePhotoReferences,
+  triggerPremiumHikeWebPush,
   updatePublicHike,
   uploadPublicHikePhoto,
 } from "@/lib/publicHikesApi";
@@ -361,6 +362,8 @@ export default function EditPublicHike() {
       });
     },
     onSuccess: () => {
+      const wasPublishedPremium = hike?.status === "approved" && hike?.is_premium === true;
+      const isPublishedPremium = formData.status === "approved" && formData.is_premium === "true";
       const finalPhotoUrls = formData.photoUrls.filter(Boolean);
       const savedPhotoUrls = savedPhotoUrlsRef.current;
       uploadedDuringEditRef.current.forEach((photoUrl) => {
@@ -373,6 +376,11 @@ export default function EditPublicHike() {
       queryClient.invalidateQueries({ queryKey: ["allHikes"] });
       queryClient.invalidateQueries({ queryKey: ["hike"] });
       queryClient.invalidateQueries({ queryKey: ["hike", "sheets", detailId] });
+      if (!wasPublishedPremium && isPublishedPremium) {
+        triggerPremiumHikeWebPush(hike._public_hike_id).catch((error) => {
+          console.error("[EditPublicHike] premium push failed:", error);
+        });
+      }
       toast.success("Die öffentliche Tour ist wieder rund.");
       navigate(createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`, { replace: true });
     },

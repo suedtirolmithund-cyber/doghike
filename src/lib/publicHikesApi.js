@@ -316,6 +316,19 @@ export async function deleteUploadedPublicHikePhoto(photoUrl) {
   if (error) throw error;
 }
 
+export async function triggerPremiumHikeWebPush(hikeId) {
+  if (!hikeId) return;
+
+  const { error } = await supabase.functions.invoke("send-web-push", {
+    body: {
+      type: "premium_hike",
+      hikeId,
+    },
+  });
+
+  if (error) throw error;
+}
+
 export async function getPublicHikeById(hikeId) {
   const { data: hikeRow, error: hikeError } = await supabase
     .from("public_hikes")
