@@ -65,7 +65,9 @@ function matchesTimeframe(entry, timeframe) {
 export async function loadLeaderboard(timeframe = "overall") {
   const { data: entries, error: entriesError } = await supabase
     .from("journal_entries")
-    .select("dog_id, dog_ids, distance_km, elevation_m, rating, date, created_at");
+    .select("dog_id, dog_ids, distance_km, elevation_m, rating, date, created_at")
+    .eq("visibility", "public")
+    .eq("status", "approved");
 
   if (entriesError) throw entriesError;
   const filteredEntries = (entries ?? []).filter(
