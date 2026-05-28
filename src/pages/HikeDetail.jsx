@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowLeft, Edit, Trash2, ChevronLeft, ChevronRight, X, Share2, Check, MapPin, Plus
+  ArrowLeft, Edit, Trash2, ChevronLeft, ChevronRight, X, Share2, Check, MapPin
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -424,39 +424,6 @@ export default function HikeDetail() {
   
   const countryLabel = getCountryLabel(hike.country);
   const seasonValues = normalizeSeasonValues(hike?.seasons, hike?.season);
-  const canCreateJournalFromHike = hike?._source === "sheets";
-
-  const handleCreateJournalEntry = () => {
-    if (!currentUser?.id) {
-      navigate(createPageUrl("Login"));
-      return;
-    }
-
-    navigate(createPageUrl("AddJournalEntry"), {
-      state: {
-        routePrefill: {
-          title: hike?.trail_name || "",
-          location: hike?.location || "",
-          date: hike?.date || "",
-          latitude: hike?.latitude ?? "",
-          longitude: hike?.longitude ?? "",
-          distance_km: hike?.distance_km ?? "",
-          elevation_m: hike?.elevation_gain_m ?? hike?.elevation_m ?? "",
-          duration_minutes: hike?.duration_minutes ?? "",
-          description: hike?.notes || "",
-          difficulty: hike?.difficulty ? Number(hike.difficulty) : 0,
-          dog_difficulty: hike?.dog_difficulty ? Number(hike.dog_difficulty) : 0,
-          water_available: mapWaterAvailabilityToJournalValue(hike?.water_availability),
-          grazing_animals: hike?.grazing_animals ?? false,
-          muzzle_recommended: hike?.muzzle_recommended ?? false,
-          hazard_notes: hike?.hazard_notes || "",
-          seasons: seasonValues,
-          photos: Array.isArray(hike?.photos) ? hike.photos : [],
-          gpx_url: hike?.gpx_url || "",
-        },
-      },
-    });
-  };
 
   const openGalleryPhoto = (index) => {
     setCurrentPhotoIndex(index);
@@ -527,17 +494,6 @@ export default function HikeDetail() {
             </Button>
           </div>
           <div className="flex flex-wrap gap-2 self-start sm:justify-end">
-            {canCreateJournalFromHike && (
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={handleCreateJournalEntry}
-                className="h-10 bg-white/10 px-3 text-sm backdrop-blur-sm text-white hover:bg-white/20"
-              >
-                <Plus className="w-4 h-4 mr-1" />
-                Ins Tagebuch
-              </Button>
-            )}
             {(isOwnJournalHike || (isAdmin && hike?._source === "sheets" && adminEditPublicHikeId)) && (
                 <>
                   <Link
