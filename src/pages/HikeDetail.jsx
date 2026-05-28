@@ -424,8 +424,7 @@ export default function HikeDetail() {
   
   const countryLabel = getCountryLabel(hike.country);
   const seasonValues = normalizeSeasonValues(hike?.seasons, hike?.season);
-  const canCreateJournalFromHike =
-    hike?._source === "sheets" && !(isAdmin && adminEditPublicHikeId);
+  const canCreateJournalFromHike = hike?._source === "sheets";
 
   const handleCreateJournalEntry = () => {
     if (!currentUser?.id) {
