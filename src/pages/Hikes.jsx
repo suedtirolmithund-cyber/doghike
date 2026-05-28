@@ -186,6 +186,17 @@ export default function Hikes() {
     filteredHikes,
   } = useHikeFilters(hikes);
   const isHikesLoading = isLoading && hikes.length === 0;
+  const hasActiveFilters =
+    searchQuery.trim() !== "" ||
+    levelFilter !== "all" ||
+    humanDifficultyFilter !== "all" ||
+    dogDifficultyFilter !== "all" ||
+    distanceMin !== "" ||
+    distanceMax !== "" ||
+    elevationMin !== "" ||
+    elevationMax !== "" ||
+    seasonFilter !== "all" ||
+    waterFilter !== "all";
   const totalPages = Math.max(1, Math.ceil(filteredHikes.length / HIKES_PAGE_SIZE));
   const visibleHikes = filteredHikes.slice(
     (currentPage - 1) * HIKES_PAGE_SIZE,
@@ -364,7 +375,9 @@ export default function Hikes() {
               <p className="text-sm leading-5 text-[#C07820]">
                 {hasPendingChanges
                   ? "Du hast Filter geändert. Tippe auf „Filter anwenden“, um die Ergebnisse zu aktualisieren."
-                  : `${filteredHikes.length} Tour${filteredHikes.length === 1 ? "" : "en"} aktiv gefiltert. Seite ${currentPage} von ${totalPages}.`}
+                  : hasActiveFilters
+                    ? `${filteredHikes.length} Tour${filteredHikes.length === 1 ? "" : "en"} aktiv gefiltert. Seite ${currentPage} von ${totalPages}.`
+                    : `${filteredHikes.length} Tour${filteredHikes.length === 1 ? "" : "en"} verfÃ¼gbar. Seite ${currentPage} von ${totalPages}.`}
               </p>
               <div className="flex gap-2">
                 <Button type="button" variant="outline" onClick={resetFilters}>
