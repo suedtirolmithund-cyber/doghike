@@ -13,6 +13,7 @@ const INITIAL_FILTERS = {
   elevationMax: "",
   seasonFilter: "all",
   waterFilter: "all",
+  premiumFilter: "all",
 };
 
 function getSeasonValues(hike) {
@@ -38,6 +39,7 @@ export function useHikeFilters(hikes = []) {
   const setElevationMax = (value) => setDraftFilters((prev) => ({ ...prev, elevationMax: value }));
   const setSeasonFilter = (value) => setDraftFilters((prev) => ({ ...prev, seasonFilter: value }));
   const setWaterFilter = (value) => setDraftFilters((prev) => ({ ...prev, waterFilter: value }));
+  const setPremiumFilter = (value) => setDraftFilters((prev) => ({ ...prev, premiumFilter: value }));
 
   const applyFilters = () => {
     setAppliedFilters(draftFilters);
@@ -70,6 +72,8 @@ export function useHikeFilters(hikes = []) {
           if (!seasons.includes(appliedFilters.seasonFilter) && !seasons.includes("all_year")) return false;
         }
         if (appliedFilters.waterFilter !== "all" && hike.water_availability !== appliedFilters.waterFilter) return false;
+        if (appliedFilters.premiumFilter === "premium" && hike.is_premium !== true) return false;
+        if (appliedFilters.premiumFilter === "free" && hike.is_premium === true) return false;
 
         if (appliedFilters.levelFilter === "all") return true;
         if (appliedFilters.sortBy === "difficulty") return hike.difficulty === appliedFilters.levelFilter;
@@ -113,6 +117,8 @@ export function useHikeFilters(hikes = []) {
     setSeasonFilter,
     waterFilter: draftFilters.waterFilter,
     setWaterFilter,
+    premiumFilter: draftFilters.premiumFilter,
+    setPremiumFilter,
     hasPendingChanges,
     applyFilters,
     resetFilters,

@@ -180,6 +180,8 @@ export default function Hikes() {
     setSeasonFilter,
     waterFilter,
     setWaterFilter,
+    premiumFilter,
+    setPremiumFilter,
     hasPendingChanges,
     applyFilters,
     resetFilters,
@@ -196,7 +198,8 @@ export default function Hikes() {
     elevationMin !== "" ||
     elevationMax !== "" ||
     seasonFilter !== "all" ||
-    waterFilter !== "all";
+    waterFilter !== "all" ||
+    premiumFilter !== "all";
   const totalPages = Math.max(1, Math.ceil(filteredHikes.length / HIKES_PAGE_SIZE));
   const visibleHikes = filteredHikes.slice(
     (currentPage - 1) * HIKES_PAGE_SIZE,
@@ -334,6 +337,20 @@ export default function Hikes() {
                         </span>
                       </SelectItem>
                     ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="doghike-filter-label">Premium</label>
+                <Select value={premiumFilter} onValueChange={setPremiumFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Alle" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Alle</SelectItem>
+                    <SelectItem value="free">Keine Premium</SelectItem>
+                    <SelectItem value="premium">Nur Premium</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
