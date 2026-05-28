@@ -225,7 +225,9 @@ export default function Premium() {
             <div className="mb-8 text-center">
               <PremiumPawMark className="mx-auto mb-4 h-14 w-14 text-2xl" />
               <h1 className="doghike-page-title mb-3">Premium Mitgliedschaft</h1>
-              <p className="doghike-page-subtitle">Entdecke exklusive hundefreundliche Touren in Südtirol</p>
+              <p className="doghike-page-subtitle text-lg sm:text-xl">
+                Entdecke exklusive hundefreundliche Touren in Südtirol
+              </p>
             </div>
 
             {checkoutPending && (
