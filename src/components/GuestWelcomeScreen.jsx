@@ -5,7 +5,6 @@ import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
-import DogTrailsBrandCard from "@/components/DogTrailsBrandCard";
 
 const ONBOARDING_IMAGE = "/onboarding/A739105-desktop.webp";
 const ONBOARDING_IMAGE_MOBILE = "/onboarding/A739105-mobile.webp";
@@ -206,17 +205,6 @@ export default function GuestWelcomeScreen() {
         className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-[#FDF0E8] md:h-[812px] md:bg-transparent"
       >
         <WarmGlassBackground mobileFrame />
-
-        {mode !== "reset" && mode !== "update-password" && (
-          <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35 }}
-            className="absolute left-4 right-4 top-4 z-10 md:hidden"
-          >
-            <DogTrailsBrandCard compact className="max-w-none" />
-          </motion.div>
-        )}
 
         {mode !== "reset" && mode !== "update-password" && (
           <LoginWelcomeIntro />
@@ -504,22 +492,22 @@ function FourToePaw({ className = "" }) {
 
 function LoginWelcomeIntro() {
   return (
-    <div className="pointer-events-none absolute left-[21px] right-[21px] top-[24px] z-10 hidden text-center md:block">
+    <div className="pointer-events-none absolute left-5 right-5 top-5 z-10 text-center md:left-[21px] md:right-[21px] md:top-[24px]">
       <img
         src="/dogtrails-logo-pin.png?v=transparent-brand-logo"
         alt=""
         aria-hidden="true"
-        className="mx-auto mb-3 h-[74px] w-[74px] object-contain drop-shadow-[0_10px_22px_rgba(116,28,59,0.28)]"
+        className="mx-auto mb-2 h-16 w-16 object-contain drop-shadow-[0_10px_22px_rgba(116,28,59,0.28)] md:mb-3 md:h-[74px] md:w-[74px]"
       />
-      <p className="text-[32px] font-extrabold uppercase leading-[34px] tracking-[0.01em] text-white drop-shadow-[0_4px_14px_rgba(116,28,59,0.34)]">
+      <p className="text-[28px] font-extrabold uppercase leading-[30px] tracking-[0.01em] text-white drop-shadow-[0_4px_14px_rgba(116,28,59,0.34)] md:text-[32px] md:leading-[34px]">
         WILLKOMMEN BEI DOGTRAILS
       </p>
-      <div className="mt-4 flex items-center justify-center gap-3 text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.28)]">
-        <FourToePaw className="h-6 w-6" />
-        <FourToePaw className="h-6 w-6" />
-        <FourToePaw className="h-6 w-6" />
+      <div className="mt-3 flex items-center justify-center gap-3 text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.28)] md:mt-4">
+        <FourToePaw className="h-5 w-5 md:h-6 md:w-6" />
+        <FourToePaw className="h-5 w-5 md:h-6 md:w-6" />
+        <FourToePaw className="h-5 w-5 md:h-6 md:w-6" />
       </div>
-      <p className="mt-5 text-[20px] font-semibold leading-[24px] text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.3)]">
+      <p className="mx-auto mt-4 max-w-[320px] text-[18px] font-semibold leading-[22px] text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.3)] md:mt-5 md:text-[20px] md:leading-[24px]">
         Plane hundefreundliche Touren, speichere deine Lieblingswege und entdecke neue Ziele
       </p>
     </div>

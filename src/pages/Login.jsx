@@ -5,10 +5,51 @@ import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle2 } from "lucide-react";
-import DogTrailsBrandCard from "@/components/DogTrailsBrandCard";
 
 const BROWN = "#A8003C";
 const BROWN_DARK = "#7C3020";
+
+function FourToePaw({ className = "" }) {
+  return (
+    <svg
+      viewBox="0 0 64 64"
+      aria-hidden="true"
+      className={className}
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle cx="11.5" cy="25" r="6.5" />
+      <circle cx="24" cy="13.5" r="6.8" />
+      <circle cx="40" cy="13.5" r="6.8" />
+      <circle cx="52.5" cy="25" r="6.5" />
+      <path d="M17.3 48.7c0-10.5 7.3-18.4 15.7-18.4s15.7 7.9 15.7 18.4c0 6.1-3.6 8.8-8.1 7.4-2.6-.8-4.8-1.7-7.6-1.7s-5 0.9-7.6 1.7c-4.5 1.4-8.1-1.3-8.1-7.4Z" />
+    </svg>
+  );
+}
+
+function LoginBrandIntro() {
+  return (
+    <div className="relative z-10 w-full max-w-sm px-4 text-center" style={{ fontFamily: "Nunito, sans-serif" }}>
+      <img
+        src="/dogtrails-logo-pin.png?v=transparent-brand-logo"
+        alt=""
+        aria-hidden="true"
+        className="mx-auto mb-2 h-16 w-16 object-contain drop-shadow-[0_10px_22px_rgba(116,28,59,0.28)] sm:h-[74px] sm:w-[74px]"
+      />
+      <p className="text-[28px] font-extrabold uppercase leading-[30px] tracking-[0.01em] text-white drop-shadow-[0_4px_14px_rgba(116,28,59,0.34)] sm:text-[32px] sm:leading-[34px]">
+        WILLKOMMEN BEI DOGTRAILS
+      </p>
+      <div className="mt-3 flex items-center justify-center gap-3 text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.28)] sm:mt-4">
+        <FourToePaw className="h-5 w-5 sm:h-6 sm:w-6" />
+        <FourToePaw className="h-5 w-5 sm:h-6 sm:w-6" />
+        <FourToePaw className="h-5 w-5 sm:h-6 sm:w-6" />
+      </div>
+      <p className="mx-auto mt-4 max-w-[320px] text-[18px] font-semibold leading-[22px] text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.3)] sm:text-[20px] sm:leading-[24px]">
+        Plane hundefreundliche Touren, speichere deine Lieblingswege und entdecke neue Ziele
+      </p>
+    </div>
+  );
+}
 
 function mapAuthError(message) {
   const msg = String(message || "").toLowerCase();
@@ -251,10 +292,8 @@ export default function Login() {
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45 }}
-          className="relative z-10 w-full max-w-sm"
-          style={{ fontFamily: "Nunito, sans-serif" }}
         >
-          <DogTrailsBrandCard />
+          <LoginBrandIntro />
         </motion.div>
       )}
 
