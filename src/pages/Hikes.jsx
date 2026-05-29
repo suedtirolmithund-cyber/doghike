@@ -163,6 +163,7 @@ export default function Hikes() {
     searchQuery,
     setSearchQuery,
     activeSearchQuery,
+    activeFilters,
     sortBy,
     setSortBy,
     levelFilter,
@@ -193,17 +194,17 @@ export default function Hikes() {
   } = useHikeFilters(hikes, { searchQuery: initialSearchQuery });
   const isHikesLoading = isLoading && hikes.length === 0;
   const hasActiveFilters =
-    searchQuery.trim() !== "" ||
-    levelFilter !== "all" ||
-    humanDifficultyFilter !== "all" ||
-    dogDifficultyFilter !== "all" ||
-    distanceMin !== "" ||
-    distanceMax !== "" ||
-    elevationMin !== "" ||
-    elevationMax !== "" ||
-    seasonFilter !== "all" ||
-    waterFilter !== "all" ||
-    premiumFilter !== "all";
+    activeFilters.searchQuery.trim() !== "" ||
+    activeFilters.levelFilter !== "all" ||
+    activeFilters.humanDifficultyFilter !== "all" ||
+    activeFilters.dogDifficultyFilter !== "all" ||
+    activeFilters.distanceMin !== "" ||
+    activeFilters.distanceMax !== "" ||
+    activeFilters.elevationMin !== "" ||
+    activeFilters.elevationMax !== "" ||
+    activeFilters.seasonFilter !== "all" ||
+    activeFilters.waterFilter !== "all" ||
+    activeFilters.premiumFilter !== "all";
   const totalPages = Math.max(1, Math.ceil(filteredHikes.length / HIKES_PAGE_SIZE));
   const visibleHikes = filteredHikes.slice(
     (currentPage - 1) * HIKES_PAGE_SIZE,

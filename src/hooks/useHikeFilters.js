@@ -100,6 +100,7 @@ export function useHikeFilters(hikes = [], initialFilters = {}) {
     searchQuery: draftFilters.searchQuery,
     setSearchQuery,
     activeSearchQuery: appliedFilters.searchQuery,
+    activeFilters: appliedFilters,
     sortBy: draftFilters.sortBy,
     setSortBy,
     activeSortBy: appliedFilters.sortBy,
