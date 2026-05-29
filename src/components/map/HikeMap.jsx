@@ -9,6 +9,8 @@ import L from "leaflet";
 import "leaflet.markercluster";
 import { formatDurationHours } from "@/lib/duration";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
+import { HIKE_PLACEHOLDER_IMAGE } from "@/lib/fallbackImages";
+import { getUniqueHikeImageSources, resolveHikeImageUrl } from "@/lib/hikeImages";
 
 function escapeHtml(str) {
   return String(str ?? "")
@@ -207,9 +209,15 @@ function buildHikePopupItem(hike, isGrouped) {
   const seasonKey = getSeasonKey(hike);
   const season = seasonKey ? seasonConfig[seasonKey] : null;
 
-  const imageHtml = hike.photos?.[0]
-    ? `<img src="${escapeHtml(hike.photos[0])}" alt="${escapeHtml(hike.trail_name)}"
-         class="hike-popup-image" />`
+  const popupPhotoSource = getUniqueHikeImageSources(
+    hike.image,
+    Array.isArray(hike.photos) ? hike.photos : [],
+    Array.isArray(hike._photo_references) ? hike._photo_references : []
+  )[0];
+  const popupPhoto = resolveHikeImageUrl(popupPhotoSource, { width: 320, quality: 76 });
+  const imageHtml = popupPhoto
+    ? `<img src="${escapeHtml(popupPhoto)}" alt="${escapeHtml(hike.trail_name)}"
+         class="hike-popup-image" onerror="this.onerror=null;this.src='${escapeHtml(HIKE_PLACEHOLDER_IMAGE)}';" />`
     : `<div style="width:60px;height:60px;border-radius:8px;background:#f5f5f4;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${TOUR_ICONS.dog}</div>`;
 
   const stats = [

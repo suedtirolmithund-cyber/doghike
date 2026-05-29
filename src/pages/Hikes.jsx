@@ -33,7 +33,8 @@ import {
 } from "@/lib/difficultyConfig";
 import { useHikeFilters } from "@/hooks/useHikeFilters";
 import { formatDurationHours } from "@/lib/duration";
-import { getDisplayImageUrl } from "@/lib/imageProxy";
+import { HIKE_PLACEHOLDER_IMAGE } from "@/lib/fallbackImages";
+import { getUniqueHikeImageSources, resolveHikeImageUrl } from "@/lib/hikeImages";
 
 const HIKES_PAGE_SIZE = 15;
 
@@ -533,15 +534,12 @@ export default function Hikes() {
                 const seasonValues = normalizeSeasonValues(hike.seasons, hike.season);
                 const seasonIcon = seasonValues[0] ? getSeasonIcon(seasonValues[0]) : null;
                 const seasonLabel = seasonValues[0] ? getSeasonLabel(seasonValues[0]) : null;
-                const coverPhoto =
-                  getDisplayImageUrl(
-                    Array.isArray(hike.photos) && hike.photos.length > 0
-                      ? hike.photos[0]
-                      : hike.image,
-                    { width: 1000, quality: 82 }
-                  ) ||
-                  (Array.isArray(hike.photos) && hike.photos.length > 0 ? hike.photos[0] : hike.image) ||
-                  "/splash/autumn-hero.jpg";
+                const coverSource = getUniqueHikeImageSources(
+                  hike.image,
+                  Array.isArray(hike.photos) ? hike.photos : [],
+                  Array.isArray(hike._photo_references) ? hike._photo_references : []
+                )[0];
+                const coverPhoto = resolveHikeImageUrl(coverSource, { width: 1000, quality: 82 });
 
                 return (
                   <motion.div
@@ -563,6 +561,9 @@ export default function Hikes() {
                               alt={hike.trail_name}
                               loading="lazy"
                               decoding="async"
+                              onError={(event) => {
+                                event.currentTarget.src = HIKE_PLACEHOLDER_IMAGE;
+                              }}
                               className="h-full w-full object-cover"
                             />
                             {seasonIcon && (

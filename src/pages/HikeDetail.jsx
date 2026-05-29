@@ -37,8 +37,9 @@ import { supabase } from "@/lib/supabaseClient";
 import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { formatDurationHours } from "@/lib/duration";
-import { getAvatarDataUrl } from "@/lib/fallbackImages";
+import { getAvatarDataUrl, HIKE_PLACEHOLDER_IMAGE } from "@/lib/fallbackImages";
 import { getDisplayImageUrl } from "@/lib/imageProxy";
+import { getUniqueHikeImageSources, resolveHikeImageUrl } from "@/lib/hikeImages";
 import { toast } from "sonner";
 
 function getCountryLabel(country) {
@@ -98,6 +99,10 @@ function getCanonicalGalleryPhotoKey(value) {
   }
 }
 
+function getRenderablePhotoKey(photo) {
+  return getCanonicalGalleryPhotoKey(photo) || (typeof photo === "string" ? photo.trim() : "");
+}
+
 function mapWaterAvailabilityToJournalValue(value) {
   if (value === "none" || value === 0 || value === "0") return 0;
   if (value === "little" || value === 1 || value === "1") return 1;
@@ -142,6 +147,7 @@ export default function HikeDetail() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [heroPhotoIndex, setHeroPhotoIndex] = useState(0);
+  const [failedPhotoKeys, setFailedPhotoKeys] = useState(() => new Set());
   const [copied, setCopied] = useState(false);
   const lightboxScrollerRef = useRef(null);
   const normalizedHikeId = hikeId ? String(hikeId) : null;
@@ -235,11 +241,7 @@ export default function HikeDetail() {
   const { user: currentUser, isAdmin } = useAuth();
 
   const detailPhotoSource = useMemo(() => {
-    const normalizedPhotos = Array.isArray(hike?.photos)
-      ? hike.photos
-          .map((photo) => (typeof photo === "string" ? photo.trim() : ""))
-          .filter(Boolean)
-      : [];
+    const normalizedPhotos = getUniqueHikeImageSources(Array.isArray(hike?.photos) ? hike.photos : []);
 
     const prioritizedPhotos =
       hike?._source === "sheets" && hike?._public_hike_id
@@ -250,14 +252,10 @@ export default function HikeDetail() {
           })()
         : normalizedPhotos;
 
-    const normalizedPhotoReferences = Array.isArray(hike?._photo_references)
-      ? hike._photo_references
-          .map((photo) => (typeof photo === "string" ? photo.trim() : ""))
-          .filter(Boolean)
-      : [];
-
-    const explicitTitleImage =
-      typeof hike?.image === "string" && hike.image.trim() ? hike.image.trim() : null;
+    const normalizedPhotoReferences = getUniqueHikeImageSources(
+      Array.isArray(hike?._photo_references) ? hike._photo_references : []
+    );
+    const explicitTitleImage = getUniqueHikeImageSources(hike?.image)[0] ?? null;
 
     const uniquePhotos = [];
     const seenPhotoKeys = new Set();
@@ -287,6 +285,7 @@ export default function HikeDetail() {
 
   useEffect(() => {
     setHeroPhotoIndex(0);
+    setFailedPhotoKeys(new Set());
   }, [heroPhotosKey]);
 
   const { data: dogs = [] } = useQuery({
@@ -498,9 +497,12 @@ export default function HikeDetail() {
   const showPremiumPreviewOnly = isPremiumHike && !userHasPremium;
 
   const hikeDogs = dogs.filter(d => hike.dogs?.includes(d.id));
-  const photos = detailPhotoSource.filter(Boolean);
-  const coverPhoto = heroPhotoIndex >= 0 ? photos[heroPhotoIndex] || "/splash/autumn-hero.jpg" : "/splash/autumn-hero.jpg";
-  const heroPreviewPhoto = getDisplayImageUrl(coverPhoto, { width: 1600, quality: 80 }) || coverPhoto;
+  const photos = detailPhotoSource.filter((photo) => {
+    const photoKey = getRenderablePhotoKey(photo);
+    return photoKey && !failedPhotoKeys.has(photoKey);
+  });
+  const coverPhoto = heroPhotoIndex >= 0 ? photos[heroPhotoIndex] || HIKE_PLACEHOLDER_IMAGE : HIKE_PLACEHOLDER_IMAGE;
+  const heroPreviewPhoto = resolveHikeImageUrl(coverPhoto, { width: 1600, quality: 80 });
   const detailId = hike?._source === "sheets" && hike?._public_hike_id
     ? hike.route_id || String(hike._public_hike_id)
     : hike.id;
@@ -523,6 +525,17 @@ export default function HikeDetail() {
   
   const countryLabel = getCountryLabel(hike.country);
   const seasonValues = normalizeSeasonValues(hike?.seasons, hike?.season);
+  const markPhotoAsFailed = (photo) => {
+    const photoKey = getRenderablePhotoKey(photo);
+    if (!photoKey) return;
+
+    setFailedPhotoKeys((currentKeys) => {
+      if (currentKeys.has(photoKey)) return currentKeys;
+      const nextKeys = new Set(currentKeys);
+      nextKeys.add(photoKey);
+      return nextKeys;
+    });
+  };
 
   const openGalleryPhoto = (index) => {
     setCurrentPhotoIndex(index);
@@ -571,6 +584,7 @@ export default function HikeDetail() {
           src={heroPreviewPhoto}
           alt={hike.trail_name}
           onError={() => {
+            markPhotoAsFailed(coverPhoto);
             setHeroPhotoIndex((currentIndex) => {
               const nextIndex = currentIndex + 1;
               return nextIndex < photos.length ? nextIndex : -1;
@@ -1031,10 +1045,11 @@ export default function HikeDetail() {
                       onClick={() => openGalleryPhoto(index)}
                     >
                       <img
-                        src={getDisplayImageUrl(photo, { width: 1000, quality: 82 }) || photo}
+                        src={resolveHikeImageUrl(photo, { width: 1000, quality: 82 })}
                         alt={`Photo ${index + 1}`}
                         loading="lazy"
                         decoding="async"
+                        onError={() => markPhotoAsFailed(photo)}
                         className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                       />
                     </button>
@@ -1183,8 +1198,12 @@ export default function HikeDetail() {
                   className="flex h-full w-screen flex-none snap-center items-center justify-center px-4 py-16 sm:px-8"
                 >
                   <img
-                    src={getDisplayImageUrl(photo, { width: 1800, quality: 84 }) || photo}
+                    src={resolveHikeImageUrl(photo, { width: 1800, quality: 84 })}
                     alt={`Photo ${index + 1}`}
+                    onError={() => {
+                      markPhotoAsFailed(photo);
+                      setCurrentPhotoIndex((index) => Math.max(0, Math.min(index, photos.length - 2)));
+                    }}
                     className="max-h-full max-w-full object-contain"
                   />
                 </div>

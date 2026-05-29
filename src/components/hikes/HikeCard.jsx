@@ -9,9 +9,10 @@ import DifficultyScaleChip from "@/components/difficulty/DifficultyScale";
 import { PremiumPawBadge } from "@/components/premium/PremiumPawBadge";
 import { TOUR_ICONS, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
-import { getAvatarDataUrl } from "@/lib/fallbackImages";
+import { getAvatarDataUrl, HIKE_PLACEHOLDER_IMAGE } from "@/lib/fallbackImages";
 import { formatDurationHours } from "@/lib/duration";
 import { getDisplayImageUrl } from "@/lib/imageProxy";
+import { getUniqueHikeImageSources, resolveHikeImageUrl } from "@/lib/hikeImages";
 
 const METRIC_FORMATTER = new Intl.NumberFormat("de-DE", {
   maximumFractionDigits: 1,
@@ -19,24 +20,6 @@ const METRIC_FORMATTER = new Intl.NumberFormat("de-DE", {
 
 const ROUTE_STAT_CHIP_CLASS =
   "inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-full border border-[#F9C030]/75 bg-white/82 px-2.5 py-1.5 text-center text-xs font-bold leading-tight text-[#7C3020] shadow-sm sm:text-sm md:px-3 md:text-xs";
-const FALLBACK_HIKE_IMAGE = "/splash/autumn-hero.jpg";
-
-function resolveCardPhotoUrl(photo, options = {}) {
-  if (!photo || typeof photo !== "string") return FALLBACK_HIKE_IMAGE;
-
-  const trimmed = photo.trim();
-  if (!trimmed) return FALLBACK_HIKE_IMAGE;
-
-  if (trimmed.startsWith("data:") || trimmed.startsWith("blob:")) {
-    return trimmed;
-  }
-
-  if (trimmed.startsWith("/") && !trimmed.startsWith("/api/image-proxy?")) {
-    return trimmed;
-  }
-
-  return getDisplayImageUrl(trimmed, options) || trimmed;
-}
 
 function hasMetricValue(value) {
   if (value === null || value === undefined || value === "") return false;
@@ -62,34 +45,17 @@ export default function HikeCard({
 }) {
   const hikeDogs = dogs.filter((dog) => hike.dogs?.includes(dog.id));
   const cardPhotoSource = useMemo(() => {
-    const normalizedPhotos = Array.isArray(hike.photos)
-      ? hike.photos
-          .map((photo) => (typeof photo === "string" ? photo.trim() : ""))
-          .filter(Boolean)
-      : [];
-
-    const normalizedPhotoReferences = Array.isArray(hike._photo_references)
-      ? hike._photo_references
-          .map((photo) => (typeof photo === "string" ? photo.trim() : ""))
-          .filter(Boolean)
-      : [];
-
-    const explicitTitleImage =
-      typeof hike.image === "string" && hike.image.trim() ? hike.image.trim() : null;
-
-    return Array.from(
-      new Set([
-        explicitTitleImage,
-        ...normalizedPhotos,
-        ...normalizedPhotoReferences,
-      ].filter(Boolean))
+    return getUniqueHikeImageSources(
+      hike.image,
+      Array.isArray(hike.photos) ? hike.photos : [],
+      Array.isArray(hike._photo_references) ? hike._photo_references : []
     );
   }, [hike._photo_references, hike.image, hike.photos]);
   const [coverPhotoIndex, setCoverPhotoIndex] = useState(0);
   const coverPhotosKey = useMemo(() => cardPhotoSource.join("|"), [cardPhotoSource]);
   const currentCoverPhoto =
-    coverPhotoIndex >= 0 ? cardPhotoSource[coverPhotoIndex] || FALLBACK_HIKE_IMAGE : FALLBACK_HIKE_IMAGE;
-  const resolvedCoverPhoto = resolveCardPhotoUrl(currentCoverPhoto, {
+    coverPhotoIndex >= 0 ? cardPhotoSource[coverPhotoIndex] || HIKE_PLACEHOLDER_IMAGE : HIKE_PLACEHOLDER_IMAGE;
+  const resolvedCoverPhoto = resolveHikeImageUrl(currentCoverPhoto, {
     width: imageSize === "home" ? 1400 : 1200,
     quality: 84,
   });
