@@ -841,7 +841,7 @@ export default function HikeDetail() {
             )}
 
             {/* Restaurants & Huts */}
-            {hike.restaurant_info && (
+            {typeof hike.restaurant_info === "string" && hike.restaurant_info.trim() && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
