@@ -424,6 +424,8 @@ export default function HikeDetail() {
     publicSubmitterProfile?.username ||
     publicSubmitterProfile?.full_name ||
     (hike?._user_id ? "ein DogTrails-Mitglied" : null);
+  const countryLabel = getCountryLabel(hike?.country);
+  const seasonValues = normalizeSeasonValues(hike?.seasons, hike?.season);
   const detailStatItems = useMemo(() => {
     const items = [];
 
@@ -581,8 +583,6 @@ export default function HikeDetail() {
       ? [String(communityHikeId)]
       : [];
   
-  const countryLabel = getCountryLabel(hike.country);
-  const seasonValues = normalizeSeasonValues(hike?.seasons, hike?.season);
   const markPhotoAsFailed = (photo) => {
     const photoKey = getRenderablePhotoKey(photo);
     if (!photoKey) return;
