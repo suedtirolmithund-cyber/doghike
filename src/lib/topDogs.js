@@ -67,7 +67,7 @@ export async function loadLeaderboard(timeframe = "overall") {
     timeframe_value: timeframe,
   });
 
-  if (!rpcError && Array.isArray(rpcRows) && rpcRows.length > 0) {
+  if (!rpcError && Array.isArray(rpcRows)) {
     return rpcRows
       .map((row) => ({
         dog: {
