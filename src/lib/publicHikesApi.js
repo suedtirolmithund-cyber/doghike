@@ -472,7 +472,7 @@ export async function updatePublicHike(hikeId, values) {
     let removedUnsupportedField = false;
 
     if (missingSeasonsColumn && Object.prototype.hasOwnProperty.call(updatePayload, "seasons")) {
-      updatePayload.season = cleanedSeasons.length > 0 ? cleanedSeasons.join(", ") : null;
+      updatePayload.season = cleanedSeasons[0] || null;
       delete updatePayload.seasons;
       removedUnsupportedField = true;
     }
