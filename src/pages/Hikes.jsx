@@ -394,7 +394,7 @@ export default function Hikes() {
                   ? "Du hast Filter geändert. Tippe auf „Filter anwenden“, um die Ergebnisse zu aktualisieren."
                   : hasActiveFilters
                     ? `${filteredHikes.length} Tour${filteredHikes.length === 1 ? "" : "en"} aktiv gefiltert. Seite ${currentPage} von ${totalPages}.`
-                    : `${filteredHikes.length} Tour${filteredHikes.length === 1 ? "" : "en"} verfÃ¼gbar. Seite ${currentPage} von ${totalPages}.`}
+                    : `${filteredHikes.length} Tour${filteredHikes.length === 1 ? "" : "en"} verfügbar. Seite ${currentPage} von ${totalPages}.`}
               </p>
               <div className="flex gap-2">
                 <Button type="button" variant="outline" onClick={resetFilters}>
