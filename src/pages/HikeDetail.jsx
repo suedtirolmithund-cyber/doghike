@@ -475,7 +475,7 @@ export default function HikeDetail() {
       items.push({
         key: "seasons",
         icon: getSeasonIcon(seasonValues[0]) || TOUR_ICONS.season,
-        value: seasonLabels.join(" · "),
+        value: seasonLabels.join(", "),
         label: seasonLabels.length > 1 ? "Jahreszeiten" : "Jahreszeit",
       });
     }
