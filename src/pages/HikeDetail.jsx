@@ -896,11 +896,13 @@ export default function HikeDetail() {
                     )}
                   </div>
                 )}
-                  {typeof hike.hazard_notes === "string" && hike.hazard_notes.trim() && (
+                  {typeof hike.hazard_notes === "string" &&
+                    hike.hazard_notes.trim() &&
+                    hike.hazard_notes.trim() !== "/" && (
                     <div className="p-3 bg-brand-50 border border-brand-100 rounded-xl">
                       <p className="font-medium text-brand-700 mb-1">{TOUR_ICONS.hazard} Achtung</p>
                       <ExpandableText
-                        text={hike.hazard_notes}
+                        text={hike.hazard_notes.trim()}
                         lines={3}
                         minChars={200}
                         className="text-sm text-brand-600 whitespace-pre-wrap"
