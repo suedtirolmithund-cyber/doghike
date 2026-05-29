@@ -22,7 +22,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 import WaterIcon from "@/components/icons/WaterIcon";
 import SeasonMultiPicker from "@/components/season/SeasonMultiPicker";
-import { DIFFICULTY_LEVELS, DOG_PRIVATE_TAGS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
+import { DIFFICULTY_LEVELS, DOG_PRIVATE_TAGS, TOUR_ICONS, WATER_LEVELS, normalizeSeasonValues } from "@/lib/difficultyConfig";
 import { hoursInputToMinutes, minutesToHoursInput } from "@/lib/duration";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
@@ -69,11 +69,7 @@ function buildInitialFormData(hike) {
     difficulty: hike?.difficulty || "unset",
     dog_difficulty: hike?.dog_difficulty || "unset",
     water_availability: hike?.water_availability || "unset",
-    seasons: Array.isArray(hike?.seasons) && hike.seasons.length > 0
-      ? hike.seasons
-      : hike?.season
-        ? [hike.season]
-        : [],
+    seasons: normalizeSeasonValues(hike?.seasons, hike?.season),
     grazing_animals: hike?.grazing_animals ?? false,
     muzzle_recommended: hike?.muzzle_recommended ?? false,
     hazard_notes: hike?.hazard_notes || "",

@@ -468,17 +468,17 @@ export default function HikeDetail() {
       });
     }
 
-    seasonValues.forEach((season) => {
-      const label = getSeasonLabel(season);
-      if (!label) return;
-
+    const seasonLabels = seasonValues
+      .map((season) => getSeasonLabel(season))
+      .filter(Boolean);
+    if (seasonLabels.length > 0) {
       items.push({
-        key: `season-${season}`,
-        icon: getSeasonIcon(season),
-        value: label,
-        label: "Jahreszeit",
+        key: "seasons",
+        icon: getSeasonIcon(seasonValues[0]) || TOUR_ICONS.season,
+        value: seasonLabels.join(" · "),
+        label: seasonLabels.length > 1 ? "Jahreszeiten" : "Jahreszeit",
       });
-    });
+    }
 
     return items;
   }, [countryLabel, hike?.distance_km, hike?.duration_minutes, hike?.elevation_gain_m, seasonValues]);

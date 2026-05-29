@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { matchesHikeSearch } from "@/lib/hikeSearch";
+import { normalizeSeasonValues } from "@/lib/difficultyConfig";
 
 const INITIAL_FILTERS = {
   searchQuery: "",
@@ -17,11 +18,7 @@ const INITIAL_FILTERS = {
 };
 
 function getSeasonValues(hike) {
-  if (Array.isArray(hike.seasons) && hike.seasons.length > 0) {
-    return hike.seasons;
-  }
-
-  return hike.season ? [hike.season] : [];
+  return normalizeSeasonValues(hike?.seasons, hike?.season);
 }
 
 export function useHikeFilters(hikes = [], initialFilters = {}) {
