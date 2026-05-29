@@ -249,13 +249,13 @@ function TimeframeFilter({ timeframe, onChange }) {
   ];
 
   return (
-    <div className="mb-4 flex flex-wrap gap-2">
+    <div className="mb-5 flex flex-wrap gap-2.5">
       {options.map((option) => (
         <button
           key={option.id}
           type="button"
           onClick={() => onChange(option.id)}
-          className={`rounded-full border px-3 py-1.5 text-sm font-semibold transition ${
+          className={`min-h-10 rounded-full border px-4 py-2 text-[15px] font-bold leading-tight transition sm:text-base ${
             timeframe === option.id
               ? "border-brand-300 bg-brand-100 text-brand-700 shadow-sm"
               : "border-white/70 bg-white/78 text-slate-500 shadow-sm backdrop-blur-xl hover:text-slate-700"
@@ -275,16 +275,16 @@ function CommunityStats({ rows }) {
   const totalHm    = rows.reduce((s, r) => s + r.totalElevation, 0);
 
   return (
-    <div className="mb-6 grid grid-cols-3 gap-2 sm:gap-3">
+    <div className="mb-5 grid grid-cols-3 gap-2 sm:gap-3">
       {[
         { icon: Dog,       value: rows.length, label: "Hunde", color: "border-brand-100 bg-white/78 text-[#A8003C]" },
         { icon: Ruler,     value: totalKm.toFixed(0), label: "km", color: "border-[#F9C030]/80 bg-[#FDF0E8]/82 text-[#7C3020]" },
         { icon: TrendingUp,value: `${(totalHm/1000).toFixed(1)}k`, label: "Höhenmeter", color: "border-[#F07030]/45 bg-white/78 text-[#7C3020]" },
       ].map(({ icon: Icon, value, label, color }) => (
-        <div key={label} className={`min-w-0 rounded-2xl border px-2 py-3 text-center shadow-[0_10px_24px_rgba(168,0,60,0.07)] ${color}`}>
-          <Icon className="mx-auto mb-1 h-4 w-4 opacity-80" />
-          <p className="break-words text-lg font-extrabold leading-tight sm:text-xl">{value}</p>
-          <p className="break-words text-[11px] font-bold leading-tight opacity-80 sm:text-xs">{label}</p>
+        <div key={label} className={`min-w-0 rounded-[18px] border px-2 py-2.5 text-center shadow-[0_8px_18px_rgba(168,0,60,0.06)] sm:py-3 ${color}`}>
+          <Icon className="mx-auto mb-0.5 h-3.5 w-3.5 opacity-80 sm:h-4 sm:w-4" />
+          <p className="break-words text-base font-extrabold leading-tight sm:text-lg">{value}</p>
+          <p className="break-words text-[10px] font-bold leading-tight opacity-80 sm:text-[11px]">{label}</p>
         </div>
       ))}
     </div>
