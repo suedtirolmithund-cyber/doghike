@@ -77,7 +77,7 @@ function DifficultyInfoDialog({ icon, title, description, levels }) {
           {levels.map((level) => (
             <div key={level.stufe} className={`rounded-2xl border p-4 shadow-sm ${level.color}`}>
               <div className="mb-2 flex items-center gap-3">
-                <span className={`rounded-full px-2 py-1 text-xs font-bold text-white ${level.badge}`}>
+                <span className={`rounded-full px-2 py-1 text-xs font-bold ${level.badge}`}>
                   {level.level}
                 </span>
                 <div>

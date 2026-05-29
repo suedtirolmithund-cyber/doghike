@@ -67,7 +67,7 @@ export default function DifficultyHelp() {
           {levels.map((level) => (
             <div key={level.stufe} className={`rounded-2xl border p-5 shadow-sm ${level.color}`}>
               <div className="mb-3 flex items-center gap-3">
-                <span className={`rounded-full px-2 py-1 text-xs font-bold text-white ${level.badge}`}>
+                <span className={`rounded-full px-2 py-1 text-xs font-bold ${level.badge}`}>
                   {level.level}
                 </span>
                 <div>

@@ -1,22 +1,20 @@
 import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel } from "@/lib/difficultyConfig";
 import { cn } from "@/lib/utils";
 
-const SHARED_DIFFICULTY_CHIP_STYLE = {
-  chipClass: "border-[#F9C030]/80 bg-[#FFF8F0] text-[#7C3020]",
-  activeBar: "bg-[#A8003C]",
-  inactiveBar: "bg-[#F3D9C9]",
-};
-
 const DIFFICULTY_TYPE_META = {
   human: {
     icon: TOUR_ICONS.human,
     label: "Mensch",
-    ...SHARED_DIFFICULTY_CHIP_STYLE,
+    chipClass: "border-[#D4547A]/60 bg-[#FFF3F7] text-[#7C3020]",
+    activeBar: "bg-[#A8003C]",
+    inactiveBar: "bg-[#F2D3DD]",
   },
   dog: {
     icon: TOUR_ICONS.dog,
     label: "Hund",
-    ...SHARED_DIFFICULTY_CHIP_STYLE,
+    chipClass: "border-[#F9C030] bg-[#FFF8E0] text-[#7C3020]",
+    activeBar: "bg-[#C07820]",
+    inactiveBar: "bg-[#F4DFA8]",
   },
 };
 

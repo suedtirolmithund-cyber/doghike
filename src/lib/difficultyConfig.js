@@ -22,11 +22,11 @@ export const DOG_PRIVATE_TAGS = [
 const DIFFICULTY_GUIDE_STYLE_BY_LEVEL = {
   1: {
     color: "bg-[#FFF8F0] border-[#F9C030]/45 text-[#7C3020]",
-    badge: "bg-[#F9C030] !text-[#7C3020]",
+    badge: "bg-[#F9C030] text-[#7C3020]",
   },
   2: {
     color: "bg-[#FFF3D6] border-[#F9C030]/75 text-[#7C3020]",
-    badge: "bg-[#F9C030] !text-[#7C3020]",
+    badge: "bg-[#F9C030] text-[#7C3020]",
   },
   3: {
     color: "bg-[#FFE9DC] border-[#F07030]/70 text-[#7C3020]",
