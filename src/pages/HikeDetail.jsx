@@ -424,6 +424,62 @@ export default function HikeDetail() {
     publicSubmitterProfile?.username ||
     publicSubmitterProfile?.full_name ||
     (hike?._user_id ? "ein DogTrails-Mitglied" : null);
+  const detailStatItems = useMemo(() => {
+    const items = [];
+
+    if (countryLabel) {
+      items.push({
+        key: `country-${countryLabel}`,
+        icon: TOUR_ICONS.country,
+        value: countryLabel,
+        label: "Land",
+      });
+    }
+
+    if (hike?.duration_minutes) {
+      const formattedDuration = formatDurationHours(hike.duration_minutes);
+      if (formattedDuration) {
+        items.push({
+          key: "duration",
+          icon: TOUR_ICONS.duration,
+          value: formattedDuration,
+          label: "Gehzeit",
+        });
+      }
+    }
+
+    if (hike?.distance_km) {
+      items.push({
+        key: "distance",
+        icon: TOUR_ICONS.distance,
+        value: `${hike.distance_km} km`,
+        label: "Strecke",
+      });
+    }
+
+    if (hike?.elevation_gain_m) {
+      items.push({
+        key: "elevation",
+        icon: TOUR_ICONS.elevation,
+        value: `${hike.elevation_gain_m} Hm`,
+        label: "Aufstieg",
+      });
+    }
+
+    seasonValues.forEach((season) => {
+      const label = getSeasonLabel(season);
+      if (!label) return;
+
+      items.push({
+        key: `season-${season}`,
+        icon: getSeasonIcon(season),
+        value: label,
+        label: "Jahreszeit",
+      });
+    });
+
+    return items;
+  }, [countryLabel, hike?.distance_km, hike?.duration_minutes, hike?.elevation_gain_m, seasonValues]);
 
   const deleteJournalEntryMutation = useMutation({
     mutationFn: async () => {
@@ -754,44 +810,15 @@ export default function HikeDetail() {
           className="mb-8 md:mb-9"
         >
           <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-3 xl:grid-cols-4">
-          {countryLabel && (
-            <div className={detailStatChipClass}>
-              <span className={detailStatIconClass}>{TOUR_ICONS.country}</span>
+          {detailStatItems.map((item) => (
+            <div key={item.key} className={detailStatChipClass}>
+              <span className={detailStatIconClass}>{item.icon}</span>
               <div className={detailStatTextClass}>
-                <div className={detailStatValueClass}>{countryLabel}</div>
-                <div className={detailStatLabelClass}>Land</div>
+                <div className={detailStatValueClass}>{item.value}</div>
+                <div className={detailStatLabelClass}>{item.label}</div>
               </div>
             </div>
-          )}
-          {hike.duration_minutes && (
-            <div className={detailStatChipClass}>
-              <span className={detailStatIconClass}>{TOUR_ICONS.duration}</span>
-              <div className={detailStatTextClass}>
-                <div className={detailStatValueClass}>
-                  {formatDurationHours(hike.duration_minutes)}
-                </div>
-                <div className={detailStatLabelClass}>Gehzeit</div>
-              </div>
-            </div>
-          )}
-          {hike.distance_km && (
-            <div className={detailStatChipClass}>
-              <span className={detailStatIconClass}>{TOUR_ICONS.distance}</span>
-              <div className={detailStatTextClass}>
-                <div className={detailStatValueClass}>{hike.distance_km} km</div>
-                <div className={detailStatLabelClass}>Strecke</div>
-              </div>
-            </div>
-          )}
-          {hike.elevation_gain_m && (
-            <div className={detailStatChipClass}>
-              <span className={detailStatIconClass}>{TOUR_ICONS.elevation}</span>
-              <div className={detailStatTextClass}>
-                <div className={detailStatValueClass}>{hike.elevation_gain_m} Hm</div>
-                <div className={detailStatLabelClass}>Aufstieg</div>
-              </div>
-            </div>
-          )}
+          ))}
           {hike.difficulty && (
             <div className={`${detailStatChipClass} ${humanDifficultyChipClass}`}>
               <span className={detailStatIconClass}>{TOUR_ICONS.human}</span>
@@ -820,20 +847,6 @@ export default function HikeDetail() {
               </div>
             </div>
           )}
-          {seasonValues.map((season) => (
-            getSeasonLabel(season) ? (
-              <div
-                key={season}
-                className={detailStatChipClass}
-              >
-                <span className={detailStatIconClass}>{getSeasonIcon(season)}</span>
-                <div className={detailStatTextClass}>
-                  <div className={detailStatValueClass}>{getSeasonLabel(season)}</div>
-                  <div className={detailStatLabelClass}>Jahreszeit</div>
-                </div>
-              </div>
-            ) : null
-          ))}
           {hike.grazing_animals && (
             <div className={detailStatChipClass}>
               <span className={detailStatIconClass}>{TOUR_ICONS.grazing}</span>
