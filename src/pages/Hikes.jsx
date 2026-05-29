@@ -11,6 +11,7 @@ import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 import WaterIcon from "@/components/icons/WaterIcon";
+import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
@@ -206,6 +207,37 @@ export default function Hikes() {
     currentPage * HIKES_PAGE_SIZE
   );
 
+  const handleApplyFilters = () => {
+    const distanceMinValue = distanceMin === "" ? null : Number(distanceMin);
+    const distanceMaxValue = distanceMax === "" ? null : Number(distanceMax);
+    const elevationMinValue = elevationMin === "" ? null : Number(elevationMin);
+    const elevationMaxValue = elevationMax === "" ? null : Number(elevationMax);
+
+    if (
+      distanceMinValue !== null &&
+      distanceMaxValue !== null &&
+      Number.isFinite(distanceMinValue) &&
+      Number.isFinite(distanceMaxValue) &&
+      distanceMinValue > distanceMaxValue
+    ) {
+      toast.error("Distanz: Min-Wert darf nicht größer als Max-Wert sein.");
+      return;
+    }
+
+    if (
+      elevationMinValue !== null &&
+      elevationMaxValue !== null &&
+      Number.isFinite(elevationMinValue) &&
+      Number.isFinite(elevationMaxValue) &&
+      elevationMinValue > elevationMaxValue
+    ) {
+      toast.error("Höhenmeter: Min-Wert darf nicht größer als Max-Wert sein.");
+      return;
+    }
+
+    applyFilters();
+  };
+
   useEffect(() => {
     setCurrentPage(1);
   }, [filteredHikes]);
@@ -236,17 +268,17 @@ export default function Hikes() {
           <div className="flex flex-col gap-3">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-              <Input
-                placeholder="Tour oder Ort suchen..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    applyFilters();
-                  }
-                }}
-                className="border-brand-100 bg-white/78 pl-10 shadow-sm"
-              />
+                  <Input
+                    placeholder="Tour oder Ort suchen..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                    handleApplyFilters();
+                      }
+                    }}
+                    className="border-brand-100 bg-white/78 pl-10 shadow-sm"
+                  />
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -401,7 +433,7 @@ export default function Hikes() {
                   <RotateCcw className="mr-2 h-4 w-4" />
                   Zurücksetzen
                 </Button>
-                <Button type="button" onClick={applyFilters} className="bg-brand-500 text-white hover:bg-brand-600">
+                <Button type="button" onClick={handleApplyFilters} className="bg-brand-500 text-white hover:bg-brand-600">
                   Filter anwenden
                 </Button>
               </div>
