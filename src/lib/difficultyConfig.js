@@ -19,12 +19,34 @@ export const DOG_PRIVATE_TAGS = [
   "🌿 Entspannt",
 ];
 
+const DIFFICULTY_GUIDE_STYLE_BY_LEVEL = {
+  1: {
+    color: "bg-[#FFF8F0] border-[#F9C030]/45 text-[#7C3020]",
+    badge: "bg-[#F9C030] !text-[#7C3020]",
+  },
+  2: {
+    color: "bg-[#FFF3D6] border-[#F9C030]/75 text-[#7C3020]",
+    badge: "bg-[#F9C030] !text-[#7C3020]",
+  },
+  3: {
+    color: "bg-[#FFE9DC] border-[#F07030]/70 text-[#7C3020]",
+    badge: "bg-[#F07030] text-white",
+  },
+  4: {
+    color: "bg-[#FFF0F4] border-[#D4547A]/65 text-[#7C3020]",
+    badge: "bg-[#D4547A] text-white",
+  },
+  5: {
+    color: "bg-[#FCE5EE] border-[#A8003C]/60 text-[#7C3020]",
+    badge: "bg-[#A8003C] text-white",
+  },
+};
+
 export const HUMAN_DIFFICULTY_GUIDE = [
   {
     level: "T1",
     stufe: "Stufe 1",
-    color: "bg-brand-100 border-brand-200 text-brand-700",
-    badge: "bg-brand-500",
+    ...DIFFICULTY_GUIDE_STYLE_BY_LEVEL[1],
     title: "Wandern",
     desc: "Breite, gut begehbare Wege mit geringen technischen Anforderungen. Kaum Trittsicherheit nötig.",
     examples: "Breite Spazier- und Wanderwege, einfache Talrunden",
@@ -34,8 +56,7 @@ export const HUMAN_DIFFICULTY_GUIDE = [
   {
     level: "T2",
     stufe: "Stufe 2",
-    color: "bg-brand-50 border-brand-100 text-brand-700",
-    badge: "bg-brand-500",
+    ...DIFFICULTY_GUIDE_STYLE_BY_LEVEL[2],
     title: "Bergwandern",
     desc: "Schmalere, steilere oder steinige Wege. Trittsicherheit beim Menschen ist erforderlich.",
     examples: "Almwege, schmalere Bergpfade, einfachere Höhenwege",
@@ -45,8 +66,7 @@ export const HUMAN_DIFFICULTY_GUIDE = [
   {
     level: "T3",
     stufe: "Stufe 3",
-    color: "bg-brand-100 border-brand-200 text-brand-700",
-    badge: "bg-brand-500",
+    ...DIFFICULTY_GUIDE_STYLE_BY_LEVEL[3],
     title: "Anspruchsvolles Bergwandern",
     desc: "Steilere, teils ausgesetzte oder unwegsame Abschnitte. Erfahrung und Trittsicherheit sind nötig.",
     examples: "Steilere Bergwege, Geröllpassagen, wurzelige oder schmale Pfade",
@@ -56,8 +76,7 @@ export const HUMAN_DIFFICULTY_GUIDE = [
   {
     level: "T4",
     stufe: "Stufe 4",
-    color: "bg-brand-100 border-brand-200 text-brand-500",
-    badge: "bg-brand-500",
+    ...DIFFICULTY_GUIDE_STYLE_BY_LEVEL[4],
     title: "Alpinwandern",
     desc: "Schwieriges Gelände mit steilen Schrofen, Geröll sowie teils weglosen oder unmarkierten Passagen.",
     examples: "Alpine Übergänge, steile felsige Routen, weglosere Abschnitte",
@@ -67,8 +86,7 @@ export const HUMAN_DIFFICULTY_GUIDE = [
   {
     level: "T5",
     stufe: "Stufe 5",
-    color: "bg-brand-100 border-brand-200 text-brand-700",
-    badge: "bg-brand-500",
+    ...DIFFICULTY_GUIDE_STYLE_BY_LEVEL[5],
     title: "Schweres Alpinwandern",
     desc: "Sehr steiles, exponiertes Gelände mit möglichen kletterähnlichen Passagen. Alpine Erfahrung ist nötig.",
     examples: "Sehr ausgesetzte alpine Routen, felsige Schlüsselstellen",
@@ -81,8 +99,7 @@ export const DOG_DIFFICULTY_GUIDE = [
   {
     level: "H1",
     stufe: "Stufe 1",
-    color: "bg-brand-100 border-brand-200 text-brand-700",
-    badge: "bg-brand-500",
+    ...DIFFICULTY_GUIDE_STYLE_BY_LEVEL[1],
     title: "Sehr leicht",
     desc: "Kurze bis einfache Touren mit wenig Steigung. Für fast alle gesunden Hunde geeignet, auch für junge, ältere oder wenig trainierte Hunde.",
     examples: "Kurze Waldwege, einfache Spazier- und Talrunden",
@@ -92,8 +109,7 @@ export const DOG_DIFFICULTY_GUIDE = [
   {
     level: "H2",
     stufe: "Stufe 2",
-    color: "bg-brand-50 border-brand-100 text-brand-700",
-    badge: "bg-brand-500",
+    ...DIFFICULTY_GUIDE_STYLE_BY_LEVEL[2],
     title: "Leicht",
     desc: "Gut machbare Wanderung mit moderater Länge oder Steigung. Der Hund braucht normale Grundfitness und sollte an verschiedene Untergründe gewöhnt sein.",
     examples: "Mittlere Almwege, längere Waldwege, sanftere Berganstiege",
@@ -103,8 +119,7 @@ export const DOG_DIFFICULTY_GUIDE = [
   {
     level: "H3",
     stufe: "Stufe 3",
-    color: "bg-brand-100 border-brand-200 text-brand-700",
-    badge: "bg-brand-500",
+    ...DIFFICULTY_GUIDE_STYLE_BY_LEVEL[3],
     title: "Mittel",
     desc: "Längere oder steilere Tour mit schmalen, steinigen oder wurzeligen Wegen. Der Hund sollte fit, trittsicher und berggewöhnt sein.",
     examples: "Längere Bergtouren, steilere Anstiege, wurzelige oder steinige Pfade",
@@ -114,8 +129,7 @@ export const DOG_DIFFICULTY_GUIDE = [
   {
     level: "H4",
     stufe: "Stufe 4",
-    color: "bg-brand-100 border-brand-200 text-brand-500",
-    badge: "bg-brand-500",
+    ...DIFFICULTY_GUIDE_STYLE_BY_LEVEL[4],
     title: "Anspruchsvoll",
     desc: "Deutlich fordernde Tour mit größerer Höhendifferenz, längerer Gehzeit oder schwierigen Stellen. Nur für ausgewachsene, fitte und bergerfahrene Hunde.",
     examples: "Lange Bergtage, steile Touren mit engeren oder schwierigeren Passagen",
@@ -125,8 +139,7 @@ export const DOG_DIFFICULTY_GUIDE = [
   {
     level: "H5",
     stufe: "Stufe 5",
-    color: "bg-brand-100 border-brand-200 text-brand-700",
-    badge: "bg-brand-500",
+    ...DIFFICULTY_GUIDE_STYLE_BY_LEVEL[5],
     title: "Sehr anspruchsvoll",
     desc: "Sehr fordernde Hundetour mit steilen, felsigen, schmalen oder ausgesetzten Passagen. Der Hund braucht sehr gute Kondition, Berggewöhnung und sichere Führung; einzelne Stellen können Hilfe oder Sicherung erfordern.",
     examples: "Sehr steile Bergtouren, felsige Passagen, ausgesetzte Engstellen",
