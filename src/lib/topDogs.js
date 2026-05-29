@@ -62,13 +62,36 @@ function matchesTimeframe(entry, timeframe) {
   return true;
 }
 
+function createEmptyStats() {
+  return {
+    totalDistance: 0,
+    totalElevation: 0,
+    tourCount: 0,
+    ratingSum: 0,
+    ratingCount: 0,
+  };
+}
+
+function accumulateDogStats(stats, entry, { elevationField = "elevation_m", includeRating = true } = {}) {
+  stats.tourCount += 1;
+  stats.totalDistance += Number(entry?.distance_km || 0);
+  stats.totalElevation += Number(entry?.[elevationField] || 0);
+
+  if (includeRating && entry?.rating) {
+    stats.ratingSum += Number(entry.rating);
+    stats.ratingCount += 1;
+  }
+}
+
 export async function loadLeaderboard(timeframe = "overall") {
   const { data: rpcRows, error: rpcError } = await supabase.rpc("get_top_dogs_leaderboard", {
     timeframe_value: timeframe,
   });
 
+  let leaderboard = [];
+
   if (!rpcError && Array.isArray(rpcRows)) {
-    return rpcRows
+    leaderboard = rpcRows
       .map((row) => ({
         dog: {
           id: row.dog_id,
@@ -85,77 +108,141 @@ export async function loadLeaderboard(timeframe = "overall") {
         ratingCount: Number(row.rating_count || 0),
       }))
       .filter((row) => row.dog?.id);
-  }
+  } else {
+    const { data: entries, error: entriesError } = await supabase
+      .from("journal_entries")
+      .select("dog_id, dog_ids, distance_km, elevation_m, rating, date, created_at");
 
-  const { data: entries, error: entriesError } = await supabase
-    .from("journal_entries")
-    .select("dog_id, dog_ids, distance_km, elevation_m, rating, date, created_at");
+    if (entriesError) throw entriesError;
+    const filteredEntries = (entries ?? []).filter(
+      (entry) => getEntryDogIds(entry).length > 0 && matchesTimeframe(entry, timeframe)
+    );
+    if (filteredEntries.length > 0) {
+      const dogIds = [...new Set(filteredEntries.flatMap(getEntryDogIds))];
 
-  if (entriesError) throw entriesError;
-  const filteredEntries = (entries ?? []).filter(
-    (entry) => getEntryDogIds(entry).length > 0 && matchesTimeframe(entry, timeframe)
-  );
-  if (!filteredEntries.length) return [];
+      const { data: dogs, error: dogsError } = await supabase
+        .from("dogs")
+        .select("id, name, breed, photo_url, user_id")
+        .in("id", dogIds);
 
-  const dogIds = [...new Set(filteredEntries.flatMap(getEntryDogIds))];
+      if (dogsError) throw dogsError;
 
-  const { data: dogs, error: dogsError } = await supabase
-    .from("dogs")
-    .select("id, name, breed, photo_url, user_id")
-    .in("id", dogIds);
+      const ownerIds = [...new Set((dogs ?? []).map((dog) => dog.user_id))];
+      const { data: profiles } = ownerIds.length
+        ? await supabase
+            .from("profiles")
+            .select("user_id, username, full_name, avatar_url")
+            .in("user_id", ownerIds)
+        : { data: [] };
 
-  if (dogsError) throw dogsError;
+      const profileMap = Object.fromEntries((profiles ?? []).map((profile) => [profile.user_id, profile]));
+      const dogMap = Object.fromEntries((dogs ?? []).map((dog) => [dog.id, dog]));
 
-  const ownerIds = [...new Set((dogs ?? []).map((dog) => dog.user_id))];
-  const { data: profiles } = ownerIds.length
-    ? await supabase
-        .from("profiles")
-        .select("user_id, username, full_name, avatar_url")
-        .in("user_id", ownerIds)
-    : { data: [] };
+      const statsMap = {};
+      for (const entry of filteredEntries) {
+        for (const dogId of getEntryDogIds(entry)) {
+          if (!statsMap[dogId]) {
+            statsMap[dogId] = createEmptyStats();
+          }
 
-  const profileMap = Object.fromEntries((profiles ?? []).map((profile) => [profile.user_id, profile]));
-  const dogMap = Object.fromEntries((dogs ?? []).map((dog) => [dog.id, dog]));
-
-  const statsMap = {};
-  for (const entry of filteredEntries) {
-    for (const dogId of getEntryDogIds(entry)) {
-      if (!statsMap[dogId]) {
-        statsMap[dogId] = {
-          totalDistance: 0,
-          totalElevation: 0,
-          tourCount: 0,
-          ratingSum: 0,
-          ratingCount: 0,
-        };
+          accumulateDogStats(statsMap[dogId], entry);
+        }
       }
 
-      const stats = statsMap[dogId];
-      stats.tourCount += 1;
-      stats.totalDistance += entry.distance_km ?? 0;
-      stats.totalElevation += entry.elevation_m ?? 0;
-      if (entry.rating) {
-        stats.ratingSum += entry.rating;
-        stats.ratingCount += 1;
-      }
+      leaderboard = dogIds
+        .map((id) => {
+          const dog = dogMap[id];
+          const profile = dog ? profileMap[dog.user_id] : null;
+          const stats = statsMap[id];
+
+          return {
+            dog,
+            profile,
+            tourCount: stats.tourCount,
+            totalDistance: +stats.totalDistance.toFixed(1),
+            totalElevation: Math.round(stats.totalElevation),
+            avgRating: stats.ratingCount ? +(stats.ratingSum / stats.ratingCount).toFixed(1) : 0,
+            ratingCount: stats.ratingCount,
+          };
+        })
+        .filter((row) => row.dog);
     }
   }
 
-  return dogIds
-    .map((id) => {
-      const dog = dogMap[id];
-      const profile = dog ? profileMap[dog.user_id] : null;
-      const stats = statsMap[id];
+  const { data: publicHikes, error: publicHikesError } = await supabase
+    .from("public_hikes")
+    .select("dog_id, dog_ids, distance_km, elevation_gain_m, date, created_at, status")
+    .eq("status", "approved");
 
-      return {
+  if (publicHikesError) throw publicHikesError;
+
+  const relevantPublicHikes = (publicHikes ?? []).filter(
+    (entry) => getEntryDogIds(entry).length > 0 && matchesTimeframe(entry, timeframe)
+  );
+
+  if (!relevantPublicHikes.length) {
+    return leaderboard;
+  }
+
+  const leaderboardMap = new Map(
+    leaderboard
+      .filter((entry) => entry?.dog?.id)
+      .map((entry) => [entry.dog.id, { ...entry }])
+  );
+  const missingDogIds = [...new Set(
+    relevantPublicHikes
+      .flatMap(getEntryDogIds)
+      .filter((dogId) => !leaderboardMap.has(dogId))
+  )];
+
+  if (missingDogIds.length > 0) {
+    const { data: missingDogs, error: missingDogsError } = await supabase
+      .from("dogs")
+      .select("id, name, breed, photo_url, user_id")
+      .in("id", missingDogIds);
+
+    if (missingDogsError) throw missingDogsError;
+
+    for (const dog of missingDogs ?? []) {
+      leaderboardMap.set(dog.id, {
         dog,
-        profile,
+        profile: null,
+        tourCount: 0,
+        totalDistance: 0,
+        totalElevation: 0,
+        avgRating: 0,
+        ratingCount: 0,
+      });
+    }
+  }
+
+  for (const entry of relevantPublicHikes) {
+    for (const dogId of getEntryDogIds(entry)) {
+      const leaderboardEntry = leaderboardMap.get(dogId);
+      if (!leaderboardEntry?.dog) {
+        continue;
+      }
+
+      const stats = {
+        tourCount: leaderboardEntry.tourCount,
+        totalDistance: leaderboardEntry.totalDistance,
+        totalElevation: leaderboardEntry.totalElevation,
+        ratingSum: leaderboardEntry.avgRating * leaderboardEntry.ratingCount,
+        ratingCount: leaderboardEntry.ratingCount,
+      };
+
+      accumulateDogStats(stats, entry, { elevationField: "elevation_gain_m", includeRating: false });
+
+      leaderboardMap.set(dogId, {
+        ...leaderboardEntry,
         tourCount: stats.tourCount,
         totalDistance: +stats.totalDistance.toFixed(1),
         totalElevation: Math.round(stats.totalElevation),
         avgRating: stats.ratingCount ? +(stats.ratingSum / stats.ratingCount).toFixed(1) : 0,
         ratingCount: stats.ratingCount,
-      };
-    })
-    .filter((row) => row.dog);
+      });
+    }
+  }
+
+  return [...leaderboardMap.values()].filter((row) => row.dog);
 }
