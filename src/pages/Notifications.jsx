@@ -55,6 +55,10 @@ const NOTIFICATION_META = {
     icon: Mountain,
     color: "text-amber-700 bg-amber-50 border-amber-200",
   },
+  free_hike: {
+    icon: Mountain,
+    color: "text-brand-700 bg-brand-50 border-brand-200",
+  },
 };
 
 export default function Notifications() {
@@ -140,7 +144,9 @@ export default function Notifications() {
 
   useEffect(() => {
     if (!user?.id || isLoading || isError) return;
-    markNotificationsSeen(user.id);
+    const latestSeenAt = notifications[0]?.time || new Date().toISOString();
+    markNotificationsSeen(user.id, latestSeenAt);
+    queryClient.setQueryData(["notificationsUnread", user.id], 0);
     queryClient.invalidateQueries({ queryKey: ["notificationsUnread", user.id] });
   }, [user?.id, isLoading, isError, notifications, queryClient]);
 

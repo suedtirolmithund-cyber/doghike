@@ -195,6 +195,29 @@ export async function loadNotifications(userId) {
     });
   }
 
+  const freeHikeSince = new Date(Date.now() - 14 * 24 * 3600 * 1000).toISOString();
+  const { data: freeHikes, error: freeHikesError } = await supabase
+    .from("public_hikes")
+    .select("id, title, location, updated_at, created_at, status, is_premium")
+    .eq("status", "approved")
+    .eq("is_premium", false)
+    .gte("created_at", freeHikeSince)
+    .order("created_at", { ascending: false })
+    .limit(6);
+
+  if (freeHikesError) throw freeHikesError;
+
+  (freeHikes ?? []).forEach((hike) => {
+    results.push({
+      id: `fh-${hike.id}`,
+      type: "free_hike",
+      title: `Neue kostenlose Tour: "${hike.title}"`,
+      body: hike.location ? `Jetzt neu in ${hike.location}` : "Jetzt neu verfügbar",
+      time: hike.created_at || hike.updated_at,
+      link: `${createPageUrl("HikeDetail")}?id=${encodeURIComponent(String(hike.id))}&source=sheets`,
+    });
+  });
+
   return results.sort((left, right) => getNotificationTime(right) - getNotificationTime(left));
 }
 
