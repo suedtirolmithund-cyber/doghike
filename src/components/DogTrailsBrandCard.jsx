@@ -1,3 +1,5 @@
+import DogTrailsLogoMark from "@/components/brand/DogTrailsLogoMark";
+
 export default function DogTrailsBrandCard({ className = "", compact = false }) {
   const heightClass = compact ? "h-[258px] sm:h-[278px]" : "h-[270px] sm:h-[360px]";
   const logoClass = compact ? "h-20 w-20 sm:h-24 sm:w-24" : "h-24 w-24 sm:h-32 sm:w-32";
@@ -10,11 +12,7 @@ export default function DogTrailsBrandCard({ className = "", compact = false }) 
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_12%,rgba(255,255,255,0.96)_0,rgba(255,248,240,0.82)_38%,rgba(253,240,232,0.56)_72%,rgba(249,192,48,0.18)_100%)]" />
 
       <div className="relative z-10 flex h-[62%] flex-col items-center justify-center px-8 text-center sm:h-[64%]">
-        <img
-          src="/dogtrails-logo-pin.png?v=transparent-brand-logo"
-          alt="DogTrails"
-          className={`${logoClass} object-contain drop-shadow-[0_10px_18px_rgba(124,48,32,0.16)]`}
-        />
+        <DogTrailsLogoMark className={`${logoClass} drop-shadow-[0_10px_18px_rgba(124,48,32,0.16)]`} />
         <div className={`mt-1 ${titleClass} font-extrabold leading-none text-[#7C3020]`}>
           DogTrails
         </div>

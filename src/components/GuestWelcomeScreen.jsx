@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import DogTrailsLogoMark from "@/components/brand/DogTrailsLogoMark";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
 
@@ -493,12 +494,7 @@ function FourToePaw({ className = "" }) {
 function LoginWelcomeIntro() {
   return (
     <div className="pointer-events-none absolute left-5 right-5 top-5 z-10 text-center md:left-[21px] md:right-[21px] md:top-[24px]">
-      <img
-        src="/dogtrails-logo-pin.png?v=transparent-brand-logo"
-        alt=""
-        aria-hidden="true"
-        className="mx-auto mb-2 h-16 w-16 object-contain drop-shadow-[0_10px_22px_rgba(116,28,59,0.28)] md:mb-3 md:h-[74px] md:w-[74px]"
-      />
+      <DogTrailsLogoMark className="mx-auto mb-2 h-16 w-16 drop-shadow-[0_10px_22px_rgba(116,28,59,0.28)] md:mb-3 md:h-[74px] md:w-[74px]" />
       <p className="text-[28px] font-extrabold uppercase leading-[30px] tracking-[0.01em] text-white drop-shadow-[0_4px_14px_rgba(116,28,59,0.34)] md:text-[32px] md:leading-[34px]">
         WILLKOMMEN BEI DOGTRAILS
       </p>

@@ -18,6 +18,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
+import DogTrailsLogoMark from "@/components/brand/DogTrailsLogoMark";
 import { ensureWebPushSubscription, notificationPermission, requestNotificationPermission, registerServiceWorker } from "@/lib/browserNotifications";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 
@@ -202,11 +203,7 @@ export default function Layout({ children, currentPageName }) {
               className="flex min-w-0 shrink-0 items-center gap-2.5 transition-opacity hover:opacity-80 lg:gap-3"
             >
               <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-[14px] border border-[#E7CFB2]/90 bg-[#FFF8F0] shadow-[0_8px_18px_rgba(124,48,32,0.16)] lg:h-12 lg:w-12 lg:rounded-[15px]">
-                <img
-                  src="/dogtrails-logo-pin.png?v=transparent-brand-logo"
-                  alt="DogTrails"
-                  className="h-11 w-11 object-contain lg:h-12 lg:w-12"
-                />
+                <DogTrailsLogoMark className="h-10 w-10 shrink-0 lg:h-11 lg:w-11" />
               </span>
               <div className="min-w-0">
                 <span className="block text-base font-semibold leading-none text-[#7d4f3f] lg:text-lg">DogTrails</span>
