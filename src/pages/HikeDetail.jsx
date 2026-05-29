@@ -299,6 +299,63 @@ export default function HikeDetail() {
     enabled: !!currentUser?.id,
   });
 
+  const publicSubmitterDogIds = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          [
+            ...(Array.isArray(hike?.dog_ids) ? hike.dog_ids : []),
+            hike?.dog_id,
+          ]
+            .map((dogId) => String(dogId ?? "").trim())
+            .filter(Boolean)
+        )
+      ),
+    [hike?.dog_id, hike?.dog_ids]
+  );
+
+  const { data: publicSubmitterProfile = null } = useQuery({
+    queryKey: ["publicHikeSubmitterProfile", hike?._user_id],
+    queryFn: async () => {
+      if (!hike?._user_id) return null;
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("user_id, username, full_name, avatar_url")
+        .eq("user_id", hike._user_id)
+        .maybeSingle();
+
+      if (error) {
+        throw error;
+      }
+
+      return data;
+    },
+    enabled: hike?._source === "sheets" && !!hike?._user_id,
+  });
+
+  const { data: publicSubmitterDogs = [] } = useQuery({
+    queryKey: ["publicHikeSubmitterDogs", publicSubmitterDogIds],
+    queryFn: async () => {
+      if (publicSubmitterDogIds.length === 0) return [];
+
+      const { data, error } = await supabase
+        .from("dogs")
+        .select("id, name, breed, photo_url")
+        .in("id", publicSubmitterDogIds);
+
+      if (error) {
+        throw error;
+      }
+
+      const dogMap = new Map((data ?? []).map((dog) => [String(dog.id), dog]));
+      return publicSubmitterDogIds
+        .map((dogId) => dogMap.get(String(dogId)))
+        .filter(Boolean);
+    },
+    enabled: hike?._source === "sheets" && publicSubmitterDogIds.length > 0,
+  });
+
   const { data: currentProfile } = useQuery({
     queryKey: ["profile_summary", currentUser?.id],
     queryFn: async () => {
@@ -362,6 +419,10 @@ export default function HikeDetail() {
 
   // Journal hikes created by the current user can be edited/deleted via Supabase
   const isOwnJournalHike = hike?._source === "journal" && !!currentUser?.id && currentUser.id === hike?._user_id;
+  const publicSubmitterName =
+    publicSubmitterProfile?.username ||
+    publicSubmitterProfile?.full_name ||
+    (hike?._user_id ? "ein DogTrails-Mitglied" : null);
 
   const deleteJournalEntryMutation = useMutation({
     mutationFn: async () => {
@@ -1028,6 +1089,50 @@ export default function HikeDetail() {
           />
         </div>
       )}
+
+      {!showPremiumPreviewOnly &&
+        hike?._source === "sheets" &&
+        hike?._user_id &&
+        (publicSubmitterName || publicSubmitterDogs.length > 0) && (
+          <div className="mx-auto max-w-5xl px-4 pb-12 sm:px-6 lg:px-8">
+            <div className="doghike-glass-card p-6">
+              <h2 className="doghike-card-title mb-3">Aus der Community eingereicht</h2>
+              {publicSubmitterName && (
+                <p className="text-sm leading-relaxed text-slate-600">
+                  Diese Tour wurde von {publicSubmitterName} mit der Community geteilt und stammt aus einer echten DogTrails-Runde.
+                </p>
+              )}
+
+              <div className="mt-4 flex flex-wrap gap-3">
+                <div className="doghike-soft-panel flex items-center gap-3 p-3">
+                  <img
+                    src={getDisplayImageUrl(publicSubmitterProfile?.avatar_url, { width: 96, quality: 76 }) || getAvatarDataUrl(hike._user_id)}
+                    alt={publicSubmitterName || "DogTrails-Mitglied"}
+                    className="h-12 w-12 rounded-full object-cover"
+                  />
+                  <div>
+                    <p className="font-medium text-slate-900">{publicSubmitterName || "DogTrails-Mitglied"}</p>
+                    <p className="text-sm text-slate-500">Tour eingereicht</p>
+                  </div>
+                </div>
+
+                {publicSubmitterDogs.map((dog) => (
+                  <div key={dog.id} className="doghike-soft-panel flex items-center gap-3 p-3">
+                    <img
+                      src={getDisplayImageUrl(dog.photo_url, { width: 96, quality: 76 }) || getAvatarDataUrl(dog.name)}
+                      alt={dog.name}
+                      className="h-12 w-12 rounded-full object-cover"
+                    />
+                    <div>
+                      <p className="font-medium text-slate-900">{dog.name}</p>
+                      <p className="text-sm text-slate-500">{dog.breed || "Mit dabei"}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
       {/* Lightbox */}
       <AnimatePresence>

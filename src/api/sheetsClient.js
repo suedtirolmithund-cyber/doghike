@@ -473,6 +473,16 @@ function publicHikeRowToHike(row, photos = [], photoReferences = []) {
   const cleanedPhotos = Array.isArray(photos) ? photos.filter(Boolean) : [];
   const cleanedPhotoReferences = Array.isArray(photoReferences) ? photoReferences.filter(Boolean) : [];
   const effectivePhotos = cleanedPhotos.length > 0 ? cleanedPhotos : cleanedPhotoReferences;
+  const cleanedDogIds = Array.from(
+    new Set(
+      [
+        ...(Array.isArray(row.dog_ids) ? row.dog_ids : []),
+        row.dog_id,
+      ]
+        .map((dogId) => String(dogId ?? "").trim())
+        .filter(Boolean)
+    )
+  );
 
   return {
     // Keep the old external id shape stable so saved hikes, comments, and ratings keep matching.
@@ -513,10 +523,14 @@ function publicHikeRowToHike(row, photos = [], photoReferences = []) {
     restaurant_info: pickFirstText(row, ["restaurant_info", "restaurant", "restaurant_notes", "einkehr", "hutte", "hütte"]),
     notes: pickFirstText(row, ["notes", "description", "beschreibung", "text", "details", "tipps"]),
     date: row.date || null,
+    dog_id: row.dog_id ? String(row.dog_id) : null,
+    dog_ids: cleanedDogIds,
+    dog_mood_tags: Array.isArray(row.dog_mood_tags) ? row.dog_mood_tags.filter(Boolean) : [],
 
     _source: "sheets",
     _public_hike_id: row.id,
     _photo_references: cleanedPhotoReferences,
+    _user_id: row.user_id ? String(row.user_id) : null,
   };
 }
 
