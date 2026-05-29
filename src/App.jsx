@@ -4,7 +4,7 @@ import { QueryClientProvider, useQuery } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import NavigationTracker from '@/lib/NavigationTracker'
 import { pagesConfig } from './pages.config'
-import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import AppLoadingScreen from '@/components/AppLoadingScreen';
@@ -195,6 +195,7 @@ const AuthenticatedApp = () => {
           <MainPage />
         </PageShell>
       } />
+      <Route path="/trails" element={<Navigate to={createPageUrl("Hikes")} replace />} />
       {Object.entries(Pages).map(([path, Page]) => (
         <Route
           key={path}
