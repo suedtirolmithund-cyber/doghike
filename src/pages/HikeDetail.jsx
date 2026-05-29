@@ -147,6 +147,7 @@ export default function HikeDetail() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [heroPhotoIndex, setHeroPhotoIndex] = useState(0);
+  const [heroImageLoaded, setHeroImageLoaded] = useState(false);
   const [failedPhotoKeys, setFailedPhotoKeys] = useState(() => new Set());
   const [copied, setCopied] = useState(false);
   const lightboxScrollerRef = useRef(null);
@@ -285,6 +286,7 @@ export default function HikeDetail() {
 
   useEffect(() => {
     setHeroPhotoIndex(0);
+    setHeroImageLoaded(false);
     setFailedPhotoKeys(new Set());
   }, [heroPhotosKey]);
 
@@ -579,22 +581,33 @@ export default function HikeDetail() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       {/* Hero Image */}
-      <div className="relative h-[50vh] overflow-hidden">
+      <div className="relative h-[50vh] overflow-hidden bg-[#FDF0E8]">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_72%_18%,rgba(249,192,48,0.42),transparent_26%),linear-gradient(135deg,#FFF8F0_0%,#FDF0E8_42%,#F6B178_100%)]" />
+        <div
+          className="pointer-events-none absolute inset-0 scale-105 bg-cover bg-center opacity-45 blur-sm"
+          style={{ backgroundImage: `url("${HIKE_PLACEHOLDER_IMAGE}")` }}
+          aria-hidden="true"
+        />
+        {!heroImageLoaded && (
+          <div className="pointer-events-none absolute inset-0 animate-pulse bg-gradient-to-r from-[#FFF8F0]/20 via-white/20 to-[#F9C030]/20" />
+        )}
         <img
           src={heroPreviewPhoto}
           alt={hike.trail_name}
+          onLoad={() => setHeroImageLoaded(true)}
           onError={() => {
+            setHeroImageLoaded(false);
             markPhotoAsFailed(coverPhoto);
             setHeroPhotoIndex((currentIndex) => {
               const nextIndex = currentIndex + 1;
               return nextIndex < photos.length ? nextIndex : -1;
             });
           }}
-          className="w-full h-full object-cover"
+          className={`relative z-10 h-full w-full object-cover transition-opacity duration-500 ${heroImageLoaded ? "opacity-100" : "opacity-0"}`}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+        <div className={`pointer-events-none absolute inset-0 z-20 bg-gradient-to-t transition-colors duration-500 ${heroImageLoaded ? "from-black/70 via-black/20 to-transparent" : "from-[#7C3020]/34 via-[#A8003C]/10 to-transparent"}`} />
         
-        <div className="absolute left-4 right-4 top-4 flex flex-col gap-2 sm:left-6 sm:right-6 sm:top-6 sm:flex-row sm:items-start sm:justify-between">
+        <div className="absolute left-4 right-4 top-4 z-30 flex flex-col gap-2 sm:left-6 sm:right-6 sm:top-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="self-start">
             <Button
               type="button"
@@ -651,7 +664,7 @@ export default function HikeDetail() {
           </div>
         </div>
 
-        <div className="absolute bottom-6 left-4 right-4 sm:bottom-8 sm:left-8 sm:right-8">
+        <div className="absolute bottom-6 left-4 right-4 z-30 sm:bottom-8 sm:left-8 sm:right-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
