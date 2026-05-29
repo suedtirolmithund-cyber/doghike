@@ -12,7 +12,7 @@ import HikeMap from "@/components/map/HikeMap";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
   DIFFICULTY_APP_EXPLANATIONS,
@@ -149,6 +149,8 @@ function WaterInfoDialog() {
 export default function Hikes() {
   const [viewMode, setViewMode] = useState("grid");
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchParams] = useSearchParams();
+  const initialSearchQuery = (searchParams.get("q") || "").trim();
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
@@ -187,7 +189,7 @@ export default function Hikes() {
     applyFilters,
     resetFilters,
     filteredHikes,
-  } = useHikeFilters(hikes);
+  } = useHikeFilters(hikes, { searchQuery: initialSearchQuery });
   const isHikesLoading = isLoading && hikes.length === 0;
   const hasActiveFilters =
     searchQuery.trim() !== "" ||

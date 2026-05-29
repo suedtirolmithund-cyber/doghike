@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
 import { Mountain, Route, Map, ArrowRight, Search, LogIn, UserPlus, ChevronDown, Plus, Globe, Dog } from "lucide-react";
@@ -60,6 +60,7 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const submitHikeUrl = isAuthenticated
     ? createPageUrl("AddJournalEntry")
     : createPageUrl("Login");
@@ -104,6 +105,17 @@ export default function Dashboard() {
 
   const seasonLabel = { spring: "Frühling", summer: "Sommer", autumn: "Herbst", winter: "Winter" }[season];
 
+  const handleHeroSearchSubmit = (event) => {
+    event.preventDefault();
+
+    const trimmedQuery = searchQuery.trim();
+    const targetUrl = trimmedQuery
+      ? `${createPageUrl("Hikes")}?q=${encodeURIComponent(trimmedQuery)}`
+      : createPageUrl("Hikes");
+
+    navigate(targetUrl);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       {/* Hero */}
@@ -144,7 +156,7 @@ export default function Dashboard() {
             )}
           </div>
 
-          <div className="relative mt-5 h-[52px] w-full max-w-[343px]">
+          <form onSubmit={handleHeroSearchSubmit} className="relative mt-5 h-[52px] w-full max-w-[343px]">
             <Search className="absolute left-[16px] top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-[#F07030]" />
             <Input
               placeholder="Tour oder Ort suchen..."
@@ -152,7 +164,7 @@ export default function Dashboard() {
               onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE); }}
               className="h-[52px] w-full rounded-xl border border-[#F9C030] bg-[#FDF0E8]/92 pl-12 pr-4 text-sm font-bold text-[#7C3020] shadow-[0_10px_26px_rgba(249,192,48,0.2)] placeholder:text-[#7C3020]/75"
             />
-          </div>
+          </form>
         </div>
 
         <div className="absolute left-1/2 top-0 hidden h-[507px] w-full max-w-[1280px] -translate-x-1/2 md:block">
@@ -185,7 +197,7 @@ export default function Dashboard() {
               )}
             </div>
 
-            <div className="absolute left-1/2 top-[386px] h-[56px] w-[672px] -translate-x-1/2">
+            <form onSubmit={handleHeroSearchSubmit} className="absolute left-1/2 top-[386px] h-[56px] w-[672px] -translate-x-1/2">
               <Search className="absolute left-[16px] top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-[#F07030]" />
               <Input
                 placeholder="Tour oder Ort suchen..."
@@ -193,7 +205,7 @@ export default function Dashboard() {
                 onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE); }}
                 className="h-[56px] w-[672px] rounded-xl border border-[#F9C030] bg-[#FDF0E8]/92 pl-12 pr-[18px] text-sm font-bold leading-[24px] text-[#7C3020] shadow-[0_10px_28px_rgba(249,192,48,0.2)] placeholder:text-[#7C3020]/75"
               />
-            </div>
+            </form>
           </motion.div>
         </div>
       </div>
