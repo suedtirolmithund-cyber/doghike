@@ -1768,7 +1768,7 @@ export default function AddJournalEntry() {
             )}
 
             <label className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-brand-100 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
-              <input type="file" accept="image/*" multiple onChange={handlePhotoUpload} className="hidden" disabled={photoUploading} />
+              <input type="file" accept="image/*,.heic,.heif" multiple onChange={handlePhotoUpload} className="hidden" disabled={photoUploading} />
               {photoUploading ? (
                 <div className="flex flex-col items-center">
                   <div className="flex items-center gap-2">

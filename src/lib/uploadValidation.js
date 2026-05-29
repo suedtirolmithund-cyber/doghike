@@ -5,6 +5,7 @@ const MAX_IMAGE_SOURCE_BYTES = MAX_IMAGE_SOURCE_MB * 1024 * 1024;
 const MAX_IMAGE_DIMENSION = 3200;
 const IMAGE_OPTIMIZATION_QUALITY_STEPS = [0.94, 0.9, 0.86, 0.82, 0.78, 0.74];
 const IMAGE_OPTIMIZATION_SCALE_STEPS = [1, 0.96, 0.9, 0.84, 0.78];
+const HEIC_EXTENSIONS = new Set(["heic", "heif"]);
 
 function createImageTooLargeError(limitMb) {
   const error = new Error(
@@ -15,11 +16,28 @@ function createImageTooLargeError(limitMb) {
 }
 
 export function validateImageUpload(file) {
-  if (!file || !file.type?.startsWith("image/")) return;
+  if (!file || !isAcceptedImageFile(file)) return;
 
   if (file.size > MAX_IMAGE_SOURCE_BYTES) {
     throw createImageTooLargeError(MAX_IMAGE_SOURCE_MB);
   }
+}
+
+function getFileExtension(fileName = "") {
+  const extension = String(fileName).split(".").pop()?.trim().toLowerCase();
+  return extension || "";
+}
+
+function isHeicLikeFile(file) {
+  const mimeType = String(file?.type ?? "").toLowerCase();
+  if (mimeType === "image/heic" || mimeType === "image/heif") return true;
+  return HEIC_EXTENSIONS.has(getFileExtension(file?.name));
+}
+
+function isAcceptedImageFile(file) {
+  if (!file) return false;
+  if (String(file.type ?? "").startsWith("image/")) return true;
+  return isHeicLikeFile(file);
 }
 
 function getFileExtensionForMimeType(mimeType, fallbackName = "upload") {
@@ -81,8 +99,15 @@ export async function optimizeImageForUpload(file) {
     typeof window === "undefined" ||
     typeof document === "undefined" ||
     typeof HTMLCanvasElement === "undefined" ||
-    !file?.type?.startsWith("image/")
+    !isAcceptedImageFile(file)
   ) {
+    if (file.size > MAX_IMAGE_UPLOAD_BYTES) {
+      throw createImageTooLargeError(MAX_IMAGE_UPLOAD_MB);
+    }
+    return file;
+  }
+
+  if (isHeicLikeFile(file)) {
     if (file.size > MAX_IMAGE_UPLOAD_BYTES) {
       throw createImageTooLargeError(MAX_IMAGE_UPLOAD_MB);
     }
