@@ -968,7 +968,7 @@ export default function HikeDetail() {
                       onClick={() => openGalleryPhoto(index)}
                     >
                       <img
-                        src={getDisplayImageUrl(photo, { width: 640, quality: 72 }) || photo}
+                        src={getDisplayImageUrl(photo, { width: 1000, quality: 82 }) || photo}
                         alt={`Photo ${index + 1}`}
                         loading="lazy"
                         decoding="async"

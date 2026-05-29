@@ -504,7 +504,7 @@ export default function Hikes() {
                     Array.isArray(hike.photos) && hike.photos.length > 0
                       ? hike.photos[0]
                       : hike.image,
-                    { width: 320, quality: 72 }
+                    { width: 1000, quality: 82 }
                   ) ||
                   (Array.isArray(hike.photos) && hike.photos.length > 0 ? hike.photos[0] : hike.image) ||
                   "/splash/autumn-hero.jpg";

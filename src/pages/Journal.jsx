@@ -318,7 +318,7 @@ export default function Journal() {
                       {entry.photos?.[0] && (
                         <div className="w-28 md:w-48 shrink-0">
                           <img
-                            src={getDisplayImageUrl(entry.photos[0], { width: 720, quality: 74 })}
+                            src={getDisplayImageUrl(entry.photos[0], { width: 1000, quality: 82 })}
                             alt={entry.title}
                             className="w-full h-full object-cover"
                             style={{ minHeight: "120px", maxHeight: "180px" }}

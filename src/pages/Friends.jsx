@@ -100,7 +100,7 @@ function FeedCard({ entry }) {
       >
         {entry.photos?.[0] && (
           <img
-            src={getDisplayImageUrl(entry.photos[0], { width: 760, quality: 74 })}
+            src={getDisplayImageUrl(entry.photos[0], { width: 1000, quality: 82 })}
             alt={entry.title}
             className="h-44 w-full object-cover"
           />

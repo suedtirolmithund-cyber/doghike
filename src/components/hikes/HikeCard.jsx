@@ -21,23 +21,21 @@ const ROUTE_STAT_CHIP_CLASS =
   "inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-full border border-[#F9C030]/75 bg-white/82 px-2.5 py-1.5 text-center text-xs font-bold leading-tight text-[#7C3020] shadow-sm sm:text-sm md:px-3 md:text-xs";
 const FALLBACK_HIKE_IMAGE = "/splash/autumn-hero.jpg";
 
-function resolveCardPhotoUrl(photo) {
+function resolveCardPhotoUrl(photo, options = {}) {
   if (!photo || typeof photo !== "string") return FALLBACK_HIKE_IMAGE;
 
   const trimmed = photo.trim();
   if (!trimmed) return FALLBACK_HIKE_IMAGE;
 
-  if (
-    trimmed.startsWith("http://")
-    || trimmed.startsWith("https://")
-    || trimmed.startsWith("data:")
-    || trimmed.startsWith("blob:")
-    || trimmed.startsWith("/")
-  ) {
+  if (trimmed.startsWith("data:") || trimmed.startsWith("blob:")) {
     return trimmed;
   }
 
-  return getDisplayImageUrl(trimmed) || trimmed;
+  if (trimmed.startsWith("/") && !trimmed.startsWith("/api/image-proxy?")) {
+    return trimmed;
+  }
+
+  return getDisplayImageUrl(trimmed, options) || trimmed;
 }
 
 function hasMetricValue(value) {
@@ -91,7 +89,10 @@ export default function HikeCard({
   const coverPhotosKey = useMemo(() => cardPhotoSource.join("|"), [cardPhotoSource]);
   const currentCoverPhoto =
     coverPhotoIndex >= 0 ? cardPhotoSource[coverPhotoIndex] || FALLBACK_HIKE_IMAGE : FALLBACK_HIKE_IMAGE;
-  const resolvedCoverPhoto = resolveCardPhotoUrl(currentCoverPhoto);
+  const resolvedCoverPhoto = resolveCardPhotoUrl(currentCoverPhoto, {
+    width: imageSize === "home" ? 1400 : 1200,
+    quality: 84,
+  });
   const hikeSource = hike._source ?? "sheets";
   const detailId = hikeSource === "sheets" && hike._public_hike_id ? hike.route_id || String(hike._public_hike_id) : hike.id;
   const dogDifficultyLabel = getDifficultyLabel(hike.dog_difficulty);
