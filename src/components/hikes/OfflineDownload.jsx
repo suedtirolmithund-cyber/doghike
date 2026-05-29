@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { format } from "date-fns";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import { Check, FileDown, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -99,6 +97,11 @@ export default function OfflineDownload({
     setDownloading(true);
 
     try {
+      const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+        import("html2canvas"),
+        import("jspdf"),
+      ]);
+
       saveToLocalStorage();
 
       const pdf = new jsPDF("p", "mm", "a4");
