@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -27,13 +27,19 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
       : 0;
 
   const userRating = user ? ratings.find((rating) => rating.user_id === user.id) : null;
+  const baselineRating = userRating?.rating ?? 0;
+  const hasRatingChanged = selectedRating !== baselineRating;
+
+  useEffect(() => {
+    setSelectedRating(userRating?.rating ?? 0);
+    setConsentPublic(true);
+  }, [userRating?.rating]);
 
   const ratingMutation = useMutation({
     mutationFn: () => upsertRating(user.id, normalizedHikeId, hikeSource, selectedRating),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ratings", hikeSource, normalizedHikeId] });
-      setSelectedRating(0);
-      setConsentPublic(false);
+      setConsentPublic(true);
       toast.success("Danke. Sag den anderen, wie hundefreundlich der Weg war.");
     },
     onError: () => {
@@ -105,7 +111,7 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
 
           <Button
             onClick={() => ratingMutation.mutate()}
-            disabled={selectedRating === 0 || ratingMutation.isPending || !consentPublic}
+            disabled={!hasRatingChanged || selectedRating === 0 || ratingMutation.isPending || !consentPublic}
             className="w-full"
           >
             {ratingMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
