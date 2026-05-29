@@ -40,46 +40,55 @@ function Podium({ top3, metric }) {
         if (!entry) return null;
         const style  = RANK_STYLE[origIdx[i]];
         const isFirst = origIdx[i] === 0;
+        const dogName = entry?.dog?.name || "Unbekannter Hund";
+        const dogBreed = entry?.dog?.breed || "";
+        const metricValue =
+          metric === "tours"
+            ? entry?.tourCount ?? 0
+            : metric === "distance"
+              ? `${entry?.totalDistance ?? 0}`
+              : (entry?.totalElevation ?? 0).toLocaleString();
+
         return (
           <motion.div
             key={entry.dog.id}
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 + 0.2 }}
-            className="flex max-w-[108px] flex-1 flex-col items-center gap-1 sm:max-w-[110px]"
+            className="flex max-w-[108px] flex-1 flex-col items-center sm:max-w-[110px]"
           >
-            {/* Dog avatar */}
-            <div className={`relative ${isFirst ? "h-16 w-16 sm:h-20 sm:w-20" : "h-12 w-12 sm:h-14 sm:w-14"}`}>
-              <img
-                src={dogPreviewPhoto(entry.dog, isFirst ? 224 : 160)}
-                alt={entry.dog.name}
-                loading="lazy"
-                decoding="async"
-                className={`w-full h-full rounded-full object-cover border-4 border-white shadow-md ${style.ring}`}
-              />
-              <span className="absolute -top-2.5 -right-1.5 text-[22px] leading-none sm:text-2xl">{style.medal}</span>
+            <div
+              className={`relative flex w-full flex-col items-center rounded-t-xl border-t-2 px-2 pb-2 pt-7 text-center shadow-sm ${heights[i]} ${style.bg} ${style.border} ${
+                isFirst ? "sm:pt-10" : "sm:pt-8"
+              }`}
+            >
+              <div className={`absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 ${isFirst ? "h-16 w-16 sm:h-20 sm:w-20" : "h-12 w-12 sm:h-14 sm:w-14"}`}>
+                <img
+                  src={dogPreviewPhoto(entry.dog, isFirst ? 224 : 160)}
+                  alt={dogName}
+                  loading="lazy"
+                  decoding="async"
+                  className={`h-full w-full rounded-full border-4 border-white object-cover shadow-md ${style.ring}`}
+                />
+                <span className="absolute -top-2.5 -right-1.5 text-[22px] leading-none sm:text-2xl">{style.medal}</span>
+              </div>
+
+              <p className={`max-w-full px-1 font-bold leading-tight text-slate-900 ${isFirst ? "text-xs sm:text-sm" : "text-[11px] sm:text-xs"} line-clamp-2`}>
+                {dogName}
+              </p>
+              {dogBreed && (
+                <p className="line-clamp-1 text-center text-[10px] text-slate-400">{dogBreed}</p>
+              )}
+
+              <div className="mt-auto pt-1">
+                <p className={`font-extrabold leading-tight ${isFirst ? "text-xl sm:text-2xl" : "text-base sm:text-lg"} ${style.num}`}>
+                  {metricValue}
+                </p>
+                <p className="text-xs font-semibold leading-tight text-slate-500">
+                  {metric === "tours" ? "Touren" : metric === "distance" ? "km" : "Hm"}
+                </p>
+              </div>
             </div>
-
-            {/* Name */}
-            <p className={`max-w-full px-1 text-center font-bold leading-tight text-slate-900 ${isFirst ? "text-xs sm:text-sm" : "text-[11px] sm:text-xs"} line-clamp-2`}>
-              {entry.dog.name}
-            </p>
-            {entry.dog.breed && (
-              <p className="line-clamp-1 text-center text-[10px] text-slate-400">{entry.dog.breed}</p>
-            )}
-
-            {/* Value */}
-            <p className={`font-extrabold leading-tight ${isFirst ? "text-xl sm:text-2xl" : "text-base sm:text-lg"} ${style.num}`}>
-              {metric === "tours"     && entry.tourCount}
-              {metric === "distance"  && `${entry.totalDistance}`}
-              {metric === "elevation" && entry.totalElevation.toLocaleString()}
-            </p>
-            <p className="text-xs font-semibold leading-tight text-slate-500">
-              {metric === "tours" ? "Touren" : metric === "distance" ? "km" : "Hm"}
-            </p>
-
-            {/* Podium block */}
-            <div className={`w-full ${heights[i]} ${style.bg} border-t-2 ${style.border} rounded-t-xl`} />
           </motion.div>
         );
       })}
