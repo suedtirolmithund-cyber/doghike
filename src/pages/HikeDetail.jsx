@@ -1206,7 +1206,7 @@ export default function HikeDetail() {
                   type="button"
                   onClick={showNextLightboxPhoto}
                   className="absolute right-4 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/12 text-white/85 shadow-lg backdrop-blur-sm transition hover:bg-white/22 hover:text-white md:flex"
-                  aria-label="NÃ¤chstes Foto"
+                  aria-label="Nächstes Foto"
                 >
                   <ChevronRight className="h-7 w-7" />
                 </button>

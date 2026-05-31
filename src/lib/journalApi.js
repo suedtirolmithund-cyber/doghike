@@ -46,7 +46,7 @@ export function getMissingSharedJournalFields(entry) {
   if (entry?.duration_minutes === "" || entry?.duration_minutes == null) missing.push("Dauer (Stunden)");
   if (!entry?.difficulty) missing.push("Schwierigkeit (Mensch)");
   if (!entry?.dog_difficulty) missing.push("Schwierigkeit (Hund)");
-  if (entry?.water_available === "" || entry?.water_available == null) missing.push("WasserverfÃ¼gbarkeit");
+  if (entry?.water_available === "" || entry?.water_available == null) missing.push("Wasserverfügbarkeit");
   if (!entry?.description?.trim()) missing.push("Beschreibung");
   if (!Array.isArray(entry?.photos) || entry.photos.length === 0) missing.push("Mindestens 1 Foto");
   if (!Array.isArray(entry?.seasons) || entry.seasons.length === 0) missing.push("Empfohlene Jahreszeit");

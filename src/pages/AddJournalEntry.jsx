@@ -1641,7 +1641,7 @@ export default function AddJournalEntry() {
                   ))}
                 </div>
                 <p className="mt-2 text-xs text-slate-400">
-                  Du kannst einen oder mehrere Hunde auswÃ¤hlen.
+                  Du kannst einen oder mehrere Hunde auswählen.
                 </p>
               </div>
             )}
