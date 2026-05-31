@@ -42,6 +42,13 @@ const DIFFICULTY_GUIDE_STYLE_BY_LEVEL = {
   },
 };
 
+const WATER_GUIDE_COLOR_BY_LEVEL = {
+  none: DIFFICULTY_GUIDE_STYLE_BY_LEVEL[1].color,
+  little: DIFFICULTY_GUIDE_STYLE_BY_LEVEL[2].color,
+  moderate: DIFFICULTY_GUIDE_STYLE_BY_LEVEL[3].color,
+  plenty: DIFFICULTY_GUIDE_STYLE_BY_LEVEL[4].color,
+};
+
 export const HUMAN_DIFFICULTY_GUIDE = [
   {
     level: "T1",
@@ -226,7 +233,7 @@ export const WATER_GUIDE = [
   {
     value: "none",
     label: "Kein Wasser",
-    color: "bg-brand-50 border-brand-100 text-brand-700",
+    color: WATER_GUIDE_COLOR_BY_LEVEL.none,
     desc: "Auf der Tour gibt es normalerweise keine verlässlichen natürlichen Wasserstellen für den Hund. Wasser muss vollständig selbst mitgenommen werden.",
     examples: "Höhenweg, Waldweg oder Almweg ohne Bach, Quelle, Brunnen oder Seezugang",
     tip: "Plane die komplette Wasserversorgung selbst ein und nimm für den Hund immer genug Reserve mit.",
@@ -234,7 +241,7 @@ export const WATER_GUIDE = [
   {
     value: "little",
     label: "Wenig Wasser",
-    color: "bg-brand-50 border-brand-100 text-brand-500",
+    color: WATER_GUIDE_COLOR_BY_LEVEL.little,
     desc: "Es gibt einzelne mögliche Wasserstellen, diese können aber selten, schlecht erreichbar oder saisonabhängig sein. Nicht als alleinige Wasserversorgung einplanen.",
     examples: "Ein kleiner Bach am Anfang der Tour oder eine Quelle, die im Sommer austrocknen kann",
     tip: "Eigenes Wasser bleibt Pflicht. Einzelne Wasserstellen sind nur ein Bonus und keine sichere Versorgung.",
@@ -242,7 +249,7 @@ export const WATER_GUIDE = [
   {
     value: "moderate",
     label: "Mehrere Wasserstellen",
-    color: "bg-brand-50 border-brand-200 text-brand-800",
+    color: WATER_GUIDE_COLOR_BY_LEVEL.moderate,
     desc: "Auf der Tour gibt es mehrere Wasserstellen oder längere Abschnitte mit Bachnähe. Trotzdem kann Wasser saisonal fehlen oder nicht zugänglich sein.",
     examples: "Wanderung entlang eines Bachs mit mehreren Zugangsmöglichkeiten oder Tour mit mehreren Brunnen oder Quellen",
     tip: "Gut für viele Hunde, aber je nach Saison oder Gelände nicht überall direkt erreichbar.",
@@ -250,7 +257,7 @@ export const WATER_GUIDE = [
   {
     value: "plenty",
     label: "Viel Wasser",
-    color: "bg-brand-50 border-brand-100 text-brand-500",
+    color: WATER_GUIDE_COLOR_BY_LEVEL.plenty,
     desc: "Die Tour bietet sehr regelmäßigen oder fast durchgehenden Wasserzugang. Besonders hundefreundlich, aber eigenes Wasser bleibt trotzdem Pflicht.",
     examples: "Rundweg um einen See mit wiederholtem direktem Zugang zum Wasser",
     tip: "Sehr hundefreundlich, trotzdem immer eigenes Trinkwasser und eine Schüssel dabeihaben.",
