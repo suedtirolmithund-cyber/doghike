@@ -327,7 +327,7 @@ create policy "Freunde und öffentliche Einträge lesen"
     (visibility = 'public' and status = 'approved')
     or (
       visibility = 'friends'
-      and status in ('approved', 'draft')
+      and status = 'approved'
       and auth.uid() is not null
       and exists (
         select 1
@@ -531,7 +531,7 @@ as $$
         or (
           auth.uid() is not null
           and je.visibility = 'friends'
-          and je.status in ('approved', 'draft')
+          and je.status = 'approved'
           and exists (
             select 1
             from public.friendships f

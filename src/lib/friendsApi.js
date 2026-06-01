@@ -144,16 +144,14 @@ export async function searchProfiles(query, currentUserId) {
   return data ?? [];
 }
 
-// Journal entries from friends with visibility = 'friends' or 'public' (approved)
+// Journal entries from friends and public entries, both only after approval.
 export async function getFriendFeedEntries(friendIds) {
   if (!friendIds.length) return [];
-  // friends entries: show approved OR draft (before the status fix was deployed)
-  // public entries: only show approved (went through admin review)
   const { data, error } = await supabase
     .from("journal_entries")
     .select("*")
     .in("user_id", friendIds)
-    .or("and(visibility.eq.friends,status.in.(approved,draft)),and(visibility.eq.public,status.eq.approved)")
+    .or("and(visibility.eq.friends,status.eq.approved),and(visibility.eq.public,status.eq.approved)")
     .order("created_at", { ascending: false })
     .limit(50);
   if (error) throw error;
