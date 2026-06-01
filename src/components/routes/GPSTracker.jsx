@@ -37,6 +37,7 @@ const GPS_TRACK_STORAGE_KEY = "doghike_active_gps_track";
 const GPS_TRACK_MAX_AGE_MS = 12 * 60 * 60 * 1000;
 const AUTO_PAUSE_STILLNESS_MS = 3 * 60 * 1000;
 const GAP_THRESHOLD_MS = 30_000;
+const WATCH_SAMPLE_DEDUP_WINDOW_MS = 1_500;
 
 // Ramer-Douglas-Peucker track simplification
 function perpendicularDistance(point, lineStart, lineEnd) {
@@ -225,6 +226,7 @@ export default function GPSTracker({ onSave }) {
   const lastMovementTimeRef = useRef(null);
   const hiddenAtRef = useRef(null);
   const burstTimersRef = useRef([]);
+  const lastAcceptedSampleMetaRef = useRef(null);
 
   const clearPersistedTrackingState = useCallback(() => {
     if (typeof window === "undefined") return;
@@ -359,17 +361,26 @@ export default function GPSTracker({ onSave }) {
     }
   }, [getTotalPausedMs]);
 
-  const handlePositionSample = useCallback((position) => {
+  const handlePositionSample = useCallback((position, source = "watch") => {
     if (isPausedRef.current) return;
 
     const { latitude, longitude, altitude, accuracy } = position.coords;
+    const sampleTime = position.timestamp || Date.now();
+
+    const lastAcceptedMeta = lastAcceptedSampleMetaRef.current;
+    if (
+      source === "poll" &&
+      lastAcceptedMeta?.source === "watch" &&
+      sampleTime - lastAcceptedMeta.timestamp <= WATCH_SAMPLE_DEDUP_WINDOW_MS
+    ) {
+      return;
+    }
 
     setGpsAccuracy(accuracy ?? null);
 
     if (accuracy && accuracy > MAX_ACCEPTED_ACCURACY_METERS) return;
 
     const prev = routePointsRef.current;
-    const sampleTime = position.timestamp || Date.now();
 
     // Smooth GPS jitter: weighted average with last 2 accepted points
     let lat = latitude;
@@ -391,9 +402,12 @@ export default function GPSTracker({ onSave }) {
         return;
       }
 
-      if (lastSample && sampleTime !== lastSample.timestamp) {
-        const elapsedHours = (sampleTime - lastSample.timestamp) / 3_600_000;
-        const speedKmh = elapsedHours > 0 ? dist / 1000 / elapsedHours : 0;
+      if (lastSample) {
+        const elapsedMs = sampleTime - lastSample.timestamp;
+        if (elapsedMs <= 0) return;
+
+        const elapsedHours = elapsedMs / 3_600_000;
+        const speedKmh = dist / 1000 / elapsedHours;
         if (speedKmh > MAX_REASONABLE_SPEED_KMH) return;
       }
 
@@ -403,6 +417,7 @@ export default function GPSTracker({ onSave }) {
     lastMovementTimeRef.current = Date.now();
     routePointsRef.current.push(newPoint);
     pointSamplesRef.current.push({ point: newPoint, timestamp: sampleTime, altitude });
+    lastAcceptedSampleMetaRef.current = { source, timestamp: sampleTime };
     setRoutePoints([...routePointsRef.current]);
     setCurrentPosition(newPoint);
 
@@ -429,7 +444,7 @@ export default function GPSTracker({ onSave }) {
     if (!navigator.geolocation) return;
 
     navigator.geolocation.getCurrentPosition(
-      handlePositionSample,
+      (position) => handlePositionSample(position, "poll"),
       () => {},
       { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 },
     );
@@ -446,7 +461,7 @@ export default function GPSTracker({ onSave }) {
     startSilentAudio();
 
     watchIdRef.current = navigator.geolocation.watchPosition(
-      handlePositionSample,
+      (position) => handlePositionSample(position, "watch"),
       (error) => {
         console.error("GPS error:", error);
         if (error.code === 1) {
@@ -580,6 +595,7 @@ export default function GPSTracker({ onSave }) {
     pausedTimeRef.current = 0;
     lastPauseTimeRef.current = null;
     lastMovementTimeRef.current = null;
+    lastAcceptedSampleMetaRef.current = null;
     hiddenAtRef.current = null;
     burstTimersRef.current.forEach(clearTimeout);
     burstTimersRef.current = [];
