@@ -450,7 +450,8 @@ export default function GPSTracker({ onSave }) {
     );
   }, [handlePositionSample]);
 
-  const startWatchers = useCallback(() => {
+  const startWatchers = useCallback((options = {}) => {
+    const { fromRestore = false } = options;
     if (!navigator.geolocation) {
       toast.error("Dein Browser kann GPS gerade nicht nutzen.");
       return false;
@@ -467,8 +468,15 @@ export default function GPSTracker({ onSave }) {
         if (error.code === 1) {
           toast.error("GPS-Zugriff wurde entzogen. Aufzeichnung pausiert.");
           stopWatchers();
-          isPausedRef.current = true;
-          setIsPaused(true);
+          if (fromRestore) {
+            isPausedRef.current = false;
+            setIsTracking(false);
+            setIsPaused(false);
+            clearPersistedTrackingState();
+          } else {
+            isPausedRef.current = true;
+            setIsPaused(true);
+          }
           releaseWakeLock();
         } else {
           toast.error("GPS findet dich gerade nicht. Prüfe die Freigabe.");
@@ -486,7 +494,7 @@ export default function GPSTracker({ onSave }) {
     intervalRef.current = setInterval(computeStats, 1000);
     requestFreshPosition();
     return true;
-  }, [computeStats, handlePositionSample, requestFreshPosition, requestWakeLock, startSilentAudio, stopWatchers]);
+  }, [clearPersistedTrackingState, computeStats, handlePositionSample, requestFreshPosition, requestWakeLock, startSilentAudio, stopWatchers]);
 
   const findMyLocation = () => {
     if (!navigator.geolocation) {
@@ -645,7 +653,7 @@ export default function GPSTracker({ onSave }) {
 
   useEffect(() => {
     if (initialState.restoredSnapshot?.isTracking) {
-      startWatchers();
+      startWatchers({ fromRestore: true });
       toast.info("Deine letzte Aufzeichnung ist wieder da.");
     }
   }, [initialState.restoredSnapshot, startWatchers]);
