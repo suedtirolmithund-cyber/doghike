@@ -433,6 +433,7 @@ export async function updatePublicHike(hikeId, values) {
   );
   const basePayload = {
     ...hikeValues,
+    updated_at: new Date().toISOString(),
     season: cleanedSeasons[0] || hikeValues.season || null,
     ...legacyPhotoColumns,
     tags,
@@ -468,6 +469,9 @@ export async function updatePublicHike(hikeId, values) {
     const missingDogMoodTagsColumn =
       errorMessage.includes("Could not find the 'dog_mood_tags' column") ||
       errorMessage.includes("column public_hikes.dog_mood_tags does not exist");
+    const missingUpdatedAtColumn =
+      errorMessage.includes("Could not find the 'updated_at' column") ||
+      errorMessage.includes("column public_hikes.updated_at does not exist");
 
     let removedUnsupportedField = false;
 
@@ -484,6 +488,11 @@ export async function updatePublicHike(hikeId, values) {
 
     if (missingDogMoodTagsColumn && Object.prototype.hasOwnProperty.call(updatePayload, "dog_mood_tags")) {
       delete updatePayload.dog_mood_tags;
+      removedUnsupportedField = true;
+    }
+
+    if (missingUpdatedAtColumn && Object.prototype.hasOwnProperty.call(updatePayload, "updated_at")) {
+      delete updatePayload.updated_at;
       removedUnsupportedField = true;
     }
 
