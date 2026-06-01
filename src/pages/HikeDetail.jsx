@@ -1095,11 +1095,18 @@ export default function HikeDetail() {
                     </button>
                   ))}
                 </div>
-                {updatedAtLabel && (
-                  <p className="mt-3 text-xs text-slate-400">
-                    Zuletzt aktualisiert: {updatedAtLabel}
-                  </p>
-                )}
+              </motion.div>
+            )}
+
+            {updatedAtLabel && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.41 }}
+              >
+                <p className="text-xs text-slate-400">
+                  Zuletzt aktualisiert: {updatedAtLabel}
+                </p>
               </motion.div>
             )}
 
