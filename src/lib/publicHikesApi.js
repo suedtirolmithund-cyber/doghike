@@ -437,6 +437,7 @@ export async function updatePublicHike(hikeId, values) {
     season: cleanedSeasons[0] || hikeValues.season || null,
     ...legacyPhotoColumns,
     tags,
+    dog_id: cleanedDogIds[0] || null,
     dog_ids: cleanedDogIds,
     dog_mood_tags: cleanedDogMoodTags,
   };
