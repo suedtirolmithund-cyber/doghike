@@ -240,6 +240,7 @@ as $$
 $$;
 
 grant execute on function public.get_top_dogs_leaderboard(text) to authenticated;
+grant execute on function public.get_top_dogs_leaderboard(text) to anon;
 
 -- Helper: Prüft ob der aktuelle Nutzer Admin ist
 create or replace function public.is_admin()

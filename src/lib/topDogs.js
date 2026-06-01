@@ -83,6 +83,55 @@ function accumulateDogStats(stats, entry, { elevationField = "elevation_m", incl
   }
 }
 
+function isMissingColumnError(error, columnName) {
+  const message = String(error?.message || "");
+  return (
+    message.includes(`Could not find the '${columnName}' column`) ||
+    message.includes(`column ${columnName} does not exist`)
+  );
+}
+
+function isAccessError(error) {
+  const message = String(error?.message || "").toLowerCase();
+  return (
+    message.includes("permission denied") ||
+    message.includes("not allowed") ||
+    message.includes("jwt") ||
+    message.includes("row-level security") ||
+    message.includes("violates row-level security")
+  );
+}
+
+async function fetchJournalEntriesForLeaderboard() {
+  let result = await supabase
+    .from("journal_entries")
+    .select("dog_id, dog_ids, distance_km, elevation_m, rating, date, created_at");
+
+  if (result.error && isMissingColumnError(result.error, "dog_ids")) {
+    result = await supabase
+      .from("journal_entries")
+      .select("dog_id, distance_km, elevation_m, rating, date, created_at");
+  }
+
+  return result;
+}
+
+async function fetchApprovedPublicHikesForLeaderboard() {
+  let result = await supabase
+    .from("public_hikes")
+    .select("dog_id, dog_ids, distance_km, elevation_gain_m, date, created_at, status")
+    .eq("status", "approved");
+
+  if (result.error && isMissingColumnError(result.error, "dog_ids")) {
+    result = await supabase
+      .from("public_hikes")
+      .select("dog_id, distance_km, elevation_gain_m, date, created_at, status")
+      .eq("status", "approved");
+  }
+
+  return result;
+}
+
 export async function loadLeaderboard(timeframe = "overall") {
   const { data: rpcRows, error: rpcError } = await supabase.rpc("get_top_dogs_leaderboard", {
     timeframe_value: timeframe,
@@ -109,11 +158,14 @@ export async function loadLeaderboard(timeframe = "overall") {
       }))
       .filter((row) => row.dog?.id);
   } else {
-    const { data: entries, error: entriesError } = await supabase
-      .from("journal_entries")
-      .select("dog_id, dog_ids, distance_km, elevation_m, rating, date, created_at");
+    const { data: entries, error: entriesError } = await fetchJournalEntriesForLeaderboard();
 
-    if (entriesError) throw entriesError;
+    if (entriesError) {
+      if (isAccessError(entriesError)) {
+        return leaderboard;
+      }
+      throw entriesError;
+    }
     const filteredEntries = (entries ?? []).filter(
       (entry) => getEntryDogIds(entry).length > 0 && matchesTimeframe(entry, timeframe)
     );
@@ -125,7 +177,12 @@ export async function loadLeaderboard(timeframe = "overall") {
         .select("id, name, breed, photo_url, user_id")
         .in("id", dogIds);
 
-      if (dogsError) throw dogsError;
+      if (dogsError) {
+        if (isAccessError(dogsError)) {
+          return leaderboard;
+        }
+        throw dogsError;
+      }
 
       const ownerIds = [...new Set((dogs ?? []).map((dog) => dog.user_id))];
       const { data: profiles } = ownerIds.length
@@ -169,12 +226,14 @@ export async function loadLeaderboard(timeframe = "overall") {
     }
   }
 
-  const { data: publicHikes, error: publicHikesError } = await supabase
-    .from("public_hikes")
-    .select("dog_id, dog_ids, distance_km, elevation_gain_m, date, created_at, status")
-    .eq("status", "approved");
+  const { data: publicHikes, error: publicHikesError } = await fetchApprovedPublicHikesForLeaderboard();
 
-  if (publicHikesError) throw publicHikesError;
+  if (publicHikesError) {
+    if (isAccessError(publicHikesError) || isMissingColumnError(publicHikesError, "dog_ids")) {
+      return leaderboard;
+    }
+    throw publicHikesError;
+  }
 
   const relevantPublicHikes = (publicHikes ?? []).filter(
     (entry) => getEntryDogIds(entry).length > 0 && matchesTimeframe(entry, timeframe)
