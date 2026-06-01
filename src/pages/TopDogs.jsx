@@ -32,7 +32,7 @@ function dogPreviewPhoto(dog, width = 160) {
 function Podium({ top3, metric }) {
   if (!top3.length) return null;
   const order = [top3[1], top3[0], top3[2]]; // 2-1-3 Reihenfolge
-  const heights = ["h-28", "h-36", "h-24"];
+  const heights = ["h-32", "h-40", "h-28"];
   const origIdx = [1, 0, 2];
 
   return (
@@ -59,8 +59,8 @@ function Podium({ top3, metric }) {
             className="flex max-w-[116px] flex-1 flex-col items-center sm:max-w-[124px]"
           >
             <div
-              className={`relative flex w-full flex-col items-center rounded-t-xl border-t-2 px-2 pb-2 pt-10 text-center shadow-sm ${heights[i]} ${style.bg} ${style.border} ${
-                isFirst ? "sm:pt-12" : "sm:pt-10"
+              className={`relative flex w-full flex-col items-center rounded-t-xl border-t-2 px-2 pb-3 pt-12 text-center shadow-sm ${heights[i]} ${style.bg} ${style.border} ${
+                isFirst ? "sm:pt-14" : "sm:pt-12"
               }`}
             >
               <div className={`absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 ${isFirst ? "h-[72px] w-[72px] sm:h-[88px] sm:w-[88px]" : "h-14 w-14 sm:h-16 sm:w-16"}`}>
@@ -74,12 +74,14 @@ function Podium({ top3, metric }) {
                 <span className="absolute -top-2.5 -right-1.5 text-[22px] leading-none sm:text-2xl">{style.medal}</span>
               </div>
 
-              <p className={`max-w-full px-1 font-bold leading-tight text-slate-900 ${isFirst ? "text-xs sm:text-sm" : "text-[11px] sm:text-xs"} line-clamp-2`}>
-                {dogName}
-              </p>
-              {dogBreed && (
-                <p className="line-clamp-1 text-center text-[10px] text-slate-400">{dogBreed}</p>
-              )}
+              <div className="w-full min-w-0 min-h-[34px] px-1">
+                <p className={`line-clamp-2 max-w-full font-bold leading-tight text-slate-900 ${isFirst ? "text-xs sm:text-sm" : "text-[11px] sm:text-xs"}`}>
+                  {dogName}
+                </p>
+                {dogBreed && (
+                  <p className="line-clamp-1 text-center text-[10px] leading-tight text-slate-400">{dogBreed}</p>
+                )}
+              </div>
 
               <div className="mt-auto pt-1">
                 <p className={`font-extrabold leading-tight ${isFirst ? "text-xl sm:text-2xl" : "text-base sm:text-lg"} ${style.num}`}>
