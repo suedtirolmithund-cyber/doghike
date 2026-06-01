@@ -40,30 +40,41 @@ export async function createSquareCropFile(
     throw new Error("canvas_context_unavailable");
   }
 
-  context.drawImage(
-    image,
-    sourceLeft,
-    sourceTop,
-    cropSize,
-    cropSize,
-    0,
-    0,
-    outputSize,
-    outputSize
-  );
+  const releaseCanvasResources = () => {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.width = 0;
+    canvas.height = 0;
+    image.src = "";
+  };
 
-  const blob = await new Promise((resolve, reject) => {
-    canvas.toBlob((nextBlob) => {
-      if (!nextBlob) {
-        reject(new Error("image_export_failed"));
-        return;
-      }
-      resolve(nextBlob);
-    }, mimeType, quality);
-  });
+  try {
+    context.drawImage(
+      image,
+      sourceLeft,
+      sourceTop,
+      cropSize,
+      cropSize,
+      0,
+      0,
+      outputSize,
+      outputSize
+    );
 
-  return new File([blob], fileName, {
-    type: mimeType,
-    lastModified: Date.now(),
-  });
+    const blob = await new Promise((resolve, reject) => {
+      canvas.toBlob((nextBlob) => {
+        if (!nextBlob) {
+          reject(new Error("image_export_failed"));
+          return;
+        }
+        resolve(nextBlob);
+      }, mimeType, quality);
+    });
+
+    return new File([blob], fileName, {
+      type: mimeType,
+      lastModified: Date.now(),
+    });
+  } finally {
+    releaseCanvasResources();
+  }
 }
