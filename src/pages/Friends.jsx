@@ -244,9 +244,18 @@ export default function Friends() {
     (friendship) => friendship.status === "pending" && friendship.requester_id === user?.id,
   );
 
-  const defaultTab = incoming.length > 0 ? "requests" : "friends";
-  const activeTab = searchParams.get("tab") || defaultTab;
+  const requestedTab = searchParams.get("tab");
+  const activeTab = requestedTab || "friends";
   const selectedFriendId = searchParams.get("friend") || "";
+
+  useEffect(() => {
+    if (requestedTab || isLoading) return;
+    if (incoming.length === 0) return;
+
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.set("tab", "requests");
+    setSearchParams(nextParams, { replace: true });
+  }, [incoming.length, isLoading, requestedTab, searchParams, setSearchParams]);
 
   useEffect(() => {
     setFriendRequestsSeenAt(readFriendRequestsSeenAt(user?.id));
@@ -303,7 +312,7 @@ export default function Friends() {
   const updatePageState = (nextTab, nextFriendId = "") => {
     const nextParams = new URLSearchParams(searchParams);
 
-    if (nextTab && nextTab !== defaultTab) {
+    if (nextTab && nextTab !== "friends") {
       nextParams.set("tab", nextTab);
     } else {
       nextParams.delete("tab");
