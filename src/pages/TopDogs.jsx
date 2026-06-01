@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { getDisplayImageUrl } from "@/lib/imageProxy";
+import { getFriendIds } from "@/lib/friendsApi";
 import { BADGE_DEFS, getBadges, loadLeaderboard } from "@/lib/topDogs";
 
 // Hilfsfunktionen UI
@@ -255,6 +256,7 @@ function TimeframeFilter({ timeframe, onChange }) {
     { id: "week", label: "Diese Woche" },
     { id: "month", label: "Dieser Monat" },
     { id: "overall", label: "Gesamt" },
+    { id: "friends", label: "Freunde" },
   ];
 
   return (
@@ -385,10 +387,19 @@ function RankingTab({ rows, metric, myDogIds }) {
 export default function TopDogs() {
   const { user } = useAuth();
   const [timeframe, setTimeframe] = useState("overall");
+  const effectiveTimeframe = timeframe === "friends" ? "overall" : timeframe;
 
   const { data: rows = [], isLoading, error } = useQuery({
-    queryKey: ["topDogs", timeframe],
-    queryFn:  () => loadLeaderboard(timeframe),
+    queryKey: ["topDogs", effectiveTimeframe],
+    queryFn:  () => loadLeaderboard(effectiveTimeframe),
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
+
+  const { data: friendIds = [] } = useQuery({
+    queryKey: ["friendIds", user?.id],
+    queryFn: () => getFriendIds(user.id),
+    enabled: timeframe === "friends" && !!user?.id,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
@@ -405,6 +416,14 @@ export default function TopDogs() {
     refetchOnWindowFocus: false,
   });
   const myDogIds = myDogs.map((dog) => dog.id);
+  const friendIdSet = useMemo(() => new Set(friendIds), [friendIds]);
+  const displayRows = useMemo(() => {
+    if (timeframe !== "friends") {
+      return rows;
+    }
+
+    return rows.filter((entry) => friendIdSet.has(entry?.dog?.user_id));
+  }, [friendIdSet, rows, timeframe]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
@@ -440,7 +459,7 @@ export default function TopDogs() {
         {/* Content */}
         {!isLoading && !error && (
           <>
-            {rows.length > 0 && <CommunityStats rows={rows} />}
+            {displayRows.length > 0 && <CommunityStats rows={displayRows} />}
             <TimeframeFilter timeframe={timeframe} onChange={setTimeframe} />
 
             <Tabs defaultValue="tours">
@@ -457,13 +476,13 @@ export default function TopDogs() {
               </TabsList>
 
               <TabsContent value="tours">
-                <RankingTab rows={rows} metric="tours" myDogIds={myDogIds} />
+                <RankingTab rows={displayRows} metric="tours" myDogIds={myDogIds} />
               </TabsContent>
               <TabsContent value="distance">
-                <RankingTab rows={rows} metric="distance" myDogIds={myDogIds} />
+                <RankingTab rows={displayRows} metric="distance" myDogIds={myDogIds} />
               </TabsContent>
               <TabsContent value="elevation">
-                <RankingTab rows={rows} metric="elevation" myDogIds={myDogIds} />
+                <RankingTab rows={displayRows} metric="elevation" myDogIds={myDogIds} />
               </TabsContent>
             </Tabs>
 
