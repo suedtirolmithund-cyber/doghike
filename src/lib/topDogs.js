@@ -260,7 +260,12 @@ export async function loadLeaderboard(timeframe = "overall") {
       .select("id, name, breed, photo_url, user_id")
       .in("id", missingDogIds);
 
-    if (missingDogsError) throw missingDogsError;
+    if (missingDogsError) {
+      if (isAccessError(missingDogsError)) {
+        return leaderboard;
+      }
+      throw missingDogsError;
+    }
 
     for (const dog of missingDogs ?? []) {
       leaderboardMap.set(dog.id, {
