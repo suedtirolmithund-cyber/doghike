@@ -444,11 +444,7 @@ export default function HikeDetail() {
     (hike?._source === "journal"
       ? hike.author_username || null
       : isAdmin && hike?._source === "sheets" && !hike?._user_id
-        ? currentProfile?.full_name ||
-          currentProfile?.username ||
-          currentUser?.user_metadata?.full_name ||
-          currentUser?.email?.split("@")[0] ||
-          null
+        ? "Julia Schwärzer, Hundetrainerin und Buchautorin"
         : null);
   const seasonValues = normalizeSeasonValues(hike?.seasons, hike?.season);
   const detailStatItems = useMemo(() => {
