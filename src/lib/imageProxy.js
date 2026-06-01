@@ -5,6 +5,8 @@ const PUBLIC_HIKE_PREFIX = "public-hikes/";
 const JOURNAL_BUCKET = "journal";
 const DEFAULT_CONTENT_IMAGE_WIDTH = 1200;
 const MAX_CONTENT_IMAGE_WIDTH = 1800;
+const DEFAULT_CONTENT_IMAGE_QUALITY = 82;
+const SUPABASE_TRANSFORM_MAX_DIMENSION = 2500;
 
 function unwrapProxyUrl(url) {
   if (!url || typeof url !== "string") return url;
@@ -60,6 +62,58 @@ function getTargetContentWidth(options = {}) {
   );
 }
 
+function getTargetImageQuality(options = {}) {
+  const requestedQuality = Number(options.quality);
+
+  if (!Number.isFinite(requestedQuality)) {
+    return DEFAULT_CONTENT_IMAGE_QUALITY;
+  }
+
+  return Math.min(100, Math.max(20, Math.round(requestedQuality)));
+}
+
+function getTargetContentHeight(targetWidth, options = {}) {
+  const requestedHeight = Number(options.height);
+
+  if (Number.isFinite(requestedHeight) && requestedHeight > 0) {
+    return Math.min(SUPABASE_TRANSFORM_MAX_DIMENSION, Math.round(requestedHeight));
+  }
+
+  return Math.min(
+    SUPABASE_TRANSFORM_MAX_DIMENSION,
+    Math.max(targetWidth, Math.round(targetWidth * 2))
+  );
+}
+
+function buildSupabaseTransformedUrl(url, options = {}) {
+  if (!url || typeof url !== "string") return url;
+
+  try {
+    const parsedUrl = new URL(url);
+    const isSupabaseHost = parsedUrl.origin === SUPABASE_URL;
+    const publicPrefix = `/storage/v1/object/public/`;
+
+    if (!isSupabaseHost || !parsedUrl.pathname.startsWith(publicPrefix)) {
+      return url;
+    }
+
+    const targetWidth = getTargetContentWidth(options);
+    const targetHeight = getTargetContentHeight(targetWidth, options);
+    const targetQuality = getTargetImageQuality(options);
+    const storagePath = parsedUrl.pathname.slice(publicPrefix.length);
+
+    parsedUrl.pathname = `/storage/v1/render/image/public/${storagePath}`;
+    parsedUrl.searchParams.set("width", String(targetWidth));
+    parsedUrl.searchParams.set("height", String(targetHeight));
+    parsedUrl.searchParams.set("quality", String(targetQuality));
+    parsedUrl.searchParams.set("resize", "contain");
+
+    return parsedUrl.toString();
+  } catch {
+    return url;
+  }
+}
+
 function upgradeKnownThumbnailUrl(url, options = {}) {
   if (!url || typeof url !== "string") return url;
 
@@ -101,5 +155,9 @@ export function getDisplayImageUrl(url, options = {}) {
 
   const normalizedUrl = unwrapProxyUrl(url.trim());
   const managedStorageUrl = normalizeManagedStoragePath(normalizedUrl);
-  return upgradeKnownThumbnailUrl(managedStorageUrl || normalizedUrl, options);
+  const sourceUrl = managedStorageUrl || normalizedUrl;
+  return buildSupabaseTransformedUrl(
+    upgradeKnownThumbnailUrl(sourceUrl, options),
+    options
+  );
 }
