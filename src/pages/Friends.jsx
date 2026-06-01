@@ -290,7 +290,7 @@ export default function Friends() {
       if (!stableAllIds.length) return {};
       const { supabase } = await import("@/lib/supabaseClient");
       const { data } = await supabase
-        .from("profiles")
+        .from("public_profiles")
         .select("user_id, username, full_name, avatar_url")
         .in("user_id", stableAllIds);
 

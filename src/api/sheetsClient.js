@@ -773,7 +773,7 @@ async function getApprovedJournalEntries() {
     const userIds = [...new Set(hydratedEntries.map((e) => e.user_id))];
     const profileMap = {};
     const { data: profiles } = await supabase
-      .from("profiles")
+      .from("public_profiles")
       .select("user_id, username, full_name, avatar_url")
       .in("user_id", userIds);
     (profiles ?? []).forEach((p) => { profileMap[p.user_id] = p; });

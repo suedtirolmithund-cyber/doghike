@@ -334,7 +334,7 @@ export default function HikeDetail() {
       if (!hike?._user_id) return null;
 
       const { data, error } = await supabase
-        .from("profiles")
+        .from("public_profiles")
         .select("user_id, username, full_name, avatar_url")
         .eq("user_id", hike._user_id)
         .maybeSingle();

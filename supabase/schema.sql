@@ -48,6 +48,18 @@ create unique index if not exists profiles_username_normalized_unique
   on public.profiles ((public.normalize_username(username)))
   where public.normalize_username(username) is not null;
 
+create or replace view public.public_profiles as
+select
+  user_id,
+  username,
+  full_name,
+  avatar_url,
+  created_at
+from public.profiles;
+
+grant select on public.public_profiles to authenticated;
+grant select on public.public_profiles to anon;
+
 -- Falls die Tabelle bereits existiert:
 -- alter table public.profiles
 --   add column if not exists role text default 'user' check (role in ('user','admin'));
@@ -65,9 +77,7 @@ create policy "Eigenes Profil lesen"
   on public.profiles for select
   using (auth.uid() = user_id);
 
-create policy "Alle Profile lesen"
-  on public.profiles for select
-  using (auth.uid() is not null);
+drop policy if exists "Alle Profile lesen" on public.profiles;
 
 create policy "Eigenes Profil anlegen"
   on public.profiles for insert

@@ -187,7 +187,7 @@ export async function loadLeaderboard(timeframe = "overall") {
       const ownerIds = [...new Set((dogs ?? []).map((dog) => dog.user_id))];
       const { data: profiles } = ownerIds.length
         ? await supabase
-            .from("profiles")
+            .from("public_profiles")
             .select("user_id, username, full_name, avatar_url")
             .in("user_id", ownerIds)
         : { data: [] };

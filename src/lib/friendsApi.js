@@ -134,7 +134,7 @@ export async function searchProfiles(query, currentUserId) {
   if (!q) return [];
 
   const { data, error } = await supabase
-    .from("profiles")
+    .from("public_profiles")
     .select("user_id, username, full_name, avatar_url")
     .or(`username.ilike.%${q}%,full_name.ilike.%${q}%`)
     .neq("user_id", currentUserId)
@@ -161,7 +161,7 @@ export async function getFriendFeedEntries(friendIds) {
 
   // Fetch author profiles
   const { data: profiles } = await supabase
-    .from("profiles")
+    .from("public_profiles")
     .select("user_id, username, full_name, avatar_url")
     .in("user_id", friendIds);
   const profileMap = Object.fromEntries((profiles ?? []).map((p) => [p.user_id, p]));

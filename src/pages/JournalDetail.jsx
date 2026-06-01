@@ -155,7 +155,7 @@ export default function JournalDetail() {
     queryKey: ["profile", entry?.user_id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("profiles")
+        .from("public_profiles")
         .select("user_id, username, full_name, avatar_url")
         .eq("user_id", entry.user_id)
         .maybeSingle();

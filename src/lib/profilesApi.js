@@ -104,7 +104,7 @@ export async function upsertProfile(userId, updates) {
   if (Object.prototype.hasOwnProperty.call(nextUpdates, "username")) {
     if (nextUpdates.username) {
       const { data: currentProfile, error: currentProfileError } = await supabase
-        .from("profiles")
+        .from("public_profiles")
         .select("username")
         .eq("user_id", userId)
         .maybeSingle();

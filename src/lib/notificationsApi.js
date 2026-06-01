@@ -116,7 +116,7 @@ export async function loadNotifications(userId) {
   if (incoming?.length) {
     const requesterIds = incoming.map((friendship) => friendship.requester_id);
     const { data: profiles, error: profileError } = await supabase
-      .from("profiles")
+      .from("public_profiles")
       .select("user_id, full_name, username, avatar_url")
       .in("user_id", requesterIds);
 
@@ -195,7 +195,7 @@ export async function loadNotifications(userId) {
     if (friendEntries?.length) {
       const profileIds = [...new Set(friendEntries.map((entry) => entry.user_id))];
       const { data: profiles, error: friendProfilesError } = await supabase
-        .from("profiles")
+        .from("public_profiles")
         .select("user_id, full_name, username")
         .in("user_id", profileIds);
 
