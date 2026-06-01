@@ -8,7 +8,7 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import L from "leaflet";
 import "leaflet.markercluster";
 import { formatDurationHours } from "@/lib/duration";
-import { TOUR_ICONS } from "@/lib/difficultyConfig";
+import { SEASON_COLORS, TOUR_ICONS } from "@/lib/difficultyConfig";
 import { HIKE_PLACEHOLDER_IMAGE } from "@/lib/fallbackImages";
 import { getUniqueHikeImageSources, resolveHikeImageUrl } from "@/lib/hikeImages";
 
@@ -19,14 +19,6 @@ function escapeHtml(str) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 }
-
-const seasonPalette = {
-  spring: { color: "#D4547A", background: "rgba(212,84,122,0.16)", text: "#7C3020" },
-  summer: { color: "#F07030", background: "rgba(240,112,48,0.16)", text: "#7C3020" },
-  autumn: { color: "#C07820", background: "rgba(192,120,32,0.18)", text: "#7C3020" },
-  winter: { color: "#A8003C", background: "rgba(168,0,60,0.12)", text: "#7C3020" },
-  all_year: { color: "#F9C030", background: "rgba(249,192,48,0.24)", text: "#7C3020" },
-};
 
 const rawSeasonConfig = {
   spring: { label: "Frühling" },
@@ -39,7 +31,7 @@ const rawSeasonConfig = {
 const seasonConfig = Object.fromEntries(
   Object.entries(rawSeasonConfig).map(([key, value]) => [
     key,
-    { ...value, ...seasonPalette[key] },
+    { ...value, ...SEASON_COLORS[key] },
   ])
 );
 

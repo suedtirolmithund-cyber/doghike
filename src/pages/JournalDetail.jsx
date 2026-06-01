@@ -24,6 +24,7 @@ import { DifficultyBars } from "@/components/difficulty/DifficultyScale";
 import {
   getDifficultyLabel,
   getDifficultyLevel,
+  getSeasonBadgeClass,
   getSeasonIcon,
   getSeasonLabel,
   getWaterLabel,
@@ -379,7 +380,7 @@ export default function JournalDetail() {
                 <span className="text-xs text-slate-500 w-28">{TOUR_ICONS.season} Jahreszeit</span>
                 <div className="flex gap-1.5 flex-wrap">
                   {entry.seasons.map((s) => (
-                    <Badge key={s} variant="secondary" className="border border-brand-100 bg-brand-50/70 text-brand-700 text-xs">
+                    <Badge key={s} variant="secondary" className={`border text-xs ${getSeasonBadgeClass(s)}`}>
                       {getSeasonIcon(s)} {getSeasonLabel(s) || s}
                     </Badge>
                   ))}

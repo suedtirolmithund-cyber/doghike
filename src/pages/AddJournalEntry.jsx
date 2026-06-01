@@ -44,6 +44,7 @@ import {
   DOG_PRIVATE_TAGS,
   DOG_DIFFICULTY_GUIDE,
   HUMAN_DIFFICULTY_GUIDE,
+  SEASON_COLORS,
   SEASON_LEVELS,
   TOUR_ICONS,
   WATER_APP_EXPLANATION,
@@ -711,13 +712,7 @@ const SEASON_OPTIONS = SEASON_LEVELS.map((season) => ({
   value: season.value,
   emoji: season.icon,
   label: season.label,
-  colors: {
-    spring: { border: "#D4547A", background: "rgba(212,84,122,0.14)", text: "#7C3020" },
-    summer: { border: "#F07030", background: "rgba(240,112,48,0.14)", text: "#7C3020" },
-    autumn: { border: "#C07820", background: "rgba(192,120,32,0.16)", text: "#7C3020" },
-    winter: { border: "#A8003C", background: "rgba(168,0,60,0.10)", text: "#7C3020" },
-    all_year: { border: "#F9C030", background: "rgba(249,192,48,0.24)", text: "#7C3020" },
-  }[season.value],
+  colors: SEASON_COLORS[season.value],
 }));
 
 function SeasonPicker({ value = [], onChange }) {
@@ -739,7 +734,7 @@ function SeasonPicker({ value = [], onChange }) {
               type="button"
               onClick={() => toggle(opt.value)}
               style={active ? {
-                borderColor: opt.colors.border,
+                borderColor: opt.colors.color,
                 backgroundColor: opt.colors.background,
                 color: opt.colors.text,
               } : {}}

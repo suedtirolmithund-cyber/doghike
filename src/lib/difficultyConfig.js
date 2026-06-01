@@ -295,12 +295,45 @@ export const TOUR_ICONS = {
   hazard: "⚠️",
 };
 
+export const SEASON_COLORS = {
+  spring: {
+    color: "#D4547A",
+    background: "rgba(212,84,122,0.14)",
+    text: "#7C3020",
+    className: "border-[#D4547A] bg-[#D4547A]/10 text-[#7C3020]",
+  },
+  summer: {
+    color: "#A8003C",
+    background: "rgba(168,0,60,0.13)",
+    text: "#7C3020",
+    className: "border-[#A8003C] bg-[#A8003C]/10 text-[#7C3020]",
+  },
+  autumn: {
+    color: "#F9C030",
+    background: "rgba(249,192,48,0.26)",
+    text: "#7C3020",
+    className: "border-[#F9C030] bg-[#F9C030]/20 text-[#7C3020]",
+  },
+  winter: {
+    color: "#2563EB",
+    background: "rgba(37,99,235,0.12)",
+    text: "#1E3A8A",
+    className: "border-[#2563EB] bg-[#2563EB]/10 text-[#1E3A8A]",
+  },
+  all_year: {
+    color: "#2E9B62",
+    background: "rgba(46,155,98,0.14)",
+    text: "#166534",
+    className: "border-[#2E9B62] bg-[#2E9B62]/10 text-[#166534]",
+  },
+};
+
 export const SEASON_LEVELS = [
-  { value: "spring", label: "Frühling", icon: "🌸", color: "bg-brand-100 text-brand-500" },
-  { value: "summer", label: "Sommer", icon: "☀️", color: "bg-brand-100 text-brand-500" },
-  { value: "autumn", label: "Herbst", icon: "🍂", color: "bg-brand-100 text-brand-400" },
-  { value: "winter", label: "Winter", icon: "❄️", color: "bg-brand-50 text-slate-700" },
-  { value: "all_year", label: "Ganzjährig", icon: "🍃", color: "bg-brand-100 text-brand-600" },
+  { value: "spring", label: "Frühling", icon: "🌸", color: SEASON_COLORS.spring.className },
+  { value: "summer", label: "Sommer", icon: "☀️", color: SEASON_COLORS.summer.className },
+  { value: "autumn", label: "Herbst", icon: "🍂", color: SEASON_COLORS.autumn.className },
+  { value: "winter", label: "Winter", icon: "❄️", color: SEASON_COLORS.winter.className },
+  { value: "all_year", label: "Ganzjährig", icon: "🍃", color: SEASON_COLORS.all_year.className },
 ];
 
 export const SEASON_BY_VALUE = Object.fromEntries(
@@ -317,6 +350,10 @@ export function getSeasonIcon(value) {
 
 export function getSeasonBadgeClass(value) {
   return SEASON_BY_VALUE[value]?.color ?? "bg-brand-50 text-slate-600";
+}
+
+export function getSeasonColorStyle(value) {
+  return SEASON_COLORS[value] ?? null;
 }
 
 function normalizeSingleSeasonValue(value) {

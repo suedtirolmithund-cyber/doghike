@@ -34,7 +34,7 @@ import PremiumGate from "@/components/hikes/PremiumGate";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { DifficultyBars } from "@/components/difficulty/DifficultyScale";
 import { supabase } from "@/lib/supabaseClient";
-import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { formatDurationHours } from "@/lib/duration";
 import { getAvatarDataUrl, HIKE_PLACEHOLDER_IMAGE } from "@/lib/fallbackImages";
@@ -498,6 +498,7 @@ export default function HikeDetail() {
         icon: getSeasonIcon(seasonValues[0]) || TOUR_ICONS.season,
         value: seasonLabels.join(", "),
         label: seasonLabels.length > 1 ? "Jahreszeiten" : "Jahreszeit",
+        className: getSeasonBadgeClass(seasonValues[0]),
       });
     }
 
@@ -832,7 +833,7 @@ export default function HikeDetail() {
         >
           <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-3 xl:grid-cols-4">
           {detailStatItems.map((item) => (
-            <div key={item.key} className={detailStatChipClass}>
+            <div key={item.key} className={`${detailStatChipClass} ${item.className ?? ""}`}>
               <span className={detailStatIconClass}>{item.icon}</span>
               <div className={detailStatTextClass}>
                 <div className={detailStatValueClass}>{item.value}</div>

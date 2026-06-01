@@ -7,7 +7,7 @@ import ExpandableText from "@/components/ExpandableText";
 import WaterIcon from "@/components/icons/WaterIcon";
 import DifficultyScaleChip from "@/components/difficulty/DifficultyScale";
 import { PremiumPawBadge } from "@/components/premium/PremiumPawBadge";
-import { TOUR_ICONS, getDifficultyLabel, getSeasonIcon, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { TOUR_ICONS, getDifficultyLabel, getSeasonBadgeClass, getSeasonIcon, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { getAvatarDataUrl, HIKE_PLACEHOLDER_IMAGE } from "@/lib/fallbackImages";
 import { formatDurationHours } from "@/lib/duration";
@@ -70,6 +70,7 @@ export default function HikeCard({
   );
   const isPremiumHike = hike.is_premium === true;
   const previewIcon = seasonValues[0] ? getSeasonIcon(seasonValues[0]) : null;
+  const previewSeasonBadgeClass = seasonValues[0] ? getSeasonBadgeClass(seasonValues[0]) : "";
   const elevationValue = hike.elevation_gain_m ?? hike.elevation_m;
   const routeStats = [
     hasMetricValue(hike.distance_km) ? { icon: TOUR_ICONS.distance, value: formatDistance(hike.distance_km), label: "Strecke" } : null,
@@ -119,7 +120,7 @@ export default function HikeCard({
             )}
 
             {previewIcon && (
-              <span className="pointer-events-none absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/74 text-xl shadow-sm backdrop-blur-sm">
+              <span className={`pointer-events-none absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border text-xl shadow-sm backdrop-blur-sm ${previewSeasonBadgeClass}`}>
                 {previewIcon}
               </span>
             )}

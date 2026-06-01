@@ -27,6 +27,7 @@ import {
   WATER_GUIDE_NOTE,
   WATER_LEVELS,
   getDifficultyLabel,
+  getSeasonBadgeClass,
   getSeasonIcon,
   getSeasonLabel,
   normalizeSeasonValues,
@@ -535,6 +536,7 @@ export default function Hikes() {
                 const seasonValues = normalizeSeasonValues(hike.seasons, hike.season);
                 const seasonIcon = seasonValues[0] ? getSeasonIcon(seasonValues[0]) : null;
                 const seasonLabel = seasonValues[0] ? getSeasonLabel(seasonValues[0]) : null;
+                const seasonBadgeClass = seasonValues[0] ? getSeasonBadgeClass(seasonValues[0]) : "";
                 const coverSource = getUniqueHikeImageSources(
                   hike.image,
                   Array.isArray(hike.photos) ? hike.photos : [],
@@ -568,7 +570,7 @@ export default function Hikes() {
                               className="h-full w-full object-cover"
                             />
                             {seasonIcon && (
-                              <span className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/80 text-xl shadow-sm">
+                              <span className={`absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border text-xl shadow-sm ${seasonBadgeClass}`}>
                                 {seasonIcon}
                               </span>
                             )}
@@ -584,7 +586,7 @@ export default function Hikes() {
                                   <span>{hike.location || "Dolomites"}</span>
                                 </span>
                                 {seasonLabel && (
-                                  <span className="inline-flex items-center gap-1">
+                                  <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-bold ${seasonBadgeClass}`}>
                                     <span>{seasonIcon}</span>
                                     <span>{seasonLabel}</span>
                                   </span>
