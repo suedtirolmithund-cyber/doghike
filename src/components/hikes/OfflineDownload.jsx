@@ -102,7 +102,10 @@ export default function OfflineDownload({
         import("jspdf"),
       ]);
 
-      saveToLocalStorage();
+      const savedOffline = saveToLocalStorage();
+      if (!savedOffline) {
+        toast.error("Die Tour konnte nicht offline gespeichert werden. Bitte schaffe Speicherplatz und versuche es noch einmal.");
+      }
 
       const pdf = new jsPDF("p", "mm", "a4");
       const pageWidth = pdf.internal.pageSize.getWidth();
