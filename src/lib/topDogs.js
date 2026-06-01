@@ -226,87 +226,92 @@ export async function loadLeaderboard(timeframe = "overall") {
     }
   }
 
-  const { data: publicHikes, error: publicHikesError } = await fetchApprovedPublicHikesForLeaderboard();
+  try {
+    const { data: publicHikes, error: publicHikesError } = await fetchApprovedPublicHikesForLeaderboard();
 
-  if (publicHikesError) {
-    if (isAccessError(publicHikesError) || isMissingColumnError(publicHikesError, "dog_ids")) {
-      return leaderboard;
-    }
-    throw publicHikesError;
-  }
-
-  const relevantPublicHikes = (publicHikes ?? []).filter(
-    (entry) => getEntryDogIds(entry).length > 0 && matchesTimeframe(entry, timeframe)
-  );
-
-  if (!relevantPublicHikes.length) {
-    return leaderboard;
-  }
-
-  const leaderboardMap = new Map(
-    leaderboard
-      .filter((entry) => entry?.dog?.id)
-      .map((entry) => [entry.dog.id, { ...entry }])
-  );
-  const missingDogIds = [...new Set(
-    relevantPublicHikes
-      .flatMap(getEntryDogIds)
-      .filter((dogId) => !leaderboardMap.has(dogId))
-  )];
-
-  if (missingDogIds.length > 0) {
-    const { data: missingDogs, error: missingDogsError } = await supabase
-      .from("dogs")
-      .select("id, name, breed, photo_url, user_id")
-      .in("id", missingDogIds);
-
-    if (missingDogsError) {
-      if (isAccessError(missingDogsError)) {
+    if (publicHikesError) {
+      if (isAccessError(publicHikesError) || isMissingColumnError(publicHikesError, "dog_ids")) {
         return leaderboard;
       }
-      throw missingDogsError;
+      throw publicHikesError;
     }
 
-    for (const dog of missingDogs ?? []) {
-      leaderboardMap.set(dog.id, {
-        dog,
-        profile: null,
-        tourCount: 0,
-        totalDistance: 0,
-        totalElevation: 0,
-        avgRating: 0,
-        ratingCount: 0,
-      });
-    }
-  }
+    const relevantPublicHikes = (publicHikes ?? []).filter(
+      (entry) => getEntryDogIds(entry).length > 0 && matchesTimeframe(entry, timeframe)
+    );
 
-  for (const entry of relevantPublicHikes) {
-    for (const dogId of getEntryDogIds(entry)) {
-      const leaderboardEntry = leaderboardMap.get(dogId);
-      if (!leaderboardEntry?.dog) {
-        continue;
+    if (!relevantPublicHikes.length) {
+      return leaderboard;
+    }
+
+    const leaderboardMap = new Map(
+      leaderboard
+        .filter((entry) => entry?.dog?.id)
+        .map((entry) => [entry.dog.id, { ...entry }])
+    );
+    const missingDogIds = [...new Set(
+      relevantPublicHikes
+        .flatMap(getEntryDogIds)
+        .filter((dogId) => !leaderboardMap.has(dogId))
+    )];
+
+    if (missingDogIds.length > 0) {
+      const { data: missingDogs, error: missingDogsError } = await supabase
+        .from("dogs")
+        .select("id, name, breed, photo_url, user_id")
+        .in("id", missingDogIds);
+
+      if (missingDogsError) {
+        if (isAccessError(missingDogsError)) {
+          return leaderboard;
+        }
+        throw missingDogsError;
       }
 
-      const stats = {
-        tourCount: leaderboardEntry.tourCount,
-        totalDistance: leaderboardEntry.totalDistance,
-        totalElevation: leaderboardEntry.totalElevation,
-        ratingSum: leaderboardEntry.avgRating * leaderboardEntry.ratingCount,
-        ratingCount: leaderboardEntry.ratingCount,
-      };
-
-      accumulateDogStats(stats, entry, { elevationField: "elevation_gain_m", includeRating: false });
-
-      leaderboardMap.set(dogId, {
-        ...leaderboardEntry,
-        tourCount: stats.tourCount,
-        totalDistance: +stats.totalDistance.toFixed(1),
-        totalElevation: Math.round(stats.totalElevation),
-        avgRating: stats.ratingCount ? +(stats.ratingSum / stats.ratingCount).toFixed(1) : 0,
-        ratingCount: stats.ratingCount,
-      });
+      for (const dog of missingDogs ?? []) {
+        leaderboardMap.set(dog.id, {
+          dog,
+          profile: null,
+          tourCount: 0,
+          totalDistance: 0,
+          totalElevation: 0,
+          avgRating: 0,
+          ratingCount: 0,
+        });
+      }
     }
-  }
 
-  return [...leaderboardMap.values()].filter((row) => row.dog);
+    for (const entry of relevantPublicHikes) {
+      for (const dogId of getEntryDogIds(entry)) {
+        const leaderboardEntry = leaderboardMap.get(dogId);
+        if (!leaderboardEntry?.dog) {
+          continue;
+        }
+
+        const stats = {
+          tourCount: leaderboardEntry.tourCount,
+          totalDistance: leaderboardEntry.totalDistance,
+          totalElevation: leaderboardEntry.totalElevation,
+          ratingSum: leaderboardEntry.avgRating * leaderboardEntry.ratingCount,
+          ratingCount: leaderboardEntry.ratingCount,
+        };
+
+        accumulateDogStats(stats, entry, { elevationField: "elevation_gain_m", includeRating: false });
+
+        leaderboardMap.set(dogId, {
+          ...leaderboardEntry,
+          tourCount: stats.tourCount,
+          totalDistance: +stats.totalDistance.toFixed(1),
+          totalElevation: Math.round(stats.totalElevation),
+          avgRating: stats.ratingCount ? +(stats.ratingSum / stats.ratingCount).toFixed(1) : 0,
+          ratingCount: stats.ratingCount,
+        });
+      }
+    }
+
+    return [...leaderboardMap.values()].filter((row) => row.dog);
+  } catch (error) {
+    console.warn("[topDogs] optional public_hikes supplement failed:", error?.message || error);
+    return leaderboard;
+  }
 }
