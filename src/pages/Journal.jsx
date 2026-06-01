@@ -48,12 +48,12 @@ const MOBILE_PAGE_SIZE = 8;
 const DESKTOP_PAGE_SIZE = 10;
 
 const COUNTRY_ALIASES = [
-  { label: "Italien", aliases: ["italien", "italy", "sÃ¼dtirol", "suedtirol", "dolomiten", "trentino", "alto adige"] },
-  { label: "Ã–sterreich", aliases: ["Ã¶sterreich", "oesterreich", "austria", "tirol", "osttirol", "salzburg"] },
+  { label: "Italien", aliases: ["italien", "italy", "südtirol", "suedtirol", "dolomiten", "trentino", "alto adige"] },
+  { label: "Österreich", aliases: ["österreich", "oesterreich", "austria", "tirol", "osttirol", "salzburg"] },
   { label: "Deutschland", aliases: ["deutschland", "germany", "bayern", "bavaria"] },
   { label: "Schweiz", aliases: ["schweiz", "switzerland", "suisse", "svizzera"] },
   { label: "Frankreich", aliases: ["frankreich", "france"] },
-  { label: "Spanien", aliases: ["spanien", "spain", "espana", "espaÃ±a"] },
+  { label: "Spanien", aliases: ["spanien", "spain", "espana", "españa"] },
   { label: "Kroatien", aliases: ["kroatien", "croatia", "hrvatska"] },
   { label: "Slowenien", aliases: ["slowenien", "slovenia", "slovenija"] },
 ];
@@ -82,7 +82,7 @@ function VisibilityStatusBadge({ visibility, status }) {
       return (
         <span className="inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1.5 rounded-full border border-brand-200 bg-brand-100 px-3 py-1 text-center text-sm font-semibold leading-tight text-brand-600 whitespace-normal break-words md:text-xs">
           <Globe className="w-3 h-3" />
-          Ã–ffentlich sichtbar
+          Öffentlich sichtbar
         </span>
       );
     }
@@ -99,7 +99,7 @@ function VisibilityStatusBadge({ visibility, status }) {
     return (
       <span className="inline-flex min-h-8 max-w-full min-w-0 flex-wrap items-center justify-center gap-1.5 rounded-full border border-brand-100 bg-brand-100 px-3 py-1 text-center text-sm font-semibold leading-tight text-brand-600 whitespace-normal break-words md:text-xs">
         <Globe className="w-3 h-3" />
-        Wartet auf PrÃ¼fung
+        Wartet auf Prüfung
       </span>
     );
   }
@@ -166,9 +166,9 @@ function JournalEntryActions({ entry, onDelete }) {
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Eintrag lÃ¶schen?</AlertDialogTitle>
+            <AlertDialogTitle>Eintrag löschen?</AlertDialogTitle>
             <AlertDialogDescription>
-              "{entry.title}" wird dauerhaft gelÃ¶scht. Das kann nicht rÃ¼ckgÃ¤ngig gemacht werden.
+              "{entry.title}" wird dauerhaft gelöscht. Das kann nicht rückgängig gemacht werden.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -177,7 +177,7 @@ function JournalEntryActions({ entry, onDelete }) {
               onClick={() => onDelete(entry.id)}
               className="bg-brand-400 hover:bg-brand-500"
             >
-              LÃ¶schen
+              Löschen
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -372,7 +372,7 @@ export default function Journal() {
     },
     onError: (_err, _id, context) => {
       queryClient.setQueryData(["journal", user?.id], context?.previous);
-      toast.error("Das LÃ¶schen hat gerade nicht geklappt.");
+      toast.error("Das Löschen hat gerade nicht geklappt.");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["allHikes"] });
@@ -394,7 +394,7 @@ export default function Journal() {
     { icon: TOUR_ICONS.distance, value: `${totalDistance.toFixed(0)} km`, label: "Gesamt", color: "text-brand-600" },
     { icon: TOUR_ICONS.elevation, value: `${Math.round(totalElevation).toLocaleString()} Hm`, label: "Aufstieg", color: "text-brand-500" },
     ...(countryCount >= 2
-      ? [{ icon: TOUR_ICONS.country, value: countryCount, label: "LÃ¤nder", color: "text-brand-500" }]
+      ? [{ icon: TOUR_ICONS.country, value: countryCount, label: "Länder", color: "text-brand-500" }]
       : []),
   ];
 
@@ -441,7 +441,7 @@ export default function Journal() {
           <BookOpen className="w-12 h-12 text-brand-400 mx-auto mb-4" />
           <h2 className="doghike-section-title mb-2">Wandertagebuch</h2>
           <p className="doghike-section-subtitle mb-6">
-            Melde dich an, um deine persÃ¶nlichen Wandererlebnisse festzuhalten.
+            Melde dich an, um deine persönlichen Wandererlebnisse festzuhalten.
           </p>
           <Link to={createPageUrl("Login")}>
             <Button className="bg-brand-400 hover:bg-brand-600 w-full">
@@ -467,7 +467,7 @@ export default function Journal() {
             </div>
             <div className="min-w-0">
               <h1 className="doghike-page-title">Wandertagebuch</h1>
-              <p className="doghike-page-subtitle">Deine persÃ¶nlichen Wandererlebnisse</p>
+              <p className="doghike-page-subtitle">Deine persönlichen Wandererlebnisse</p>
               {entries.length > 0 && (
                 <Link to={createPageUrl("AddJournalEntry")} className="mt-3 inline-flex">
                   <Button className="doghike-primary-action doghike-compact-action">
@@ -594,7 +594,7 @@ export default function Journal() {
             <BookOpen className="doghike-empty-icon" />
             <h3 className="doghike-empty-title">Noch keine Wanderungen</h3>
             <p className="text-slate-500 mb-6 text-sm max-w-xs mx-auto">
-              Halte den ersten Tag mit deinem Hund fest. Fotos, Strecke, GefÃ¼hl.
+              Halte den ersten Tag mit deinem Hund fest. Fotos, Strecke, Gefühl.
             </p>
             <Link to={createPageUrl("AddJournalEntry")}>
               <Button className="bg-brand-400 hover:bg-brand-600">
@@ -606,9 +606,9 @@ export default function Journal() {
           <div className="doghike-empty-state">
             <Search className="doghike-empty-icon" />
             <h3 className="doghike-empty-title">Nichts Passendes gefunden</h3>
-            <p className="text-slate-400 text-sm mb-4">FÃ¼r â€ž{search}â€œ wurde nichts gefunden.</p>
+            <p className="text-slate-400 text-sm mb-4">Für „{search}“ wurde nichts gefunden.</p>
             <Button variant="outline" onClick={() => setSearch("")}>
-              Suche zurÃ¼cksetzen
+              Suche zurücksetzen
             </Button>
           </div>
         )}
@@ -621,7 +621,7 @@ export default function Journal() {
               onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
               disabled={currentPage === 1}
             >
-              ZurÃ¼ck
+              Zurück
             </Button>
             {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
               <button
