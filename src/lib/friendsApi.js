@@ -17,6 +17,18 @@ async function triggerFriendshipWebPush(eventType, friendshipId) {
   }
 }
 
+async function requireCurrentUserId() {
+  const { data, error } = await supabase.auth.getUser();
+  if (error) throw error;
+
+  const userId = data?.user?.id;
+  if (!userId) {
+    throw new Error("Du musst eingeloggt sein.");
+  }
+
+  return userId;
+}
+
 // Returns all friendships involving the current user (pending + accepted)
 export async function getFriendships(userId) {
   const { data, error } = await supabase
@@ -83,20 +95,26 @@ export async function sendFriendRequest(requesterId, receiverId) {
 
 // Accept a request (only receiver can do this)
 export async function acceptFriendRequest(friendshipId) {
-  const { error } = await supabase
+  const currentUserId = await requireCurrentUserId();
+  const { data, error } = await supabase
     .from("friendships")
     .update({ status: "accepted" })
-    .eq("id", friendshipId);
+    .eq("id", friendshipId)
+    .eq("receiver_id", currentUserId)
+    .select("id")
+    .single();
   if (error) throw error;
-  await triggerFriendshipWebPush("friend_accepted", friendshipId);
+  await triggerFriendshipWebPush("friend_accepted", data.id);
 }
 
 // Reject a request
 export async function rejectFriendRequest(friendshipId) {
+  const currentUserId = await requireCurrentUserId();
   const { error } = await supabase
     .from("friendships")
     .update({ status: "rejected" })
-    .eq("id", friendshipId);
+    .eq("id", friendshipId)
+    .eq("receiver_id", currentUserId);
   if (error) throw error;
 }
 
