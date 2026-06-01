@@ -160,6 +160,12 @@ function RankRow({ entry, rank, metric, isMyDog }) {
 
 function CompactRankRow({ entry, rank, metric, isMyDog }) {
   const badges = getBadges(entry, false);
+  const rankBorderClass =
+    rank === 4
+      ? "border-[#F9C030]/85"
+      : rank === 5
+        ? "border-[#D4547A]/70"
+        : "border-brand-100/70";
 
   return (
     <motion.div
@@ -167,7 +173,7 @@ function CompactRankRow({ entry, rank, metric, isMyDog }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.15 + (rank - 4) * 0.05 }}
       className={`rounded-2xl border p-3 ${
-        isMyDog ? "border-brand-300 bg-brand-50/70 shadow-sm" : "border-white/70 bg-white/78 shadow-sm backdrop-blur-xl"
+        isMyDog ? "border-brand-300 bg-brand-50/70 shadow-sm" : `${rankBorderClass} bg-white/78 shadow-sm backdrop-blur-xl`
       }`}
     >
       <div className="flex items-center gap-3">
