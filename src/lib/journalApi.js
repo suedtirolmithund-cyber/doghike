@@ -228,6 +228,18 @@ function isMissingOptionalJournalColumnError(error) {
   );
 }
 
+async function requireCurrentUserId() {
+  const { data, error } = await supabase.auth.getUser();
+  if (error) throw error;
+
+  const userId = data?.user?.id;
+  if (!userId) {
+    throw new Error("Du musst eingeloggt sein.");
+  }
+
+  return userId;
+}
+
 export async function createJournalEntry(userId, entry) {
   const payload = { user_id: userId, ...entry };
   let { data, error } = await supabase
@@ -249,10 +261,12 @@ export async function createJournalEntry(userId, entry) {
 }
 
 export async function updateJournalEntry(id, entry) {
+  const currentUserId = await requireCurrentUserId();
   let { data, error } = await supabase
     .from("journal_entries")
     .update(entry)
     .eq("id", id)
+    .eq("user_id", currentUserId)
     .select()
     .single();
 
@@ -261,6 +275,7 @@ export async function updateJournalEntry(id, entry) {
       .from("journal_entries")
       .update(withoutUnsupportedOptionalColumns(entry, error))
       .eq("id", id)
+      .eq("user_id", currentUserId)
       .select()
       .single());
   }
@@ -270,13 +285,18 @@ export async function updateJournalEntry(id, entry) {
 }
 
 export async function deleteJournalEntry(id) {
+  const currentUserId = await requireCurrentUserId();
   const { data: existingEntry, error: fetchError } = await supabase
     .from("journal_entries")
     .select("photos, gpx_url")
     .eq("id", id)
+    .eq("user_id", currentUserId)
     .single();
 
   if (fetchError && fetchError.code !== "PGRST116") throw fetchError;
+  if (!existingEntry) {
+    throw new Error("Eintrag nicht gefunden oder keine Berechtigung.");
+  }
 
   const { data: relatedComments, error: commentsFetchError } = await supabase
     .from("comments")
@@ -289,7 +309,8 @@ export async function deleteJournalEntry(id) {
   const { error } = await supabase
     .from("journal_entries")
     .delete()
-    .eq("id", id);
+    .eq("id", id)
+    .eq("user_id", currentUserId);
   if (error) throw error;
 
   const cleanupResults = await Promise.allSettled([
