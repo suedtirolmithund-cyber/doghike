@@ -10,6 +10,7 @@ const ALLOWED_IMAGE_CONTENT_TYPES = new Set([
   "image/gif",
   "image/avif",
 ]);
+const MAX_PROXY_IMAGE_BYTES = 12 * 1024 * 1024;
 
 function isAllowedImageUrl(rawUrl) {
   try {
@@ -62,6 +63,41 @@ function bufferMatchesImageContentType(buffer, contentType) {
   }
 
   return false;
+}
+
+async function readResponseBodyWithLimit(response, maxBytes) {
+  const contentLengthHeader = response.headers.get("content-length");
+  const declaredLength = Number.parseInt(contentLengthHeader || "", 10);
+  if (Number.isFinite(declaredLength) && declaredLength > maxBytes) {
+    throw new Error("image_too_large");
+  }
+
+  if (!response.body?.getReader) {
+    const buffer = Buffer.from(await response.arrayBuffer());
+    if (buffer.length > maxBytes) {
+      throw new Error("image_too_large");
+    }
+    return buffer;
+  }
+
+  const reader = response.body.getReader();
+  const chunks = [];
+  let totalBytes = 0;
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    const chunk = Buffer.from(value);
+    totalBytes += chunk.length;
+    if (totalBytes > maxBytes) {
+      throw new Error("image_too_large");
+    }
+
+    chunks.push(chunk);
+  }
+
+  return Buffer.concat(chunks, totalBytes);
 }
 
 export async function fetchProxiedImage(rawUrl, method = "GET") {
@@ -130,7 +166,20 @@ export async function fetchProxiedImage(rawUrl, method = "GET") {
     };
   }
 
-  const imageBuffer = Buffer.from(await upstream.arrayBuffer());
+  let imageBuffer;
+  try {
+    imageBuffer = await readResponseBodyWithLimit(upstream, MAX_PROXY_IMAGE_BYTES);
+  } catch (error) {
+    if (error?.message === "image_too_large") {
+      return {
+        status: 413,
+        body: "Image exceeds maximum proxy size",
+      };
+    }
+
+    throw error;
+  }
+
   if (!bufferMatchesImageContentType(imageBuffer, contentType)) {
     return {
       status: 415,
