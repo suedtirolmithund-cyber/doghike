@@ -2,9 +2,14 @@ import { supabase } from "@/lib/supabaseClient";
 import { createPageUrl } from "@/utils";
 
 const NOTIFICATION_SEEN_KEY = "doghike:notifications-seen";
+const NOTIFICATION_START_KEY = "doghike:notifications-start";
 
 function getSeenStorageKey(userId) {
   return `${NOTIFICATION_SEEN_KEY}:${userId}`;
+}
+
+function getStartStorageKey(userId) {
+  return `${NOTIFICATION_START_KEY}:${userId}`;
 }
 
 function readSeenAt(userId) {
@@ -20,6 +25,24 @@ function writeSeenAt(userId, value) {
   if (!userId || typeof window === "undefined") return;
   try {
     window.localStorage.setItem(getSeenStorageKey(userId), value);
+  } catch {
+    // Ignore localStorage issues and keep notifications usable.
+  }
+}
+
+function readStartAt(userId) {
+  if (!userId || typeof window === "undefined") return null;
+  try {
+    return window.localStorage.getItem(getStartStorageKey(userId));
+  } catch {
+    return null;
+  }
+}
+
+function writeStartAt(userId, value) {
+  if (!userId || typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(getStartStorageKey(userId), value);
   } catch {
     // Ignore localStorage issues and keep notifications usable.
   }
@@ -46,8 +69,32 @@ export function markNotificationsSeen(userId, seenAt = new Date().toISOString())
   writeSeenAt(userId, seenAt);
 }
 
+export function getNotificationsStartAt(userId) {
+  return readStartAt(userId);
+}
+
+export function initializeNotificationsStartAt(userId, startAt = new Date().toISOString()) {
+  if (!readStartAt(userId)) {
+    writeStartAt(userId, startAt);
+  }
+}
+
+export function resetNotificationsStartAt(userId, startAt = new Date().toISOString()) {
+  writeStartAt(userId, startAt);
+}
+
+function isAtOrAfterStartTime(notification, startAt) {
+  if (!startAt) return true;
+
+  const startTimestamp = new Date(startAt).getTime();
+  if (!Number.isFinite(startTimestamp)) return true;
+
+  return getNotificationTime(notification) >= startTimestamp;
+}
+
 export async function loadNotifications(userId) {
   const results = [];
+  const startAt = readStartAt(userId);
 
   const { data: currentProfile, error: currentProfileError } = await supabase
     .from("profiles")
@@ -218,7 +265,9 @@ export async function loadNotifications(userId) {
     });
   });
 
-  return results.sort((left, right) => getNotificationTime(right) - getNotificationTime(left));
+  return results
+    .filter((notification) => isAtOrAfterStartTime(notification, startAt))
+    .sort((left, right) => getNotificationTime(right) - getNotificationTime(left));
 }
 
 export async function loadUnreadNotificationCount(userId) {

@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { APP_ICON } from "@/lib/fallbackImages";
+import { initializeNotificationsStartAt } from "@/lib/notificationsApi";
 
 const ICON = APP_ICON;
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_WEB_PUSH_PUBLIC_KEY || "";
@@ -112,6 +113,7 @@ export async function ensureWebPushSubscription(userId) {
   }
 
   await upsertPushSubscription(userId, subscription);
+  initializeNotificationsStartAt(userId);
   return true;
 }
 

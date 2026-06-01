@@ -19,7 +19,7 @@ import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { loadNotifications, markNotificationsSeen } from "@/lib/notificationsApi";
+import { loadNotifications, markNotificationsSeen, resetNotificationsStartAt } from "@/lib/notificationsApi";
 import {
   disableWebPushSubscription,
   ensureWebPushSubscription,
@@ -105,8 +105,12 @@ export default function Notifications() {
         return;
       }
 
+      resetNotificationsStartAt(user.id);
       await ensureWebPushSubscription(user.id);
       setSubscriptionEnabled(true);
+      queryClient.setQueryData(["notificationsUnread", user.id], 0);
+      queryClient.invalidateQueries({ queryKey: ["notifications", user.id] });
+      queryClient.invalidateQueries({ queryKey: ["notificationsUnread", user.id] });
       toast.success("Hinweise sind jetzt an.");
     } catch {
       toast.error("Hinweise lassen sich gerade nicht aktivieren.");
