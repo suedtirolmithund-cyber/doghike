@@ -7,6 +7,18 @@ function normalizeHikeSource(value) {
   return value ?? "sheets";
 }
 
+async function requireCurrentUserId() {
+  const { data, error } = await supabase.auth.getUser();
+  if (error) throw error;
+
+  const userId = data?.user?.id;
+  if (!userId) {
+    throw new Error("Du musst eingeloggt sein.");
+  }
+
+  return userId;
+}
+
 function getStorageDescriptor(photoReference) {
   if (!photoReference) return null;
 
@@ -303,14 +315,20 @@ export async function createComment(
 }
 
 export async function deleteComment(id) {
+  const currentUserId = await requireCurrentUserId();
   const { data: existingComment, error: fetchError } = await supabase
     .from("comments")
     .select("photo_url")
     .eq("id", id)
+    .eq("user_id", currentUserId)
     .single();
   if (fetchError) throw fetchError;
 
-  const { error } = await supabase.from("comments").delete().eq("id", id);
+  const { error } = await supabase
+    .from("comments")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", currentUserId);
   if (error) throw error;
 
   const storageDescriptor = getStorageDescriptor(existingComment?.photo_url);
