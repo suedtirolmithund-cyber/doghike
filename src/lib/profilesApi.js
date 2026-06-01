@@ -38,6 +38,26 @@ function sanitizeDogPayload(dogData = {}) {
   };
 }
 
+function sanitizeProfileUpdates(updates = {}) {
+  const {
+    role,
+    is_premium,
+    stripe_customer_id,
+    stripe_subscription_id,
+    premium_current_period_end,
+    premium_updated_at,
+    subscription_status,
+    ...safeUpdates
+  } = updates;
+
+  return {
+    ...safeUpdates,
+    username: Object.prototype.hasOwnProperty.call(safeUpdates, "username")
+      ? sanitizeUsername(safeUpdates.username)
+      : safeUpdates.username,
+  };
+}
+
 async function requireCurrentUserId() {
   const { data, error } = await supabase.auth.getUser();
   if (error) throw error;
@@ -79,11 +99,9 @@ export async function getProfile(userId) {
 }
 
 export async function upsertProfile(userId, updates) {
-  const nextUpdates = { ...updates };
+  const nextUpdates = sanitizeProfileUpdates(updates);
 
   if (Object.prototype.hasOwnProperty.call(nextUpdates, "username")) {
-    nextUpdates.username = sanitizeUsername(nextUpdates.username);
-
     if (nextUpdates.username) {
       const { data: currentProfile, error: currentProfileError } = await supabase
         .from("profiles")

@@ -52,22 +52,6 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("user_id", userId)
-        .maybeSingle();
-
-      const normalizedRole = typeof data?.role === "string" ? data.role.trim().toLowerCase() : "";
-      if (!error && normalizedRole) {
-        setIsAdmin(normalizedRole === "admin");
-        return;
-      }
-
-      if (error) {
-        console.error("[fetchRole] error:", error.message);
-      }
-
       const { data: rpcData, error: rpcError } = await supabase.rpc("is_admin");
       if (rpcError) {
         console.error("[fetchRole] is_admin fallback error:", rpcError.message);
