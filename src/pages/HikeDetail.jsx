@@ -377,7 +377,7 @@ export default function HikeDetail() {
 
       const { data, error } = await supabase
         .from("profiles")
-        .select("is_premium, premium_current_period_end")
+        .select("is_premium, premium_current_period_end, username, full_name")
         .eq("user_id", currentUser.id)
         .maybeSingle();
 
@@ -439,6 +439,17 @@ export default function HikeDetail() {
     (hike?._user_id ? "ein DogTrails-Mitglied" : null);
   const countryLabel = getCountryLabel(hike?.country);
   const updatedAtLabel = formatUpdatedAtLabel(hike?.updated_at || hike?.created_at);
+  const detailAuthorName =
+    publicSubmitterName ||
+    (hike?._source === "journal"
+      ? hike.author_username || null
+      : isAdmin && hike?._source === "sheets" && !hike?._user_id
+        ? currentProfile?.full_name ||
+          currentProfile?.username ||
+          currentUser?.user_metadata?.full_name ||
+          currentUser?.email?.split("@")[0] ||
+          null
+        : null);
   const seasonValues = normalizeSeasonValues(hike?.seasons, hike?.season);
   const detailStatItems = useMemo(() => {
     const items = [];
@@ -1098,15 +1109,24 @@ export default function HikeDetail() {
               </motion.div>
             )}
 
-            {updatedAtLabel && (
+            {(updatedAtLabel || detailAuthorName) && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.41 }}
               >
-                <p className="text-xs text-slate-400">
-                  Zuletzt aktualisiert: {updatedAtLabel}
-                </p>
+                <div className="space-y-1">
+                  {updatedAtLabel && (
+                    <p className="text-xs text-slate-400">
+                      Zuletzt aktualisiert: {updatedAtLabel}
+                    </p>
+                  )}
+                  {detailAuthorName && (
+                    <p className="text-xs text-slate-400">
+                      Verfasst von: {detailAuthorName}
+                    </p>
+                  )}
+                </div>
               </motion.div>
             )}
 
