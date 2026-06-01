@@ -523,6 +523,8 @@ function publicHikeRowToHike(row, photos = [], photoReferences = []) {
     restaurant_info: pickFirstText(row, ["restaurant_info", "restaurant", "restaurant_notes", "einkehr", "hutte", "hütte"]),
     notes: pickFirstText(row, ["notes", "description", "beschreibung", "text", "details", "tipps"]),
     date: row.date || null,
+    created_at: row.created_at || null,
+    updated_at: row.updated_at || null,
     dog_id: row.dog_id ? String(row.dog_id) : null,
     dog_ids: cleanedDogIds,
     dog_mood_tags: Array.isArray(row.dog_mood_tags) ? row.dog_mood_tags.filter(Boolean) : [],
