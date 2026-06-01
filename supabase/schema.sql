@@ -727,6 +727,160 @@ create table if not exists public.support_requests (
 alter table public.support_requests enable row level security;
 
 -- PUBLIC HIKES
+create table if not exists public.public_hikes (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users(id) on delete set null,
+  title text not null,
+  location text,
+  country text,
+  date date,
+  distance_km numeric(6,2),
+  elevation_gain_m integer,
+  duration_minutes integer,
+  difficulty smallint check (difficulty between 1 and 5),
+  dog_difficulty smallint check (dog_difficulty between 1 and 5),
+  water_availability smallint check (water_availability between 0 and 3),
+  season text,
+  seasons text[] default '{}',
+  grazing_animals boolean default false,
+  muzzle_recommended boolean default false,
+  hazard_notes text,
+  parking_info text,
+  restaurant_info text,
+  notes text,
+  tags text[] default '{}',
+  is_premium boolean not null default false,
+  status text not null default 'draft' check (status in ('draft', 'approved', 'archived')),
+  latitude numeric(10,7),
+  longitude numeric(10,7),
+  dog_id uuid references public.dogs(id) on delete set null,
+  dog_ids uuid[] default '{}',
+  dog_mood_tags text[] default '{}',
+  image text,
+  image2 text,
+  image3 text,
+  image4 text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz default now()
+);
+
+create table if not exists public.public_hike_photos (
+  id uuid default gen_random_uuid() primary key,
+  hike_id uuid references public.public_hikes(id) on delete cascade not null,
+  photo_url text not null,
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists public_hikes_status_idx on public.public_hikes(status);
+create index if not exists public_hikes_user_id_idx on public.public_hikes(user_id);
+create index if not exists public_hike_photos_hike_id_sort_idx
+  on public.public_hike_photos(hike_id, sort_order);
+
+alter table public.public_hikes enable row level security;
+alter table public.public_hike_photos enable row level security;
+
+create policy "Öffentliche Touren lesen"
+  on public.public_hikes for select
+  using (
+    (status = 'approved')
+    or (auth.uid() = user_id)
+    or public.is_admin()
+  );
+
+create policy "Eigene öffentliche Touren anlegen"
+  on public.public_hikes for insert
+  with check (
+    (auth.uid() = user_id)
+    or public.is_admin()
+  );
+
+create policy "Eigene oder Admin öffentliche Touren bearbeiten"
+  on public.public_hikes for update
+  using (
+    (auth.uid() = user_id)
+    or public.is_admin()
+  )
+  with check (
+    (auth.uid() = user_id)
+    or public.is_admin()
+  );
+
+create policy "Eigene oder Admin öffentliche Touren löschen"
+  on public.public_hikes for delete
+  using (
+    (auth.uid() = user_id)
+    or public.is_admin()
+  );
+
+create policy "Öffentliche Tourfotos lesen"
+  on public.public_hike_photos for select
+  using (
+    exists (
+      select 1
+      from public.public_hikes h
+      where h.id = public.public_hike_photos.hike_id
+        and (
+          h.status = 'approved'
+          or h.user_id = auth.uid()
+          or public.is_admin()
+        )
+    )
+  );
+
+create policy "Eigene oder Admin Tourfotos anlegen"
+  on public.public_hike_photos for insert
+  with check (
+    exists (
+      select 1
+      from public.public_hikes h
+      where h.id = public.public_hike_photos.hike_id
+        and (
+          h.user_id = auth.uid()
+          or public.is_admin()
+        )
+    )
+  );
+
+create policy "Eigene oder Admin Tourfotos bearbeiten"
+  on public.public_hike_photos for update
+  using (
+    exists (
+      select 1
+      from public.public_hikes h
+      where h.id = public.public_hike_photos.hike_id
+        and (
+          h.user_id = auth.uid()
+          or public.is_admin()
+        )
+    )
+  )
+  with check (
+    exists (
+      select 1
+      from public.public_hikes h
+      where h.id = public.public_hike_photos.hike_id
+        and (
+          h.user_id = auth.uid()
+          or public.is_admin()
+        )
+    )
+  );
+
+create policy "Eigene oder Admin Tourfotos löschen"
+  on public.public_hike_photos for delete
+  using (
+    exists (
+      select 1
+      from public.public_hikes h
+      where h.id = public.public_hike_photos.hike_id
+        and (
+          h.user_id = auth.uid()
+          or public.is_admin()
+        )
+    )
+  );
+
 -- Falls die Tabelle bereits existiert und mehrere Jahreszeiten speichern soll:
 -- alter table public.public_hikes
 --   add column if not exists seasons text[] default '{}';
