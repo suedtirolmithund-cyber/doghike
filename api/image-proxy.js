@@ -3,6 +3,13 @@ const ALLOWED_HOSTS = new Set([
   "image.jimcdn.com",
   "jimcdn.com",
 ]);
+const ALLOWED_IMAGE_CONTENT_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/avif",
+]);
 
 function isAllowedImageUrl(rawUrl) {
   try {
@@ -13,6 +20,48 @@ function isAllowedImageUrl(rawUrl) {
   } catch {
     return false;
   }
+}
+
+function normalizeContentType(value) {
+  return String(value || "image/jpeg").split(";")[0].trim().toLowerCase();
+}
+
+function bufferMatchesImageContentType(buffer, contentType) {
+  if (!Buffer.isBuffer(buffer) || buffer.length < 12) return false;
+
+  if (contentType === "image/jpeg") {
+    return buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff;
+  }
+
+  if (contentType === "image/png") {
+    return (
+      buffer[0] === 0x89 &&
+      buffer[1] === 0x50 &&
+      buffer[2] === 0x4e &&
+      buffer[3] === 0x47 &&
+      buffer[4] === 0x0d &&
+      buffer[5] === 0x0a &&
+      buffer[6] === 0x1a &&
+      buffer[7] === 0x0a
+    );
+  }
+
+  if (contentType === "image/gif") {
+    return buffer.subarray(0, 6).toString("ascii") === "GIF87a" || buffer.subarray(0, 6).toString("ascii") === "GIF89a";
+  }
+
+  if (contentType === "image/webp") {
+    return (
+      buffer.subarray(0, 4).toString("ascii") === "RIFF" &&
+      buffer.subarray(8, 12).toString("ascii") === "WEBP"
+    );
+  }
+
+  if (contentType === "image/avif") {
+    return buffer.subarray(4, 8).toString("ascii") === "ftyp" && buffer.subarray(8, 12).toString("ascii").startsWith("avi");
+  }
+
+  return false;
 }
 
 export async function fetchProxiedImage(rawUrl, method = "GET") {
@@ -60,8 +109,8 @@ export async function fetchProxiedImage(rawUrl, method = "GET") {
     };
   }
 
-  const contentType = upstream.headers.get("content-type") || "image/jpeg";
-  if (!contentType.toLowerCase().startsWith("image/")) {
+  const contentType = normalizeContentType(upstream.headers.get("content-type"));
+  if (!ALLOWED_IMAGE_CONTENT_TYPES.has(contentType)) {
     return {
       status: 415,
       body: "Unsupported media type",
@@ -82,6 +131,13 @@ export async function fetchProxiedImage(rawUrl, method = "GET") {
   }
 
   const imageBuffer = Buffer.from(await upstream.arrayBuffer());
+  if (!bufferMatchesImageContentType(imageBuffer, contentType)) {
+    return {
+      status: 415,
+      body: "Invalid image payload",
+    };
+  }
+
   return {
     status: 200,
     headers,
