@@ -334,7 +334,7 @@ function RankingTab({ rows, metric, myDogIds }) {
   const ownDogIdSet = new Set(myDogIds ?? []);
   const myIdx = sorted.findIndex((r) => ownDogIdSet.has(r.dog?.id));
   const myEntry = myIdx >= 0 ? sorted[myIdx] : null;
-  const showOwnRankCard = myIdx >= 10;
+  const showOwnRankCard = myIdx >= 5;
 
   if (!sorted.length) {
     return (
