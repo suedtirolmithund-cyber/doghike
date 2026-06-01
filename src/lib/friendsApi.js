@@ -33,7 +33,8 @@ export async function getFriendIds(userId) {
   const friendships = await getFriendships(userId);
   return friendships
     .filter((f) => f.status === "accepted")
-    .map((f) => (f.requester_id === userId ? f.receiver_id : f.requester_id));
+    .map((f) => (f.requester_id === userId ? f.receiver_id : f.requester_id))
+    .filter((friendId) => !!friendId && String(friendId) !== String(userId));
 }
 
 // Send a friend request

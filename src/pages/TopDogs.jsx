@@ -422,7 +422,10 @@ export default function TopDogs() {
     refetchOnWindowFocus: false,
   });
   const myDogIds = myDogs.map((dog) => dog.id);
-  const friendIdSet = useMemo(() => new Set(friendIds), [friendIds]);
+  const friendIdSet = useMemo(
+    () => new Set((friendIds ?? []).map((friendId) => String(friendId))),
+    [friendIds]
+  );
   const displayRows = useMemo(() => {
     if (timeframe !== "friends") {
       return rows;
@@ -430,8 +433,8 @@ export default function TopDogs() {
 
     return rows.filter(
       (entry) =>
-        friendIdSet.has(entry?.dog?.user_id) &&
-        entry?.dog?.user_id !== user?.id
+        friendIdSet.has(String(entry?.dog?.user_id ?? "")) &&
+        String(entry?.dog?.user_id ?? "") !== String(user?.id ?? "")
     );
   }, [friendIdSet, rows, timeframe, user?.id]);
 
