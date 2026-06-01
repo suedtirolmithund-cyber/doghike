@@ -1171,7 +1171,7 @@ export default function AddJournalEntry() {
       removedExistingPhotosRef.current = [...new Set([...removedExistingPhotosRef.current, photoToRemove])];
     }
 
-    set("photos", form.photos.filter((_, j) => j !== index));
+    set("photos", (currentPhotos = []) => currentPhotos.filter((_, j) => j !== index));
     setSelectedPhotoIndex(null);
   };
 
@@ -1185,7 +1185,7 @@ export default function AddJournalEntry() {
       return nextItems;
     };
 
-    set("photos", moveItem(form.photos));
+    set("photos", (currentPhotos = []) => moveItem(currentPhotos));
     setPhotoPreviewUrls((prev) => moveItem(prev));
     setSelectedPhotoIndex(null);
   };
@@ -1201,7 +1201,7 @@ export default function AddJournalEntry() {
       return nextItems;
     };
 
-    set("photos", reorder(form.photos));
+    set("photos", (currentPhotos = []) => reorder(currentPhotos));
     setPhotoPreviewUrls((prev) => reorder(prev));
   };
 
@@ -1341,7 +1341,11 @@ export default function AddJournalEntry() {
     });
   };
 
-  const set = (key, val) => setForm((p) => ({ ...p, [key]: val }));
+  const set = (key, val) =>
+    setForm((p) => ({
+      ...p,
+      [key]: typeof val === "function" ? val(p[key]) : val,
+    }));
   const toggleDogMoodTag = (tag) => {
     setForm((prev) => ({
       ...prev,
