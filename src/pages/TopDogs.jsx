@@ -328,7 +328,7 @@ function BadgeLegend() {
 }
 
 // Ranking-Tab-Inhalt
-function RankingTab({ rows, metric, myDogIds }) {
+function RankingTab({ rows, metric, myDogIds, showOwnRank = true }) {
   const sorted = useMemo(() => {
     const key = metric === "tours" ? "tourCount" : metric === "distance" ? "totalDistance" : "totalElevation";
     return [...rows].sort((a, b) => b[key] - a[key]);
@@ -340,7 +340,7 @@ function RankingTab({ rows, metric, myDogIds }) {
   const ownDogIdSet = new Set(myDogIds ?? []);
   const myIdx = sorted.findIndex((r) => ownDogIdSet.has(r.dog?.id));
   const myEntry = myIdx >= 0 ? sorted[myIdx] : null;
-  const showOwnRankCard = myIdx >= 5;
+  const showOwnRankCard = showOwnRank && myIdx >= 5;
 
   if (!sorted.length) {
     return (
@@ -428,8 +428,12 @@ export default function TopDogs() {
       return rows;
     }
 
-    return rows.filter((entry) => friendIdSet.has(entry?.dog?.user_id));
-  }, [friendIdSet, rows, timeframe]);
+    return rows.filter(
+      (entry) =>
+        friendIdSet.has(entry?.dog?.user_id) &&
+        entry?.dog?.user_id !== user?.id
+    );
+  }, [friendIdSet, rows, timeframe, user?.id]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
@@ -482,13 +486,13 @@ export default function TopDogs() {
               </TabsList>
 
               <TabsContent value="tours">
-                <RankingTab rows={displayRows} metric="tours" myDogIds={myDogIds} />
+                <RankingTab rows={displayRows} metric="tours" myDogIds={myDogIds} showOwnRank={timeframe !== "friends"} />
               </TabsContent>
               <TabsContent value="distance">
-                <RankingTab rows={displayRows} metric="distance" myDogIds={myDogIds} />
+                <RankingTab rows={displayRows} metric="distance" myDogIds={myDogIds} showOwnRank={timeframe !== "friends"} />
               </TabsContent>
               <TabsContent value="elevation">
-                <RankingTab rows={displayRows} metric="elevation" myDogIds={myDogIds} />
+                <RankingTab rows={displayRows} metric="elevation" myDogIds={myDogIds} showOwnRank={timeframe !== "friends"} />
               </TabsContent>
             </Tabs>
 
