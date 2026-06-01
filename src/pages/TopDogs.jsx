@@ -32,11 +32,11 @@ function dogPreviewPhoto(dog, width = 160) {
 function Podium({ top3, metric }) {
   if (!top3.length) return null;
   const order = [top3[1], top3[0], top3[2]]; // 2-1-3 Reihenfolge
-  const heights = ["h-24", "h-32", "h-20"];
+  const heights = ["h-28", "h-36", "h-24"];
   const origIdx = [1, 0, 2];
 
   return (
-    <div className="mb-6 flex items-end justify-center gap-2 px-1 sm:gap-3 sm:px-4">
+    <div className="mb-6 flex items-end justify-center gap-2 px-1 pt-10 sm:gap-4 sm:px-4 sm:pt-12">
       {order.map((entry, i) => {
         if (!entry) return null;
         const style  = RANK_STYLE[origIdx[i]];
@@ -56,14 +56,14 @@ function Podium({ top3, metric }) {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 + 0.2 }}
-            className="flex max-w-[108px] flex-1 flex-col items-center sm:max-w-[110px]"
+            className="flex max-w-[116px] flex-1 flex-col items-center sm:max-w-[124px]"
           >
             <div
-              className={`relative flex w-full flex-col items-center rounded-t-xl border-t-2 px-2 pb-2 pt-7 text-center shadow-sm ${heights[i]} ${style.bg} ${style.border} ${
-                isFirst ? "sm:pt-10" : "sm:pt-8"
+              className={`relative flex w-full flex-col items-center rounded-t-xl border-t-2 px-2 pb-2 pt-10 text-center shadow-sm ${heights[i]} ${style.bg} ${style.border} ${
+                isFirst ? "sm:pt-12" : "sm:pt-10"
               }`}
             >
-              <div className={`absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 ${isFirst ? "h-16 w-16 sm:h-20 sm:w-20" : "h-12 w-12 sm:h-14 sm:w-14"}`}>
+              <div className={`absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 ${isFirst ? "h-[72px] w-[72px] sm:h-[88px] sm:w-[88px]" : "h-14 w-14 sm:h-16 sm:w-16"}`}>
                 <img
                   src={dogPreviewPhoto(entry.dog, isFirst ? 224 : 160)}
                   alt={dogName}
