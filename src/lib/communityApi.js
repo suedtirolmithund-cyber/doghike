@@ -19,6 +19,33 @@ async function requireCurrentUserId() {
   return userId;
 }
 
+async function assertCanRateHike(currentUserId, hikeId, hikeSource) {
+  if (normalizeHikeSource(hikeSource) === "journal") {
+    const { data, error } = await supabase
+      .from("journal_entries")
+      .select("user_id")
+      .eq("id", hikeId)
+      .maybeSingle();
+
+    if (error) throw error;
+    if (data?.user_id && String(data.user_id) === String(currentUserId)) {
+      throw new Error("Du kannst deine eigene Tagebuch-Tour nicht selbst bewerten.");
+    }
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from("public_hikes")
+    .select("user_id")
+    .eq("id", hikeId)
+    .maybeSingle();
+
+  if (error) throw error;
+  if (data?.user_id && String(data.user_id) === String(currentUserId)) {
+    throw new Error("Du kannst deine eigene Tour nicht selbst bewerten.");
+  }
+}
+
 function getStorageDescriptor(photoReference) {
   if (!photoReference) return null;
 
@@ -188,13 +215,19 @@ export async function getRatings(hikeId, hikeSource = "sheets", alternateHikeIds
 }
 
 export async function upsertRating(userId, hikeId, hikeSource = "sheets", rating) {
+  const currentUserId = await requireCurrentUserId();
+  if (String(userId) !== String(currentUserId)) {
+    throw new Error("Du kannst nur unter deinem eigenen Profil bewerten.");
+  }
+
   const normalizedHikeId = String(hikeId);
   const normalizedHikeSource = normalizeHikeSource(hikeSource);
+  await assertCanRateHike(currentUserId, normalizedHikeId, normalizedHikeSource);
 
   const { data: existingRows, error: existingError } = await supabase
     .from("ratings")
     .select("id, hike_source")
-    .eq("user_id", userId)
+    .eq("user_id", currentUserId)
     .eq("hike_id", normalizedHikeId);
   if (existingError) throw existingError;
 
@@ -207,6 +240,7 @@ export async function upsertRating(userId, hikeId, hikeSource = "sheets", rating
       .from("ratings")
       .update({ rating, hike_source: normalizedHikeSource })
       .eq("id", matchingExistingRow.id)
+      .eq("user_id", currentUserId)
       .select()
       .single();
     if (error) throw error;
@@ -215,7 +249,7 @@ export async function upsertRating(userId, hikeId, hikeSource = "sheets", rating
 
   const { data, error } = await supabase
     .from("ratings")
-    .insert({ user_id: userId, hike_id: normalizedHikeId, hike_source: normalizedHikeSource, rating })
+    .insert({ user_id: currentUserId, hike_id: normalizedHikeId, hike_source: normalizedHikeSource, rating })
     .select()
     .single();
   if (error) throw error;
