@@ -1208,11 +1208,12 @@ export default function HikeDetail() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/95"
+            className="fixed inset-0 z-[100] bg-black/95"
           >
             <button
               onClick={() => setLightboxOpen(false)}
-              className="absolute left-4 top-4 z-20 rounded-full bg-white/12 p-2 text-white/80 backdrop-blur-sm hover:bg-white/20 hover:text-white"
+              className="absolute left-4 z-30 rounded-full bg-white/12 p-2 text-white/80 backdrop-blur-sm hover:bg-white/20 hover:text-white"
+              style={{ top: "max(1rem, env(safe-area-inset-top))" }}
               aria-label="Fotoansicht schließen"
             >
               <X className="w-8 h-8" />
