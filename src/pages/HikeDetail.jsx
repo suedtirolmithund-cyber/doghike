@@ -103,6 +103,19 @@ function getRenderablePhotoKey(photo) {
   return getCanonicalGalleryPhotoKey(photo) || (typeof photo === "string" ? photo.trim() : "");
 }
 
+function formatUpdatedAtLabel(value) {
+  if (!value) return null;
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return null;
+
+  return new Intl.DateTimeFormat("de-DE", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(parsed);
+}
+
 function mapWaterAvailabilityToJournalValue(value) {
   if (value === "none" || value === 0 || value === "0") return 0;
   if (value === "little" || value === 1 || value === "1") return 1;
@@ -425,6 +438,7 @@ export default function HikeDetail() {
     publicSubmitterProfile?.full_name ||
     (hike?._user_id ? "ein DogTrails-Mitglied" : null);
   const countryLabel = getCountryLabel(hike?.country);
+  const updatedAtLabel = formatUpdatedAtLabel(hike?.updated_at || hike?.created_at);
   const seasonValues = normalizeSeasonValues(hike?.seasons, hike?.season);
   const detailStatItems = useMemo(() => {
     const items = [];
@@ -1081,6 +1095,11 @@ export default function HikeDetail() {
                     </button>
                   ))}
                 </div>
+                {updatedAtLabel && (
+                  <p className="mt-3 text-xs text-slate-400">
+                    Zuletzt aktualisiert: {updatedAtLabel}
+                  </p>
+                )}
               </motion.div>
             )}
 
