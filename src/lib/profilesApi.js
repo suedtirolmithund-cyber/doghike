@@ -38,6 +38,18 @@ function sanitizeDogPayload(dogData = {}) {
   };
 }
 
+async function requireCurrentUserId() {
+  const { data, error } = await supabase.auth.getUser();
+  if (error) throw error;
+
+  const userId = data?.user?.id;
+  if (!userId) {
+    throw new Error("Du musst eingeloggt sein.");
+  }
+
+  return userId;
+}
+
 // ── File upload ──────────────────────────────────────────────
 export async function uploadFile(bucket, userId, file) {
   validateImageUpload(file);
@@ -168,6 +180,7 @@ export async function createDog(userId, dogData) {
 }
 
 export async function updateDog(dogId, dogData) {
+  const currentUserId = await requireCurrentUserId();
   // Strip system fields that must not appear in an UPDATE payload
   const { id, user_id, created_at, updated_at, ...safeData } = dogData;
   const payload = sanitizeDogPayload(safeData);
@@ -176,6 +189,7 @@ export async function updateDog(dogId, dogData) {
     .from("dogs")
     .update(payload)
     .eq("id", dogId)
+    .eq("user_id", currentUserId)
     .select()
     .single();
 
@@ -184,18 +198,24 @@ export async function updateDog(dogId, dogData) {
 }
 
 export async function deleteDog(dogId) {
+  const currentUserId = await requireCurrentUserId();
   const { data: existingDog, error: fetchError } = await supabase
     .from("dogs")
     .select("photo_url")
     .eq("id", dogId)
+    .eq("user_id", currentUserId)
     .single();
 
   if (fetchError && fetchError.code !== "PGRST116") throw fetchError;
+  if (!existingDog) {
+    throw new Error("Hund nicht gefunden oder keine Berechtigung.");
+  }
 
   const { error } = await supabase
     .from("dogs")
     .delete()
-    .eq("id", dogId);
+    .eq("id", dogId)
+    .eq("user_id", currentUserId);
   if (error) throw error;
 
   if (existingDog?.photo_url) {
