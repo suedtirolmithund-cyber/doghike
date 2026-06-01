@@ -26,6 +26,7 @@ import {
   getJournalEntry,
   getSignedJournalUrls,
   uploadJournalFile,
+  uploadJournalGpx,
   deleteJournalFiles,
   getMissingFriendsJournalFields,
   getMissingPrivateJournalFields,
@@ -1231,7 +1232,7 @@ export default function AddJournalEntry() {
     }
     setGpxUploading(true);
     try {
-      const url = await uploadJournalFile(user.id, file);
+      const url = await uploadJournalGpx(user.id, file);
       if (form.gpx_url) {
         if (uploadedGpxRef.current.includes(form.gpx_url)) {
           await deleteJournalFiles([form.gpx_url]);

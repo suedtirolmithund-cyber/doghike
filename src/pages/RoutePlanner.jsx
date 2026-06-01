@@ -20,7 +20,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import GPSTracker from "@/components/routes/GPSTracker";
 import GPXUploader from "@/components/routes/GPXUploader";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
-import { deleteJournalFiles, uploadJournalFile } from "@/lib/journalApi";
+import { deleteJournalFiles, uploadJournalGpx } from "@/lib/journalApi";
 import { formatDurationHours } from "@/lib/duration";
 import { toast } from "sonner";
 
@@ -674,7 +674,7 @@ export default function RoutePlanner() {
 
     try {
       if (activeTab === "gpx" && routeGeometry.rawFile) {
-        uploadedGpxUrl = await uploadJournalFile(user.id, routeGeometry.rawFile);
+        uploadedGpxUrl = await uploadJournalGpx(user.id, routeGeometry.rawFile);
       }
 
       await createRouteMutation.mutateAsync({

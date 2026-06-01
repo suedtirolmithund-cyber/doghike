@@ -7,6 +7,12 @@ const IMAGE_OPTIMIZATION_QUALITY_STEPS = [0.94, 0.9, 0.86, 0.82, 0.78, 0.74];
 const IMAGE_OPTIMIZATION_SCALE_STEPS = [1, 0.96, 0.9, 0.84, 0.78];
 const HEIC_EXTENSIONS = new Set(["heic", "heif"]);
 
+function createInvalidImageTypeError() {
+  const error = new Error("Bitte wähle ein Bild im JPG-, PNG-, WEBP- oder HEIC-Format.");
+  error.code = "INVALID_IMAGE_TYPE";
+  return error;
+}
+
 function createImageTooLargeError(limitMb) {
   const error = new Error(
     `Das Foto ist zu groß. Bitte wähle ein Bild unter ${limitMb} MB.`
@@ -16,7 +22,9 @@ function createImageTooLargeError(limitMb) {
 }
 
 export function validateImageUpload(file) {
-  if (!file || !isAcceptedImageFile(file)) return;
+  if (!file || !isAcceptedImageFile(file)) {
+    throw createInvalidImageTypeError();
+  }
 
   if (file.size > MAX_IMAGE_SOURCE_BYTES) {
     throw createImageTooLargeError(MAX_IMAGE_SOURCE_MB);
@@ -192,7 +200,7 @@ export function getImageUploadErrorMessage(
   error,
   fallback = "Das Foto konnte gerade nicht hochgeladen werden. Bitte versuche es noch einmal."
 ) {
-  if (error?.code === "IMAGE_TOO_LARGE") {
+  if (error?.code === "IMAGE_TOO_LARGE" || error?.code === "INVALID_IMAGE_TYPE") {
     return error.message;
   }
 

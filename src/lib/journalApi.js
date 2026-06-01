@@ -362,8 +362,7 @@ export async function deleteJournalFiles(fileReferences = []) {
   }
 }
 
-// Upload photo or GPX to "journal" bucket
-export async function uploadJournalFile(userId, file) {
+export async function uploadJournalImage(userId, file) {
   validateImageUpload(file);
   const preparedFile = await optimizeImageForUpload(file);
   const path = `${userId}/${Date.now()}_${preparedFile.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
@@ -372,4 +371,18 @@ export async function uploadJournalFile(userId, file) {
     .upload(path, preparedFile, { upsert: true, contentType: preparedFile.type });
   if (error) throw error;
   return data.path;
+}
+
+export async function uploadJournalGpx(userId, file) {
+  const path = `${userId}/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+  const { data, error } = await supabase.storage
+    .from("journal")
+    .upload(path, file, { upsert: true, contentType: file.type || "application/gpx+xml" });
+  if (error) throw error;
+  return data.path;
+}
+
+// Backward-compatible image upload helper for existing image callers.
+export async function uploadJournalFile(userId, file) {
+  return uploadJournalImage(userId, file);
 }
