@@ -74,9 +74,11 @@ create policy "Eigenes Profil anlegen"
   on public.profiles for insert
   with check (auth.uid() = user_id);
 
+drop policy if exists "Eigenes Profil bearbeiten" on public.profiles;
 create policy "Eigenes Profil bearbeiten"
   on public.profiles for update
-  using (auth.uid() = user_id);
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
 
 -- DOGS
 create table if not exists public.dogs (
@@ -277,10 +279,34 @@ begin
 end;
 $$;
 
+create or replace function public.prevent_profile_role_self_update()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if auth.role() = 'service_role' or public.is_admin() then
+    return new;
+  end if;
+
+  if new.role is distinct from old.role then
+    raise exception 'Profile role cannot be updated directly';
+  end if;
+
+  return new;
+end;
+$$;
+
 drop trigger if exists protect_profile_billing_fields on public.profiles;
 create trigger protect_profile_billing_fields
   before update on public.profiles
   for each row execute function public.prevent_profile_billing_self_update();
+
+drop trigger if exists protect_profile_role_field on public.profiles;
+create trigger protect_profile_role_field
+  before update on public.profiles
+  for each row execute function public.prevent_profile_role_self_update();
 
 create policy "Eigene Einträge lesen"
   on public.journal_entries for select
