@@ -18,10 +18,10 @@ configureLeafletDefaultIcon();
 const myLocationIcon = L.divIcon({
   html: `<div style="
     width: 20px; height: 20px;
-    background: #2563eb;
+    background: #A8003C;
     border: 3px solid white;
     border-radius: 50%;
-    box-shadow: 0 0 0 4px rgba(37,99,235,0.3), 0 2px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 0 0 4px rgba(249,192,48,0.36), 0 2px 8px rgba(124,48,32,0.26);
   "></div>`,
   className: "",
   iconSize: [20, 20],
@@ -791,7 +791,7 @@ export default function GPSTracker({ onSave }) {
             <Polyline
               key={idx}
               positions={seg.positions}
-              color={seg.dashed ? "#94a3b8" : "#1e293b"}
+              color={seg.dashed ? "#C07820" : "#A8003C"}
               weight={5}
               opacity={seg.dashed ? 0.55 : 0.85}
               dashArray={seg.dashed ? "8 8" : undefined}
@@ -916,8 +916,8 @@ export default function GPSTracker({ onSave }) {
             <AreaChart data={liveElevationProfile} margin={{ top: 2, right: 4, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="eleGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#b88c73" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#b88c73" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#F07030" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#F9C030" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <XAxis dataKey="dist" tick={{ fontSize: 9 }} tickFormatter={(v) => `${v}km`} />
@@ -927,7 +927,7 @@ export default function GPSTracker({ onSave }) {
                 labelFormatter={(v) => `${v}km`}
                 contentStyle={{ fontSize: 11 }}
               />
-              <Area type="monotone" dataKey="ele" stroke="#b88c73" strokeWidth={2} fill="url(#eleGrad)" dot={false} />
+              <Area type="monotone" dataKey="ele" stroke="#F07030" strokeWidth={2} fill="url(#eleGrad)" dot={false} />
             </AreaChart>
           </ResponsiveContainer>
         </div>

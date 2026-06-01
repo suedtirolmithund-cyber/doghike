@@ -22,7 +22,7 @@ function RouteDrawerMap({ waypoints, setWaypoints, routeCoordinates }) {
   return (
     <>
       {routeCoordinates.length > 1 && (
-        <Polyline positions={routeCoordinates} color="#1e293b" weight={4} />
+        <Polyline positions={routeCoordinates} color="#A8003C" weight={4} />
       )}
       {waypoints.map((point, idx) => (
         <Marker key={idx} position={point} />

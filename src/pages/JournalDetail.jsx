@@ -471,7 +471,7 @@ export default function JournalDetail() {
                 >
                   <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png" />
                   <Marker position={[entry.latitude, entry.longitude]} />
-                  <Circle center={[entry.latitude, entry.longitude]} radius={300} color="#16a34a" fillOpacity={0.1} />
+                  <Circle center={[entry.latitude, entry.longitude]} radius={300} color="#A8003C" fillOpacity={0.1} />
                 </SafeMapContainer>
               </div>
             </div>

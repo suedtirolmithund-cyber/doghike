@@ -98,7 +98,7 @@ export default function HikeCard({
         state={{ hike }}
       >
         <div className="group overflow-hidden rounded-[22px] border border-brand-100/80 bg-white/78 shadow-[0_12px_28px_rgba(168,0,60,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(240,112,48,0.12)]">
-          <div className={`relative overflow-hidden bg-gradient-to-br from-[#d7c0ad] via-[#c8b49f] to-[#8fa19a] ${imageHeightClass}`}>
+          <div className={`relative overflow-hidden bg-gradient-to-br from-[#FDF0E8] via-[#F9C030]/40 to-[#D4547A]/35 ${imageHeightClass}`}>
             {resolvedCoverPhoto ? (
               <img
                 src={resolvedCoverPhoto}

@@ -21,7 +21,7 @@ configureLeafletDefaultIcon();
 const createWaypointIcon = (index, isEditing) => {
   return L.divIcon({
     html: `<div style="
-      background: ${isEditing ? '#ef4444' : '#1e293b'};
+      background: ${isEditing ? '#F07030' : '#A8003C'};
       color: white;
       width: 28px;
       height: 28px;
@@ -127,7 +127,7 @@ function RouteDrawerMap({ waypoints, setWaypoints, routeCoordinates, isEditing, 
     <>
       {searchCenter && <MapCenterController center={searchCenter} />}
       {routeCoordinates.length > 1 && (
-        <Polyline positions={routeCoordinates} color="#ef4444" weight={4} opacity={0.8} />
+        <Polyline positions={routeCoordinates} color="#A8003C" weight={4} opacity={0.8} />
       )}
       {waypoints.map((point, idx) => (
         <DraggableMarker

@@ -418,7 +418,7 @@ export default function RouteDetail() {
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       attribution='&copy; OpenStreetMap'
                     />
-                    <Polyline positions={route.waypoints} color="#1e293b" weight={4} />
+                    <Polyline positions={route.waypoints} color="#A8003C" weight={4} />
                     <Marker position={route.waypoints[0]} />
                     {route.waypoints.length > 1 && (
                       <Marker position={route.waypoints[route.waypoints.length - 1]} />

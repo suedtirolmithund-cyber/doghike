@@ -49,11 +49,11 @@ const NOTIFICATION_META = {
   },
   friend_entry: {
     icon: BookOpen,
-    color: "text-slate-600 bg-brand-50/70 border-brand-100",
+    color: "text-[#7C3020] bg-[#FDF0E8] border-[#F9C030]/50",
   },
   premium_hike: {
     icon: Mountain,
-    color: "text-amber-700 bg-amber-50 border-amber-200",
+    color: "text-[#7C3020] bg-[#F9C030]/25 border-[#F9C030]",
   },
   free_hike: {
     icon: Mountain,
@@ -158,8 +158,8 @@ export default function Notifications() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-50 via-white to-brand-50/20 px-4">
         <div className="doghike-glass-card p-8 text-center">
-          <Bell className="mx-auto mb-3 h-12 w-12 text-slate-300" />
-          <p className="mb-4 font-medium text-slate-600">Bitte anmelden</p>
+          <Bell className="mx-auto mb-3 h-12 w-12 text-[#C07820]" />
+          <p className="mb-4 font-medium text-[#7C3020]">Bitte anmelden</p>
           <Link to={createPageUrl("Login")} className="text-sm text-brand-400 underline">
             Zur Anmeldung
           </Link>
@@ -217,8 +217,8 @@ export default function Notifications() {
           <div className="doghike-glass-card mb-5 flex items-center gap-3 p-4">
             <CheckCircle2 className="h-5 w-5 shrink-0 text-brand-500" />
             <div className="flex-1">
-              <p className="text-sm font-medium text-slate-700">Web-Push ist aktiv</p>
-              <p className="text-xs text-slate-500">
+              <p className="text-sm font-medium text-[#7C3020]">Web-Push ist aktiv</p>
+              <p className="text-xs text-[#C07820]">
                 Freundschaftsanfragen, Bestätigungen und neue Premium-Touren können jetzt auch bei geschlossener App ankommen.
               </p>
             </div>
@@ -236,8 +236,8 @@ export default function Notifications() {
 
         {webPushSupported() && hasWebPushConfig() && permission === "denied" && (
           <div className="doghike-glass-card mb-5 flex items-center gap-3 p-4">
-            <BellOff className="h-5 w-5 shrink-0 text-slate-400" />
-            <p className="text-xs text-slate-500">
+            <BellOff className="h-5 w-5 shrink-0 text-[#C07820]" />
+            <p className="text-xs text-[#C07820]">
               Benachrichtigungen sind blockiert. Erlaube sie in den Browser-Einstellungen, wenn du Hinweise zu Anfragen und Freigaben erhalten möchtest.
             </p>
           </div>
@@ -245,13 +245,13 @@ export default function Notifications() {
 
         {isLoading ? (
           <div className="flex justify-center py-20">
-            <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
+            <Loader2 className="h-8 w-8 animate-spin text-[#C07820]" />
           </div>
         ) : isError ? (
           <div className="doghike-glass-card p-5 text-center">
-            <BellOff className="mx-auto mb-3 h-10 w-10 text-slate-300" />
+            <BellOff className="mx-auto mb-3 h-10 w-10 text-[#C07820]" />
             <h3 className="doghike-card-title mb-1">Benachrichtigungen laden gerade nicht</h3>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-[#C07820]">
               Versuch es kurz nochmal. Deine Hinweise bleiben erhalten und kommen später wieder rein.
             </p>
           </div>
@@ -259,7 +259,7 @@ export default function Notifications() {
           <div className="doghike-empty-state">
             <Bell className="doghike-empty-icon" />
             <h3 className="doghike-empty-title mb-1">Alles auf dem neuesten Stand</h3>
-            <p className="text-sm text-slate-400">Sobald etwas Neues passiert, erscheint es hier.</p>
+            <p className="text-sm text-[#C07820]">Sobald etwas Neues passiert, erscheint es hier.</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -279,11 +279,11 @@ export default function Notifications() {
                       <Icon className="h-5 w-5" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium leading-snug text-slate-900">{notification.title}</p>
+                      <p className="text-sm font-medium leading-snug text-[#7C3020]">{notification.title}</p>
                       {notification.body && (
-                        <p className="mt-1 text-xs leading-relaxed text-slate-500">{notification.body}</p>
+                        <p className="mt-1 text-xs leading-relaxed text-[#C07820]">{notification.body}</p>
                       )}
-                      <p className="mt-1 text-xs text-slate-400">
+                      <p className="mt-1 text-xs text-[#C07820]/80">
                         {format(new Date(notification.time), "d. MMM, HH:mm", { locale: de })}
                       </p>
                     </div>

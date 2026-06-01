@@ -7,7 +7,7 @@ import SafeMapContainer from "@/components/map/SafeMapContainer";
 
 // Custom marker icon for route points
 const createPointIcon = (isStart = false) => {
-  const color = isStart ? "#22c55e" : "#3b82f6";
+  const color = isStart ? "#F9C030" : "#A8003C";
   const html = `
     <div style="
       background: ${color};
@@ -94,7 +94,7 @@ export default function RouteEditor({ coordinates = [], startPoint = null, onCha
             <>
               <Polyline
                 positions={coordinates}
-                color="#ef4444"
+                color="#A8003C"
                 weight={4}
                 opacity={0.8}
               />

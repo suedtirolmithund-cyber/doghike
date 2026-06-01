@@ -199,7 +199,7 @@ export default function Dogs() {
                     transition={{ delay: index * 0.06 }}
                     className="doghike-glass-card-hover overflow-hidden"
                   >
-                    <div className="relative h-48 bg-gradient-to-br from-brand-50 via-white to-stone-100">
+                    <div className="relative h-48 bg-gradient-to-br from-[#FDF0E8] via-white to-[#F9C030]/30">
                       <img
                         src={dog.photo_url || getAvatarDataUrl(dog.name)}
                         alt={dog.name}

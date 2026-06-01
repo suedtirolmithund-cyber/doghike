@@ -25,7 +25,7 @@ export default function RoutePreviewMap({ coordinates }) {
             url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
           />
-          <Polyline positions={coordinates} color="#1e293b" weight={4} />
+          <Polyline positions={coordinates} color="#A8003C" weight={4} />
           <Marker position={startPoint} title="Start" />
           <Marker position={endPoint} title="Ende" />
         </SafeMapContainer>

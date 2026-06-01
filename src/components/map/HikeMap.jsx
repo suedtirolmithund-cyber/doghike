@@ -21,11 +21,11 @@ function escapeHtml(str) {
 }
 
 const seasonPalette = {
-  spring: { color: "#ec9cf4", background: "rgba(236,156,244,0.18)", text: "#292524" },
-  summer: { color: "#d64545", background: "rgba(214,69,69,0.14)", text: "#292524" },
-  autumn: { color: "#f19a4b", background: "rgba(241,154,75,0.18)", text: "#292524" },
-  winter: { color: "#5b83f0", background: "rgba(91,131,240,0.16)", text: "#292524" },
-  all_year: { color: "#38a062", background: "rgba(56,160,98,0.16)", text: "#292524" },
+  spring: { color: "#D4547A", background: "rgba(212,84,122,0.16)", text: "#7C3020" },
+  summer: { color: "#F07030", background: "rgba(240,112,48,0.16)", text: "#7C3020" },
+  autumn: { color: "#C07820", background: "rgba(192,120,32,0.18)", text: "#7C3020" },
+  winter: { color: "#A8003C", background: "rgba(168,0,60,0.12)", text: "#7C3020" },
+  all_year: { color: "#F9C030", background: "rgba(249,192,48,0.24)", text: "#7C3020" },
 };
 
 const rawSeasonConfig = {
@@ -51,7 +51,7 @@ const legacyAvailabilityMap = {
   YearRound: "all_year",
 };
 
-const DEFAULT_COLOR = "#38a062";
+const DEFAULT_COLOR = "#F9C030";
 
 function getCountryLabel(country) {
   if (country === "italy") return "Italien";
@@ -89,8 +89,8 @@ function createGroupedIcon({ color, photoUrl, count }) {
           border-radius:50%;
           overflow:hidden;
           border:3px solid white;
-          box-shadow:0 2px 10px rgba(0,0,0,0.3);
-          background:#e7e5e4;
+          box-shadow:0 2px 10px rgba(124,48,32,0.26);
+          background:#FDF0E8;
         ">
           <img
             src="${photoUrl}"
@@ -141,7 +141,7 @@ function createGroupedIcon({ color, photoUrl, count }) {
         align-items:center;
         justify-content:center;
         font-size:20px;
-        box-shadow:0 2px 8px rgba(0,0,0,0.25);
+        box-shadow:0 2px 8px rgba(124,48,32,0.22);
         border:3px solid white;
       ">🐾</div>
       ${count > 1 ? `
@@ -218,7 +218,7 @@ function buildHikePopupItem(hike, isGrouped) {
   const imageHtml = popupPhoto
     ? `<img src="${escapeHtml(popupPhoto)}" alt="${escapeHtml(hike.trail_name)}"
          class="hike-popup-image" onerror="this.onerror=null;this.src='${escapeHtml(HIKE_PLACEHOLDER_IMAGE)}';" />`
-    : `<div style="width:60px;height:60px;border-radius:8px;background:#f5f5f4;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${TOUR_ICONS.dog}</div>`;
+    : `<div style="width:60px;height:60px;border-radius:8px;background:#FDF0E8;color:#A8003C;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${TOUR_ICONS.dog}</div>`;
 
   const stats = [
     hike.distance_km ? `${TOUR_ICONS.distance} ${hike.distance_km} km` : null,
@@ -364,7 +364,7 @@ export default function HikeMap({
       </SafeMapContainer>
 
       {showLegend && (
-        <div className="absolute bottom-3 left-3 z-[1000] flex max-w-[calc(100%-1.5rem)] flex-col gap-1 rounded-xl border border-stone-200/60 bg-white/90 px-3 py-2 text-xs text-stone-700 shadow backdrop-blur-sm">
+        <div className="absolute bottom-3 left-3 z-[1000] flex max-w-[calc(100%-1.5rem)] flex-col gap-1 rounded-xl border border-[#F9C030]/50 bg-white/92 px-3 py-2 text-xs text-[#7C3020] shadow backdrop-blur-sm">
           {Object.entries(seasonConfig).map(([key, { color, label }]) => (
             <div key={key} className="flex items-center gap-2 whitespace-nowrap">
               <span
@@ -375,7 +375,7 @@ export default function HikeMap({
                   borderRadius: "50%",
                   display: "inline-block",
                   border: "2px solid white",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                  boxShadow: "0 1px 3px rgba(124,48,32,0.2)",
                 }}
               />
               {label}
@@ -388,8 +388,8 @@ export default function HikeMap({
         .leaflet-popup-content-wrapper {
           border-radius: 20px;
           background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(247,239,232,0.92));
-          border: 1px solid rgba(184,140,115,0.24);
-          box-shadow: 0 18px 46px rgba(41,37,36,0.2);
+          border: 1px solid rgba(249,192,48,0.42);
+          box-shadow: 0 18px 46px rgba(124,48,32,0.18);
           overflow: hidden;
           backdrop-filter: blur(14px);
         }
@@ -399,8 +399,8 @@ export default function HikeMap({
         }
         .leaflet-popup-tip {
           background: rgba(247,239,232,0.95);
-          border: 1px solid rgba(184,140,115,0.2);
-          box-shadow: 0 8px 20px rgba(41,37,36,0.15);
+          border: 1px solid rgba(249,192,48,0.36);
+          box-shadow: 0 8px 20px rgba(124,48,32,0.14);
         }
         .hike-popup-wrap {
           min-width: 260px;
@@ -410,7 +410,7 @@ export default function HikeMap({
         .hike-popup-group-title {
           margin: 0;
           padding: 12px 12px 0;
-          color: #292524;
+          color: #7C3020;
           font-size: 13px;
           font-weight: 800;
         }
@@ -420,7 +420,7 @@ export default function HikeMap({
           text-decoration: none;
         }
         .hike-popup-card.is-grouped {
-          border-top: 1px solid rgba(214,211,209,0.82);
+          border-top: 1px solid rgba(249,192,48,0.42);
           margin-top: 10px;
         }
         .hike-popup-card.is-grouped:first-of-type {
@@ -431,7 +431,7 @@ export default function HikeMap({
           position: relative;
           height: 116px;
           overflow: hidden;
-          background: #f5f5f4;
+          background: #FDF0E8;
         }
         .hike-popup-image {
           display: block;
@@ -443,7 +443,7 @@ export default function HikeMap({
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #9f6f52;
+          color: #C07820;
           font-size: 13px;
           font-weight: 800;
           background: #FDF0E8;
@@ -457,33 +457,33 @@ export default function HikeMap({
           padding: 5px 8px;
           font-size: 11px;
           font-weight: 800;
-          box-shadow: 0 6px 14px rgba(41,37,36,0.18);
+          box-shadow: 0 6px 14px rgba(124,48,32,0.16);
           backdrop-filter: blur(10px);
         }
         .hike-popup-content {
           padding: 12px;
         }
         .hike-popup-title {
-          color: #1c1917;
+          color: #7C3020;
           font-size: 16px;
           font-weight: 800;
           line-height: 1.2;
         }
         .hike-popup-place {
           margin-top: 5px;
-          color: #78716c;
+          color: #C07820;
           font-size: 12px;
           line-height: 1.25;
         }
         .hike-popup-country {
           margin-top: 3px;
-          color: #57534e;
+          color: #C07820;
           font-size: 11px;
           line-height: 1.25;
         }
         .hike-popup-stats {
           margin-top: 10px;
-          color: #57534e;
+          color: #C07820;
           font-size: 12px;
           font-weight: 700;
           line-height: 1.4;
@@ -503,7 +503,7 @@ export default function HikeMap({
           border-radius: 50%;
           color: white;
           font-weight: bold;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+          box-shadow: 0 2px 8px rgba(124,48,32,0.24);
           border: 3px solid white;
         }
         .cluster-small { width: 40px; height: 40px; background: linear-gradient(135deg, #F9C030, #F07030); color: #7C3020; font-size: 14px; }

@@ -323,8 +323,8 @@ export default function Login() {
                 onClick={() => switchMode("register")}
                 className="flex-1 py-2.5 rounded-xl text-base font-medium transition-all"
                 style={{
-                  background: mode === "register" ? BROWN : "rgba(255,255,255,0.15)",
-                  color: "white",
+                  background: mode === "register" ? BROWN : "#FDF0E8",
+                  color: mode === "register" ? "white" : BROWN_DARK,
                   fontFamily: "Nunito, sans-serif",
                 }}
               >
@@ -334,8 +334,8 @@ export default function Login() {
                 onClick={() => switchMode("login")}
                 className="flex-1 py-2.5 rounded-xl text-base font-medium transition-all"
                 style={{
-                  background: mode === "login" ? BROWN : "rgba(255,255,255,0.15)",
-                  color: "white",
+                  background: mode === "login" ? BROWN : "#FDF0E8",
+                  color: mode === "login" ? "white" : BROWN_DARK,
                   fontFamily: "Nunito, sans-serif",
                 }}
               >
@@ -354,8 +354,8 @@ export default function Login() {
                 placeholder="E-Mail Adresse"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-14 px-4 rounded-2xl text-base outline-none border-0"
-                style={{ background: "#f0f0f0", color: "#222", fontFamily: "Nunito, sans-serif" }}
+                className="w-full h-14 px-4 rounded-2xl border border-[#F9C030]/45 text-base outline-none placeholder:text-[#C07820]"
+                style={{ background: "#FFFFFF", color: BROWN_DARK, fontFamily: "Nunito, sans-serif" }}
                 autoComplete="email"
                 required
               />
@@ -390,15 +390,15 @@ export default function Login() {
                   placeholder="Neues Passwort"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-14 px-4 pr-12 rounded-2xl text-base outline-none border-0"
-                  style={{ background: "#f0f0f0", color: "#222", fontFamily: "Nunito, sans-serif" }}
+                  className="w-full h-14 px-4 pr-12 rounded-2xl border border-[#F9C030]/45 text-base outline-none placeholder:text-[#C07820]"
+                  style={{ background: "#FFFFFF", color: BROWN_DARK, fontFamily: "Nunito, sans-serif" }}
                   autoComplete="new-password"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#C07820] hover:text-[#A8003C]"
                   tabIndex={-1}
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -409,8 +409,8 @@ export default function Login() {
                 placeholder="Neues Passwort bestätigen"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full h-14 px-4 rounded-2xl text-base outline-none border-0"
-                style={{ background: "#f0f0f0", color: "#222", fontFamily: "Nunito, sans-serif" }}
+                className="w-full h-14 px-4 rounded-2xl border border-[#F9C030]/45 text-base outline-none placeholder:text-[#C07820]"
+                style={{ background: "#FFFFFF", color: BROWN_DARK, fontFamily: "Nunito, sans-serif" }}
                 autoComplete="new-password"
                 required
               />
@@ -435,8 +435,8 @@ export default function Login() {
                   placeholder="E-Mail Adresse"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full h-14 px-4 rounded-2xl text-base outline-none border-0"
-                  style={{ background: "#f0f0f0", color: "#222", fontFamily: "Nunito, sans-serif" }}
+                  className="w-full h-14 px-4 rounded-2xl border border-[#F9C030]/45 text-base outline-none placeholder:text-[#C07820]"
+                  style={{ background: "#FFFFFF", color: BROWN_DARK, fontFamily: "Nunito, sans-serif" }}
                   autoComplete="email"
                   required
                 />
@@ -447,15 +447,15 @@ export default function Login() {
                     placeholder="Passwort"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full h-14 px-4 pr-12 rounded-2xl text-base outline-none border-0"
-                    style={{ background: "#f0f0f0", color: "#222", fontFamily: "Nunito, sans-serif" }}
+                    className="w-full h-14 px-4 pr-12 rounded-2xl border border-[#F9C030]/45 text-base outline-none placeholder:text-[#C07820]"
+                    style={{ background: "#FFFFFF", color: BROWN_DARK, fontFamily: "Nunito, sans-serif" }}
                     autoComplete={mode === "login" ? "current-password" : "new-password"}
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#C07820] hover:text-[#A8003C]"
                     tabIndex={-1}
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -476,8 +476,8 @@ export default function Login() {
                         placeholder="Passwort bestätigen"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full h-14 px-4 rounded-2xl text-base outline-none border-0"
-                        style={{ background: "#f0f0f0", color: "#222", fontFamily: "Nunito, sans-serif" }}
+                        className="w-full h-14 px-4 rounded-2xl border border-[#F9C030]/45 text-base outline-none placeholder:text-[#C07820]"
+                        style={{ background: "#FFFFFF", color: BROWN_DARK, fontFamily: "Nunito, sans-serif" }}
                         autoComplete="new-password"
                       />
                       <div className="flex items-start gap-3 px-1">

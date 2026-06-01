@@ -118,7 +118,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       {/* Hero */}
-      <div className="relative h-[520px] overflow-hidden bg-gradient-to-br from-[#d8c6b7] via-[#b9a48f] to-[#6f8583] sm:h-[560px] md:h-[507px]">
+      <div className="relative h-[520px] overflow-hidden bg-gradient-to-br from-[#FDF0E8] via-[#F9C030]/45 to-[#D4547A]/40 sm:h-[560px] md:h-[507px]">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{

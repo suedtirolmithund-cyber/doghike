@@ -415,7 +415,7 @@ function PublicHikeCard({ hike }) {
               className="h-full w-full object-cover"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-stone-100 to-stone-200 text-slate-400">
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#FDF0E8] to-[#F9C030]/35 text-[#C07820]">
               <ImageIcon className="h-6 w-6" />
             </div>
           )}

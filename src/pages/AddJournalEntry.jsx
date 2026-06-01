@@ -368,7 +368,7 @@ function BonePicker({ label, value, onChange }) {
 
 // Karten-Marker Icon
 const markerIcon = L.divIcon({
-  html: `<div style="background:#16a34a;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.25);border:3px solid white;">P</div>`,
+  html: `<div style="background:#A8003C;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;box-shadow:0 2px 8px rgba(124,48,32,0.25);border:3px solid white;">P</div>`,
   className: "",
   iconSize: [28, 28],
   iconAnchor: [14, 28],

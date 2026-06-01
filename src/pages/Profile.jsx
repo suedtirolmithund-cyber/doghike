@@ -556,7 +556,7 @@ export default function Profile() {
                 variant="outline"
                 size="sm"
                 onClick={logout}
-                className="min-h-10 shrink-0 rounded-xl border-brand-100 bg-white/70 px-3 py-2 text-brand-600 shadow-sm hover:border-brand-100 hover:bg-brand-50 hover:text-brand-400"
+                className="min-h-10 shrink-0 rounded-xl border-[#A8003C] bg-[#A8003C] px-3 py-2 text-white shadow-[0_10px_22px_rgba(168,0,60,0.18)] hover:border-[#7C3020] hover:bg-[#7C3020] hover:text-white"
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Abmelden</span>
@@ -597,7 +597,7 @@ export default function Profile() {
                 variant="outline"
                 size="sm"
                 onClick={logout}
-                className={`${mobileProfileActionClass} border-brand-100 bg-white/70 text-brand-600 shadow-sm hover:border-brand-100 hover:bg-brand-50 hover:text-brand-400`}
+                className={`${mobileProfileActionClass} border-[#A8003C] bg-[#A8003C] text-white shadow-[0_10px_22px_rgba(168,0,60,0.18)] hover:border-[#7C3020] hover:bg-[#7C3020] hover:text-white`}
               >
                 <LogOut className="h-4 w-4" />
                 <span>Abmelden</span>
@@ -682,7 +682,7 @@ export default function Profile() {
                       transition={{ delay: index * 0.05 }}
                       className="doghike-glass-card-hover overflow-hidden"
                     >
-                      <div className="relative h-40 bg-gradient-to-br from-brand-50 via-white to-stone-100 md:h-44">
+                      <div className="relative h-40 bg-gradient-to-br from-[#FDF0E8] via-white to-[#F9C030]/30 md:h-44">
                         <img
                           src={getDisplayImageUrl(dog.photo_url, { width: 720, quality: 76 }) || getAvatarDataUrl(dog.name)}
                           alt={dog.name}
@@ -764,7 +764,7 @@ export default function Profile() {
               </div>
             ) : (
               <div className="doghike-empty-state">
-                <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full border border-white/80 bg-gradient-to-br from-brand-50 via-white to-stone-100 text-5xl shadow-[0_16px_34px_rgba(120,90,66,0.14)]">
+                <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full border border-white/80 bg-gradient-to-br from-[#FDF0E8] via-white to-[#F9C030]/30 text-5xl shadow-[0_16px_34px_rgba(120,90,66,0.14)]">
                   🐕
                 </div>
                 <h3 className="doghike-empty-title">Wer läuft mit dir?</h3>

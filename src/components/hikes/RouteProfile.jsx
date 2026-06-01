@@ -145,20 +145,20 @@ export default function RouteProfile({ hike }) {
                   <stop offset="95%" stopColor="#F9C030" stopOpacity={0.08} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e7e5e4" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#F9C030" strokeOpacity={0.28} />
               <XAxis
                 dataKey="distanceLabel"
                 label={{ value: "Distanz (km)", position: "insideBottom", offset: -12 }}
-                stroke="#78716c"
+                stroke="#C07820"
                 tick={{ fontSize: 11 }}
               />
               <YAxis
                 label={{ value: "Höhe (m)", angle: -90, position: "insideLeft", offset: 10 }}
-                stroke="#78716c"
+                stroke="#C07820"
                 tick={{ fontSize: 11 }}
               />
               <Tooltip
-                contentStyle={{ backgroundColor: "rgba(255,255,255,0.95)", border: "1px solid #e7e5e4", borderRadius: "8px", fontSize: "12px" }}
+                contentStyle={{ backgroundColor: "rgba(255,255,255,0.95)", border: "1px solid #F9C030", borderRadius: "8px", fontSize: "12px" }}
                 labelFormatter={(v) => `${v} km`}
                 formatter={(v) => [`${Math.round(v)} m`, "Höhe"]}
               />

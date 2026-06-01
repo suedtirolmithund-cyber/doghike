@@ -103,24 +103,24 @@ export default function RouteElevationProfile({ coordinates, distance }) {
             <AreaChart data={data}>
               <defs>
                 <linearGradient id="elevGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#f97316" stopOpacity={0.8}/>
-                  <stop offset="95%" stopColor="#f97316" stopOpacity={0.1}/>
+                  <stop offset="5%" stopColor="#F07030" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#F9C030" stopOpacity={0.12}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e7e5e4" />
-              <XAxis dataKey="distanceLabel" stroke="#78716c" tick={{ fontSize: 10 }} interval={Math.ceil(data.length / 5)} />
-              <YAxis stroke="#78716c" tick={{ fontSize: 10 }} width={35} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#F9C030" strokeOpacity={0.28} />
+              <XAxis dataKey="distanceLabel" stroke="#C07820" tick={{ fontSize: 10 }} interval={Math.ceil(data.length / 5)} />
+              <YAxis stroke="#C07820" tick={{ fontSize: 10 }} width={35} />
               <Tooltip 
                 contentStyle={{ 
                   backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-                  border: '1px solid #e7e5e4',
+                  border: '1px solid #F9C030',
                   borderRadius: '8px',
                   fontSize: '12px'
                 }}
                 labelFormatter={(value) => `${value} km`}
                 formatter={(value) => [`${value} m`, 'Höhe']}
               />
-              <Area type="monotone" dataKey="elevation" stroke="#f97316" strokeWidth={2} fill="url(#elevGradient)" />
+              <Area type="monotone" dataKey="elevation" stroke="#F07030" strokeWidth={2} fill="url(#elevGradient)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>

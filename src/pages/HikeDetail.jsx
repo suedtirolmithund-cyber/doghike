@@ -519,27 +519,27 @@ export default function HikeDetail() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20">
         {/* Hero skeleton */}
-        <div className="h-64 md:h-80 lg:h-96 bg-slate-200 animate-pulse" />
+        <div className="h-64 animate-pulse bg-gradient-to-br from-[#FDF0E8] via-[#F9C030]/30 to-[#D4547A]/25 md:h-80 lg:h-96" />
         <div className="mx-auto max-w-4xl px-4 py-6 space-y-6">
           {/* Title */}
           <div className="space-y-2">
-            <div className="h-7 w-2/3 rounded-lg bg-slate-200 animate-pulse" />
-            <div className="h-4 w-1/3 rounded-lg bg-slate-100 animate-pulse" />
+            <div className="h-7 w-2/3 animate-pulse rounded-lg bg-[#F9C030]/28" />
+            <div className="h-4 w-1/3 animate-pulse rounded-lg bg-[#FDF0E8]" />
           </div>
           {/* Stats row */}
           <div className="grid grid-cols-3 gap-3">
             {[1,2,3].map((i) => (
-              <div key={i} className="h-16 rounded-xl bg-slate-100 animate-pulse" />
+              <div key={i} className="h-16 animate-pulse rounded-xl bg-[#FDF0E8]" />
             ))}
           </div>
           {/* Description */}
           <div className="space-y-2">
-            <div className="h-4 w-full rounded bg-slate-100 animate-pulse" />
-            <div className="h-4 w-5/6 rounded bg-slate-100 animate-pulse" />
-            <div className="h-4 w-4/6 rounded bg-slate-100 animate-pulse" />
+            <div className="h-4 w-full animate-pulse rounded bg-[#FDF0E8]" />
+            <div className="h-4 w-5/6 animate-pulse rounded bg-[#FDF0E8]" />
+            <div className="h-4 w-4/6 animate-pulse rounded bg-[#FDF0E8]" />
           </div>
           {/* Map placeholder */}
-          <div className="h-48 rounded-xl bg-slate-200 animate-pulse" />
+          <div className="h-48 animate-pulse rounded-xl bg-gradient-to-br from-[#FDF0E8] to-[#F9C030]/30" />
         </div>
       </div>
     );

@@ -21,6 +21,7 @@ import GPSTracker from "@/components/routes/GPSTracker";
 import GPXUploader from "@/components/routes/GPXUploader";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
 import { deleteJournalFiles, uploadJournalFile } from "@/lib/journalApi";
+import { formatDurationHours } from "@/lib/duration";
 import { toast } from "sonner";
 
 // ── Leaflet fix ───────────────────────────────────────────────
@@ -30,7 +31,7 @@ configureLeafletDefaultIcon();
 
 const waypointIcon = (label, isStart, isEnd) => L.divIcon({
   html: `<div style="
-    background: ${isStart ? '#16a34a' : isEnd ? '#dc2626' : '#1e293b'};
+    background: ${isStart ? '#F9C030' : isEnd ? '#A8003C' : '#F07030'};
     color: white; width: 28px; height: 28px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 11px; font-weight: bold; border: 3px solid white;
@@ -206,15 +207,15 @@ function ElevationChart({ profile }) {
         <AreaChart data={profile} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
           <defs>
             <linearGradient id="eleGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#c46f52" stopOpacity={0.34} />
-              <stop offset="95%" stopColor="#c46f52" stopOpacity={0.06} />
+              <stop offset="5%" stopColor="#F07030" stopOpacity={0.34} />
+              <stop offset="95%" stopColor="#F9C030" stopOpacity={0.08} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#F9C030" strokeOpacity={0.28} />
           <XAxis dataKey="dist" tickFormatter={(v) => `${v} km`} tick={{ fontSize: 9 }} />
           <YAxis domain={[minEle - 20, maxEle + 20]} tick={{ fontSize: 9 }} unit=" m" />
           <Tooltip formatter={(v) => [`${Math.round(v)} m`, "Höhe"]} labelFormatter={(v) => `${v} km`} />
-          <Area type="monotone" dataKey="ele" stroke="#c46f52" strokeWidth={2}
+          <Area type="monotone" dataKey="ele" stroke="#F07030" strokeWidth={2}
             fill="url(#eleGrad)" dot={false} />
         </AreaChart>
       </ResponsiveContainer>
@@ -588,6 +589,25 @@ function SmartRoutePlanner({ onRouteReady }) {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {route && (
+        <div className="doghike-glass-card rounded-xl p-3">
+          <div className="grid grid-cols-3 gap-2 text-center">
+            <div>
+              <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-slate-400">Distanz</p>
+              <p className="mt-1 text-sm font-bold text-slate-900">{route.distance_km} km</p>
+            </div>
+            <div>
+              <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-slate-400">Höhenmeter</p>
+              <p className="mt-1 text-sm font-bold text-slate-900">{route.elevation_gain_m ?? 0} Hm</p>
+            </div>
+            <div>
+              <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-slate-400">Geschätzt</p>
+              <p className="mt-1 text-sm font-bold text-slate-900">{formatDurationHours(route.duration_minutes) || "–"}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

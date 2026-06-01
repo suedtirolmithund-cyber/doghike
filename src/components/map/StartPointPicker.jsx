@@ -8,7 +8,7 @@ import SafeMapContainer from "@/components/map/SafeMapContainer";
 const startPointIcon = L.divIcon({
   html: `
     <div style="
-      background: #1e293b;
+      background: #A8003C;
       width: 36px;
       height: 36px;
       border-radius: 50%;
