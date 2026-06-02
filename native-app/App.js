@@ -452,6 +452,7 @@ export default function App() {
     const { error } = await action;
     if (error) {
       setAuthError(error.message || "Anmeldung fehlgeschlagen.");
+      setPassword("");
     }
 
     setAuthSubmitting(false);
