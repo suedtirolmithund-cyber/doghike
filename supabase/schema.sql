@@ -560,7 +560,7 @@ create policy "Admin Routen verwalten" on public.user_routes
 create or replace function public.can_read_shared_journal_file(object_name text)
 returns boolean
 language sql
-security definer
+security invoker
 as $$
   select exists (
     select 1
