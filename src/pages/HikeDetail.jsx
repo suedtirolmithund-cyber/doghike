@@ -228,16 +228,13 @@ export default function HikeDetail() {
 
   const { data: hike, isLoading } = useQuery({
     queryKey: ["hike", hikeSource, hikeId],
-    initialData: initialHike,
+    placeholderData: initialHike,
     queryFn: async () => {
-      const cachedHikes = queryClient.getQueryData(["allHikes"]);
-      const hikes = Array.isArray(cachedHikes) && cachedHikes.length > 0
-        ? cachedHikes
-        : await queryClient.fetchQuery({
-            queryKey: ["allHikes"],
-            queryFn: getAllHikes,
-            staleTime: 5 * 60_000,
-          });
+      const hikes = await queryClient.fetchQuery({
+        queryKey: ["allHikes"],
+        queryFn: getAllHikes,
+        staleTime: 0,
+      });
       return hikes.find((h) => {
         if ((h._source ?? "sheets") !== hikeSource) return false;
 
