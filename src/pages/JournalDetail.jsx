@@ -87,6 +87,12 @@ function PhotoGallery({ photos }) {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [isCurrentPhotoLoading, setIsCurrentPhotoLoading] = useState(true);
   const lightboxScrollerRef = useRef(null);
+  const lightboxDragRef = useRef({
+    isDragging: false,
+    pointerId: null,
+    startX: 0,
+    scrollLeft: 0,
+  });
 
   useEffect(() => {
     if (!photos?.length) return;
@@ -146,11 +152,67 @@ function PhotoGallery({ photos }) {
 
   const handleLightboxScroll = () => {
     const scroller = lightboxScrollerRef.current;
-    if (!scroller) return;
+    if (!scroller?.clientWidth) return;
     const nextIndex = Math.round(scroller.scrollLeft / scroller.clientWidth);
     if (nextIndex >= 0 && nextIndex < photos.length) {
       setCurrentPhotoIndex(nextIndex);
     }
+  };
+
+  const handleLightboxWheel = (event) => {
+    const scroller = lightboxScrollerRef.current;
+    if (!scroller || photos.length <= 1) return;
+
+    const delta =
+      Math.abs(event.deltaX) > Math.abs(event.deltaY)
+        ? event.deltaX
+        : event.deltaY;
+    if (!delta) return;
+
+    event.preventDefault();
+    scroller.scrollLeft += delta;
+  };
+
+  const handleLightboxPointerDown = (event) => {
+    if (photos.length <= 1 || event.pointerType === "touch") return;
+    const scroller = lightboxScrollerRef.current;
+    if (!scroller) return;
+
+    lightboxDragRef.current = {
+      isDragging: true,
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      scrollLeft: scroller.scrollLeft,
+    };
+    scroller.setPointerCapture?.(event.pointerId);
+  };
+
+  const handleLightboxPointerMove = (event) => {
+    const drag = lightboxDragRef.current;
+    if (!drag.isDragging || drag.pointerId !== event.pointerId) return;
+
+    const scroller = lightboxScrollerRef.current;
+    if (!scroller) return;
+
+    event.preventDefault();
+    scroller.scrollLeft = drag.scrollLeft - (event.clientX - drag.startX);
+  };
+
+  const stopLightboxDrag = (event) => {
+    const drag = lightboxDragRef.current;
+    if (!drag.isDragging || drag.pointerId !== event.pointerId) return;
+
+    const scroller = lightboxScrollerRef.current;
+    if (scroller?.hasPointerCapture?.(event.pointerId)) {
+      scroller.releasePointerCapture(event.pointerId);
+    }
+
+    lightboxDragRef.current = {
+      isDragging: false,
+      pointerId: null,
+      startX: 0,
+      scrollLeft: 0,
+    };
   };
 
   return (
@@ -282,8 +344,13 @@ function PhotoGallery({ photos }) {
 
             <div
               ref={lightboxScrollerRef}
-              className="flex h-full snap-x snap-mandatory overflow-x-auto scroll-smooth"
+              className="flex h-full cursor-grab snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth touch-pan-x active:cursor-grabbing"
               onScroll={handleLightboxScroll}
+              onWheel={handleLightboxWheel}
+              onPointerDown={handleLightboxPointerDown}
+              onPointerMove={handleLightboxPointerMove}
+              onPointerUp={stopLightboxDrag}
+              onPointerCancel={stopLightboxDrag}
             >
               {photos.map((photo, index) => (
                 <div
@@ -293,6 +360,7 @@ function PhotoGallery({ photos }) {
                   <img
                     src={photo}
                     alt={`Foto ${index + 1}`}
+                    draggable={false}
                     className="max-h-full max-w-full object-contain"
                   />
                 </div>

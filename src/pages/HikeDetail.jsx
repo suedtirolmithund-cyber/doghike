@@ -164,6 +164,12 @@ export default function HikeDetail() {
   const [failedPhotoKeys, setFailedPhotoKeys] = useState(() => new Set());
   const [copied, setCopied] = useState(false);
   const lightboxScrollerRef = useRef(null);
+  const lightboxDragRef = useRef({
+    isDragging: false,
+    pointerId: null,
+    startX: 0,
+    scrollLeft: 0,
+  });
   const normalizedHikeId = hikeId ? String(hikeId) : null;
   const prefetchedHike = location.state?.hike;
   const initialHike = useMemo(() => {
@@ -642,6 +648,58 @@ export default function HikeDetail() {
     if (nextIndex >= 0 && nextIndex < photos.length) {
       setCurrentPhotoIndex((currentIndex) => (currentIndex === nextIndex ? currentIndex : nextIndex));
     }
+  };
+  const handleLightboxWheel = (event) => {
+    const scroller = lightboxScrollerRef.current;
+    if (!scroller || photos.length <= 1) return;
+
+    const delta =
+      Math.abs(event.deltaX) > Math.abs(event.deltaY)
+        ? event.deltaX
+        : event.deltaY;
+    if (!delta) return;
+
+    event.preventDefault();
+    scroller.scrollLeft += delta;
+  };
+  const handleLightboxPointerDown = (event) => {
+    if (photos.length <= 1 || event.pointerType === "touch") return;
+    const scroller = lightboxScrollerRef.current;
+    if (!scroller) return;
+
+    lightboxDragRef.current = {
+      isDragging: true,
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      scrollLeft: scroller.scrollLeft,
+    };
+    scroller.setPointerCapture?.(event.pointerId);
+  };
+  const handleLightboxPointerMove = (event) => {
+    const drag = lightboxDragRef.current;
+    if (!drag.isDragging || drag.pointerId !== event.pointerId) return;
+
+    const scroller = lightboxScrollerRef.current;
+    if (!scroller) return;
+
+    event.preventDefault();
+    scroller.scrollLeft = drag.scrollLeft - (event.clientX - drag.startX);
+  };
+  const stopLightboxDrag = (event) => {
+    const drag = lightboxDragRef.current;
+    if (!drag.isDragging || drag.pointerId !== event.pointerId) return;
+
+    const scroller = lightboxScrollerRef.current;
+    if (scroller?.hasPointerCapture?.(event.pointerId)) {
+      scroller.releasePointerCapture(event.pointerId);
+    }
+
+    lightboxDragRef.current = {
+      isDragging: false,
+      pointerId: null,
+      startX: 0,
+      scrollLeft: 0,
+    };
   };
   const canComment = hike?._source === "sheets" || hike?.visibility === "public";
   const canDownloadPdf = (hike?._source === "sheets" || isOwnJournalHike || hike?.visibility === "public")
@@ -1256,8 +1314,13 @@ export default function HikeDetail() {
 
             <div
               ref={lightboxScrollerRef}
-              className="flex h-full snap-x snap-mandatory overflow-x-auto scroll-smooth"
+              className="flex h-full cursor-grab snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth touch-pan-x active:cursor-grabbing"
               onScroll={handleLightboxScroll}
+              onWheel={handleLightboxWheel}
+              onPointerDown={handleLightboxPointerDown}
+              onPointerMove={handleLightboxPointerMove}
+              onPointerUp={stopLightboxDrag}
+              onPointerCancel={stopLightboxDrag}
             >
               {photos.map((photo, index) => (
                 <div
@@ -1267,6 +1330,7 @@ export default function HikeDetail() {
                   <img
                     src={resolveHikeImageUrl(photo, { width: 1800, quality: 84 })}
                     alt={`Photo ${index + 1}`}
+                    draggable={false}
                     onError={() => {
                       markPhotoAsFailed(photo);
                       setCurrentPhotoIndex((index) => Math.max(0, Math.min(index, photos.length - 2)));
