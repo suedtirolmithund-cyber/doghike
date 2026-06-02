@@ -101,54 +101,25 @@ export async function getProfile(userId) {
 export async function upsertProfile(userId, updates) {
   const nextUpdates = sanitizeProfileUpdates(updates);
 
-  if (Object.prototype.hasOwnProperty.call(nextUpdates, "username")) {
-    if (nextUpdates.username) {
-      const { data: currentProfile, error: currentProfileError } = await supabase
-        .from("public_profiles")
-        .select("username")
-        .eq("user_id", userId)
-        .maybeSingle();
-
-      if (currentProfileError) throw currentProfileError;
-
-      const currentUsername = sanitizeUsername(currentProfile?.username);
-
-      if (currentUsername === nextUpdates.username) {
-        const { data, error } = await supabase
-          .from("profiles")
-          .upsert({ user_id: userId, ...nextUpdates }, { onConflict: "user_id" })
-          .select()
-          .single();
-        if (error) throw error;
-        return data;
-      }
-
-      const { data: existingProfiles, error: usernameError } = await supabase
-        .from("profiles")
-        .select("user_id, username")
-        .neq("user_id", userId)
-        .not("username", "is", null);
-
-      if (usernameError) throw usernameError;
-
-      const conflictingProfile = (existingProfiles ?? []).find(
-        (profile) => sanitizeUsername(profile.username) === nextUpdates.username
-      );
-
-      if (conflictingProfile?.user_id) {
-        const error = new Error("username_taken");
-        error.code = "USERNAME_TAKEN";
-        throw error;
-      }
-    }
-  }
-
   const { data, error } = await supabase
     .from("profiles")
     .upsert({ user_id: userId, ...nextUpdates }, { onConflict: "user_id" })
     .select()
     .single();
-  if (error) throw error;
+  if (error) {
+    const isUsernameConflict =
+      error.code === "23505" &&
+      (String(error.message || "").includes("profiles_username_normalized_unique") ||
+        String(error.details || "").toLowerCase().includes("username"));
+
+    if (isUsernameConflict) {
+      const usernameTakenError = new Error("username_taken");
+      usernameTakenError.code = "USERNAME_TAKEN";
+      throw usernameTakenError;
+    }
+
+    throw error;
+  }
   return data;
 }
 
