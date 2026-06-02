@@ -20,12 +20,28 @@ const RANK_STYLE = [
   { ring: "ring-2 ring-brand-200", bg: "bg-gradient-to-br from-brand-50 to-brand-50", border: "border-brand-100", medal: "🥉", num: "text-brand-400" },
 ];
 
-function dogPhoto(dog) {
-  return dog?.photo_url || getAvatarDataUrl(dog?.name ?? "dog");
-}
-
 function dogPreviewPhoto(dog, width = 160) {
   return getDisplayImageUrl(dog?.photo_url, { width, quality: 70 }) || getAvatarDataUrl(dog?.name ?? "dog");
+}
+
+function DogPhoto({ dog, width = 160, alt, className }) {
+  const fallbackSrc = getAvatarDataUrl(dog?.name ?? "dog");
+  const src = dogPreviewPhoto(dog, width);
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      className={className}
+      onError={(event) => {
+        if (event.currentTarget.src !== fallbackSrc) {
+          event.currentTarget.src = fallbackSrc;
+        }
+      }}
+    />
+  );
 }
 
 // Podium (Top 3)
@@ -64,11 +80,10 @@ function Podium({ top3, metric }) {
               }`}
             >
               <div className={`absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 ${isFirst ? "h-[72px] w-[72px] sm:h-[88px] sm:w-[88px]" : "h-14 w-14 sm:h-16 sm:w-16"}`}>
-                <img
-                  src={dogPreviewPhoto(entry.dog, isFirst ? 224 : 160)}
+                <DogPhoto
+                  dog={entry.dog}
+                  width={isFirst ? 224 : 160}
                   alt={dogName}
-                  loading="lazy"
-                  decoding="async"
                   className={`h-full w-full rounded-full border-4 border-white object-cover shadow-md ${style.ring}`}
                 />
                 <span className="absolute -top-2.5 -right-1.5 text-[22px] leading-none sm:text-2xl">{style.medal}</span>
@@ -117,11 +132,10 @@ function RankRow({ entry, rank, metric, isMyDog }) {
       <span className="w-7 text-center text-sm font-bold text-slate-500 shrink-0">#{rank}</span>
 
       {/* Avatar */}
-      <img
-        src={dogPreviewPhoto(entry.dog, 128)}
+      <DogPhoto
+        dog={entry.dog}
+        width={128}
         alt={entry.dog.name}
-        loading="lazy"
-        decoding="async"
         className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm shrink-0"
       />
 
@@ -180,11 +194,10 @@ function CompactRankRow({ entry, rank, metric, isMyDog }) {
     >
       <div className="flex items-center gap-3">
         <span className="w-7 shrink-0 text-center text-sm font-bold text-slate-500">#{rank}</span>
-        <img
-          src={dogPreviewPhoto(entry.dog, 144)}
+        <DogPhoto
+          dog={entry.dog}
+          width={144}
           alt={entry.dog.name}
-          loading="lazy"
-          decoding="async"
           className="h-11 w-11 shrink-0 rounded-full border-2 border-white object-cover shadow-sm"
         />
         <div className="min-w-0 flex-1">
@@ -235,10 +248,12 @@ function MyDogCard({ entry, rank, totalCount, metric }) {
       animate={{ opacity: 1, y: 0 }}
       className="mt-4 flex flex-wrap items-center gap-4 rounded-2xl border-2 border-brand-300 bg-brand-50/70 p-4 shadow-sm backdrop-blur-xl"
     >
-      <img src={dogPreviewPhoto(entry.dog, 160)} alt={entry.dog.name}
-        loading="lazy"
-        decoding="async"
-        className="w-12 h-12 rounded-full object-cover border-2 border-white shadow" />
+      <DogPhoto
+        dog={entry.dog}
+        width={160}
+        alt={entry.dog.name}
+        className="w-12 h-12 rounded-full object-cover border-2 border-white shadow"
+      />
       <div className="flex-1 min-w-0">
         <p className="font-bold text-slate-900">Aktuelle Position</p>
         <p className="text-xs text-slate-500">
