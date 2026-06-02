@@ -30,10 +30,124 @@ function subscriptionToProfileUpdate(subscription: Stripe.Subscription) {
   };
 }
 
-function oneMonthFromNow() {
-  const date = new Date();
+function oneMonthFromTimestamp(timestamp: number) {
+  const date = new Date(timestamp * 1000);
   date.setMonth(date.getMonth() + 1);
   return date.toISOString();
+}
+
+async function claimWebhookEvent(
+  adminClient: ReturnType<typeof createClient>,
+  event: Stripe.Event,
+) {
+  const now = new Date().toISOString();
+  const { error: insertError } = await adminClient
+    .from("stripe_webhook_events")
+    .insert({
+      event_id: event.id,
+      event_type: event.type,
+      processing_status: "processing",
+      updated_at: now,
+    });
+
+  if (!insertError) return "claimed";
+
+  if (insertError.code !== "23505") {
+    throw insertError;
+  }
+
+  const { data: existingEvent, error: selectError } = await adminClient
+    .from("stripe_webhook_events")
+    .select("processing_status")
+    .eq("event_id", event.id)
+    .maybeSingle();
+
+  if (selectError) throw selectError;
+  if (existingEvent?.processing_status === "processed") return "processed";
+
+  if (existingEvent?.processing_status === "failed") {
+    const { error: retryError } = await adminClient
+      .from("stripe_webhook_events")
+      .update({
+        processing_status: "processing",
+        error_message: null,
+        updated_at: now,
+      })
+      .eq("event_id", event.id)
+      .eq("processing_status", "failed");
+
+    if (retryError) throw retryError;
+    return "claimed";
+  }
+
+  return "processing";
+}
+
+async function markWebhookEventProcessed(
+  adminClient: ReturnType<typeof createClient>,
+  eventId: string,
+) {
+  const now = new Date().toISOString();
+  const { error } = await adminClient
+    .from("stripe_webhook_events")
+    .update({
+      processing_status: "processed",
+      processed_at: now,
+      updated_at: now,
+      error_message: null,
+    })
+    .eq("event_id", eventId);
+
+  if (error) throw error;
+}
+
+async function markWebhookEventFailed(
+  adminClient: ReturnType<typeof createClient>,
+  eventId: string,
+  error: unknown,
+) {
+  const message = error instanceof Error ? error.message : String(error);
+  await adminClient
+    .from("stripe_webhook_events")
+    .update({
+      processing_status: "failed",
+      error_message: message.slice(0, 500),
+      updated_at: new Date().toISOString(),
+    })
+    .eq("event_id", eventId)
+    .eq("processing_status", "processing");
+}
+
+async function resolveProfileUpdateTarget(
+  adminClient: ReturnType<typeof createClient>,
+  identifiers: { userId?: string | null; customerId?: string | null; subscriptionId?: string | null },
+) {
+  if (identifiers.userId) {
+    return { column: "user_id", value: identifiers.userId };
+  }
+
+  const lookup = identifiers.customerId
+    ? { column: "stripe_customer_id", value: identifiers.customerId }
+    : identifiers.subscriptionId
+      ? { column: "stripe_subscription_id", value: identifiers.subscriptionId }
+      : null;
+
+  if (!lookup) {
+    throw new Error("No profile identifier found in Stripe event");
+  }
+
+  const { data: profiles, error } = await adminClient
+    .from("profiles")
+    .select("user_id")
+    .eq(lookup.column, lookup.value)
+    .limit(2);
+
+  if (error) throw error;
+  if (!profiles || profiles.length !== 1) {
+    throw new Error(`Expected exactly one profile for ${lookup.column}`);
+  }
+
+  return { column: "user_id", value: profiles[0].user_id };
 }
 
 async function updateProfile(
@@ -46,19 +160,8 @@ async function updateProfile(
     ...(identifiers.customerId ? { stripe_customer_id: identifiers.customerId } : {}),
   };
 
-  if (identifiers.userId) {
-    return adminClient.from("profiles").update(payload).eq("user_id", identifiers.userId);
-  }
-
-  if (identifiers.customerId) {
-    return adminClient.from("profiles").update(payload).eq("stripe_customer_id", identifiers.customerId);
-  }
-
-  if (identifiers.subscriptionId) {
-    return adminClient.from("profiles").update(payload).eq("stripe_subscription_id", identifiers.subscriptionId);
-  }
-
-  throw new Error("No profile identifier found in Stripe event");
+  const target = await resolveProfileUpdateTarget(adminClient, identifiers);
+  return adminClient.from("profiles").update(payload).eq(target.column, target.value);
 }
 
 Deno.serve(async (request) => {
@@ -88,11 +191,19 @@ Deno.serve(async (request) => {
     return new Response("Invalid signature", { status: 400 });
   }
 
+  const adminClient = createClient(
+    env("SUPABASE_URL"),
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? env("SUPABASE_SECRET_KEY"),
+  );
+
   try {
-    const adminClient = createClient(
-      env("SUPABASE_URL"),
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? env("SUPABASE_SECRET_KEY"),
-    );
+    const claimStatus = await claimWebhookEvent(adminClient, event);
+    if (claimStatus === "processed") {
+      return jsonResponse({ received: true, duplicate: true });
+    }
+    if (claimStatus === "processing") {
+      return jsonResponse({ error: "Webhook event is already processing" }, 409);
+    }
 
     switch (event.type) {
       case "checkout.session.completed": {
@@ -112,7 +223,7 @@ Deno.serve(async (request) => {
             {
               is_premium: true,
               subscription_status: "one_time_active",
-              premium_current_period_end: oneMonthFromNow(),
+              premium_current_period_end: oneMonthFromTimestamp(event.created),
               premium_updated_at: new Date().toISOString(),
             },
           );
@@ -197,9 +308,11 @@ Deno.serve(async (request) => {
         break;
     }
 
+    await markWebhookEventProcessed(adminClient, event.id);
     return jsonResponse({ received: true });
   } catch (error) {
     console.error("[stripe-webhook] processing failed", error);
+    await markWebhookEventFailed(adminClient, event.id, error);
     return jsonResponse({ error: "Webhook processing failed" }, 500);
   }
 });

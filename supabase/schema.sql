@@ -71,6 +71,19 @@ alter table public.profiles
   add column if not exists premium_current_period_end timestamptz,
   add column if not exists premium_updated_at timestamptz;
 
+create table if not exists public.stripe_webhook_events (
+  event_id text primary key,
+  event_type text not null,
+  processing_status text not null default 'processing'
+    check (processing_status in ('processing', 'processed', 'failed')),
+  error_message text,
+  created_at timestamptz not null default now(),
+  processed_at timestamptz,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.stripe_webhook_events enable row level security;
+
 alter table public.profiles enable row level security;
 
 create policy "Eigenes Profil lesen"
