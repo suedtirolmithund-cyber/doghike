@@ -168,8 +168,9 @@ create policy "Eigene Hunde löschen"
 create or replace function public.get_public_dog_profile_count()
 returns integer
 language sql
-security definer
+security invoker
 stable
+set search_path = public
 as $$
   select count(*)::integer
   from public.dogs;
