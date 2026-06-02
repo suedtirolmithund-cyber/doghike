@@ -83,6 +83,26 @@ export function resetNotificationsStartAt(userId, startAt = new Date().toISOStri
   writeStartAt(userId, startAt);
 }
 
+export function subscribeToNotificationStorage(userId, onChange) {
+  if (!userId || typeof window === "undefined" || typeof onChange !== "function") {
+    return () => {};
+  }
+
+  const seenKey = getSeenStorageKey(userId);
+  const startKey = getStartStorageKey(userId);
+
+  const handleStorage = (event) => {
+    if (event.storageArea !== window.localStorage) return;
+    if (event.key !== seenKey && event.key !== startKey) return;
+    onChange(event);
+  };
+
+  window.addEventListener("storage", handleStorage);
+  return () => {
+    window.removeEventListener("storage", handleStorage);
+  };
+}
+
 function isAtOrAfterStartTime(notification, startAt) {
   if (!startAt) return true;
 

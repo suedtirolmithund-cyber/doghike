@@ -51,7 +51,7 @@ import {
   deleteStoredFile,
 } from "@/lib/profilesApi";
 import { getSavedHikes } from "@/lib/communityApi";
-import { loadUnreadNotificationCount } from "@/lib/notificationsApi";
+import { loadUnreadNotificationCount, subscribeToNotificationStorage } from "@/lib/notificationsApi";
 import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
 import { getAllHikes } from "@/api/sheetsClient";
 import { getUserRoutes } from "@/lib/routesApi";
@@ -178,6 +178,15 @@ export default function Profile() {
     refetchOnWindowFocus: false,
     refetchInterval: 10 * 60_000,
   });
+
+  useEffect(() => {
+    if (!user?.id) return undefined;
+
+    return subscribeToNotificationStorage(user.id, () => {
+      queryClient.invalidateQueries({ queryKey: ["notificationsUnread", user.id] });
+      queryClient.invalidateQueries({ queryKey: ["notifications", user.id] });
+    });
+  }, [queryClient, user?.id]);
 
   useEffect(() => {
     setRoutesSeenAt(readRoutesSeenAt(user?.id));
