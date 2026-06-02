@@ -35,6 +35,7 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuth } from "@/lib/AuthContext";
+import { hasActivePremiumAccess } from "@/lib/premiumAccess";
 
 const SUPPORT_EMAIL = "suedtirolmithund@gmail.com";
 
@@ -60,8 +61,7 @@ export default function AccountSettings({ user, profile }) {
   const [pendingPlan, setPendingPlan] = useState(null);
   const [premiumWithdrawalConsent, setPremiumWithdrawalConsent] = useState(false);
   const premiumEndDate = profile?.premium_current_period_end ? new Date(profile.premium_current_period_end) : null;
-  const premiumHasTimeLeft = !premiumEndDate || premiumEndDate.getTime() > Date.now();
-  const isPremium = profile?.is_premium === true && premiumHasTimeLeft;
+  const isPremium = hasActivePremiumAccess(profile);
   const canOpenPortal = !!profile?.stripe_customer_id;
   const currentPeriodEnd = premiumEndDate
     ? new Intl.DateTimeFormat("de-DE", { dateStyle: "medium" }).format(premiumEndDate)

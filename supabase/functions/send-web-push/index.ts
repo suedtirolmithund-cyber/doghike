@@ -253,7 +253,7 @@ Deno.serve(async (request) => {
         .filter((profile) => {
           if (profile.role === "admin") return true;
           if (profile.is_premium !== true) return false;
-          if (!profile.premium_current_period_end) return true;
+          if (!profile.premium_current_period_end) return false;
           const endTime = new Date(profile.premium_current_period_end).getTime();
           return Number.isFinite(endTime) && endTime > now;
         })

@@ -21,6 +21,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { toast } from "sonner";
 import { PremiumPawMark } from "@/components/premium/PremiumPawBadge";
+import { hasActivePremiumAccess } from "@/lib/premiumAccess";
 
 const features = [
   "Schalte ausgewählte Touren frei, die du sonst nur als Vorschau siehst",
@@ -87,8 +88,7 @@ export default function Premium() {
   });
 
   const premiumEndDate = profile?.premium_current_period_end ? new Date(profile.premium_current_period_end) : null;
-  const premiumHasTimeLeft = !premiumEndDate || premiumEndDate.getTime() > Date.now();
-  const isPremium = profile?.is_premium === true && premiumHasTimeLeft;
+  const isPremium = hasActivePremiumAccess(profile);
   const canOpenPortal = !!profile?.stripe_customer_id;
   const currentPeriodEnd = premiumEndDate
     ? new Intl.DateTimeFormat("de-DE", { dateStyle: "medium" }).format(premiumEndDate)

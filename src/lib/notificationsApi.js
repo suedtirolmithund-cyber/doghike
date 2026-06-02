@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { createPageUrl } from "@/utils";
+import { hasActivePremiumAccess } from "@/lib/premiumAccess";
 
 const NOTIFICATION_SEEN_KEY = "doghike:notifications-seen";
 const NOTIFICATION_START_KEY = "doghike:notifications-start";
@@ -51,14 +52,6 @@ function writeStartAt(userId, value) {
 function getNotificationTime(notification) {
   const timestamp = notification?.time ? new Date(notification.time).getTime() : NaN;
   return Number.isFinite(timestamp) ? timestamp : 0;
-}
-
-function profileHasActivePremium(profile) {
-  if (!profile?.is_premium) return false;
-  if (!profile?.premium_current_period_end) return true;
-
-  const premiumEndTimestamp = new Date(profile.premium_current_period_end).getTime();
-  return Number.isFinite(premiumEndTimestamp) && premiumEndTimestamp > Date.now();
 }
 
 export function getNotificationsSeenAt(userId) {
@@ -237,7 +230,7 @@ export async function loadNotifications(userId) {
     }
   }
 
-  if (profileHasActivePremium(currentProfile)) {
+  if (hasActivePremiumAccess(currentProfile)) {
     const since = new Date(Date.now() - 14 * 24 * 3600 * 1000).toISOString();
     const { data: premiumHikes, error: premiumHikesError } = await supabase
       .from("public_hikes")

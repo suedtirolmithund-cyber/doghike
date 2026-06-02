@@ -36,6 +36,7 @@ import { DifficultyBars } from "@/components/difficulty/DifficultyScale";
 import { supabase } from "@/lib/supabaseClient";
 import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
+import { hasActivePremiumAccess } from "@/lib/premiumAccess";
 import { formatDurationHours } from "@/lib/duration";
 import { getAvatarDataUrl, HIKE_PLACEHOLDER_IMAGE } from "@/lib/fallbackImages";
 import { getDisplayImageUrl } from "@/lib/imageProxy";
@@ -380,7 +381,7 @@ export default function HikeDetail() {
 
       const { data, error } = await supabase
         .from("profiles")
-        .select("is_premium, premium_current_period_end, username, full_name")
+        .select("is_premium, premium_current_period_end, role, username, full_name")
         .eq("user_id", currentUser.id)
         .maybeSingle();
 
@@ -572,13 +573,7 @@ export default function HikeDetail() {
   // Premium gate: admins may inspect premium hikes, but downloads still require active Premium.
   const isPremiumContent = PREMIUM_FEATURES_ENABLED && hike.is_premium === true;
   const isPremiumHike = isPremiumContent && !isAdmin && !isOwnHike;
-  const premiumEndDate = currentProfile?.premium_current_period_end
-    ? new Date(currentProfile.premium_current_period_end)
-    : null;
-  const userHasPremium = isAdmin || (
-    currentProfile?.is_premium === true
-    && (!premiumEndDate || premiumEndDate.getTime() > Date.now())
-  );
+  const userHasPremium = isAdmin || hasActivePremiumAccess(currentProfile);
   const showPremiumPreviewOnly = isPremiumHike && !userHasPremium;
 
   const hikeDogs = dogs.filter(d => hike.dogs?.includes(d.id));
