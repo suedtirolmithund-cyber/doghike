@@ -99,6 +99,16 @@ create table if not exists public.premium_checkout_consents (
 
 alter table public.premium_checkout_consents enable row level security;
 
+create policy "Eigene Premium-Checkout-Einwilligungen lesen"
+  on public.premium_checkout_consents for select
+  using (auth.uid() = user_id);
+
+create policy "Admin Premium-Checkout-Einwilligungen verwalten"
+  on public.premium_checkout_consents
+  for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
 alter table public.profiles enable row level security;
 
 create policy "Eigenes Profil lesen"
