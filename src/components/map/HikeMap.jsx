@@ -266,15 +266,11 @@ function MarkersLayer({ hikes }) {
 
     groupedHikes.forEach((group) => {
       const primaryHike = group.hikes[0];
-      const photoUrl =
-        primaryHike._source === "journal"
-          ? primaryHike.dog_photo_url || primaryHike.author_avatar
-          : null;
 
       const marker = L.marker([group.latitude, group.longitude], {
         icon: createGroupedIcon({
           color: getColor(primaryHike),
-          photoUrl,
+          photoUrl: null,
           count: group.hikes.length,
         }),
       });
