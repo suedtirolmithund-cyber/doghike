@@ -67,6 +67,7 @@ export default function Premium() {
   const [searchParams] = useSearchParams();
   const [withdrawalConsent, setWithdrawalConsent] = useState(false);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
+  const [checkoutWaitTimedOut, setCheckoutWaitTimedOut] = useState(false);
   const queryClient = useQueryClient();
   const checkoutStatus = searchParams.get("checkout");
 
@@ -85,12 +86,36 @@ export default function Premium() {
     enabled: !!user?.id,
   });
 
-  useEffect(() => {
-    if (!user?.id || checkoutStatus !== "success") return;
+  const premiumEndDate = profile?.premium_current_period_end ? new Date(profile.premium_current_period_end) : null;
+  const premiumHasTimeLeft = !premiumEndDate || premiumEndDate.getTime() > Date.now();
+  const isPremium = profile?.is_premium === true && premiumHasTimeLeft;
+  const canOpenPortal = !!profile?.stripe_customer_id;
+  const currentPeriodEnd = premiumEndDate
+    ? new Intl.DateTimeFormat("de-DE", { dateStyle: "medium" }).format(premiumEndDate)
+    : null;
+  const checkoutPending = checkoutStatus === "success" && !isPremium;
+  const checkoutLocked = checkoutPending;
 
+  useEffect(() => {
+    if (!user?.id || checkoutStatus !== "success" || isPremium) return;
+
+    setCheckoutWaitTimedOut(false);
     toast.success("Zahlung abgeschlossen. Dein Premium-Status wird aktualisiert.");
     queryClient.invalidateQueries({ queryKey: ["profile", user.id] });
-  }, [checkoutStatus, queryClient, user?.id]);
+
+    const intervalId = window.setInterval(() => {
+      queryClient.invalidateQueries({ queryKey: ["profile", user.id] });
+    }, 3000);
+    const timeoutId = window.setTimeout(() => {
+      window.clearInterval(intervalId);
+      setCheckoutWaitTimedOut(true);
+    }, 30000);
+
+    return () => {
+      window.clearInterval(intervalId);
+      window.clearTimeout(timeoutId);
+    };
+  }, [checkoutStatus, isPremium, queryClient, user?.id]);
 
   useEffect(() => {
     if (checkoutStatus === "cancelled") {
@@ -157,16 +182,8 @@ export default function Premium() {
     },
   });
 
-  const premiumEndDate = profile?.premium_current_period_end ? new Date(profile.premium_current_period_end) : null;
-  const premiumHasTimeLeft = !premiumEndDate || premiumEndDate.getTime() > Date.now();
-  const isPremium = profile?.is_premium === true && premiumHasTimeLeft;
   const isStartingMonthly = checkoutMutation.isPending && checkoutMutation.variables === "monthly";
   const isStartingOneTime = checkoutMutation.isPending && checkoutMutation.variables === "one_time";
-  const canOpenPortal = !!profile?.stripe_customer_id;
-  const currentPeriodEnd = premiumEndDate
-    ? new Intl.DateTimeFormat("de-DE", { dateStyle: "medium" }).format(premiumEndDate)
-    : null;
-  const checkoutPending = checkoutStatus === "success" && !isPremium;
 
   if (!PREMIUM_FEATURES_ENABLED) {
     return (
@@ -256,7 +273,9 @@ export default function Premium() {
 
             {checkoutPending && (
               <div className="mb-6 rounded-2xl border border-brand-100 bg-brand-50 p-4 text-sm text-brand-800">
-                Deine Zahlung war erfolgreich. Der Stripe-Webhook aktualisiert deinen Premium-Status gleich automatisch.
+                {checkoutWaitTimedOut
+                  ? "Deine Zahlung ist angekommen, aber Premium wurde noch nicht automatisch aktiviert. Bitte starte keine zweite Zahlung und melde dich beim Support."
+                  : "Deine Zahlung war erfolgreich. Wir aktualisieren deinen Premium-Status gerade automatisch."}
               </div>
             )}
 
@@ -309,7 +328,7 @@ export default function Premium() {
                 <Button
                   className="h-12 w-full rounded-xl bg-white text-[#7C3020] hover:bg-white/90 disabled:opacity-50 md:h-14 md:text-lg"
                   onClick={() => checkoutMutation.mutate("monthly")}
-                  disabled={checkoutMutation.isPending || isFetching || !withdrawalConsent}
+                  disabled={checkoutLocked || checkoutMutation.isPending || isFetching || !withdrawalConsent}
                 >
                   {isStartingMonthly ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -322,7 +341,7 @@ export default function Premium() {
                   variant="outline"
                   className="h-12 w-full rounded-xl border-white/30 bg-white/10 text-white hover:bg-white/20 disabled:opacity-50 md:h-14 md:text-lg"
                   onClick={() => checkoutMutation.mutate("one_time")}
-                  disabled={checkoutMutation.isPending || isFetching || !withdrawalConsent}
+                  disabled={checkoutLocked || checkoutMutation.isPending || isFetching || !withdrawalConsent}
                 >
                   {isStartingOneTime ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
