@@ -2,8 +2,10 @@ import { TileLayer, Marker, Polyline, Popup, useMap } from "react-leaflet";
 import { useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { MapPin } from "lucide-react";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
+import { EmptyState } from "@/components/ui/AppState";
 
 
 configureLeafletDefaultIcon();
@@ -53,8 +55,15 @@ export default function InteractiveHikeMap({
 }) {
   if (!latitude || !longitude) {
     return (
-      <div className="rounded-2xl border border-brand-100 bg-brand-100/80 p-8 text-center">
-        <p className="text-slate-500">Keine Karteninformationen verfügbar</p>
+      <div className="rounded-2xl border border-brand-100 bg-brand-100/80 p-4">
+        <EmptyState
+          icon={MapPin}
+          title="Keine Karte verfügbar"
+          description="Für diese Wanderung ist noch kein genauer Startpunkt hinterlegt."
+          compact
+          className="bg-white/75 py-8 shadow-none"
+          iconClassName="h-10 w-10"
+        />
       </div>
     );
   }

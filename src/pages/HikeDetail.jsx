@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/ui/BackButton";
+import { EmptyState } from "@/components/ui/AppState";
 import { Badge } from "@/components/ui/badge";
 import {
   AlertDialog,
@@ -560,10 +561,12 @@ export default function HikeDetail() {
   if (!hike) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center px-4">
-        <div className="doghike-glass-card p-8 text-center">
-          <p className="text-xl text-slate-700 mb-4">Wanderung nicht gefunden</p>
-          <BackButton to={fallbackBackUrl} variant="default" />
-        </div>
+        <EmptyState
+          icon={MapPin}
+          title="Wanderung nicht gefunden"
+          description="Diese Wanderung gibt es nicht mehr oder sie konnte nicht geladen werden."
+          action={<BackButton to={fallbackBackUrl} variant="default" />}
+        />
       </div>
     );
   }

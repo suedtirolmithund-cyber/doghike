@@ -11,13 +11,13 @@ import {
   XCircle,
   BookOpen,
   Mountain,
-  Loader2,
   BellOff,
   Clock3,
 } from "lucide-react";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
+import { SectionLoadingState } from "@/components/ui/AppState";
 import { toast } from "sonner";
 import { loadNotifications, markNotificationsSeen, resetNotificationsStartAt } from "@/lib/notificationsApi";
 import {
@@ -244,9 +244,7 @@ export default function Notifications() {
         )}
 
         {isLoading ? (
-          <div className="flex justify-center py-20">
-            <Loader2 className="h-8 w-8 animate-spin text-[#C07820]" />
-          </div>
+          <SectionLoadingState message="Benachrichtigungen laden..." className="py-16" />
         ) : isError ? (
           <div className="doghike-glass-card p-5 text-center">
             <BellOff className="mx-auto mb-3 h-10 w-10 text-[#C07820]" />

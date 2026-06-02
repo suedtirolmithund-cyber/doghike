@@ -895,7 +895,13 @@ export default function EditPublicHike() {
                   </div>
                 </>
               ) : (
-                <p className="text-sm text-slate-500">Noch keine Fotos ausgewählt.</p>
+                <div className="doghike-soft-panel flex items-center gap-3 p-3">
+                  <Camera className="h-5 w-5 shrink-0 text-brand-400" />
+                  <div>
+                    <p className="text-sm font-semibold text-[#7C3020]">Noch keine Fotos</p>
+                    <p className="text-xs text-[#C07820]">Wähle Fotos aus, damit die Wanderung lebendiger wirkt.</p>
+                  </div>
+                </div>
               )}
             </div>
 
