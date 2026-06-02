@@ -55,9 +55,15 @@ function parseGPX(text) {
   }
 
   const trkpts = xml.querySelectorAll("trkpt");
-  const wpts = trkpts.length > 0 ? trkpts : xml.querySelectorAll("rtept");
+  const rtepts = trkpts.length === 0 ? xml.querySelectorAll("rtept") : [];
+  const sourcePoints =
+    trkpts.length > 0
+      ? trkpts
+      : rtepts.length > 0
+        ? rtepts
+        : xml.querySelectorAll("wpt");
 
-  if (wpts.length === 0) {
+  if (sourcePoints.length === 0) {
     throw new Error("Keine Wegpunkte im GPX gefunden.");
   }
 
@@ -66,7 +72,7 @@ function parseGPX(text) {
   let elevLoss = 0;
   let prevElev = null;
 
-  wpts.forEach((pt) => {
+  sourcePoints.forEach((pt) => {
     const lat = parseFloat(pt.getAttribute("lat"));
     const lon = parseFloat(pt.getAttribute("lon"));
     const eleEl = pt.querySelector("ele");
