@@ -38,6 +38,7 @@ import { Link } from "react-router-dom";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
+import { reverseNominatim, searchNominatim } from "@/lib/nominatimApi";
 import {
   DIFFICULTY_APP_EXPLANATIONS,
   DIFFICULTY_GUIDE_NOTE,
@@ -459,9 +460,10 @@ function LocationPicker({ lat, lng, locationName = "", onChange }) {
     setSearchResults([]);
     skipNextAutoSearchRef.current = true;
     try {
-      const url = `https://nominatim.openstreetmap.org/reverse?lat=${encodeURIComponent(clickLat)}&lon=${encodeURIComponent(clickLng)}&format=json&accept-language=de&addressdetails=1`;
-      const resp = await fetch(url, { headers: { "Accept-Language": "de" } });
-      const result = await resp.json();
+      const result = await reverseNominatim(clickLat, clickLng, {
+        acceptLanguage: "de",
+        addressdetails: 1,
+      });
       const nextLocation = getReadableLocationLabel(result);
       if (nextLocation) {
         setSearchText(nextLocation);
@@ -480,9 +482,11 @@ function LocationPicker({ lat, lng, locationName = "", onChange }) {
       setSearchResults([]);
     }
     try {
-      const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&accept-language=de&addressdetails=1`;
-      const resp = await fetch(url, { headers: { "Accept-Language": "de" } });
-      const results = await resp.json();
+      const results = await searchNominatim(query, {
+        limit: 5,
+        acceptLanguage: "de",
+        addressdetails: 1,
+      });
       if (results.length > 0) {
         if (!auto && results.length === 1) {
           const { lat: rLat, lon: rLon } = results[0];

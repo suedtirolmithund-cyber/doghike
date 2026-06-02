@@ -10,6 +10,7 @@ import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 import { formatDurationHours } from "@/lib/duration";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
+import { searchNominatim } from "@/lib/nominatimApi";
 
 const GH_API_KEY = import.meta.env.VITE_GRAPHHOPPER_KEY || "";
 
@@ -359,10 +360,10 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
     
     setIsSearching(true);
     try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&countrycodes=it,at,de,ch,es,hr,si`
-      );
-      const data = await response.json();
+      const data = await searchNominatim(query, {
+        limit: 5,
+        countrycodes: "it,at,de,ch,es,hr,si",
+      });
       setSearchResults(data);
     } catch (error) {
       console.error('Suchfehler:', error);

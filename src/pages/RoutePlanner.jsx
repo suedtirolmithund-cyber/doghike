@@ -22,6 +22,7 @@ import GPXUploader from "@/components/routes/GPXUploader";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
 import { deleteJournalFiles, uploadJournalGpx } from "@/lib/journalApi";
 import { formatDurationHours } from "@/lib/duration";
+import { searchNominatim } from "@/lib/nominatimApi";
 import { toast } from "sonner";
 
 // ── Leaflet fix ───────────────────────────────────────────────
@@ -330,10 +331,10 @@ function SmartRoutePlanner({ onRouteReady }) {
     setSearchError(null);
     setSearchResults([]);
     try {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&accept-language=de`
-      );
-      const results = await res.json();
+      const results = await searchNominatim(query, {
+        limit: 5,
+        acceptLanguage: "de",
+      });
       if (results.length > 0) {
         const normalizedResults = results.map((result) => ({
           lat: parseFloat(result.lat),

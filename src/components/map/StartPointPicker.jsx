@@ -4,6 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
+import { reverseNominatim } from "@/lib/nominatimApi";
 
 const startPointIcon = L.divIcon({
   html: `
@@ -32,10 +33,7 @@ function MapClickHandler({ onLocationSelect }) {
       
       // Reverse geocoding to get location name
       try {
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
-        );
-        const data = await response.json();
+        const data = await reverseNominatim(lat, lng);
         
         const locationName = data.address?.village || 
                            data.address?.town || 
