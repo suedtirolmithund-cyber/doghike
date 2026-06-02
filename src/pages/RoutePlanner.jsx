@@ -21,7 +21,7 @@ import GPSTracker from "@/components/routes/GPSTracker";
 import GPXUploader from "@/components/routes/GPXUploader";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
 import { deleteJournalFiles, uploadJournalGpx } from "@/lib/journalApi";
-import { formatDurationHours } from "@/lib/duration";
+import { estimateRouteDurationMinutes, formatDurationHours } from "@/lib/duration";
 import { searchNominatim } from "@/lib/nominatimApi";
 import { toast } from "sonner";
 
@@ -96,7 +96,7 @@ async function calcBrouterRoute(waypoints, profile = "hiking-mountain") {
       }, 0).toFixed(2);
 
   const ascend = props["filtered ascend"] != null ? Math.round(props["filtered ascend"]) : null;
-  const duration = Math.round((distKm / 3.5) * 60 + (ascend || 0) / 400 * 60);
+  const duration = estimateRouteDurationMinutes(distKm, ascend || 0);
 
   const step = Math.max(1, Math.floor(coords.length / 80));
   let cumDist = 0;
@@ -137,7 +137,7 @@ async function calcGraphHopperRoute(waypoints, profile = "hike") {
   return {
     positions,
     distance_km: +(path.distance / 1000).toFixed(2),
-    duration_minutes: Math.round(path.time / 60000),
+    duration_minutes: estimateRouteDurationMinutes(path.distance / 1000, path.ascend || 0),
     elevationProfile,
     elevation_gain_m: path.ascend ? Math.round(path.ascend) : null,
   };

@@ -7,7 +7,7 @@ import RouteElevationProfile from "./RouteElevationProfile";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
-import { formatDurationHours } from "@/lib/duration";
+import { estimateRouteDurationMinutes, formatDurationHours, getRouteDurationRuleLabel } from "@/lib/duration";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
 import { searchNominatim } from "@/lib/nominatimApi";
@@ -207,8 +207,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
         const path = data.paths[0];
         const distKm = parseFloat((path.distance / 1000).toFixed(2));
         const elevGain = path.ascend ? Math.round(path.ascend) : 0;
-        // Naismith's rule: 1h per 5km + 1h per 600m ascent
-        const estimatedMin = Math.round((distKm / 5) * 60 + (elevGain / 600) * 60);
+        const estimatedMin = estimateRouteDurationMinutes(distKm, elevGain);
         return {
           coordinates: path.points.coordinates.map(c => [c[1], c[0]]),
           distanceKm: distKm,
@@ -242,7 +241,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
           coordinates: route.geometry.coordinates.map(c => [c[1], c[0]]),
           distanceKm: distKm,
           elevationGain: 0,
-          durationMin: Math.round((distKm / 5) * 60),
+          durationMin: estimateRouteDurationMinutes(distKm, 0),
         };
       } else {
         const distKm = parseFloat(calculateDistance(points));
@@ -250,7 +249,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
           coordinates: points,
           distanceKm: distKm,
           elevationGain: 0,
-          durationMin: Math.round((distKm / 5) * 60),
+          durationMin: estimateRouteDurationMinutes(distKm, 0),
         };
       }
     } catch (error) {
@@ -260,7 +259,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
         coordinates: points,
         distanceKm: distKm,
         elevationGain: 0,
-        durationMin: Math.round((distKm / 5) * 60),
+        durationMin: estimateRouteDurationMinutes(distKm, 0),
       };
     }
   };
@@ -486,7 +485,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
                     </div>
                   </div>
                 )}
-                <p className="text-xs text-slate-400 w-full">Nach Naismith-Regel (5 km/h + 600 Hm/h)</p>
+                <p className="text-xs text-slate-400 w-full">Nach {getRouteDurationRuleLabel()}</p>
               </div>
             )}
           </div>

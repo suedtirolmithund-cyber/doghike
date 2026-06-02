@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import RouteElevationProfile from "./RouteElevationProfile";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
-import { formatDurationHours } from "@/lib/duration";
+import { estimateRouteDurationMinutes, formatDurationHours, getRouteDurationRuleLabel } from "@/lib/duration";
 import "leaflet/dist/leaflet.css";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
@@ -93,9 +93,7 @@ function parseGPX(text) {
     distKm += haversine(points[i - 1].lat, points[i - 1].lon, points[i].lat, points[i].lon);
   }
 
-  const baseTime = distKm / 4;
-  const climbTime = elevGain / 600;
-  const durationMin = Math.round((baseTime + climbTime) * 60);
+  const durationMin = estimateRouteDurationMinutes(distKm, elevGain);
 
   return {
     coordinates: points.map((p) => [p.lat, p.lon]),
@@ -256,7 +254,7 @@ export default function GPXUploader({ onSave }) {
               <span>{TOUR_ICONS.elevation} Min. Höhe: <strong>{Math.round(gpxData.min_elevation)} m</strong></span>
             )}
             <span className="text-slate-400 ml-auto flex items-center gap-1">
-              <Zap className="w-3 h-3" /> Dauer nach Naismith-Formel geschätzt
+              <Zap className="w-3 h-3" /> Dauer nach {getRouteDurationRuleLabel()} geschätzt
             </span>
           </div>
 
