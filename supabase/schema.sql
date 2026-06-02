@@ -85,6 +85,12 @@ create table if not exists public.stripe_webhook_events (
 
 alter table public.stripe_webhook_events enable row level security;
 
+create policy "Admin Stripe-Webhook-Events verwalten"
+  on public.stripe_webhook_events
+  for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
 create table if not exists public.premium_checkout_consents (
   id uuid default gen_random_uuid() primary key,
   user_id uuid references auth.users(id) on delete cascade not null,
