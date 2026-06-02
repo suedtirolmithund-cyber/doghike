@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { clearDogNudgeSession } from "@/lib/dogNudgeSession";
 import { supabase } from "@/lib/supabaseClient";
+import { createPageUrl } from "@/utils";
 
 const AuthContext = createContext();
 const REGISTRATION_CONSENT_KEY = "doghike_pending_registration_consent";
@@ -193,7 +194,7 @@ export const AuthProvider = ({ children }) => {
   const resetPasswordForEmail = async (email) => {
     setAuthError(null);
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + "/Login",
+      redirectTo: `${window.location.origin}${createPageUrl("Login")}`,
     });
     if (error) {
       setAuthError(error.message);

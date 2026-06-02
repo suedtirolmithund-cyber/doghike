@@ -81,9 +81,9 @@ export default function Dashboard() {
 
   const season = getCurrentSeason();
 
-  const filteredHikes = sortBySeason(
-    hikes.filter((h) => matchesHikeSearch(h, searchQuery)),
-    season
+  const filteredHikes = useMemo(
+    () => sortBySeason(hikes.filter((h) => matchesHikeSearch(h, searchQuery)), season),
+    [hikes, searchQuery, season],
   );
 
   const countryCount = useMemo(() => {
