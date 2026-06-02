@@ -52,6 +52,10 @@ function getDistanceInKm(left, right) {
   return 6371 * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
 }
 
+function normalizeCompareText(value) {
+  return String(value ?? "").trim().toLowerCase();
+}
+
 export default function SmartRecommendations({ allHikes = [], currentHike = null }) {
   const { user } = useAuth();
 
@@ -88,9 +92,20 @@ export default function SmartRecommendations({ allHikes = [], currentHike = null
     const currentLocationTokens = getUniqueTokens(currentHike?.location, currentHike?.country);
     const currentTagTokens = getUniqueTokens(currentHike?.tags);
     const currentSeasonValues = normalizeSeasonValues(currentHike?.seasons, currentHike?.season);
+    const currentTrailName = normalizeCompareText(currentHike?.trail_name);
+    const currentLocationName = normalizeCompareText(currentHike?.location);
 
     const scoredRecommendations = allHikes
-      .filter((hike) => hike?.id !== currentHike?.id)
+      .filter((hike) => {
+        if (hike?.id === currentHike?.id) return false;
+
+        const sameTrailName = normalizeCompareText(hike?.trail_name) === currentTrailName;
+        const sameLocationName = normalizeCompareText(hike?.location) === currentLocationName;
+
+        if (sameTrailName && sameLocationName) return false;
+
+        return true;
+      })
       .map((hike) => {
         const hikeLocationTokens = getUniqueTokens(hike.location, hike.country);
         const hikeTagTokens = getUniqueTokens(hike.tags);
