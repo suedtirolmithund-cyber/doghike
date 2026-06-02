@@ -5,7 +5,7 @@ import { createPageUrl } from "@/utils";
 export default function SubmitHike() {
   const navigate = useNavigate();
   useEffect(() => {
-    navigate(createPageUrl("AddJournalEntry"), { replace: true });
+    navigate(`${createPageUrl("AddJournalEntry")}?intent=submit-hike`, { replace: true });
   }, [navigate]);
   return null;
 }

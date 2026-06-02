@@ -61,7 +61,7 @@ export default function Dashboard() {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const submitHikeUrl = isAuthenticated
-    ? createPageUrl("AddJournalEntry")
+    ? createPageUrl("SubmitHike")
     : createPageUrl("Login");
 
   const { data: hikes = [], isLoading } = useQuery({

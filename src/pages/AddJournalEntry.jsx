@@ -878,6 +878,7 @@ export default function AddJournalEntry() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const editId = searchParams.get("id");
+  const isSubmitHikeIntent = !editId && searchParams.get("intent") === "submit-hike";
 
   const routePrefill = location.state?.routePrefill || null;
 
@@ -1440,6 +1441,15 @@ export default function AddJournalEntry() {
             </div>
           </div>
         </motion.div>
+
+        {isSubmitHikeIntent && (
+          <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+            <div className="rounded-2xl border border-brand-100/80 bg-white/80 px-4 py-3 text-sm leading-relaxed text-slate-600 shadow-sm">
+              <p>Hier kannst du eine neue Wanderung für DogTrails einreichen.</p>
+              <p>Fülle die wichtigsten Infos aus. Öffentliche Einreichungen werden vor der Freigabe kurz geprüft.</p>
+            </div>
+          </motion.div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
 
