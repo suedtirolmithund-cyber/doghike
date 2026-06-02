@@ -718,6 +718,8 @@ end;
 $$;
 
 grant execute on function public.admin_approve_journal_entry(uuid) to authenticated;
+revoke execute on function public.admin_approve_journal_entry(uuid) from public;
+revoke execute on function public.admin_approve_journal_entry(uuid) from anon;
 
 create or replace function public.admin_reject_journal_entry(target_entry_id uuid, target_reason text default null)
 returns void
@@ -742,6 +744,8 @@ end;
 $$;
 
 grant execute on function public.admin_reject_journal_entry(uuid, text) to authenticated;
+revoke execute on function public.admin_reject_journal_entry(uuid, text) from public;
+revoke execute on function public.admin_reject_journal_entry(uuid, text) from anon;
 
 create or replace function public.delete_own_account()
 returns void
