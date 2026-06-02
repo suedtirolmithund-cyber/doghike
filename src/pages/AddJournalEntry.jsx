@@ -944,17 +944,19 @@ export default function AddJournalEntry() {
   const removedExistingGpxRef = useRef([]);
   const keepUploadedMediaRef = useRef(false);
 
-  const { data: userDogs = [] } = useQuery({
-    queryKey: ["dogs", user?.id],
-    queryFn: () => getDogs(user.id),
-    enabled: !!user?.id,
-  });
-
   // Load existing entry for editing
   const { data: existing, isLoading: loadingEntry } = useQuery({
     queryKey: ["journalEntry", editId],
     queryFn: () => getJournalEntry(editId),
     enabled: !!editId,
+  });
+
+  const dogOwnerId = editId ? existing?.user_id : user?.id;
+
+  const { data: userDogs = [] } = useQuery({
+    queryKey: ["dogs", dogOwnerId],
+    queryFn: () => getDogs(dogOwnerId),
+    enabled: !!dogOwnerId,
   });
 
   useEffect(() => {
