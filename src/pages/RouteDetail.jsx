@@ -42,6 +42,8 @@ import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 
 configureLeafletDefaultIcon();
 
+const getRouteCompletionDraftKey = (routeId) => `dogtrails:route-completion-draft:${routeId}`;
+
 
 export default function RouteDetail() {
   const [searchParams] = useSearchParams();
@@ -72,12 +74,40 @@ export default function RouteDetail() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const preservePendingMediaRef = useRef(false);
   const pendingPhotosRef = useRef([]);
+  const restoredDraftRef = useRef(false);
 
   const { user } = useAuth();
+  const completionDraftKey = routeId ? getRouteCompletionDraftKey(routeId) : null;
 
   useEffect(() => {
     pendingPhotosRef.current = completeData.photos ?? [];
   }, [completeData.photos]);
+
+  useEffect(() => {
+    if (!completionDraftKey || restoredDraftRef.current || typeof window === "undefined") return;
+
+    try {
+      const rawDraft = window.localStorage.getItem(completionDraftKey);
+      if (!rawDraft) {
+        restoredDraftRef.current = true;
+        return;
+      }
+
+      const draft = JSON.parse(rawDraft);
+      setCompleteData((prev) => ({
+        ...prev,
+        ...draft,
+        photos: Array.isArray(draft?.photos) ? draft.photos : [],
+        dogs: Array.isArray(draft?.dogs) ? draft.dogs : [],
+        seasons: Array.isArray(draft?.seasons) ? draft.seasons : [],
+      }));
+      preservePendingMediaRef.current = true;
+    } catch (error) {
+      console.error("[route-detail] restore completion draft failed:", error);
+    } finally {
+      restoredDraftRef.current = true;
+    }
+  }, [completionDraftKey]);
 
   useEffect(() => {
     return () => {
@@ -87,7 +117,25 @@ export default function RouteDetail() {
     };
   }, []);
 
+  const persistCompletionDraft = (draft) => {
+    if (!completionDraftKey || typeof window === "undefined") return;
+
+    try {
+      window.localStorage.setItem(completionDraftKey, JSON.stringify(draft));
+      preservePendingMediaRef.current = true;
+    } catch (error) {
+      console.error("[route-detail] persist completion draft failed:", error);
+    }
+  };
+
+  const clearPersistedCompletionDraft = () => {
+    if (!completionDraftKey || typeof window === "undefined") return;
+    window.localStorage.removeItem(completionDraftKey);
+  };
+
   const clearPendingCompletionPhotos = async () => {
+    preservePendingMediaRef.current = false;
+    clearPersistedCompletionDraft();
     const pendingPhotos = completeData.photos ?? [];
     if (pendingPhotos.length > 0) {
       try {
@@ -185,6 +233,7 @@ export default function RouteDetail() {
   const completeRouteMutation = useMutation({
     mutationFn: (data) => updateRoute(routeId, { completed: true, ...data }),
     onSuccess: () => {
+      persistCompletionDraft(completeData);
       queryClient.invalidateQueries({ queryKey: ["route", routeId] });
       queryClient.invalidateQueries({ queryKey: ["userRoutes", user?.id] });
       setShowCompleteForm(false);
@@ -266,6 +315,7 @@ export default function RouteDetail() {
 
   const handleCreateJournalEntry = () => {
     preservePendingMediaRef.current = true;
+    clearPersistedCompletionDraft();
     navigate(createPageUrl("AddJournalEntry"), {
       state: { routePrefill: buildJournalPrefill() },
     });
@@ -814,9 +864,10 @@ export default function RouteDetail() {
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={async () => {
-                    await clearPendingCompletionPhotos();
+                  onClick={() => {
+                    persistCompletionDraft(completeData);
                     setShowJournalDialog(false);
+                    toast.success("Fotos und Abschlussdaten bleiben für später erhalten.");
                   }}
                   className="w-full"
                 >
