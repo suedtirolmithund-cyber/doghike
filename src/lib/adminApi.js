@@ -113,18 +113,17 @@ export async function approveEntry(id) {
 
   validatePublicJournalEntry(entry);
 
-  const { error } = await supabase
-    .from("journal_entries")
-    .update({ status: "approved" })
-    .eq("id", id);
+  const { error } = await supabase.rpc("admin_approve_journal_entry", {
+    target_entry_id: id,
+  });
   if (error) throw error;
 }
 
 export async function rejectEntry(id, reason) {
-  const { error } = await supabase
-    .from("journal_entries")
-    .update({ status: "rejected", rejection_reason: reason || null })
-    .eq("id", id);
+  const { error } = await supabase.rpc("admin_reject_journal_entry", {
+    target_entry_id: id,
+    target_reason: reason ?? null,
+  });
   if (error) throw error;
 }
 

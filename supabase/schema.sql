@@ -651,6 +651,54 @@ begin
 end;
 $$;
 
+create or replace function public.admin_approve_journal_entry(target_entry_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_admin() then
+    raise exception 'not_allowed';
+  end if;
+
+  update public.journal_entries
+  set status = 'approved',
+      rejection_reason = null
+  where id = target_entry_id;
+
+  if not found then
+    raise exception 'not_found';
+  end if;
+end;
+$$;
+
+grant execute on function public.admin_approve_journal_entry(uuid) to authenticated;
+
+create or replace function public.admin_reject_journal_entry(target_entry_id uuid, target_reason text default null)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_admin() then
+    raise exception 'not_allowed';
+  end if;
+
+  update public.journal_entries
+  set status = 'rejected',
+      rejection_reason = nullif(btrim(target_reason), '')
+  where id = target_entry_id;
+
+  if not found then
+    raise exception 'not_found';
+  end if;
+end;
+$$;
+
+grant execute on function public.admin_reject_journal_entry(uuid, text) to authenticated;
+
 create or replace function public.delete_own_account()
 returns void
 language plpgsql
