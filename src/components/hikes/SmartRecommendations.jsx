@@ -156,14 +156,11 @@ export default function SmartRecommendations({ allHikes = [], currentHike = null
         return b._score - a._score;
       });
 
-    const sameAreaRecommendations = scoredRecommendations.filter(
-      (hike) => hike._hasExactLocationMatch || hike._areaScore > 0 || Number.isFinite(hike._distanceInKm)
+    const nearbyRecommendations = scoredRecommendations.filter(
+      (hike) => Number.isFinite(hike._distanceInKm) && hike._distanceInKm <= 30
     );
-    if (sameAreaRecommendations.length >= 3) {
-      return sameAreaRecommendations.slice(0, 3);
-    }
 
-    return scoredRecommendations.slice(0, 3);
+    return nearbyRecommendations.slice(0, 3);
   }, [allHikes, currentHike, myEntries]);
 
   if (!recommendations.length) return null;
@@ -185,8 +182,8 @@ export default function SmartRecommendations({ allHikes = [], currentHike = null
         </div>
         <p className="text-sm leading-relaxed text-[#C07820]">
           {hasAreaMatches && areaLabel
-            ? `Diese Vorschläge liegen rund um ${areaLabel} und sind der Wanderung auf der Karte besonders nahe.`
-            : "Hier findest du weitere spannende Wanderungen, die dieser Wanderung auf der Karte möglichst nahe liegen."}
+            ? `Diese Vorschläge liegen im Umkreis von 30 km rund um ${areaLabel}.`
+            : "Hier findest du weitere spannende Wanderungen im Umkreis von 30 km."}
         </p>
       </div>
 
