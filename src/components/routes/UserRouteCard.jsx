@@ -15,6 +15,7 @@ import "leaflet/dist/leaflet.css";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import { formatDurationHours } from "@/lib/duration";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
+import { ROUTE_LINE_COLOR, ROUTE_TILE_LAYER } from "@/lib/routeMapStyle";
 
 function getRouteTypeLabel(routeType) {
   if (routeType === "recorded") return "GPS-Aufzeichnung";
@@ -46,8 +47,13 @@ export default function UserRouteCard({ route, index, onDelete }) {
           zoomControl={false}
           attributionControl={false}
         >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <Polyline positions={coordinates} color="#A8003C" weight={4} />
+          <TileLayer
+            url={ROUTE_TILE_LAYER.url}
+            attribution={ROUTE_TILE_LAYER.attribution}
+            maxZoom={ROUTE_TILE_LAYER.maxZoom}
+            maxNativeZoom={ROUTE_TILE_LAYER.maxNativeZoom}
+          />
+          <Polyline positions={coordinates} color={ROUTE_LINE_COLOR} weight={4} />
         </SafeMapContainer>
 
         <div className="absolute left-3 top-3 z-[1000] flex items-center gap-1 rounded-full border border-brand-100/80 bg-white/82 px-3 py-1 text-xs font-medium text-[#7C3020] shadow-sm backdrop-blur-sm">
@@ -112,7 +118,7 @@ export default function UserRouteCard({ route, index, onDelete }) {
             variant="ghost"
             size="icon"
             onClick={() => onDelete(route.id)}
-            className="text-brand-400 hover:text-brand-500 hover:bg-brand-50"
+            className="text-brand-400 hover:bg-brand-600 hover:text-white"
           >
             <Trash2 className="w-4 h-4" />
           </Button>

@@ -6,6 +6,7 @@ import { deleteJournalFiles, uploadJournalFile } from "@/lib/journalApi";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { TileLayer, Polyline, Marker } from "react-leaflet";
+import L from "leaflet";
 import EditableRouteDrawer from "@/components/routes/EditableRouteDrawer";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,12 @@ import { DIFFICULTY_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyCon
 import { formatDurationHours, hoursInputToMinutes } from "@/lib/duration";
 import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
+import {
+  ROUTE_LINE_COLOR,
+  ROUTE_TILE_LAYER,
+  getRouteWaypointColor,
+  getRouteWaypointLabel,
+} from "@/lib/routeMapStyle";
 import "leaflet/dist/leaflet.css";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 
@@ -43,6 +50,21 @@ import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 configureLeafletDefaultIcon();
 
 const getRouteCompletionDraftKey = (routeId) => `dogtrails:route-completion-draft:${routeId}`;
+
+const routeWaypointIcon = (index, total) => L.divIcon({
+  html: `<div style="
+    background: ${getRouteWaypointColor(index, total)};
+    color: ${index === 0 ? '#7C3020' : 'white'};
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(124,48,32,0.26);">
+    ${getRouteWaypointLabel(index, total)}
+  </div>`,
+  className: "",
+  iconSize: [28, 28],
+  iconAnchor: [14, 14],
+});
 
 
 export default function RouteDetail() {
@@ -374,7 +396,7 @@ export default function RouteDetail() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="text-brand-400 hover:text-brand-500"
+                        className="text-brand-400 hover:bg-brand-600 hover:text-white"
                       >
                         <Trash2 className="w-5 h-5" />
                       </Button>
@@ -390,7 +412,7 @@ export default function RouteDetail() {
                         <AlertDialogCancel>Abbrechen</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => deleteRouteMutation.mutate()}
-                          className="bg-brand-400 hover:bg-brand-500"
+                          className="bg-brand-400 hover:bg-brand-600"
                         >
                           Löschen
                         </AlertDialogAction>
@@ -465,14 +487,19 @@ export default function RouteDetail() {
                     scrollWheelZoom={false}
                   >
                     <TileLayer
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      attribution='&copy; OpenStreetMap'
+                      url={ROUTE_TILE_LAYER.url}
+                      attribution={ROUTE_TILE_LAYER.attribution}
+                      maxZoom={ROUTE_TILE_LAYER.maxZoom}
+                      maxNativeZoom={ROUTE_TILE_LAYER.maxNativeZoom}
                     />
-                    <Polyline positions={route.waypoints} color="#A8003C" weight={4} />
-                    <Marker position={route.waypoints[0]} />
-                    {route.waypoints.length > 1 && (
-                      <Marker position={route.waypoints[route.waypoints.length - 1]} />
-                    )}
+                    <Polyline positions={route.waypoints} color={ROUTE_LINE_COLOR} weight={4} />
+                    {route.waypoints.map((point, index) => (
+                      <Marker
+                        key={`${point[0]}-${point[1]}-${index}`}
+                        position={point}
+                        icon={routeWaypointIcon(index, route.waypoints.length)}
+                      />
+                    ))}
                   </SafeMapContainer>
                 ) : (
                   <div className="flex h-full items-center justify-center bg-brand-50/35 text-sm text-slate-500">

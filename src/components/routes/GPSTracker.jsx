@@ -10,6 +10,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
+import { ROUTE_LINE_COLOR, ROUTE_TILE_LAYER } from "@/lib/routeMapStyle";
 
 
 configureLeafletDefaultIcon();
@@ -807,15 +808,17 @@ export default function GPSTracker({ onSave }) {
           scrollWheelZoom={false}
         >
           <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution="&copy; OpenStreetMap"
+            url={ROUTE_TILE_LAYER.url}
+            attribution={ROUTE_TILE_LAYER.attribution}
+            maxZoom={ROUTE_TILE_LAYER.maxZoom}
+            maxNativeZoom={ROUTE_TILE_LAYER.maxNativeZoom}
           />
           <MapFlyController flyRef={flyControllerRef} />
           {routeSegments.map((seg, idx) => (
             <Polyline
               key={idx}
               positions={seg.positions}
-              color={seg.dashed ? "#C07820" : "#A8003C"}
+              color={ROUTE_LINE_COLOR}
               weight={5}
               opacity={seg.dashed ? 0.55 : 0.85}
               dashArray={seg.dashed ? "8 8" : undefined}
@@ -902,7 +905,7 @@ export default function GPSTracker({ onSave }) {
                 Weiter
               </Button>
             )}
-            <Button onClick={stopTracking} className="flex-1 bg-brand-400 hover:bg-brand-500 sm:flex-none">
+            <Button onClick={stopTracking} className="flex-1 bg-brand-400 hover:bg-brand-600 sm:flex-none">
               <Square className="mr-2 h-4 w-4" />
               Beenden & Speichern
             </Button>

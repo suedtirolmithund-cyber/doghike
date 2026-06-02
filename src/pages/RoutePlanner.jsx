@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
-  Map, Navigation, Loader2, Upload, Search, RotateCcw, Layers, Mountain, X, Info
+  Map, Navigation, Loader2, Upload, Search, RotateCcw, Mountain, X, Info
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { motion, AnimatePresence } from "framer-motion";
@@ -24,42 +24,31 @@ import { deleteJournalFiles, uploadJournalGpx } from "@/lib/journalApi";
 import { estimateRouteDurationMinutes, formatDurationHours } from "@/lib/duration";
 import { searchNominatim } from "@/lib/nominatimApi";
 import { toast } from "sonner";
+import {
+  ROUTE_LINE_COLOR,
+  ROUTE_TILE_LAYER,
+  getRouteWaypointColor,
+  getRouteWaypointLabel,
+} from "@/lib/routeMapStyle";
 
 // ── Leaflet fix ───────────────────────────────────────────────
 
 configureLeafletDefaultIcon();
 
 
-const waypointIcon = (label, isStart, isEnd) => L.divIcon({
+const waypointIcon = (label, index, total) => L.divIcon({
   html: `<div style="
-    background: ${isStart ? '#F9C030' : isEnd ? '#A8003C' : '#F07030'};
-    color: white; width: 28px; height: 28px; border-radius: 50%;
+    background: ${getRouteWaypointColor(index, total)};
+    color: ${index === 0 ? '#7C3020' : 'white'}; width: 28px; height: 28px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 11px; font-weight: bold; border: 3px solid white;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
-    ${isStart ? 'S' : isEnd ? 'Z' : label}
+    ${getRouteWaypointLabel(index, total, label)}
   </div>`,
   className: "", iconSize: [28, 28], iconAnchor: [14, 14],
 });
 
 // ── Tile layers ───────────────────────────────────────────────
-const TILES = {
-  standard: {
-    url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
-    label: "Standard",
-    maxZoom: 19,
-    maxNativeZoom: 19,
-  },
-  topo: {
-    url: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-    attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, SRTM | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)',
-    label: "Topo",
-    maxZoom: 17,
-    maxNativeZoom: 17,
-  },
-};
-
 // ── Haversine distance ────────────────────────────────────────
 function haversine(a, b) {
   const R = 6371;
@@ -252,7 +241,6 @@ function SmartRoutePlanner({ onRouteReady }) {
   const [route, setRoute] = useState(null);
   const [elevation, setElevation] = useState([]);
   const [calculating, setCalculating] = useState(false);
-  const [mapType, setMapType] = useState("standard");
   const [flyTarget, setFlyTarget] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -260,14 +248,8 @@ function SmartRoutePlanner({ onRouteReady }) {
   const [searchError, setSearchError] = useState(null);
   const [routingMode, setRoutingMode] = useState("hike");
   const routeRef = useRef(null);
-  const topoTileFallbackRef = useRef(false);
-  const mapResetKey = `planner-${mapType}-${routingMode}`;
-
-  const tile = TILES[mapType];
-
-  useEffect(() => {
-    topoTileFallbackRef.current = false;
-  }, [mapType]);
+  const tile = ROUTE_TILE_LAYER;
+  const mapResetKey = `planner-${routingMode}`;
 
   useEffect(() => {
     if (waypoints.length < 2) {
@@ -382,14 +364,6 @@ function SmartRoutePlanner({ onRouteReady }) {
     setSearchError(null);
   };
 
-  const handleTileError = (event) => {
-    const failedZoom = event?.coords?.z ?? tile.maxNativeZoom;
-    if (mapType !== "topo" || topoTileFallbackRef.current || failedZoom < tile.maxNativeZoom) return;
-    topoTileFallbackRef.current = true;
-    setMapType("standard");
-    toast.info("Topo geht hier gerade nicht. Die Standardkarte übernimmt.");
-  };
-
   return (
     <div className="space-y-3">
       {/* Routing mode selector */}
@@ -407,7 +381,7 @@ function SmartRoutePlanner({ onRouteReady }) {
       </div>
 
       {/* Toolbar */}
-      <div className="grid grid-cols-[1fr_auto] items-center gap-2">
+      <div className="grid grid-cols-1 items-center gap-2 sm:grid-cols-[1fr_auto]">
         <form onSubmit={handleSearch} className="grid min-w-0 grid-cols-[1fr_auto] gap-1.5">
           <Input value={searchText} onChange={(e) => setSearchText(e.target.value)}
             placeholder="Ort als Wegpunkt suchen..." className="h-10 text-sm" />
@@ -415,14 +389,6 @@ function SmartRoutePlanner({ onRouteReady }) {
             {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
           </Button>
         </form>
-
-        <button
-          onClick={() => setMapType((t) => t === "standard" ? "topo" : "standard")}
-          className="flex h-10 shrink-0 items-center gap-1.5 rounded-xl border border-brand-100 bg-white/70 px-3 text-xs font-medium text-slate-600 hover:bg-brand-50/40"
-        >
-          <Layers className="w-3.5 h-3.5" />
-          {mapType === "standard" ? "Topo" : "Standard"}
-        </button>
 
         {waypoints.length > 0 && (
           <Button size="sm" variant="outline" onClick={reset} className="col-span-2 h-9 text-brand-500 hover:text-brand-400 sm:col-span-1">
@@ -477,7 +443,6 @@ function SmartRoutePlanner({ onRouteReady }) {
             attribution={tile.attribution}
             maxZoom={tile.maxZoom}
             maxNativeZoom={tile.maxNativeZoom}
-            eventHandlers={{ tileerror: handleTileError }}
           />
           <MapClickHandler onMapClick={handleMapClick} />
           {flyTarget && <MapFlyTo center={flyTarget.center} zoom={flyTarget.zoom} />}
@@ -486,7 +451,7 @@ function SmartRoutePlanner({ onRouteReady }) {
           {route && (
             <Polyline
               positions={route.positions}
-              color="#A8003C"
+              color={ROUTE_LINE_COLOR}
               weight={6}
               opacity={0.85}
               eventHandlers={{ click: handleRouteClick }}
@@ -498,7 +463,7 @@ function SmartRoutePlanner({ onRouteReady }) {
             <Marker
               key={i}
               position={[wp.lat, wp.lng]}
-              icon={waypointIcon(wp.label, i === 0, i === waypoints.length - 1 && waypoints.length > 1)}
+              icon={waypointIcon(wp.label, i, waypoints.length)}
               draggable={true}
               eventHandlers={{
                 dragend: (e) => {
@@ -556,10 +521,14 @@ function SmartRoutePlanner({ onRouteReady }) {
         <div className="space-y-1">
           {waypoints.map((wp, i) => (
             <div key={i} className="flex items-center gap-2 text-xs bg-brand-50/70 rounded-lg px-2 py-1.5 group">
-              <span className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-white text-[10px] shrink-0 ${
-            i === 0 ? "bg-brand-400" : i === waypoints.length - 1 && waypoints.length > 1 ? "bg-brand-400" : "bg-brand-700"
-              }`}>
-                {i === 0 ? "S" : i === waypoints.length - 1 && waypoints.length > 1 ? "Z" : wp.label}
+              <span
+                className="w-5 h-5 rounded-full flex items-center justify-center font-bold text-white text-[10px] shrink-0"
+                style={{
+                  backgroundColor: getRouteWaypointColor(i, waypoints.length),
+                  color: i === 0 ? "#7C3020" : "white",
+                }}
+              >
+                {getRouteWaypointLabel(i, waypoints.length, wp.label)}
               </span>
               <span className="text-slate-500 flex-1 truncate">{wp.lat.toFixed(5)}, {wp.lng.toFixed(5)}</span>
               {/* Reorder buttons */}
@@ -573,7 +542,7 @@ function SmartRoutePlanner({ onRouteReady }) {
                   ↓
                 </button>
               </div>
-              <button onClick={() => removeWaypoint(i)} className="text-slate-300 hover:text-brand-500">
+              <button onClick={() => removeWaypoint(i)} className="rounded p-1 text-slate-300 hover:bg-brand-600 hover:text-white">
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>

@@ -11,6 +11,12 @@ import { estimateRouteDurationMinutes, formatDurationHours, getRouteDurationRule
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
 import { searchNominatim } from "@/lib/nominatimApi";
+import {
+  ROUTE_LINE_COLOR,
+  ROUTE_TILE_LAYER,
+  getRouteWaypointColor,
+  getRouteWaypointLabel,
+} from "@/lib/routeMapStyle";
 
 const GH_API_KEY = import.meta.env.VITE_GRAPHHOPPER_KEY || "";
 
@@ -19,11 +25,11 @@ configureLeafletDefaultIcon();
 
 
 // Create custom draggable marker icon
-const createWaypointIcon = (index, isEditing) => {
+const createWaypointIcon = (index, total, isEditing) => {
   return L.divIcon({
     html: `<div style="
-      background: ${isEditing ? '#F07030' : '#A8003C'};
-      color: white;
+      background: ${getRouteWaypointColor(index, total)};
+      color: ${index === 0 ? '#7C3020' : 'white'};
       width: 28px;
       height: 28px;
       border-radius: 50%;
@@ -35,14 +41,14 @@ const createWaypointIcon = (index, isEditing) => {
       border: 3px solid white;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
       cursor: ${isEditing ? 'move' : 'pointer'};
-    ">${index + 1}</div>`,
+    ">${getRouteWaypointLabel(index, total)}</div>`,
     className: '',
     iconSize: [28, 28],
     iconAnchor: [14, 14],
   });
 };
 
-function DraggableMarker({ position, index, isEditing, onDrag, onDelete }) {
+function DraggableMarker({ position, index, total, isEditing, onDrag, onDelete }) {
   const markerRef = useRef(null);
 
   useEffect(() => {
@@ -67,7 +73,7 @@ function DraggableMarker({ position, index, isEditing, onDrag, onDelete }) {
   return (
     <Marker
       position={position}
-      icon={createWaypointIcon(index, isEditing)}
+      icon={createWaypointIcon(index, total, isEditing)}
       ref={markerRef}
       eventHandlers={eventHandlers}
       draggable={isEditing}
@@ -128,13 +134,14 @@ function RouteDrawerMap({ waypoints, setWaypoints, routeCoordinates, isEditing, 
     <>
       {searchCenter && <MapCenterController center={searchCenter} />}
       {routeCoordinates.length > 1 && (
-        <Polyline positions={routeCoordinates} color="#A8003C" weight={4} opacity={0.8} />
+        <Polyline positions={routeCoordinates} color={ROUTE_LINE_COLOR} weight={4} opacity={0.8} />
       )}
       {waypoints.map((point, idx) => (
         <DraggableMarker
           key={idx}
           position={point}
           index={idx}
+          total={waypoints.length}
           isEditing={isEditing}
           onDrag={handleDrag}
           onDelete={handleDelete}
@@ -436,7 +443,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
               size="sm"
               variant={isEditing ? "default" : "outline"}
               onClick={() => setIsEditing(!isEditing)}
-              className={isEditing ? "bg-brand-400 hover:bg-brand-500" : ""}
+              className={isEditing ? "bg-brand-400 hover:bg-brand-600" : ""}
             >
               {isEditing ? (
                 <>
@@ -505,8 +512,10 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
           scrollWheelZoom={false}
         >
           <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
+            url={ROUTE_TILE_LAYER.url}
+            attribution={ROUTE_TILE_LAYER.attribution}
+            maxZoom={ROUTE_TILE_LAYER.maxZoom}
+            maxNativeZoom={ROUTE_TILE_LAYER.maxNativeZoom}
           />
           <RouteDrawerMap 
             waypoints={waypoints} 
@@ -539,7 +548,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
           variant="outline"
           onClick={handleClear}
           disabled={waypoints.length === 0}
-          className="text-brand-400 hover:text-brand-500 hover:bg-brand-50"
+          className="text-brand-400 hover:bg-brand-600 hover:text-white"
           size="sm"
         >
           <Trash2 className="w-3 h-3 md:w-4 md:h-4 md:mr-2" />
