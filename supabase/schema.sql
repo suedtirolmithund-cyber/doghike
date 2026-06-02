@@ -695,6 +695,10 @@ begin
 end;
 $$;
 
+grant execute on function public.admin_delete_user_account(uuid) to authenticated;
+revoke execute on function public.admin_delete_user_account(uuid) from public;
+revoke execute on function public.admin_delete_user_account(uuid) from anon;
+
 create or replace function public.admin_approve_journal_entry(target_entry_id uuid)
 returns void
 language plpgsql
