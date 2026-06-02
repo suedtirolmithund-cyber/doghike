@@ -54,6 +54,14 @@ export async function deleteRoute(id) {
   if (error) throw error;
 
   if (existingRoute?.gpx_url) {
-    await deleteJournalFiles([existingRoute.gpx_url]);
+    try {
+      await deleteJournalFiles([existingRoute.gpx_url]);
+    } catch (cleanupError) {
+      console.error("deleteRoute:gpxCleanup", {
+        routeId: id,
+        gpxUrl: existingRoute.gpx_url,
+        cleanupError,
+      });
+    }
   }
 }
