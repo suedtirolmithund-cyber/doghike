@@ -629,10 +629,8 @@ export default function RoutePlanner() {
 
   const createRouteMutation = useMutation({
     mutationFn: (data) => createRoute(user.id, data),
-    onSuccess: (savedRoute) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userRoutes", user?.id] });
-      toast.success("Deine Route ist bereit.");
-      navigate(createPageUrl("RouteDetail") + `?id=${savedRoute.id}`);
     },
     onError: () => toast.error("Die Route wollte gerade nicht speichern."),
   });
@@ -664,8 +662,23 @@ export default function RoutePlanner() {
     }
 
     if (activeTab === "track") {
+      const savedRoute = await createRouteMutation.mutateAsync({
+        name: routeData.name,
+        description: routeData.description,
+        start_location: routeData.start_location,
+        route_type: "recorded",
+        waypoints: routeGeometry.positions ?? routeGeometry.coordinates ?? [],
+        is_public: false,
+        distance_km: routeGeometry.distance_km,
+        elevation_gain_m: routeGeometry.elevation_gain_m || null,
+        duration_minutes: routeGeometry.duration_minutes || null,
+      });
+      toast.success("Deine Aufzeichnung ist als Route gespeichert.");
       navigate(createPageUrl("AddJournalEntry"), {
-        state: { routePrefill: buildJournalPrefillFromRecordedRoute() },
+        state: {
+          routePrefill: buildJournalPrefillFromRecordedRoute(),
+          savedRouteId: savedRoute.id,
+        },
       });
       return;
     }
@@ -677,7 +690,7 @@ export default function RoutePlanner() {
         uploadedGpxUrl = await uploadJournalGpx(user.id, routeGeometry.rawFile);
       }
 
-      await createRouteMutation.mutateAsync({
+      const savedRoute = await createRouteMutation.mutateAsync({
         name: routeData.name,
         description: routeData.description,
         start_location: routeData.start_location,
@@ -689,6 +702,8 @@ export default function RoutePlanner() {
         duration_minutes: routeGeometry.duration_minutes || null,
         gpx_url: uploadedGpxUrl,
       });
+      toast.success("Deine Route ist bereit.");
+      navigate(createPageUrl("RouteDetail") + `?id=${savedRoute.id}`);
     } catch (error) {
       if (uploadedGpxUrl) {
         try {
@@ -819,7 +834,7 @@ export default function RoutePlanner() {
 
               <div className="rounded-xl border border-brand-100 bg-brand-50/70 px-4 py-3 text-sm text-slate-600">
                 {activeTab === "track"
-                  ? "Diese Aufzeichnung gilt als bereits gemacht und wird direkt als vorausgefüllter Tagebuch-Eintrag geöffnet."
+                  ? "Diese Aufzeichnung wird zuerst privat als Route gespeichert und danach als vorausgefüllter Tagebuch-Eintrag geöffnet."
                   : activeTab === "gpx"
                     ? "Dieser GPX-Import bleibt privat. Du kannst ihn später als Wanderung eintragen oder weiterbearbeiten."
                     : "Diese Planung bleibt privat. Erst wenn du die Route später als Wanderung einträgst, kannst du sie auf Freunde oder öffentlich stellen."}
@@ -832,7 +847,7 @@ export default function RoutePlanner() {
                 <Button type="submit" disabled={createRouteMutation.isPending} className="w-full bg-[#A8003C] hover:bg-[#7C3020] sm:w-auto">
                   {createRouteMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                   {activeTab === "track"
-                    ? "Ins Tagebuch übernehmen"
+                    ? "Speichern & ins Tagebuch"
                     : activeTab === "gpx"
                       ? "GPX-Route speichern"
                       : "Route speichern"}
