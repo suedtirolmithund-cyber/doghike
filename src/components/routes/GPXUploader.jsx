@@ -18,6 +18,8 @@ import SafeMapContainer from "@/components/map/SafeMapContainer";
 
 configureLeafletDefaultIcon();
 
+const ELEVATION_NOISE_THRESHOLD_M = 5;
+
 
 function haversine(lat1, lon1, lat2, lon2) {
   const R = 6371;
@@ -75,8 +77,8 @@ function parseGPX(text) {
 
       if (ele !== null && prevElev !== null) {
         const diff = ele - prevElev;
-        if (diff > 0) elevGain += diff;
-        else elevLoss += Math.abs(diff);
+        if (diff > ELEVATION_NOISE_THRESHOLD_M) elevGain += diff;
+        else if (diff < -ELEVATION_NOISE_THRESHOLD_M) elevLoss += Math.abs(diff);
       }
       if (ele !== null) prevElev = ele;
     }
