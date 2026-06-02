@@ -25,7 +25,9 @@ export function minutesToHoursInput(minutes) {
 export function hoursInputToMinutes(hoursValue) {
   if (hoursValue === null || hoursValue === undefined || hoursValue === "") return null;
 
-  const numericHours = Number(hoursValue);
+  const normalizedHoursValue =
+    typeof hoursValue === "string" ? hoursValue.replace(",", ".").trim() : hoursValue;
+  const numericHours = Number(normalizedHoursValue);
   if (!Number.isFinite(numericHours)) return null;
 
   return Math.round(numericHours * 60);
