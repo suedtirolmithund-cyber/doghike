@@ -84,6 +84,20 @@ create table if not exists public.stripe_webhook_events (
 
 alter table public.stripe_webhook_events enable row level security;
 
+create table if not exists public.premium_checkout_consents (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  stripe_customer_id text,
+  stripe_checkout_session_id text unique,
+  checkout_plan text not null check (checkout_plan in ('monthly', 'one_time')),
+  withdrawal_consent boolean not null check (withdrawal_consent = true),
+  withdrawal_consent_at timestamptz not null,
+  withdrawal_consent_source text not null default 'premium_checkout',
+  created_at timestamptz not null default now()
+);
+
+alter table public.premium_checkout_consents enable row level security;
+
 alter table public.profiles enable row level security;
 
 create policy "Eigenes Profil lesen"

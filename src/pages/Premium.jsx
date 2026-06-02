@@ -137,6 +137,8 @@ export default function Premium() {
       const { data, error } = await supabase.functions.invoke("create-checkout-session", {
         body: {
           plan,
+          withdrawalConsent,
+          withdrawalConsentAt: new Date().toISOString(),
           successUrl: `${premiumUrl}?checkout=success`,
           cancelUrl: `${premiumUrl}?checkout=cancelled`,
         },

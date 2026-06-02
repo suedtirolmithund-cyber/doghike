@@ -76,6 +76,14 @@ async function getOrCreateStripeCustomer(
   return latestProfile.stripe_customer_id;
 }
 
+function requireWithdrawalConsent(value: unknown) {
+  if (value !== true) {
+    throw new Error("Bitte bestätige die Einwilligung zum sofortigen Premium-Zugang.");
+  }
+
+  return new Date().toISOString();
+}
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -90,7 +98,7 @@ Deno.serve(async (request) => {
     const supabaseUrl = env("SUPABASE_URL");
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? env("SUPABASE_PUBLISHABLE_KEY");
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? env("SUPABASE_SECRET_KEY");
-    const { successUrl, cancelUrl, plan } = await request.json().catch(() => ({}));
+    const { successUrl, cancelUrl, plan, withdrawalConsent } = await request.json().catch(() => ({}));
     const checkoutPlan = plan === "one_time" ? "one_time" : "monthly";
     const priceId = checkoutPlan === "one_time"
       ? env("STRIPE_PREMIUM_ONE_TIME_PRICE_ID")
@@ -109,7 +117,15 @@ Deno.serve(async (request) => {
     const user = userData.user;
     const safeSuccessUrl = safeAppRedirectUrl(successUrl, "/Premium?checkout=success");
     const safeCancelUrl = safeAppRedirectUrl(cancelUrl, "/Premium?checkout=cancelled");
+    const withdrawalConsentAt = requireWithdrawalConsent(withdrawalConsent);
     const customerId = await getOrCreateStripeCustomer(adminClient, user);
+    const checkoutMetadata = {
+      user_id: user.id,
+      checkout_plan: checkoutPlan,
+      withdrawal_consent: "true",
+      withdrawal_consent_at: withdrawalConsentAt,
+      withdrawal_consent_source: "premium_checkout",
+    };
 
     const session = await stripe.checkout.sessions.create({
       mode: checkoutPlan === "one_time" ? "payment" : "subscription",
@@ -125,10 +141,31 @@ Deno.serve(async (request) => {
         name: "auto",
       },
       ...(checkoutPlan === "monthly"
-        ? { subscription_data: { metadata: { user_id: user.id } } }
+        ? { subscription_data: { metadata: checkoutMetadata } }
         : {}),
-      metadata: { user_id: user.id, checkout_plan: checkoutPlan },
+      metadata: checkoutMetadata,
     });
+
+    const { error: consentError } = await adminClient
+      .from("premium_checkout_consents")
+      .insert({
+        user_id: user.id,
+        stripe_customer_id: customerId,
+        stripe_checkout_session_id: session.id,
+        checkout_plan: checkoutPlan,
+        withdrawal_consent: true,
+        withdrawal_consent_at: withdrawalConsentAt,
+        withdrawal_consent_source: "premium_checkout",
+      });
+
+    if (consentError) {
+      try {
+        await stripe.checkout.sessions.expire(session.id);
+      } catch (error) {
+        console.warn("[create-checkout-session] checkout session cleanup failed", error);
+      }
+      throw consentError;
+    }
 
     return jsonResponse({ url: session.url });
   } catch (error) {

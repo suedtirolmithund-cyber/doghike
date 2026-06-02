@@ -18,6 +18,7 @@ import {
   User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -57,6 +58,7 @@ export default function AccountSettings({ user, profile }) {
   const { logout } = useAuth();
   const [isDeleting, setIsDeleting] = useState(false);
   const [pendingPlan, setPendingPlan] = useState(null);
+  const [premiumWithdrawalConsent, setPremiumWithdrawalConsent] = useState(false);
   const premiumEndDate = profile?.premium_current_period_end ? new Date(profile.premium_current_period_end) : null;
   const premiumHasTimeLeft = !premiumEndDate || premiumEndDate.getTime() > Date.now();
   const isPremium = profile?.is_premium === true && premiumHasTimeLeft;
@@ -71,6 +73,8 @@ export default function AccountSettings({ user, profile }) {
       const { data, error } = await supabase.functions.invoke("create-checkout-session", {
         body: {
           plan,
+          withdrawalConsent: premiumWithdrawalConsent,
+          withdrawalConsentAt: new Date().toISOString(),
           successUrl: `${premiumUrl}?checkout=success`,
           cancelUrl: `${premiumUrl}?checkout=cancelled`,
         },
@@ -161,13 +165,29 @@ export default function AccountSettings({ user, profile }) {
             </p>
           </div>
 
+          {!isPremium && (
+            <label className="flex items-start gap-3 rounded-2xl border border-brand-100 bg-white/70 p-3 text-left">
+              <Checkbox
+                id="profile-premium-withdrawal-consent"
+                checked={premiumWithdrawalConsent}
+                onCheckedChange={(checked) => setPremiumWithdrawalConsent(checked === true)}
+                className="mt-0.5 shrink-0"
+              />
+              <span className="text-xs leading-relaxed text-slate-500">
+                Ich stimme zu, dass der Premium-Zugang sofort nach Zahlung freigeschaltet wird,
+                und nehme zur Kenntnis, dass ich damit mein 14-tägiges Widerrufsrecht gemäß
+                Art. 59 lit. a D.Lgs. 206/2005 verliere.
+              </span>
+            </label>
+          )}
+
           <div className="grid gap-2 sm:grid-cols-2">
             {!isPremium && (
               <>
                 <Button
                   className="doghike-primary-action min-h-11 py-2"
                   onClick={() => { setPendingPlan("monthly"); checkoutMutation.mutate("monthly"); }}
-                  disabled={!!pendingPlan}
+                  disabled={!!pendingPlan || !premiumWithdrawalConsent}
                 >
                   {pendingPlan === "monthly" ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -180,7 +200,7 @@ export default function AccountSettings({ user, profile }) {
                   variant="outline"
                   className="min-h-11 py-2"
                   onClick={() => { setPendingPlan("one_time"); checkoutMutation.mutate("one_time"); }}
-                  disabled={!!pendingPlan}
+                  disabled={!!pendingPlan || !premiumWithdrawalConsent}
                 >
                   {pendingPlan === "one_time" ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
