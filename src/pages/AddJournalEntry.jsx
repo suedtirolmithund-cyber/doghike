@@ -1174,6 +1174,7 @@ export default function AddJournalEntry() {
     }
 
     set("photos", (currentPhotos = []) => currentPhotos.filter((_, j) => j !== index));
+    setPhotoPreviewUrls((currentPreviewUrls = []) => currentPreviewUrls.filter((_, j) => j !== index));
     setSelectedPhotoIndex(null);
   };
 
