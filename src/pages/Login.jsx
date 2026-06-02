@@ -141,12 +141,12 @@ export default function Login() {
         return;
       }
       if (!privacyAccepted) {
-        setLocalError("Bitte akzeptiere die Datenschutzerklärung.");
+        setLocalError("Bitte akzeptiere die Datenschutzerklärung und Nutzungsbedingungen.");
         return;
       }
 
       setLoading(true);
-      const { error: err } = await signUpWithEmail(email, password);
+      const { error: err } = await signUpWithEmail(email, password, "email_registration");
       setLoading(false);
 
       if (err) {
@@ -177,13 +177,13 @@ export default function Login() {
     setSuccessMsg(null);
 
     if (mode === "register" && !privacyAccepted) {
-      setLocalError("Bitte akzeptiere die Datenschutzerklärung.");
+      setLocalError("Bitte akzeptiere die Datenschutzerklärung und Nutzungsbedingungen.");
       return;
     }
 
     setGoogleLoading(true);
     try {
-      const result = await loginWithGoogle();
+      const result = await loginWithGoogle("/", mode === "register" ? "google_registration" : null);
       if (result?.error) {
         setGoogleLoading(false);
         setLocalError(mapAuthError(result.error.message));
@@ -491,7 +491,11 @@ export default function Login() {
                           <Link to={createPageUrl("Datenschutz")} className="underline text-white" target="_blank">
                             Datenschutzerklärung
                           </Link>{" "}
-                          gemäß DSGVO. <span className="text-brand-300">*</span>
+                          und die{" "}
+                          <Link to={createPageUrl("AGB")} className="underline text-white" target="_blank">
+                            Nutzungsbedingungen
+                          </Link>
+                          . <span className="text-brand-300">*</span>
                         </label>
                       </div>
                     </motion.div>
@@ -577,7 +581,7 @@ export default function Login() {
           <p className="text-xs text-white/50" style={{ fontFamily: "Nunito, sans-serif" }}>
             <Link to={createPageUrl("Datenschutz")} className="hover:text-white/80">Datenschutz</Link>
             {" · "}
-            <Link to={createPageUrl("Legal")} className="hover:text-white/80">Nutzungsbedingungen</Link>
+            <Link to={createPageUrl("AGB")} className="hover:text-white/80">Nutzungsbedingungen</Link>
           </p>
         </div>
       </motion.div>

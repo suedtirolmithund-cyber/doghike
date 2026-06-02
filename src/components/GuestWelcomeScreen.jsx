@@ -92,12 +92,12 @@ export default function GuestWelcomeScreen() {
         return;
       }
       if (!privacyAccepted) {
-        setLocalError("Bitte akzeptiere die Datenschutzerklärung.");
+        setLocalError("Bitte akzeptiere die Datenschutzerklärung und Nutzungsbedingungen.");
         return;
       }
 
       setLoading(true);
-      const { data, error: err } = await signUpWithEmail(email, password);
+      const { data, error: err } = await signUpWithEmail(email, password, "email_registration");
       setLoading(false);
       if (err) {
         setLocalError(mapAuthError(err.message));
@@ -182,11 +182,14 @@ export default function GuestWelcomeScreen() {
     setLocalError(null);
     setSuccessMsg(null);
     if (mode === "register" && !privacyAccepted) {
-      setLocalError("Bitte akzeptiere die Datenschutzerklärung.");
+      setLocalError("Bitte akzeptiere die Datenschutzerklärung und Nutzungsbedingungen.");
       return;
     }
     setGoogleLoading(true);
-    const result = await loginWithGoogle(mode === "register" ? createPageUrl("Profile") : "/");
+    const result = await loginWithGoogle(
+      mode === "register" ? createPageUrl("Profile") : "/",
+      mode === "register" ? "google_registration" : null
+    );
     if (result?.error) {
       setGoogleLoading(false);
       setLocalError(mapAuthError(result.error.message));
@@ -369,6 +372,10 @@ export default function GuestWelcomeScreen() {
                           <Link to={createPageUrl("Datenschutz")} className="text-white underline" target="_blank">
                             Datenschutzerklärung
                           </Link>
+                          {" "}und die{" "}
+                          <Link to={createPageUrl("AGB")} className="text-white underline" target="_blank">
+                            Nutzungsbedingungen
+                          </Link>
                           .
                         </label>
                       </div>
@@ -421,7 +428,7 @@ export default function GuestWelcomeScreen() {
               Datenschutz
             </Link>
             {" · "}
-            <Link to={createPageUrl("Legal")} className="hover:text-white">
+            <Link to={createPageUrl("AGB")} className="hover:text-white">
               Nutzungsbedingungen
             </Link>
           </p>

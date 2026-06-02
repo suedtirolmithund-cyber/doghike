@@ -347,6 +347,7 @@ export default function AccountSettings({ user, profile }) {
                     <li>Kommentare & Bewertungen</li>
                     <li>Freundschaften</li>
                     <li>Routen & GPS-Daten</li>
+                    <li>Öffentliche Touren & Support-Anfragen</li>
                   </ul>
                   <p className="font-medium text-brand-400">
                     Diese Löschung ist endgültig und kann nicht rückgängig gemacht werden.

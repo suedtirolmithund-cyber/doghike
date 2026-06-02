@@ -91,6 +91,32 @@ create policy "Admin Stripe-Webhook-Events verwalten"
   using (public.is_admin())
   with check (public.is_admin());
 
+create table if not exists public.registration_consents (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users(id) on delete cascade unique not null,
+  privacy_version text not null default '2026-06',
+  terms_version text not null default '2026-06',
+  accepted_at timestamptz not null default now(),
+  accepted_source text not null default 'registration',
+  created_at timestamptz not null default now()
+);
+
+alter table public.registration_consents enable row level security;
+
+create policy "Eigene Registrierungseinwilligung lesen"
+  on public.registration_consents for select
+  using (auth.uid() = user_id);
+
+create policy "Eigene Registrierungseinwilligung anlegen"
+  on public.registration_consents for insert
+  with check (auth.uid() = user_id);
+
+create policy "Admin Registrierungseinwilligungen verwalten"
+  on public.registration_consents
+  for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
 create table if not exists public.premium_checkout_consents (
   id uuid default gen_random_uuid() primary key,
   user_id uuid references auth.users(id) on delete cascade not null,
@@ -640,6 +666,10 @@ begin
     return substring(file_reference from length('pending://') + 1);
   end if;
 
+  if bucket_name = 'journal' and file_reference like 'public-hikes/%' then
+    return file_reference;
+  end if;
+
   if file_reference like bucket_name || '/%' then
     return substring(file_reference from length(bucket_name) + 2);
   end if;
@@ -664,6 +694,7 @@ create or replace function public.admin_delete_user_account(target_user_id uuid)
 returns void
 language plpgsql
 security definer
+set search_path = public
 as $$
 begin
   if not public.is_admin() then
@@ -701,6 +732,27 @@ begin
       select public.extract_storage_object_name('journal', ur.gpx_url)
       from public.user_routes ur
       where ur.user_id = target_user_id
+      union
+      select public.extract_storage_object_name('journal', ph.photo_url)
+      from public.public_hikes phike
+      join public.public_hike_photos ph on ph.hike_id = phike.id
+      where phike.user_id = target_user_id
+      union
+      select public.extract_storage_object_name('journal', phike.image)
+      from public.public_hikes phike
+      where phike.user_id = target_user_id
+      union
+      select public.extract_storage_object_name('journal', phike.image2)
+      from public.public_hikes phike
+      where phike.user_id = target_user_id
+      union
+      select public.extract_storage_object_name('journal', phike.image3)
+      from public.public_hikes phike
+      where phike.user_id = target_user_id
+      union
+      select public.extract_storage_object_name('journal', phike.image4)
+      from public.public_hikes phike
+      where phike.user_id = target_user_id
     );
 
   delete from storage.objects
@@ -718,6 +770,12 @@ begin
       from public.comments c
       where c.user_id = target_user_id
     );
+
+  delete from public.support_requests
+  where user_id = target_user_id;
+
+  delete from public.public_hikes
+  where user_id = target_user_id;
 
   delete from auth.users
   where id = target_user_id;
@@ -784,6 +842,7 @@ create or replace function public.delete_own_account()
 returns void
 language plpgsql
 security definer
+set search_path = public
 as $$
 declare
   current_user_id uuid;
@@ -825,6 +884,27 @@ begin
       select public.extract_storage_object_name('journal', ur.gpx_url)
       from public.user_routes ur
       where ur.user_id = current_user_id
+      union
+      select public.extract_storage_object_name('journal', ph.photo_url)
+      from public.public_hikes phike
+      join public.public_hike_photos ph on ph.hike_id = phike.id
+      where phike.user_id = current_user_id
+      union
+      select public.extract_storage_object_name('journal', phike.image)
+      from public.public_hikes phike
+      where phike.user_id = current_user_id
+      union
+      select public.extract_storage_object_name('journal', phike.image2)
+      from public.public_hikes phike
+      where phike.user_id = current_user_id
+      union
+      select public.extract_storage_object_name('journal', phike.image3)
+      from public.public_hikes phike
+      where phike.user_id = current_user_id
+      union
+      select public.extract_storage_object_name('journal', phike.image4)
+      from public.public_hikes phike
+      where phike.user_id = current_user_id
     );
 
   delete from storage.objects
@@ -843,10 +923,20 @@ begin
       where c.user_id = current_user_id
     );
 
+  delete from public.support_requests
+  where user_id = current_user_id;
+
+  delete from public.public_hikes
+  where user_id = current_user_id;
+
   delete from auth.users
   where id = current_user_id;
 end;
 $$;
+
+grant execute on function public.delete_own_account() to authenticated;
+revoke execute on function public.delete_own_account() from public;
+revoke execute on function public.delete_own_account() from anon;
 
 create table if not exists public.support_requests (
   id uuid default gen_random_uuid() primary key,

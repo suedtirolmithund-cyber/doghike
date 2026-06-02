@@ -54,7 +54,7 @@ export default function Datenschutz() {
                     <li><strong>E-Mail-Adresse</strong> (Pflichtfeld)</li>
                     <li><strong>Passwort</strong> (verschlüsselt gehasht, nie im Klartext gespeichert)</li>
                     <li><strong>Anzeigename</strong> (optional, von dir frei wählbar)</li>
-                    <li><strong>Zeitpunkt der Registrierung</strong> und Zustimmung zur Datenschutzerklärung</li>
+                    <li><strong>Zeitpunkt der Registrierung</strong> und Zustimmung zur Datenschutzerklärung und zu den Nutzungsbedingungen</li>
                   </ul>
                 </div>
 
@@ -155,13 +155,12 @@ export default function Datenschutz() {
                   <li><strong>Wanderungen, Fotos, GPS-Daten:</strong> Bis du sie löschst oder wir deine Kontolöschung bearbeiten.</li>
                   <li><strong>Kommentare & Bewertungen:</strong> Bis du sie löschst oder wir deine Kontolöschung bearbeiten.</li>
                   <li><strong>Technische Logs:</strong> Vercel speichert Zugriffslogs typischerweise bis zu 30 Tage; Supabase Auth-Logs nach deren jeweiliger Standardaufbewahrung.</li>
-                  <li><strong>Einwilligungsnachweis:</strong> Datum der Zustimmung zur Datenschutzerklärung wird gespeichert, soweit dies zum Nachweis erforderlich ist.</li>
+                  <li><strong>Einwilligungsnachweis:</strong> Datum, Quelle und Version der Zustimmung zu Datenschutzerklärung und Nutzungsbedingungen werden gespeichert, soweit dies zum Nachweis erforderlich ist.</li>
                 </ul>
                 <div className="bg-brand-50 border border-brand-100 rounded-xl p-4 mt-4">
                   <p className="text-brand-700 text-sm">
                     <strong>Recht auf Vergessenwerden:</strong> Du kannst dein Konto und alle deine Daten jederzeit
-                    in den Profileinstellungen unter "Konto löschen" zur Löschung anfragen.
-                    Die Anfrage wird per E-Mail vorbereitet und danach manuell bearbeitet.
+                    in den Profileinstellungen unter "Konto löschen" direkt löschen.
                   </p>
                 </div>
               </div>
@@ -385,7 +384,7 @@ export default function Datenschutz() {
                   </div>
                   <div className="bg-brand-50/70 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Löschung (Art. 17)</p>
-                    <p className="text-sm">Vollständige Datenlöschung per Anfrage über die Profileinstellungen oder per E-Mail.</p>
+                    <p className="text-sm">Vollständige Datenlöschung direkt über die Profileinstellungen oder per Anfrage per E-Mail.</p>
                   </div>
                   <div className="bg-brand-50/70 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Datenportabilität (Art. 20)</p>
@@ -418,7 +417,7 @@ export default function Datenschutz() {
                   <p className="font-semibold mb-1">Anfragen stellen:</p>
             <p className="text-brand-50 text-sm">
                     Schreib an <strong>suedtirolmithund@gmail.com</strong>. Antwort innerhalb von 1 Monat (Art. 12 Abs. 3 DSGVO); bei komplexen Anfragen Verlängerung um weitere 2 Monate möglich.
-                    Für Kontolöschung: Anfrage über die Profileinstellungen oder per E-Mail.
+                    Für Kontolöschung: direkt über die Profileinstellungen oder per E-Mail-Anfrage.
                   </p>
                 </div>
               </div>

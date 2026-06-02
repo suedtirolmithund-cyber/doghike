@@ -17,7 +17,7 @@ export default function ConsentDialog({ type, onAccept, onDecline, open = true }
     registration: {
       title: "Datenschutz und Nutzungsbedingungen",
       description:
-        "Bitte bestätige, dass du unseren Datenschutzerklärungen zustimmst, bevor du fortfährst.",
+        "Bitte bestätige, dass du unserer Datenschutzerklärung und den Nutzungsbedingungen zustimmst, bevor du fortfährst.",
       checkbox:
         "Ich akzeptiere die Datenschutzerklärung und Nutzungsbedingungen",
     },

@@ -3,6 +3,42 @@ import { clearDogNudgeSession } from "@/lib/dogNudgeSession";
 import { supabase } from "@/lib/supabaseClient";
 
 const AuthContext = createContext();
+const REGISTRATION_CONSENT_KEY = "doghike_pending_registration_consent";
+const CONSENT_VERSION = "2026-06";
+
+function getPendingRegistrationConsent() {
+  try {
+    const raw = window.localStorage.getItem(REGISTRATION_CONSENT_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function setPendingRegistrationConsent(source) {
+  const consent = {
+    privacyVersion: CONSENT_VERSION,
+    termsVersion: CONSENT_VERSION,
+    acceptedAt: new Date().toISOString(),
+    source,
+  };
+
+  try {
+    window.localStorage.setItem(REGISTRATION_CONSENT_KEY, JSON.stringify(consent));
+  } catch {
+    // Keep registration usable if localStorage is unavailable.
+  }
+
+  return consent;
+}
+
+function clearPendingRegistrationConsent() {
+  try {
+    window.localStorage.removeItem(REGISTRATION_CONSENT_KEY);
+  } catch {
+    // Ignore localStorage cleanup issues.
+  }
+}
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -37,6 +73,29 @@ export const AuthProvider = ({ children }) => {
 
       if (error) {
         console.error("[ensureProfile] error:", error.message);
+      }
+
+      const metadataConsent = nextUser.user_metadata?.registration_consent ?? null;
+      const pendingConsent = getPendingRegistrationConsent();
+      const consent = metadataConsent || pendingConsent;
+
+      if (consent?.acceptedAt || consent?.accepted_at) {
+        const { error: consentError } = await supabase.from("registration_consents").upsert(
+          {
+            user_id: nextUser.id,
+            privacy_version: consent.privacyVersion || consent.privacy_version || CONSENT_VERSION,
+            terms_version: consent.termsVersion || consent.terms_version || CONSENT_VERSION,
+            accepted_at: consent.acceptedAt || consent.accepted_at,
+            accepted_source: consent.source || consent.accepted_source || "registration",
+          },
+          { onConflict: "user_id", ignoreDuplicates: true },
+        );
+
+        if (consentError) {
+          console.error("[ensureProfile] registration consent error:", consentError.message);
+        } else {
+          clearPendingRegistrationConsent();
+        }
       }
     } catch (error) {
       console.error("[ensureProfile] exception:", error);
@@ -111,10 +170,20 @@ export const AuthProvider = ({ children }) => {
     return { data };
   };
 
-  const signUpWithEmail = async (email, password) => {
+  const signUpWithEmail = async (email, password, consentSource = "email_registration") => {
     setAuthError(null);
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const consent = setPendingRegistrationConsent(consentSource);
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          registration_consent: consent,
+        },
+      },
+    });
     if (error) {
+      clearPendingRegistrationConsent();
       setAuthError(error.message);
       return { error };
     }
@@ -153,8 +222,11 @@ export const AuthProvider = ({ children }) => {
     return {};
   };
 
-  const loginWithGoogle = async (redirectPath = "/") => {
+  const loginWithGoogle = async (redirectPath = "/", consentSource = null) => {
     setAuthError(null);
+    if (consentSource) {
+      setPendingRegistrationConsent(consentSource);
+    }
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: window.location.origin + redirectPath },
