@@ -222,7 +222,7 @@ Deno.serve(async (request) => {
             { userId, customerId },
             {
               is_premium: true,
-              subscription_status: "one_time_active",
+              subscription_status: null,
               premium_current_period_end: oneMonthFromTimestamp(event.created),
               premium_updated_at: new Date().toISOString(),
             },
