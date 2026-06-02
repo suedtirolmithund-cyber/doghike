@@ -454,6 +454,11 @@ export default function HikeDetail() {
       : isAdmin && hike?._source === "sheets" && !hike?._user_id
         ? "Julia Schwärzer, Hundetrainerin und Buchautorin"
         : null);
+  const publicSubmitterDisplayPhoto =
+    getDisplayImageUrl(primaryPublicSubmitterDog?.photo_url, { width: 80, quality: 72 }) ||
+    getDisplayImageUrl(publicSubmitterProfile?.avatar_url, { width: 80, quality: 72 }) ||
+    getAvatarDataUrl(primaryPublicSubmitterDog?.name || publicSubmitterHandle || hike?._user_id || "DogTrails-Mitglied");
+  const publicSubmitterDisplayLine = primaryPublicSubmitterDog?.name || null;
   const seasonValues = normalizeSeasonValues(hike?.seasons, hike?.season);
   const detailStatItems = useMemo(() => {
     const items = [];
@@ -1165,15 +1170,15 @@ export default function HikeDetail() {
                       Zuletzt aktualisiert: {updatedAtLabel}
                     </p>
                   )}
-                  {hike?._source === "sheets" && hike?._user_id && (publicSubmitterHandle || primaryPublicSubmitterDog) ? (
+                  {hike?._source === "sheets" && hike?._user_id && (publicSubmitterDisplayLine || publicSubmitterName) ? (
                     <div className="inline-flex items-center gap-2 rounded-full border border-brand-100/80 bg-white/80 px-3 py-1.5 text-xs text-slate-500 shadow-sm">
                       <img
-                        src={getDisplayImageUrl(primaryPublicSubmitterDog?.photo_url, { width: 80, quality: 72 }) || getAvatarDataUrl(primaryPublicSubmitterDog?.name || hike._user_id)}
-                        alt={primaryPublicSubmitterDog?.name || publicSubmitterHandle || "DogTrails-Mitglied"}
+                        src={publicSubmitterDisplayPhoto}
+                        alt={primaryPublicSubmitterDog?.name || publicSubmitterHandle || publicSubmitterName || "DogTrails-Mitglied"}
                         className="h-7 w-7 rounded-full object-cover"
                       />
                       <span className="font-medium text-slate-700">
-                        {primaryPublicSubmitterDog?.name || "Hund"}
+                        {publicSubmitterDisplayLine || publicSubmitterName}
                         {publicSubmitterHandle ? ` · ${publicSubmitterHandle}` : ""}
                       </span>
                     </div>

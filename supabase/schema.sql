@@ -153,6 +153,30 @@ create policy "Eigene Hunde lesen"
   on public.dogs for select
   using (auth.uid() = user_id);
 
+create policy "Öffentliche Hunde genehmigter Touren lesen"
+  on public.dogs for select
+  using (
+    exists (
+      select 1
+      from public.public_hikes h
+      where h.status = 'approved'
+        and (
+          h.dog_id = public.dogs.id
+          or public.dogs.id = any(coalesce(h.dog_ids, '{}'::uuid[]))
+        )
+    )
+    or exists (
+      select 1
+      from public.journal_entries je
+      where je.status = 'approved'
+        and je.visibility = 'public'
+        and (
+          je.dog_id = public.dogs.id
+          or public.dogs.id = any(coalesce(je.dog_ids, '{}'::uuid[]))
+        )
+    )
+  );
+
 create policy "Eigene Hunde anlegen"
   on public.dogs for insert
   with check (auth.uid() = user_id);
