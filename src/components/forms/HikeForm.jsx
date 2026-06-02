@@ -905,7 +905,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         <p className="text-xs text-slate-600 mt-2 bg-white p-2 rounded border border-brand-200">
           {formData.visibility === "private" && `${TOUR_ICONS.private} Nur du kannst diese Wanderung sehen – nur die Grundangaben sind Pflicht, weitere Felder bleiben optional.`}
           {formData.visibility === "friends" && `${TOUR_ICONS.friends} Nur Freunde können diese Wanderung sehen – für das Teilen müssen alle Pflichtfelder ausgefüllt sein.`}
-          {formData.visibility === "public" && `${TOUR_ICONS.public} Alle Nutzer können diese Wanderung sehen – für eine öffentliche Wanderung müssen alle Pflichtfelder ausgefüllt sein.`}
+          {formData.visibility === "public" && `${TOUR_ICONS.public} Alle Nutzer können diese Wanderung sehen. Sichtbar werden Tourdaten, Fotos, dein Nutzername, optional dein Profilbild sowie Name und optionales Foto ausgewählter Hunde.`}
         </p>
         {hike && hike.visibility === "public" && formData.visibility !== "public" && (
           <p className="text-xs text-brand-400 font-medium mt-2">

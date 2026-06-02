@@ -114,7 +114,7 @@ export default function Support() {
       questions: [
         {
           q: "Wer kann meine Wanderungen sehen?",
-          a: "Das hängt von deiner Sichtbarkeitseinstellung ab. Private Wanderungen siehst nur du, Freunde-Wanderungen sehen deine Freunde, öffentliche Wanderungen sind für alle sichtbar nach Admin-Freigabe.",
+          a: "Das hängt von deiner Sichtbarkeitseinstellung ab. Private Wanderungen siehst nur du, Freunde-Wanderungen sehen deine Freunde, öffentliche Wanderungen sind nach Admin-Freigabe öffentlich sichtbar. Dabei können Tourdaten, Fotos, dein Nutzername, optional dein Profilbild sowie Name und optionales Foto ausgewählter Hunde angezeigt werden.",
         },
         {
           q: "Wie kann ich mein Konto löschen?",

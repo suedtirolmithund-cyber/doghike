@@ -340,7 +340,7 @@ export default function HikeDetail() {
 
       const { data, error } = await supabase
         .from("public_profiles")
-        .select("user_id, username, full_name, avatar_url")
+        .select("user_id, username, avatar_url")
         .eq("user_id", hike._user_id)
         .maybeSingle();
 
@@ -440,12 +440,11 @@ export default function HikeDetail() {
   const isOwnJournalHike = hike?._source === "journal" && !!currentUser?.id && currentUser.id === hike?._user_id;
   const publicSubmitterName =
     publicSubmitterProfile?.username ||
-    publicSubmitterProfile?.full_name ||
     (hike?._user_id ? "ein DogTrails-Mitglied" : null);
   const primaryPublicSubmitterDog = publicSubmitterDogs[0] ?? null;
   const publicSubmitterHandle = publicSubmitterProfile?.username
     ? `@${publicSubmitterProfile.username}`
-    : publicSubmitterProfile?.full_name || null;
+    : null;
   const countryLabel = getCountryLabel(hike?.country);
   const updatedAtLabel = formatUpdatedAtLabel(hike?.updated_at || hike?.created_at);
   const detailAuthorName =

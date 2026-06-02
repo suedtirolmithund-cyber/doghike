@@ -246,18 +246,21 @@ as $$
   with filtered_entries as (
     select je.*
     from public.journal_entries je
-    where (
-      timeframe_value = 'overall'
-      or (
-        timeframe_value = 'week'
-        and coalesce(je.date::timestamptz, je.created_at) >=
-          date_trunc('day', now()) - (((extract(dow from now())::int + 6) % 7) * interval '1 day')
+    where
+      je.visibility = 'public'
+      and je.status = 'approved'
+      and (
+        timeframe_value = 'overall'
+        or (
+          timeframe_value = 'week'
+          and coalesce(je.date::timestamptz, je.created_at) >=
+            date_trunc('day', now()) - (((extract(dow from now())::int + 6) % 7) * interval '1 day')
+        )
+        or (
+          timeframe_value = 'month'
+          and coalesce(je.date::timestamptz, je.created_at) >= date_trunc('month', now())
+        )
       )
-      or (
-        timeframe_value = 'month'
-        and coalesce(je.date::timestamptz, je.created_at) >= date_trunc('month', now())
-      )
-    )
   ),
   entry_dogs as (
     select

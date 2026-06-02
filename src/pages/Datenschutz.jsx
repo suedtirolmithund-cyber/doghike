@@ -15,7 +15,7 @@ export default function Datenschutz() {
             </div>
             <h1 className="doghike-page-title">Datenschutzerklärung</h1>
           </div>
-          <p className="text-xs text-slate-400 mb-8">Letzte Aktualisierung: Mai 2026</p>
+          <p className="text-xs text-slate-400 mb-8">Letzte Aktualisierung: Juni 2026</p>
 
           <div className="space-y-6 md:space-y-8">
             <section>
@@ -65,7 +65,9 @@ export default function Datenschutz() {
                     <li><strong>GPS-Koordinaten:</strong> Startpunkt und optionale Routenpunkte, die du selbst eingibst oder aufzeichnest</li>
                     <li><strong>Fotos:</strong> Von dir hochgeladene Bilder. Beim Upload bestätigst du, dass du die Nutzungsrechte besitzt.</li>
                     <li><strong>Hundeprofil:</strong> Name, Rasse, Geburtsdatum, Foto (alles freiwillig)</li>
+                    <li><strong>Veröffentlichungsdaten:</strong> Bei öffentlichen Wanderungen können Tourdaten, Fotos, Nutzername, optionales Profilbild sowie Name und optionales Foto ausgewählter Hunde öffentlich angezeigt werden.</li>
                     <li><strong>Soziale Daten:</strong> Kommentare, Bewertungen (1-5 Sterne), Freundschaftsanfragen</li>
+                    <li><strong>Premium- und Zahlungsmetadaten:</strong> Premium-Status, Stripe-Kundennummer, Abonnementstatus, Checkout-Einwilligung und Zeitpunkte der Zahlungsabwicklung. Kreditkartendaten werden nicht in der App gespeichert.</li>
                   </ul>
                 </div>
 
@@ -123,6 +125,11 @@ export default function Datenschutz() {
                       <td className="p-3">Art. 6 Abs. 1 lit. b DSGVO bzw. lit. a DSGVO für freiwillige Inhalte</td>
                     </tr>
                     <tr className="bg-brand-50/70">
+                      <td className="p-3">Premium- und Zahlungsmetadaten</td>
+                      <td className="p-3">Premium-Buchung, Zahlungsabwicklung, Nachweis gesetzlicher Informations- und Widerrufshinweise</td>
+                      <td className="p-3">Art. 6 Abs. 1 lit. b und lit. c DSGVO</td>
+                    </tr>
+                    <tr>
                       <td className="p-3">Session-Token</td>
                       <td className="p-3">Technisch notwendige Anmeldung</td>
                       <td className="p-3">Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung)</td>
@@ -172,6 +179,7 @@ export default function Datenschutz() {
                     <li><strong>Nur du</strong> siehst deine privaten Wanderungen und Kontoinformationen.</li>
                     <li><strong>Freunde</strong> sehen nur Inhalte, die du ausdrücklich für Freunde freigibst.</li>
                     <li><strong>Alle Nutzer</strong> sehen Wanderungsdaten aus unserem öffentlichen Google Sheet und Inhalte, die du öffentlich teilst.</li>
+                    <li><strong>Bei öffentlichen Wanderungen</strong> werden nach Admin-Freigabe insbesondere Tourdaten, Fotos, dein Nutzername, optional dein Profilbild sowie Name und optionales Foto ausgewählter Hunde sichtbar. Verwende einen Nutzernamen statt deines echten Namens, wenn du pseudonym auftreten möchtest.</li>
                     <li><strong>Administratoren</strong> können Inhalte zur Moderation und Freigabe einsehen.</li>
                   </ul>
                 </div>
@@ -264,8 +272,11 @@ export default function Datenschutz() {
               </h2>
               <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
-                  Folgende Auftragsverarbeiter haben ihren Sitz in den <strong>USA</strong>, einem Land ohne
-                  EU-Angemessenheitsbeschluss im Sinne des Art. 45 DSGVO:
+                  Einige Auftragsverarbeiter haben ihren Sitz außerhalb der EU/des EWR oder können Daten dort verarbeiten.
+                  Für die USA besteht seit dem 10. Juli 2023 ein EU-Angemessenheitsbeschluss für nach dem
+                  EU-US Data Privacy Framework zertifizierte Unternehmen. Soweit ein Anbieter nicht oder nicht für
+                  alle Verarbeitungsvorgänge darunter fällt, stützen wir Transfers auf geeignete Garantien wie
+                  Standardvertragsklauseln gem. Art. 46 DSGVO oder vergleichbare Schutzmechanismen.
                 </p>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm text-slate-600 border-collapse">
@@ -278,27 +289,28 @@ export default function Datenschutz() {
                     <tbody className="divide-y divide-stone-100">
                       <tr>
                         <td className="p-3">Supabase Inc.</td>
-                        <td className="p-3">Standardvertragsklauseln gem. Art. 46 Abs. 2 lit. c DSGVO (SCCs)</td>
+                        <td className="p-3">EU-US Data Privacy Framework, sofern zertifiziert; ergänzend oder alternativ Standardvertragsklauseln gem. Art. 46 Abs. 2 lit. c DSGVO</td>
                       </tr>
                       <tr className="bg-brand-50/70">
                         <td className="p-3">Vercel Inc.</td>
-                        <td className="p-3">Standardvertragsklauseln gem. Art. 46 Abs. 2 lit. c DSGVO (SCCs)</td>
+                        <td className="p-3">EU-US Data Privacy Framework, sofern zertifiziert; ergänzend oder alternativ Standardvertragsklauseln gem. Art. 46 Abs. 2 lit. c DSGVO</td>
                       </tr>
                       <tr>
                         <td className="p-3">Google LLC</td>
-                        <td className="p-3">Standardvertragsklauseln gem. Art. 46 Abs. 2 lit. c DSGVO (SCCs)</td>
+                        <td className="p-3">EU-US Data Privacy Framework, sofern zertifiziert; ergänzend oder alternativ Standardvertragsklauseln gem. Art. 46 Abs. 2 lit. c DSGVO</td>
                       </tr>
                       <tr className="bg-brand-50/70">
                         <td className="p-3">Stripe Inc.</td>
-                        <td className="p-3">Standardvertragsklauseln gem. Art. 46 Abs. 2 lit. c DSGVO (SCCs)</td>
+                        <td className="p-3">EU-US Data Privacy Framework, sofern zertifiziert; ergänzend oder alternativ Standardvertragsklauseln gem. Art. 46 Abs. 2 lit. c DSGVO</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
                 <div className="rounded-xl border border-brand-200 bg-brand-50 p-4 text-sm text-brand-700">
-                  Trotz dieser Schutzmaßnahmen können US-Behörden unter bestimmten Umständen Zugang zu Daten erlangen.
-                  Durch die Nutzung der App stimmst du diesen Transfers auf Basis der genannten Rechtsgrundlagen zu.
-                  Du kannst deine Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen, indem du dein Konto löschst.
+                  Trotz dieser Schutzmaßnahmen kann bei Drittlandverarbeitungen ein abweichendes Datenschutzniveau bestehen.
+                  Eine Einwilligung ist nur dort Rechtsgrundlage, wo sie ausdrücklich abgefragt wird. Technisch notwendige
+                  oder vertraglich erforderliche Verarbeitungen erfolgen auf den oben genannten Rechtsgrundlagen; deine
+                  Betroffenenrechte bleiben davon unberührt.
                 </div>
               </div>
             </section>
@@ -312,7 +324,7 @@ export default function Datenschutz() {
                 <ul className="list-disc pl-5 mt-2 space-y-1">
                   <li>Du bist Urheber oder besitzt die Nutzungsrechte an den Fotos.</li>
                   <li>Die abgebildeten Personen haben der Veröffentlichung zugestimmt (sofern erkennbar).</li>
-                  <li>Fotos zu öffentlichen Wanderungen können für andere berechtigte Nutzer innerhalb der App sichtbar werden.</li>
+                  <li>Fotos zu öffentlichen Wanderungen können nach Freigabe öffentlich abrufbar sein und zusammen mit Tourdaten, Nutzername sowie optionalem Profil- oder Hundefoto angezeigt werden.</li>
                   <li>Du kannst Fotos jederzeit durch Bearbeiten der Wanderung entfernen.</li>
                 </ul>
               </div>
@@ -445,9 +457,9 @@ export default function Datenschutz() {
               <div className="bg-brand-50 border border-brand-100 rounded-xl p-4">
                 <p className="text-brand-700 text-sm md:text-base leading-relaxed">
                   <strong>Öffentliche Inhalte:</strong> Kommentare und Bewertungen, die du abgibst,
-                  können für andere App-Nutzer sichtbar sein. Fotos, die du zu öffentlichen Wanderungen hochlädst,
-                  können je nach Freigabe für andere Nutzer oder öffentlich sichtbar werden. Teile keine sensiblen
-                  personenbezogenen Informationen in öffentlichen Beiträgen.
+                  können für andere App-Nutzer sichtbar sein. Öffentliche Wanderungen können nach Freigabe weltweit
+                  abrufbar sein und Tourdaten, Fotos, Nutzername, optionales Profilbild sowie Name und optionales
+                  Foto ausgewählter Hunde zeigen. Teile keine sensiblen personenbezogenen Informationen in öffentlichen Beiträgen.
                 </p>
               </div>
             </section>

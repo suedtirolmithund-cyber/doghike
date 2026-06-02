@@ -712,7 +712,7 @@ function journalEntryToHike(entry, dog = null, profile = null) {
     // Dog & author info for display
     dog_photo_url: dog?.photo_url || null,
     dog_name: dog?.name || null,
-    author_username: profile?.username || profile?.full_name || null,
+    author_username: profile?.username || null,
     author_avatar: profile?.avatar_url || null,
 
     _source: "journal",

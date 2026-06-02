@@ -1851,6 +1851,9 @@ export default function AddJournalEntry() {
                 <p className="text-xs text-brand-600 bg-brand-50 border border-brand-100 rounded-lg px-3 py-2">
                   Nach dem Speichern wird dieser Eintrag an einen Admin zur Prüfung geschickt und erst danach öffentlich sichtbar.
                 </p>
+                <p className="text-xs text-brand-700 bg-white border border-brand-100 rounded-lg px-3 py-2">
+                  Öffentlich sichtbar sind dann Tourdaten, Fotos, dein Nutzername, optional dein Profilbild sowie Name und optionales Foto der ausgewählten Hunde.
+                </p>
                 <div className="text-xs rounded-lg border border-brand-200 bg-brand-50/70 px-3 py-2 text-brand-800">
                   <p className="font-semibold mb-1">Pflichtfelder für öffentliche Wanderungen:</p>
                   <p>Ort - Startpunkt (Karte) - Distanz - Höhenmeter - Dauer - Schwierigkeit (Mensch und Hund) - Beschreibung - mind. 1 Foto - Jahreszeit</p>

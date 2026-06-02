@@ -439,6 +439,10 @@ export default function JournalDetail() {
   const isOwner = user?.id === entry?.user_id;
   const visInfo = VISIBILITY_INFO[entry?.visibility ?? "private"];
   const fallbackBackUrl = createPageUrl("Journal");
+  const authorDisplayName =
+    entry?.visibility === "public" && !isOwner
+      ? author?.username || "DogTrails-Mitglied"
+      : author?.full_name || author?.username || "Nutzer";
 
   const handleBack = () => {
     if (typeof window !== "undefined") {
@@ -508,7 +512,7 @@ export default function JournalDetail() {
                 alt="" className="w-9 h-9 rounded-full object-cover"
               />
               <div>
-                <p className="text-sm font-medium text-slate-900">{author?.full_name || author?.username || "Nutzer"}</p>
+                <p className="text-sm font-medium text-slate-900">{authorDisplayName}</p>
                 <p className="text-xs text-slate-400">
                   {format(new Date(entry.date || entry.created_at), "d. MMMM yyyy", { locale: de })}
                 </p>
