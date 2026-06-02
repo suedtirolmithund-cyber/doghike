@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -7,13 +7,13 @@ import { getJournalEntryForDisplay } from "@/lib/journalApi";
 import { useAuth } from "@/lib/AuthContext";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 import {
   ArrowLeft, Star, AlertTriangle, Dog, User, Users, Globe,
-  Loader2, ShieldOff, ChevronLeft, ChevronRight,
+  Loader2, ShieldOff, ChevronLeft, ChevronRight, X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -83,12 +83,20 @@ function preloadPhoto(url) {
 
 function PhotoGallery({ photos }) {
   const [idx, setIdx] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [isCurrentPhotoLoading, setIsCurrentPhotoLoading] = useState(true);
+  const lightboxScrollerRef = useRef(null);
 
   useEffect(() => {
     if (!photos?.length) return;
     setIsCurrentPhotoLoading(true);
   }, [idx, photos]);
+
+  useEffect(() => {
+    setIdx(0);
+    setCurrentPhotoIndex(0);
+  }, [photos]);
 
   useEffect(() => {
     if (!photos?.length) return;
@@ -97,45 +105,209 @@ function PhotoGallery({ photos }) {
     }
   }, [idx, photos]);
 
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const scroller = lightboxScrollerRef.current;
+    if (!scroller) return;
+
+    requestAnimationFrame(() => {
+      scroller.scrollTo({
+        left: currentPhotoIndex * scroller.clientWidth,
+        behavior: "auto",
+      });
+    });
+  }, [currentPhotoIndex, lightboxOpen]);
+
   if (!photos?.length) return null;
 
+  const openPhoto = (index) => {
+    setIdx(index);
+    setCurrentPhotoIndex(index);
+    setLightboxOpen(true);
+  };
+
+  const showPhoto = (nextIndex) => {
+    const normalizedIndex = (nextIndex + photos.length) % photos.length;
+    setIdx(normalizedIndex);
+    setCurrentPhotoIndex(normalizedIndex);
+  };
+
+  const showLightboxPhoto = (nextIndex) => {
+    const normalizedIndex = (nextIndex + photos.length) % photos.length;
+    setCurrentPhotoIndex(normalizedIndex);
+    const scroller = lightboxScrollerRef.current;
+    if (scroller) {
+      scroller.scrollTo({
+        left: normalizedIndex * scroller.clientWidth,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const handleLightboxScroll = () => {
+    const scroller = lightboxScrollerRef.current;
+    if (!scroller) return;
+    const nextIndex = Math.round(scroller.scrollLeft / scroller.clientWidth);
+    if (nextIndex >= 0 && nextIndex < photos.length) {
+      setCurrentPhotoIndex(nextIndex);
+    }
+  };
+
   return (
-    <div className="relative rounded-2xl overflow-hidden bg-brand-100/80">
-      {isCurrentPhotoLoading && (
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-brand-50/70 backdrop-blur-[1px]">
-          <Loader2 className="h-5 w-5 animate-spin text-brand-400" />
-          <p className="text-xs font-medium text-slate-500">Foto wird geladen...</p>
+    <>
+      <div className="space-y-3">
+        <div className="relative overflow-hidden rounded-[22px] border border-brand-100/80 bg-brand-100/80 shadow-[0_12px_28px_rgba(168,0,60,0.08)]">
+          {isCurrentPhotoLoading && (
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-brand-50/70 backdrop-blur-[1px]">
+              <Loader2 className="h-5 w-5 animate-spin text-brand-400" />
+              <p className="text-xs font-medium text-slate-500">Foto wird geladen...</p>
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={() => openPhoto(idx)}
+            className="group block w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300"
+            aria-label={`Foto ${idx + 1} groß öffnen`}
+          >
+            <img
+              src={photos[idx]}
+              alt={`Foto ${idx + 1}`}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              onLoad={() => setIsCurrentPhotoLoading(false)}
+              onError={() => setIsCurrentPhotoLoading(false)}
+              className="h-72 w-full object-cover transition-transform duration-700 group-hover:scale-[1.02] sm:h-80 md:h-[420px]"
+            />
+          </button>
+          {photos.length > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={() => showPhoto(idx - 1)}
+                className="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/35 text-white shadow-lg backdrop-blur-sm transition hover:bg-black/55"
+                aria-label="Vorheriges Foto"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => showPhoto(idx + 1)}
+                className="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/35 text-white shadow-lg backdrop-blur-sm transition hover:bg-black/55"
+                aria-label="Nächstes Foto"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+              <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-1.5 rounded-full bg-black/25 px-2 py-1 backdrop-blur-sm">
+                {photos.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => showPhoto(i)}
+                    aria-label={`Foto ${i + 1} anzeigen`}
+                    className={`h-2.5 w-2.5 rounded-full transition ${i === idx ? "bg-white" : "bg-white/50"}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
-      )}
-      <img
-        src={photos[idx]}
-        alt=""
-        loading="eager"
-        fetchPriority="high"
-        decoding="async"
-        onLoad={() => setIsCurrentPhotoLoading(false)}
-        onError={() => setIsCurrentPhotoLoading(false)}
-        className="w-full h-64 md:h-96 object-cover"
-      />
-      {photos.length > 1 && (
-        <>
-          <button onClick={() => setIdx((i) => (i - 1 + photos.length) % photos.length)}
-            className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-1.5 transition">
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button onClick={() => setIdx((i) => (i + 1) % photos.length)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-1.5 transition">
-            <ChevronRight className="w-5 h-5" />
-          </button>
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
-            {photos.map((_, i) => (
-              <button key={i} onClick={() => setIdx(i)}
-                className={`w-2 h-2 rounded-full transition ${i === idx ? "bg-white" : "bg-white/50"}`} />
-            ))}
+
+        {photos.length > 1 && (
+          <div className="doghike-glass-card p-4">
+            <h2 className="doghike-card-title mb-3">Fotos</h2>
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
+              {photos.map((photo, index) => (
+                <button
+                  type="button"
+                  key={`${photo}-${index}`}
+                  onClick={() => openPhoto(index)}
+                  className={`aspect-square overflow-hidden rounded-xl border bg-brand-50/70 p-0 transition-all hover:ring-2 hover:ring-brand-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 ${
+                    index === idx ? "border-brand-300 ring-2 ring-brand-200" : "border-brand-100/70"
+                  }`}
+                  aria-label={`Foto ${index + 1} groß öffnen`}
+                >
+                  <img
+                    src={photo}
+                    alt={`Foto ${index + 1}`}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover transition-transform duration-300 hover:scale-110"
+                  />
+                </button>
+              ))}
+            </div>
           </div>
-        </>
-      )}
-    </div>
+        )}
+      </div>
+
+      <AnimatePresence>
+        {lightboxOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/95"
+          >
+            <button
+              type="button"
+              onClick={() => setLightboxOpen(false)}
+              className="absolute left-4 z-30 rounded-full bg-white/12 p-2 text-white/80 backdrop-blur-sm hover:bg-white/20 hover:text-white"
+              style={{ top: "max(1rem, env(safe-area-inset-top))" }}
+              aria-label="Fotoansicht schließen"
+            >
+              <X className="h-8 w-8" />
+            </button>
+
+            {photos.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => showLightboxPhoto(currentPhotoIndex - 1)}
+                  className="absolute left-4 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/12 text-white/85 shadow-lg backdrop-blur-sm transition hover:bg-white/22 hover:text-white md:flex"
+                  aria-label="Vorheriges Foto"
+                >
+                  <ChevronLeft className="h-7 w-7" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => showLightboxPhoto(currentPhotoIndex + 1)}
+                  className="absolute right-4 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/12 text-white/85 shadow-lg backdrop-blur-sm transition hover:bg-white/22 hover:text-white md:flex"
+                  aria-label="Nächstes Foto"
+                >
+                  <ChevronRight className="h-7 w-7" />
+                </button>
+              </>
+            )}
+
+            <div
+              ref={lightboxScrollerRef}
+              className="flex h-full snap-x snap-mandatory overflow-x-auto scroll-smooth"
+              onScroll={handleLightboxScroll}
+            >
+              {photos.map((photo, index) => (
+                <div
+                  key={`${photo}-lightbox-${index}`}
+                  className="flex h-full w-screen flex-none snap-center items-center justify-center px-4 py-16 sm:px-8"
+                >
+                  <img
+                    src={photo}
+                    alt={`Foto ${index + 1}`}
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+
+            {photos.length > 1 && (
+              <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full bg-black/45 px-3 py-1 text-sm font-semibold text-white/80 backdrop-blur-sm">
+                {currentPhotoIndex + 1} / {photos.length}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
