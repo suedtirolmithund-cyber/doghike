@@ -17,9 +17,9 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/ui/BackButton";
+import { EmptyState, PageLoadingState } from "@/components/ui/AppState";
 import { Badge } from "@/components/ui/badge";
 import WaterIcon from "@/components/icons/WaterIcon";
-import PawLoadingTrail from "@/components/PawLoadingTrail";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
 import { DifficultyBars } from "@/components/difficulty/DifficultyScale";
 import {
@@ -463,26 +463,18 @@ export default function JournalDetail() {
   };
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="mx-auto h-8 w-8 animate-spin text-slate-400" />
-          <p className="mt-3 text-slate-500">Lädt...</p>
-          <PawLoadingTrail />
-        </div>
-      </div>
-    );
+    return <PageLoadingState message="Dein Eintrag lädt..." />;
   }
 
   if (!entry) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="text-center">
-          <ShieldOff className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-          <p className="text-slate-600 font-medium mb-2">Eintrag nicht gefunden</p>
-          <p className="text-slate-400 text-sm mb-4">Dieser Eintrag existiert nicht oder du hast keinen Zugriff.</p>
-          <BackButton to={fallbackBackUrl} variant="outline" />
-        </div>
+      <div className="doghike-page-shell flex items-center justify-center px-4 py-12">
+        <EmptyState
+          icon={ShieldOff}
+          title="Eintrag nicht gefunden"
+          description="Dieser Eintrag existiert nicht mehr oder du hast keinen Zugriff."
+          action={<BackButton to={fallbackBackUrl} variant="outline" />}
+        />
       </div>
     );
   }

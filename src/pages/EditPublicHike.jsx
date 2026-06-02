@@ -16,6 +16,7 @@ import {
 } from "@/lib/publicHikesApi";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/ui/BackButton";
+import { EmptyState, PageLoadingState } from "@/components/ui/AppState";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -404,20 +405,18 @@ export default function EditPublicHike() {
   });
 
   if (isLoadingAuth || isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center">
-        <Loader2 className="w-6 h-6 animate-spin text-brand-500" />
-      </div>
-    );
+    return <PageLoadingState message="Die Wanderung lädt..." />;
   }
 
   if (!isAdmin) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center px-4">
-        <div className="doghike-glass-card p-8 text-center">
-          <p className="text-xl text-slate-700 mb-4">Nur Admins können öffentliche Wanderungen bearbeiten.</p>
-          <BackButton to={createPageUrl("Hikes")} variant="default" />
-        </div>
+        <EmptyState
+          icon={CircleHelp}
+          title="Kein Zugriff"
+          description="Nur Admins können öffentliche Wanderungen bearbeiten."
+          action={<BackButton to={createPageUrl("Hikes")} variant="default" />}
+        />
       </div>
     );
   }
@@ -425,10 +424,12 @@ export default function EditPublicHike() {
   if (!hike || !formData) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center px-4">
-        <div className="doghike-glass-card p-8 text-center">
-          <p className="text-xl text-slate-700 mb-4">Öffentliche Wanderung nicht gefunden</p>
-          <BackButton to={createPageUrl("Hikes")} variant="default" />
-        </div>
+        <EmptyState
+          icon={Camera}
+          title="Wanderung nicht gefunden"
+          description="Diese öffentliche Wanderung gibt es nicht mehr oder sie konnte nicht geladen werden."
+          action={<BackButton to={createPageUrl("Hikes")} variant="default" />}
+        />
       </div>
     );
   }

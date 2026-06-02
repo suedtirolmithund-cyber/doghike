@@ -12,6 +12,7 @@ import { Map, Loader2 } from "lucide-react";
 import EditableRouteDrawer from "@/components/routes/EditableRouteDrawer";
 import RoutePreviewMap from "@/components/routes/RoutePreviewMap";
 import BackButton from "@/components/ui/BackButton";
+import { EmptyState, PageLoadingState } from "@/components/ui/AppState";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { formatDurationHours } from "@/lib/duration";
@@ -82,20 +83,18 @@ export default function EditRoute() {
   };
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-slate-400" />
-      </div>
-    );
+    return <PageLoadingState message="Deine Route lädt..." />;
   }
 
   if (!route || !routeData) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="text-center">
-          <p className="text-xl text-slate-700 mb-4">Route nicht gefunden</p>
-          <BackButton to={createPageUrl("Profile")} variant="default" />
-        </div>
+      <div className="doghike-page-shell flex items-center justify-center px-4 py-12">
+        <EmptyState
+          icon={Map}
+          title="Route nicht gefunden"
+          description="Diese Route gibt es nicht mehr oder du hast keinen Zugriff."
+          action={<BackButton to={createPageUrl("Profile")} variant="default" />}
+        />
       </div>
     );
   }

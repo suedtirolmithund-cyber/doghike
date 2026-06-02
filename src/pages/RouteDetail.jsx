@@ -30,8 +30,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import ExpandableText from "@/components/ExpandableText";
-import PawLoadingTrail from "@/components/PawLoadingTrail";
 import BackButton from "@/components/ui/BackButton";
+import { EmptyState, PageLoadingState } from "@/components/ui/AppState";
 import WaterIcon from "@/components/icons/WaterIcon";
 import SeasonMultiPicker from "@/components/season/SeasonMultiPicker";
 import { DIFFICULTY_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
@@ -268,23 +268,18 @@ export default function RouteDetail() {
   });
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-slate-600">Die Route lädt...</p>
-          <PawLoadingTrail />
-        </div>
-      </div>
-    );
+    return <PageLoadingState message="Deine Route lädt..." />;
   }
 
   if (!route) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-xl text-slate-700 mb-4">Route nicht gefunden</p>
-          <BackButton to={createPageUrl("Profile")} variant="default" />
-        </div>
+      <div className="doghike-page-shell flex items-center justify-center px-4 py-12">
+        <EmptyState
+          icon={Map}
+          title="Route nicht gefunden"
+          description="Diese Route gibt es nicht mehr oder du hast keinen Zugriff."
+          action={<BackButton to={createPageUrl("Profile")} variant="default" />}
+        />
       </div>
     );
   }
@@ -496,8 +491,15 @@ export default function RouteDetail() {
                     ))}
                   </SafeMapContainer>
                 ) : (
-                  <div className="flex h-full items-center justify-center bg-brand-50/35 text-sm text-slate-500">
-                    Keine Wegpunkte vorhanden
+                  <div className="flex h-full items-center justify-center bg-brand-50/35 p-4">
+                    <EmptyState
+                      icon={Map}
+                      title="Noch keine Wegpunkte"
+                      description="Setze Start, Ziel oder Zwischenpunkte, damit hier deine Route erscheint."
+                      compact
+                      className="w-full border-brand-100/40 bg-white/75 py-8 shadow-none md:py-10"
+                      iconClassName="h-10 w-10"
+                    />
                   </div>
                 )}
               </div>

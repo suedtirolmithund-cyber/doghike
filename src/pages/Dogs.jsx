@@ -4,11 +4,12 @@ import { useAuth } from "@/lib/AuthContext";
 import { getDogs, createDog, updateDog, deleteDog } from "@/lib/profilesApi";
 import { supabase } from "@/lib/supabaseClient";
 import { motion, AnimatePresence } from "framer-motion";
-import { Dog, Plus, Edit, Trash2, Loader2, LogIn, Mountain, Home } from "lucide-react";
+import { Dog, Plus, Edit, Trash2, LogIn, Mountain, Home } from "lucide-react";
 import { differenceInYears, differenceInMonths } from "date-fns";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
+import { SectionLoadingState } from "@/components/ui/AppState";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   AlertDialog,
@@ -181,9 +182,7 @@ export default function Dogs() {
         </motion.div>
 
         {isLoading ? (
-          <div className="flex justify-center py-20">
-            <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
-          </div>
+          <SectionLoadingState message="Hunde laden..." className="py-16" />
         ) : dogs.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <AnimatePresence>

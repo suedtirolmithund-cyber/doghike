@@ -12,7 +12,6 @@ import {
   Trash2,
   BookOpen,
   LogIn,
-  Loader2,
   Search,
   User,
   Users,
@@ -21,6 +20,7 @@ import {
   List,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SectionLoadingState } from "@/components/ui/AppState";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -526,9 +526,7 @@ export default function Journal() {
         )}
 
         {isLoading ? (
-          <div className="flex justify-center py-20">
-            <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
-          </div>
+          <SectionLoadingState message="Wanderungen laden..." className="py-16" />
         ) : filtered.length > 0 ? (
           viewMode === "grid" ? (
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">

@@ -23,6 +23,7 @@ import { differenceInYears, differenceInMonths } from "date-fns";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
+import { SectionLoadingState } from "@/components/ui/AppState";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -679,9 +680,7 @@ export default function Profile() {
             </div>
 
             {dogsLoading ? (
-              <div className="flex justify-center py-16">
-                <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
-              </div>
+              <SectionLoadingState message="Hunde laden..." className="py-14" />
             ) : dogs.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <AnimatePresence>
@@ -813,9 +812,7 @@ export default function Profile() {
             </div>
 
             {routesLoading ? (
-              <div className="flex justify-center py-16">
-                <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
-              </div>
+              <SectionLoadingState message="Routen laden..." className="py-14" />
             ) : userRoutes.length > 0 ? (
               <div className="space-y-3">
                 {userRoutes.map((route) => {
@@ -891,9 +888,7 @@ export default function Profile() {
             </div>
 
             {isSavedHikesResolving ? (
-              <div className="flex justify-center py-16">
-                <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
-              </div>
+              <SectionLoadingState message="Lieblingswanderungen laden..." className="py-14" />
             ) : savedHikeObjects.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {savedHikeObjects.map((hike, index) => (

@@ -4,9 +4,10 @@ import { useAuth } from "@/lib/AuthContext";
 import { motion } from "framer-motion";
 import {
   Trophy, TrendingUp, Ruler,
-  Loader2, Dog, Sparkles,
+  Dog, Sparkles,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SectionLoadingState } from "@/components/ui/AppState";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { getDisplayImageUrl } from "@/lib/imageProxy";
@@ -461,10 +462,7 @@ export default function TopDogs() {
 
         {/* Loading */}
         {isLoading && (
-          <div className="flex items-center justify-center py-20 gap-2 text-slate-400">
-            <Loader2 className="w-6 h-6 animate-spin" />
-            <span className="text-sm">Lade Ranking...</span>
-          </div>
+          <SectionLoadingState message="Ranking laden..." className="py-16" />
         )}
 
         {/* Error */}

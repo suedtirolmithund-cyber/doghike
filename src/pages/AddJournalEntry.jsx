@@ -12,6 +12,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/ui/BackButton";
+import { EmptyState, PageLoadingState } from "@/components/ui/AppState";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -1402,20 +1403,18 @@ export default function AddJournalEntry() {
   }
 
   if (loadingEntry) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
-      </div>
-    );
+    return <PageLoadingState message="Dein Eintrag lädt..." />;
   }
 
   if (editId && !existing) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="text-center">
-          <p className="text-xl text-slate-700 mb-4">Eintrag nicht gefunden</p>
-          <BackButton to={createPageUrl("Journal")} variant="outline" />
-        </div>
+      <div className="doghike-page-shell flex items-center justify-center px-4 py-12">
+        <EmptyState
+          icon={FileText}
+          title="Eintrag nicht gefunden"
+          description="Dieser Tagebuch-Eintrag existiert nicht mehr oder du hast keinen Zugriff."
+          action={<BackButton to={createPageUrl("Journal")} variant="outline" />}
+        />
       </div>
     );
   }

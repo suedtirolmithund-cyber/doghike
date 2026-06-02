@@ -44,6 +44,7 @@ import {
 } from "@/lib/adminApi";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/ui/BackButton";
+import { PageLoadingState, SectionLoadingState } from "@/components/ui/AppState";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -741,11 +742,7 @@ export default function AdminDashboard() {
   });
 
   if (isLoadingAuth || (isAuthenticated && checkingAdminAccess)) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
-      </div>
-    );
+    return <PageLoadingState message="Admin-Bereich lädt..." />;
   }
 
   if (!isAuthenticated) {
@@ -840,9 +837,7 @@ export default function AdminDashboard() {
             </div>
 
             {entriesLoading ? (
-              <div className="flex justify-center py-20">
-                <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
-              </div>
+              <SectionLoadingState message="Einträge laden..." className="py-16" />
             ) : entries.length === 0 ? (
               <div className="doghike-empty-state">
                 <CheckCircle2 className="doghike-empty-icon text-brand-400" />
@@ -909,9 +904,7 @@ export default function AdminDashboard() {
             </div>
 
             {commentsLoading ? (
-              <div className="flex justify-center py-20">
-                <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
-              </div>
+              <SectionLoadingState message="Kommentare laden..." className="py-16" />
             ) : filteredComments.length === 0 ? (
               <div className="doghike-empty-state">
                 <CheckCircle2 className="doghike-empty-icon text-brand-400" />
@@ -994,9 +987,7 @@ export default function AdminDashboard() {
             </div>
 
             {publicHikesLoading ? (
-              <div className="flex justify-center py-20">
-                <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
-              </div>
+              <SectionLoadingState message="Wanderungen laden..." className="py-16" />
             ) : filteredPublicHikes.length === 0 ? (
               <div className="doghike-empty-state">
                 <CheckCircle2 className="doghike-empty-icon text-brand-400" />
@@ -1042,9 +1033,7 @@ export default function AdminDashboard() {
             </div>
 
             {usersLoading ? (
-              <div className="flex justify-center py-20">
-                <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
-              </div>
+              <SectionLoadingState message="Nutzer laden..." className="py-16" />
             ) : filteredUsers.length === 0 ? (
               <div className="doghike-empty-state">
                 <CheckCircle2 className="doghike-empty-icon text-brand-400" />
