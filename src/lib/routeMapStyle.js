@@ -21,6 +21,48 @@ export function getRouteWaypointColor(index, total) {
   return ROUTE_WAYPOINT_COLORS.middle;
 }
 
+export function getRouteWaypointType(index, total) {
+  if (index === 0) return "start";
+  if (total > 1 && index === total - 1) return "end";
+  return "middle";
+}
+
+export function getRouteWaypointRoleLabel(index, total) {
+  const type = getRouteWaypointType(index, total);
+  if (type === "start") return "Start";
+  if (type === "end") return "Ziel";
+  return "Zwischenstopp";
+}
+
+export function getRouteWaypointListStyle(index, total) {
+  const type = getRouteWaypointType(index, total);
+
+  if (type === "start") {
+    return {
+      backgroundColor: "#FFF8E0",
+      borderColor: "#F9C030",
+      textColor: "#7C3020",
+      badgeTextColor: "#7C3020",
+    };
+  }
+
+  if (type === "end") {
+    return {
+      backgroundColor: "#FFF3F7",
+      borderColor: "#A8003C",
+      textColor: "#A8003C",
+      badgeTextColor: "#FFFFFF",
+    };
+  }
+
+  return {
+    backgroundColor: "#FFF3EC",
+    borderColor: "#F07030",
+    textColor: "#7C3020",
+    badgeTextColor: "#FFFFFF",
+  };
+}
+
 export function getRouteWaypointLabel(index, total, fallbackLabel) {
   if (index === 0) return "S";
   if (total > 1 && index === total - 1) return "Z";

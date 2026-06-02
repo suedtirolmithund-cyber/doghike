@@ -29,6 +29,8 @@ import {
   ROUTE_TILE_LAYER,
   getRouteWaypointColor,
   getRouteWaypointLabel,
+  getRouteWaypointListStyle,
+  getRouteWaypointRoleLabel,
 } from "@/lib/routeMapStyle";
 
 // ── Leaflet fix ───────────────────────────────────────────────
@@ -518,35 +520,82 @@ function SmartRoutePlanner({ onRouteReady }) {
 
       {/* Waypoints list with reorder */}
       {waypoints.length > 0 && (
-        <div className="space-y-1">
-          {waypoints.map((wp, i) => (
-            <div key={i} className="flex items-center gap-2 text-xs bg-brand-50/70 rounded-lg px-2 py-1.5 group">
-              <span
-                className="w-5 h-5 rounded-full flex items-center justify-center font-bold text-white text-[10px] shrink-0"
+        <div className="space-y-2">
+          {waypoints.map((wp, i) => {
+            const listStyle = getRouteWaypointListStyle(i, waypoints.length);
+            const waypointLabel = getRouteWaypointLabel(i, waypoints.length, wp.label);
+            const roleLabel = getRouteWaypointRoleLabel(i, waypoints.length);
+            const pointLabel = `Punkt ${i + 1} von ${waypoints.length}`;
+
+            return (
+              <div
+                key={i}
+                className="group grid grid-cols-[auto,1fr,auto] items-center gap-2 rounded-xl border px-2.5 py-2 text-xs shadow-sm sm:px-3"
                 style={{
-                  backgroundColor: getRouteWaypointColor(i, waypoints.length),
-                  color: i === 0 ? "#7C3020" : "white",
+                  backgroundColor: listStyle.backgroundColor,
+                  borderColor: listStyle.borderColor,
                 }}
               >
-                {getRouteWaypointLabel(i, waypoints.length, wp.label)}
-              </span>
-              <span className="text-slate-500 flex-1 truncate">{wp.lat.toFixed(5)}, {wp.lng.toFixed(5)}</span>
-              {/* Reorder buttons */}
-              <div className="flex gap-0.5 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
-                <button onClick={() => moveWaypoint(i, -1)} disabled={i === 0}
-                  className="rounded p-1 text-slate-400 hover:bg-white hover:text-slate-700 disabled:opacity-20">
-                  ↑
-                </button>
-                <button onClick={() => moveWaypoint(i, 1)} disabled={i === waypoints.length - 1}
-                  className="rounded p-1 text-slate-400 hover:bg-white hover:text-slate-700 disabled:opacity-20">
-                  ↓
-                </button>
+                <span
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-extrabold shadow-sm ring-2 ring-white/80"
+                  style={{
+                    backgroundColor: getRouteWaypointColor(i, waypoints.length),
+                    color: listStyle.badgeTextColor,
+                  }}
+                  aria-label={`${roleLabel}, ${pointLabel}`}
+                  title={`${roleLabel}, ${pointLabel}`}
+                >
+                  {waypointLabel}
+                </span>
+
+                <div className="min-w-0">
+                  <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5">
+                    <span className="font-bold leading-tight" style={{ color: listStyle.textColor }}>
+                      {roleLabel}
+                    </span>
+                    <span className="rounded-full bg-white/72 px-2 py-0.5 text-[10px] font-semibold leading-tight text-[#C07820]">
+                      {pointLabel}
+                    </span>
+                  </div>
+                  <p className="mt-0.5 truncate font-mono text-[11px] leading-tight text-[#9A6C58]">
+                    {wp.lat.toFixed(5)}, {wp.lng.toFixed(5)}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-1 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
+                  <button
+                    type="button"
+                    onClick={() => moveWaypoint(i, -1)}
+                    disabled={i === 0}
+                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/60 text-[#7C3020] hover:bg-white disabled:opacity-25"
+                    aria-label={`${roleLabel} nach oben verschieben`}
+                    title="Nach oben"
+                  >
+                    ↑
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moveWaypoint(i, 1)}
+                    disabled={i === waypoints.length - 1}
+                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/60 text-[#7C3020] hover:bg-white disabled:opacity-25"
+                    aria-label={`${roleLabel} nach unten verschieben`}
+                    title="Nach unten"
+                  >
+                    ↓
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeWaypoint(i)}
+                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/60 text-[#A8003C] hover:bg-brand-600 hover:text-white"
+                    aria-label={`${roleLabel} entfernen`}
+                    title="Entfernen"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
               </div>
-              <button onClick={() => removeWaypoint(i)} className="rounded p-1 text-slate-300 hover:bg-brand-600 hover:text-white">
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
