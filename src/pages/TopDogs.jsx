@@ -353,7 +353,6 @@ function RankingTab({ rows, metric, myDogIds, showOwnRank = true }) {
 
   const top3 = sorted.slice(0, 3);
   const nextTwo = sorted.slice(3, 5);
-  const rest  = sorted.slice(5, 10);
   const ownDogIdSet = new Set(myDogIds ?? []);
   const myIdx = sorted.findIndex((r) => ownDogIdSet.has(r.dog?.id));
   const myEntry = myIdx >= 0 ? sorted[myIdx] : null;
@@ -387,18 +386,7 @@ function RankingTab({ rows, metric, myDogIds, showOwnRank = true }) {
           ))}
         </div>
       )}
-      <div className="space-y-2">
-        {rest.map((entry, i) => (
-          <RankRow
-            key={entry.dog.id}
-            entry={entry}
-            rank={i + 6}
-            metric={metric}
-            isMyDog={ownDogIdSet.has(entry.dog?.id)}
-          />
-        ))}
-      </div>
-      {/* Dein Hund falls außerhalb Top 10 */}
+      {/* Dein Hund falls außerhalb Top 5 */}
       {showOwnRankCard && myEntry && (
         <MyDogCard entry={myEntry} rank={myIdx + 1} totalCount={sorted.length} metric={metric} />
       )}
