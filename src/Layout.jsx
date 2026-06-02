@@ -19,7 +19,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
 import DogTrailsLogoMark from "@/components/brand/DogTrailsLogoMark";
-import { ensureWebPushSubscription, notificationPermission, requestNotificationPermission, registerServiceWorker } from "@/lib/browserNotifications";
+import { ensureWebPushSubscription, notificationPermission, registerServiceWorker } from "@/lib/browserNotifications";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 
 const MAIN_NAV = [
@@ -64,10 +64,7 @@ export default function Layout({ children, currentPageName }) {
     const setupPush = async () => {
       const permission = notificationPermission();
       if (permission === "denied") return;
-      if (permission === "default") {
-        const granted = await requestNotificationPermission();
-        if (!granted) return;
-      }
+      if (permission !== "granted") return;
       ensureWebPushSubscription(user.id).catch((error) => {
         console.error("[WebPush] Subscription-Sync fehlgeschlagen:", error);
       });
