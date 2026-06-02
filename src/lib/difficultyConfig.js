@@ -6,6 +6,33 @@ export const DIFFICULTY_LEVELS = [
   { value: "5", label: "Sehr anspruchsvoll", short: "Stufe 5", textColor: "text-brand-400", badgeClass: "bg-brand-100 text-brand-500 border-brand-100" },
 ];
 
+export const HIKE_CARD_STAT_CHIP_CLASS =
+  "inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-full border border-[#F9C030]/75 bg-white/82 px-2.5 py-1.5 text-center text-xs font-bold leading-tight text-[#7C3020] shadow-sm sm:text-sm md:px-3 md:text-xs";
+
+export const DIFFICULTY_TYPE_STYLES = {
+  human: {
+    chipClass: "border-[#D4547A]/60 bg-[#FFF3F7] text-[#7C3020]",
+    importantChipClass: "!border-[#D4547A]/60 !bg-[#FFF3F7] !text-[#7C3020]",
+    activeBar: "bg-[#A8003C]",
+    inactiveBar: "bg-[#F2D3DD]",
+  },
+  dog: {
+    chipClass: "border-[#F9C030] bg-[#FFF8E0] text-[#7C3020]",
+    importantChipClass: "!border-[#F9C030] !bg-[#FFF8E0] !text-[#7C3020]",
+    activeBar: "bg-[#C07820]",
+    inactiveBar: "bg-[#F4DFA8]",
+  },
+};
+
+export function getDifficultyTypeStyle(type) {
+  return DIFFICULTY_TYPE_STYLES[type] ?? DIFFICULTY_TYPE_STYLES.human;
+}
+
+export function getDifficultyTypeChipClass(type, variant = "default") {
+  const style = getDifficultyTypeStyle(type);
+  return variant === "important" ? style.importantChipClass : style.chipClass;
+}
+
 export const DOG_PRIVATE_TAGS = [
   "💪 Fit",
   "🔥 Motiviert",
@@ -222,11 +249,14 @@ export function getDifficultyBadgeClass(level) {
   return DIFFICULTY_BADGE_CLASSES[level] ?? "bg-brand-50 text-slate-600 border-brand-100";
 }
 
+export const WATER_TEXT_CLASS = "text-[#A8003C]";
+export const WATER_BADGE_CLASS = "bg-[#FFF3F7] text-[#A8003C] border-[#D4547A]/60";
+
 export const WATER_LEVELS = [
-  { value: "none", numeric: 0, label: "Kein Wasser", icon: "💧", textColor: "text-[#A8003C]", badgeClass: "bg-[#FFF3F7] text-[#A8003C] border-[#D4547A]/60" },
-  { value: "little", numeric: 1, label: "Wenig Wasser", icon: "💧", textColor: "text-[#A8003C]", badgeClass: "bg-[#FFF3F7] text-[#A8003C] border-[#D4547A]/60" },
-  { value: "moderate", numeric: 2, label: "Etwas Wasser", icon: "💧💧", textColor: "text-[#A8003C]", badgeClass: "bg-[#FFF3F7] text-[#A8003C] border-[#D4547A]/60" },
-  { value: "plenty", numeric: 3, label: "Viel Wasser", icon: "💧💧💧", textColor: "text-[#A8003C]", badgeClass: "bg-[#FFF3F7] text-[#A8003C] border-[#D4547A]/60" },
+  { value: "none", numeric: 0, label: "Kein Wasser", icon: "💧", textColor: WATER_TEXT_CLASS, badgeClass: WATER_BADGE_CLASS },
+  { value: "little", numeric: 1, label: "Wenig Wasser", icon: "💧", textColor: WATER_TEXT_CLASS, badgeClass: WATER_BADGE_CLASS },
+  { value: "moderate", numeric: 2, label: "Etwas Wasser", icon: "💧💧", textColor: WATER_TEXT_CLASS, badgeClass: WATER_BADGE_CLASS },
+  { value: "plenty", numeric: 3, label: "Viel Wasser", icon: "💧💧💧", textColor: WATER_TEXT_CLASS, badgeClass: WATER_BADGE_CLASS },
 ];
 
 export const WATER_GUIDE = [
@@ -419,9 +449,9 @@ export function getWaterIcon(value) {
 }
 
 export function getWaterBadgeClass(value) {
-  return getWaterLevel(value)?.badgeClass ?? "bg-[#FFF3F7] text-[#A8003C] border-[#D4547A]/60";
+  return getWaterLevel(value)?.badgeClass ?? WATER_BADGE_CLASS;
 }
 
 export function getWaterTextColor(value) {
-  return getWaterLevel(value)?.textColor ?? "text-[#A8003C]";
+  return getWaterLevel(value)?.textColor ?? WATER_TEXT_CLASS;
 }

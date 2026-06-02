@@ -7,7 +7,7 @@ import ExpandableText from "@/components/ExpandableText";
 import WaterIcon from "@/components/icons/WaterIcon";
 import DifficultyScaleChip from "@/components/difficulty/DifficultyScale";
 import { PremiumPawBadge } from "@/components/premium/PremiumPawBadge";
-import { TOUR_ICONS, getDifficultyLabel, getSeasonBadgeClass, getSeasonIcon, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { HIKE_CARD_STAT_CHIP_CLASS, TOUR_ICONS, getDifficultyLabel, getSeasonBadgeClass, getSeasonIcon, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { getAvatarDataUrl, HIKE_PLACEHOLDER_IMAGE } from "@/lib/fallbackImages";
 import { formatDurationHours } from "@/lib/duration";
@@ -17,9 +17,6 @@ import { getUniqueHikeImageSources, resolveHikeImageUrl } from "@/lib/hikeImages
 const METRIC_FORMATTER = new Intl.NumberFormat("de-DE", {
   maximumFractionDigits: 1,
 });
-
-const ROUTE_STAT_CHIP_CLASS =
-  "inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-full border border-[#F9C030]/75 bg-white/82 px-2.5 py-1.5 text-center text-xs font-bold leading-tight text-[#7C3020] shadow-sm sm:text-sm md:px-3 md:text-xs";
 
 function hasMetricValue(value) {
   if (value === null || value === undefined || value === "") return false;
@@ -170,7 +167,7 @@ export default function HikeCard({
                   {routeStats.map((stat) => (
                     <span
                       key={stat.label}
-                      className={ROUTE_STAT_CHIP_CLASS}
+                      className={HIKE_CARD_STAT_CHIP_CLASS}
                       aria-label={`${stat.label}: ${stat.value}`}
                     >
                       <span className="text-sm leading-none">{stat.icon}</span>

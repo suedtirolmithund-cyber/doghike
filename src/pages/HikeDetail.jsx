@@ -34,7 +34,7 @@ import PremiumGate from "@/components/hikes/PremiumGate";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { DifficultyBars } from "@/components/difficulty/DifficultyScale";
 import { supabase } from "@/lib/supabaseClient";
-import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getDifficultyTypeChipClass, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { hasActivePremiumAccess } from "@/lib/premiumAccess";
 import { formatDurationHours } from "@/lib/duration";
@@ -126,9 +126,9 @@ function mapWaterAvailabilityToJournalValue(value) {
 }
 
 const humanDifficultyChipClass =
-  "!border-[#D4547A]/60 !bg-[#FFF3F7] !text-[#7C3020]";
+  getDifficultyTypeChipClass("human", "important");
 const dogDifficultyChipClass =
-  "!border-[#F9C030] !bg-[#FFF8E0] !text-[#7C3020]";
+  getDifficultyTypeChipClass("dog", "important");
 const detailStatChipClass =
   "doghike-stat-chip min-h-[52px] min-w-0 justify-center gap-2 px-2.5 py-2 text-center sm:min-h-[58px] sm:px-3 sm:py-2 lg:min-h-[60px] lg:px-3.5 lg:py-2.5";
 const detailStatIconClass =
