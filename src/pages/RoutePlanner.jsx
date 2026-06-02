@@ -700,6 +700,20 @@ export default function RoutePlanner() {
     }
   };
 
+  const handleTabChange = (nextTab) => {
+    if (nextTab === activeTab) return;
+
+    if (routeGeometry) {
+      const shouldDiscard = window.confirm(
+        "Deine aktuelle Route ist noch nicht gespeichert. Willst du wirklich den Tab wechseln und die Route verwerfen?",
+      );
+      if (!shouldDiscard) return;
+    }
+
+    setActiveTab(nextTab);
+    setRouteGeometry(null);
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center p-6">
@@ -733,7 +747,7 @@ export default function RoutePlanner() {
             { id: "track", icon: Navigation, label: "Aufzeichnen" },
             { id: "gpx", icon: Upload, label: "GPX" },
           ].map(({ id, icon: Icon, label }) => (
-            <button key={id} onClick={() => { setActiveTab(id); setRouteGeometry(null); }}
+            <button key={id} onClick={() => handleTabChange(id)}
               className={`flex min-w-0 items-center justify-center gap-1 rounded-lg px-2 py-2 text-xs font-medium transition-all sm:text-sm ${
                 activeTab === id ? "bg-brand-100 text-brand-800 shadow-sm" : "text-slate-500 hover:text-slate-700"
               }`}
