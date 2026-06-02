@@ -291,6 +291,8 @@ Deno.serve(async (request) => {
           : invoice.subscription?.id;
         const customerId = typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id;
 
+        if (!subscriptionId) break;
+
         const { error } = await updateProfile(
           adminClient,
           { customerId, subscriptionId },
