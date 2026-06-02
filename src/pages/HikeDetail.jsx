@@ -6,9 +6,10 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowLeft, Edit, Trash2, ChevronLeft, ChevronRight, X, Share2, Check, MapPin
+  Edit, Trash2, ChevronLeft, ChevronRight, X, Share2, Check, MapPin
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import BackButton from "@/components/ui/BackButton";
 import { Badge } from "@/components/ui/badge";
 import {
   AlertDialog,
@@ -441,6 +442,10 @@ export default function HikeDetail() {
     publicSubmitterProfile?.username ||
     publicSubmitterProfile?.full_name ||
     (hike?._user_id ? "ein DogTrails-Mitglied" : null);
+  const primaryPublicSubmitterDog = publicSubmitterDogs[0] ?? null;
+  const publicSubmitterHandle = publicSubmitterProfile?.username
+    ? `@${publicSubmitterProfile.username}`
+    : publicSubmitterProfile?.full_name || null;
   const countryLabel = getCountryLabel(hike?.country);
   const updatedAtLabel = formatUpdatedAtLabel(hike?.updated_at || hike?.created_at);
   const detailAuthorName =
@@ -563,9 +568,7 @@ export default function HikeDetail() {
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="doghike-glass-card p-8 text-center">
           <p className="text-xl text-slate-700 mb-4">Wanderung nicht gefunden</p>
-          <Link to={fallbackBackUrl}>
-            <Button className="bg-brand-400 text-white hover:bg-brand-600">Zurück zu den Wanderungen</Button>
-          </Link>
+          <BackButton to={fallbackBackUrl} variant="default" />
         </div>
       </div>
     );
@@ -737,15 +740,10 @@ export default function HikeDetail() {
         
         <div className="absolute left-4 right-4 top-4 z-30 flex flex-col gap-2 sm:left-6 sm:right-6 sm:top-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="self-start">
-            <Button
-              type="button"
-              variant="ghost"
+            <BackButton
               onClick={handleBack}
-              className="h-10 bg-white/10 px-3 text-sm backdrop-blur-sm text-white hover:bg-white/20"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Zurück
-            </Button>
+              className="h-10 bg-white/10 px-3 text-sm text-white backdrop-blur-sm hover:bg-white/20"
+            />
           </div>
           <div className="flex flex-wrap gap-2 self-start sm:justify-end">
             {(isOwnJournalHike || (isAdmin && hike?._source === "sheets" && adminEditPublicHikeId)) && (
@@ -1168,11 +1166,23 @@ export default function HikeDetail() {
                       Zuletzt aktualisiert: {updatedAtLabel}
                     </p>
                   )}
-                  {detailAuthorName && (
+                  {hike?._source === "sheets" && hike?._user_id && (publicSubmitterHandle || primaryPublicSubmitterDog) ? (
+                    <div className="inline-flex items-center gap-2 rounded-full border border-brand-100/80 bg-white/80 px-3 py-1.5 text-xs text-slate-500 shadow-sm">
+                      <img
+                        src={getDisplayImageUrl(primaryPublicSubmitterDog?.photo_url, { width: 80, quality: 72 }) || getAvatarDataUrl(primaryPublicSubmitterDog?.name || hike._user_id)}
+                        alt={primaryPublicSubmitterDog?.name || publicSubmitterHandle || "DogTrails-Mitglied"}
+                        className="h-7 w-7 rounded-full object-cover"
+                      />
+                      <span className="font-medium text-slate-700">
+                        {primaryPublicSubmitterDog?.name || "Hund"}
+                        {publicSubmitterHandle ? ` · ${publicSubmitterHandle}` : ""}
+                      </span>
+                    </div>
+                  ) : detailAuthorName ? (
                     <p className="text-xs text-slate-400">
                       Verfasst von: {detailAuthorName}
                     </p>
-                  )}
+                  ) : null}
                 </div>
               </motion.div>
             )}
