@@ -48,7 +48,8 @@ create unique index if not exists profiles_username_normalized_unique
   on public.profiles ((public.normalize_username(username)))
   where public.normalize_username(username) is not null;
 
-create or replace view public.public_profiles as
+create or replace view public.public_profiles
+with (security_invoker = true) as
 select
   user_id,
   username,
