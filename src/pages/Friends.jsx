@@ -227,7 +227,7 @@ export default function Friends() {
     enabled: !!user?.id,
   });
 
-  const stableFriendIds = [...friendIds].sort();
+  const stableFriendIds = useMemo(() => [...friendIds].sort(), [friendIds]);
 
   const { data: feedEntries = [], isLoading: feedLoading } = useQuery({
     queryKey: ["friendFeed", user?.id, stableFriendIds.join(",")],
@@ -281,8 +281,15 @@ export default function Friends() {
     setFriendRequestsSeenAt(seenAt);
   }, [activeTab, unseenIncomingCount, user?.id]);
 
-  const allIds = [...new Set(friendships.flatMap((friendship) => [friendship.requester_id, friendship.receiver_id]))];
-  const stableAllIds = [...allIds].sort();
+  const stableAllIds = useMemo(
+    () =>
+      [
+        ...new Set(
+          friendships.flatMap((friendship) => [friendship.requester_id, friendship.receiver_id]),
+        ),
+      ].sort(),
+    [friendships],
+  );
 
   const { data: profileMap = {} } = useQuery({
     queryKey: ["friendProfiles", user?.id, stableAllIds.join(",")],
