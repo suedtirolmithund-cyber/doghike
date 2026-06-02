@@ -12,13 +12,36 @@ import RouteElevationProfile from "./RouteElevationProfile";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import { estimateRouteDurationMinutes, formatDurationHours, getRouteDurationRuleLabel } from "@/lib/duration";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
+import {
+  ROUTE_LINE_COLOR,
+  ROUTE_TILE_LAYER,
+  getRouteWaypointColor,
+  getRouteWaypointLabel,
+} from "@/lib/routeMapStyle";
 
 
 configureLeafletDefaultIcon();
 
 const ELEVATION_NOISE_THRESHOLD_M = 5;
+const MAX_GPX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
+
+const routeWaypointIcon = (index, total) => L.divIcon({
+  html: `<div style="
+    background: ${getRouteWaypointColor(index, total)};
+    color: ${index === 0 ? '#7C3020' : 'white'};
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(124,48,32,0.26);">
+    ${getRouteWaypointLabel(index, total)}
+  </div>`,
+  className: "",
+  iconSize: [28, 28],
+  iconAnchor: [14, 14],
+});
 
 
 function haversine(lat1, lon1, lat2, lon2) {
@@ -134,6 +157,12 @@ export default function GPXUploader({ onSave }) {
       setError("Hier passt nur eine GPX-Datei.");
       return;
     }
+    if (file.size > MAX_GPX_FILE_SIZE_BYTES) {
+      setFileName("");
+      setGpxData(null);
+      setError("Die GPX-Datei ist zu groß. Bitte nimm eine Datei bis 5 MB.");
+      return;
+    }
 
     setFileName(file.name);
     const reader = new FileReader();
@@ -224,7 +253,7 @@ export default function GPXUploader({ onSave }) {
                 <p className="text-xs text-brand-400">{gpxData.coordinates.length} Wegpunkte geladen</p>
               </div>
             </div>
-            <Button variant="ghost" size="sm" onClick={handleClear} className="text-slate-500 hover:text-brand-400">
+            <Button variant="ghost" size="sm" onClick={handleClear} className="text-slate-500 hover:bg-brand-600 hover:text-white">
               <Trash2 className="w-4 h-4" />
             </Button>
           </div>
@@ -267,14 +296,16 @@ export default function GPXUploader({ onSave }) {
           <div className="relative h-72 md:h-96 rounded-xl overflow-hidden border-2 border-brand-100">
             <SafeMapContainer resetKey={`gpx-preview-${gpxData.coordinates.length}`} center={mapCenter} zoom={12} style={{ height: "100%", width: "100%" }}>
               <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution="&copy; OpenStreetMap"
+                url={ROUTE_TILE_LAYER.url}
+                attribution={ROUTE_TILE_LAYER.attribution}
+                maxZoom={ROUTE_TILE_LAYER.maxZoom}
+                maxNativeZoom={ROUTE_TILE_LAYER.maxNativeZoom}
               />
-              <Polyline positions={gpxData.coordinates} color="#A8003C" weight={4} opacity={0.85} />
+              <Polyline positions={gpxData.coordinates} color={ROUTE_LINE_COLOR} weight={4} opacity={0.85} />
               {gpxData.coordinates.length > 0 && (
                 <>
-                  <Marker position={gpxData.coordinates[0]} />
-                  <Marker position={gpxData.coordinates[gpxData.coordinates.length - 1]} />
+                  <Marker position={gpxData.coordinates[0]} icon={routeWaypointIcon(0, 2)} />
+                  <Marker position={gpxData.coordinates[gpxData.coordinates.length - 1]} icon={routeWaypointIcon(1, 2)} />
                 </>
               )}
             </SafeMapContainer>
