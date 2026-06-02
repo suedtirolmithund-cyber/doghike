@@ -131,7 +131,7 @@ function matchesRecognizedFilters(hike, query) {
     const textHasWater = buildSearchableValues(hike).some((value) =>
       WATER_TERMS.some((term) => value.includes(term))
     );
-    if ((waterLevel ?? 0) < 2 && !textHasWater) return false;
+    if (waterLevel !== null && waterLevel < 2 && !textHasWater) return false;
   }
 
   if (wantsShort) {
