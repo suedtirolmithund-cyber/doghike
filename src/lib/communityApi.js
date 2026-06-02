@@ -430,7 +430,19 @@ export async function publishPendingCommentPhoto(photoReference) {
     .from("comments-pending")
     .remove([storageDescriptor.path]);
   if (removeError) {
-    console.error("[publishPendingCommentPhoto] cleanup failed:", removeError.message);
+    const { error: rollbackError } = await supabase.storage
+      .from("comments")
+      .remove([storageDescriptor.path]);
+
+    if (rollbackError) {
+      console.error(
+        "[publishPendingCommentPhoto] pending cleanup and rollback failed:",
+        removeError.message,
+        rollbackError.message
+      );
+    }
+
+    throw removeError;
   }
 
   return `comments/${storageDescriptor.path}`;
