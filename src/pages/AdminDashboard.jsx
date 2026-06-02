@@ -43,6 +43,7 @@ import {
   adminDeleteUserAccount,
 } from "@/lib/adminApi";
 import { Button } from "@/components/ui/button";
+import BackButton from "@/components/ui/BackButton";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -651,7 +652,7 @@ export default function AdminDashboard() {
       queryClient.invalidateQueries({ queryKey: ["journal"] });
       queryClient.invalidateQueries({ queryKey: ["journalEntry"] });
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
-      toast.success("Eintrag genehmigt");
+      toast.success("Eintrag genehmigt.");
     },
     onError: () =>
       toast.error("Der Eintrag konnte gerade nicht freigegeben werden. Bitte versuche es noch einmal."),
@@ -673,7 +674,7 @@ export default function AdminDashboard() {
       queryClient.invalidateQueries({ queryKey: ["journal"] });
       queryClient.invalidateQueries({ queryKey: ["journalEntry"] });
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
-      toast.success("Eintrag abgelehnt");
+      toast.success("Eintrag abgelehnt.");
     },
     onError: () =>
       toast.error("Der Eintrag konnte gerade nicht abgelehnt werden. Bitte versuche es noch einmal."),
@@ -692,7 +693,7 @@ export default function AdminDashboard() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin_comments"] });
       queryClient.invalidateQueries({ queryKey: ["comments"] });
-      toast.success("Kommentar freigegeben");
+      toast.success("Kommentar freigegeben.");
     },
     onError: () =>
       toast.error("Der Kommentar konnte gerade nicht freigegeben werden. Bitte versuche es noch einmal."),
@@ -711,7 +712,7 @@ export default function AdminDashboard() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin_comments"] });
       queryClient.invalidateQueries({ queryKey: ["comments"] });
-      toast.success("Kommentar gelöscht");
+      toast.success("Kommentar gelöscht.");
     },
     onError: () =>
       toast.error("Der Kommentar konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal."),
@@ -729,7 +730,7 @@ export default function AdminDashboard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin_users"] });
-      toast.success("Nutzerkonto gelöscht");
+      toast.success("Nutzerkonto gelöscht.");
     },
     onError: () =>
       toast.error("Das Nutzerkonto konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal."),
@@ -768,11 +769,7 @@ export default function AdminDashboard() {
           <ShieldCheck className="mx-auto mb-4 h-12 w-12 text-brand-200" />
           <p className="text-lg font-semibold text-slate-700">Kein Zugriff</p>
           <p className="mt-1 text-sm text-slate-500">Diese Seite ist nur für Administratoren.</p>
-          <Link to="/">
-            <Button variant="outline" className="mt-4">
-              Zurück
-            </Button>
-          </Link>
+          <BackButton to="/" variant="outline" className="mt-4" />
         </div>
       </div>
     );

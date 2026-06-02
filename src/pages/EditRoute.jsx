@@ -8,9 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Map, Loader2 } from "lucide-react";
+import { Map, Loader2 } from "lucide-react";
 import EditableRouteDrawer from "@/components/routes/EditableRouteDrawer";
 import RoutePreviewMap from "@/components/routes/RoutePreviewMap";
+import BackButton from "@/components/ui/BackButton";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { formatDurationHours } from "@/lib/duration";
@@ -93,9 +94,7 @@ export default function EditRoute() {
       <div className="min-h-screen flex items-center justify-center px-4">
         <div className="text-center">
           <p className="text-xl text-slate-700 mb-4">Route nicht gefunden</p>
-          <Link to={createPageUrl("Profile")}>
-            <Button>Zurück zum Profil</Button>
-          </Link>
+          <BackButton to={createPageUrl("Profile")} variant="default" />
         </div>
       </div>
     );
@@ -104,11 +103,7 @@ export default function EditRoute() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
-        <Link to={`${createPageUrl("RouteDetail")}?id=${routeId}`}>
-          <Button variant="ghost" className="mb-3 md:mb-4" size="sm">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Zurück zur Route
-          </Button>
-        </Link>
+        <BackButton to={`${createPageUrl("RouteDetail")}?id=${routeId}`} className="mb-3 md:mb-4" />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

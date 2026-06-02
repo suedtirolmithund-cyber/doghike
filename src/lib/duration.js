@@ -53,3 +53,13 @@ export function estimateRouteDurationMinutes(distanceKm, elevationGainM = 0) {
 export function getRouteDurationRuleLabel() {
   return `${ROUTE_BASE_SPEED_KMH} km/h + ${ROUTE_ASCENT_METERS_PER_HOUR} Hm/h`;
 }
+
+export function getRouteDurationRuleHint({ hasElevationData = true } = {}) {
+  const ruleLabel = getRouteDurationRuleLabel();
+
+  if (!hasElevationData) {
+    return `Gehzeit nach Naismith-Regel ohne Höhendaten geschätzt (${ruleLabel}).`;
+  }
+
+  return `Gehzeit nach Naismith-Regel geschätzt (${ruleLabel}).`;
+}

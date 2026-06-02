@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Eye, EyeOff, AlertCircle, CheckCircle2 } from "lucide-react";
 import DogTrailsLogoMark from "@/components/brand/DogTrailsLogoMark";
+import BackButton from "@/components/ui/BackButton";
 
 const BROWN = "#A8003C";
 const BROWN_DARK = "#7C3020";
@@ -369,13 +370,11 @@ export default function Login() {
                 {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                 Link senden
               </button>
-              <button
-                type="button"
+              <BackButton
                 onClick={() => switchMode("login")}
-                className="w-full text-center text-sm text-white/60 hover:text-white/90 mt-1"
-              >
-                ← Zurück zur Anmeldung
-              </button>
+                label="Zurück zur Anmeldung"
+                className="mt-1 w-full border-transparent bg-transparent text-sm text-white/70 shadow-none hover:bg-white/10 hover:text-white"
+              />
             </form>
           )}
 

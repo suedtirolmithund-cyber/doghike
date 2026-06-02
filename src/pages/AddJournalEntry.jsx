@@ -4,13 +4,14 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { createPageUrl } from "@/utils";
 import {
-  ArrowLeft, Upload, X, Loader2, Star, FileText,
+  Upload, X, Loader2, Star, FileText,
   Mountain, TrendingUp, MapPin, AlertTriangle, Dog, Search, Layers, CircleHelp, ChevronLeft, ChevronRight
 } from "lucide-react";
 import { TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Button } from "@/components/ui/button";
+import BackButton from "@/components/ui/BackButton";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -1243,7 +1244,7 @@ export default function AddJournalEntry() {
     const file = e.target.files[0];
     if (!file) return;
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("GPX-Datei zu groß (max. 5 MB)");
+      toast.error("GPX-Datei zu groß (max. 5 MB).");
       return;
     }
     setGpxUploading(true);
@@ -1412,9 +1413,7 @@ export default function AddJournalEntry() {
       <div className="min-h-screen flex items-center justify-center px-4">
         <div className="text-center">
           <p className="text-xl text-slate-700 mb-4">Eintrag nicht gefunden</p>
-          <Link to={createPageUrl("Journal")}>
-            <Button variant="outline">Zurück zum Tagebuch</Button>
-          </Link>
+          <BackButton to={createPageUrl("Journal")} variant="outline" />
         </div>
       </div>
     );
@@ -1426,11 +1425,7 @@ export default function AddJournalEntry() {
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-          <Link to={createPageUrl("Journal")}>
-            <Button variant="ghost" size="sm" className="mb-4 -ml-2 text-slate-600">
-              <ArrowLeft className="w-4 h-4 mr-1" /> Zurück
-            </Button>
-          </Link>
+          <BackButton to={createPageUrl("Journal")} className="mb-4 -ml-2 text-slate-600" />
           <div className="doghike-page-header">
             <div className="doghike-page-icon">
               <FileText className="h-5 w-5" />

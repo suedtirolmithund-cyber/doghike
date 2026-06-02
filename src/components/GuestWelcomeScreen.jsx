@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import DogTrailsLogoMark from "@/components/brand/DogTrailsLogoMark";
+import BackButton from "@/components/ui/BackButton";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
 
@@ -276,13 +277,11 @@ export default function GuestWelcomeScreen() {
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 Link senden
               </button>
-              <button
-                type="button"
+              <BackButton
                 onClick={() => switchMode("login")}
-                className="min-h-10 w-full px-2 py-2 text-center text-sm leading-tight text-white/70"
-              >
-                Zurück zur Anmeldung
-              </button>
+                label="Zurück zur Anmeldung"
+                className="w-full border-transparent bg-transparent px-2 py-2 text-sm text-white/70 shadow-none hover:bg-white/10 hover:text-white"
+              />
             </form>
           )}
 

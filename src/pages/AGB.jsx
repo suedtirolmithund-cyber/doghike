@@ -1,17 +1,13 @@
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { ArrowLeft, FileText, UserCheck, Image, Star, CreditCard, AlertTriangle, XCircle, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { FileText, UserCheck, Image, Star, CreditCard, AlertTriangle, XCircle, Mail } from "lucide-react";
+import BackButton from "@/components/ui/BackButton";
 
 export default function AGB() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
-        <Link to={createPageUrl("Dashboard")}>
-          <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Zurück
-          </Button>
-        </Link>
+        <BackButton to={createPageUrl("Dashboard")} className="mb-6" />
 
         <div className="rounded-2xl border border-brand-100/80 bg-white/78 p-4 shadow-[0_14px_34px_rgba(168,0,60,0.08)] backdrop-blur-sm md:p-8">
           <div className="doghike-page-header mb-2">

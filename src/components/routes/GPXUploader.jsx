@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import RouteElevationProfile from "./RouteElevationProfile";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
-import { estimateRouteDurationMinutes, formatDurationHours, getRouteDurationRuleLabel } from "@/lib/duration";
+import { estimateRouteDurationMinutes, formatDurationHours, getRouteDurationRuleHint } from "@/lib/duration";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
@@ -289,7 +289,7 @@ export default function GPXUploader({ onSave }) {
               <span>{TOUR_ICONS.elevation} Min. Höhe: <strong>{Math.round(gpxData.min_elevation)} m</strong></span>
             )}
             <span className="text-slate-400 ml-auto flex items-center gap-1">
-              <Zap className="w-3 h-3" /> Dauer nach {getRouteDurationRuleLabel()} geschätzt
+              <Zap className="w-3 h-3" /> {getRouteDurationRuleHint()}
             </span>
           </div>
 

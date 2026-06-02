@@ -12,10 +12,11 @@ import { TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 import {
-  ArrowLeft, Star, AlertTriangle, Dog, User, Users, Globe,
+  Star, AlertTriangle, Dog, User, Users, Globe,
   Loader2, ShieldOff, ChevronLeft, ChevronRight, X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import BackButton from "@/components/ui/BackButton";
 import { Badge } from "@/components/ui/badge";
 import WaterIcon from "@/components/icons/WaterIcon";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
@@ -476,9 +477,7 @@ export default function JournalDetail() {
           <ShieldOff className="w-12 h-12 text-slate-300 mx-auto mb-4" />
           <p className="text-slate-600 font-medium mb-2">Eintrag nicht gefunden</p>
           <p className="text-slate-400 text-sm mb-4">Dieser Eintrag existiert nicht oder du hast keinen Zugriff.</p>
-          <Link to={fallbackBackUrl}>
-            <Button variant="outline">Zurück zum Tagebuch</Button>
-          </Link>
+          <BackButton to={fallbackBackUrl} variant="outline" />
         </div>
       </div>
     );
@@ -490,11 +489,7 @@ export default function JournalDetail() {
 
         {/* Back button */}
         <div className="mb-4 flex items-center justify-between">
-          <button onClick={handleBack}>
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="w-4 h-4 mr-2" /> Zurück
-            </Button>
-          </button>
+          <BackButton onClick={handleBack} />
           {isOwner && (
             <Link to={createPageUrl("AddJournalEntry") + `?id=${entry.id}`}>
               <Button variant="outline" size="sm">Bearbeiten</Button>

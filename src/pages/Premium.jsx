@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { Link, useSearchParams } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
-  ArrowLeft,
   CalendarClock,
   Check,
   CreditCard,
@@ -17,6 +16,7 @@ import {
   Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import BackButton from "@/components/ui/BackButton";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { toast } from "sonner";
@@ -192,11 +192,7 @@ export default function Premium() {
       <div className="doghike-page-shell">
         <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-            <Link to={createPageUrl("Hikes")}>
-              <Button variant="ghost" className="mb-6 text-slate-600">
-                <ArrowLeft className="mr-2 h-4 w-4" /> Zurück
-              </Button>
-            </Link>
+            <BackButton to={createPageUrl("Hikes")} className="mb-6 text-slate-600" />
           </motion.div>
 
           <motion.div
@@ -219,11 +215,7 @@ export default function Premium() {
     <div className="doghike-page-shell">
       <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-          <Link to={createPageUrl("Hikes")}>
-            <Button variant="ghost" className="mb-6 text-slate-600">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Zurück
-            </Button>
-          </Link>
+          <BackButton to={createPageUrl("Hikes")} className="mb-6 text-slate-600" />
         </motion.div>
 
         {isPremium ? (

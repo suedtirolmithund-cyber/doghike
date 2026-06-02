@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
-import { ArrowLeft, Loader2, Mail, MessageCircle, Send, CheckCircle2, HelpCircle, Book, Shield, Bug } from "lucide-react";
+import { Loader2, Mail, MessageCircle, Send, CheckCircle2, HelpCircle, Book, Shield, Bug } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import BackButton from "@/components/ui/BackButton";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
@@ -30,7 +31,7 @@ export default function Support() {
     event.preventDefault();
 
     if (!subject.trim() || !message.trim()) {
-      toast.error("Bitte fülle alle Felder aus");
+      toast.error("Bitte fülle alle Felder aus.");
       return;
     }
 
@@ -148,11 +149,7 @@ export default function Support() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
-        <Link to={createPageUrl("Dashboard")}>
-          <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Zurück
-          </Button>
-        </Link>
+        <BackButton to={createPageUrl("Dashboard")} className="mb-6" />
 
         <div className="space-y-6">
           <div className="doghike-glass-card p-6 md:p-8">

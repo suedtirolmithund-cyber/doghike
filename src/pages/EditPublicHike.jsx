@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Camera, ChevronLeft, ChevronRight, CircleHelp, Loader2, Trash2 } from "lucide-react";
+import { Camera, ChevronLeft, ChevronRight, CircleHelp, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -15,6 +15,7 @@ import {
   uploadPublicHikePhoto,
 } from "@/lib/publicHikesApi";
 import { Button } from "@/components/ui/button";
+import BackButton from "@/components/ui/BackButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -221,7 +222,7 @@ export default function EditPublicHike() {
         ...prev,
         photoUrls: [...prev.photoUrls, ...uploadedUrls],
       }));
-      toast.success(`${uploadedUrls.length} Bild${uploadedUrls.length !== 1 ? "er" : ""} ist dabei`);
+      toast.success(`${uploadedUrls.length} Bild${uploadedUrls.length !== 1 ? "er" : ""} ist dabei.`);
     } catch (error) {
       console.error("[EditPublicHike] photo upload failed:", error);
       toast.error(
@@ -415,9 +416,7 @@ export default function EditPublicHike() {
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="doghike-glass-card p-8 text-center">
           <p className="text-xl text-slate-700 mb-4">Nur Admins können öffentliche Wanderungen bearbeiten.</p>
-          <Link to={createPageUrl("Hikes")}>
-            <Button className="bg-brand-400 text-white hover:bg-brand-600">Zurück zu den Wanderungen</Button>
-          </Link>
+          <BackButton to={createPageUrl("Hikes")} variant="default" />
         </div>
       </div>
     );
@@ -428,9 +427,7 @@ export default function EditPublicHike() {
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="doghike-glass-card p-8 text-center">
           <p className="text-xl text-slate-700 mb-4">Öffentliche Wanderung nicht gefunden</p>
-          <Link to={createPageUrl("Hikes")}>
-            <Button className="bg-brand-400 text-white hover:bg-brand-600">Zurück zu den Wanderungen</Button>
-          </Link>
+          <BackButton to={createPageUrl("Hikes")} variant="default" />
         </div>
       </div>
     );
@@ -440,12 +437,10 @@ export default function EditPublicHike() {
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
-          <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`}>
-            <Button variant="ghost" className="pl-0 text-slate-600 hover:text-slate-900">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Zurück zur Wanderung
-            </Button>
-          </Link>
+          <BackButton
+            to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`}
+            className="pl-0 text-slate-600 hover:text-slate-900"
+          />
         </div>
 
         <div className="doghike-glass-card p-6 md:p-8">

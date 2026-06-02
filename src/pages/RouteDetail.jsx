@@ -25,12 +25,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ArrowLeft, Map, Navigation, EyeOff, Trash2, CheckCircle2, Star, Upload, X, Loader2, Pencil, BookOpen } from "lucide-react";
+import { Map, Navigation, EyeOff, Trash2, CheckCircle2, Star, Upload, X, Loader2, Pencil, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import ExpandableText from "@/components/ExpandableText";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
+import BackButton from "@/components/ui/BackButton";
 import WaterIcon from "@/components/icons/WaterIcon";
 import SeasonMultiPicker from "@/components/season/SeasonMultiPicker";
 import { DIFFICULTY_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
@@ -207,7 +208,7 @@ export default function RouteDetail() {
     try {
       const urls = await Promise.all(files.map((f) => uploadJournalFile(user.id, f)));
       setCompleteData((prev) => ({ ...prev, photos: [...(prev.photos || []), ...urls] }));
-      toast.success(`${urls.length} Foto${urls.length > 1 ? "s" : ""} ist dabei`);
+      toast.success(`${urls.length} Foto${urls.length > 1 ? "s" : ""} ist dabei.`);
     } catch (error) {
       toast.error(
         getImageUploadErrorMessage(
@@ -282,9 +283,7 @@ export default function RouteDetail() {
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center">
         <div className="text-center">
           <p className="text-xl text-slate-700 mb-4">Route nicht gefunden</p>
-          <Link to={createPageUrl("Profile")}>
-            <Button>Zurück zum Profil</Button>
-          </Link>
+          <BackButton to={createPageUrl("Profile")} variant="default" />
         </div>
       </div>
     );
@@ -347,12 +346,7 @@ export default function RouteDetail() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
-        <Link to={createPageUrl("Profile")}>
-          <Button variant="ghost" className="mb-4">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück
-          </Button>
-        </Link>
+        <BackButton to={createPageUrl("Profile")} className="mb-4" />
 
         <div className="space-y-6">
           {/* Header */}

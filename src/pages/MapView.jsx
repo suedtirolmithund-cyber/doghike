@@ -1,10 +1,9 @@
 import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { ArrowLeft, Map, MapPin } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Map, MapPin } from "lucide-react";
+import BackButton from "@/components/ui/BackButton";
 import HikeMap from "@/components/map/HikeMap";
 
 export default function MapView() {
@@ -26,12 +25,7 @@ export default function MapView() {
           className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 mb-4 md:mb-6"
         >
           <div>
-            <Link to={createPageUrl("Dashboard")}>
-              <Button variant="ghost" className="mb-2 text-slate-600" size="sm">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Zurück
-              </Button>
-            </Link>
+            <BackButton to={createPageUrl("Dashboard")} className="mb-2 text-slate-600" />
             <div className="doghike-page-header mb-0">
               <div className="doghike-page-icon">
                 <Map className="h-5 w-5" />

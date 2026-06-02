@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { CheckCircle2, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import BackButton from "@/components/ui/BackButton";
 import { motion } from "framer-motion";
 import { PremiumPawBadge, PremiumPawMark } from "@/components/premium/PremiumPawBadge";
 
@@ -70,11 +71,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
               Jetzt Premium werden
             </Button>
           </Link>
-          <Link to={createPageUrl("Hikes")} className="w-full sm:w-auto">
-            <Button variant="outline" className="w-full sm:w-auto">
-              Zurück zu allen Wanderungen
-            </Button>
-          </Link>
+          <BackButton to={createPageUrl("Hikes")} variant="outline" className="w-full sm:w-auto" />
         </div>
       </motion.div>
     );
@@ -118,11 +115,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
               Jetzt Premium werden
             </Button>
           </Link>
-          <Link to={createPageUrl("Hikes")}>
-            <Button variant="ghost" className="w-full">
-              Zurück zu allen Wanderungen
-            </Button>
-          </Link>
+          <BackButton to={createPageUrl("Hikes")} className="w-full" />
         </motion.div>
       </div>
     </div>
