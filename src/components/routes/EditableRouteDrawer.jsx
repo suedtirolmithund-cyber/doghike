@@ -168,6 +168,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
   const [isSearching, setIsSearching] = useState(false);
   const [searchCenter, setSearchCenter] = useState(null);
   const mapResetKey = `editable-route-${isEditing ? "edit" : "view"}-${waypoints.length}`;
+  const routeRequestIdRef = useRef(0);
 
   useEffect(() => {
     if (lastAppliedInitialRouteRef.current === initialRouteSignature) return;
@@ -177,83 +178,131 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
 
   // Fetch route using GraphHopper public API with hiking profile
   // Uses OSM data, prefers marked hiking trails (foot-hiking), allows side paths
-  const fetchRoute = async (points) => {
+  const fetchRoute = async (points, signal) => {
     if (points.length < 2) {
-      setRouteCoordinates(points);
-      setRouteDistance(0);
-      return;
+      return {
+        coordinates: points,
+        distanceKm: 0,
+        elevationGain: 0,
+        durationMin: 0,
+      };
     }
 
-    setIsCalculating(true);
     try {
       if (!GH_API_KEY) {
-        await fetchRouteOSRM(points);
-        return;
+        return await fetchRouteOSRM(points, signal);
       }
 
       // Build GraphHopper request - foot_hiking prefers designated hiking trails
       // but also uses footpaths and side trails
       const pointsParam = points.map(p => `point=${p[0]},${p[1]}`).join('&');
       const response = await fetch(
-        `https://graphhopper.com/api/1/route?${pointsParam}&profile=hike&locale=de&calc_points=true&instructions=false&points_encoded=false&key=${GH_API_KEY}`
+        `https://graphhopper.com/api/1/route?${pointsParam}&profile=hike&locale=de&calc_points=true&instructions=false&points_encoded=false&key=${GH_API_KEY}`,
+        { signal },
       );
       const data = await response.json();
 
       if (data.paths && data.paths[0]) {
         const path = data.paths[0];
-        const coordinates = path.points.coordinates.map(c => [c[1], c[0]]);
-        setRouteCoordinates(coordinates);
         const distKm = parseFloat((path.distance / 1000).toFixed(2));
-        setRouteDistance(distKm);
         const elevGain = path.ascend ? Math.round(path.ascend) : 0;
-        setRouteElevationGain(elevGain);
         // Naismith's rule: 1h per 5km + 1h per 600m ascent
         const estimatedMin = Math.round((distKm / 5) * 60 + (elevGain / 600) * 60);
-        setRouteDurationMin(estimatedMin);
+        return {
+          coordinates: path.points.coordinates.map(c => [c[1], c[0]]),
+          distanceKm: distKm,
+          elevationGain: elevGain,
+          durationMin: estimatedMin,
+        };
       } else {
         // Fallback: try OSRM
-        await fetchRouteOSRM(points);
+        return await fetchRouteOSRM(points, signal);
       }
     } catch (error) {
+      if (error?.name === "AbortError") throw error;
       console.error('GraphHopper routing error, falling back to OSRM:', error);
-      await fetchRouteOSRM(points);
-    } finally {
-      setIsCalculating(false);
+      return await fetchRouteOSRM(points, signal);
     }
   };
 
   // OSRM fallback
-  const fetchRouteOSRM = async (points) => {
+  const fetchRouteOSRM = async (points, signal) => {
     try {
       const coords = points.map(p => `${p[1]},${p[0]}`).join(';');
       const response = await fetch(
-        `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${coords}?overview=full&geometries=geojson`
+        `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${coords}?overview=full&geometries=geojson`,
+        { signal },
       );
       const data = await response.json();
       if (data.code === 'Ok' && data.routes && data.routes[0]) {
         const route = data.routes[0];
-        const coordinates = route.geometry.coordinates.map(c => [c[1], c[0]]);
-        setRouteCoordinates(coordinates);
         const distKm = parseFloat((route.distance / 1000).toFixed(2));
-        setRouteDistance(distKm);
-        setRouteElevationGain(0);
-        setRouteDurationMin(Math.round((distKm / 5) * 60));
+        return {
+          coordinates: route.geometry.coordinates.map(c => [c[1], c[0]]),
+          distanceKm: distKm,
+          elevationGain: 0,
+          durationMin: Math.round((distKm / 5) * 60),
+        };
       } else {
         const distKm = parseFloat(calculateDistance(points));
-        setRouteCoordinates(points);
-        setRouteDistance(distKm);
-        setRouteDurationMin(Math.round((distKm / 5) * 60));
+        return {
+          coordinates: points,
+          distanceKm: distKm,
+          elevationGain: 0,
+          durationMin: Math.round((distKm / 5) * 60),
+        };
       }
-    } catch {
+    } catch (error) {
+      if (error?.name === "AbortError") throw error;
       const distKm = parseFloat(calculateDistance(points));
-      setRouteCoordinates(points);
-      setRouteDistance(distKm);
-      setRouteDurationMin(Math.round((distKm / 5) * 60));
+      return {
+        coordinates: points,
+        distanceKm: distKm,
+        elevationGain: 0,
+        durationMin: Math.round((distKm / 5) * 60),
+      };
     }
   };
 
   useEffect(() => {
-    fetchRoute(waypoints);
+    const requestId = routeRequestIdRef.current + 1;
+    routeRequestIdRef.current = requestId;
+    const controller = new AbortController();
+
+    if (waypoints.length < 2) {
+      setRouteCoordinates(waypoints);
+      setRouteDistance(0);
+      setRouteElevationGain(0);
+      setRouteDurationMin(0);
+      return () => controller.abort();
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setIsCalculating(true);
+      fetchRoute(waypoints, controller.signal)
+        .then((result) => {
+          if (!result) return;
+          if (controller.signal.aborted || routeRequestIdRef.current !== requestId) return;
+          setRouteCoordinates(result.coordinates);
+          setRouteDistance(result.distanceKm);
+          setRouteElevationGain(result.elevationGain);
+          setRouteDurationMin(result.durationMin);
+        })
+        .catch((error) => {
+          if (error?.name === "AbortError") return;
+          console.error("Route calculation failed:", error);
+        })
+        .finally(() => {
+          if (!controller.signal.aborted && routeRequestIdRef.current === requestId) {
+            setIsCalculating(false);
+          }
+        });
+    }, 250);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      controller.abort();
+    };
   }, [waypoints]);
 
   const calculateDistance = (points) => {
