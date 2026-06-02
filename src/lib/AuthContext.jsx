@@ -9,9 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
-  const [isLoadingPublicSettings] = useState(false);
   const [authError, setAuthError] = useState(null);
-  const [appPublicSettings] = useState(null);
 
   const applySessionState = (session) => {
     setUser(session?.user ?? null);
@@ -174,9 +172,7 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated,
         isAdmin,
         isLoadingAuth,
-        isLoadingPublicSettings,
         authError,
-        appPublicSettings,
         logout,
         loginWithEmail,
         signUpWithEmail,

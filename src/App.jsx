@@ -175,8 +175,8 @@ const DogProfileRedirect = () => {
 };
 
 const AuthenticatedApp = () => {
-  const { isAuthenticated, isLoadingAuth, isLoadingPublicSettings } = useAuth();
-  const isBootLoading = isLoadingPublicSettings || isLoadingAuth;
+  const { isAuthenticated, isLoadingAuth } = useAuth();
+  const isBootLoading = isLoadingAuth;
 
   if (isBootLoading) {
     return <BootLoadingGate />;
