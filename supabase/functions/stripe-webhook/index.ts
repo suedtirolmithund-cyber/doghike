@@ -32,8 +32,20 @@ function subscriptionToProfileUpdate(subscription: Stripe.Subscription) {
 
 function oneMonthFromTimestamp(timestamp: number) {
   const date = new Date(timestamp * 1000);
-  date.setMonth(date.getMonth() + 1);
-  return date.toISOString();
+  const targetYear = date.getUTCFullYear();
+  const targetMonth = date.getUTCMonth() + 1;
+  const lastTargetMonthDay = new Date(Date.UTC(targetYear, targetMonth + 1, 0)).getUTCDate();
+  const targetDay = Math.min(date.getUTCDate(), lastTargetMonthDay);
+
+  return new Date(Date.UTC(
+    targetYear,
+    targetMonth,
+    targetDay,
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds(),
+    date.getUTCMilliseconds(),
+  )).toISOString();
 }
 
 async function claimWebhookEvent(
