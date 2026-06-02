@@ -60,7 +60,7 @@ export default function AGB() {
                   <li>Die Registrierung ist kostenlos. Du brauchst eine gültige E-Mail-Adresse oder ein Google-Konto.</li>
                   <li>Du bist für die Sicherheit deines Kontos verantwortlich. Teile dein Passwort nicht.</li>
                   <li>Pro Person ist ein Konto erlaubt. Mehrfachkonten können bei Missbrauch gesperrt werden.</li>
-                  <li>Du musst mindestens 16 Jahre alt sein.</li>
+                  <li>In Italien ist die selbstständige datenschutzrechtliche Einwilligung für Online-Dienste ab 14 Jahren möglich. Unter 14 Jahren ist die Zustimmung oder Genehmigung der Erziehungsberechtigten erforderlich.</li>
                   <li>Du kannst dein Konto jederzeit direkt löschen: Profil → Konto → „Konto löschen“.</li>
                 </ul>
               </div>

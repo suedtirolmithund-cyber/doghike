@@ -9,6 +9,7 @@ import {
   CreditCard,
   Crown,
   ExternalLink,
+  LogOut,
   Loader2,
   Mail,
   MessageCircle,
@@ -58,6 +59,7 @@ export default function AccountSettings({ user, profile }) {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isSigningOutAll, setIsSigningOutAll] = useState(false);
   const [pendingPlan, setPendingPlan] = useState(null);
   const [premiumWithdrawalConsent, setPremiumWithdrawalConsent] = useState(false);
   const premiumEndDate = profile?.premium_current_period_end ? new Date(profile.premium_current_period_end) : null;
@@ -142,6 +144,23 @@ export default function AccountSettings({ user, profile }) {
       }
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  const handleSignOutAllSessions = async () => {
+    setIsSigningOutAll(true);
+    try {
+      const { error } = await supabase.auth.signOut({ scope: "global" });
+      if (error) throw error;
+
+      await logout();
+      toast.success("Du wurdest auf allen Geräten abgemeldet.");
+      navigate(createPageUrl("Login"), { replace: true });
+    } catch (error) {
+      console.error("[AccountSettings] global sign-out failed:", error);
+      toast.error("Abmelden auf allen Geräten hat gerade nicht funktioniert. Bitte versuche es noch einmal.");
+    } finally {
+      setIsSigningOutAll(false);
     }
   };
 
@@ -284,6 +303,27 @@ export default function AccountSettings({ user, profile }) {
                 Datenauskunft anfragen
               </Button>
             </a>
+            <a href={`mailto:${SUPPORT_EMAIL}?subject=Datenexport`}>
+              <Button variant="outline" size="sm" className="text-slate-700">
+                <Mail className="w-3 h-3 mr-2" />
+                Datenexport anfordern
+              </Button>
+            </a>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="text-slate-700"
+              onClick={handleSignOutAllSessions}
+              disabled={isSigningOutAll}
+            >
+              {isSigningOutAll ? (
+                <Loader2 className="w-3 h-3 mr-2 animate-spin" />
+              ) : (
+                <LogOut className="w-3 h-3 mr-2" />
+              )}
+              Von allen Geräten abmelden
+            </Button>
           </div>
         </div>
       </div>

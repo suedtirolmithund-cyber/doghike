@@ -59,6 +59,15 @@ export default function Datenschutz() {
                 </div>
 
                 <div className="bg-brand-50/70 rounded-xl p-4">
+                  <p className="font-medium text-slate-900 mb-2">Mindestalter:</p>
+                  <p>
+                    In Italien können Minderjährige ab 14 Jahren selbst in die Verarbeitung ihrer Daten bei Online-Diensten einwilligen.
+                    Unter 14 Jahren darf die App nur mit Zustimmung oder Genehmigung der Erziehungsberechtigten genutzt werden.
+                    Minderjährige sollten keine sensiblen Daten, privaten Adressen oder erkennbare Fotos Dritter öffentlich teilen.
+                  </p>
+                </div>
+
+                <div className="bg-brand-50/70 rounded-xl p-4">
                   <p className="font-medium text-slate-900 mb-2">Bei der Nutzung der App:</p>
                   <ul className="list-disc pl-6 space-y-1">
                     <li><strong>Wanderungsdaten:</strong> Trailname, Ort, Datum, Distanz, Höhenmeter, Dauer, Schwierigkeit, Saison, Wasserverfügbarkeit, Notizen, Parkplatzinfos</li>
@@ -197,6 +206,7 @@ export default function Datenschutz() {
                   <div className="border border-brand-100 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Supabase Inc. (Authentifizierung, Datenbank, Storage)</p>
                     <p>Speichert Nutzerkonten, Session-Tokens und App-Daten. Journal-Dateien werden in Supabase Storage gespeichert und in der App je nach Freigabe privat, für Freunde oder öffentlich ausgeliefert.</p>
+                    <p className="mt-1 text-slate-500">Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO für Konto, Anmeldung und App-Funktionen; Art. 6 Abs. 1 lit. f DSGVO für Sicherheit, Fehlerbehebung und Missbrauchsschutz.</p>
               <p className="mt-1 text-slate-500">Datenschutz: <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">supabase.com/privacy</a></p>
                   </div>
 
@@ -209,6 +219,7 @@ export default function Datenschutz() {
                   <div className="border border-brand-100 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Google LLC (Sign-in mit Google / OAuth)</p>
                     <p>Wenn du dich über "Mit Google anmelden" registrierst oder einloggst, überträgt Google deine E-Mail-Adresse, deinen Namen und dein Profilbild an Supabase Auth.</p>
+                    <p className="mt-1 text-slate-500">Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO für die von dir gewählte Anmeldung über Google; soweit zusätzliche freiwillige Profilangaben übernommen werden, Art. 6 Abs. 1 lit. a DSGVO.</p>
               <p className="mt-1 text-slate-500">Datenschutz: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">policies.google.com/privacy</a></p>
                   </div>
 
@@ -250,6 +261,7 @@ export default function Datenschutz() {
                   <div className="border border-brand-100 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Stripe Inc. (Zahlungsabwicklung für Premium)</p>
                     <p>Verarbeitet Zahlungsdaten bei Premium-Käufen direkt. Der Betreiber speichert keine Kreditkartendaten. Stripe erhält Name, E-Mail-Adresse und Zahlungsinformationen.</p>
+                    <p className="mt-1 text-slate-500">Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO für die Premium-Buchung und Zahlungsabwicklung; Art. 6 Abs. 1 lit. c DSGVO für gesetzliche Nachweis- und Aufbewahrungspflichten.</p>
                     <p className="mt-1 text-slate-500"><a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">stripe.com/privacy</a></p>
                   </div>
 
@@ -388,7 +400,7 @@ export default function Datenschutz() {
                   </div>
                   <div className="bg-brand-50/70 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Datenportabilität (Art. 20)</p>
-                    <p className="text-sm">Deine Daten in einem gängigen Format anfordern.</p>
+                    <p className="text-sm">Du kannst eine Kopie deiner bereitgestellten Daten in einem gängigen Format per E-Mail anfordern. Wir stellen die Daten manuell bereit, soweit Art. 20 DSGVO anwendbar ist.</p>
                   </div>
                   <div className="bg-brand-50/70 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Einschränkung (Art. 18)</p>
@@ -417,7 +429,7 @@ export default function Datenschutz() {
                   <p className="font-semibold mb-1">Anfragen stellen:</p>
             <p className="text-brand-50 text-sm">
                     Schreib an <strong>suedtirolmithund@gmail.com</strong>. Antwort innerhalb von 1 Monat (Art. 12 Abs. 3 DSGVO); bei komplexen Anfragen Verlängerung um weitere 2 Monate möglich.
-                    Für Kontolöschung: direkt über die Profileinstellungen oder per E-Mail-Anfrage.
+                    Für Datenexport: Betreff "Datenexport". Für Kontolöschung: direkt über die Profileinstellungen oder per E-Mail-Anfrage.
                   </p>
                 </div>
               </div>
