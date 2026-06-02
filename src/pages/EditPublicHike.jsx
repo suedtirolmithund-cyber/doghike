@@ -136,6 +136,7 @@ export default function EditPublicHike() {
   const [isUploadingPhotos, setIsUploadingPhotos] = useState(false);
   const uploadedDuringEditRef = useRef(new Set());
   const savedPhotoUrlsRef = useRef(new Set());
+  const saveInFlightRef = useRef(false);
 
   const { data: userDogs = [] } = useQuery({
     queryKey: ["dogs", user?.id],
@@ -187,6 +188,8 @@ export default function EditPublicHike() {
 
   useEffect(() => {
     return () => {
+      if (saveInFlightRef.current) return;
+
       const uploadedUrls = [...uploadedDuringEditRef.current];
       if (uploadedUrls.length === 0) return;
 
@@ -314,6 +317,9 @@ export default function EditPublicHike() {
   };
 
   const saveMutation = useMutation({
+    onMutate: () => {
+      saveInFlightRef.current = true;
+    },
     mutationFn: async () => {
       if (!hike?._public_hike_id) {
         throw new Error("missing_public_hike_id");
@@ -390,6 +396,9 @@ export default function EditPublicHike() {
     onError: (error) => {
       console.error("[EditPublicHike] save failed:", error);
       toast.error(getFriendlySaveErrorMessage(error));
+    },
+    onSettled: () => {
+      saveInFlightRef.current = false;
     },
   });
 
