@@ -561,6 +561,7 @@ create or replace function public.can_read_shared_journal_file(object_name text)
 returns boolean
 language sql
 security invoker
+set search_path = public
 as $$
   select exists (
     select 1
