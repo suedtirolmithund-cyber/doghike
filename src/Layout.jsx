@@ -194,7 +194,7 @@ export default function Layout({ children, currentPageName }) {
 
       <nav className="fixed left-0 right-0 top-0 z-50 hidden border-b border-brand-100/70 bg-white/78 shadow-[0_10px_28px_rgba(168,0,60,0.12)] backdrop-blur-md md:block">
         <div className="mx-auto w-full max-w-[1600px] py-2 pl-6 pr-3 lg:pl-8 lg:pr-4 xl:pl-10 xl:pr-6 2xl:px-8 2xl:py-3">
-          <div className="flex flex-wrap items-center justify-between gap-2 lg:gap-3 2xl:flex-nowrap 2xl:gap-4">
+          <div className="flex flex-nowrap items-center justify-between gap-2 lg:gap-3 2xl:gap-4">
             <Link
               to={createPageUrl("Dashboard")}
               className="flex min-w-0 shrink-0 items-center gap-2.5 transition-opacity hover:opacity-80 lg:gap-3"
@@ -208,14 +208,14 @@ export default function Layout({ children, currentPageName }) {
               </div>
             </Link>
 
-            <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-1 overflow-visible lg:gap-1.5 2xl:flex-nowrap">
+            <div className="flex min-w-0 flex-1 flex-nowrap items-center justify-start gap-2 overflow-x-auto overflow-y-visible px-1 py-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:gap-2.5 xl:justify-center">
               {DESKTOP_NAV.map(({ name, icon: Icon, label }) => {
                 const active = isActive(name);
                 return (
                   <Link
                     key={name}
                     to={createPageUrl(name)}
-                    className={`flex min-w-[86px] max-w-[126px] items-center justify-center gap-1 rounded-lg px-2 py-2 text-center leading-tight transition-all lg:min-w-[96px] lg:gap-1.5 xl:min-w-[104px] xl:gap-2 xl:px-2.5 xl:py-2.5 2xl:min-w-[108px] ${
+                    className={`flex shrink-0 items-center justify-center gap-1 rounded-lg px-2 py-2 text-center leading-tight transition-all lg:gap-1.5 xl:gap-2 xl:px-2.5 xl:py-2.5 ${
                       active ? "bg-[#FFF8F0] text-[#A8003C] shadow-sm ring-1 ring-[#F9C030]/60" : "text-[#7C3020] hover:bg-[#FFF8F0] hover:text-[#A8003C] active:bg-[#FFF8F0] active:text-[#A8003C]"
                     }`}
                   >
@@ -227,7 +227,7 @@ export default function Layout({ children, currentPageName }) {
               {isAdmin && (
                 <Link
                   to={createPageUrl("AdminDashboard")}
-                  className={`flex min-w-[86px] max-w-[126px] items-center justify-center gap-1 rounded-lg px-2 py-2 text-center leading-tight transition-all lg:min-w-[96px] lg:gap-1.5 xl:min-w-[104px] xl:gap-2 xl:px-2.5 xl:py-2.5 2xl:min-w-[108px] ${
+                  className={`flex shrink-0 items-center justify-center gap-1 rounded-lg px-2 py-2 text-center leading-tight transition-all lg:gap-1.5 xl:gap-2 xl:px-2.5 xl:py-2.5 ${
                     isActive("AdminDashboard") ? "bg-[#FFF8F0] text-[#A8003C] shadow-sm ring-1 ring-[#F9C030]/60" : "text-[#7C3020] hover:bg-[#FFF8F0] hover:text-[#A8003C] active:bg-[#FFF8F0] active:text-[#A8003C]"
                   }`}
                 >
