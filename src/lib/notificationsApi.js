@@ -108,23 +108,65 @@ function isAtOrAfterStartTime(notification, startAt) {
 export async function loadNotifications(userId) {
   const results = [];
   const startAt = readStartAt(userId);
+  const premiumHikeSince = new Date(Date.now() - 14 * 24 * 3600 * 1000).toISOString();
+  const friendEntrySince = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
 
-  const { data: currentProfile, error: currentProfileError } = await supabase
-    .from("profiles")
-    .select("is_premium, premium_current_period_end")
-    .eq("user_id", userId)
-    .maybeSingle();
+  const [
+    { data: currentProfile, error: currentProfileError },
+    { data: incoming, error: incomingError },
+    { data: myEntries, error: myEntriesError },
+    { data: acceptedFriendships, error: friendshipsError },
+    { data: premiumHikes, error: premiumHikesError },
+    { data: freeHikes, error: freeHikesError },
+  ] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("is_premium, premium_current_period_end")
+      .eq("user_id", userId)
+      .maybeSingle(),
+    supabase
+      .from("friendships")
+      .select("id, requester_id, created_at")
+      .eq("receiver_id", userId)
+      .eq("status", "pending")
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("journal_entries")
+      .select("id, title, status, visibility, updated_at, created_at, rejection_reason")
+      .eq("user_id", userId)
+      .eq("visibility", "public")
+      .in("status", ["pending", "approved", "rejected"])
+      .order("updated_at", { ascending: false })
+      .limit(10),
+    supabase
+      .from("friendships")
+      .select("requester_id, receiver_id")
+      .or(`requester_id.eq.${userId},receiver_id.eq.${userId}`)
+      .eq("status", "accepted"),
+    supabase
+      .from("public_hikes")
+      .select("id, title, location, updated_at, created_at, status, is_premium")
+      .eq("status", "approved")
+      .eq("is_premium", true)
+      .gte("created_at", premiumHikeSince)
+      .order("created_at", { ascending: false })
+      .limit(6),
+    supabase
+      .from("public_hikes")
+      .select("id, title, location, updated_at, created_at, status, is_premium")
+      .eq("status", "approved")
+      .eq("is_premium", false)
+      .gte("created_at", premiumHikeSince)
+      .order("created_at", { ascending: false })
+      .limit(6),
+  ]);
 
   if (currentProfileError) throw currentProfileError;
-
-  const { data: incoming, error: incomingError } = await supabase
-    .from("friendships")
-    .select("id, requester_id, created_at")
-    .eq("receiver_id", userId)
-    .eq("status", "pending")
-    .order("created_at", { ascending: false });
-
   if (incomingError) throw incomingError;
+  if (myEntriesError) throw myEntriesError;
+  if (friendshipsError) throw friendshipsError;
+  if (premiumHikesError) throw premiumHikesError;
+  if (freeHikesError) throw freeHikesError;
 
   if (incoming?.length) {
     const requesterIds = incoming.map((friendship) => friendship.requester_id);
@@ -150,17 +192,6 @@ export async function loadNotifications(userId) {
     });
   }
 
-  const { data: myEntries, error: myEntriesError } = await supabase
-    .from("journal_entries")
-    .select("id, title, status, visibility, updated_at, created_at, rejection_reason")
-    .eq("user_id", userId)
-    .eq("visibility", "public")
-    .in("status", ["pending", "approved", "rejected"])
-    .order("updated_at", { ascending: false })
-    .limit(10);
-
-  if (myEntriesError) throw myEntriesError;
-
   (myEntries ?? []).forEach((entry) => {
     const pending = entry.status === "pending";
     const approved = entry.status === "approved";
@@ -180,26 +211,17 @@ export async function loadNotifications(userId) {
     });
   });
 
-  const { data: acceptedFriendships, error: friendshipsError } = await supabase
-    .from("friendships")
-    .select("requester_id, receiver_id")
-    .or(`requester_id.eq.${userId},receiver_id.eq.${userId}`)
-    .eq("status", "accepted");
-
-  if (friendshipsError) throw friendshipsError;
-
   const friendIds = (acceptedFriendships ?? []).map((friendship) =>
     friendship.requester_id === userId ? friendship.receiver_id : friendship.requester_id,
   );
 
   if (friendIds.length > 0) {
-    const since = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
     const { data: friendEntries, error: friendEntriesError } = await supabase
       .from("journal_entries")
       .select("id, title, user_id, created_at")
       .in("user_id", friendIds)
       .or("and(visibility.eq.friends,status.eq.approved),and(visibility.eq.public,status.eq.approved)")
-      .gte("created_at", since)
+      .gte("created_at", friendEntrySince)
       .order("created_at", { ascending: false })
       .limit(5);
 
@@ -231,18 +253,6 @@ export async function loadNotifications(userId) {
   }
 
   if (hasActivePremiumAccess(currentProfile)) {
-    const since = new Date(Date.now() - 14 * 24 * 3600 * 1000).toISOString();
-    const { data: premiumHikes, error: premiumHikesError } = await supabase
-      .from("public_hikes")
-      .select("id, title, location, updated_at, created_at, status, is_premium")
-      .eq("status", "approved")
-      .eq("is_premium", true)
-      .gte("created_at", since)
-      .order("created_at", { ascending: false })
-      .limit(6);
-
-    if (premiumHikesError) throw premiumHikesError;
-
     (premiumHikes ?? []).forEach((hike) => {
       results.push({
         id: `ph-${hike.id}`,
@@ -254,18 +264,6 @@ export async function loadNotifications(userId) {
       });
     });
   }
-
-  const freeHikeSince = new Date(Date.now() - 14 * 24 * 3600 * 1000).toISOString();
-  const { data: freeHikes, error: freeHikesError } = await supabase
-    .from("public_hikes")
-    .select("id, title, location, updated_at, created_at, status, is_premium")
-    .eq("status", "approved")
-    .eq("is_premium", false)
-    .gte("created_at", freeHikeSince)
-    .order("created_at", { ascending: false })
-    .limit(6);
-
-  if (freeHikesError) throw freeHikesError;
 
   (freeHikes ?? []).forEach((hike) => {
     results.push({
