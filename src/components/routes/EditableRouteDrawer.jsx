@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { TileLayer, Polyline, Marker, useMapEvents, Popup, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -144,11 +144,18 @@ function RouteDrawerMap({ waypoints, setWaypoints, routeCoordinates, isEditing, 
 }
 
 export default function EditableRouteDrawer({ onSave, initialRoute = [], initialCoordinates = null }) {
-  const normalizedInitialRoute = Array.isArray(initialRoute) && initialRoute.length > 0
-    ? initialRoute
-    : Array.isArray(initialCoordinates)
-      ? initialCoordinates
-      : [];
+  const normalizedInitialRoute = useMemo(() => (
+    Array.isArray(initialRoute) && initialRoute.length > 0
+      ? initialRoute
+      : Array.isArray(initialCoordinates)
+        ? initialCoordinates
+        : []
+  ), [initialCoordinates, initialRoute]);
+  const initialRouteSignature = useMemo(
+    () => JSON.stringify(normalizedInitialRoute),
+    [normalizedInitialRoute],
+  );
+  const lastAppliedInitialRouteRef = useRef(initialRouteSignature);
   const [waypoints, setWaypoints] = useState(normalizedInitialRoute);
   const [routeCoordinates, setRouteCoordinates] = useState([]);
   const [isCalculating, setIsCalculating] = useState(false);
@@ -163,8 +170,10 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
   const mapResetKey = `editable-route-${isEditing ? "edit" : "view"}-${waypoints.length}`;
 
   useEffect(() => {
+    if (lastAppliedInitialRouteRef.current === initialRouteSignature) return;
+    lastAppliedInitialRouteRef.current = initialRouteSignature;
     setWaypoints(normalizedInitialRoute);
-  }, [normalizedInitialRoute]);
+  }, [initialRouteSignature, normalizedInitialRoute]);
 
   // Fetch route using GraphHopper public API with hiking profile
   // Uses OSM data, prefers marked hiking trails (foot-hiking), allows side paths
