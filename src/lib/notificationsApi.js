@@ -260,7 +260,7 @@ export async function loadNotifications(userId) {
         title: `Neue Premium-Wanderung: "${hike.title}"`,
         body: hike.location ? `Jetzt neu in ${hike.location}` : "Jetzt neu f\u00fcr Premium-Mitglieder",
         time: hike.created_at || hike.updated_at,
-        link: `${createPageUrl("HikeDetail")}?id=${encodeURIComponent(String(hike.id))}&source=sheets`,
+        link: `${createPageUrl("HikeDetail")}?id=${encodeURIComponent(String(hike.id))}&source=supabase`,
       });
     });
   }
@@ -272,7 +272,7 @@ export async function loadNotifications(userId) {
       title: `Neue kostenlose Wanderung: "${hike.title}"`,
       body: hike.location ? `Jetzt neu in ${hike.location}` : "Jetzt neu verfügbar",
       time: hike.created_at || hike.updated_at,
-      link: `${createPageUrl("HikeDetail")}?id=${encodeURIComponent(String(hike.id))}&source=sheets`,
+      link: `${createPageUrl("HikeDetail")}?id=${encodeURIComponent(String(hike.id))}&source=supabase`,
     });
   });
 

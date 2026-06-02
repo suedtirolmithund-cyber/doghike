@@ -154,7 +154,8 @@ const weatherEmojis = {
 export default function HikeDetail() {
   const [searchParams] = useSearchParams();
   const hikeId = searchParams.get("id");
-  const hikeSource = searchParams.get("source") ?? "sheets";
+  const requestedHikeSource = searchParams.get("source") ?? "sheets";
+  const hikeSource = requestedHikeSource === "supabase" ? "sheets" : requestedHikeSource;
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();

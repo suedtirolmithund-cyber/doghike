@@ -209,7 +209,7 @@ Deno.serve(async (request) => {
       body = hike.location
         ? `"${hike.title}" ist jetzt neu in ${hike.location}.`
         : `"${hike.title}" ist jetzt neu verfugbar.`;
-      url = `/HikeDetail?id=${encodeURIComponent(String(hike.id))}&source=sheets`;
+      url = `/HikeDetail?id=${encodeURIComponent(String(hike.id))}&source=supabase`;
     } else if (type === "premium_hike") {
       if (!hikeId) {
         return json({ error: "invalid_payload" }, 400);
@@ -264,7 +264,7 @@ Deno.serve(async (request) => {
       body = hike.location
         ? `"${hike.title}" ist jetzt neu in ${hike.location}.`
         : `"${hike.title}" ist jetzt für Premium-Mitglieder verfügbar.`;
-      url = `/HikeDetail?id=${encodeURIComponent(String(hike.id))}&source=sheets`;
+      url = `/HikeDetail?id=${encodeURIComponent(String(hike.id))}&source=supabase`;
     } else {
       return json({ error: "unsupported_type" }, 400);
     }
