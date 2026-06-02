@@ -26,6 +26,7 @@ import {
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/AuthContext";
+import { supabase } from "@/lib/supabaseClient";
 import { createPageUrl } from "@/utils";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import { matchesTextSearch } from "@/lib/hikeSearch";
@@ -542,7 +543,7 @@ function UserCard({ profile, deleting, onDelete }) {
 }
 
 export default function AdminDashboard() {
-  const { isAuthenticated, isAdmin, isLoadingAuth } = useAuth();
+  const { isAuthenticated, isLoadingAuth } = useAuth();
   const queryClient = useQueryClient();
   const [processingId, setProcessingId] = useState(null);
   const [processingType, setProcessingType] = useState(null);
@@ -552,32 +553,43 @@ export default function AdminDashboard() {
   const [publicHikeStatusFilter, setPublicHikeStatusFilter] = useState("all");
   const [publicHikePremiumFilter, setPublicHikePremiumFilter] = useState("all");
   const [userSearch, setUserSearch] = useState("");
+  const { data: canAccessAdmin = false, isLoading: checkingAdminAccess } = useQuery({
+    queryKey: ["admin_access"],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("is_admin");
+      if (error) throw error;
+      return Boolean(data);
+    },
+    enabled: isAuthenticated,
+    retry: false,
+    staleTime: 30_000,
+  });
 
   const { data: entries = [], isLoading: entriesLoading } = useQuery({
     queryKey: ["admin_pending"],
     queryFn: getPendingEntries,
-    enabled: isAdmin,
+    enabled: canAccessAdmin,
     refetchInterval: 60_000,
   });
 
   const { data: comments = [], isLoading: commentsLoading } = useQuery({
     queryKey: ["admin_comments"],
     queryFn: getAllComments,
-    enabled: isAdmin,
+    enabled: canAccessAdmin,
     refetchInterval: 60_000,
   });
 
   const { data: publicHikes = [], isLoading: publicHikesLoading } = useQuery({
     queryKey: ["admin_public_hikes"],
     queryFn: getAdminPublicHikes,
-    enabled: isAdmin,
+    enabled: canAccessAdmin,
     refetchInterval: 60_000,
   });
 
   const { data: adminUsers = [], isLoading: usersLoading } = useQuery({
     queryKey: ["admin_users"],
     queryFn: getAdminUsers,
-    enabled: isAdmin,
+    enabled: canAccessAdmin,
     refetchInterval: 60_000,
   });
 
@@ -727,7 +739,7 @@ export default function AdminDashboard() {
     },
   });
 
-  if (isLoadingAuth) {
+  if (isLoadingAuth || (isAuthenticated && checkingAdminAccess)) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
@@ -749,7 +761,7 @@ export default function AdminDashboard() {
     );
   }
 
-  if (!isAdmin) {
+  if (!canAccessAdmin) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
         <div className="text-center">
