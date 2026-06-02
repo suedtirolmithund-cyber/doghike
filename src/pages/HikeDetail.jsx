@@ -43,18 +43,7 @@ import { getAvatarDataUrl, HIKE_PLACEHOLDER_IMAGE } from "@/lib/fallbackImages";
 import { getDisplayImageUrl } from "@/lib/imageProxy";
 import { getUniqueHikeImageSources, resolveHikeImageUrl } from "@/lib/hikeImages";
 import { toast } from "sonner";
-
-function getCountryLabel(country) {
-  if (country === "italy") return "Italien";
-  if (country === "austria") return "Österreich";
-  if (country === "germany") return "Deutschland";
-  if (country === "switzerland") return "Schweiz";
-  if (country === "spain") return "Spanien";
-  if (country === "croatia") return "Kroatien";
-  if (country === "slovenia") return "Slowenien";
-  if (country === "other") return "Anderes";
-  return country || null;
-}
+import { getCountryLabel } from "@/lib/countries";
 
 function isManagedPublicHikePhoto(value) {
   if (typeof value !== "string") return false;

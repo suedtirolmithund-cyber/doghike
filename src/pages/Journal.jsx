@@ -43,38 +43,10 @@ import { getWaterBadgeClass, getWaterLabel, TOUR_ICONS } from "@/lib/difficultyC
 import { formatDurationHours } from "@/lib/duration";
 import { matchesTextSearch } from "@/lib/hikeSearch";
 import { getDisplayImageUrl } from "@/lib/imageProxy";
+import { getJournalCountryLabel } from "@/lib/countries";
 
 const MOBILE_PAGE_SIZE = 8;
 const DESKTOP_PAGE_SIZE = 10;
-
-const COUNTRY_ALIASES = [
-  { label: "Italien", aliases: ["italien", "italy", "südtirol", "suedtirol", "dolomiten", "trentino", "alto adige"] },
-  { label: "Österreich", aliases: ["österreich", "oesterreich", "austria", "tirol", "osttirol", "salzburg"] },
-  { label: "Deutschland", aliases: ["deutschland", "germany", "bayern", "bavaria"] },
-  { label: "Schweiz", aliases: ["schweiz", "switzerland", "suisse", "svizzera"] },
-  { label: "Frankreich", aliases: ["frankreich", "france"] },
-  { label: "Spanien", aliases: ["spanien", "spain", "espana", "españa"] },
-  { label: "Kroatien", aliases: ["kroatien", "croatia", "hrvatska"] },
-  { label: "Slowenien", aliases: ["slowenien", "slovenia", "slovenija"] },
-];
-
-function getJournalCountry(entry) {
-  const explicitCountry = typeof entry?.country === "string" ? entry.country.trim() : "";
-  const source = explicitCountry || entry?.location || "";
-  const normalized = source
-    .toString()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-
-  const matchedCountry = COUNTRY_ALIASES.find(({ aliases }) =>
-    aliases.some((alias) =>
-      normalized.includes(alias.normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
-    )
-  );
-
-  return matchedCountry?.label || explicitCountry || null;
-}
 
 function VisibilityStatusBadge({ visibility, status }) {
   if (visibility === "public") {
@@ -388,7 +360,7 @@ export default function Journal() {
 
   const totalDistance = entries.reduce((sum, entry) => sum + (Number(entry.distance_km) || 0), 0);
   const totalElevation = entries.reduce((sum, entry) => sum + (entry.elevation_m || 0), 0);
-  const countryCount = new Set(entries.map(getJournalCountry).filter(Boolean)).size;
+  const countryCount = new Set(entries.map(getJournalCountryLabel).filter(Boolean)).size;
   const statsItems = [
     { icon: TOUR_ICONS.map, value: entries.length, label: "Wanderungen", color: "text-brand-400" },
     { icon: TOUR_ICONS.distance, value: `${totalDistance.toFixed(0)} km`, label: "Gesamt", color: "text-brand-600" },
