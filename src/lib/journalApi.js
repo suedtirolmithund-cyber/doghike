@@ -93,6 +93,39 @@ function getCommentStorageDescriptor(photoReference) {
   };
 }
 
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function removeStoragePathsWithRetry(bucket, paths, logLabel, attempts = 3) {
+  const uniquePaths = [...new Set((paths ?? []).filter(Boolean))];
+  if (uniquePaths.length === 0) return;
+
+  let lastError = null;
+
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    const { error } = await supabase.storage
+      .from(bucket)
+      .remove(uniquePaths);
+
+    if (!error) {
+      return;
+    }
+
+    lastError = error;
+
+    if (attempt < attempts) {
+      await delay(250 * attempt);
+    }
+  }
+
+  console.error(
+    `[${logLabel}] storage cleanup failed after ${attempts} attempts:`,
+    lastError?.message,
+    uniquePaths
+  );
+}
+
 export async function getSignedJournalUrl(fileReference) {
   if (!fileReference) return null;
   if (!isJournalStoragePath(fileReference)) return fileReference;
@@ -337,13 +370,7 @@ export async function deleteJournalEntry(id) {
   ].filter((fileReference) => isJournalStoragePath(fileReference));
 
   if (storagePaths.length > 0) {
-    const { error: storageError } = await supabase.storage
-      .from("journal")
-      .remove(storagePaths);
-
-    if (storageError) {
-      console.error("[deleteJournalEntry] journal file cleanup failed:", storageError.message);
-    }
+    await removeStoragePathsWithRetry("journal", storagePaths, "deleteJournalEntry:journal");
   }
 
   const commentStorageByBucket = (relatedComments ?? [])
@@ -356,16 +383,7 @@ export async function deleteJournalEntry(id) {
 
   await Promise.all(
     Object.entries(commentStorageByBucket).map(async ([bucket, paths]) => {
-      const uniquePaths = [...new Set(paths)];
-      if (uniquePaths.length === 0) return;
-
-      const { error: storageError } = await supabase.storage
-        .from(bucket)
-        .remove(uniquePaths);
-
-      if (storageError) {
-        console.error(`[deleteJournalEntry] ${bucket} comment photo cleanup failed:`, storageError.message);
-      }
+      await removeStoragePathsWithRetry(bucket, paths, `deleteJournalEntry:${bucket}`);
     })
   );
 }
@@ -374,13 +392,7 @@ export async function deleteJournalFiles(fileReferences = []) {
   const storagePaths = fileReferences.filter((fileReference) => isJournalStoragePath(fileReference));
   if (storagePaths.length === 0) return;
 
-  const { error } = await supabase.storage
-    .from("journal")
-    .remove(storagePaths);
-
-  if (error) {
-    console.error("[deleteJournalFiles] journal file cleanup failed:", error.message);
-  }
+  await removeStoragePathsWithRetry("journal", storagePaths, "deleteJournalFiles:journal");
 }
 
 export async function uploadJournalImage(userId, file) {
