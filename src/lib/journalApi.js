@@ -273,6 +273,20 @@ async function requireCurrentUserId() {
   return userId;
 }
 
+async function isCurrentUserAdmin() {
+  try {
+    const { data, error } = await supabase.rpc("is_admin");
+    if (error) {
+      console.error("[isCurrentUserAdmin] failed:", error.message);
+      return false;
+    }
+    return Boolean(data);
+  } catch (error) {
+    console.error("[isCurrentUserAdmin] exception:", error);
+    return false;
+  }
+}
+
 export async function createJournalEntry(userId, entry) {
   const payload = { user_id: userId, ...entry };
   let { data, error } = await supabase
@@ -295,22 +309,32 @@ export async function createJournalEntry(userId, entry) {
 
 export async function updateJournalEntry(id, entry) {
   const currentUserId = await requireCurrentUserId();
-  let { data, error } = await supabase
+  const currentUserIsAdmin = await isCurrentUserAdmin();
+
+  let updateQuery = supabase
     .from("journal_entries")
     .update(entry)
     .eq("id", id)
-    .eq("user_id", currentUserId)
-    .select()
-    .single();
+    .select();
+
+  if (!currentUserIsAdmin) {
+    updateQuery = updateQuery.eq("user_id", currentUserId);
+  }
+
+  let { data, error } = await updateQuery.single();
 
   if (error && isMissingOptionalJournalColumnError(error)) {
-    ({ data, error } = await supabase
+    let fallbackUpdateQuery = supabase
       .from("journal_entries")
       .update(withoutUnsupportedOptionalColumns(entry, error))
       .eq("id", id)
-      .eq("user_id", currentUserId)
-      .select()
-      .single());
+      .select();
+
+    if (!currentUserIsAdmin) {
+      fallbackUpdateQuery = fallbackUpdateQuery.eq("user_id", currentUserId);
+    }
+
+    ({ data, error } = await fallbackUpdateQuery.single());
   }
 
   if (error) throw error;
