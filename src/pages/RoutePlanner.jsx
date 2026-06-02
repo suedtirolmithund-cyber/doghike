@@ -792,6 +792,18 @@ export default function RoutePlanner() {
           ))}
         </div>
 
+        {activeTab === "plan" && (
+          <div className="mb-5 flex items-start gap-2 rounded-2xl border border-[#F9C030]/80 bg-[#FFF8E0]/85 px-3 py-3 text-xs font-medium leading-relaxed text-[#7C3020] shadow-sm sm:text-sm">
+            <span className="inline-flex h-6 shrink-0 items-center gap-1 rounded-full bg-white/75 px-2 text-[10px] font-bold uppercase tracking-wide text-[#A8003C] sm:text-xs">
+              <Info className="h-3.5 w-3.5" />
+              Privat
+            </span>
+            <span>
+              Deine Planung bleibt privat. Öffentlich wird sie erst, wenn du daraus später eine Wanderung einträgst.
+            </span>
+          </div>
+        )}
+
         {/* Tab content */}
         {activeTab === "plan" && (
           <SmartRoutePlanner onRouteReady={setRouteGeometry} />
