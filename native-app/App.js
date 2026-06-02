@@ -502,32 +502,49 @@ export default function App() {
   }, [loadTrackerState]);
 
   const handleSaveTrack = useCallback(async () => {
-    if (!user?.id || !trackerData) return;
+    if (!user?.id) return;
 
     if (trackingActive) {
       Alert.alert("Aufzeichnung laeuft noch", "Bitte stoppe die Aufzeichnung zuerst.");
       return;
     }
 
-    if ((trackerSummary.pointCount ?? 0) < 2) {
+    setSaveLoading(true);
+
+    const storedTrack = await getStoredTrack();
+    const latestTrack =
+      storedTrack && trackerData
+        ? (storedTrack.samples?.length ?? 0) > (trackerData.samples?.length ?? 0) ||
+          ((storedTrack.samples?.length ?? 0) === (trackerData.samples?.length ?? 0) &&
+            (storedTrack.lastUpdatedAt ?? 0) >= (trackerData.lastUpdatedAt ?? 0))
+          ? storedTrack
+          : trackerData
+        : storedTrack ?? trackerData;
+
+    const latestSummary = getTrackSummary(latestTrack);
+
+    if (!latestTrack || (latestSummary.pointCount ?? 0) < 2) {
       Alert.alert("Zu kurz", "Es sind noch nicht genug Trackpunkte da.");
+      setSaveLoading(false);
       return;
     }
 
-    setSaveLoading(true);
+    const trackDogName = latestTrack.dogId
+      ? dogs.find((dog) => dog.id === latestTrack.dogId)?.name ?? selectedDog?.name ?? null
+      : null;
 
-    const waypoints = trackerData.samples.map((sample) => [
+    const waypoints = latestTrack.samples.map((sample) => [
       sample.latitude,
       sample.longitude,
     ]);
 
     const startLocation =
-      trackerData.samples.length > 0
-        ? `${trackerData.samples[0].latitude.toFixed(5)}, ${trackerData.samples[0].longitude.toFixed(5)}`
+      latestTrack.samples.length > 0
+        ? `${latestTrack.samples[0].latitude.toFixed(5)}, ${latestTrack.samples[0].longitude.toFixed(5)}`
         : null;
 
     const notes = [
-      trackerData.dogId && selectedDog ? `Hund: ${selectedDog.name}` : null,
+      trackDogName ? `Hund: ${trackDogName}` : null,
       "Aufzeichnung aus der nativen DogTrails-Tracking-App.",
     ]
       .filter(Boolean)
@@ -535,18 +552,18 @@ export default function App() {
 
     const { error } = await supabase.from("user_routes").insert({
       user_id: user.id,
-      name: trackerData.name || routeName.trim(),
+      name: latestTrack.name || routeName.trim(),
       start_location: startLocation,
       notes,
       waypoints,
-      distance_km: trackerSummary.distanceKm,
-      elevation_gain_m: trackerSummary.elevationGainM,
-      duration_minutes: trackerSummary.durationMinutes,
-      avg_speed_kmh: trackerSummary.avgSpeedKmh,
+      distance_km: latestSummary.distanceKm,
+      elevation_gain_m: latestSummary.elevationGainM,
+      duration_minutes: latestSummary.durationMinutes,
+      avg_speed_kmh: latestSummary.avgSpeedKmh,
       route_type: "recorded",
       completed: true,
       completed_date: new Date().toISOString().slice(0, 10),
-      completed_duration_minutes: trackerSummary.durationMinutes,
+      completed_duration_minutes: latestSummary.durationMinutes,
     });
 
     if (error) {
@@ -565,14 +582,10 @@ export default function App() {
   }, [
     loadRoutes,
     loadTrackerState,
+    dogs,
     routeName,
     selectedDog,
     trackerData,
-    trackerSummary.avgSpeedKmh,
-    trackerSummary.distanceKm,
-    trackerSummary.durationMinutes,
-    trackerSummary.elevationGainM,
-    trackerSummary.pointCount,
     trackingActive,
     user?.id,
   ]);
