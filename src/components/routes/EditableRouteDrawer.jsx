@@ -161,7 +161,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
   const [routeCoordinates, setRouteCoordinates] = useState([]);
   const [isCalculating, setIsCalculating] = useState(false);
   const [routeDistance, setRouteDistance] = useState(0);
-  const [routeElevationGain, setRouteElevationGain] = useState(0);
+  const [routeElevationGain, setRouteElevationGain] = useState(null);
   const [routeDurationMin, setRouteDurationMin] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -184,7 +184,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
       return {
         coordinates: points,
         distanceKm: 0,
-        elevationGain: 0,
+        elevationGain: null,
         durationMin: 0,
       };
     }
@@ -240,7 +240,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
         return {
           coordinates: route.geometry.coordinates.map(c => [c[1], c[0]]),
           distanceKm: distKm,
-          elevationGain: 0,
+          elevationGain: null,
           durationMin: estimateRouteDurationMinutes(distKm, 0),
         };
       } else {
@@ -248,7 +248,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
         return {
           coordinates: points,
           distanceKm: distKm,
-          elevationGain: 0,
+          elevationGain: null,
           durationMin: estimateRouteDurationMinutes(distKm, 0),
         };
       }
@@ -258,7 +258,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
       return {
         coordinates: points,
         distanceKm: distKm,
-        elevationGain: 0,
+        elevationGain: null,
         durationMin: estimateRouteDurationMinutes(distKm, 0),
       };
     }
@@ -272,7 +272,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
     if (waypoints.length < 2) {
       setRouteCoordinates(waypoints);
       setRouteDistance(0);
-      setRouteElevationGain(0);
+      setRouteElevationGain(null);
       setRouteDurationMin(0);
       return () => controller.abort();
     }
@@ -348,7 +348,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
     onSave({
       coordinates: routeCoordinates.length > 0 ? routeCoordinates : waypoints,
       distance_km: parseFloat(routeDistance),
-      elevation_gain_m: routeElevationGain,
+      elevation_gain_m: routeElevationGain ?? null,
       duration_minutes: routeDurationMin,
     });
   };
@@ -476,7 +476,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
                     </p>
                   </div>
                 </div>
-                {routeElevationGain > 0 && (
+                {routeElevationGain != null && (
                   <div className="flex items-center gap-2">
                     <span className="text-lg">{TOUR_ICONS.elevation}</span>
                     <div>
@@ -485,7 +485,11 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
                     </div>
                   </div>
                 )}
-                <p className="text-xs text-slate-400 w-full">Nach {getRouteDurationRuleLabel()}</p>
+                <p className="text-xs text-slate-400 w-full">
+                  {routeElevationGain == null
+                    ? `Gehzeit nach ${getRouteDurationRuleLabel()} ohne verfügbare Höhendaten geschätzt`
+                    : `Nach ${getRouteDurationRuleLabel()}`}
+                </p>
               </div>
             )}
           </div>
