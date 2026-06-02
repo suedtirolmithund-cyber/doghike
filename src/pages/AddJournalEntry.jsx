@@ -956,6 +956,9 @@ export default function AddJournalEntry() {
   });
 
   const dogOwnerId = editId ? existing?.user_id : user?.id;
+  const isAdminReviewingForeignEntry = Boolean(
+    editId && isAdmin && existing?.user_id && existing.user_id !== user?.id
+  );
 
   const { data: userDogs = [] } = useQuery({
     queryKey: ["dogs", dogOwnerId],
@@ -999,6 +1002,12 @@ export default function AddJournalEntry() {
       });
     }
   }, [existing]);
+
+  useEffect(() => {
+    if (isAdminReviewingForeignEntry) {
+      setPhotoConsent(true);
+    }
+  }, [isAdminReviewingForeignEntry]);
 
   useEffect(() => {
     let cancelled = false;
@@ -1310,7 +1319,7 @@ export default function AddJournalEntry() {
     }
 
     const needsConsent = form.photos.length > 0 && form.visibility !== "private";
-    if (needsConsent && !photoConsent) {
+    if (needsConsent && !photoConsent && !isAdminReviewingForeignEntry) {
       toast.error("Bitte bestätige dein Einverständnis zu den Fotos.");
       return;
     }
@@ -1857,7 +1866,7 @@ export default function AddJournalEntry() {
           </section>
 
           {/* Foto-Einverständnis (nur wenn Fotos + nicht privat) */}
-          {form.photos.length > 0 && form.visibility !== "private" && (
+          {form.photos.length > 0 && form.visibility !== "private" && !isAdminReviewingForeignEntry && (
             <section className="bg-brand-50 border border-brand-100 rounded-2xl p-4">
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
