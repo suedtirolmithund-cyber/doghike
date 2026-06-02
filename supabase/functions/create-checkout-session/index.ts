@@ -14,6 +14,68 @@ function env(name: string) {
   return value;
 }
 
+async function getOrCreateStripeCustomer(
+  adminClient: ReturnType<typeof createClient>,
+  user: { id: string; email?: string | null },
+) {
+  const { data: profile, error: profileError } = await adminClient
+    .from("profiles")
+    .select("stripe_customer_id")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (profileError) {
+    throw profileError;
+  }
+
+  if (profile?.stripe_customer_id) {
+    return profile.stripe_customer_id;
+  }
+
+  const customer = await stripe.customers.create({
+    email: user.email ?? undefined,
+    metadata: { user_id: user.id },
+  });
+
+  const { data: claimedProfile, error: claimError } = await adminClient
+    .from("profiles")
+    .update({ stripe_customer_id: customer.id, premium_updated_at: new Date().toISOString() })
+    .eq("user_id", user.id)
+    .is("stripe_customer_id", null)
+    .select("stripe_customer_id")
+    .maybeSingle();
+
+  if (claimError) {
+    throw claimError;
+  }
+
+  if (claimedProfile?.stripe_customer_id) {
+    return claimedProfile.stripe_customer_id;
+  }
+
+  const { data: latestProfile, error: latestError } = await adminClient
+    .from("profiles")
+    .select("stripe_customer_id")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (latestError) {
+    throw latestError;
+  }
+
+  if (!latestProfile?.stripe_customer_id) {
+    throw new Error("Stripe-Kundennummer konnte nicht gespeichert werden.");
+  }
+
+  try {
+    await stripe.customers.del(customer.id);
+  } catch (error) {
+    console.warn("[create-checkout-session] unused Stripe customer cleanup failed", error);
+  }
+
+  return latestProfile.stripe_customer_id;
+}
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -47,35 +109,7 @@ Deno.serve(async (request) => {
     const user = userData.user;
     const safeSuccessUrl = safeAppRedirectUrl(successUrl, "/Premium?checkout=success");
     const safeCancelUrl = safeAppRedirectUrl(cancelUrl, "/Premium?checkout=cancelled");
-
-    const { data: profile, error: profileError } = await adminClient
-      .from("profiles")
-      .select("stripe_customer_id")
-      .eq("user_id", user.id)
-      .maybeSingle();
-
-    if (profileError) {
-      throw profileError;
-    }
-
-    let customerId = profile?.stripe_customer_id ?? null;
-
-    if (!customerId) {
-      const customer = await stripe.customers.create({
-        email: user.email ?? undefined,
-        metadata: { user_id: user.id },
-      });
-      customerId = customer.id;
-
-      const { error: updateError } = await adminClient
-        .from("profiles")
-        .update({ stripe_customer_id: customerId, premium_updated_at: new Date().toISOString() })
-        .eq("user_id", user.id);
-
-      if (updateError) {
-        throw updateError;
-      }
-    }
+    const customerId = await getOrCreateStripeCustomer(adminClient, user);
 
     const session = await stripe.checkout.sessions.create({
       mode: checkoutPlan === "one_time" ? "payment" : "subscription",
