@@ -25,9 +25,18 @@ Run the updated billing columns and trigger from `supabase/schema.sql`, then set
 
 ```bash
 supabase secrets set STRIPE_SECRET_KEY=sk_live_...
+supabase secrets set APP_ORIGIN=https://your-production-domain.example
 supabase secrets set STRIPE_PREMIUM_PRICE_ID=price_...
+supabase secrets set STRIPE_PREMIUM_ONE_TIME_PRICE_ID=price_...
 supabase secrets set STRIPE_WEBHOOK_SIGNING_SECRET=whsec_...
 supabase secrets set SUPABASE_SERVICE_ROLE_KEY=...
+```
+
+`APP_ORIGIN` must be the real app origin without a path, for example `https://doghike.vercel.app`.
+Optional preview or staging origins can be added as a comma-separated allowlist:
+
+```bash
+supabase secrets set ALLOWED_REDIRECT_ORIGINS=https://preview.example,https://staging.example
 ```
 
 Deploy the functions:

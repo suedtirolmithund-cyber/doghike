@@ -1,6 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.48.1";
 import Stripe from "https://esm.sh/stripe@14.25.0?target=denonext";
 import { corsHeaders, jsonResponse } from "../_shared/cors.ts";
+import { safeAppRedirectUrl } from "../_shared/redirects.ts";
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") ?? "", {
   apiVersion: "2024-11-20.acacia",
@@ -11,18 +12,6 @@ function env(name: string) {
   const value = Deno.env.get(name);
   if (!value) throw new Error(`Missing environment variable: ${name}`);
   return value;
-}
-
-function sameOriginUrl(value: unknown, origin: string, fallbackPath: string) {
-  const fallback = `${origin}${fallbackPath}`;
-  if (typeof value !== "string") return fallback;
-
-  try {
-    const url = new URL(value, origin);
-    return url.origin === origin ? url.toString() : fallback;
-  } catch {
-    return fallback;
-  }
 }
 
 Deno.serve(async (request) => {
@@ -56,9 +45,8 @@ Deno.serve(async (request) => {
 
     const adminClient = createClient(supabaseUrl, serviceRoleKey);
     const user = userData.user;
-    const origin = request.headers.get("Origin") ?? "http://localhost:5173";
-    const safeSuccessUrl = sameOriginUrl(successUrl, origin, "/Premium?checkout=success");
-    const safeCancelUrl = sameOriginUrl(cancelUrl, origin, "/Premium?checkout=cancelled");
+    const safeSuccessUrl = safeAppRedirectUrl(successUrl, "/Premium?checkout=success");
+    const safeCancelUrl = safeAppRedirectUrl(cancelUrl, "/Premium?checkout=cancelled");
 
     const { data: profile, error: profileError } = await adminClient
       .from("profiles")

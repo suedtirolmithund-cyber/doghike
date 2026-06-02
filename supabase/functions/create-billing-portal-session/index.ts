@@ -1,6 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.48.1";
 import Stripe from "https://esm.sh/stripe@14.25.0?target=denonext";
 import { corsHeaders, jsonResponse } from "../_shared/cors.ts";
+import { safeAppRedirectUrl } from "../_shared/redirects.ts";
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") ?? "", {
   apiVersion: "2024-11-20.acacia",
@@ -11,18 +12,6 @@ function env(name: string) {
   const value = Deno.env.get(name);
   if (!value) throw new Error(`Missing environment variable: ${name}`);
   return value;
-}
-
-function sameOriginUrl(value: unknown, origin: string, fallbackPath: string) {
-  const fallback = `${origin}${fallbackPath}`;
-  if (typeof value !== "string") return fallback;
-
-  try {
-    const url = new URL(value, origin);
-    return url.origin === origin ? url.toString() : fallback;
-  } catch {
-    return fallback;
-  }
 }
 
 Deno.serve(async (request) => {
@@ -65,10 +54,9 @@ Deno.serve(async (request) => {
     }
 
     const { returnUrl } = await request.json().catch(() => ({}));
-    const origin = request.headers.get("Origin") ?? "http://localhost:5173";
     const session = await stripe.billingPortal.sessions.create({
       customer: profile.stripe_customer_id,
-      return_url: sameOriginUrl(returnUrl, origin, "/Premium"),
+      return_url: safeAppRedirectUrl(returnUrl, "/Premium"),
     });
 
     return jsonResponse({ url: session.url });
