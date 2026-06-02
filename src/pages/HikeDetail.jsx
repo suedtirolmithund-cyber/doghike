@@ -562,9 +562,9 @@ export default function HikeDetail() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="doghike-glass-card p-8 text-center">
-          <p className="text-xl text-slate-700 mb-4">Tour nicht gefunden</p>
+          <p className="text-xl text-slate-700 mb-4">Wanderung nicht gefunden</p>
           <Link to={fallbackBackUrl}>
-            <Button className="bg-brand-400 text-white hover:bg-brand-600">Zurück zu den Touren</Button>
+            <Button className="bg-brand-400 text-white hover:bg-brand-600">Zurück zu den Wanderungen</Button>
           </Link>
         </div>
       </div>
@@ -771,7 +771,7 @@ export default function HikeDetail() {
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Tour löschen?</AlertDialogTitle>
+                      <AlertDialogTitle>Wanderung löschen?</AlertDialogTitle>
                       <AlertDialogDescription>
                         Dies wird "{hike.trail_name}" dauerhaft löschen. Diese Aktion kann nicht rückgängig gemacht werden.
                       </AlertDialogDescription>
@@ -821,7 +821,7 @@ export default function HikeDetail() {
               />
               <button
                 onClick={handleShare}
-                title="Tour teilen"
+                title="Wanderung teilen"
                 className="flex items-center gap-1 px-2 py-1 rounded-full text-white/70 hover:text-white transition-all"
               >
                 {copied
@@ -965,7 +965,7 @@ export default function HikeDetail() {
                 {previewNotes ? (
                   <p className="text-slate-600 leading-relaxed">{previewNotes}</p>
                 ) : (
-                  <p className="text-slate-500">Zu dieser Premium-Tour ist eine Kurzvorschau sichtbar. Die ganzen Details kannst du mit Premium freischalten.</p>
+                  <p className="text-slate-500">Zu dieser Premium-Wanderung ist eine Kurzvorschau sichtbar. Die ganzen Details kannst du mit Premium freischalten.</p>
                 )}
               </div>
             </div>
@@ -1212,7 +1212,7 @@ export default function HikeDetail() {
         )}
       </div>
 
-      {/* Ähnliche Touren */}
+      {/* Ähnliche Wanderungen */}
       {!showPremiumPreviewOnly && hike && (
         <div className="mx-auto max-w-5xl px-4 pb-8 sm:px-6 lg:px-8">
           <SmartRecommendations
@@ -1233,7 +1233,7 @@ export default function HikeDetail() {
               <h2 className="doghike-card-title mb-3">Aus der Community eingereicht</h2>
               {publicSubmitterName && (
                 <p className="text-sm leading-relaxed text-slate-600">
-                  Diese Tour wurde von {publicSubmitterName} mit der Community geteilt und stammt aus einer echten DogTrails-Runde.
+                  Diese Wanderung wurde von {publicSubmitterName} mit der Community geteilt und stammt aus einer echten DogTrails-Runde.
                 </p>
               )}
 
@@ -1246,7 +1246,7 @@ export default function HikeDetail() {
                   />
                   <div>
                     <p className="font-medium text-slate-900">{publicSubmitterName || "DogTrails-Mitglied"}</p>
-                    <p className="text-sm text-slate-500">Tour eingereicht</p>
+                    <p className="text-sm text-slate-500">Wanderung eingereicht</p>
                   </div>
                 </div>
 

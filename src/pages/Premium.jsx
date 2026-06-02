@@ -24,12 +24,12 @@ import { PremiumPawMark } from "@/components/premium/PremiumPawBadge";
 import { hasActivePremiumAccess } from "@/lib/premiumAccess";
 
 const features = [
-  "Schalte ausgewählte Touren frei, die du sonst nur als Vorschau siehst",
-  "Plane entspannter mit mehr Details, Kartenansicht und hilfreichen Tourinfos",
-  "Sieh Wetterinfos direkt dort, wo du deine Tour planst",
+  "Schalte ausgewählte Wanderungen frei, die du sonst nur als Vorschau siehst",
+  "Plane entspannter mit mehr Details, Kartenansicht und hilfreichen Wanderungsinfos",
+  "Sieh Wetterinfos direkt dort, wo du deine Wanderung planst",
   "Entdecke sorgfältig ergänzte Hinweise und Tipps, die unterwegs wirklich zählen",
-  "Speichere Premium-Touren als PDF, wenn du offline oder ohne Empfang unterwegs bist",
-  "Freue dich auf neue Premium-Touren, die regelmäßig dazukommen",
+  "Speichere Premium-Wanderungen als PDF, wenn du offline oder ohne Empfang unterwegs bist",
+  "Freue dich auf neue Premium-Wanderungen, die regelmäßig dazukommen",
 ];
 
 const testimonials = [
@@ -235,7 +235,7 @@ export default function Premium() {
             <PremiumPawMark className="mx-auto mb-6 h-16 w-16 text-3xl" />
             <h2 className="doghike-page-title mb-3">Du bist Premium!</h2>
             <p className="mb-8 text-slate-500">
-              Du hast Zugang zu allen exklusiven Premium-Touren auf DogTrails.
+              Du hast Zugang zu allen exklusiven Premium-Wanderungen auf DogTrails.
             </p>
             {currentPeriodEnd && (
               <p className="mb-8 text-sm text-slate-400">Aktueller Zeitraum bis {currentPeriodEnd}</p>
@@ -243,7 +243,7 @@ export default function Premium() {
             <div className="grid gap-3 sm:grid-cols-2">
               <Link to={createPageUrl("Hikes")}>
                 <Button className="doghike-primary-action h-12 w-full">
-                  <Mountain className="mr-2 h-5 w-5" /> Touren entdecken
+                  <Mountain className="mr-2 h-5 w-5" /> Wanderungen entdecken
                 </Button>
               </Link>
               {canOpenPortal && (

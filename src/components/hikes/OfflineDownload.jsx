@@ -104,7 +104,7 @@ export default function OfflineDownload({
 
       const savedOffline = saveToLocalStorage();
       if (!savedOffline) {
-        toast.error("Die Tour konnte nicht offline gespeichert werden. Bitte schaffe Speicherplatz und versuche es noch einmal.");
+        toast.error("Die Wanderung konnte nicht offline gespeichert werden. Bitte schaffe Speicherplatz und versuche es noch einmal.");
       }
 
       const pdf = new jsPDF("p", "mm", "a4");
@@ -149,9 +149,9 @@ export default function OfflineDownload({
         addSectionTitle("Nutzung & Verantwortung");
         addParagraph(
           [
-            "© DogTrails. Alle Inhalte, Texte, Fotos, Tourdaten und Hinweise in diesem PDF sind urheberrechtlich geschützt.",
+            "© DogTrails. Alle Inhalte, Texte, Fotos, Wanderungsdaten und Hinweise in diesem PDF sind urheberrechtlich geschützt.",
             "Dieses PDF ist nur für deine persönliche Nutzung gedacht. Weitergabe, Veröffentlichung, Kopieren, Verkauf oder Hochladen in andere Dienste ist ohne schriftliche Zustimmung nicht erlaubt.",
-            "Die Tour ist eine Orientierung. Du bist selbst verantwortlich für Planung, Ausrüstung, Wetter, Sperren, Wege, deine Kondition, deinen Hund und die Regeln vor Ort.",
+            "Die Wanderung ist eine Orientierung. Du bist selbst verantwortlich für Planung, Ausrüstung, Wetter, Sperren, Wege, deine Kondition, deinen Hund und die Regeln vor Ort.",
             "Kartengrundlage: © OpenStreetMap-Mitwirkende / CARTO, je nach Kartenansicht.",
           ].join("\n\n")
         );
@@ -214,7 +214,7 @@ export default function OfflineDownload({
       pdf.setFont("helvetica", "bold");
       pdf.setFontSize(22);
       pdf.setTextColor(...PDF_COLORS.text);
-      const titleLines = pdf.splitTextToSize(hike.trail_name || "Tour", contentWidth);
+      const titleLines = pdf.splitTextToSize(hike.trail_name || "Wanderung", contentWidth);
       pdf.text(titleLines, margin, yPosition);
       yPosition += titleLines.length * 8;
 
@@ -272,7 +272,7 @@ export default function OfflineDownload({
         }
       }
 
-      addSectionTitle("Tourdetails");
+      addSectionTitle("Wanderungsdetails");
       addKeyValueGrid([
         { label: "Startpunkt / Parkplatz", value: hike.parking_info || null },
         { label: "Einkehr", value: hike.restaurant_info || null },
@@ -330,8 +330,8 @@ export default function OfflineDownload({
       addLegalNotice();
       addFooterToAllPages();
 
-      const baseName = transliterateFilename(hike.trail_name || "tour");
-      const filename = `${baseName || "tour"}.pdf`;
+      const baseName = transliterateFilename(hike.trail_name || "wanderung");
+      const filename = `${baseName || "wanderung"}.pdf`;
       pdf.save(filename);
 
       setSuccess(true);
@@ -364,7 +364,7 @@ export default function OfflineDownload({
         ) : (
           <>
             <FileDown className="mr-2 h-4 w-4" />
-            Tour als PDF
+            Wanderung als PDF
           </>
         )}
       </Button>

@@ -27,7 +27,7 @@ export default function Legal() {
             <div className="flex gap-3 items-start">
               <AlertTriangle className="w-5 h-5 text-brand-600 shrink-0 mt-0.5" />
               <p className="text-sm md:text-base leading-relaxed">
-                <strong>Alle Touren erfolgen auf eigene Verantwortung.</strong> Die bereitgestellten Inhalte dienen nur der Orientierung und ersetzen keine eigene Sicherheitsprüfung vor Ort.
+                <strong>Alle Wanderungen erfolgen auf eigene Verantwortung.</strong> Die bereitgestellten Inhalte dienen nur der Orientierung und ersetzen keine eigene Sicherheitsprüfung vor Ort.
               </p>
             </div>
           </div>
@@ -52,12 +52,12 @@ export default function Legal() {
               </h2>
               <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
-                  <strong>DogTrails</strong> ist eine Informationsplattform. Alle Inhalte – Tourenberichte,
+                  <strong>DogTrails</strong> ist eine Informationsplattform. Alle Inhalte – Wanderungsberichte,
                   GPS-Koordinaten, Fotos, Schwierigkeitsbewertungen und Empfehlungen – dienen ausschließlich
                   der allgemeinen Orientierung.
                 </p>
                 <p>
-                  Die App ist <strong>kein Navigationsgerät, kein offizielles Kartenmaterial und kein Ersatz für behördliche Informationen oder professionelle Tourenplanung</strong>.
+                  Die App ist <strong>kein Navigationsgerät, kein offizielles Kartenmaterial und kein Ersatz für behördliche Informationen oder professionelle Wanderungsplanung</strong>.
                 </p>
               </div>
             </section>
@@ -65,11 +65,11 @@ export default function Legal() {
             <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <FileText className="w-5 h-5 text-brand-600" />
-                2. Keine Gewähr für die Richtigkeit der Touren
+                2. Keine Gewähr für die Richtigkeit der Wanderungen
               </h2>
               <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
-                  Alle Touren und Inhalte auf dieser Plattform werden von Nutzern erstellt oder aus externen Quellen übernommen.
+                  Alle Wanderungen und Inhalte auf dieser Plattform werden von Nutzern erstellt oder aus externen Quellen übernommen.
                   Der Betreiber kann <strong>keine Gewähr für Richtigkeit, Vollständigkeit oder Aktualität</strong> übernehmen.
                 </p>
                 <ul className="list-disc pl-6 space-y-2">
@@ -88,7 +88,7 @@ export default function Legal() {
               </h2>
               <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
-                  Der Betreiber dieser Plattform übernimmt keine Gewähr für die Richtigkeit, Vollständigkeit oder ständige Verfügbarkeit aller Tourenangaben.
+                  Der Betreiber dieser Plattform übernimmt keine Gewähr für die Richtigkeit, Vollständigkeit oder ständige Verfügbarkeit aller Wanderungsangaben.
                 </p>
                 <p>
                   Eine Haftung für Schäden im Zusammenhang mit der Nutzung der App ist – soweit gesetzlich zulässig – auf Fälle von Vorsatz und grober Fahrlässigkeit beschränkt. Eine Haftung für Personenschäden, die auf Fahrlässigkeit beruhen, wird durch diesen Hinweis nicht ausgeschlossen.
@@ -113,10 +113,10 @@ export default function Legal() {
                 </p>
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Einschätzung der eigenen Fitness und der des Hundes</li>
-                  <li>Wahl einer geeigneten Tour</li>
+                  <li>Wahl einer geeigneten Wanderung</li>
                   <li>Mitführen angemessener Ausrüstung</li>
                   <li>Einhaltung lokaler Vorschriften</li>
-                  <li>Abbruch einer Tour bei unsicheren Bedingungen</li>
+                  <li>Abbruch einer Wanderung bei unsicheren Bedingungen</li>
                 </ul>
               </div>
             </section>

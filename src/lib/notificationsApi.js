@@ -247,7 +247,7 @@ export async function loadNotifications(userId) {
       results.push({
         id: `ph-${hike.id}`,
         type: "premium_hike",
-        title: `Neue Premium-Tour: "${hike.title}"`,
+        title: `Neue Premium-Wanderung: "${hike.title}"`,
         body: hike.location ? `Jetzt neu in ${hike.location}` : "Jetzt neu f\u00fcr Premium-Mitglieder",
         time: hike.created_at || hike.updated_at,
         link: `${createPageUrl("HikeDetail")}?id=${encodeURIComponent(String(hike.id))}&source=sheets`,
@@ -271,7 +271,7 @@ export async function loadNotifications(userId) {
     results.push({
       id: `fh-${hike.id}`,
       type: "free_hike",
-      title: `Neue kostenlose Tour: "${hike.title}"`,
+      title: `Neue kostenlose Wanderung: "${hike.title}"`,
       body: hike.location ? `Jetzt neu in ${hike.location}` : "Jetzt neu verfügbar",
       time: hike.created_at || hike.updated_at,
       link: `${createPageUrl("HikeDetail")}?id=${encodeURIComponent(String(hike.id))}&source=sheets`,

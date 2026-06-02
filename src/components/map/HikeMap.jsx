@@ -281,7 +281,7 @@ function MarkersLayer({ hikes }) {
 
       const popupTitle =
         group.hikes.length > 1
-          ? `${group.hikes.length} Touren ab diesem Startpunkt`
+          ? `${group.hikes.length} Wanderungen ab diesem Startpunkt`
           : primaryHike.trail_name;
 
       const popupItems = group.hikes

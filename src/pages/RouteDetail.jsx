@@ -248,7 +248,7 @@ export default function RouteDetail() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-slate-600">Der Weg lädt...</p>
+          <p className="text-slate-600">Die Route lädt...</p>
           <PawLoadingTrail />
         </div>
       </div>
@@ -555,7 +555,7 @@ export default function RouteDetail() {
                     <CheckCircle2 className="w-6 h-6 text-brand-400" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-semibold text-brand-600">Tour erledigt! 🎉</p>
+                    <p className="font-semibold text-brand-600">Wanderung erledigt! 🎉</p>
                     {route.completed_date && (
                       <p className="text-sm text-slate-500">Am {format(new Date(route.completed_date), "dd.MM.yyyy")}</p>
                     )}
@@ -582,7 +582,7 @@ export default function RouteDetail() {
               ) : (
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <h3 className="doghike-card-title">Tour gemacht?</h3>
+                    <h3 className="doghike-card-title">Wanderung gemacht?</h3>
                     <p className="text-sm text-slate-500">Markiere diese Route als erledigt</p>
                   </div>
                   <Button
@@ -604,11 +604,11 @@ export default function RouteDetail() {
                     className="overflow-hidden"
                   >
                     <div className="border-t border-brand-100 mt-4 pt-4 space-y-4">
-                      <h4 className="doghike-card-title">Tour-Details ergänzen</h4>
+                      <h4 className="doghike-card-title">Wanderungsdetails ergänzen</h4>
 
                       {/* Date */}
                       <div>
-                        <label className="text-sm font-medium text-slate-700 mb-1 block">Datum der Tour</label>
+                        <label className="text-sm font-medium text-slate-700 mb-1 block">Datum der Wanderung</label>
                         <Input
                           type="date"
                           value={completeData.completed_date}
@@ -788,7 +788,7 @@ export default function RouteDetail() {
                       <div>
                         <label className="text-sm font-medium text-slate-700 mb-1 block">Beschreibung & Notizen</label>
                         <Textarea
-                          placeholder="Wie war die Tour? Besondere Erlebnisse, Highlights..."
+                          placeholder="Wie war die Wanderung? Besondere Erlebnisse, Highlights..."
                           value={completeData.completed_notes}
                           onChange={(e) => setCompleteData({ ...completeData, completed_notes: e.target.value })}
                           rows={3}
@@ -852,7 +852,7 @@ export default function RouteDetail() {
             >
               <div className="text-center mb-5">
                 <div className="text-4xl mb-3">🎉</div>
-                <h3 className="doghike-card-title">Tour erledigt!</h3>
+                <h3 className="doghike-card-title">Wanderung erledigt!</h3>
                 <p className="text-slate-500 text-sm mt-2">
                   Möchtest du einen Tagebucheintrag für diese Wanderung erstellen?
                 </p>

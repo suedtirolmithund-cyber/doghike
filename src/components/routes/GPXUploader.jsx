@@ -37,7 +37,7 @@ function mapGpxError(message) {
   const msg = String(message || "").toLowerCase();
 
   if (msg.includes("keine wegpunkte")) {
-    return "In der GPX-Datei steckt noch kein brauchbarer Weg.";
+    return "In der GPX-Datei steckt noch keine brauchbare Route.";
   }
   if (msg.includes("parsererror") || msg.includes("xml")) {
     return "Die GPX-Datei lässt sich nicht lesen. Prüfe kurz das Format.";
@@ -197,7 +197,7 @@ export default function GPXUploader({ onSave }) {
             onChange={handleFileChange}
           />
           <Upload className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-          <p className="text-base font-medium text-slate-700 mb-1">GPX-Weg reinziehen</p>
+          <p className="text-base font-medium text-slate-700 mb-1">GPX-Datei reinziehen</p>
           <p className="text-sm text-slate-500">Zieh die Datei hierher oder wähle sie aus.</p>
           <p className="text-xs text-slate-400 mt-2">Unterstützt: .gpx (Garmin, Komoot, Strava und ähnliche)</p>
         </div>

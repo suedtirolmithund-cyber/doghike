@@ -646,7 +646,7 @@ export default function GPSTracker({ onSave }) {
       });
       resetTrackingState();
     } else {
-      toast.error("Der Weg ist noch zu kurz aufgezeichnet.");
+      toast.error("Die Route ist noch zu kurz aufgezeichnet.");
       resetTrackingState();
     }
   };
@@ -916,7 +916,7 @@ export default function GPSTracker({ onSave }) {
           <ul className="list-disc space-y-1 pl-4">
             <li>Aktiviere GPS auf deinem Gerät.</li>
             <li>Erlaube dem Browser den Standortzugriff.</li>
-            <li>Der tatsächliche Weg wird aufgezeichnet und laufend lokal gesichert.</li>
+            <li>Die tatsächliche Route wird aufgezeichnet und laufend lokal gesichert.</li>
             <li>Mit Pause kannst du unterbrechen und später weiter aufnehmen.</li>
           </ul>
         </div>

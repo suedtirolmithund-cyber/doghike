@@ -6,8 +6,8 @@ import { motion } from "framer-motion";
 import { PremiumPawBadge, PremiumPawMark } from "@/components/premium/PremiumPawBadge";
 
 const premiumItems = [
-  "Premium-Touren",
-  "Mehr Tourdetails",
+  "Premium-Wanderungen",
+  "Mehr Wanderungsdetails",
   "Kartenansicht",
   "Wetterinfos",
   "Tipps & Hinweise",
@@ -20,7 +20,7 @@ const inlineItems = [
   "Parken & Einkehr",
   "Tipps & Hinweise",
   "PDF-Download",
-  "Immer neue Touren",
+  "Immer neue Wanderungen",
 ];
 
 function PremiumList({ title, items }) {
@@ -72,7 +72,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
           </Link>
           <Link to={createPageUrl("Hikes")} className="w-full sm:w-auto">
             <Button variant="outline" className="w-full sm:w-auto">
-              Zurück zu allen Touren
+              Zurück zu allen Wanderungen
             </Button>
           </Link>
         </div>
@@ -104,10 +104,10 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
         >
           <PremiumPawMark className="mx-auto mb-5 h-14 w-14 text-2xl sm:mb-6 sm:h-16 sm:w-16 sm:text-3xl" />
 
-          <h2 className="doghike-page-title mb-2">Premium-Tour</h2>
+          <h2 className="doghike-page-title mb-2">Premium-Wanderung</h2>
           <p className="mb-2 text-base font-medium text-[#C07820] sm:text-lg">{hikeName}</p>
           <p className="mb-6 text-sm leading-6 text-[#C07820] sm:mb-8">
-            Diese Tour ist exklusiv für Premium-Mitglieder verfügbar. Schließe Premium ab, um alle Details, Karten,
+            Diese Wanderung ist exklusiv für Premium-Mitglieder verfügbar. Schließe Premium ab, um alle Details, Karten,
             Fotos und Tipps zu sehen.
           </p>
 
@@ -120,7 +120,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
           </Link>
           <Link to={createPageUrl("Hikes")}>
             <Button variant="ghost" className="w-full">
-              Zurück zu allen Touren
+              Zurück zu allen Wanderungen
             </Button>
           </Link>
         </motion.div>

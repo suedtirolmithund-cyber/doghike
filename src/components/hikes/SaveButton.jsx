@@ -37,7 +37,7 @@ export default function SaveButton({ hikeId, hikeSource = "sheets", className })
       toast.error("Das Merken hat gerade nicht geklappt.");
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] }),
-    onSuccess: () => toast.success("Die Tour wartet jetzt in deiner Merkliste."),
+    onSuccess: () => toast.success("Die Wanderung wartet jetzt in deiner Merkliste."),
   });
 
   const unsaveMutation = useMutation({
@@ -55,7 +55,7 @@ export default function SaveButton({ hikeId, hikeSource = "sheets", className })
       toast.error("Das Entfernen hat gerade nicht geklappt.");
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["savedHikes", user?.id] }),
-    onSuccess: () => toast.success("Die Tour ist aus deiner Merkliste raus."),
+    onSuccess: () => toast.success("Die Wanderung ist aus deiner Merkliste raus."),
   });
 
   const handleClick = (e) => {
@@ -78,7 +78,7 @@ export default function SaveButton({ hikeId, hikeSource = "sheets", className })
     <button
       onClick={handleClick}
       disabled={isPending}
-      title={isSaved ? "Aus Merkliste entfernen" : "Tour speichern"}
+      title={isSaved ? "Aus Merkliste entfernen" : "Wanderung speichern"}
       className={cn(
         "flex items-center gap-1.5 px-2 py-1 rounded-full transition-all",
         isSaved

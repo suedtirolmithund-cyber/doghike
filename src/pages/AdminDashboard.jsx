@@ -335,7 +335,7 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
               {formatAdminDate(comment.created_at)}
             </p>
             <p className="mt-1 text-xs text-slate-500">
-              {comment.hike_title || `Tour-ID: ${comment.hike_id}`}
+              {comment.hike_title || `Wanderungs-ID: ${comment.hike_id}`}
             </p>
           </div>
         </div>
@@ -382,7 +382,7 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
       <div className="mt-3 flex justify-end">
         <Link to={hikeDetailUrl}>
           <Button variant="outline" size="sm">
-            Zur Tour
+            Zur Wanderung
             <ArrowRight className="ml-1.5 h-4 w-4" />
           </Button>
         </Link>
@@ -452,7 +452,7 @@ function PublicHikeCard({ hike }) {
             </Link>
             <Link to={hikeDetailUrl}>
               <Button variant="outline" size="sm">
-                Zur Tour
+                Zur Wanderung
                 <ArrowRight className="ml-1.5 h-4 w-4" />
               </Button>
             </Link>
@@ -788,7 +788,7 @@ export default function AdminDashboard() {
           <div>
             <h1 className="doghike-page-title">Admin Dashboard</h1>
             <p className="doghike-page-subtitle">
-              Touren prüfen, Kommentare moderieren, öffentliche Touren pflegen und Nutzer verwalten.
+              Wanderungen prüfen, Kommentare moderieren, öffentliche Wanderungen pflegen und Nutzer verwalten.
             </p>
           </div>
         </motion.div>
@@ -797,7 +797,7 @@ export default function AdminDashboard() {
           <TabsList className="mb-6 grid h-auto w-full grid-cols-2 gap-2 border border-white/70 bg-white/65 p-2 backdrop-blur-xl md:grid-cols-4">
             <TabsTrigger value="entries" className="relative flex items-center gap-2">
               <Clock className="h-4 w-4" />
-              Touren prüfen
+              Wanderungen prüfen
               {entries.length > 0 && (
                 <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-brand-500 text-[10px] font-bold text-white">
                   {entries.length > 9 ? "9+" : entries.length}
@@ -817,7 +817,7 @@ export default function AdminDashboard() {
 
             <TabsTrigger value="public-hikes" className="flex items-center gap-2">
               <Map className="h-4 w-4" />
-              Öffentliche Touren
+              Öffentliche Wanderungen
             </TabsTrigger>
 
             <TabsTrigger value="users" className="flex items-center gap-2">
@@ -896,7 +896,7 @@ export default function AdminDashboard() {
                   <Input
                     value={commentSearch}
                     onChange={(event) => setCommentSearch(event.target.value)}
-                    placeholder="Nach Text, Nutzer oder Tour suchen"
+                    placeholder="Nach Text, Nutzer oder Wanderung suchen"
                     className="pl-10"
                   />
                 </div>
@@ -1003,7 +1003,7 @@ export default function AdminDashboard() {
             ) : filteredPublicHikes.length === 0 ? (
               <div className="doghike-empty-state">
                 <CheckCircle2 className="doghike-empty-icon text-brand-400" />
-                <h3 className="doghike-empty-title">Keine passenden Touren</h3>
+                <h3 className="doghike-empty-title">Keine passenden Wanderungen</h3>
                 <p className="text-sm text-slate-500">Mit den aktuellen Filtern wurde nichts gefunden.</p>
               </div>
             ) : (

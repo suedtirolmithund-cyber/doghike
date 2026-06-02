@@ -108,7 +108,7 @@ export const DOG_DIFFICULTY_GUIDE = [
     stufe: "Stufe 1",
     ...DIFFICULTY_GUIDE_STYLE_BY_LEVEL[1],
     title: "Sehr leicht",
-    desc: "Kurze bis einfache Touren mit wenig Steigung. Für fast alle gesunden Hunde geeignet, auch für junge, ältere oder wenig trainierte Hunde.",
+    desc: "Kurze bis einfache Wanderungen mit wenig Steigung. Für fast alle gesunden Hunde geeignet, auch für junge, ältere oder wenig trainierte Hunde.",
     examples: "Kurze Waldwege, einfache Spazier- und Talrunden",
     terrain: "Gut laufbar, wenig steil, kaum belastende Hindernisse",
     note: "Auch für wenig trainierte Hunde meist gut machbar",
@@ -128,8 +128,8 @@ export const DOG_DIFFICULTY_GUIDE = [
     stufe: "Stufe 3",
     ...DIFFICULTY_GUIDE_STYLE_BY_LEVEL[3],
     title: "Mittel",
-    desc: "Längere oder steilere Tour mit schmalen, steinigen oder wurzeligen Wegen. Der Hund sollte fit, trittsicher und berggewöhnt sein.",
-    examples: "Längere Bergtouren, steilere Anstiege, wurzelige oder steinige Pfade",
+    desc: "Längere oder steilere Wanderung mit schmalen, steinigen oder wurzeligen Wegen. Der Hund sollte fit, trittsicher und berggewöhnt sein.",
+    examples: "Längere Bergwanderungen, steilere Anstiege, wurzelige oder steinige Pfade",
     terrain: "Schmal, uneben, teils steinig oder wurzelig",
     note: "Der Hund sollte längere Belastung und schwierigen Untergrund kennen",
   },
@@ -138,8 +138,8 @@ export const DOG_DIFFICULTY_GUIDE = [
     stufe: "Stufe 4",
     ...DIFFICULTY_GUIDE_STYLE_BY_LEVEL[4],
     title: "Anspruchsvoll",
-    desc: "Deutlich fordernde Tour mit größerer Höhendifferenz, längerer Gehzeit oder schwierigen Stellen. Nur für ausgewachsene, fitte und bergerfahrene Hunde.",
-    examples: "Lange Bergtage, steile Touren mit engeren oder schwierigeren Passagen",
+    desc: "Deutlich fordernde Wanderung mit größerer Höhendifferenz, längerer Gehzeit oder schwierigen Stellen. Nur für ausgewachsene, fitte und bergerfahrene Hunde.",
+    examples: "Lange Bergtage, steile Wanderungen mit engeren oder schwierigeren Passagen",
     terrain: "Belastend, länger, steiler oder technisch heikler für Hunde",
     note: "Nur für fitte, ausgewachsene und berggewohnte Hunde sinnvoll",
   },
@@ -148,8 +148,8 @@ export const DOG_DIFFICULTY_GUIDE = [
     stufe: "Stufe 5",
     ...DIFFICULTY_GUIDE_STYLE_BY_LEVEL[5],
     title: "Sehr anspruchsvoll",
-    desc: "Sehr fordernde Hundetour mit steilen, felsigen, schmalen oder ausgesetzten Passagen. Der Hund braucht sehr gute Kondition, Berggewöhnung und sichere Führung; einzelne Stellen können Hilfe oder Sicherung erfordern.",
-    examples: "Sehr steile Bergtouren, felsige Passagen, ausgesetzte Engstellen",
+    desc: "Sehr fordernde Hundewanderung mit steilen, felsigen, schmalen oder ausgesetzten Passagen. Der Hund braucht sehr gute Kondition, Berggewöhnung und sichere Führung; einzelne Stellen können Hilfe oder Sicherung erfordern.",
+    examples: "Sehr steile Bergwanderungen, felsige Passagen, ausgesetzte Engstellen",
     terrain: "Felsig, schmal, steil oder klar ausgesetzt",
     note: "Einzelne Stellen können Hilfe, Tragen oder zusätzliche Sicherung nötig machen",
   },
@@ -164,12 +164,12 @@ export const DIFFICULTY_APP_EXPLANATIONS = [
   {
     key: "dog",
     title: "Hund-Schwierigkeit",
-    description: "Beschreibt, wie anspruchsvoll die Tour für den Hund ist: Fitness, Länge, Höhenmeter, Berggewöhnung, Trittsicherheit auf Untergrund und mögliche schwierige Stellen.",
+    description: "Beschreibt, wie anspruchsvoll die Wanderung für den Hund ist: Fitness, Länge, Höhenmeter, Berggewöhnung, Trittsicherheit auf Untergrund und mögliche schwierige Stellen.",
   },
 ];
 
 export const DIFFICULTY_GUIDE_NOTE =
-  "Die Mensch- und Hund-Schwierigkeit können voneinander abweichen. Eine Tour kann für Menschen nur T2 sein, für Hunde aber H4, wenn sie lang ist, viele Höhenmeter hat oder für Hunde schwierige Passagen enthält.";
+  "Die Mensch- und Hund-Schwierigkeit können voneinander abweichen. Eine Wanderung kann für Menschen nur T2 sein, für Hunde aber H4, wenn sie lang ist, viele Höhenmeter hat oder für Hunde schwierige Passagen enthält.";
 
 export const DIFFICULTY_LABELS = Object.fromEntries(
   DIFFICULTY_LEVELS.flatMap((level) => [
@@ -234,7 +234,7 @@ export const WATER_GUIDE = [
     value: "none",
     label: "Kein Wasser",
     color: WATER_GUIDE_COLOR_BY_LEVEL.none,
-    desc: "Auf der Tour gibt es normalerweise keine verlässlichen natürlichen Wasserstellen für den Hund. Wasser muss vollständig selbst mitgenommen werden.",
+    desc: "Auf der Wanderung gibt es normalerweise keine verlässlichen natürlichen Wasserstellen für den Hund. Wasser muss vollständig selbst mitgenommen werden.",
     examples: "Höhenweg, Waldweg oder Almweg ohne Bach, Quelle, Brunnen oder Seezugang",
     tip: "Plane die komplette Wasserversorgung selbst ein und nimm für den Hund immer genug Reserve mit.",
   },
@@ -243,22 +243,22 @@ export const WATER_GUIDE = [
     label: "Wenig Wasser",
     color: WATER_GUIDE_COLOR_BY_LEVEL.little,
     desc: "Es gibt einzelne mögliche Wasserstellen, diese können aber selten, schlecht erreichbar oder saisonabhängig sein. Nicht als alleinige Wasserversorgung einplanen.",
-    examples: "Ein kleiner Bach am Anfang der Tour oder eine Quelle, die im Sommer austrocknen kann",
+    examples: "Ein kleiner Bach am Anfang der Wanderung oder eine Quelle, die im Sommer austrocknen kann",
     tip: "Eigenes Wasser bleibt Pflicht. Einzelne Wasserstellen sind nur ein Bonus und keine sichere Versorgung.",
   },
   {
     value: "moderate",
     label: "Mehrere Wasserstellen",
     color: WATER_GUIDE_COLOR_BY_LEVEL.moderate,
-    desc: "Auf der Tour gibt es mehrere Wasserstellen oder längere Abschnitte mit Bachnähe. Trotzdem kann Wasser saisonal fehlen oder nicht zugänglich sein.",
-    examples: "Wanderung entlang eines Bachs mit mehreren Zugangsmöglichkeiten oder Tour mit mehreren Brunnen oder Quellen",
+    desc: "Auf der Wanderung gibt es mehrere Wasserstellen oder längere Abschnitte mit Bachnähe. Trotzdem kann Wasser saisonal fehlen oder nicht zugänglich sein.",
+    examples: "Wanderung entlang eines Bachs mit mehreren Zugangsmöglichkeiten oder Wanderung mit mehreren Brunnen oder Quellen",
     tip: "Gut für viele Hunde, aber je nach Saison oder Gelände nicht überall direkt erreichbar.",
   },
   {
     value: "plenty",
     label: "Viel Wasser",
     color: WATER_GUIDE_COLOR_BY_LEVEL.plenty,
-    desc: "Die Tour bietet sehr regelmäßigen oder fast durchgehenden Wasserzugang. Besonders hundefreundlich, aber eigenes Wasser bleibt trotzdem Pflicht.",
+    desc: "Die Wanderung bietet sehr regelmäßigen oder fast durchgehenden Wasserzugang. Besonders hundefreundlich, aber eigenes Wasser bleibt trotzdem Pflicht.",
     examples: "Rundweg um einen See mit wiederholtem direktem Zugang zum Wasser",
     tip: "Sehr hundefreundlich, trotzdem immer eigenes Trinkwasser und eine Schüssel dabeihaben.",
   },

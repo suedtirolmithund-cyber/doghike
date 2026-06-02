@@ -780,7 +780,7 @@ export default function Profile() {
                   🐕
                 </div>
                 <h3 className="doghike-empty-title">Wer läuft mit dir?</h3>
-                <p className="text-slate-500 mb-6">Lege deinen ersten Hund an, damit du gemeinsame Touren später leichter zuordnen kannst.</p>
+                <p className="text-slate-500 mb-6">Lege deinen ersten Hund an, damit du gemeinsame Wanderungen später leichter zuordnen kannst.</p>
                 <Button
                   onClick={() => {
                     setEditingDog(null);
@@ -869,8 +869,8 @@ export default function Profile() {
             ) : (
               <div className="doghike-empty-state">
                 <Navigation className="doghike-empty-icon" />
-                <h3 className="doghike-empty-title">Noch kein Weg geplant</h3>
-                <p className="text-slate-500 text-sm mb-6">Plane den ersten Weg. Dein Hund kommt später im Tagebuch dazu.</p>
+                <h3 className="doghike-empty-title">Noch keine Route geplant</h3>
+                <p className="text-slate-500 text-sm mb-6">Plane deine erste Route. Dein Hund kommt später im Tagebuch dazu.</p>
                 <Link to={createPageUrl("RoutePlanner")}>
                   <Button className="doghike-primary-action">
                     <Plus className="w-4 h-4 mr-2" />
@@ -885,9 +885,9 @@ export default function Profile() {
             <div className="mb-4 md:mb-6">
               <h2 className="doghike-section-title mb-1 flex items-center gap-2">
                 <Heart className="w-5 h-5 text-brand-400" />
-                Gespeicherte Touren
+                Gespeicherte Wanderungen
               </h2>
-              <p className="doghike-section-subtitle">Touren die du mit dem Herz-Button markiert hast</p>
+              <p className="doghike-section-subtitle">Wanderungen, die du mit dem Herz-Button markiert hast</p>
             </div>
 
             {isSavedHikesResolving ? (
@@ -903,14 +903,14 @@ export default function Profile() {
             ) : (
               <div className="doghike-empty-state">
                 <Heart className="doghike-empty-icon" />
-                <h3 className="doghike-empty-title">Noch keine Lieblingstouren</h3>
+                <h3 className="doghike-empty-title">Noch keine Lieblingswanderungen</h3>
                 <p className="text-slate-500 text-sm mb-6 max-w-xs mx-auto">
-                  Tippe bei einer Tour aufs Herz. Dann wartet sie hier auf dich.
+                  Tippe bei einer Wanderung aufs Herz. Dann wartet sie hier auf dich.
                 </p>
                 <Link to={createPageUrl("Hikes")}>
                   <Button className="doghike-primary-action">
                     <Mountain className="w-4 h-4 mr-2" />
-                    Touren entdecken
+                    Wanderungen entdecken
                   </Button>
                 </Link>
               </div>

@@ -81,7 +81,7 @@ export default function Datenschutz() {
                     <li>Session-Token und technisch notwendige Browser-Speicher-Einträge</li>
                     <li>IP-Adresse (wird von Vercel- und Supabase-Infrastruktur protokolliert)</li>
                     <li>Browsertyp und Betriebssystem</li>
-                    <li><strong>Live-GPS-Koordinaten</strong> bei aktiver Tourenaufzeichnung: werden nur lokal im Browser verarbeitet und erst auf deinen ausdrücklichen Befehl hin gespeichert. Es erfolgt keine automatische Übertragung.</li>
+                    <li><strong>Live-GPS-Koordinaten</strong> bei aktiver Routenaufzeichnung: werden nur lokal im Browser verarbeitet und erst auf deinen ausdrücklichen Befehl hin gespeichert. Es erfolgt keine automatische Übertragung.</li>
                     <li><strong>Web-Push-Abonnement-Token</strong> (falls du Benachrichtigungen erlaubst): wird in der Supabase-Datenbank gespeichert und dient ausschließlich dem Versand von In-App-Benachrichtigungen (z. B. Freundschaftsanfragen).</li>
                   </ul>
                 </div>
@@ -115,7 +115,7 @@ export default function Datenschutz() {
                     </tr>
                     <tr>
                       <td className="p-3">Fotos</td>
-                      <td className="p-3">Bebilderung von Touren und Profilen</td>
+                      <td className="p-3">Bebilderung von Wanderungen und Profilen</td>
                       <td className="p-3">Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)</td>
                     </tr>
                     <tr className="bg-brand-50/70">
@@ -177,7 +177,7 @@ export default function Datenschutz() {
                   <ul className="list-disc pl-6 space-y-2">
                     <li><strong>Nur du</strong> siehst deine privaten Wanderungen und Kontoinformationen.</li>
                     <li><strong>Freunde</strong> sehen nur Inhalte, die du ausdrücklich für Freunde freigibst.</li>
-                    <li><strong>Alle Nutzer</strong> sehen Touren-Daten aus unserem öffentlichen Google Sheet und Inhalte, die du öffentlich teilst.</li>
+                    <li><strong>Alle Nutzer</strong> sehen Wanderungsdaten aus unserem öffentlichen Google Sheet und Inhalte, die du öffentlich teilst.</li>
                     <li><strong>Administratoren</strong> können Inhalte zur Moderation und Freigabe einsehen.</li>
                   </ul>
                 </div>
@@ -231,13 +231,13 @@ export default function Datenschutz() {
 
                   <div className="border border-brand-100 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Open-Meteo (Wetterdaten)</p>
-                    <p>Wenn du eine Tourendetailseite mit Startpunkt öffnest, werden die GPS-Koordinaten des Startpunkts an Open-Meteo gesendet, um Wetterdaten zu laden.</p>
+                    <p>Wenn du eine Wanderungsdetailseite mit Startpunkt öffnest, werden die GPS-Koordinaten des Startpunkts an Open-Meteo gesendet, um Wetterdaten zu laden.</p>
               <p className="mt-1 text-slate-500"><a href="https://open-meteo.com/en/terms" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">open-meteo.com/en/terms</a></p>
                   </div>
 
                   <div className="border border-brand-100 rounded-xl p-4">
-                    <p className="font-semibold text-slate-900 mb-1">Google Sheets (öffentliche Tourdaten)</p>
-                    <p>Öffentliche Tourdaten werden aus einem veröffentlichten Google-Sheet geladen. Beim Abruf können IP-Adresse, Browserdaten und der Zeitpunkt des Abrufs an Google übertragen werden.</p>
+                    <p className="font-semibold text-slate-900 mb-1">Google Sheets (öffentliche Wanderungsdaten)</p>
+                    <p>Öffentliche Wanderungsdaten werden aus einem veröffentlichten Google-Sheet geladen. Beim Abruf können IP-Adresse, Browserdaten und der Zeitpunkt des Abrufs an Google übertragen werden.</p>
                     <p className="mt-1 text-slate-500"><a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">policies.google.com/privacy</a></p>
                   </div>
 
@@ -318,7 +318,7 @@ export default function Datenschutz() {
                 <ul className="list-disc pl-5 mt-2 space-y-1">
                   <li>Du bist Urheber oder besitzt die Nutzungsrechte an den Fotos.</li>
                   <li>Die abgebildeten Personen haben der Veröffentlichung zugestimmt (sofern erkennbar).</li>
-                  <li>Fotos zu öffentlichen Touren können für andere berechtigte Nutzer innerhalb der App sichtbar werden.</li>
+                  <li>Fotos zu öffentlichen Wanderungen können für andere berechtigte Nutzer innerhalb der App sichtbar werden.</li>
                   <li>Du kannst Fotos jederzeit durch Bearbeiten der Wanderung entfernen.</li>
                 </ul>
               </div>
@@ -451,7 +451,7 @@ export default function Datenschutz() {
               <div className="bg-brand-50 border border-brand-100 rounded-xl p-4">
                 <p className="text-brand-700 text-sm md:text-base leading-relaxed">
                   <strong>Öffentliche Inhalte:</strong> Kommentare und Bewertungen, die du abgibst,
-                  können für andere App-Nutzer sichtbar sein. Fotos, die du zu öffentlichen Touren hochlädst,
+                  können für andere App-Nutzer sichtbar sein. Fotos, die du zu öffentlichen Wanderungen hochlädst,
                   können je nach Freigabe für andere Nutzer oder öffentlich sichtbar werden. Teile keine sensiblen
                   personenbezogenen Informationen in öffentlichen Beiträgen.
                 </p>

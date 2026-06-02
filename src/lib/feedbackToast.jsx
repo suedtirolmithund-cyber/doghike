@@ -21,7 +21,7 @@ export function showUploadedFeedback(title = "Hochgeladen", description = "Deine
   successToast(title, description, <ImagePlus className="h-4 w-4 text-brand-500" />);
 }
 
-export function showFriendFeedback(title = "Freund hinzugefügt", description = "Jetzt könnt ihr Touren teilen.") {
+export function showFriendFeedback(title = "Freund hinzugefügt", description = "Jetzt könnt ihr Wanderungen teilen.") {
   successToast(title, description, <UserPlus className="h-4 w-4 text-brand-500" />);
 }
 
@@ -29,6 +29,6 @@ export function showDogFeedback(title = "Wanderbuddy gespeichert", description =
   successToast(title, description, <PawPrint className="h-4 w-4 text-brand-500" />);
 }
 
-export function showSavedTourFeedback(title = "Zur Merkliste hinzugefügt", description = "Die Tour wartet jetzt auf dich.") {
+export function showSavedTourFeedback(title = "Zur Merkliste hinzugefügt", description = "Die Wanderung wartet jetzt auf dich.") {
   successToast(title, description, <Heart className="h-4 w-4 text-brand-500" />);
 }

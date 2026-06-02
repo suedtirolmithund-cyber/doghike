@@ -4,8 +4,8 @@ import { supabase } from "@/lib/supabaseClient";
 
 export const BADGE_DEFS = {
   champion: { emoji: "🏆", label: "Champion", desc: "Platz 1 im Ranking" },
-  veteran: { emoji: "🏅", label: "Veteran", desc: "50+ Touren", threshold: { field: "tourCount", min: 50 } },
-  explorer: { emoji: "🧭", label: "Entdecker", desc: "10+ Touren", threshold: { field: "tourCount", min: 10 } },
+  veteran: { emoji: "🏅", label: "Veteran", desc: "50+ Wanderungen", threshold: { field: "tourCount", min: 50 } },
+  explorer: { emoji: "🧭", label: "Entdecker", desc: "10+ Wanderungen", threshold: { field: "tourCount", min: 10 } },
   ultra: { emoji: "⚡", label: "Ultra-Läufer", desc: "500+ km", threshold: { field: "totalDistance", min: 500 } },
   marathoner: { emoji: "🏃", label: "Kilometerfresser", desc: "100+ km", threshold: { field: "totalDistance", min: 100 } },
   mountaineer: { emoji: TOUR_ICONS.elevation, label: "Gipfelstürmer", desc: "1.000+ Höhenmeter", threshold: { field: "totalElevation", min: 1000 } },

@@ -138,12 +138,12 @@ export default function Dashboard() {
           <div className="mt-6 grid w-full max-w-[343px] gap-3">
             <Link to={createPageUrl("Hikes")}>
               <Button size="lg" variant="outline" className="h-[46px] w-full border !border-[#F9C030] !bg-[#FDF0E8] !text-[#7C3020] shadow-[0_12px_26px_rgba(249,192,48,0.2)] hover:!bg-[#FDF0E8] hover:!text-[#7C3020]">
-                <Mountain className="h-[18px] w-[18px] text-[#F07030]" /> Alle Touren entdecken
+                <Mountain className="h-[18px] w-[18px] text-[#F07030]" /> Wanderungen entdecken
               </Button>
             </Link>
             <Link to={submitHikeUrl}>
               <Button size="lg" variant="outline" className="h-[46px] w-full border !border-[#F9C030] !bg-[#FDF0E8] !text-[#7C3020] shadow-[0_12px_26px_rgba(249,192,48,0.2)] hover:!bg-[#FDF0E8] hover:!text-[#7C3020]">
-                <Plus className="h-[18px] w-[18px] text-[#F07030]" /> Tour einreichen
+                <Plus className="h-[18px] w-[18px] text-[#F07030]" /> Wanderung einreichen
               </Button>
             </Link>
             {!isAuthenticated && (
@@ -158,7 +158,7 @@ export default function Dashboard() {
           <form onSubmit={handleHeroSearchSubmit} className="relative mt-5 h-[52px] w-full max-w-[343px]">
             <Search className="absolute left-[16px] top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-[#F07030]" />
             <Input
-              placeholder="Tour oder Ort suchen..."
+              placeholder="Wanderung oder Ort suchen..."
               value={searchQuery}
               onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE); }}
               className="h-[52px] w-full rounded-xl border border-[#F9C030] bg-[#FDF0E8]/92 pl-12 pr-4 text-sm font-bold text-[#7C3020] shadow-[0_10px_26px_rgba(249,192,48,0.2)] placeholder:text-[#7C3020]/75"
@@ -179,12 +179,12 @@ export default function Dashboard() {
             <div className="absolute left-1/2 top-[281px] flex h-[46px] -translate-x-1/2 items-center justify-center gap-2">
               <Link to={createPageUrl("Hikes")}>
                 <Button size="lg" variant="outline" className="h-[46px] w-[224.19px] border !border-[#F9C030] !bg-[#FDF0E8] px-0 text-[16px] font-bold leading-[19px] !text-[#7C3020] shadow-[0_12px_26px_rgba(249,192,48,0.2)] hover:!bg-[#FDF0E8] hover:!text-[#7C3020]">
-                  <Mountain className="mr-0 h-[18px] w-[18px] text-[#F07030]" /> Alle Touren entdecken
+                  <Mountain className="mr-0 h-[18px] w-[18px] text-[#F07030]" /> Wanderungen entdecken
                 </Button>
               </Link>
               <Link to={submitHikeUrl}>
                 <Button size="lg" variant="outline" className="h-[46px] w-[177.56px] border !border-[#F9C030] !bg-[#FDF0E8] px-0 text-[16px] font-bold leading-[19px] !text-[#7C3020] shadow-[0_12px_26px_rgba(249,192,48,0.2)] hover:!bg-[#FDF0E8] hover:!text-[#7C3020]">
-                  <Plus className="mr-0 h-[18px] w-[18px] text-[#F07030]" /> Tour einreichen
+                  <Plus className="mr-0 h-[18px] w-[18px] text-[#F07030]" /> Wanderung einreichen
                 </Button>
               </Link>
               {!isAuthenticated && (
@@ -199,7 +199,7 @@ export default function Dashboard() {
             <form onSubmit={handleHeroSearchSubmit} className="absolute left-1/2 top-[386px] h-[56px] w-[672px] -translate-x-1/2">
               <Search className="absolute left-[16px] top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-[#F07030]" />
               <Input
-                placeholder="Tour oder Ort suchen..."
+                placeholder="Wanderung oder Ort suchen..."
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE); }}
                 className="h-[56px] w-[672px] rounded-xl border border-[#F9C030] bg-[#FDF0E8]/92 pl-12 pr-[18px] text-sm font-bold leading-[24px] text-[#7C3020] shadow-[0_10px_28px_rgba(249,192,48,0.2)] placeholder:text-[#7C3020]/75"
@@ -279,7 +279,7 @@ export default function Dashboard() {
               <div className="space-y-1">
                 <p className="text-lg font-semibold text-slate-800">Wanderungen werden aktualisiert</p>
                 <p className="max-w-md text-sm text-slate-500">
-                  Wir holen gerade die schönsten Wege für dich.
+                  Wir holen gerade die schönsten Wanderungen für dich.
                 </p>
               </div>
             </motion.div>
@@ -316,10 +316,10 @@ export default function Dashboard() {
               className="doghike-empty-state">
               <Mountain className="doghike-empty-icon" />
               <h3 className="doghike-empty-title">
-                {searchQuery ? "Da ist noch nicht der richtige Weg dabei" : "Noch keine Touren"}
+                {searchQuery ? "Da ist noch nicht die richtige Wanderung dabei" : "Noch keine Wanderungen"}
               </h3>
               <p className="mx-auto max-w-xs text-sm text-slate-500">
-                {searchQuery ? "Ändere die Suche ein wenig. Vielleicht wartet der passende Weg gleich daneben." : "Sobald Touren verfügbar sind, erscheinen sie hier."}
+                {searchQuery ? "Ändere die Suche ein wenig. Vielleicht wartet die passende Wanderung gleich daneben." : "Sobald Wanderungen verfügbar sind, erscheinen sie hier."}
               </p>
               {searchQuery && (
                 <Button variant="outline" onClick={() => setSearchQuery("")} className="doghike-secondary-action mt-4">

@@ -57,8 +57,8 @@ export default function MapView() {
           ) : (
             <div className="doghike-empty-state">
               <MapPin className="doghike-empty-icon" />
-              <h3 className="doghike-empty-title">Noch keine Wege auf der Karte</h3>
-              <p className="mx-auto max-w-xs text-sm text-slate-500">Aktuell sind noch keine Touren mit Karte verfügbar.</p>
+              <h3 className="doghike-empty-title">Noch keine Wanderungen auf der Karte</h3>
+              <p className="mx-auto max-w-xs text-sm text-slate-500">Aktuell sind noch keine Wanderungen mit Karte verfügbar.</p>
             </div>
           )}
         </motion.div>

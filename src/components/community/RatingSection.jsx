@@ -40,7 +40,7 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ratings", hikeSource, normalizedHikeId] });
       setConsentPublic(true);
-      toast.success("Danke. Sag den anderen, wie hundefreundlich der Weg war.");
+      toast.success("Danke. Sag den anderen, wie hundefreundlich die Wanderung war.");
     },
     onError: () => {
       toast.error("Das hat gerade nicht geklappt. Versuch es gleich noch einmal.");

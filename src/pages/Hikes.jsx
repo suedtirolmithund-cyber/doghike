@@ -260,7 +260,7 @@ export default function Hikes() {
           </div>
           <div>
             <h1 className="doghike-page-title">Alle Wanderungen</h1>
-            <p className="doghike-page-subtitle">{hikes.length} hundefreundliche Touren</p>
+            <p className="doghike-page-subtitle">{hikes.length} hundefreundliche Wanderungen</p>
           </div>
         </motion.div>
 
@@ -274,7 +274,7 @@ export default function Hikes() {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                   <Input
-                    placeholder="Tour oder Ort suchen..."
+                    placeholder="Wanderung oder Ort suchen..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => {
@@ -293,7 +293,7 @@ export default function Hikes() {
                   <DifficultyInfoDialog
                     icon={<Mountain className="h-4 w-4 text-brand-500" />}
                     title="Schwierigkeit Mensch"
-                    description="So sind die Touren für Menschen von Stufe 1 bis Stufe 5 eingeordnet."
+                    description="So sind die Wanderungen für Menschen von Stufe 1 bis Stufe 5 eingeordnet."
                     levels={HUMAN_DIFFICULTY_GUIDE}
                   />
                 </div>
@@ -318,7 +318,7 @@ export default function Hikes() {
                   <DifficultyInfoDialog
                     icon={<PawPrint className="h-4 w-4 text-brand-500" />}
                     title="Schwierigkeit Hund"
-                    description="So sind die Touren für Hunde von Stufe 1 bis Stufe 5 eingeordnet."
+                    description="So sind die Wanderungen für Hunde von Stufe 1 bis Stufe 5 eingeordnet."
                     levels={DOG_DIFFICULTY_GUIDE}
                   />
                 </div>
@@ -430,8 +430,8 @@ export default function Hikes() {
                 {hasPendingChanges
                   ? "Du hast Filter geändert. Tippe auf „Filter anwenden“, um die Ergebnisse zu aktualisieren."
                   : hasActiveFilters
-                    ? `${filteredHikes.length} Tour${filteredHikes.length === 1 ? "" : "en"} aktiv gefiltert. Seite ${currentPage} von ${totalPages}.`
-                    : `${filteredHikes.length} Tour${filteredHikes.length === 1 ? "" : "en"} verfügbar. Seite ${currentPage} von ${totalPages}.`}
+                    ? `${filteredHikes.length} Wanderung${filteredHikes.length === 1 ? "" : "en"} aktiv gefiltert. Seite ${currentPage} von ${totalPages}.`
+                    : `${filteredHikes.length} Wanderung${filteredHikes.length === 1 ? "" : "en"} verfügbar. Seite ${currentPage} von ${totalPages}.`}
               </p>
               <div className="flex gap-2">
                 <Button type="button" variant="outline" onClick={resetFilters}>
@@ -455,7 +455,7 @@ export default function Hikes() {
           >
             <div className="doghike-section-header">
               <div>
-                <h2 className="doghike-section-title">Touren auf der Karte</h2>
+                <h2 className="doghike-section-title">Wanderungen auf der Karte</h2>
                 <p className="doghike-section-subtitle">Alle passenden Wanderungen mit Startpunkt.</p>
               </div>
             </div>
@@ -514,7 +514,7 @@ export default function Hikes() {
             <div className="space-y-1">
               <p className="text-lg font-semibold text-slate-800">Wanderungen werden aktualisiert</p>
               <p className="max-w-md text-sm text-slate-500">
-                Wir sortieren gerade die passenden Wege für dich.
+                Wir sortieren gerade die passenden Wanderungen für dich.
               </p>
             </div>
           </motion.div>
@@ -625,7 +625,7 @@ export default function Hikes() {
             <Mountain className="doghike-empty-icon" />
             <h3 className="doghike-empty-title">Da passt gerade nichts</h3>
             <p className="mx-auto max-w-xs text-sm text-slate-500">
-              Stell die Suche etwas weiter. Dann tauchen neue Wege auf.
+              Stell die Suche etwas weiter. Dann tauchen neue Wanderungen auf.
             </p>
           </motion.div>
         )}

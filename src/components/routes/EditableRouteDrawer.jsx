@@ -546,9 +546,9 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
           onClick={makeLoop}
           disabled={waypoints.length < 2 || isEditing}
           size="sm"
-          title="Startpunkt als letzten Wegpunkt hinzufügen (Rundtour)"
+          title="Startpunkt als letzten Wegpunkt hinzufügen (Rundroute)"
         >
-          🔄 <span className="hidden md:inline ml-2">Rundtour</span>
+          🔄 <span className="hidden md:inline ml-2">Rundroute</span>
         </Button>
         <Button
           onClick={handleSave}

@@ -29,7 +29,7 @@ async function assertCanRateHike(currentUserId, hikeId, hikeSource) {
 
     if (error) throw error;
     if (data?.user_id && String(data.user_id) === String(currentUserId)) {
-      throw new Error("Du kannst deine eigene Tagebuch-Tour nicht selbst bewerten.");
+      throw new Error("Du kannst deine eigene Tagebuch-Wanderung nicht selbst bewerten.");
     }
     return;
   }
@@ -42,7 +42,7 @@ async function assertCanRateHike(currentUserId, hikeId, hikeSource) {
 
   if (error) throw error;
   if (data?.user_id && String(data.user_id) === String(currentUserId)) {
-    throw new Error("Du kannst deine eigene Tour nicht selbst bewerten.");
+    throw new Error("Du kannst deine eigene Wanderung nicht selbst bewerten.");
   }
 }
 

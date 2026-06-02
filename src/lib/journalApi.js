@@ -61,7 +61,7 @@ export function getMissingPublicJournalFields(entry) {
 export function validatePublicJournalEntry(entry) {
   const missing = getMissingSharedJournalFields(entry);
   if (missing.length > 0) {
-    throw new Error(`Fehlende Pflichtfelder für öffentliche Touren: ${missing.join(", ")}`);
+    throw new Error(`Fehlende Pflichtfelder für öffentliche Wanderungen: ${missing.join(", ")}`);
   }
 }
 

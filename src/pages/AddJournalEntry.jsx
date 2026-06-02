@@ -663,7 +663,7 @@ function LocationPicker({ lat, lng, locationName = "", onChange }) {
       </div>
 
       <p className="text-xs text-slate-400">
-        Tippe auf die Karte um den Startpunkt der Tour zu markieren
+        Tippe auf die Karte, um den Startpunkt der Wanderung zu markieren
         {markerPos && (
           <span className="ml-2 text-brand-400 font-medium">
             Punkt gesetzt
@@ -1077,7 +1077,7 @@ export default function AddJournalEntry() {
             },
           });
         } catch (error) {
-          console.error("[WebPush] Freundes-Tour Versand fehlgeschlagen:", error);
+          console.error("[WebPush] Freundes-Wanderung Versand fehlgeschlagen:", error);
         }
       }
       navigate(createPageUrl("Journal"));
@@ -1296,7 +1296,7 @@ export default function AddJournalEntry() {
       if (missing.length > 0) {
         const targetLabel = form.visibility === "public" ? "öffentlich" : "mit Freunden geteilt";
         toast.error(
-          `Um eine Tour ${targetLabel} zu speichern, müssen alle Pflichtfelder ausgefüllt sein: ${missing.join(", ")}`,
+          `Um eine Wanderung ${targetLabel} zu speichern, müssen alle Pflichtfelder ausgefüllt sein: ${missing.join(", ")}`,
           {
           duration: 6000,
           }
@@ -1844,7 +1844,7 @@ export default function AddJournalEntry() {
                   Nach dem Speichern wird dieser Eintrag an einen Admin zur Prüfung geschickt und erst danach öffentlich sichtbar.
                 </p>
                 <div className="text-xs rounded-lg border border-brand-200 bg-brand-50/70 px-3 py-2 text-brand-800">
-                  <p className="font-semibold mb-1">Pflichtfelder für öffentliche Touren:</p>
+                  <p className="font-semibold mb-1">Pflichtfelder für öffentliche Wanderungen:</p>
                   <p>Ort - Startpunkt (Karte) - Distanz - Höhenmeter - Dauer - Schwierigkeit (Mensch und Hund) - Beschreibung - mind. 1 Foto - Jahreszeit</p>
                   <p className="mt-1 text-brand-600">GPX-Datei ist optional.</p>
                 </div>

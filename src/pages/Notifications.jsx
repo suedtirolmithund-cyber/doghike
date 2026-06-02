@@ -219,7 +219,7 @@ export default function Notifications() {
             <div className="flex-1">
               <p className="text-sm font-medium text-[#7C3020]">Web-Push ist aktiv</p>
               <p className="text-xs text-[#C07820]">
-                Freundschaftsanfragen, Bestätigungen und neue Premium-Touren können jetzt auch bei geschlossener App ankommen.
+                Freundschaftsanfragen, Bestätigungen und neue Premium-Wanderungen können jetzt auch bei geschlossener App ankommen.
               </p>
             </div>
             <Button

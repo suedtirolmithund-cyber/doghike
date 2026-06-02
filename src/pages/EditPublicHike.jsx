@@ -93,21 +93,21 @@ function buildInitialFormData(hike) {
 
 function getFriendlySaveErrorMessage(error) {
   if (!error) {
-    return "Die öffentliche Tour konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.";
+    return "Die öffentliche Wanderung konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.";
   }
 
   if (error.message === "missing_public_hike_id") {
-    return "Die Tour-ID fehlt. Bitte öffne die Tour neu und versuche es noch einmal.";
+    return "Die Wanderungs-ID fehlt. Bitte öffne die Wanderung neu und versuche es noch einmal.";
   }
 
   const message = String(error.message || error.details || "").toLowerCase();
 
   if (message.includes("row-level security") || message.includes("permission denied")) {
-    return "Du hast gerade keine Berechtigung, diese öffentliche Tour zu speichern.";
+    return "Du hast gerade keine Berechtigung, diese öffentliche Wanderung zu speichern.";
   }
 
   if (message.includes("duplicate key")) {
-    return "Eine Tour mit diesen Daten existiert bereits. Bitte prüfe Titel oder Zuordnung.";
+    return "Eine Wanderung mit diesen Daten existiert bereits. Bitte prüfe Titel oder Zuordnung.";
   }
 
   if (message.includes("invalid input syntax") || message.includes("numeric")) {
@@ -122,7 +122,7 @@ function getFriendlySaveErrorMessage(error) {
     return "Die Verbindung zum Server ist gerade fehlgeschlagen. Bitte versuche es noch einmal.";
   }
 
-  return error.message || "Die öffentliche Tour konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.";
+  return error.message || "Die öffentliche Wanderung konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.";
 }
 
 export default function EditPublicHike() {
@@ -390,7 +390,7 @@ export default function EditPublicHike() {
           console.error("[EditPublicHike] free push failed:", error);
         });
       }
-      toast.success("Die öffentliche Tour ist wieder rund.");
+      toast.success("Die öffentliche Wanderung ist wieder rund.");
       navigate(createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`, { replace: true });
     },
     onError: (error) => {
@@ -414,9 +414,9 @@ export default function EditPublicHike() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="doghike-glass-card p-8 text-center">
-          <p className="text-xl text-slate-700 mb-4">Nur Admins können öffentliche Touren bearbeiten.</p>
+          <p className="text-xl text-slate-700 mb-4">Nur Admins können öffentliche Wanderungen bearbeiten.</p>
           <Link to={createPageUrl("Hikes")}>
-            <Button className="bg-brand-400 text-white hover:bg-brand-600">Zurück zu den Touren</Button>
+            <Button className="bg-brand-400 text-white hover:bg-brand-600">Zurück zu den Wanderungen</Button>
           </Link>
         </div>
       </div>
@@ -427,9 +427,9 @@ export default function EditPublicHike() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 flex items-center justify-center px-4">
         <div className="doghike-glass-card p-8 text-center">
-          <p className="text-xl text-slate-700 mb-4">Öffentliche Tour nicht gefunden</p>
+          <p className="text-xl text-slate-700 mb-4">Öffentliche Wanderung nicht gefunden</p>
           <Link to={createPageUrl("Hikes")}>
-            <Button className="bg-brand-400 text-white hover:bg-brand-600">Zurück zu den Touren</Button>
+            <Button className="bg-brand-400 text-white hover:bg-brand-600">Zurück zu den Wanderungen</Button>
           </Link>
         </div>
       </div>
@@ -443,14 +443,14 @@ export default function EditPublicHike() {
           <Link to={createPageUrl("HikeDetail") + `?id=${encodeURIComponent(detailId)}&source=sheets`}>
             <Button variant="ghost" className="pl-0 text-slate-600 hover:text-slate-900">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Zurück zur Tour
+              Zurück zur Wanderung
             </Button>
           </Link>
         </div>
 
         <div className="doghike-glass-card p-6 md:p-8">
           <div className="mb-6">
-            <h1 className="doghike-page-title">Öffentliche Tour bearbeiten</h1>
+            <h1 className="doghike-page-title">Öffentliche Wanderung bearbeiten</h1>
             <p className="doghike-page-subtitle">Änderungen werden direkt in Supabase gespeichert.</p>
           </div>
 

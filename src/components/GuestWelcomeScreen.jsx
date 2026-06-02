@@ -504,7 +504,7 @@ function LoginWelcomeIntro() {
         <FourToePaw className="h-5 w-5 md:h-6 md:w-6" />
       </div>
       <p className="mx-auto mt-4 max-w-[320px] text-[18px] font-semibold leading-[22px] text-white drop-shadow-[0_3px_10px_rgba(116,28,59,0.3)] md:mt-5 md:text-[20px] md:leading-[24px]">
-        Plane hundefreundliche Touren, speichere deine Lieblingswege und entdecke neue Ziele
+        Plane hundefreundliche Wanderungen, speichere deine Lieblingswanderungen und entdecke neue Ziele
       </p>
     </div>
   );

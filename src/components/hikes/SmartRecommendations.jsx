@@ -179,14 +179,14 @@ export default function SmartRecommendations({ allHikes = [], currentHike = null
           <h2 className="doghike-section-title">Weitere spannende Wanderungen in dieser Region</h2>
           {isPersonalized && (
             <span className="inline-flex items-center gap-1 rounded-full bg-brand-100/80 px-2 py-1 text-xs text-slate-500">
-              <Sparkles className="h-3 w-3" /> passend zu deinen Touren
+              <Sparkles className="h-3 w-3" /> passend zu deinen Wanderungen
             </span>
           )}
         </div>
         <p className="text-sm leading-relaxed text-[#C07820]">
           {hasAreaMatches && areaLabel
-            ? `Diese Vorschläge liegen rund um ${areaLabel} und sind der Tour auf der Karte besonders nahe.`
-            : "Hier findest du weitere spannende Wanderungen, die dieser Tour auf der Karte möglichst nahe liegen."}
+            ? `Diese Vorschläge liegen rund um ${areaLabel} und sind der Wanderung auf der Karte besonders nahe.`
+            : "Hier findest du weitere spannende Wanderungen, die dieser Wanderung auf der Karte möglichst nahe liegen."}
         </p>
       </div>
 

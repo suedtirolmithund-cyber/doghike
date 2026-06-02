@@ -358,7 +358,7 @@ export default function Friends() {
     mutationFn: acceptFriendRequest,
     onSuccess: () => {
       refreshFriendData();
-      showFriendFeedback("Freund hinzugefügt", "Ihr könnt jetzt Touren teilen.");
+      showFriendFeedback("Freund hinzugefügt", "Ihr könnt jetzt Wanderungen teilen.");
     },
     onError: () => toast.error("Das Annehmen hat gerade nicht geklappt."),
   });
@@ -583,8 +583,8 @@ export default function Friends() {
             </TabsTrigger>
 
             <TabsTrigger value="feed" className="min-h-11 px-2 py-2 text-sm">
-              <span className="sm:hidden">Touren</span>
-              <span className="hidden sm:inline">Touren von Freunden</span>
+              <span className="sm:hidden">Wanderungen</span>
+              <span className="hidden sm:inline">Wanderungen von Freunden</span>
             </TabsTrigger>
           </TabsList>
 
@@ -641,7 +641,7 @@ export default function Friends() {
                 <Users className="doghike-empty-icon" />
                 <p className="mb-1 font-medium text-slate-600">Noch niemand auf deiner Liste</p>
                 <p className="text-sm text-slate-400">
-                  Such nach Menschen, mit denen du Touren teilen willst.
+                  Such nach Menschen, mit denen du Wanderungen teilen willst.
                 </p>
               </div>
             )}
@@ -768,7 +768,7 @@ export default function Friends() {
             ) : feedEntries.length === 0 ? (
               <div className="doghike-empty-state">
                 <BookOpen className="doghike-empty-icon" />
-                <p className="mb-1 font-medium text-slate-600">Noch keine geteilten Wege</p>
+                <p className="mb-1 font-medium text-slate-600">Noch keine geteilten Wanderungen</p>
                 <p className="text-sm text-slate-400">
                   Wenn deine Freunde losziehen und teilen, erscheint es hier.
                 </p>
@@ -781,7 +781,7 @@ export default function Friends() {
                       <Avatar profile={selectedFriendProfile} />
                       <div>
                         <p className="text-sm font-semibold text-slate-900">
-                          Touren von {selectedFriendProfile.full_name || selectedFriendProfile.username || "deinem Freund"}
+                          Wanderungen von {selectedFriendProfile.full_name || selectedFriendProfile.username || "deinem Freund"}
                         </p>
                         <p className="text-xs text-slate-500">
                           Hier siehst du nur die geteilten Einträge dieses Profils.
@@ -795,7 +795,7 @@ export default function Friends() {
                       onClick={clearFriendFeedFilter}
                       className="rounded-xl border-brand-100 text-brand-500 hover:bg-brand-50"
                     >
-                      Alle Freundes-Touren
+                      Alle Freundes-Wanderungen
                     </Button>
                   </div>
                 )}
@@ -804,7 +804,7 @@ export default function Friends() {
                   <div className="doghike-empty-state">
                     <BookOpen className="doghike-empty-icon" />
                     <p className="mb-1 font-medium text-slate-600">
-                      Noch keine geteilten Wege von diesem Freund
+                      Noch keine geteilten Wanderungen von diesem Freund
                     </p>
                     <p className="text-sm text-slate-400">
                       Sobald etwas geteilt wird, erscheint es genau hier.

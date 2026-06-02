@@ -24,7 +24,7 @@ import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 
 const MAIN_NAV = [
   { name: "Dashboard", icon: Home, label: "Home" },
-  { name: "Hikes", icon: Mountain, label: "Touren" },
+  { name: "Hikes", icon: Mountain, label: "Wanderungen" },
   { name: "Journal", icon: BookOpen, label: "Tagebuch" },
   { name: "RoutePlanner", icon: Route, label: "Planen" },
   { name: "Profile", icon: Dog, label: "Profil" },
@@ -37,7 +37,7 @@ const MORE_ITEMS = [
 
 const DESKTOP_NAV = [
   { name: "Dashboard", icon: Home, label: "Startseite" },
-  { name: "Hikes", icon: Mountain, label: "Alle Touren" },
+  { name: "Hikes", icon: Mountain, label: "Alle Wanderungen" },
   { name: "Journal", icon: BookOpen, label: "Tagebuch" },
   { name: "RoutePlanner", icon: Route, label: "Routenplaner" },
   { name: "Friends", icon: Users, label: "Freunde" },

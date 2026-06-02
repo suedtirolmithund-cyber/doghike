@@ -286,7 +286,7 @@ function SmartRoutePlanner({ onRouteReady }) {
         onRouteReady(r);
       })
       .catch(() => {
-        if (!cancelled) toast.error("Der Weg lässt sich gerade nicht berechnen. Versuch es gleich noch einmal.");
+        if (!cancelled) toast.error("Die Route lässt sich gerade nicht berechnen. Versuch es gleich noch einmal.");
       })
       .finally(() => { if (!cancelled) setCalculating(false); });
 
@@ -799,7 +799,7 @@ export default function RoutePlanner() {
               </h3>
 
               <div>
-                <Label htmlFor="name">Name der Tour *</Label>
+          <Label htmlFor="name">Name der Route *</Label>
                 <Input id="name" placeholder="z.B. Pragser Wildsee Rundweg"
                   value={routeData.name} onChange={(e) => setRouteData({ ...routeData, name: e.target.value })}
                   required className="mt-1" />

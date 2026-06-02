@@ -274,7 +274,7 @@ export default function Dogs() {
                       <div className="grid grid-cols-3 gap-2 pt-3 border-t border-brand-100">
                         <div className="text-center">
                           <p className="text-lg font-bold text-slate-900">{stats.tourCount}</p>
-                          <p className="text-xs text-slate-400">Touren</p>
+                          <p className="text-xs text-slate-400">Wanderungen</p>
                         </div>
                         <div className="text-center">
                           <p className="text-lg font-bold text-slate-900">{stats.totalDistance.toFixed(1)}</p>
@@ -352,7 +352,7 @@ export default function Dogs() {
                       className="h-auto w-full justify-start gap-3 rounded-[20px] border-brand-100 bg-white/85 px-4 py-4 text-left text-slate-700 shadow-sm hover:bg-brand-50/50"
                     >
                       <Mountain className="h-4 w-4 shrink-0 text-brand-400" />
-                      <span className="text-sm font-medium">Touren entdecken</span>
+                      <span className="text-sm font-medium">Wanderungen entdecken</span>
                     </Button>
                   </Link>
                   <Link to={createPageUrl("AddJournalEntry")} className="block">

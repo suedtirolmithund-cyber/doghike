@@ -245,7 +245,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
   const handleSubmit = async (e) => {
     e.preventDefault();
     const missing = [];
-    if (!formData.trail_name?.trim()) missing.push("Name der Tour");
+    if (!formData.trail_name?.trim()) missing.push("Name der Wanderung");
     
     if (!formData.latitude || !formData.longitude) missing.push("Ausgangspunkt");
 
@@ -271,13 +271,13 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       }
 
       if (formData.visibility === "public") {
-        toast.error(`Um eine Tour öffentlich zu machen, müssen alle Pflichtfelder ausgefüllt sein: ${missing.join(", ")}`, {
+        toast.error(`Um eine Wanderung öffentlich zu machen, müssen alle Pflichtfelder ausgefüllt sein: ${missing.join(", ")}`, {
           duration: 7000,
         });
         return;
       }
 
-      toast.error(`Um eine Tour mit Freunden zu teilen, müssen alle Pflichtfelder ausgefüllt sein: ${missing.join(", ")}`, {
+      toast.error(`Um eine Wanderung mit Freunden zu teilen, müssen alle Pflichtfelder ausgefüllt sein: ${missing.join(", ")}`, {
         duration: 7000,
       });
       return;
@@ -305,7 +305,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <Label htmlFor="trail_name">Name der Tour *</Label>
+          <Label htmlFor="trail_name">Name der Wanderung *</Label>
           <Input
             id="trail_name"
             value={formData.trail_name}
@@ -465,7 +465,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             </button>
           </div>
           <p className="text-xs text-slate-500">
-            Optional für alle Touren. Du kannst keinen, einen oder beide Hinweise angeben.
+            Optional für alle Wanderungen. Du kannst keinen, einen oder beide Hinweise angeben.
           </p>
         </div>
 
@@ -693,7 +693,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
 
       {dogs.length > 0 && (
         <div className="space-y-3">
-          <Label>Hunde auf dieser Tour</Label>
+        <Label>Hunde auf dieser Wanderung</Label>
           <div className="flex flex-wrap gap-4">
             {dogs.map((dog) => (
               <label
@@ -881,7 +881,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       </div>
 
       <div className="space-y-2 p-4 bg-brand-50 border border-brand-100 rounded-xl">
-        <Label htmlFor="visibility" className="text-base font-semibold">Sichtbarkeit der Tour</Label>
+        <Label htmlFor="visibility" className="text-base font-semibold">Sichtbarkeit der Wanderung</Label>
         <Select
           value={formData.visibility}
           onValueChange={(value) => {
@@ -903,13 +903,13 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
           </SelectContent>
         </Select>
         <p className="text-xs text-slate-600 mt-2 bg-white p-2 rounded border border-brand-200">
-          {formData.visibility === "private" && `${TOUR_ICONS.private} Nur du kannst diese Tour sehen – nur die Grundangaben sind Pflicht, weitere Felder bleiben optional.`}
-          {formData.visibility === "friends" && `${TOUR_ICONS.friends} Nur Freunde können diese Tour sehen – für das Teilen müssen alle Pflichtfelder ausgefüllt sein.`}
-          {formData.visibility === "public" && `${TOUR_ICONS.public} Alle Nutzer können diese Tour sehen – für eine öffentliche Tour müssen alle Pflichtfelder ausgefüllt sein.`}
+          {formData.visibility === "private" && `${TOUR_ICONS.private} Nur du kannst diese Wanderung sehen – nur die Grundangaben sind Pflicht, weitere Felder bleiben optional.`}
+          {formData.visibility === "friends" && `${TOUR_ICONS.friends} Nur Freunde können diese Wanderung sehen – für das Teilen müssen alle Pflichtfelder ausgefüllt sein.`}
+          {formData.visibility === "public" && `${TOUR_ICONS.public} Alle Nutzer können diese Wanderung sehen – für eine öffentliche Wanderung müssen alle Pflichtfelder ausgefüllt sein.`}
         </p>
         {hike && hike.visibility === "public" && formData.visibility !== "public" && (
           <p className="text-xs text-brand-400 font-medium mt-2">
-            {TOUR_ICONS.hazard} Achtung: Du änderst die Sichtbarkeit von öffentlich - die Tour wird dann aus der öffentlichen Liste entfernt!
+            {TOUR_ICONS.hazard} Achtung: Du änderst die Sichtbarkeit von öffentlich - die Wanderung wird dann aus der öffentlichen Liste entfernt!
           </p>
         )}
       </div>
@@ -917,9 +917,9 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       <AlertDialog open={showVisibilityConfirm} onOpenChange={setShowVisibilityConfirm}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Öffentliche Tour ändern?</AlertDialogTitle>
+            <AlertDialogTitle>Öffentliche Wanderung ändern?</AlertDialogTitle>
             <AlertDialogDescription>
-              Diese Tour ist aktuell öffentlich. Wenn du sie auf privat oder nur für Freunde änderst,
+              Diese Wanderung ist aktuell öffentlich. Wenn du sie auf privat oder nur für Freunde änderst,
               wird sie aus der öffentlichen Liste entfernt.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -958,7 +958,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               Einen Moment...
             </>
           ) : (
-            submitLabel || (hike ? "Tour aktualisieren" : "Tour hinzufügen")
+            submitLabel || (hike ? "Wanderung aktualisieren" : "Wanderung hinzufügen")
           )}
         </Button>
       </div>

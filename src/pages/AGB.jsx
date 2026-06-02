@@ -73,7 +73,7 @@ export default function AGB() {
             <section className="border-t border-brand-100 pt-6 md:pt-8">
               <h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
             <Image className="w-5 h-5 text-brand-600" />
-                3. Nutzerinhalte (Touren, Fotos, Kommentare)
+                3. Nutzerinhalte (Wanderungen, Fotos, Kommentare)
               </h2>
               <div className="space-y-3 text-sm md:text-base text-slate-600 leading-relaxed">
                 <p>
@@ -202,8 +202,8 @@ export default function AGB() {
                   <li>Wartungsarbeiten können die Verfügbarkeit vorübergehend einschränken.</li>
                   <li>Der Betreiber übernimmt keine Gewähr dafür, dass alle Daten dauerhaft verfügbar bleiben. Sichere wichtige GPX-Daten zusätzlich lokal.</li>
                   <li>
-                    Toureninformationen dienen nur zur Orientierung. Eine Haftung für leichte Fahrlässigkeit bei
-                    unzutreffenden oder veralteten Tourangaben wird - soweit gesetzlich zulässig - ausgeschlossen.
+                    Wanderungsinformationen dienen nur zur Orientierung. Eine Haftung für leichte Fahrlässigkeit bei
+                    unzutreffenden oder veralteten Wanderungsangaben wird - soweit gesetzlich zulässig - ausgeschlossen.
             Details: <Link to={createPageUrl("Legal")} className="text-brand-600 underline">Rechtliche Hinweise</Link>.
                   </li>
                 </ul>
