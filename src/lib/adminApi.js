@@ -3,8 +3,56 @@ import { publishPendingCommentPhoto } from "./communityApi";
 import { hydrateJournalEntriesMedia, validatePublicJournalEntry } from "./journalApi";
 import { resolvePublicHikePhotoReferences } from "./publicHikesApi";
 
+const ADMIN_COMMENTS_LIMIT = 250;
+const PENDING_ENTRY_FIELDS = [
+  "id",
+  "user_id",
+  "status",
+  "created_at",
+  "title",
+  "location",
+  "distance_km",
+  "elevation_m",
+  "photos",
+  "description",
+  "hazard_notes",
+].join(", ");
+const APPROVE_ENTRY_FIELDS = [
+  "id",
+  "title",
+  "location",
+  "latitude",
+  "longitude",
+  "distance_km",
+  "elevation_m",
+  "duration_minutes",
+  "difficulty",
+  "dog_difficulty",
+  "water_available",
+  "description",
+  "photos",
+  "seasons",
+].join(", ");
+const ADMIN_COMMENT_FIELDS = [
+  "id",
+  "user_id",
+  "hike_id",
+  "hike_source",
+  "text",
+  "photo_url",
+  "reported",
+  "reported_reason",
+  "created_at",
+].join(", ");
+
 function normalizeHikeSource(value) {
   return value ?? "sheets";
+}
+
+async function assertAdmin() {
+  const { data, error } = await supabase.rpc("is_admin");
+  if (error) throw error;
+  if (!data) throw new Error("not_allowed");
 }
 
 function getStorageDescriptor(photoReference) {
@@ -53,9 +101,11 @@ function getStorageDescriptor(photoReference) {
 }
 
 export async function getPendingEntries() {
+  await assertAdmin();
+
   const { data, error } = await supabase
     .from("journal_entries")
-    .select("*")
+    .select(PENDING_ENTRY_FIELDS)
     .eq("status", "pending")
     .order("created_at", { ascending: true });
   if (error) throw error;
@@ -78,6 +128,8 @@ export async function getPendingEntries() {
 }
 
 export async function getAdminPublicHikes() {
+  await assertAdmin();
+
   const { data, error } = await supabase
     .from("public_hikes")
     .select("id, title, location, country, status, is_premium, updated_at, created_at, image")
@@ -104,9 +156,11 @@ export async function getAdminPublicHikes() {
 }
 
 export async function approveEntry(id) {
+  await assertAdmin();
+
   const { data: entry, error: fetchError } = await supabase
     .from("journal_entries")
-    .select("*")
+    .select(APPROVE_ENTRY_FIELDS)
     .eq("id", id)
     .single();
   if (fetchError) throw fetchError;
@@ -120,6 +174,8 @@ export async function approveEntry(id) {
 }
 
 export async function rejectEntry(id, reason) {
+  await assertAdmin();
+
   const { error } = await supabase.rpc("admin_reject_journal_entry", {
     target_entry_id: id,
     target_reason: reason ?? null,
@@ -128,10 +184,13 @@ export async function rejectEntry(id, reason) {
 }
 
 export async function getAllComments() {
+  await assertAdmin();
+
   const { data, error } = await supabase
     .from("comments")
-    .select("*")
-    .order("created_at", { ascending: false });
+    .select(ADMIN_COMMENT_FIELDS)
+    .order("created_at", { ascending: false })
+    .limit(ADMIN_COMMENTS_LIMIT);
   if (error) throw error;
   if (!data?.length) return [];
 
@@ -195,6 +254,9 @@ export async function getAllComments() {
         return {
           ...comment,
           photo_preview_url: signedUrlData?.signedUrl ?? null,
+          photo_preview_expires_at: signedUrlData?.signedUrl
+            ? new Date(Date.now() + 60 * 60 * 1000).toISOString()
+            : null,
           hike_title: hikeTitleMap[`${commentSource}:${comment.hike_id}`] ?? null,
           profiles: profileMap[comment.user_id] ?? null,
         };
@@ -212,6 +274,9 @@ export async function getAllComments() {
         return {
           ...comment,
           photo_preview_url: signedUrlData?.signedUrl ?? null,
+          photo_preview_expires_at: signedUrlData?.signedUrl
+            ? new Date(Date.now() + 60 * 60 * 1000).toISOString()
+            : null,
           hike_title: hikeTitleMap[`${commentSource}:${comment.hike_id}`] ?? null,
           profiles: profileMap[comment.user_id] ?? null,
         };
@@ -220,6 +285,7 @@ export async function getAllComments() {
       return {
         ...comment,
         photo_preview_url: comment.photo_url ?? null,
+        photo_preview_expires_at: null,
         hike_title: hikeTitleMap[`${commentSource}:${comment.hike_id}`] ?? null,
         profiles: profileMap[comment.user_id] ?? null,
       };
@@ -230,6 +296,8 @@ export async function getAllComments() {
 }
 
 export async function getAdminUsers() {
+  await assertAdmin();
+
   const { data, error } = await supabase
     .from("profiles")
     .select("user_id, username, full_name, avatar_url, role, is_premium, created_at")
@@ -240,6 +308,8 @@ export async function getAdminUsers() {
 }
 
 export async function approveComment(id) {
+  await assertAdmin();
+
   const { data: existingComment, error: fetchError } = await supabase
     .from("comments")
     .select("photo_url")
@@ -261,6 +331,8 @@ export async function approveComment(id) {
 }
 
 export async function adminDeleteComment(id) {
+  await assertAdmin();
+
   const { data: existingComment, error: fetchError } = await supabase
     .from("comments")
     .select("photo_url")
@@ -283,6 +355,8 @@ export async function adminDeleteComment(id) {
 }
 
 export async function adminDeleteUserAccount(userId) {
+  await assertAdmin();
+
   const { error } = await supabase.rpc("admin_delete_user_account", {
     target_user_id: userId,
   });

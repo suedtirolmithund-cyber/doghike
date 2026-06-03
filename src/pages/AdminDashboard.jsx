@@ -372,13 +372,20 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
       <p className="mt-3 whitespace-pre-wrap text-sm text-slate-700">{comment.text}</p>
 
       {comment.photo_preview_url && (
-        <a href={comment.photo_preview_url} target="_blank" rel="noopener noreferrer">
-          <img
-            src={comment.photo_preview_url}
-            alt=""
-            className="mt-2 h-32 rounded-lg object-cover hover:opacity-90"
-          />
-        </a>
+        <div className="mt-2">
+          <a href={comment.photo_preview_url} target="_blank" rel="noopener noreferrer">
+            <img
+              src={comment.photo_preview_url}
+              alt=""
+              className="h-32 rounded-lg object-cover hover:opacity-90"
+            />
+          </a>
+          {comment.photo_preview_expires_at && (
+            <p className="mt-1 text-xs text-slate-400">
+              Fotolink läuft nach ca. 1 Stunde ab. Lade die Kommentare neu, wenn das Bild nicht mehr erscheint.
+            </p>
+          )}
+        </div>
       )}
 
       <div className="mt-3 flex justify-end">
@@ -529,7 +536,7 @@ function UserCard({ profile, deleting, onDelete, currentUserId }) {
             <AlertDialogHeader>
               <AlertDialogTitle>Nutzerkonto wirklich löschen?</AlertDialogTitle>
               <AlertDialogDescription>
-                Dabei werden Profil, Hunde, Kommentare, Bewertungen, Fotos und weitere Nutzerdaten endgültig entfernt.
+                Dabei werden Profil, Hunde, Tagebuch-/Journal-Einträge, öffentliche Touren, Kommentare, Bewertungen, Fotos und weitere Nutzerdaten endgültig entfernt.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -881,7 +888,7 @@ export default function AdminDashboard() {
                     </div>
                     <div>
                       <p className="text-2xl font-bold leading-none text-slate-900">{comments.length}</p>
-                      <p className="text-xs text-slate-500">Kommentare gesamt</p>
+                      <p className="text-xs text-slate-500">Neueste Kommentare</p>
                     </div>
                   </div>
                   <div className="border-l border-brand-100 pl-4">
@@ -909,6 +916,9 @@ export default function AdminDashboard() {
                     Nur Freigaben
                   </FilterButton>
                 </div>
+                <p className="mt-2 text-xs text-slate-400">
+                  Aus Datenschutz- und Performancegründen werden maximal die neuesten 250 Kommentare geladen.
+                </p>
               </div>
             </div>
 

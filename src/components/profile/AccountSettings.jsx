@@ -382,7 +382,7 @@ export default function AccountSettings({ user, profile }) {
                   </p>
                   <ul className="list-disc pl-5 space-y-1">
                     <li>Profil & E-Mail-Adresse</li>
-                    <li>Alle Wanderungen & Fotos</li>
+                    <li>Alle Wanderungen, Tagebuch-/Journal-Einträge & Fotos</li>
                     <li>Hundeprofil</li>
                     <li>Kommentare & Bewertungen</li>
                     <li>Freundschaften</li>
