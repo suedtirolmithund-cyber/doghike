@@ -954,6 +954,12 @@ create table if not exists public.support_requests (
 
 alter table public.support_requests enable row level security;
 
+create policy "Eigene Support-Anfragen lesen" on public.support_requests
+  for select using (auth.uid() = user_id);
+
+create policy "Admin Support-Anfragen verwalten" on public.support_requests
+  for all using (public.is_admin()) with check (public.is_admin());
+
 -- PUBLIC HIKES
 create table if not exists public.public_hikes (
   id uuid default gen_random_uuid() primary key,
