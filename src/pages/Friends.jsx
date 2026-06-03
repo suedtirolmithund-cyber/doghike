@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { SectionLoadingState } from "@/components/ui/AppState";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { showFriendFeedback, showSavedFeedback, showSentFeedback } from "@/lib/feedbackToast";
@@ -552,9 +553,10 @@ export default function Friends() {
             )}
 
             {searchResults.length === 0 && searchQuery && !searching && (
-              <p className="mt-2 text-center text-xs text-slate-400">
-                Keine Nutzer gefunden für „{searchQuery}“
-              </p>
+              <div className="mt-3 flex items-center justify-center gap-2 rounded-xl border border-brand-100 bg-brand-50/70 px-3 py-2 text-center text-xs text-[#C07820]">
+                <Search className="h-3.5 w-3.5 shrink-0" />
+                <span>Keine Nutzer gefunden für „{searchQuery}“</span>
+              </div>
             )}
           </AnimatePresence>
         </motion.div>
@@ -597,9 +599,7 @@ export default function Friends() {
 
           <TabsContent value="friends">
             {isLoading ? (
-              <div className="flex justify-center py-16">
-                <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
-              </div>
+              <SectionLoadingState message="Freunde laden..." className="py-16" />
             ) : accepted.length > 0 ? (
               <div className="space-y-2">
                 {accepted.map((friendship) => {
@@ -761,9 +761,7 @@ export default function Friends() {
 
           <TabsContent value="feed">
             {feedLoading ? (
-              <div className="flex justify-center py-16">
-                <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
-              </div>
+              <SectionLoadingState message="Wanderungen laden..." className="py-16" />
             ) : friendIds.length === 0 ? (
               <div className="doghike-empty-state">
                 <Users className="doghike-empty-icon" />
