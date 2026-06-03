@@ -107,12 +107,11 @@ export default function Login() {
   const error = localError || authError;
 
   useEffect(() => {
-    const hash = window.location.hash || "";
-    const search = window.location.search || "";
+    const searchParams = new URLSearchParams(window.location.search || "");
+    const hashParams = new URLSearchParams((window.location.hash || "").replace(/^#/, ""));
     const recoveryDetected =
-      hash.includes("type=recovery") ||
-      search.includes("type=recovery") ||
-      (hash.includes("access_token=") && hash.includes("refresh_token="));
+      searchParams.get("type") === "recovery" ||
+      hashParams.get("type") === "recovery";
 
     if (recoveryDetected) {
       setMode("update-password");
