@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { clearDogNudgeSession } from "@/lib/dogNudgeSession";
 import { supabase } from "@/lib/supabaseClient";
 import { createPageUrl } from "@/utils";
@@ -47,6 +47,7 @@ export const AuthProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [authError, setAuthError] = useState(null);
+  const hydrationRunRef = useRef(0);
 
   const applySessionState = (session) => {
     setUser(session?.user ?? null);
@@ -105,47 +106,47 @@ export const AuthProvider = ({ children }) => {
 
   const fetchRole = async (userId) => {
     if (!userId) {
-      setIsAdmin(false);
-      return;
+      return false;
     }
 
     try {
       const { data: rpcData, error: rpcError } = await supabase.rpc("is_admin");
       if (rpcError) {
         console.error("[fetchRole] is_admin fallback error:", rpcError.message);
-        setIsAdmin(false);
-        return;
+        return false;
       }
 
-      setIsAdmin(Boolean(rpcData));
+      return Boolean(rpcData);
     } catch (error) {
       console.error("[fetchRole] exception:", error);
-      setIsAdmin(false);
+      return false;
     }
   };
 
   useEffect(() => {
-    const hydrateSessionData = async (session) => {
+    const hydrateSessionData = async (session, runId) => {
       if (session?.user) {
         await ensureProfile(session.user);
-        await fetchRole(session.user.id);
+        const nextIsAdmin = await fetchRole(session.user.id);
+
+        if (hydrationRunRef.current !== runId) return;
+        setIsAdmin(nextIsAdmin);
       } else {
+        if (hydrationRunRef.current !== runId) return;
         setIsAdmin(false);
       }
     };
 
     supabase.auth.getSession().then(async ({ data: { session } }) => {
+      const runId = ++hydrationRunRef.current;
       applySessionState(session);
-      await hydrateSessionData(session);
+      await hydrateSessionData(session, runId);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      const runId = ++hydrationRunRef.current;
       applySessionState(session);
-
-      // Keep the auth event itself light so login/logout can complete immediately.
-      window.setTimeout(() => {
-        void hydrateSessionData(session);
-      }, 0);
+      void hydrateSessionData(session, runId);
     });
 
     return () => subscription.unsubscribe();
