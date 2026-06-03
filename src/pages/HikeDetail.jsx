@@ -520,7 +520,7 @@ export default function HikeDetail() {
       queryClient.invalidateQueries({ queryKey: ["journalEntry"] });
       queryClient.invalidateQueries({ queryKey: ["savedHikes", currentUser?.id] });
       queryClient.invalidateQueries({ queryKey: ["notifications", currentUser?.id] });
-      navigate(createPageUrl("Hikes"));
+      navigate(createPageUrl("Journal"));
     },
     onError: () => {
       toast.error("Die Wanderung konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal.");
