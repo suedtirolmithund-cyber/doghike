@@ -735,7 +735,7 @@ function getJournalEntryDogIds(entry) {
 }
 
 const APPROVED_JOURNAL_HIKE_LIMIT = 250;
-const APPROVED_JOURNAL_ENTRY_FIELDS = [
+const APPROVED_JOURNAL_ENTRY_FIELD_LIST = [
   "id",
   "user_id",
   "title",
@@ -760,7 +760,20 @@ const APPROVED_JOURNAL_ENTRY_FIELDS = [
   "dog_id",
   "dog_ids",
   "tags",
-].join(", ");
+];
+const APPROVED_JOURNAL_ENTRY_FIELDS = APPROVED_JOURNAL_ENTRY_FIELD_LIST.join(", ");
+
+function isMissingApprovedJournalOptionalFieldError(error) {
+  const message = String(error?.message ?? "");
+  return ["dog_ids", "tags", "seasons"].some(
+    (field) => message.includes(field) && message.includes("column")
+  );
+}
+
+function stripMissingApprovedJournalOptionalFields(fields, error) {
+  const message = String(error?.message ?? "");
+  return fields.filter((field) => !(message.includes(field) && message.includes("column")));
+}
 
 /**
  * Fetches approved journal entries from Supabase.
@@ -772,14 +785,25 @@ async function getApprovedJournalEntries() {
     const { hydrateJournalEntriesMedia } = await import("@/lib/journalApi");
 
     // 1. Fetch approved public entries
-    const { data: entries, error } = await supabase
-      .from("journal_entries")
-      .select(APPROVED_JOURNAL_ENTRY_FIELDS)
-      .eq("status", "approved")
-      .eq("visibility", "public")
-      .order("date", { ascending: false, nullsFirst: false })
-      .order("created_at", { ascending: false })
-      .limit(APPROVED_JOURNAL_HIKE_LIMIT);
+    const runApprovedJournalQuery = (fieldList) =>
+      supabase
+        .from("journal_entries")
+        .select(fieldList.join(", "))
+        .eq("status", "approved")
+        .eq("visibility", "public")
+        .order("date", { ascending: false, nullsFirst: false })
+        .order("created_at", { ascending: false })
+        .limit(APPROVED_JOURNAL_HIKE_LIMIT);
+
+    let { data: entries, error } = await runApprovedJournalQuery(APPROVED_JOURNAL_ENTRY_FIELD_LIST);
+
+    if (error && isMissingApprovedJournalOptionalFieldError(error)) {
+      const fallbackFields = stripMissingApprovedJournalOptionalFields(
+        APPROVED_JOURNAL_ENTRY_FIELD_LIST,
+        error
+      );
+      ({ data: entries, error } = await runApprovedJournalQuery(fallbackFields));
+    }
 
     if (error) {
       console.error("[sheetsClient] Supabase journal fetch error:", error.message);
