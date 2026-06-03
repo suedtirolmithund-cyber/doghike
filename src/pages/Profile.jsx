@@ -56,6 +56,7 @@ import { loadUnreadNotificationCount, subscribeToNotificationStorage } from "@/l
 import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
 import { getAllHikes } from "@/api/sheetsClient";
 import { getUserRoutes } from "@/lib/routesApi";
+import { getDogJournalUsageCounts } from "@/lib/journalApi";
 import DogForm from "@/components/forms/DogForm";
 import HikeCard from "@/components/hikes/HikeCard";
 import AccountSettings from "@/components/profile/AccountSettings";
@@ -166,6 +167,15 @@ export default function Profile() {
     queryKey: ["userRoutes", user?.id],
     queryFn: () => getUserRoutes(user.id),
     enabled: !!user?.id,
+    staleTime: 5 * 60_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
+
+  const { data: dogJournalUsage = {} } = useQuery({
+    queryKey: ["dogJournalUsage", user?.id],
+    queryFn: () => getDogJournalUsageCounts(user.id),
+    enabled: !!user?.id && dogs.length > 0,
     staleTime: 5 * 60_000,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -696,7 +706,11 @@ export default function Profile() {
             ) : dogs.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <AnimatePresence>
-                  {dogs.map((dog, index) => (
+                  {dogs.map((dog, index) => {
+                    const linkedHikeCount = dogJournalUsage[String(dog.id)] ?? 0;
+                    const hasLinkedHikes = linkedHikeCount > 0;
+
+                    return (
                     <motion.div
                       key={dog.id}
                       initial={{ opacity: 0, y: 20 }}
@@ -736,14 +750,30 @@ export default function Profile() {
                             <AlertDialogContent>
                               <AlertDialogHeader>
                                 <AlertDialogTitle>{dog.name} entfernen?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  Dies entfernt {dog.name} dauerhaft aus deiner Hundeliste.
+                                <AlertDialogDescription asChild>
+                                  {hasLinkedHikes ? (
+                                    <div className="space-y-2 text-sm text-slate-600">
+                                      <p>
+                                        <strong>{dog.name}</strong> ist noch in{" "}
+                                        <strong>
+                                          {linkedHikeCount} Wandereintrag{linkedHikeCount === 1 ? "" : "en"}
+                                        </strong>{" "}
+                                        verknüpft.
+                                      </p>
+                                      <p>
+                                        Wenn du den Hund jetzt entfernst, bleiben die Wanderungen zwar bestehen,
+                                        können den Hund dort aber nicht mehr vollständig zuordnen.
+                                      </p>
+                                    </div>
+                                  ) : (
+                                    <p>Dies entfernt {dog.name} dauerhaft aus deiner Hundeliste.</p>
+                                  )}
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel>Abbrechen</AlertDialogCancel>
                                 <AlertDialogAction onClick={() => deleteDogMutation.mutate(dog.id)} className="bg-brand-400 hover:bg-brand-500">
-                                  Entfernen
+                                  {hasLinkedHikes ? "Trotzdem entfernen" : "Entfernen"}
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>
@@ -782,7 +812,8 @@ export default function Profile() {
                         )}
                       </div>
                     </motion.div>
-                  ))}
+                    );
+                  })}
                 </AnimatePresence>
               </div>
             ) : (

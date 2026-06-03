@@ -261,6 +261,39 @@ export async function getJournalEntriesForDisplay(userId, options) {
   return hydrateJournalEntriesMedia(data ?? []);
 }
 
+export async function getDogJournalUsageCounts(userId) {
+  let { data, error } = await supabase
+    .from("journal_entries")
+    .select("id, dog_id, dog_ids")
+    .eq("user_id", userId);
+
+  if (error && isMissingOptionalJournalColumnError(error)) {
+    ({ data, error } = await supabase
+      .from("journal_entries")
+      .select("id, dog_id")
+      .eq("user_id", userId));
+  }
+
+  if (error) throw error;
+
+  return (data ?? []).reduce((counts, entry) => {
+    const linkedDogIds = new Set(
+      [
+        entry?.dog_id,
+        ...(Array.isArray(entry?.dog_ids) ? entry.dog_ids : []),
+      ]
+        .filter(Boolean)
+        .map(String)
+    );
+
+    linkedDogIds.forEach((dogId) => {
+      counts[dogId] = (counts[dogId] ?? 0) + 1;
+    });
+
+    return counts;
+  }, {});
+}
+
 export async function getJournalEntry(id) {
   const { data, error } = await supabase
     .from("journal_entries")
