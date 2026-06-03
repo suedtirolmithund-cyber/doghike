@@ -583,8 +583,11 @@ function UserCard({ profile, deleting, onDelete, currentUserId }) {
 export default function AdminDashboard() {
   const { user, isAuthenticated, isLoadingAuth } = useAuth();
   const queryClient = useQueryClient();
-  const [processingId, setProcessingId] = useState(null);
-  const [processingType, setProcessingType] = useState(null);
+  const [approvingEntryId, setApprovingEntryId] = useState(null);
+  const [rejectingEntryId, setRejectingEntryId] = useState(null);
+  const [approvingCommentId, setApprovingCommentId] = useState(null);
+  const [deletingCommentId, setDeletingCommentId] = useState(null);
+  const [deletingUserId, setDeletingUserId] = useState(null);
   const [commentSearch, setCommentSearch] = useState("");
   const [commentFilter, setCommentFilter] = useState("all");
   const [publicHikeSearch, setPublicHikeSearch] = useState("");
@@ -698,8 +701,7 @@ export default function AdminDashboard() {
   const approveMutation = useMutation({
     mutationFn: (id) => approveEntry(id),
     onMutate: (id) => {
-      setProcessingId(id);
-      setProcessingType("approve");
+      setApprovingEntryId(id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin_pending"] });
@@ -711,16 +713,14 @@ export default function AdminDashboard() {
     },
     onError: (error) => toast.error(getApproveEntryErrorMessage(error)),
     onSettled: () => {
-      setProcessingId(null);
-      setProcessingType(null);
+      setApprovingEntryId(null);
     },
   });
 
   const rejectMutation = useMutation({
     mutationFn: ({ id, reason }) => rejectEntry(id, reason),
     onMutate: ({ id }) => {
-      setProcessingId(id);
-      setProcessingType("reject");
+      setRejectingEntryId(id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin_pending"] });
@@ -733,16 +733,14 @@ export default function AdminDashboard() {
     onError: () =>
       toast.error("Der Eintrag konnte gerade nicht abgelehnt werden. Bitte versuche es noch einmal."),
     onSettled: () => {
-      setProcessingId(null);
-      setProcessingType(null);
+      setRejectingEntryId(null);
     },
   });
 
   const approveCommentMutation = useMutation({
     mutationFn: (id) => approveComment(id),
     onMutate: (id) => {
-      setProcessingId(id);
-      setProcessingType("approveComment");
+      setApprovingCommentId(id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin_comments"] });
@@ -752,16 +750,14 @@ export default function AdminDashboard() {
     onError: () =>
       toast.error("Der Kommentar konnte gerade nicht freigegeben werden. Bitte versuche es noch einmal."),
     onSettled: () => {
-      setProcessingId(null);
-      setProcessingType(null);
+      setApprovingCommentId(null);
     },
   });
 
   const deleteCommentMutation = useMutation({
     mutationFn: (id) => adminDeleteComment(id),
     onMutate: (id) => {
-      setProcessingId(id);
-      setProcessingType("deleteComment");
+      setDeletingCommentId(id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin_comments"] });
@@ -771,16 +767,14 @@ export default function AdminDashboard() {
     onError: () =>
       toast.error("Der Kommentar konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal."),
     onSettled: () => {
-      setProcessingId(null);
-      setProcessingType(null);
+      setDeletingCommentId(null);
     },
   });
 
   const deleteUserMutation = useMutation({
     mutationFn: (userId) => adminDeleteUserAccount(userId),
     onMutate: (userId) => {
-      setProcessingId(userId);
-      setProcessingType("deleteUser");
+      setDeletingUserId(userId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin_users"] });
@@ -789,8 +783,7 @@ export default function AdminDashboard() {
     onError: () =>
       toast.error("Das Nutzerkonto konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal."),
     onSettled: () => {
-      setProcessingId(null);
-      setProcessingType(null);
+      setDeletingUserId(null);
     },
   });
 
@@ -906,8 +899,8 @@ export default function AdminDashboard() {
                       entry={entry}
                       onApprove={(id) => approveMutation.mutate(id)}
                       onReject={(id, reason) => rejectMutation.mutate({ id, reason })}
-                      approving={processingId === entry.id && processingType === "approve"}
-                      rejecting={processingId === entry.id && processingType === "reject"}
+                      approving={approvingEntryId === entry.id}
+                      rejecting={rejectingEntryId === entry.id}
                     />
                   ))}
                 </AnimatePresence>
@@ -976,8 +969,8 @@ export default function AdminDashboard() {
                       comment={comment}
                       onApprove={(id) => approveCommentMutation.mutate(id)}
                       onDelete={(id) => deleteCommentMutation.mutate(id)}
-                      approving={processingId === comment.id && processingType === "approveComment"}
-                      deleting={processingId === comment.id && processingType === "deleteComment"}
+                      approving={approvingCommentId === comment.id}
+                      deleting={deletingCommentId === comment.id}
                     />
                   ))}
                 </AnimatePresence>
@@ -1138,7 +1131,7 @@ export default function AdminDashboard() {
                     <UserCard
                       key={profile.user_id}
                       profile={profile}
-                      deleting={processingId === profile.user_id && processingType === "deleteUser"}
+                      deleting={deletingUserId === profile.user_id}
                       onDelete={(userId) => deleteUserMutation.mutate(userId)}
                       currentUserId={user?.id}
                     />
