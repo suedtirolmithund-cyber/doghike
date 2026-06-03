@@ -2,7 +2,7 @@ import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { CircleHelp, List, Mountain, PawPrint, RotateCcw, Search, LayoutGrid } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -402,17 +402,51 @@ export default function Hikes() {
               <div>
                 <label className="doghike-filter-label">{TOUR_ICONS.distance} Distanz (km)</label>
                 <div className="flex gap-2">
-                  <Input type="number" placeholder="Min" value={distanceMin} onChange={(e) => setDistanceMin(e.target.value)} />
-                  <Input type="number" placeholder="Max" value={distanceMax} onChange={(e) => setDistanceMax(e.target.value)} />
+                  <Input
+                    type="number"
+                    placeholder="Min"
+                    value={distanceMin}
+                    onChange={(e) => setDistanceMin(e.target.value)}
+                    aria-invalid={Boolean(distanceRangeError)}
+                    className={distanceRangeError ? "border-[#A8003C] bg-[#FFF3F7]" : undefined}
+                  />
+                  <Input
+                    type="number"
+                    placeholder="Max"
+                    value={distanceMax}
+                    onChange={(e) => setDistanceMax(e.target.value)}
+                    aria-invalid={Boolean(distanceRangeError)}
+                    className={distanceRangeError ? "border-[#A8003C] bg-[#FFF3F7]" : undefined}
+                  />
                 </div>
+                {distanceRangeError && (
+                  <p className="mt-1.5 text-xs font-semibold leading-snug text-[#A8003C]">{distanceRangeError}</p>
+                )}
               </div>
 
               <div>
                 <label className="doghike-filter-label">{TOUR_ICONS.elevation} Höhenmeter (m)</label>
                 <div className="flex gap-2">
-                  <Input type="number" placeholder="Min" value={elevationMin} onChange={(e) => setElevationMin(e.target.value)} />
-                  <Input type="number" placeholder="Max" value={elevationMax} onChange={(e) => setElevationMax(e.target.value)} />
+                  <Input
+                    type="number"
+                    placeholder="Min"
+                    value={elevationMin}
+                    onChange={(e) => setElevationMin(e.target.value)}
+                    aria-invalid={Boolean(elevationRangeError)}
+                    className={elevationRangeError ? "border-[#A8003C] bg-[#FFF3F7]" : undefined}
+                  />
+                  <Input
+                    type="number"
+                    placeholder="Max"
+                    value={elevationMax}
+                    onChange={(e) => setElevationMax(e.target.value)}
+                    aria-invalid={Boolean(elevationRangeError)}
+                    className={elevationRangeError ? "border-[#A8003C] bg-[#FFF3F7]" : undefined}
+                  />
                 </div>
+                {elevationRangeError && (
+                  <p className="mt-1.5 text-xs font-semibold leading-snug text-[#A8003C]">{elevationRangeError}</p>
+                )}
               </div>
 
               <div className="sm:col-span-2 lg:col-span-1">
@@ -445,7 +479,12 @@ export default function Hikes() {
                   <RotateCcw className="mr-2 h-4 w-4" />
                   Zurücksetzen
                 </Button>
-                <Button type="button" onClick={handleApplyFilters} className="bg-brand-500 text-white hover:bg-brand-600">
+                <Button
+                  type="button"
+                  onClick={handleApplyFilters}
+                  disabled={Boolean(filterRangeError)}
+                  className="bg-brand-500 text-white hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
+                >
                   Filter anwenden
                 </Button>
               </div>

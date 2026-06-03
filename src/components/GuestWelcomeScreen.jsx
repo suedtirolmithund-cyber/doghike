@@ -14,6 +14,18 @@ const ONBOARDING_IMAGE_MOBILE = "/onboarding/A739105-mobile.webp";
 function mapAuthError(message) {
   const msg = String(message || "").toLowerCase();
   if (msg.includes("invalid login credentials")) return "E-Mail oder Passwort stimmen nicht.";
+  if (msg.includes("account_not_found") || msg.includes("account not found") || msg.includes("user not found")) {
+    return "Für diese E-Mail gibt es noch kein Konto.";
+  }
+  if (
+    msg.includes("expired_token") ||
+    msg.includes("token has expired") ||
+    msg.includes("token expired") ||
+    msg.includes("otp expired") ||
+    msg.includes("invalid or expired")
+  ) {
+    return "Der Link ist abgelaufen. Fordere bitte einen neuen Link an.";
+  }
   if (msg.includes("email not confirmed")) return "Bitte bestätige zuerst deine E-Mail-Adresse.";
   if (msg.includes("user already registered")) return "Für diese E-Mail gibt es schon ein Konto.";
   if (msg.includes("password should be at least")) return "Das Passwort ist zu kurz.";
