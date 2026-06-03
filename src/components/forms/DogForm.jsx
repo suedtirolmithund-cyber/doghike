@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { uploadFile, deleteStoredFile } from "@/lib/profilesApi";
-import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
+import { getImageUploadErrorMessage, validateImageUpload } from "@/lib/uploadValidation";
 import { useAuth } from "@/lib/AuthContext";
 import { Dog, Upload, Loader2, Move } from "lucide-react";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
@@ -35,11 +35,18 @@ export default function DogForm({ dog, onSave, onCancel }) {
   const handlePhotoUpload = async (event) => {
     const file = event.target.files[0];
     if (!file || !user) return;
-    const objectUrl = URL.createObjectURL(file);
     setUploadError(null);
-    setEditorSourceUrl(objectUrl);
-    setEditorSourceName(file.name || "hund.jpg");
-    setEditorOpen(true);
+
+    try {
+      validateImageUpload(file);
+      const objectUrl = URL.createObjectURL(file);
+      setEditorSourceUrl(objectUrl);
+      setEditorSourceName(file.name || "hund.jpg");
+      setEditorOpen(true);
+    } catch (error) {
+      setUploadError(getImageUploadErrorMessage(error));
+    }
+
     event.target.value = "";
   };
 
