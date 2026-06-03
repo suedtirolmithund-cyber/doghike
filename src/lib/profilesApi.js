@@ -90,7 +90,7 @@ export async function uploadFile(bucket, userId, file) {
 export async function getProfile(userId) {
   const { data, error } = await supabase
     .from("profiles")
-    .select("*")
+    .select("user_id, full_name, username, avatar_url")
     .eq("user_id", userId)
     .single();
   // PGRST116 = row not found – kein Fehler, Profil noch nicht angelegt
