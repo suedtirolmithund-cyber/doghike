@@ -231,6 +231,23 @@ export default function Profile() {
     );
   }, [topDogs]);
 
+  const hikesBySourceAndId = useMemo(() => {
+    const lookup = new Map();
+
+    allHikes.forEach((hike) => {
+      const hikeSource = normalizeHikeSource(hike?._source);
+      const candidateIds = [hike?.id, hike?._public_hike_id, hike?.route_id]
+        .filter(Boolean)
+        .map((value) => String(value));
+
+      candidateIds.forEach((candidateId) => {
+        lookup.set(`${hikeSource}:${candidateId}`, hike);
+      });
+    });
+
+    return lookup;
+  }, [allHikes]);
+
   const savedHikeObjects = useMemo(
     () =>
       savedHikes
@@ -238,19 +255,10 @@ export default function Profile() {
           const savedSource = normalizeHikeSource(saved.hike_source);
           const savedId = String(saved.hike_id);
 
-          return allHikes.find((hike) => {
-            const hikeSource = normalizeHikeSource(hike._source);
-            if (hikeSource !== savedSource) return false;
-
-            const candidateIds = [hike.id, hike._public_hike_id, hike.route_id]
-              .filter(Boolean)
-              .map((value) => String(value));
-
-            return candidateIds.includes(savedId);
-          });
+          return hikesBySourceAndId.get(`${savedSource}:${savedId}`);
         })
         .filter(Boolean),
-    [allHikes, savedHikes],
+    [hikesBySourceAndId, savedHikes],
   );
   const isSavedHikesResolving =
     savedLoading ||
