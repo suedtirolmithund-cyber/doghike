@@ -93,11 +93,16 @@ export default function Premium() {
   const currentPeriodEnd = premiumEndDate
     ? new Intl.DateTimeFormat("de-DE", { dateStyle: "medium" }).format(premiumEndDate)
     : null;
-  const checkoutPending = checkoutStatus === "success" && !isPremium;
-  const checkoutLocked = checkoutPending;
+  const checkoutSucceeded = checkoutStatus === "success";
+  const checkoutPending = checkoutSucceeded && !isPremium;
+  const checkoutLocked = checkoutSucceeded;
 
   useEffect(() => {
-    if (!user?.id || checkoutStatus !== "success" || isPremium) return;
+    if (!checkoutSucceeded || isPremium) {
+      setCheckoutWaitTimedOut(false);
+      return;
+    }
+    if (!user?.id) return;
 
     setCheckoutWaitTimedOut(false);
     toast.success("Zahlung abgeschlossen. Dein Premium-Status wird aktualisiert.");
@@ -115,7 +120,7 @@ export default function Premium() {
       window.clearInterval(intervalId);
       window.clearTimeout(timeoutId);
     };
-  }, [checkoutStatus, isPremium, queryClient, user?.id]);
+  }, [checkoutSucceeded, isPremium, queryClient, user?.id]);
 
   useEffect(() => {
     if (checkoutStatus === "cancelled") {
@@ -265,15 +270,26 @@ export default function Premium() {
               </p>
             </div>
 
-            {checkoutPending && (
-              <div className="mb-6 rounded-2xl border border-brand-100 bg-brand-50 p-4 text-sm text-brand-800">
-                {checkoutWaitTimedOut
-                  ? "Deine Zahlung ist angekommen, aber Premium wurde noch nicht automatisch aktiviert. Bitte starte keine zweite Zahlung und melde dich beim Support."
-                  : "Deine Zahlung war erfolgreich. Wir aktualisieren deinen Premium-Status gerade automatisch."}
+            {checkoutPending ? (
+              <div className="mb-6 rounded-2xl border border-brand-100 bg-white/85 p-6 text-center shadow-sm">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-brand-50 text-brand-500">
+                  {checkoutWaitTimedOut ? (
+                    <ShieldCheck className="h-6 w-6" />
+                  ) : (
+                    <Loader2 className="h-6 w-6 animate-spin" />
+                  )}
+                </div>
+                <h2 className="mb-2 text-xl font-bold text-slate-900">
+                  {checkoutWaitTimedOut ? "Zahlung wird geprüft" : "Premium wird aktiviert"}
+                </h2>
+                <p className="mx-auto max-w-md text-sm leading-6 text-slate-500">
+                  {checkoutWaitTimedOut
+                    ? "Deine Zahlung ist angekommen, aber Premium wurde noch nicht automatisch aktiviert. Bitte starte keine zweite Zahlung und melde dich beim Support."
+                    : "Deine Zahlung war erfolgreich. Wir aktualisieren deinen Premium-Status gerade automatisch. Das dauert meist nur einen Moment."}
+                </p>
               </div>
-            )}
-
-            <div className="mb-6 overflow-hidden rounded-2xl border border-brand-100/70 bg-gradient-to-br from-[#501F14] via-[#A8003C] to-[#F9C030] p-8 text-white shadow-[0_20px_46px_rgba(168,0,60,0.16)]">
+            ) : (
+              <div className="mb-6 overflow-hidden rounded-2xl border border-brand-100/70 bg-gradient-to-br from-[#501F14] via-[#A8003C] to-[#F9C030] p-8 text-white shadow-[0_20px_46px_rgba(168,0,60,0.16)]">
               <div className="mb-8 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-2xl border border-white/22 bg-white/14 p-4 backdrop-blur-md">
                   <p className="mb-1 text-sm font-medium text-white/84">Monatliches Abo</p>
@@ -364,7 +380,8 @@ export default function Premium() {
                   Sichere Zahlung und Aboverwaltung über Stripe.
                 </p>
               </div>
-            </div>
+              </div>
+            )}
 
             <div className="mb-4 flex justify-center gap-1">
               {[1, 2, 3, 4, 5].map((star) => (
