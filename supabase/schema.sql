@@ -289,7 +289,7 @@ returns table (
   rating_count integer
 )
 language sql
-security definer
+security invoker
 stable
 set search_path = public
 as $$
