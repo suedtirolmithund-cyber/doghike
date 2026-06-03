@@ -168,7 +168,7 @@ export default function Login() {
       setLocalError(mapAuthError(err.message));
       setShowResend(String(err.message).toLowerCase().includes("email not confirmed"));
     } else {
-      navigate("/");
+      navigate(createPageUrl("Dashboard"));
     }
   };
 
