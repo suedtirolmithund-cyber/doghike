@@ -44,6 +44,17 @@ const ADMIN_COMMENT_FIELDS = [
   "reported_reason",
   "created_at",
 ].join(", ");
+const ADMIN_PUBLIC_JOURNAL_HIKE_FIELDS = [
+  "id",
+  "user_id",
+  "title",
+  "location",
+  "status",
+  "visibility",
+  "photos",
+  "created_at",
+  "date",
+].join(", ");
 
 function normalizeHikeSource(value) {
   return value ?? "sheets";
@@ -130,11 +141,16 @@ export async function getPendingEntries() {
 export async function getAdminPublicHikeStats() {
   await assertAdmin();
 
-  const [approvedResult, draftResult, premiumResult] = await Promise.all([
+  const [approvedResult, approvedJournalResult, draftResult, premiumResult] = await Promise.all([
     supabase
       .from("public_hikes")
       .select("id", { count: "exact", head: true })
       .eq("status", "approved"),
+    supabase
+      .from("journal_entries")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "approved")
+      .eq("visibility", "public"),
     supabase
       .from("public_hikes")
       .select("id", { count: "exact", head: true })
@@ -146,11 +162,12 @@ export async function getAdminPublicHikeStats() {
   ]);
 
   if (approvedResult.error) throw approvedResult.error;
+  if (approvedJournalResult.error) throw approvedJournalResult.error;
   if (draftResult.error) throw draftResult.error;
   if (premiumResult.error) throw premiumResult.error;
 
   return {
-    approvedCount: approvedResult.count ?? 0,
+    approvedCount: (approvedResult.count ?? 0) + (approvedJournalResult.count ?? 0),
     draftCount: draftResult.count ?? 0,
     premiumCount: premiumResult.count ?? 0,
   };
@@ -167,52 +184,97 @@ export async function getAdminPublicHikes({
 
   const normalizedPage = Number.isFinite(page) ? Math.max(1, page) : 1;
   const normalizedPageSize = Number.isFinite(pageSize) ? Math.max(1, pageSize) : 24;
-  const rangeStart = (normalizedPage - 1) * normalizedPageSize;
-  const rangeEnd = rangeStart + normalizedPageSize - 1;
   const trimmedSearch = search.trim();
 
-  let query = supabase
+  const escapedSearch = trimmedSearch.replace(/[%_,]/g, (char) => `\\${char}`);
+  let publicHikesQuery = supabase
     .from("public_hikes")
-    .select("id, title, location, country, status, is_premium, updated_at, created_at, image", {
-      count: "exact",
-    })
+    .select("id, title, location, country, status, is_premium, updated_at, created_at, image")
     .order("updated_at", { ascending: false });
 
   if (statusFilter !== "all") {
-    query = query.eq("status", statusFilter);
+    publicHikesQuery = publicHikesQuery.eq("status", statusFilter);
   }
 
   if (premiumFilter === "premium") {
-    query = query.eq("is_premium", true);
+    publicHikesQuery = publicHikesQuery.eq("is_premium", true);
   } else if (premiumFilter === "free") {
-    query = query.eq("is_premium", false);
+    publicHikesQuery = publicHikesQuery.eq("is_premium", false);
   }
 
   if (trimmedSearch) {
-    const escapedSearch = trimmedSearch.replace(/[%_,]/g, (char) => `\\${char}`);
-    query = query.or(
+    publicHikesQuery = publicHikesQuery.or(
       `title.ilike.%${escapedSearch}%,location.ilike.%${escapedSearch}%,country.ilike.%${escapedSearch}%`
     );
   }
 
-  const { data, error, count } = await query.range(rangeStart, rangeEnd);
+  let publicJournalQuery = supabase
+    .from("journal_entries")
+    .select(ADMIN_PUBLIC_JOURNAL_HIKE_FIELDS)
+    .eq("visibility", "public")
+    .order("created_at", { ascending: false });
 
-  if (error) throw error;
+  if (statusFilter !== "all") {
+    publicJournalQuery = publicJournalQuery.eq("status", statusFilter);
+  }
+
+  if (premiumFilter === "premium") {
+    publicJournalQuery = publicJournalQuery.eq("id", "__no_match__");
+  }
+
+  if (trimmedSearch) {
+    publicJournalQuery = publicJournalQuery.or(
+      `title.ilike.%${escapedSearch}%,location.ilike.%${escapedSearch}%`
+    );
+  }
+
+  const [
+    { data: publicHikes = [], error: publicHikesError },
+    { data: publicJournalEntries = [], error: publicJournalError },
+  ] = await Promise.all([publicHikesQuery, publicJournalQuery]);
+
+  if (publicHikesError) throw publicHikesError;
+  if (publicJournalError) throw publicJournalError;
 
   const coverPhotos = await resolvePublicHikePhotoReferences(
-    (data ?? []).map((hike) => hike.image ?? null)
+    publicHikes.map((hike) => hike.image ?? null)
   );
+  const hydratedJournalEntries = await hydrateJournalEntriesMedia(publicJournalEntries);
 
-  return {
-    items: (data ?? []).map((hike, index) => ({
+  const mergedItems = [
+    ...publicHikes.map((hike, index) => ({
       ...hike,
       trail_name: hike.title,
       route_id: String(hike.id),
       _public_hike_id: hike.id,
       _source: "sheets",
       cover_photo: coverPhotos[index] ?? hike.image ?? null,
+      _sort_date: hike.updated_at ?? hike.created_at ?? null,
     })),
-    totalCount: count ?? 0,
+    ...hydratedJournalEntries.map((entry) => ({
+      ...entry,
+      trail_name: entry.title,
+      country: null,
+      is_premium: false,
+      route_id: String(entry.id),
+      _journal_id: entry.id,
+      _source: "journal",
+      cover_photo: Array.isArray(entry.photos) ? entry.photos[0] ?? null : null,
+      _sort_date: entry.created_at ?? entry.date ?? null,
+    })),
+  ].sort((left, right) => {
+    const leftTime = left?._sort_date ? new Date(left._sort_date).getTime() : 0;
+    const rightTime = right?._sort_date ? new Date(right._sort_date).getTime() : 0;
+    return rightTime - leftTime;
+  });
+
+  const totalCount = mergedItems.length;
+  const rangeStart = (normalizedPage - 1) * normalizedPageSize;
+  const pagedItems = mergedItems.slice(rangeStart, rangeStart + normalizedPageSize);
+
+  return {
+    items: pagedItems,
+    totalCount,
   };
 }
 

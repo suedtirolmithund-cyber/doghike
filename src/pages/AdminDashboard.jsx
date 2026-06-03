@@ -426,7 +426,9 @@ function PublicHikeCard({ hike }) {
     createPageUrl("HikeDetail") +
     `?id=${encodeURIComponent(detailId)}&source=${encodeURIComponent(hike._source ?? "sheets")}`;
   const editUrl =
-    createPageUrl("EditPublicHike") + `?id=${encodeURIComponent(hike._public_hike_id ?? hike.id)}`;
+    hike?._source === "journal"
+      ? createPageUrl("AddJournalEntry") + `?id=${encodeURIComponent(hike._journal_id ?? hike.id)}`
+      : createPageUrl("EditPublicHike") + `?id=${encodeURIComponent(hike._public_hike_id ?? hike.id)}`;
 
   return (
     <motion.div
