@@ -278,24 +278,15 @@ export async function getComments(hikeId, hikeSource = "sheets", alternateHikeId
     new Set([hikeId, ...alternateHikeIds].map((value) => String(value)).filter(Boolean))
   );
   const normalizedHikeSource = normalizeHikeSource(hikeSource);
-  const { data: authData } = await supabase.auth.getUser();
-  const currentUserId = authData?.user?.id;
-
-  let query = supabase
+  const { data, error } = await supabase
     .from("comments")
     .select("*")
     .in("hike_id", normalizedHikeIds)
     .order("created_at", { ascending: false });
-
-  if (currentUserId) {
-    query = query.or(`reported.eq.false,user_id.eq.${currentUserId}`);
-  } else {
-    query = query.eq("reported", false);
-  }
-
-  const { data, error } = await query;
   if (error) throw error;
 
+  const { data: authData } = await supabase.auth.getUser();
+  const currentUserId = authData?.user?.id;
   const filteredComments = (data ?? []).filter(
     (comment) => normalizeHikeSource(comment.hike_source) === normalizedHikeSource
   );
@@ -407,17 +398,13 @@ export function commentNeedsReview(text) {
 export async function uploadCommentPhoto(userId, file, { needsReview = false } = {}) {
   validateImageUpload(file);
   const preparedFile = await optimizeImageForUpload(file);
-  const bucket = needsReview ? "comments-pending" : "comments";
+  const bucket = "comments";
   const sanitizedName = preparedFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
   const path = `${userId}/${Date.now()}_${sanitizedName}`;
   const { data, error } = await supabase.storage
     .from(bucket)
     .upload(path, preparedFile, { upsert: true, contentType: preparedFile.type });
   if (error) throw error;
-
-  if (needsReview) {
-    return `pending://${data.path}`;
-  }
 
   return `comments/${data.path}`;
 }

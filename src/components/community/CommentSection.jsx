@@ -278,7 +278,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
                     </p>
                     {comment.reported && user?.id === comment.user_id && (
                       <p className="text-xs text-brand-300 mt-1">
-                        Wartet auf Freigabe durch den Admin.
+                        Für den Admin markiert, aber bereits öffentlich sichtbar.
                       </p>
                     )}
                   </div>
