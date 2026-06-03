@@ -2,6 +2,26 @@ import { supabase } from "./supabaseClient";
 import { optimizeImageForUpload, validateImageUpload } from "./uploadValidation";
 
 const JOURNAL_SIGNED_URL_TTL_SECONDS = 60 * 60;
+const JOURNAL_DISPLAY_SELECT = [
+  "id",
+  "title",
+  "date",
+  "location",
+  "country",
+  "description",
+  "visibility",
+  "status",
+  "distance_km",
+  "elevation_m",
+  "duration_minutes",
+  "difficulty",
+  "dog_difficulty",
+  "dog_suitable",
+  "water_available",
+  "gpx_url",
+  "photos",
+  "rating",
+].join(", ");
 
 export function getMissingPrivateJournalFields(entry) {
   const missing = [];
@@ -210,8 +230,16 @@ export async function getJournalEntries(userId, { limit = 100 } = {}) {
 }
 
 export async function getJournalEntriesForDisplay(userId, options) {
-  const entries = await getJournalEntries(userId, options);
-  return hydrateJournalEntriesMedia(entries);
+  const { limit = 100 } = options ?? {};
+  const { data, error } = await supabase
+    .from("journal_entries")
+    .select(JOURNAL_DISPLAY_SELECT)
+    .eq("user_id", userId)
+    .order("date", { ascending: false })
+    .limit(limit);
+
+  if (error) throw error;
+  return hydrateJournalEntriesMedia(data ?? []);
 }
 
 export async function getJournalEntry(id) {
