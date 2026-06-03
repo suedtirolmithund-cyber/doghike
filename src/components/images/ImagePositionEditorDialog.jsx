@@ -65,7 +65,7 @@ export default function ImagePositionEditorDialog({
           <div className="space-y-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between gap-3">
-                <Label className="flex items-center gap-2 text-sm text-slate-600">
+                <Label className="flex items-center gap-2">
                   <ZoomIn className="h-4 w-4" />
                   Zoom
                 </Label>
@@ -76,7 +76,7 @@ export default function ImagePositionEditorDialog({
 
             <div className="space-y-2">
               <div className="flex items-center justify-between gap-3">
-                <Label className="flex items-center gap-2 text-sm text-slate-600">
+                <Label className="flex items-center gap-2">
                   <MoveHorizontal className="h-4 w-4" />
                   Links / rechts
                 </Label>
@@ -87,7 +87,7 @@ export default function ImagePositionEditorDialog({
 
             <div className="space-y-2">
               <div className="flex items-center justify-between gap-3">
-                <Label className="flex items-center gap-2 text-sm text-slate-600">
+                <Label className="flex items-center gap-2">
                   <MoveVertical className="h-4 w-4" />
                   Oben / unten
                 </Label>

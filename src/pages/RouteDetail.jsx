@@ -12,6 +12,7 @@ import SafeMapContainer from "@/components/map/SafeMapContainer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -631,7 +632,7 @@ export default function RouteDetail() {
 
                       {/* Date */}
                       <div>
-                        <label className="text-sm font-medium text-slate-700 mb-1 block">Datum der Wanderung</label>
+                        <Label className="mb-2">Datum der Wanderung</Label>
                         <Input
                           type="date"
                           value={completeData.completed_date}
@@ -641,7 +642,7 @@ export default function RouteDetail() {
 
                       {/* Duration */}
                       <div>
-                        <label className="text-sm font-medium text-slate-700 mb-1 block">Tatsächliche Gehzeit (Stunden)</label>
+                        <Label className="mb-2">Tatsächliche Gehzeit (Stunden)</Label>
                         <Input
                           type="number"
                           step="0.1"
@@ -654,7 +655,7 @@ export default function RouteDetail() {
                       {/* Difficulty */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="text-sm font-medium text-slate-700 mb-1 block">Schwierigkeit (Mensch) {TOUR_ICONS.human}</label>
+                          <Label className="mb-2">Schwierigkeit (Mensch) {TOUR_ICONS.human}</Label>
                           <Select value={completeData.difficulty} onValueChange={(v) => setCompleteData({ ...completeData, difficulty: v })}>
                             <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
                             <SelectContent>
@@ -667,7 +668,7 @@ export default function RouteDetail() {
                           </Select>
                         </div>
                         <div>
-                          <label className="text-sm font-medium text-slate-700 mb-1 block">Schwierigkeit (Hund) {TOUR_ICONS.dog}</label>
+                          <Label className="mb-2">Schwierigkeit (Hund) {TOUR_ICONS.dog}</Label>
                           <Select value={completeData.dog_difficulty} onValueChange={(v) => setCompleteData({ ...completeData, dog_difficulty: v })}>
                             <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
                             <SelectContent>
@@ -692,9 +693,9 @@ export default function RouteDetail() {
                           />
                         </div>
                         <div>
-                          <label className="mb-1 flex items-center gap-1 text-sm font-medium text-slate-700">
+                          <Label className="mb-2 flex items-center gap-1">
                             Wasser unterwegs <WaterIcon value="little" />
-                          </label>
+                          </Label>
                           <Select value={completeData.water_availability} onValueChange={(v) => setCompleteData({ ...completeData, water_availability: v })}>
                             <SelectTrigger><SelectValue placeholder="Wählen" /></SelectTrigger>
                             <SelectContent>
@@ -712,7 +713,7 @@ export default function RouteDetail() {
 
                       {/* Rating */}
                       <div>
-                        <label className="text-sm font-medium text-slate-700 mb-2 block">Bewertung</label>
+                        <Label className="mb-2">Bewertung</Label>
                         <div className="flex gap-1">
                           {[1,2,3,4,5].map(star => (
                             <button
@@ -731,7 +732,7 @@ export default function RouteDetail() {
                       {/* Dogs */}
                       {myDogs.length > 0 && (
                         <div>
-                          <label className="text-sm font-medium text-slate-700 mb-2 block">{TOUR_ICONS.dog} Welche Hunde waren dabei?</label>
+                          <Label className="mb-2">{TOUR_ICONS.dog} Welche Hunde waren dabei?</Label>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             {myDogs.map((dog) => (
                               <div
@@ -753,7 +754,7 @@ export default function RouteDetail() {
 
                       {/* Photos */}
                       <div>
-                        <label className="text-sm font-medium text-slate-700 mb-2 block">Fotos</label>
+                        <Label className="mb-2">Fotos</Label>
                         <div className="flex flex-wrap gap-3">
                           {completeData.photos?.map((url, index) => (
                             <div key={url} className="relative group">
@@ -776,7 +777,7 @@ export default function RouteDetail() {
 
                       {/* Parking */}
                       <div>
-                        <label className="text-sm font-medium text-slate-700 mb-1 block">{TOUR_ICONS.parking} Ausgangspunkt & Parken</label>
+                        <Label className="mb-2">{TOUR_ICONS.parking} Ausgangspunkt & Parken</Label>
                         <Textarea
                           placeholder="z.B. Großer Parkplatz am Pragser Wildsee..."
                           value={completeData.parking_info}
@@ -787,7 +788,7 @@ export default function RouteDetail() {
 
                       {/* Restaurant */}
                       <div>
-                        <label className="text-sm font-medium text-slate-700 mb-1 block">{TOUR_ICONS.restaurant} Einkehrmöglichkeiten (optional)</label>
+                        <Label className="mb-2">{TOUR_ICONS.restaurant} Einkehrmöglichkeiten (optional)</Label>
                         <Textarea
                           placeholder="z.B. Seekofel Hütte (2324m)..."
                           value={completeData.restaurant_info}
@@ -798,7 +799,7 @@ export default function RouteDetail() {
 
                       {/* Hazard */}
                       <div>
-                        <label className="text-sm font-medium text-slate-700 mb-1 block">{TOUR_ICONS.hazard} Gefahrenstellen (optional)</label>
+                        <Label className="mb-2">{TOUR_ICONS.hazard} Gefahrenstellen (optional)</Label>
                         <Textarea
                           placeholder="z.B. steile Passagen, Leitern, Kühe auf der Alm..."
                           value={completeData.hazard_notes}
@@ -809,7 +810,7 @@ export default function RouteDetail() {
 
                       {/* Notes */}
                       <div>
-                        <label className="text-sm font-medium text-slate-700 mb-1 block">Beschreibung & Notizen</label>
+                        <Label className="mb-2">Beschreibung & Notizen</Label>
                         <Textarea
                           placeholder="Wie war die Wanderung? Besondere Erlebnisse, Highlights..."
                           value={completeData.completed_notes}

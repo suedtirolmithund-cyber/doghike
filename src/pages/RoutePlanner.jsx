@@ -386,8 +386,8 @@ function SmartRoutePlanner({ onRouteReady }) {
       <div className="grid grid-cols-1 items-center gap-2 sm:grid-cols-[1fr_auto]">
         <form onSubmit={handleSearch} className="grid min-w-0 grid-cols-[1fr_auto] gap-1.5">
           <Input value={searchText} onChange={(e) => setSearchText(e.target.value)}
-            placeholder="Ort als Wegpunkt suchen..." className="h-10 text-sm" />
-          <Button type="submit" size="sm" variant="outline" disabled={searching} className="h-10 w-10 shrink-0 rounded-xl px-0">
+            placeholder="Ort als Wegpunkt suchen..." className="text-sm" />
+          <Button type="submit" variant="outline" disabled={searching} className="h-12 w-12 shrink-0 rounded-xl px-0">
             {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
           </Button>
         </form>

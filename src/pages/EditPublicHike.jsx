@@ -632,7 +632,7 @@ export default function EditPublicHike() {
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <Label className="text-sm text-slate-600">Wie waren deine Hunde drauf?</Label>
+                <Label className="mb-2">Wie waren deine Hunde drauf?</Label>
                 <div className="flex flex-wrap gap-2">
                   {DOG_PRIVATE_TAGS.map((tag) => {
                     const isActive = formData.dog_mood_tags.includes(tag);
@@ -656,7 +656,7 @@ export default function EditPublicHike() {
 
               {userDogs.length > 0 && (
                 <div className="space-y-2 md:col-span-2">
-                  <Label className="text-sm text-slate-600">Welche Hunde waren dabei?</Label>
+                  <Label className="mb-2">Welche Hunde waren dabei?</Label>
                   <div className="flex flex-wrap gap-2">
                     <button
                       type="button"

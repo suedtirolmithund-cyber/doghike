@@ -24,7 +24,7 @@ export default function SeasonMultiPicker({
 
   return (
     <div>
-      <Label className="mb-2 block text-sm text-slate-600">{label}</Label>
+      <Label className="mb-2">{label}</Label>
       <div className="flex flex-wrap gap-2">
         {SEASON_OPTIONS.map((option) => {
           const active = value.includes(option.value);

@@ -192,7 +192,7 @@ function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
             <div className="space-y-4 border-t border-brand-100 px-5 pb-4 pt-4">
               {entry.description && (
                 <div>
-                  <Label className="text-xs uppercase tracking-wide text-slate-500">
+                  <Label className="text-xs uppercase tracking-wide text-[#C07820]">
                     Beschreibung
                   </Label>
                   <p className="mt-1 whitespace-pre-wrap text-sm text-slate-700">

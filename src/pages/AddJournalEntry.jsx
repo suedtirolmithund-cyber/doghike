@@ -67,7 +67,7 @@ function StarPicker({ label, value, onChange }) {
   const [hover, setHover] = useState(0);
   return (
     <div>
-      <Label className="text-sm text-slate-600 mb-1 block">{label}</Label>
+      <Label className="mb-2">{label}</Label>
       <div className="flex gap-1">
         {[1, 2, 3, 4, 5].map((s) => (
           <button key={s} type="button"
@@ -290,7 +290,7 @@ function MountainPicker({ label, value, onChange }) {
   return (
     <div>
       <div className="mb-1 flex items-center gap-1.5">
-        <Label className="mb-0 block text-sm text-slate-600">{label}</Label>
+        <Label className="mb-0">{label}</Label>
         <DifficultyInfoDialog
           icon={<span className="text-sm leading-none">{TOUR_ICONS.human}</span>}
           title="Schwierigkeit Mensch"
@@ -336,7 +336,7 @@ function BonePicker({ label, value, onChange }) {
   return (
     <div>
       <div className="mb-1 flex items-center gap-1.5">
-        <Label className="mb-0 block text-sm text-slate-600">{label}</Label>
+        <Label className="mb-0">{label}</Label>
         <DifficultyInfoDialog
           icon={<span className="text-sm leading-none">{TOUR_ICONS.dog}</span>}
           title="Schwierigkeit Hund"
@@ -685,7 +685,7 @@ function WaterPicker({ label, value, onChange }) {
   return (
     <div>
       <div className="mb-1 flex items-center gap-1.5">
-        <Label className="mb-0 block text-sm text-slate-600">{label}</Label>
+        <Label className="mb-0">{label}</Label>
         <WaterInfoDialog />
       </div>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -731,7 +731,7 @@ function SeasonPicker({ value = [], onChange }) {
   };
   return (
     <div>
-      <Label className="text-sm text-slate-600 mb-2 block">{TOUR_ICONS.season} Empfohlene Jahreszeit</Label>
+      <Label className="mb-2">{TOUR_ICONS.season} Empfohlene Jahreszeit</Label>
       <div className="flex flex-wrap gap-2">
         {SEASON_OPTIONS.map((opt) => {
           const active = value.includes(opt.value);
@@ -825,7 +825,7 @@ const VISIBILITY_OPTIONS = [
 function VisibilityPicker({ value, onChange }) {
   return (
     <div>
-      <Label className="text-sm text-slate-600 mb-2 block">Sichtbarkeit</Label>
+      <Label className="mb-2">Sichtbarkeit</Label>
       <div className="grid grid-cols-3 gap-2">
         {VISIBILITY_OPTIONS.map((opt) => (
           <button
@@ -1557,7 +1557,7 @@ export default function AddJournalEntry() {
             <BonePicker label="Schwierigkeit (Hund)" value={form.dog_difficulty} onChange={(v) => set("dog_difficulty", v)} />
 
             <div>
-              <Label className="mb-2 block text-sm text-slate-600">Hinweise für Hunde (optional)</Label>
+              <Label className="mb-2">Hinweise für Hunde (optional)</Label>
               <div className="flex flex-wrap gap-2">
                 <div className="flex items-center gap-1.5">
                   <button
@@ -1594,7 +1594,7 @@ export default function AddJournalEntry() {
             </div>
 
             <div>
-              <Label className="text-sm text-slate-600 mb-2 block">Wie war dein Hund drauf? (optional, nur für dich)</Label>
+              <Label className="mb-2">Wie war dein Hund drauf? (optional, nur für dich)</Label>
               <div className="flex flex-wrap gap-2">
                 {DOG_PRIVATE_TAGS.map((tag) => {
                   const isActive = form.dog_mood_tags.includes(tag);
@@ -1622,7 +1622,7 @@ export default function AddJournalEntry() {
             {/* Dog picker */}
             {userDogs.length > 0 && (
               <div>
-                <Label className="text-sm text-slate-600 mb-2 block">Welche Hunde waren dabei?</Label>
+                <Label className="mb-2">Welche Hunde waren dabei?</Label>
                 <div className="flex flex-wrap gap-2">
                   <button
                     type="button"

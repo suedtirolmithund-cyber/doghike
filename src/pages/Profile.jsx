@@ -495,7 +495,7 @@ export default function Profile() {
               {editingProfile ? (
                 <div className="space-y-2">
                   <div>
-                    <Label className="text-xs text-slate-500">Anzeigename</Label>
+                    <Label className="text-xs text-[#C07820]">Anzeigename</Label>
                     <Input
                       value={profileDraft.full_name}
                       onChange={(event) => setProfileDraft((draft) => ({ ...draft, full_name: event.target.value }))}
@@ -504,7 +504,7 @@ export default function Profile() {
                     />
                   </div>
                   <div>
-                    <Label className="text-xs text-slate-500">Username</Label>
+                    <Label className="text-xs text-[#C07820]">Username</Label>
                     <Input
                       value={profileDraft.username}
                       onChange={(event) => setProfileDraft((draft) => ({ ...draft, username: event.target.value }))}

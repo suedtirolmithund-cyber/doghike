@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import BackButton from "@/components/ui/BackButton";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import {
   Accordion,
@@ -227,7 +228,7 @@ export default function Support() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 {!user?.email && (
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Deine E-Mail-Adresse</label>
+                    <Label className="mb-2">Deine E-Mail-Adresse</Label>
                     <Input
                       type="email"
                       value={email}
@@ -239,7 +240,7 @@ export default function Support() {
                 )}
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Betreff</label>
+                  <Label className="mb-2">Betreff</Label>
                   <Input
                     value={subject}
                     onChange={(event) => setSubject(event.target.value)}
@@ -249,7 +250,7 @@ export default function Support() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Nachricht</label>
+                  <Label className="mb-2">Nachricht</Label>
                   <Textarea
                     value={message}
                     onChange={(event) => setMessage(event.target.value)}

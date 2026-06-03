@@ -266,7 +266,7 @@ export default function AccountSettings({ user, profile }) {
           <User className="w-4 h-4" /> Profildaten
         </h3>
         <div>
-          <Label className="text-sm text-slate-600 mb-1 block">E-Mail-Adresse</Label>
+          <Label className="mb-2">E-Mail-Adresse</Label>
           <Input value={user?.email || ""} disabled className="bg-brand-50/70 text-slate-500" />
           <p className="text-xs text-slate-400 mt-1">
             E-Mail-Änderungen können über{" "}
