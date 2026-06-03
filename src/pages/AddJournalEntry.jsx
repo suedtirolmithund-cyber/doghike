@@ -950,6 +950,13 @@ export default function AddJournalEntry() {
   const removedExistingPhotosRef = useRef([]);
   const removedExistingGpxRef = useRef([]);
   const keepUploadedMediaRef = useRef(false);
+  const photoPreviewCacheRef = useRef({});
+
+  const set = (key, val) =>
+    setForm((p) => ({
+      ...p,
+      [key]: typeof val === "function" ? val(p[key]) : val,
+    }));
 
   // Load existing entry for editing
   const { data: existing, isLoading: loadingEntry } = useQuery({
@@ -1016,7 +1023,21 @@ export default function AddJournalEntry() {
     let cancelled = false;
 
     async function loadPhotoPreviews() {
-      const previewUrls = await getSignedJournalUrls(form.photos ?? []);
+      const photoPaths = form.photos ?? [];
+      const missingPaths = photoPaths.filter(
+        (path) => path && !photoPreviewCacheRef.current[path],
+      );
+
+      if (missingPaths.length > 0) {
+        const signedUrls = await getSignedJournalUrls(missingPaths);
+        missingPaths.forEach((path, index) => {
+          photoPreviewCacheRef.current[path] = signedUrls[index] ?? path;
+        });
+      }
+
+      const previewUrls = photoPaths.map(
+        (path) => photoPreviewCacheRef.current[path] ?? path,
+      );
       if (!cancelled) {
         setPhotoPreviewUrls(previewUrls);
       }
@@ -1360,11 +1381,6 @@ export default function AddJournalEntry() {
     });
   };
 
-  const set = (key, val) =>
-    setForm((p) => ({
-      ...p,
-      [key]: typeof val === "function" ? val(p[key]) : val,
-    }));
   const toggleDogMoodTag = (tag) => {
     setForm((prev) => ({
       ...prev,
