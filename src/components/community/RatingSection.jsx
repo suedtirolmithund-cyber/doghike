@@ -60,8 +60,8 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
               key={star}
               className={`w-5 h-5 ${
                 star <= Math.round(averageRating)
-                  ? "fill-brand-100 text-brand-100"
-                  : "text-brand-100"
+                  ? "fill-brand-400 text-brand-400"
+                  : "text-slate-300"
               }`}
             />
           ))}
@@ -90,8 +90,8 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
                 <Star
                   className={`w-8 h-8 transition-colors ${
                     star <= (hoverRating || selectedRating || userRating?.rating || 0)
-                      ? "fill-brand-100 text-brand-100"
-                      : "text-brand-100 hover:text-brand-200"
+                      ? "fill-brand-400 text-brand-400"
+                      : "text-slate-300 hover:text-brand-200"
                   }`}
                 />
               </motion.button>
