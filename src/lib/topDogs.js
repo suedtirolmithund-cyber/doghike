@@ -105,16 +105,12 @@ function isAccessError(error) {
 async function fetchJournalEntriesForLeaderboard() {
   let result = await supabase
     .from("journal_entries")
-    .select("dog_id, dog_ids, distance_km, elevation_m, rating, date, created_at, visibility, status")
-    .eq("visibility", "public")
-    .eq("status", "approved");
+    .select("dog_id, dog_ids, distance_km, elevation_m, rating, date, created_at, visibility, status");
 
   if (result.error && isMissingColumnError(result.error, "dog_ids")) {
     result = await supabase
       .from("journal_entries")
-      .select("dog_id, distance_km, elevation_m, rating, date, created_at, visibility, status")
-      .eq("visibility", "public")
-      .eq("status", "approved");
+      .select("dog_id, distance_km, elevation_m, rating, date, created_at, visibility, status");
   }
 
   return result;
