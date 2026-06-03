@@ -175,7 +175,7 @@ export default function Login() {
     setLocalError(null);
     setSuccessMsg(null);
 
-    if (!privacyAccepted) {
+    if (mode === "register" && !privacyAccepted) {
       setLocalError("Bitte akzeptiere die Datenschutzerklärung und Nutzungsbedingungen.");
       return;
     }
@@ -494,9 +494,7 @@ export default function Login() {
                           <Link to={createPageUrl("AGB")} className="underline text-white" target="_blank">
                             Nutzungsbedingungen
                           </Link>
-                          {mode === "login"
-                            ? " für die Anmeldung oder Registrierung mit Google."
-                            : "."}{" "}
+                          .{" "}
                           <span className="text-brand-300">*</span>
                         </label>
                       </div>

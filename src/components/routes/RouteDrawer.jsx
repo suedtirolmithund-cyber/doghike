@@ -6,7 +6,6 @@ import RouteElevationProfile from "./RouteElevationProfile";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
-import { TOUR_ICONS } from "@/lib/difficultyConfig";
 import LocationIcon from "@/components/icons/LocationIcon";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
 import {
