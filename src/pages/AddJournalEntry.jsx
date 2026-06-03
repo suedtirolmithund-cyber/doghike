@@ -13,6 +13,7 @@ import "leaflet/dist/leaflet.css";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/ui/BackButton";
 import { EmptyState, PageLoadingState } from "@/components/ui/AppState";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -425,6 +426,30 @@ function getReadableLocationLabel(result) {
   );
 }
 
+async function validateGpxFile(file) {
+  if (!file) {
+    throw new Error("gpx_missing");
+  }
+
+  const fileName = String(file.name || "").trim().toLowerCase();
+  const mimeType = String(file.type || "").trim().toLowerCase();
+  const looksLikeGpxName = fileName.endsWith(".gpx");
+  const looksLikeGpxType =
+    mimeType.includes("gpx") ||
+    mimeType.includes("xml") ||
+    mimeType === "application/octet-stream" ||
+    mimeType === "";
+
+  if (!looksLikeGpxName && !looksLikeGpxType) {
+    throw new Error("gpx_invalid_type");
+  }
+
+  const sample = await file.slice(0, 4096).text();
+  if (!/<gpx[\s>]/i.test(sample)) {
+    throw new Error("gpx_invalid_content");
+  }
+}
+
 // Location Picker Komponente
 function LocationPicker({ lat, lng, locationName = "", onChange }) {
   const [markerPos, setMarkerPos] = useState(
@@ -456,6 +481,14 @@ function LocationPicker({ lat, lng, locationName = "", onChange }) {
   useEffect(() => {
     topoTileFallbackRef.current = false;
   }, [mapType]);
+
+  useEffect(() => {
+    if (!flyTarget) return;
+    const timer = window.setTimeout(() => {
+      setFlyTarget(null);
+    }, 1100);
+    return () => window.clearTimeout(timer);
+  }, [flyTarget]);
 
   const handleMapClick = async ({ lat: clickLat, lng: clickLng }) => {
     setMarkerPos([clickLat, clickLng]);
@@ -1272,6 +1305,7 @@ export default function AddJournalEntry() {
     }
     setGpxUploading(true);
     try {
+      await validateGpxFile(file);
       const url = await uploadJournalGpx(user.id, file);
       if (form.gpx_url) {
         if (uploadedGpxRef.current.includes(form.gpx_url)) {
@@ -1284,8 +1318,13 @@ export default function AddJournalEntry() {
       uploadedGpxRef.current = [...uploadedGpxRef.current, url];
       setForm((p) => ({ ...p, gpx_url: url }));
       showUploadedFeedback("GPX hochgeladen", "Die Route ist jetzt im Eintrag dabei.");
-    } catch {
-      toast.error("Die GPX-Datei wollte gerade nicht hochladen.");
+    } catch (error) {
+      const message = String(error?.message || "");
+      if (message === "gpx_invalid_type" || message === "gpx_invalid_content") {
+        toast.error("Bitte eine gültige GPX-Datei auswählen.");
+      } else {
+        toast.error("Die GPX-Datei wollte gerade nicht hochladen.");
+      }
     } finally {
       setGpxUploading(false);
     }
@@ -1559,12 +1598,11 @@ export default function AddJournalEntry() {
               <Label htmlFor="dog_suitable" className="cursor-pointer flex items-center gap-2">
                 Hundefreundlich
               </Label>
-              <input
+              <Checkbox
                 id="dog_suitable"
-                type="checkbox"
-                checked={form.dog_suitable}
-                onChange={(e) => set("dog_suitable", e.target.checked)}
-                className="w-5 h-5 rounded accent-brand-400 cursor-pointer"
+                checked={Boolean(form.dog_suitable)}
+                onCheckedChange={(checked) => set("dog_suitable", checked === true)}
+                className="h-5 w-5 rounded border-brand-300 data-[state=checked]:border-brand-400 data-[state=checked]:bg-brand-400 data-[state=checked]:text-white"
               />
             </div>
 
@@ -1892,11 +1930,10 @@ export default function AddJournalEntry() {
           {form.photos.length > 0 && form.visibility !== "private" && !isAdminReviewingForeignEntry && (
             <section className="bg-brand-50 border border-brand-100 rounded-2xl p-4">
               <label className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
+                <Checkbox
                   checked={photoConsent}
-                  onChange={(e) => setPhotoConsent(e.target.checked)}
-                  className="mt-1 w-4 h-4 rounded accent-brand-400 shrink-0 cursor-pointer"
+                  onCheckedChange={(checked) => setPhotoConsent(checked === true)}
+                  className="mt-1 h-4 w-4 shrink-0 rounded border-brand-300 data-[state=checked]:border-brand-400 data-[state=checked]:bg-brand-400 data-[state=checked]:text-white"
                 />
                 <span className="text-sm text-brand-700 leading-relaxed">
                   <strong>Einverständnis Fotos:</strong> Ich bestätige, dass ich die Nutzungsrechte
