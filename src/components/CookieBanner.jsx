@@ -5,13 +5,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Cookie } from "lucide-react";
 
-const CONSENT_KEY = "doghike_cookie_consent";
+const NOTICE_KEY = "doghike_cookie_notice_ack";
+const LEGACY_NOTICE_KEY = "doghike_cookie_consent";
 
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem(CONSENT_KEY);
+    const stored = localStorage.getItem(NOTICE_KEY) || localStorage.getItem(LEGACY_NOTICE_KEY);
     if (!stored) {
       // Small delay so the banner doesn't flash during initial render
       const t = setTimeout(() => setVisible(true), 600);
@@ -20,12 +21,14 @@ export default function CookieBanner() {
   }, []);
 
   const acknowledge = () => {
-    localStorage.setItem(CONSENT_KEY, JSON.stringify({ acknowledged: true, date: new Date().toISOString() }));
+    localStorage.setItem(NOTICE_KEY, JSON.stringify({ acknowledged: true, date: new Date().toISOString() }));
+    localStorage.removeItem(LEGACY_NOTICE_KEY);
     setVisible(false);
   };
 
   const closeNecessary = () => {
-    localStorage.setItem(CONSENT_KEY, JSON.stringify({ acknowledged: true, necessaryOnly: true, date: new Date().toISOString() }));
+    localStorage.setItem(NOTICE_KEY, JSON.stringify({ acknowledged: true, necessaryOnly: true, date: new Date().toISOString() }));
+    localStorage.removeItem(LEGACY_NOTICE_KEY);
     setVisible(false);
   };
 
@@ -50,7 +53,8 @@ export default function CookieBanner() {
                 </h3>
                 <p className="text-xs leading-relaxed text-brand-50">
                   Diese App verwendet ausschließlich technisch notwendige Cookies und Browser-Speicher
-                  für Anmeldung, Sicherheit und Einstellungen. Es gibt keine Werbe- oder Tracking-Cookies.{" "}
+                  für Anmeldung, Sicherheit, App-Funktionen und Einstellungen. Es gibt keine Werbe-,
+                  Profiling- oder Tracking-Cookies; daher ist keine Tracking-Einwilligung erforderlich.{" "}
                   <Link
                     to={createPageUrl("Datenschutz")}
                     className="text-white underline hover:text-brand-50"
@@ -66,7 +70,7 @@ export default function CookieBanner() {
                 onClick={acknowledge}
                 className="h-10 flex-1 bg-white text-sm text-brand-700 hover:bg-brand-50"
               >
-                Verstanden
+                Hinweis verstanden
               </Button>
               <Button
                 onClick={closeNecessary}

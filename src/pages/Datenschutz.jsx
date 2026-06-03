@@ -346,7 +346,7 @@ export default function Datenschutz() {
                 8. Technisch notwendige Cookies & LocalStorage
               </h2>
               <div className="space-y-3 text-sm text-slate-600">
-                <p>Diese App verwendet <strong>ausschließlich technisch notwendige</strong> Browser-Speicher-Einträge und ein einzelnes technisch notwendiges Cookie:</p>
+                <p>Diese App verwendet <strong>ausschließlich technisch notwendige</strong> Cookies, LocalStorage- und SessionStorage-Einträge. Sie dienen Anmeldung, Sicherheit, App-Funktionen und Einstellungen; es gibt kein Werbe-, Profiling- oder Tracking-Cookie.</p>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm border-collapse">
                     <thead>
@@ -363,8 +363,8 @@ export default function Datenschutz() {
                         <td className="p-2">Bis zum Abmelden oder Ablauf der Session</td>
                       </tr>
                       <tr className="bg-brand-50/70">
-                        <td className="p-2 font-mono text-xs">doghike_cookie_consent</td>
-                        <td className="p-2">LocalStorage: Speichert, dass du den Hinweis zu technisch notwendigen Speichern gesehen hast</td>
+                        <td className="p-2 font-mono text-xs">doghike_cookie_notice_ack</td>
+                        <td className="p-2">LocalStorage: Speichert, dass du den Hinweis zu technisch notwendigen Speichern gesehen hast. Ältere Installationen können noch den früheren Schlüssel doghike_cookie_consent enthalten.</td>
                         <td className="p-2">Dauerhaft, bis du den Browser-Speicher löschst</td>
                       </tr>
                       <tr>
@@ -372,10 +372,30 @@ export default function Datenschutz() {
                         <td className="p-2">Cookie: Speichert den geöffneten oder geschlossenen Zustand der Seitenleiste</td>
                         <td className="p-2">7 Tage</td>
                       </tr>
+                      <tr className="bg-brand-50/70">
+                        <td className="p-2 font-mono text-xs">doghike_pending_registration_consent</td>
+                        <td className="p-2">LocalStorage: Merkt eine gerade bestätigte Registrierungseinwilligung während Google-OAuth-Weiterleitungen</td>
+                        <td className="p-2">Bis zur Kontoanlage oder manuellen Löschung des Browser-Speichers</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-mono text-xs">doghike_active_gps_track</td>
+                        <td className="p-2">LocalStorage: Sichert eine aktiv gestartete GPS-Aufzeichnung lokal, damit sie bei Neuladen nicht sofort verloren geht</td>
+                        <td className="p-2">Bis zum Beenden der Aufzeichnung oder maximal ca. 12 Stunden</td>
+                      </tr>
+                      <tr className="bg-brand-50/70">
+                        <td className="p-2 font-mono text-xs">offlineHikes</td>
+                        <td className="p-2">LocalStorage: Speichert von dir bewusst offline gesicherte Wanderungen</td>
+                        <td className="p-2">Bis du sie entfernst oder den Browser-Speicher löschst</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 font-mono text-xs">doghike:* / doghike_*</td>
+                        <td className="p-2">LocalStorage/SessionStorage: Technische UI-Zustände wie Benachrichtigungshinweise, Freunde-/Routen-Hinweise, Navigationsverlauf und einmalige Reload-Retry-Flags</td>
+                        <td className="p-2">Sessionbezogen oder bis zur Änderung/Löschung des Browser-Speichers</td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
-                <p>Es werden <strong>keine Werbe-Cookies, keine Tracking-Cookies und keine Third-Party-Cookies</strong> gesetzt.</p>
+                <p>Für diese technischen Speicher ist nach den Cookie-Leitlinien des italienischen Garante keine Einwilligung erforderlich; erforderlich ist die Information hier in der Datenschutzerklärung und im kurzen Hinweisbanner. Es werden <strong>keine Werbe-Cookies, keine Tracking-Cookies und keine Third-Party-Cookies</strong> gesetzt.</p>
               </div>
             </section>
 
