@@ -11,6 +11,7 @@ import HikeCard from "@/components/hikes/HikeCard";
 import HikeMap from "@/components/map/HikeMap";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 import WaterIcon from "@/components/icons/WaterIcon";
+import LocationIcon from "@/components/icons/LocationIcon";
 import { toast } from "sonner";
 import { Link, useSearchParams } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -260,7 +261,9 @@ export default function Hikes() {
           </div>
           <div>
             <h1 className="doghike-page-title">Alle Wanderungen</h1>
-            <p className="doghike-page-subtitle">{hikes.length} hundefreundliche Wanderungen</p>
+            <p className="doghike-page-subtitle">
+              {(hasActiveFilters ? filteredHikes.length : hikes.length)} hundefreundliche Wanderungen
+            </p>
           </div>
         </motion.div>
 
@@ -582,7 +585,7 @@ export default function Hikes() {
                               </h3>
                               <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#C07820]">
                                 <span className="inline-flex items-center gap-1">
-                                  <span>{TOUR_ICONS.location}</span>
+                                  <LocationIcon className="h-4 w-4" />
                                   <span>{hike.location || "Dolomites"}</span>
                                 </span>
                                 {seasonLabel && (
