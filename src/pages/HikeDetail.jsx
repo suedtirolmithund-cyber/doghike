@@ -425,11 +425,12 @@ export default function HikeDetail() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lightboxOpen]);
 
-  // Sheets hikes are read-only
-  const isOwnHike = false;
+  const isOwnHike = Boolean(
+    currentUser?.id && hike?._user_id && currentUser.id === hike._user_id
+  );
 
   // Journal hikes created by the current user can be edited/deleted via Supabase
-  const isOwnJournalHike = hike?._source === "journal" && !!currentUser?.id && currentUser.id === hike?._user_id;
+  const isOwnJournalHike = hike?._source === "journal" && isOwnHike;
   const publicSubmitterName =
     publicSubmitterProfile?.username ||
     (hike?._user_id ? "ein DogTrails-Mitglied" : null);
