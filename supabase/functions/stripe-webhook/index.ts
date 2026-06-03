@@ -48,6 +48,22 @@ function oneMonthFromTimestamp(timestamp: number) {
   )).toISOString();
 }
 
+function stripeRequestId(event: Stripe.Event) {
+  if (!event.request) return null;
+  if (typeof event.request === "string") return event.request;
+  return event.request.id ?? null;
+}
+
+function webhookEventDebugFields(event: Stripe.Event) {
+  return {
+    event_payload: event as unknown as Record<string, unknown>,
+    stripe_created_at: event.created ? new Date(event.created * 1000).toISOString() : null,
+    stripe_livemode: event.livemode,
+    stripe_api_version: event.api_version ?? null,
+    stripe_request_id: stripeRequestId(event),
+  };
+}
+
 async function claimWebhookEvent(
   adminClient: ReturnType<typeof createClient>,
   event: Stripe.Event,
@@ -58,6 +74,7 @@ async function claimWebhookEvent(
     .insert({
       event_id: event.id,
       event_type: event.type,
+      ...webhookEventDebugFields(event),
       processing_status: "processing",
       updated_at: now,
     });
@@ -81,6 +98,8 @@ async function claimWebhookEvent(
     const { error: retryError } = await adminClient
       .from("stripe_webhook_events")
       .update({
+        event_type: event.type,
+        ...webhookEventDebugFields(event),
         processing_status: "processing",
         error_message: null,
         updated_at: now,

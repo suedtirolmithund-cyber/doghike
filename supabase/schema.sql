@@ -75,6 +75,11 @@ alter table public.profiles
 create table if not exists public.stripe_webhook_events (
   event_id text primary key,
   event_type text not null,
+  event_payload jsonb,
+  stripe_created_at timestamptz,
+  stripe_livemode boolean,
+  stripe_api_version text,
+  stripe_request_id text,
   processing_status text not null default 'processing'
     check (processing_status in ('processing', 'processed', 'failed')),
   error_message text,
@@ -82,6 +87,13 @@ create table if not exists public.stripe_webhook_events (
   processed_at timestamptz,
   updated_at timestamptz not null default now()
 );
+
+alter table public.stripe_webhook_events
+  add column if not exists event_payload jsonb,
+  add column if not exists stripe_created_at timestamptz,
+  add column if not exists stripe_livemode boolean,
+  add column if not exists stripe_api_version text,
+  add column if not exists stripe_request_id text;
 
 alter table public.stripe_webhook_events enable row level security;
 
