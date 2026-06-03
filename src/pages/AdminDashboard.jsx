@@ -116,6 +116,20 @@ function StatusBadge({ status }) {
 
 const PUBLIC_HIKES_PAGE_SIZE = 24;
 
+function getApproveEntryErrorMessage(error) {
+  const rawMessage = typeof error?.message === "string" ? error.message.trim() : "";
+  const validationPrefix = "Fehlende Pflichtfelder für öffentliche Wanderungen:";
+
+  if (rawMessage.startsWith(validationPrefix)) {
+    const missingFields = rawMessage.slice(validationPrefix.length).trim();
+    return missingFields
+      ? `Freigabe noch nicht möglich. Es fehlen: ${missingFields}.`
+      : "Freigabe noch nicht möglich. Es fehlen noch Pflichtfelder.";
+  }
+
+  return "Der Eintrag konnte gerade nicht freigegeben werden. Bitte versuche es noch einmal.";
+}
+
 function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
   const [expanded, setExpanded] = useState(false);
   const [showRejectForm, setShowRejectForm] = useState(false);
@@ -695,8 +709,7 @@ export default function AdminDashboard() {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
       toast.success("Eintrag genehmigt.");
     },
-    onError: () =>
-      toast.error("Der Eintrag konnte gerade nicht freigegeben werden. Bitte versuche es noch einmal."),
+    onError: (error) => toast.error(getApproveEntryErrorMessage(error)),
     onSettled: () => {
       setProcessingId(null);
       setProcessingType(null);
