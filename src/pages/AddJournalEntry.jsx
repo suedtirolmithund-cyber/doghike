@@ -201,6 +201,17 @@ function WaterInfoDialog() {
   );
 }
 
+function normalizePublicTags(value) {
+  return Array.from(
+    new Set(
+      (Array.isArray(value) ? value : value ? [value] : [])
+        .flatMap((entry) => String(entry ?? "").split(","))
+        .map((tag) => tag.trim())
+        .filter(Boolean)
+    )
+  );
+}
+
 function GrazingAnimalsInfoDialog() {
   return (
     <Dialog>
@@ -904,6 +915,7 @@ const EMPTY_FORM = {
   dog_id: null,
   dog_ids: [],
   dog_mood_tags: [],
+  tagsText: "",
 };
 
 export default function AddJournalEntry() {
@@ -938,6 +950,7 @@ export default function AddJournalEntry() {
     dog_id: routePrefill?.dog_id ?? null,
     dog_ids: normalizeSelectedDogIds(routePrefill?.dog_ids, routePrefill?.dog_id),
     dog_mood_tags: normalizeDogMoodTags(routePrefill?.dog_mood_tags),
+    tagsText: normalizePublicTags(routePrefill?.tags).join(", "),
     photos: routePrefill?.photos ?? [],
     gpx_url: routePrefill?.gpx_url ?? "",
   };
@@ -967,6 +980,7 @@ export default function AddJournalEntry() {
       dog_id: prefill.dog_ids[0] ?? prefill.dog_id ?? EMPTY_FORM.dog_id,
       dog_ids: prefill.dog_ids,
       dog_mood_tags: prefill.dog_mood_tags,
+      tagsText: prefill.tagsText || EMPTY_FORM.tagsText,
       photos: Array.isArray(prefill.photos) ? prefill.photos : EMPTY_FORM.photos,
       gpx_url: prefill.gpx_url || EMPTY_FORM.gpx_url,
     }),
@@ -1042,6 +1056,7 @@ export default function AddJournalEntry() {
         dog_id: normalizedExistingDogIds[0] ?? null,
         dog_ids: normalizedExistingDogIds,
         dog_mood_tags: normalizeDogMoodTags(existing.dog_mood_tags),
+        tagsText: normalizePublicTags(existing.tags).join(", "),
       });
     }
   }, [existing]);
@@ -1396,12 +1411,14 @@ export default function AddJournalEntry() {
 
     const normalizedDogIds = normalizeSelectedDogIds(form.dog_ids, form.dog_id);
     const normalizedSeasons = normalizeSeasonValues(form.seasons, form.season);
+    const normalizedTags = normalizePublicTags(form.tagsText);
 
     saveMutation.mutate({
       ...form,
       seasons: normalizedSeasons,
       dog_ids: normalizedDogIds,
       dog_id: normalizedDogIds[0] ?? null,
+      tags: normalizedTags,
       distance_km: form.distance_km !== "" ? Number(form.distance_km) : null,
       elevation_m: form.elevation_m !== "" ? Number(form.elevation_m) : null,
       duration_minutes: hoursInputToMinutes(form.duration_minutes),
@@ -1917,6 +1934,18 @@ export default function AddJournalEntry() {
                 <p className="text-xs text-brand-700 bg-white border border-brand-100 rounded-lg px-3 py-2">
                   Öffentlich sichtbar sind dann Tourdaten, Fotos, dein Nutzername, optional dein Profilbild sowie Name und optionales Foto der ausgewählten Hunde.
                 </p>
+                <div className="space-y-2 rounded-lg border border-brand-100 bg-white px-3 py-3">
+                  <Label htmlFor="public-tags">Tags fÃ¼r die Ã¶ffentliche Tour</Label>
+                  <Input
+                    id="public-tags"
+                    value={form.tagsText}
+                    onChange={(e) => set("tagsText", e.target.value)}
+                    placeholder="See, Schatten, Rundweg, HÃ¼tte"
+                  />
+                  <p className="text-xs text-slate-500">
+                    Optional. Du oder der Admin kÃ¶nnt hier passende Tags ergÃ¤nzen, bevor die Tour Ã¶ffentlich erscheint.
+                  </p>
+                </div>
                 <div className="text-xs rounded-lg border border-brand-200 bg-brand-50/70 px-3 py-2 text-brand-800">
                   <p className="font-semibold mb-1">Pflichtfelder für öffentliche Wanderungen:</p>
                   <p>Ort - Startpunkt (Karte) - Distanz - Höhenmeter - Dauer - Schwierigkeit (Mensch und Hund) - Beschreibung - mind. 1 Foto - Jahreszeit</p>

@@ -292,6 +292,10 @@ function withoutUnsupportedOptionalColumns(entry = {}, error) {
     delete fallbackEntry.dog_mood_tags;
   }
 
+  if (message.includes("tags") && message.includes("column")) {
+    delete fallbackEntry.tags;
+  }
+
   if (message.includes("seasons") && message.includes("column")) {
     delete fallbackEntry.seasons;
   }
@@ -304,6 +308,7 @@ function isMissingOptionalJournalColumnError(error) {
   return (
     (message.includes("dog_ids") && message.includes("column")) ||
     (message.includes("dog_mood_tags") && message.includes("column")) ||
+    (message.includes("tags") && message.includes("column")) ||
     (message.includes("seasons") && message.includes("column"))
   );
 }

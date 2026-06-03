@@ -268,6 +268,7 @@ create table if not exists public.journal_entries (
   grazing_animals   boolean default false,
   muzzle_recommended boolean default false,
   dog_mood_tags     text[] default '{}',
+  tags              text[] default '{}',
   hazard_notes      text,
   seasons           text[] default '{}',
   visibility        text default 'private' check (visibility in ('private', 'friends', 'public')),
@@ -285,6 +286,7 @@ create table if not exists public.journal_entries (
 --   add column if not exists grazing_animals boolean default false,
 --   add column if not exists muzzle_recommended boolean default false,
 --   add column if not exists dog_mood_tags text[] default '{}',
+--   add column if not exists tags text[] default '{}',
 --   add column if not exists seasons text[] default '{}',
 --   add column if not exists visibility text default 'private' check (visibility in ('private','friends','public')),
 --   add column if not exists status text default 'draft' check (status in ('draft','pending','approved','rejected'));

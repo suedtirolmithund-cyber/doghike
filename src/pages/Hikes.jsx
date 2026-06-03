@@ -40,6 +40,23 @@ import { getUniqueHikeImageSources, resolveHikeImageUrl } from "@/lib/hikeImages
 
 const HIKES_PAGE_SIZE = 15;
 
+function getRangeValidationError(label, min, max) {
+  const minValue = min === "" ? null : Number(min);
+  const maxValue = max === "" ? null : Number(max);
+
+  if (
+    minValue !== null &&
+    maxValue !== null &&
+    Number.isFinite(minValue) &&
+    Number.isFinite(maxValue) &&
+    minValue > maxValue
+  ) {
+    return `${label}: Min darf nicht größer als Max sein.`;
+  }
+
+  return "";
+}
+
 function DifficultyInfoDialog({ icon, title, description, levels }) {
   return (
     <Dialog>
@@ -158,7 +175,7 @@ export default function Hikes() {
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
     staleTime: 5 * 60_000,
-    refetchOnMount: false,
+    refetchOnMount: "always",
     refetchOnWindowFocus: false,
   });
   const {
@@ -212,32 +229,19 @@ export default function Hikes() {
     (currentPage - 1) * HIKES_PAGE_SIZE,
     currentPage * HIKES_PAGE_SIZE
   );
+  const distanceRangeError = useMemo(
+    () => getRangeValidationError("Distanz", distanceMin, distanceMax),
+    [distanceMin, distanceMax]
+  );
+  const elevationRangeError = useMemo(
+    () => getRangeValidationError("Höhenmeter", elevationMin, elevationMax),
+    [elevationMin, elevationMax]
+  );
+  const filterRangeError = distanceRangeError || elevationRangeError;
 
   const handleApplyFilters = () => {
-    const distanceMinValue = distanceMin === "" ? null : Number(distanceMin);
-    const distanceMaxValue = distanceMax === "" ? null : Number(distanceMax);
-    const elevationMinValue = elevationMin === "" ? null : Number(elevationMin);
-    const elevationMaxValue = elevationMax === "" ? null : Number(elevationMax);
-
-    if (
-      distanceMinValue !== null &&
-      distanceMaxValue !== null &&
-      Number.isFinite(distanceMinValue) &&
-      Number.isFinite(distanceMaxValue) &&
-      distanceMinValue > distanceMaxValue
-    ) {
-      toast.error("Distanz: Min-Wert darf nicht größer als Max-Wert sein.");
-      return;
-    }
-
-    if (
-      elevationMinValue !== null &&
-      elevationMaxValue !== null &&
-      Number.isFinite(elevationMinValue) &&
-      Number.isFinite(elevationMaxValue) &&
-      elevationMinValue > elevationMaxValue
-    ) {
-      toast.error("Höhenmeter: Min-Wert darf nicht größer als Max-Wert sein.");
+    if (filterRangeError) {
+      toast.error(filterRangeError);
       return;
     }
 

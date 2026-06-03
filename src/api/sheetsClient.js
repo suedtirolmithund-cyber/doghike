@@ -675,7 +675,7 @@ function journalEntryToHike(entry, dog = null, profile = null) {
 
     photos: Array.isArray(entry.photos) ? entry.photos : [],
     link: null,
-    tags: [],
+    tags: Array.isArray(entry.tags) ? entry.tags.filter(Boolean) : [],
 
     distance_km: entry.distance_km ? Number(entry.distance_km) : null,
     elevation_gain_m: entry.elevation_m || null,
@@ -759,6 +759,7 @@ const APPROVED_JOURNAL_ENTRY_FIELDS = [
   "date",
   "dog_id",
   "dog_ids",
+  "tags",
 ].join(", ");
 
 /**
