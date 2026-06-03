@@ -63,6 +63,7 @@ ToastAction.displayName = "ToastAction";
 const ToastClose = React.forwardRef(({ className, ...props }, ref) => (
   <button
     ref={ref}
+    aria-label="Benachrichtigung schließen"
     className={cn(
       "absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-brand-200 group-[.destructive]:hover:text-brand-50 group-[.destructive]:focus:ring-brand-300 group-[.destructive]:focus:ring-offset-brand-400",
       className
@@ -71,6 +72,7 @@ const ToastClose = React.forwardRef(({ className, ...props }, ref) => (
     {...props}
   >
     <X className="h-4 w-4" />
+    <span className="sr-only">Benachrichtigung schließen</span>
   </button>
 ));
 ToastClose.displayName = "ToastClose";

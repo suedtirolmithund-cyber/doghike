@@ -1287,13 +1287,17 @@ export default function HikeDetail() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Foto-Lightbox"
             className="fixed inset-0 z-[100] bg-black/95"
           >
             <button
+              type="button"
               onClick={() => setLightboxOpen(false)}
               className="absolute left-4 z-30 rounded-full bg-white/12 p-2 text-white/80 backdrop-blur-sm hover:bg-white/20 hover:text-white"
               style={{ top: "max(1rem, env(safe-area-inset-top))" }}
-              aria-label="Fotoansicht schließen"
+              aria-label="Lightbox schließen"
             >
               <X className="w-8 h-8" />
             </button>
@@ -1304,7 +1308,7 @@ export default function HikeDetail() {
                   type="button"
                   onClick={showPreviousLightboxPhoto}
                   className="absolute left-4 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/12 text-white/85 shadow-lg backdrop-blur-sm transition hover:bg-white/22 hover:text-white md:flex"
-                  aria-label="Vorheriges Foto"
+                  aria-label="Vorheriges Foto in der Lightbox"
                 >
                   <ChevronLeft className="h-7 w-7" />
                 </button>
@@ -1312,7 +1316,7 @@ export default function HikeDetail() {
                   type="button"
                   onClick={showNextLightboxPhoto}
                   className="absolute right-4 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/12 text-white/85 shadow-lg backdrop-blur-sm transition hover:bg-white/22 hover:text-white md:flex"
-                  aria-label="Nächstes Foto"
+                  aria-label="Nächstes Foto in der Lightbox"
                 >
                   <ChevronRight className="h-7 w-7" />
                 </button>
@@ -1336,7 +1340,7 @@ export default function HikeDetail() {
                 >
                   <img
                     src={resolveHikeImageUrl(photo, { width: 1800, quality: 84 })}
-                    alt={`Photo ${index + 1}`}
+                    alt={`Foto ${index + 1} von ${photos.length}`}
                     draggable={false}
                     onError={() => {
                       markPhotoAsFailed(photo);
@@ -1348,7 +1352,10 @@ export default function HikeDetail() {
               ))}
             </div>
 
-            <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full bg-black/45 px-3 py-1 text-sm font-semibold text-white/80 backdrop-blur-sm">
+            <div
+              className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full bg-black/45 px-3 py-1 text-sm font-semibold text-white/80 backdrop-blur-sm"
+              aria-live="polite"
+            >
               {currentPhotoIndex + 1} / {photos.length}
             </div>
           </motion.div>
