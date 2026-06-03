@@ -38,7 +38,7 @@ import { formatDurationHours } from "@/lib/duration";
 import { HIKE_PLACEHOLDER_IMAGE } from "@/lib/fallbackImages";
 import { getUniqueHikeImageSources, resolveHikeImageUrl } from "@/lib/hikeImages";
 
-const HIKES_PAGE_SIZE = 15;
+const HIKES_PAGE_SIZE = 10;
 
 function getRangeValidationError(label, min, max) {
   const minValue = min === "" ? null : Number(min);
@@ -408,6 +408,7 @@ export default function Hikes() {
                     value={distanceMin}
                     onChange={(e) => setDistanceMin(e.target.value)}
                     aria-invalid={Boolean(distanceRangeError)}
+                    aria-describedby={distanceRangeError ? "hike-distance-range-error" : undefined}
                     className={distanceRangeError ? "border-[#A8003C] bg-[#FFF3F7]" : undefined}
                   />
                   <Input
@@ -416,11 +417,18 @@ export default function Hikes() {
                     value={distanceMax}
                     onChange={(e) => setDistanceMax(e.target.value)}
                     aria-invalid={Boolean(distanceRangeError)}
+                    aria-describedby={distanceRangeError ? "hike-distance-range-error" : undefined}
                     className={distanceRangeError ? "border-[#A8003C] bg-[#FFF3F7]" : undefined}
                   />
                 </div>
                 {distanceRangeError && (
-                  <p className="mt-1.5 text-xs font-semibold leading-snug text-[#A8003C]">{distanceRangeError}</p>
+                  <p
+                    id="hike-distance-range-error"
+                    role="alert"
+                    className="mt-1.5 text-xs font-semibold leading-snug text-[#A8003C]"
+                  >
+                    {distanceRangeError}
+                  </p>
                 )}
               </div>
 
@@ -433,6 +441,7 @@ export default function Hikes() {
                     value={elevationMin}
                     onChange={(e) => setElevationMin(e.target.value)}
                     aria-invalid={Boolean(elevationRangeError)}
+                    aria-describedby={elevationRangeError ? "hike-elevation-range-error" : undefined}
                     className={elevationRangeError ? "border-[#A8003C] bg-[#FFF3F7]" : undefined}
                   />
                   <Input
@@ -441,11 +450,18 @@ export default function Hikes() {
                     value={elevationMax}
                     onChange={(e) => setElevationMax(e.target.value)}
                     aria-invalid={Boolean(elevationRangeError)}
+                    aria-describedby={elevationRangeError ? "hike-elevation-range-error" : undefined}
                     className={elevationRangeError ? "border-[#A8003C] bg-[#FFF3F7]" : undefined}
                   />
                 </div>
                 {elevationRangeError && (
-                  <p className="mt-1.5 text-xs font-semibold leading-snug text-[#A8003C]">{elevationRangeError}</p>
+                  <p
+                    id="hike-elevation-range-error"
+                    role="alert"
+                    className="mt-1.5 text-xs font-semibold leading-snug text-[#A8003C]"
+                  >
+                    {elevationRangeError}
+                  </p>
                 )}
               </div>
 
