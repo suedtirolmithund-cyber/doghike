@@ -1,6 +1,18 @@
 import { supabase } from "./supabaseClient";
 import { deleteJournalFiles } from "./journalApi";
 
+async function requireCurrentUserId() {
+  const { data, error } = await supabase.auth.getUser();
+  if (error) throw error;
+
+  const userId = data?.user?.id;
+  if (!userId) {
+    throw new Error("Du musst eingeloggt sein.");
+  }
+
+  return userId;
+}
+
 export async function getUserRoutes(userId) {
   const { data, error } = await supabase
     .from("user_routes")
@@ -32,10 +44,12 @@ export async function createRoute(userId, routeData) {
 }
 
 export async function updateRoute(id, updates) {
+  const currentUserId = await requireCurrentUserId();
   const { data, error } = await supabase
     .from("user_routes")
     .update(updates)
     .eq("id", id)
+    .eq("user_id", currentUserId)
     .select()
     .single();
   if (error) throw error;
