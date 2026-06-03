@@ -90,6 +90,7 @@ function StatusBadge({ status }) {
   const normalized = (status ?? "").toLowerCase();
   const config = {
     approved: "bg-[#FFF8E0] text-[#7C3020] border-[#F9C030]",
+    pending: "bg-brand-100 text-brand-700 border-brand-200",
     draft: "bg-brand-50 text-brand-600 border-brand-100",
     archived: "bg-brand-100/80 text-slate-600 border-brand-100",
   };
@@ -101,6 +102,8 @@ function StatusBadge({ status }) {
     >
       {normalized === "approved"
         ? "Freigegeben"
+        : normalized === "pending"
+          ? "Ausstehend"
         : normalized === "draft"
           ? "Entwurf"
           : normalized === "archived"
