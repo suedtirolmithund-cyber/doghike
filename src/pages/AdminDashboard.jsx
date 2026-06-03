@@ -465,8 +465,11 @@ function PublicHikeCard({ hike }) {
   );
 }
 
-function UserCard({ profile, deleting, onDelete }) {
+function UserCard({ profile, deleting, onDelete, currentUserId }) {
   const displayName = profile.full_name || profile.username || "Unbenannter Nutzer";
+  const isCurrentUser = profile.user_id === currentUserId;
+  const isAdminAccount = profile.role === "admin";
+  const allowDelete = !isCurrentUser && !isAdminAccount;
 
   return (
     <motion.div
@@ -510,6 +513,7 @@ function UserCard({ profile, deleting, onDelete }) {
           </div>
         </div>
 
+        {allowDelete ? (
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
@@ -539,13 +543,18 @@ function UserCard({ profile, deleting, onDelete }) {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+        ) : (
+          <div className="text-right text-[11px] font-medium text-slate-400">
+            {isCurrentUser ? "Eigenes Konto" : "Admin geschützt"}
+          </div>
+        )}
       </div>
     </motion.div>
   );
 }
 
 export default function AdminDashboard() {
-  const { isAuthenticated, isLoadingAuth } = useAuth();
+  const { user, isAuthenticated, isLoadingAuth } = useAuth();
   const queryClient = useQueryClient();
   const [processingId, setProcessingId] = useState(null);
   const [processingType, setProcessingType] = useState(null);
@@ -1049,6 +1058,7 @@ export default function AdminDashboard() {
                       profile={profile}
                       deleting={processingId === profile.user_id && processingType === "deleteUser"}
                       onDelete={(userId) => deleteUserMutation.mutate(userId)}
+                      currentUserId={user?.id}
                     />
                   ))}
                 </AnimatePresence>
