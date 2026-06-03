@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
@@ -39,6 +39,7 @@ import {
   approveComment,
   adminDeleteComment,
   getAdminPublicHikes,
+  getAdminPublicHikeStats,
   getAdminUsers,
   adminDeleteUserAccount,
 } from "@/lib/adminApi";
@@ -112,6 +113,8 @@ function StatusBadge({ status }) {
     </Badge>
   );
 }
+
+const PUBLIC_HIKES_PAGE_SIZE = 24;
 
 function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
   const [expanded, setExpanded] = useState(false);
@@ -573,6 +576,7 @@ export default function AdminDashboard() {
   const [publicHikeSearch, setPublicHikeSearch] = useState("");
   const [publicHikeStatusFilter, setPublicHikeStatusFilter] = useState("all");
   const [publicHikePremiumFilter, setPublicHikePremiumFilter] = useState("all");
+  const [publicHikePage, setPublicHikePage] = useState(1);
   const [userSearch, setUserSearch] = useState("");
   const { data: canAccessAdmin = false, isLoading: checkingAdminAccess } = useQuery({
     queryKey: ["admin_access"],
@@ -600,9 +604,29 @@ export default function AdminDashboard() {
     refetchInterval: 60_000,
   });
 
-  const { data: publicHikes = [], isLoading: publicHikesLoading } = useQuery({
-    queryKey: ["admin_public_hikes"],
-    queryFn: getAdminPublicHikes,
+  const { data: publicHikeStats, isLoading: publicHikeStatsLoading } = useQuery({
+    queryKey: ["admin_public_hike_stats"],
+    queryFn: getAdminPublicHikeStats,
+    enabled: canAccessAdmin,
+    refetchInterval: 60_000,
+  });
+
+  const { data: publicHikesData, isLoading: publicHikesLoading } = useQuery({
+    queryKey: [
+      "admin_public_hikes",
+      publicHikePage,
+      publicHikeSearch,
+      publicHikeStatusFilter,
+      publicHikePremiumFilter,
+    ],
+    queryFn: () =>
+      getAdminPublicHikes({
+        page: publicHikePage,
+        pageSize: PUBLIC_HIKES_PAGE_SIZE,
+        search: publicHikeSearch,
+        statusFilter: publicHikeStatusFilter,
+        premiumFilter: publicHikePremiumFilter,
+      }),
     enabled: canAccessAdmin,
     refetchInterval: 60_000,
   });
@@ -614,10 +638,23 @@ export default function AdminDashboard() {
     refetchInterval: 60_000,
   });
 
+  const publicHikes = publicHikesData?.items ?? [];
+  const totalPublicHikes = publicHikesData?.totalCount ?? 0;
+  const totalPublicHikePages = Math.max(1, Math.ceil(totalPublicHikes / PUBLIC_HIKES_PAGE_SIZE));
   const pendingCommentsCount = comments.filter((comment) => comment.reported).length;
-  const approvedPublicHikesCount = publicHikes.filter((hike) => hike.status === "approved").length;
-  const draftPublicHikesCount = publicHikes.filter((hike) => hike.status === "draft").length;
-  const premiumPublicHikesCount = publicHikes.filter((hike) => hike.is_premium).length;
+  const approvedPublicHikesCount = publicHikeStats?.approvedCount ?? 0;
+  const draftPublicHikesCount = publicHikeStats?.draftCount ?? 0;
+  const premiumPublicHikesCount = publicHikeStats?.premiumCount ?? 0;
+
+  useEffect(() => {
+    setPublicHikePage(1);
+  }, [publicHikeSearch, publicHikeStatusFilter, publicHikePremiumFilter]);
+
+  useEffect(() => {
+    if (publicHikePage > totalPublicHikePages) {
+      setPublicHikePage(totalPublicHikePages);
+    }
+  }, [publicHikePage, totalPublicHikePages]);
 
   const filteredComments = useMemo(() => {
     return comments.filter((comment) => {
@@ -634,22 +671,6 @@ export default function AdminDashboard() {
       );
     });
   }, [commentFilter, commentSearch, comments]);
-
-  const filteredPublicHikes = useMemo(() => {
-    return publicHikes.filter((hike) => {
-      if (publicHikeStatusFilter !== "all" && hike.status !== publicHikeStatusFilter) {
-        return false;
-      }
-
-        if (publicHikePremiumFilter === "premium" && !hike.is_premium) return false;
-        if (publicHikePremiumFilter === "free" && hike.is_premium) return false;
-
-        return matchesTextSearch(
-          [hike.title, hike.trail_name, hike.location, hike.country],
-          publicHikeSearch
-        );
-      });
-  }, [publicHikePremiumFilter, publicHikeSearch, publicHikeStatusFilter, publicHikes]);
 
   const filteredUsers = useMemo(() => {
     return adminUsers.filter((profile) => {
@@ -955,15 +976,21 @@ export default function AdminDashboard() {
             <div className="mb-4 grid gap-4 md:grid-cols-[1.05fr_0.95fr]">
               <div className="grid gap-3 sm:grid-cols-3">
                 <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
-                  <p className="text-2xl font-bold text-slate-900">{approvedPublicHikesCount}</p>
+                  <p className="text-2xl font-bold text-slate-900">
+                    {publicHikeStatsLoading ? "..." : approvedPublicHikesCount}
+                  </p>
                   <p className="mt-1 text-xs text-slate-500">Freigegeben</p>
                 </div>
                 <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
-                  <p className="text-2xl font-bold text-slate-900">{draftPublicHikesCount}</p>
+                  <p className="text-2xl font-bold text-slate-900">
+                    {publicHikeStatsLoading ? "..." : draftPublicHikesCount}
+                  </p>
                   <p className="mt-1 text-xs text-slate-500">Entwürfe</p>
                 </div>
                 <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
-                  <p className="text-2xl font-bold text-slate-900">{premiumPublicHikesCount}</p>
+                  <p className="text-2xl font-bold text-slate-900">
+                    {publicHikeStatsLoading ? "..." : premiumPublicHikesCount}
+                  </p>
                   <p className="mt-1 text-xs text-slate-500">Premium</p>
                 </div>
               </div>
@@ -1010,19 +1037,48 @@ export default function AdminDashboard() {
 
             {publicHikesLoading ? (
               <SectionLoadingState message="Wanderungen laden..." className="py-16" />
-            ) : filteredPublicHikes.length === 0 ? (
+            ) : publicHikes.length === 0 ? (
               <div className="doghike-empty-state">
                 <CheckCircle2 className="doghike-empty-icon text-brand-400" />
                 <h3 className="doghike-empty-title">Keine passenden Wanderungen</h3>
                 <p className="text-sm text-slate-500">Mit den aktuellen Filtern wurde nichts gefunden.</p>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <AnimatePresence>
-                  {filteredPublicHikes.map((hike) => (
+                  {publicHikes.map((hike) => (
                     <PublicHikeCard key={hike.id} hike={hike} />
                   ))}
                 </AnimatePresence>
+                {totalPublicHikePages > 1 && (
+                  <div className="flex flex-col gap-3 rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between">
+                    <p className="text-sm text-slate-500">
+                      Seite {publicHikePage} von {totalPublicHikePages}
+                      {" · "}
+                      {totalPublicHikes} Wanderung{totalPublicHikes !== 1 ? "en" : ""} gesamt
+                    </p>
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        disabled={publicHikePage <= 1}
+                        onClick={() => setPublicHikePage((value) => Math.max(1, value - 1))}
+                      >
+                        ZurÃ¼ck
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        disabled={publicHikePage >= totalPublicHikePages}
+                        onClick={() => setPublicHikePage((value) => Math.min(totalPublicHikePages, value + 1))}
+                      >
+                        Weiter
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </TabsContent>

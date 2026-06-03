@@ -127,32 +127,93 @@ export async function getPendingEntries() {
   }));
 }
 
-export async function getAdminPublicHikes() {
+export async function getAdminPublicHikeStats() {
   await assertAdmin();
 
-  const { data, error } = await supabase
+  const [approvedResult, draftResult, premiumResult] = await Promise.all([
+    supabase
+      .from("public_hikes")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "approved"),
+    supabase
+      .from("public_hikes")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "draft"),
+    supabase
+      .from("public_hikes")
+      .select("id", { count: "exact", head: true })
+      .eq("is_premium", true),
+  ]);
+
+  if (approvedResult.error) throw approvedResult.error;
+  if (draftResult.error) throw draftResult.error;
+  if (premiumResult.error) throw premiumResult.error;
+
+  return {
+    approvedCount: approvedResult.count ?? 0,
+    draftCount: draftResult.count ?? 0,
+    premiumCount: premiumResult.count ?? 0,
+  };
+}
+
+export async function getAdminPublicHikes({
+  page = 1,
+  pageSize = 24,
+  search = "",
+  statusFilter = "all",
+  premiumFilter = "all",
+} = {}) {
+  await assertAdmin();
+
+  const normalizedPage = Number.isFinite(page) ? Math.max(1, page) : 1;
+  const normalizedPageSize = Number.isFinite(pageSize) ? Math.max(1, pageSize) : 24;
+  const rangeStart = (normalizedPage - 1) * normalizedPageSize;
+  const rangeEnd = rangeStart + normalizedPageSize - 1;
+  const trimmedSearch = search.trim();
+
+  let query = supabase
     .from("public_hikes")
-    .select("id, title, location, country, status, is_premium, updated_at, created_at, image")
+    .select("id, title, location, country, status, is_premium, updated_at, created_at, image", {
+      count: "exact",
+    })
     .order("updated_at", { ascending: false });
+
+  if (statusFilter !== "all") {
+    query = query.eq("status", statusFilter);
+  }
+
+  if (premiumFilter === "premium") {
+    query = query.eq("is_premium", true);
+  } else if (premiumFilter === "free") {
+    query = query.eq("is_premium", false);
+  }
+
+  if (trimmedSearch) {
+    const escapedSearch = trimmedSearch.replace(/[%_,]/g, (char) => `\\${char}`);
+    query = query.or(
+      `title.ilike.%${escapedSearch}%,location.ilike.%${escapedSearch}%,country.ilike.%${escapedSearch}%`
+    );
+  }
+
+  const { data, error, count } = await query.range(rangeStart, rangeEnd);
 
   if (error) throw error;
 
-  return Promise.all(
-    (data ?? []).map(async (hike) => {
-      const [coverPhoto] = await resolvePublicHikePhotoReferences(
-        hike.image ? [hike.image] : []
-      );
-
-      return {
-        ...hike,
-        trail_name: hike.title,
-        route_id: String(hike.id),
-        _public_hike_id: hike.id,
-        _source: "sheets",
-        cover_photo: coverPhoto ?? hike.image ?? null,
-      };
-    })
+  const coverPhotos = await resolvePublicHikePhotoReferences(
+    (data ?? []).map((hike) => hike.image ?? null)
   );
+
+  return {
+    items: (data ?? []).map((hike, index) => ({
+      ...hike,
+      trail_name: hike.title,
+      route_id: String(hike.id),
+      _public_hike_id: hike.id,
+      _source: "sheets",
+      cover_photo: coverPhotos[index] ?? hike.image ?? null,
+    })),
+    totalCount: count ?? 0,
+  };
 }
 
 export async function approveEntry(id) {
