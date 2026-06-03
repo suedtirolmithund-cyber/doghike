@@ -26,7 +26,9 @@ import { searchNominatim } from "@/lib/nominatimApi";
 import { toast } from "sonner";
 import {
   ROUTE_LINE_COLOR,
+  ROUTE_TILE_LAYERS,
   ROUTE_TILE_LAYER,
+  getRouteTileLayer,
   getRouteWaypointColor,
   getRouteWaypointLabel,
   getRouteWaypointListStyle,
@@ -249,8 +251,9 @@ function SmartRoutePlanner({ onRouteReady }) {
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState(null);
   const [routingMode, setRoutingMode] = useState("hike");
+  const [tileLayerId, setTileLayerId] = useState(ROUTE_TILE_LAYER.id);
   const routeRef = useRef(null);
-  const tile = ROUTE_TILE_LAYER;
+  const tile = getRouteTileLayer(tileLayerId);
   const mapResetKey = `planner-${routingMode}`;
 
   useEffect(() => {
@@ -378,6 +381,23 @@ function SmartRoutePlanner({ onRouteReady }) {
           >
             <div>{m.label}</div>
             <div className="text-[10px] font-normal text-slate-400 mt-0.5 hidden sm:block">{m.desc}</div>
+          </button>
+        ))}
+      </div>
+
+      <div className="flex flex-wrap gap-1 rounded-xl border border-white/70 bg-white/65 p-1 backdrop-blur-xl">
+        {ROUTE_TILE_LAYERS.map((layer) => (
+          <button
+            key={layer.id}
+            type="button"
+            onClick={() => setTileLayerId(layer.id)}
+            className={`rounded-lg px-3 py-2 text-xs font-medium transition-all ${
+              tileLayerId === layer.id
+                ? "bg-brand-100 text-brand-800 shadow-sm"
+                : "text-slate-500 hover:text-slate-700"
+            }`}
+          >
+            {layer.label}
           </button>
         ))}
       </div>
