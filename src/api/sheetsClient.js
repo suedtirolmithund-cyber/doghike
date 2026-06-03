@@ -786,27 +786,42 @@ async function getApprovedJournalEntries() {
     }
     if (!entries?.length) return [];
 
-    const hydratedEntries = await hydrateJournalEntriesMedia(entries);
+    let hydratedEntries = entries;
+    try {
+      hydratedEntries = await hydrateJournalEntriesMedia(entries);
+    } catch (error) {
+      console.error("[sheetsClient] journal media hydration failed, falling back to raw entries:", error);
+    }
 
     // 2. Fetch dogs for entries that have one or more selected dogs
     const dogIds = [...new Set(hydratedEntries.flatMap((entry) => getJournalEntryDogIds(entry)))];
     const dogMap = {};
     if (dogIds.length > 0) {
-      const { data: dogs } = await supabase
-        .from("dogs")
-        .select("id, name, photo_url")
-        .in("id", dogIds);
-      (dogs ?? []).forEach((d) => { dogMap[d.id] = d; });
+      try {
+        const { data: dogs } = await supabase
+          .from("dogs")
+          .select("id, name, photo_url")
+          .in("id", dogIds);
+        (dogs ?? []).forEach((d) => { dogMap[d.id] = d; });
+      } catch (error) {
+        console.error("[sheetsClient] dog lookup for approved journals failed:", error);
+      }
     }
 
     // 3. Fetch author profiles (separate query — no direct FK to public.profiles)
     const userIds = [...new Set(hydratedEntries.map((e) => e.user_id))];
     const profileMap = {};
-    const { data: profiles } = await supabase
-      .from("public_profiles")
-      .select("user_id, username, full_name, avatar_url")
-      .in("user_id", userIds);
-    (profiles ?? []).forEach((p) => { profileMap[p.user_id] = p; });
+    if (userIds.length > 0) {
+      try {
+        const { data: profiles } = await supabase
+          .from("public_profiles")
+          .select("user_id, username, full_name, avatar_url")
+          .in("user_id", userIds);
+        (profiles ?? []).forEach((p) => { profileMap[p.user_id] = p; });
+      } catch (error) {
+        console.error("[sheetsClient] profile lookup for approved journals failed:", error);
+      }
+    }
 
     return hydratedEntries.map((entry) =>
       journalEntryToHike(

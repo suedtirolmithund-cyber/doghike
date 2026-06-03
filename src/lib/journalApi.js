@@ -150,9 +150,17 @@ export async function getSignedJournalUrl(fileReference) {
   if (!fileReference) return null;
   if (!isJournalStoragePath(fileReference)) return fileReference;
 
-  const { data, error } = await supabase.storage
-    .from("journal")
-    .createSignedUrl(fileReference, JOURNAL_SIGNED_URL_TTL_SECONDS);
+  let response;
+  try {
+    response = await supabase.storage
+      .from("journal")
+      .createSignedUrl(fileReference, JOURNAL_SIGNED_URL_TTL_SECONDS);
+  } catch (error) {
+    console.error("[getSignedJournalUrl] failed:", error?.message || error);
+    return null;
+  }
+
+  const { data, error } = response;
 
   if (error) {
     console.error("[getSignedJournalUrl] failed:", error.message);
@@ -179,9 +187,20 @@ export async function getSignedJournalUrls(fileReferences = []) {
   });
 
   if (storagePaths.length > 0) {
-    const { data, error } = await supabase.storage
-      .from("journal")
-      .createSignedUrls(storagePaths, JOURNAL_SIGNED_URL_TTL_SECONDS);
+    let response;
+    try {
+      response = await supabase.storage
+        .from("journal")
+        .createSignedUrls(storagePaths, JOURNAL_SIGNED_URL_TTL_SECONDS);
+    } catch (error) {
+      console.error("[getSignedJournalUrls] failed:", error?.message || error);
+      storageIndexes.forEach((index) => {
+        resolved[index] = null;
+      });
+      return resolved;
+    }
+
+    const { data, error } = response;
 
     if (error) {
       console.error("[getSignedJournalUrls] failed:", error.message);
