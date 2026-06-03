@@ -2,6 +2,23 @@ import { supabase } from "./supabaseClient";
 import { optimizeImageForUpload, validateImageUpload } from "./uploadValidation";
 
 const COMMENT_SIGNED_URL_TTL_SECONDS = 60 * 60;
+const COMMENT_REVIEW_PATTERNS = [
+  /\bwhatsapp\b/i,
+  /\btelegram\b/i,
+  /\bbitcoin\b/i,
+  /\bkrypto\b/i,
+  /\bcrypto\b/i,
+  /\bonlyfans\b/i,
+  /\bescort\b/i,
+  /\bcasino\b/i,
+  /\bviagra\b/i,
+  /\bsex\b/i,
+  /\bporno\b/i,
+  /\bwww\./i,
+  /https?:\/\//i,
+  /\b(?:dm|pn|privatnachricht)\b/i,
+  /\b(?:schreib mir|melde dich|kontaktiere mich)\b/i,
+];
 
 function normalizeHikeSource(value) {
   return value ?? "sheets";
@@ -377,7 +394,14 @@ export async function deleteComment(id) {
 }
 
 export function commentNeedsReview(text) {
-  return false;
+  if (typeof text !== "string") return false;
+
+  const normalizedText = text
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+
+  return COMMENT_REVIEW_PATTERNS.some((pattern) => pattern.test(normalizedText));
 }
 
 export async function uploadCommentPhoto(userId, file, { needsReview = false } = {}) {
