@@ -354,13 +354,19 @@ grant execute on function public.get_top_dogs_leaderboard(text) to anon;
 -- Helper: Prüft ob der aktuelle Nutzer Admin ist
 create or replace function public.is_admin()
 returns boolean
-language sql security definer
+language sql
+security definer
+set search_path = public
 as $$
   select exists (
     select 1 from public.profiles
     where user_id = auth.uid() and role = 'admin'
   );
 $$;
+
+grant execute on function public.is_admin() to authenticated;
+revoke execute on function public.is_admin() from public;
+revoke execute on function public.is_admin() from anon;
 
 create or replace function public.prevent_profile_billing_self_update()
 returns trigger
