@@ -289,44 +289,70 @@ returns table (
   rating_count integer
 )
 language sql
-security invoker
+security definer
 stable
 set search_path = public
 as $$
-  with filtered_entries as (
-    select je.*
+  with timeframe_bounds as (
+    select
+      date_trunc('day', now()) - (((extract(dow from now())::int + 6) % 7) * interval '1 day') as start_of_week,
+      date_trunc('month', now()) as start_of_month
+  ),
+  source_entries as (
+    select
+      coalesce(je.date::timestamptz, je.created_at) as occurred_at,
+      je.distance_km,
+      je.elevation_m as elevation_value,
+      je.rating,
+      array_cat(
+        coalesce(je.dog_ids, '{}'::uuid[]),
+        case when je.dog_id is not null then array[je.dog_id] else '{}'::uuid[] end
+      ) as dog_ids
     from public.journal_entries je
+    where auth.uid() is not null
+
+    union all
+
+    select
+      coalesce(h.date::timestamptz, h.created_at) as occurred_at,
+      h.distance_km,
+      h.elevation_gain_m as elevation_value,
+      null::numeric as rating,
+      array_cat(
+        coalesce(h.dog_ids, '{}'::uuid[]),
+        case when h.dog_id is not null then array[h.dog_id] else '{}'::uuid[] end
+      ) as dog_ids
+    from public.public_hikes h
+    where auth.uid() is not null
+      and h.status = 'approved'
+  ),
+  filtered_entries as (
+    select se.*
+    from source_entries se
+    cross join timeframe_bounds tb
     where
-      je.visibility = 'public'
-      and je.status = 'approved'
-      and (
-        timeframe_value = 'overall'
-        or (
-          timeframe_value = 'week'
-          and coalesce(je.date::timestamptz, je.created_at) >=
-            date_trunc('day', now()) - (((extract(dow from now())::int + 6) % 7) * interval '1 day')
-        )
-        or (
-          timeframe_value = 'month'
-          and coalesce(je.date::timestamptz, je.created_at) >= date_trunc('month', now())
-        )
+      timeframe_value = 'overall'
+      or (
+        timeframe_value = 'week'
+        and se.occurred_at is not null
+        and se.occurred_at >= tb.start_of_week
+      )
+      or (
+        timeframe_value = 'month'
+        and se.occurred_at is not null
+        and se.occurred_at >= tb.start_of_month
       )
   ),
   entry_dogs as (
     select
-      je.distance_km,
-      je.elevation_m,
-      je.rating,
+      fe.distance_km,
+      fe.elevation_value,
+      fe.rating,
       selected_dogs.dog_id
-    from filtered_entries je
+    from filtered_entries fe
     cross join lateral (
       select distinct dog_id
-      from unnest(
-        array_cat(
-          coalesce(je.dog_ids, '{}'::uuid[]),
-          case when je.dog_id is not null then array[je.dog_id] else '{}'::uuid[] end
-        )
-      ) as dog_id
+      from unnest(fe.dog_ids) as dog_id
     ) selected_dogs
   )
   select
@@ -337,7 +363,7 @@ as $$
     d.photo_url as dog_photo_url,
     count(*)::integer as tour_count,
     round(coalesce(sum(ed.distance_km), 0)::numeric, 1) as total_distance,
-    round(coalesce(sum(ed.elevation_m), 0))::integer as total_elevation,
+    round(coalesce(sum(ed.elevation_value), 0))::integer as total_elevation,
     case
       when count(ed.rating) > 0 then round(avg(ed.rating)::numeric, 1)
       else 0
@@ -349,7 +375,8 @@ as $$
 $$;
 
 grant execute on function public.get_top_dogs_leaderboard(text) to authenticated;
-grant execute on function public.get_top_dogs_leaderboard(text) to anon;
+revoke execute on function public.get_top_dogs_leaderboard(text) from public;
+revoke execute on function public.get_top_dogs_leaderboard(text) from anon;
 
 -- Helper: Prüft ob der aktuelle Nutzer Admin ist
 create or replace function public.is_admin()

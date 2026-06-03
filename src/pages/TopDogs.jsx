@@ -280,7 +280,6 @@ function TimeframeFilter({ timeframe, onChange }) {
     { id: "week", label: "Diese Woche" },
     { id: "month", label: "Dieser Monat" },
     { id: "overall", label: "Gesamt" },
-    { id: "friends", label: "Freunde" },
   ];
 
   return (
@@ -292,6 +291,32 @@ function TimeframeFilter({ timeframe, onChange }) {
           onClick={() => onChange(option.id)}
           className={`min-h-10 rounded-full border px-4 py-2 text-[15px] font-bold leading-tight transition sm:text-base ${
             timeframe === option.id
+              ? "border-brand-300 bg-brand-100 text-brand-700 shadow-sm"
+              : "border-white/70 bg-white/78 text-slate-500 shadow-sm backdrop-blur-xl hover:text-slate-700"
+          }`}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function ScopeFilter({ scope, onChange }) {
+  const options = [
+    { id: "community", label: "Alle Hunde" },
+    { id: "friends", label: "Freunde" },
+  ];
+
+  return (
+    <div className="mb-3 flex flex-wrap gap-2.5">
+      {options.map((option) => (
+        <button
+          key={option.id}
+          type="button"
+          onClick={() => onChange(option.id)}
+          className={`min-h-10 rounded-full border px-4 py-2 text-[15px] font-bold leading-tight transition sm:text-base ${
+            scope === option.id
               ? "border-brand-300 bg-brand-100 text-brand-700 shadow-sm"
               : "border-white/70 bg-white/78 text-slate-500 shadow-sm backdrop-blur-xl hover:text-slate-700"
           }`}
@@ -398,12 +423,12 @@ function RankingTab({ rows, metric, myDogIds, showOwnRank = true }) {
 // Main Page
 export default function TopDogs() {
   const { user } = useAuth();
+  const [scope, setScope] = useState("community");
   const [timeframe, setTimeframe] = useState("overall");
-  const effectiveTimeframe = timeframe === "friends" ? "overall" : timeframe;
 
   const { data: rows = [], isLoading, error } = useQuery({
-    queryKey: ["topDogs", effectiveTimeframe],
-    queryFn:  () => loadLeaderboard(effectiveTimeframe),
+    queryKey: ["topDogs", timeframe],
+    queryFn:  () => loadLeaderboard(timeframe),
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
@@ -411,7 +436,7 @@ export default function TopDogs() {
   const { data: friendIds = [] } = useQuery({
     queryKey: ["friendIds", user?.id],
     queryFn: () => getFriendIds(user.id),
-    enabled: timeframe === "friends" && !!user?.id,
+    enabled: scope === "friends" && !!user?.id,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
@@ -433,7 +458,7 @@ export default function TopDogs() {
     [friendIds]
   );
   const displayRows = useMemo(() => {
-    if (timeframe !== "friends") {
+    if (scope !== "friends") {
       return rows;
     }
 
@@ -442,7 +467,7 @@ export default function TopDogs() {
         friendIdSet.has(String(entry?.dog?.user_id ?? "")) &&
         String(entry?.dog?.user_id ?? "") !== String(user?.id ?? "")
     );
-  }, [friendIdSet, rows, timeframe, user?.id]);
+  }, [friendIdSet, rows, scope, user?.id]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
@@ -476,6 +501,7 @@ export default function TopDogs() {
         {!isLoading && !error && (
           <>
             {displayRows.length > 0 && <CommunityStats rows={displayRows} />}
+            <ScopeFilter scope={scope} onChange={setScope} />
             <TimeframeFilter timeframe={timeframe} onChange={setTimeframe} />
 
             <Tabs defaultValue="tours">
@@ -492,13 +518,13 @@ export default function TopDogs() {
               </TabsList>
 
               <TabsContent value="tours">
-                <RankingTab rows={displayRows} metric="tours" myDogIds={myDogIds} showOwnRank={timeframe !== "friends"} />
+                <RankingTab rows={displayRows} metric="tours" myDogIds={myDogIds} showOwnRank={scope !== "friends"} />
               </TabsContent>
               <TabsContent value="distance">
-                <RankingTab rows={displayRows} metric="distance" myDogIds={myDogIds} showOwnRank={timeframe !== "friends"} />
+                <RankingTab rows={displayRows} metric="distance" myDogIds={myDogIds} showOwnRank={scope !== "friends"} />
               </TabsContent>
               <TabsContent value="elevation">
-                <RankingTab rows={displayRows} metric="elevation" myDogIds={myDogIds} showOwnRank={timeframe !== "friends"} />
+                <RankingTab rows={displayRows} metric="elevation" myDogIds={myDogIds} showOwnRank={scope !== "friends"} />
               </TabsContent>
             </Tabs>
 
