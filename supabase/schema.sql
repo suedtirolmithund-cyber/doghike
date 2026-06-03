@@ -195,7 +195,23 @@ create policy "Öffentliche Hunde genehmigter Touren lesen"
       select 1
       from public.journal_entries je
       where je.status = 'approved'
-        and je.visibility = 'public'
+        and (
+          je.visibility = 'public'
+          or (
+            je.visibility = 'friends'
+            and auth.uid() is not null
+            and exists (
+              select 1
+              from public.friendships f
+              where
+                f.status = 'accepted'
+                and (
+                  (f.requester_id = auth.uid() and f.receiver_id = je.user_id)
+                  or (f.receiver_id = auth.uid() and f.requester_id = je.user_id)
+                )
+            )
+          )
+        )
         and (
           je.dog_id = public.dogs.id
           or public.dogs.id = any(coalesce(je.dog_ids, '{}'::uuid[]))
@@ -456,7 +472,8 @@ create trigger protect_profile_role_field
 
 create policy "Eigene Einträge lesen"
   on public.journal_entries for select
-  using (auth.uid() = user_id OR public.is_admin());
+  using (auth.uid() = user_id OR public.is_admin())
+  with check (auth.uid() = user_id OR public.is_admin());
 
 create policy "Freunde und öffentliche Einträge lesen"
   on public.journal_entries for select

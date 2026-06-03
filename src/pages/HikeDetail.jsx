@@ -698,6 +698,9 @@ export default function HikeDetail() {
     };
   };
   const canComment = hike?._source === "sheets" || hike?.visibility === "public";
+  const canAdminEditJournalHike = Boolean(
+    isAdmin && hike?._source === "journal" && hike?._journal_id
+  );
   const canDownloadPdf = (hike?._source === "sheets" || isOwnJournalHike || hike?.visibility === "public")
     && (!isPremiumContent || userHasPremium);
   const includePhotosInPdf = hike?._source === "sheets" || isOwnJournalHike;
@@ -744,13 +747,13 @@ export default function HikeDetail() {
             />
           </div>
           <div className="flex flex-wrap gap-2 self-start sm:justify-end">
-            {(isOwnJournalHike || (isAdmin && hike?._source === "sheets" && adminEditPublicHikeId)) && (
+            {(isOwnJournalHike || canAdminEditJournalHike || (isAdmin && hike?._source === "sheets" && adminEditPublicHikeId)) && (
                 <>
                   <Link
                     to={
-                      isOwnJournalHike
+                      (isOwnJournalHike || canAdminEditJournalHike)
                         ? createPageUrl("AddJournalEntry") + `?id=${hike?._journal_id}`
-                      : createPageUrl("EditPublicHike") + `?id=${encodeURIComponent(adminEditPublicHikeId ?? "")}`
+                        : createPageUrl("EditPublicHike") + `?id=${encodeURIComponent(adminEditPublicHikeId ?? "")}`
                     }
                   >
                   <Button variant="ghost" className="h-10 bg-white/10 px-3 text-sm backdrop-blur-sm text-white hover:bg-white/20">
