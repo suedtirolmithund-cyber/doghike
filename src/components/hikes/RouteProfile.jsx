@@ -76,7 +76,7 @@ export default function RouteProfile({ hike }) {
           </div>
         )}
         {hike.elevation_gain_m && (
-          <div className="rounded-xl border border-brand-100 bg-brand-50/80 p-4">
+          <div className="doghike-soft-panel p-4">
             <div className="flex items-center gap-1.5 text-brand-500 mb-1">
               <span className="text-sm leading-none">{TOUR_ICONS.elevation}</span>
               <span className="text-xs font-medium">Aufstieg</span>
@@ -98,7 +98,7 @@ export default function RouteProfile({ hike }) {
           </div>
         )}
         {pace && (
-          <div className="rounded-xl border border-brand-100 bg-white/70 p-4">
+          <div className="doghike-soft-panel p-4">
             <div className="flex items-center gap-1.5 text-brand-600 mb-1">
               <span className="text-sm leading-none">{TOUR_ICONS.speed}</span>
               <span className="text-xs font-medium">Tempo</span>

@@ -160,6 +160,14 @@
     @apply rounded-xl border border-brand-100/55 bg-brand-50/70;
   }
 
+  .doghike-map-frame {
+    @apply overflow-hidden rounded-xl border border-brand-100/70 bg-white/60 shadow-sm;
+  }
+
+  .doghike-floating-panel {
+    @apply rounded-xl border border-brand-100/70 bg-white/90 shadow-sm backdrop-blur-md;
+  }
+
   .doghike-page-shell {
     @apply min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/60 pb-24 md:pb-8;
   }

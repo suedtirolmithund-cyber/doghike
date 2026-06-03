@@ -37,7 +37,7 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
 
   if (isLoading) {
     return (
-      <div className="rounded-2xl border border-brand-100/70 bg-white/70 p-4 shadow-sm backdrop-blur-sm">
+      <div className="doghike-glass-card p-4">
         <div className="text-center text-brand-600">
           <div className="flex items-center justify-center gap-2">
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -58,7 +58,7 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl border border-brand-100/70 bg-white/70 p-4 shadow-[0_12px_28px_rgba(168,0,60,0.08)] backdrop-blur-sm"
+      className="doghike-glass-card p-4"
     >
       <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-[#7C3020] sm:text-base">
         <Cloud className="h-4 w-4 text-brand-400" />

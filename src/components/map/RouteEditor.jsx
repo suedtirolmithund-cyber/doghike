@@ -75,7 +75,7 @@ export default function RouteEditor({ coordinates = [], startPoint = null, onCha
         </Button>
       </div>
 
-      <div className="rounded-2xl overflow-hidden border border-brand-100 shadow-sm" style={{ height: "400px" }}>
+      <div className="doghike-map-frame" style={{ height: "400px" }}>
         <SafeMapContainer
           resetKey={`route-editor-${coordinates.length}-${center.join("-")}`}
           center={center}

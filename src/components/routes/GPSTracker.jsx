@@ -799,7 +799,7 @@ export default function GPSTracker({ onSave }) {
         ))}
       </div>
 
-      <div className="relative h-[50vw] min-h-64 max-h-72 overflow-hidden rounded-xl border-2 border-brand-100 md:h-80 lg:h-[400px]">
+      <div className="doghike-map-frame relative h-[50vw] min-h-64 max-h-72 border-2 md:h-80 lg:h-[400px]">
         <SafeMapContainer
           resetKey={`gps-tracker-${trackingKey}`}
           center={currentPosition || myLocation || [46.5, 11.9]}
@@ -857,7 +857,7 @@ export default function GPSTracker({ onSave }) {
         )}
 
         {routePoints.length > 0 && (
-          <div className="absolute right-3 top-3 z-[1000] rounded-lg border border-brand-100 bg-white/90 px-2 py-1 text-xs font-medium text-slate-700 shadow backdrop-blur-sm">
+          <div className="doghike-floating-panel absolute right-3 top-3 z-[1000] px-2 py-1 text-xs font-medium text-slate-700">
             {routePoints.length} Punkte
           </div>
         )}
@@ -872,7 +872,7 @@ export default function GPSTracker({ onSave }) {
           }}
           disabled={locating}
           title="Meinen Standort finden"
-          className="absolute bottom-3 right-3 z-[1000] flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-brand-100 bg-white p-3 shadow-md hover:bg-brand-50/70"
+          className="doghike-floating-panel absolute bottom-3 right-3 z-[1000] flex min-h-[44px] min-w-[44px] items-center justify-center p-3 hover:bg-brand-50/70"
         >
           {locating ? (
           <Loader2 className="h-5 w-5 animate-spin text-brand-600" />
@@ -926,7 +926,7 @@ export default function GPSTracker({ onSave }) {
       )}
 
       {isTracking && (
-        <div className="rounded-lg border border-brand-100 bg-brand-50 p-3 text-xs text-brand-700 md:text-sm">
+        <div className="doghike-soft-panel p-3 text-xs text-brand-700 md:text-sm">
           <p className="mb-1 font-medium">Bestmöglich für die Web-Version:</p>
           <ul className="list-disc space-y-1 pl-4">
             <li>Lass die App möglichst geöffnet oder den Bildschirm aktiv.</li>
@@ -937,7 +937,7 @@ export default function GPSTracker({ onSave }) {
       )}
 
       {liveElevationProfile.length >= 3 && (
-        <div className="rounded-xl border border-brand-100 bg-white p-3">
+        <div className="doghike-soft-panel p-3">
           <p className="mb-2 text-xs font-medium text-slate-500">Höhenprofil (live)</p>
           <ResponsiveContainer width="100%" height={80}>
             <AreaChart data={liveElevationProfile} margin={{ top: 2, right: 4, left: -20, bottom: 0 }}>

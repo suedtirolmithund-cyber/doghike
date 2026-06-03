@@ -467,7 +467,7 @@ export default function RouteDetail() {
                 </Button>
               </div>
             ) : (
-              <div className="h-96 md:h-[500px] rounded-xl overflow-hidden border border-brand-100">
+              <div className="doghike-map-frame h-96 md:h-[500px]">
                 {route.waypoints?.length > 0 ? (
                   <SafeMapContainer
                     resetKey={routeMapResetKey}

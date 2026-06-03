@@ -667,7 +667,7 @@ function LocationPicker({ lat, lng, locationName = "", onChange }) {
       )}
 
       {/* Map */}
-      <div className="relative rounded-xl overflow-hidden border border-brand-100 shadow-sm" style={{ height: 260 }}>
+      <div className="doghike-map-frame relative" style={{ height: 260 }}>
         <div className="absolute right-3 top-3 z-[1000]">
           <Button
             type="button"

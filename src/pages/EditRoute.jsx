@@ -132,7 +132,7 @@ export default function EditRoute() {
             </div>
           ) : (
             <div className="mb-6">
-              <div className="rounded-xl overflow-hidden border border-brand-100 mb-3">
+              <div className="doghike-map-frame mb-3">
                 <RoutePreviewMap coordinates={routeGeometry?.coordinates ?? []} />
               </div>
               {route?.route_type === "planned" && (

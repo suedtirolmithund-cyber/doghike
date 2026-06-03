@@ -78,7 +78,7 @@ export default function StartPointPicker({ latitude, longitude, onSelect }) {
   };
 
   return (
-    <div className="relative rounded-xl overflow-hidden border border-brand-100" style={{ height: "400px" }}>
+    <div className="doghike-map-frame relative" style={{ height: "400px" }}>
       <SafeMapContainer
         resetKey={`start-point-${latitude ?? "none"}-${longitude ?? "none"}`}
         center={position}

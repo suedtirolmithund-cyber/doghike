@@ -55,7 +55,7 @@ export default function InteractiveHikeMap({
 }) {
   if (!latitude || !longitude) {
     return (
-      <div className="rounded-2xl border border-brand-100 bg-brand-100/80 p-4">
+      <div className="doghike-soft-panel p-4">
         <EmptyState
           icon={MapPin}
           title="Keine Karte verfügbar"
@@ -74,7 +74,7 @@ export default function InteractiveHikeMap({
 
   return (
     <div className="doghike-glass-card overflow-hidden rounded-2xl p-2 shadow-sm">
-      <div className="relative h-[260px] sm:h-[360px] overflow-hidden rounded-xl border border-white/70 shadow-sm md:h-[500px]">
+      <div className="doghike-map-frame relative h-[260px] sm:h-[360px] md:h-[500px]">
         <SafeMapContainer
           resetKey={mapResetKey}
           center={center}
@@ -110,7 +110,7 @@ export default function InteractiveHikeMap({
         </SafeMapContainer>
 
         {hasRoute && (
-          <div className="absolute right-3 top-3 z-[1000] rounded-xl border border-white/70 bg-white/90 px-3 py-2 shadow-sm backdrop-blur-md">
+          <div className="doghike-floating-panel absolute right-3 top-3 z-[1000] px-3 py-2">
             <p className="text-xs font-medium text-slate-700">{routeCoordinates.length} Wegpunkte</p>
           </div>
         )}

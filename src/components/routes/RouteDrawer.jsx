@@ -160,7 +160,7 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
         )}
       </div>
 
-      <div className="relative h-64 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-brand-100">
+      <div className="doghike-map-frame relative h-64 border-2 md:h-96 lg:h-[500px]">
         <SafeMapContainer
           resetKey={`route-drawer-${waypoints.length}-${routeCoordinates.length}`}
           center={[46.5, 11.9]}

@@ -501,7 +501,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
         )}
       </div>
 
-      <div className="relative h-[60vw] min-h-64 max-h-72 md:h-96 lg:h-[500px] rounded-xl overflow-hidden border-2 border-brand-100">
+      <div className="doghike-map-frame relative h-[60vw] min-h-64 max-h-72 border-2 md:h-96 lg:h-[500px]">
         <SafeMapContainer
           resetKey={mapResetKey}
           center={waypoints.length > 0 ? waypoints[0] : [46.5, 11.9]}

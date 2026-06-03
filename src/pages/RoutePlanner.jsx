@@ -401,7 +401,7 @@ function SmartRoutePlanner({ onRouteReady }) {
 
       {searchError && <p className="text-xs text-brand-500">{searchError}</p>}
       {searchResults.length > 1 && (
-        <div className="rounded-xl border border-brand-100/80 bg-white/85 p-2 shadow-sm backdrop-blur-sm">
+        <div className="doghike-floating-panel p-2">
           <div className="flex items-center justify-between gap-2 px-2 pb-2">
             <p className="text-xs font-medium text-slate-500">
               Mehrere Orte gefunden. Wähle den richtigen aus:
@@ -431,7 +431,7 @@ function SmartRoutePlanner({ onRouteReady }) {
       )}
 
       {/* Map */}
-      <div className="relative h-[68vw] min-h-[310px] max-h-[500px] overflow-hidden rounded-xl border border-brand-100 shadow-sm md:h-[440px] md:max-h-none">
+      <div className="doghike-map-frame relative h-[68vw] min-h-[310px] max-h-[500px] md:h-[440px] md:max-h-none">
         <SafeMapContainer
           resetKey={mapResetKey}
           center={[46.5, 11.3]}
@@ -492,28 +492,28 @@ function SmartRoutePlanner({ onRouteReady }) {
         </SafeMapContainer>
 
         {waypoints.length === 0 && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 text-xs text-slate-600 shadow pointer-events-none">
+          <div className="doghike-floating-panel pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 text-xs text-slate-600">
             Tippe auf die Karte um Wegpunkte zu setzen
           </div>
         )}
         {waypoints.length === 1 && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 text-xs text-slate-600 shadow pointer-events-none">
+          <div className="doghike-floating-panel pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 text-xs text-slate-600">
             Setze einen weiteren Punkt für die Route
           </div>
         )}
         {route && waypoints.length >= 2 && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-xl px-3 py-1.5 text-[10px] text-slate-500 shadow pointer-events-none">
+          <div className="doghike-floating-panel pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 px-3 py-1.5 text-[10px] text-slate-500">
             Route anklicken → Wegpunkt einfügen · Marker ziehen → verschieben
           </div>
         )}
 
         {calculating && (
-          <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs text-slate-600 flex items-center gap-1.5 shadow">
+          <div className="doghike-floating-panel absolute right-3 top-3 flex items-center gap-1.5 px-3 py-1.5 text-xs text-slate-600">
             <Loader2 className="w-3.5 h-3.5 animate-spin text-brand-600" /> Route wird berechnet...
           </div>
         )}
 
-        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 text-[10px] font-medium text-slate-500 shadow">
+        <div className="doghike-floating-panel absolute left-3 top-3 px-2 py-1 text-[10px] font-medium text-slate-500">
           {tile.label}
         </div>
       </div>
@@ -863,7 +863,7 @@ export default function RoutePlanner() {
                   rows={2} className="mt-1" />
               </div>
 
-              <div className="rounded-xl border border-brand-100 bg-brand-50/70 px-4 py-3 text-sm text-slate-600">
+              <div className="doghike-soft-panel px-4 py-3 text-sm text-slate-600">
                 {activeTab === "track"
                   ? "Diese Aufzeichnung wird zuerst privat als Route gespeichert und danach als vorausgefüllter Tagebuch-Eintrag geöffnet."
                   : activeTab === "gpx"

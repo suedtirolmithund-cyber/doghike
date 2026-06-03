@@ -73,7 +73,7 @@ export default function WeatherWidget({ location, latitude, longitude }) {
       </h2>
 
       {/* Aktuell */}
-      <div className="mb-3 rounded-xl border border-brand-100/60 bg-white/58 p-3 backdrop-blur-sm">
+      <div className="doghike-soft-panel mb-3 p-3">
         <div className="flex items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
@@ -114,7 +114,7 @@ export default function WeatherWidget({ location, latitude, longitude }) {
                 ? "Heute"
                 : format(parseISO(dateStr), "EEE", { locale: de });
               return (
-                <div key={dateStr} className="rounded-xl border border-brand-100/60 bg-white/55 p-2 text-center backdrop-blur-sm">
+                <div key={dateStr} className="doghike-soft-panel p-2 text-center">
                   <div className="mb-2 text-xs capitalize text-[#C07820]">{dayName}</div>
                   <DayIcon className="mx-auto mb-2 h-5 w-5 text-brand-600" />
                   <div className="text-sm font-semibold text-[#7C3020]">
