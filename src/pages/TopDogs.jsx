@@ -49,7 +49,7 @@ function DogPhoto({ dog, width = 160, alt, className }) {
 function Podium({ top3, metric }) {
   if (!top3.length) return null;
   const order = [top3[1], top3[0], top3[2]]; // 2-1-3 Reihenfolge
-  const heights = ["h-32", "h-40", "h-28"];
+  const heights = ["min-h-[9.5rem]", "min-h-[11rem]", "min-h-[9.5rem]"];
   const origIdx = [1, 0, 2];
 
   return (
@@ -76,7 +76,7 @@ function Podium({ top3, metric }) {
             className="flex max-w-[116px] flex-1 flex-col items-center sm:max-w-[124px]"
           >
             <div
-              className={`relative flex w-full flex-col items-center rounded-t-xl border-t-2 px-2 pb-3 pt-12 text-center shadow-sm ${heights[i]} ${style.bg} ${style.border} ${
+              className={`relative flex w-full flex-col items-center rounded-t-xl border-t-2 px-2 pb-5 pt-12 text-center shadow-sm ${heights[i]} ${style.bg} ${style.border} ${
                 isFirst ? "sm:pt-14" : "sm:pt-12"
               }`}
             >
@@ -99,11 +99,11 @@ function Podium({ top3, metric }) {
                 )}
               </div>
 
-              <div className="mt-auto pt-1">
+              <div className="mt-auto flex min-h-[3.6rem] flex-col items-center justify-end pt-2">
                 <p className={`font-extrabold leading-tight ${isFirst ? "text-xl sm:text-2xl" : "text-base sm:text-lg"} ${style.num}`}>
                   {metricValue}
                 </p>
-                <p className="text-xs font-semibold leading-tight text-slate-500">
+                <p className="max-w-full break-words text-[11px] font-semibold leading-snug text-slate-500 sm:text-xs">
                   {metric === "tours" ? "Wanderungen" : metric === "distance" ? "km" : "Hm"}
                 </p>
               </div>
