@@ -9,6 +9,7 @@ import L from "leaflet";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 import { estimateRouteDurationMinutes, formatDurationHours, getRouteDurationRuleHint } from "@/lib/duration";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
+import LocationIcon from "@/components/icons/LocationIcon";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
 import { searchNominatim } from "@/lib/nominatimApi";
 import {
@@ -430,7 +431,10 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
         <div className="doghike-soft-panel p-3 md:p-4">
         <div className="flex items-start justify-between mb-2">
           <div>
-            <p className="font-medium text-xs md:text-sm text-slate-900 mb-1">{TOUR_ICONS.location} Routenplaner</p>
+            <p className="mb-1 flex items-center gap-1.5 text-xs font-medium text-slate-900 md:text-sm">
+              <LocationIcon className="h-3.5 w-3.5 md:h-4 md:w-4" />
+              Routenplaner
+            </p>
             <p className="text-xs text-slate-600">
               {isEditing ? 'Ziehe Wegpunkte um sie zu verschieben' : 'Klicke auf die Karte um Wegpunkte zu setzen'}
             </p>
@@ -501,7 +505,7 @@ export default function EditableRouteDrawer({ onSave, initialRoute = [], initial
         )}
       </div>
 
-      <div className="doghike-map-frame relative h-[60vw] min-h-64 max-h-72 border-2 md:h-96 lg:h-[500px]">
+      <div className="doghike-map-frame relative h-[60vw] min-h-64 max-h-72 md:h-96 lg:h-[500px]">
         <SafeMapContainer
           resetKey={mapResetKey}
           center={waypoints.length > 0 ? waypoints[0] : [46.5, 11.9]}

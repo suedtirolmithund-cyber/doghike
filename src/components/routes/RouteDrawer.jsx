@@ -7,6 +7,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { configureLeafletDefaultIcon } from "@/lib/leafletDefaultIcon";
 import { TOUR_ICONS } from "@/lib/difficultyConfig";
+import LocationIcon from "@/components/icons/LocationIcon";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
 import {
   ROUTE_LINE_COLOR,
@@ -141,7 +142,10 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
   return (
     <div className="space-y-3 md:space-y-4">
         <div className="doghike-soft-panel p-3 md:p-4 text-xs md:text-sm text-slate-700">
-        <p className="font-medium mb-2">{TOUR_ICONS.location} So funktioniert's:</p>
+        <p className="mb-2 flex items-center gap-1.5 font-medium">
+          <LocationIcon className="h-3.5 w-3.5 md:h-4 md:w-4" />
+          So funktioniert's:
+        </p>
         <ol className="list-decimal pl-4 md:pl-5 space-y-1">
           <li>Klicke auf die Karte, um Wegpunkte zu setzen</li>
           <li>Die Route folgt automatisch Wanderwegen</li>
@@ -160,7 +164,7 @@ export default function RouteDrawer({ onSave, initialRoute = [] }) {
         )}
       </div>
 
-      <div className="doghike-map-frame relative h-64 border-2 md:h-96 lg:h-[500px]">
+      <div className="doghike-map-frame relative h-64 md:h-96 lg:h-[500px]">
         <SafeMapContainer
           resetKey={`route-drawer-${waypoints.length}-${routeCoordinates.length}`}
           center={[46.5, 11.9]}

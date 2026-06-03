@@ -1841,7 +1841,7 @@ export default function AddJournalEntry() {
               </div>
             )}
 
-            <label className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-brand-100 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
+            <label className="flex min-h-36 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-[#F9C030]/85 bg-[#FDF0E8]/72 p-6 text-center shadow-sm transition-colors hover:bg-[#FDF0E8]">
               <input type="file" accept="image/*,.heic,.heif" multiple onChange={handlePhotoUpload} className="hidden" disabled={photoUploading} />
               {photoUploading ? (
                 <div className="flex flex-col items-center">
@@ -1872,7 +1872,7 @@ export default function AddJournalEntry() {
                 </button>
               </div>
             ) : (
-              <label className="flex items-center gap-3 p-4 border-2 border-dashed border-brand-100 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
+              <label className="flex min-h-24 cursor-pointer items-center gap-3 rounded-2xl border border-dashed border-[#F9C030]/85 bg-[#FDF0E8]/72 p-4 shadow-sm transition-colors hover:bg-[#FDF0E8]">
                 <input type="file" accept=".gpx" onChange={handleGpxUpload} className="hidden" disabled={gpxUploading} />
                 {gpxUploading ? (
                   <div className="flex flex-col items-center">
@@ -1928,7 +1928,7 @@ export default function AddJournalEntry() {
 
           {/* Foto-Einverständnis (nur wenn Fotos + nicht privat) */}
           {form.photos.length > 0 && form.visibility !== "private" && !isAdminReviewingForeignEntry && (
-            <section className="bg-brand-50 border border-brand-100 rounded-2xl p-4">
+            <section className="rounded-2xl border border-[#F9C030]/75 bg-[#FDF0E8]/78 p-4 shadow-sm">
               <label className="flex items-start gap-3 cursor-pointer">
                 <Checkbox
                   checked={photoConsent}
@@ -1947,9 +1947,9 @@ export default function AddJournalEntry() {
           )}
 
           {/* Submit */}
-          <div className="flex gap-3 justify-end pb-4">
-            <Link to={createPageUrl("Journal")}>
-              <Button type="button" variant="outline">Abbrechen</Button>
+          <div className="flex flex-col-reverse gap-3 justify-end pb-4 sm:flex-row">
+            <Link to={createPageUrl("Journal")} className="w-full sm:w-auto">
+              <Button type="button" variant="outline" className="w-full sm:w-auto">Abbrechen</Button>
             </Link>
             <Button
               type="submit"
@@ -1957,7 +1957,7 @@ export default function AddJournalEntry() {
                 saveMutation.isPending ||
                 (form.photos.length > 0 && form.visibility !== "private" && !photoConsent)
               }
-              className="bg-brand-400 hover:bg-brand-600 px-8"
+              className="w-full bg-brand-400 px-8 hover:bg-brand-600 sm:w-auto"
             >
               {saveMutation.isPending ? (
                 <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Speichern...</>

@@ -253,16 +253,16 @@ export default function DogForm({ dog, onSave, onCancel }) {
         <p className="text-sm text-brand-400">{validationError}</p>
       )}
 
-      <div className="flex gap-3 justify-end pt-2">
+      <div className="flex flex-col-reverse gap-3 justify-end pt-2 sm:flex-row">
         {onCancel && (
-          <Button type="button" variant="outline" onClick={handleCancel}>
+          <Button type="button" variant="outline" onClick={handleCancel} className="w-full sm:w-auto">
             Abbrechen
           </Button>
         )}
         <Button
           type="submit"
           disabled={saving || uploading}
-          className="bg-brand-400 hover:bg-brand-600"
+          className="w-full bg-brand-400 hover:bg-brand-600 sm:w-auto"
         >
           {saving ? (
             <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Speichern...</>

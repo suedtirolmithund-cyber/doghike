@@ -26,6 +26,7 @@ import RouteEditor from "@/components/map/RouteEditor";
 import StartPointPicker from "@/components/map/StartPointPicker";
 import ConsentDialog from "@/components/ConsentDialog";
 import WaterIcon from "@/components/icons/WaterIcon";
+import LocationIcon from "@/components/icons/LocationIcon";
 import SeasonMultiPicker from "@/components/season/SeasonMultiPicker";
 import { DIFFICULTY_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 import { hoursInputToMinutes, minutesToHoursInput } from "@/lib/duration";
@@ -509,7 +510,10 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
       <div className="space-y-4 rounded-2xl border border-brand-100/70 bg-white/70 p-5 shadow-[0_12px_28px_rgba(168,0,60,0.08)] backdrop-blur-sm md:p-6">
         <div className="flex items-center justify-between">
           <div>
-            <Label className="text-lg">{TOUR_ICONS.location} Ausgangspunkt *</Label>
+            <Label className="flex items-center gap-2 text-lg">
+              <LocationIcon className="h-5 w-5" />
+              Ausgangspunkt *
+            </Label>
             <p className="text-sm text-slate-500 mt-1">
               Wähle den Startpunkt deiner Wanderung auf der Karte aus
             </p>
@@ -533,8 +537,14 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             <p className="text-sm text-brand-600 font-medium mb-1">
               {TOUR_ICONS.check} Ausgangspunkt gesetzt
             </p>
-            <p className="text-xs text-slate-600">
-              {formData.location && `${TOUR_ICONS.location} ${formData.location} • `}
+            <p className="flex flex-wrap items-center gap-x-1 text-xs text-slate-600">
+              {formData.location && (
+                <>
+                  <LocationIcon className="h-3.5 w-3.5" />
+                  <span>{formData.location}</span>
+                  <span>•</span>
+                </>
+              )}
               {formData.latitude.toFixed(5)}, {formData.longitude.toFixed(5)}
             </p>
           </div>
@@ -796,7 +806,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
             ))}
           </AnimatePresence>
           
-          <label className="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-brand-100 rounded-xl cursor-pointer hover:border-brand-400 transition-colors">
+          <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-[#F9C030]/85 bg-[#FDF0E8]/72 text-center shadow-sm transition-colors hover:bg-[#FDF0E8]">
             <input
               type="file"
               accept="image/*"
@@ -941,16 +951,16 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
         </AlertDialogContent>
       </AlertDialog>
 
-      <div className="flex gap-3 justify-end pt-4">
+      <div className="flex flex-col-reverse gap-3 justify-end pt-4 sm:flex-row">
         {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel}>
+          <Button type="button" variant="outline" onClick={onCancel} className="w-full sm:w-auto">
             Abbrechen
           </Button>
         )}
         <Button
           type="submit"
           disabled={saving}
-          className="bg-[#A8003C] hover:bg-[#7C3020]"
+          className="w-full bg-[#A8003C] hover:bg-[#7C3020] sm:w-auto"
         >
           {saving ? (
             <>

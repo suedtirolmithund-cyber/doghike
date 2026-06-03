@@ -20,6 +20,7 @@ import BackButton from "@/components/ui/BackButton";
 import { EmptyState, PageLoadingState } from "@/components/ui/AppState";
 import { Badge } from "@/components/ui/badge";
 import WaterIcon from "@/components/icons/WaterIcon";
+import LocationIcon from "@/components/icons/LocationIcon";
 import SafeMapContainer from "@/components/map/SafeMapContainer";
 import { DifficultyBars } from "@/components/difficulty/DifficultyScale";
 import {
@@ -528,7 +529,8 @@ export default function JournalDetail() {
 
             {entry.location && (
               <p className="doghike-card-subtitle mb-3 flex items-center gap-1.5">
-                <span className="text-sm leading-none shrink-0">{TOUR_ICONS.location}</span> {entry.location}
+                <LocationIcon className="h-4 w-4" />
+                <span>{entry.location}</span>
               </p>
             )}
 

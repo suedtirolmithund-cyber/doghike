@@ -293,7 +293,7 @@ export default function GPXUploader({ onSave }) {
             </span>
           </div>
 
-          <div className="doghike-map-frame relative h-72 border-2 md:h-96">
+          <div className="doghike-map-frame relative h-72 md:h-96">
             <SafeMapContainer resetKey={`gpx-preview-${gpxData.coordinates.length}`} center={mapCenter} zoom={12} style={{ height: "100%", width: "100%" }}>
               <TileLayer
                 url={ROUTE_TILE_LAYER.url}

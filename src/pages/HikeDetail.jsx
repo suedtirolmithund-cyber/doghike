@@ -34,6 +34,7 @@ import RatingSection from "@/components/community/RatingSection";
 import ExpandableText from "@/components/ExpandableText";
 import PremiumGate from "@/components/hikes/PremiumGate";
 import WaterIcon from "@/components/icons/WaterIcon";
+import LocationIcon from "@/components/icons/LocationIcon";
 import { DifficultyBars } from "@/components/difficulty/DifficultyScale";
 import { supabase } from "@/lib/supabaseClient";
 import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getDifficultyTypeChipClass, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
@@ -807,7 +808,7 @@ export default function HikeDetail() {
             <h1 className="mb-2 text-3xl font-light leading-tight text-white sm:text-4xl md:text-5xl">{hike.trail_name}</h1>
             <div className="flex flex-wrap items-center gap-2.5 text-white/85 sm:gap-3">
               <div className="flex min-w-0 items-center gap-2 text-sm font-medium sm:text-base md:text-lg">
-                <span>{TOUR_ICONS.location}</span>
+                <LocationIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                 <span className="break-words">{hike.location || "Dolomites"}</span>
               </div>
               <SaveButton

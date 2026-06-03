@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Cloud, CloudRain, CloudSnow, Sun, Wind, Droplets, Loader2, CloudLightning, CloudDrizzle } from "lucide-react";
+import { Cloud, CloudRain, CloudSnow, Sun, Wind, Droplets, CloudLightning, CloudDrizzle } from "lucide-react";
 import { motion } from "framer-motion";
 import { format, parseISO } from "date-fns";
 import { de } from "date-fns/locale";
@@ -46,11 +46,8 @@ export default function WeatherWidget({ location, latitude, longitude }) {
     return (
       <div className="doghike-glass-card p-6">
         <div className="py-8 text-center">
-          <div className="flex items-center justify-center gap-2">
-            <Loader2 className="h-5 w-5 animate-spin text-brand-400" />
-            <span className="text-sm text-[#C07820]">Wetter wird geladen...</span>
-          </div>
-          <PawLoadingTrail />
+          <PawLoadingTrail className="mt-0" />
+          <span className="mt-2 block text-sm font-medium text-[#C07820]">Wetter wird geladen...</span>
         </div>
       </div>
     );

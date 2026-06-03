@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import ExpandableText from "@/components/ExpandableText";
 import WaterIcon from "@/components/icons/WaterIcon";
+import LocationIcon from "@/components/icons/LocationIcon";
 import DifficultyScaleChip from "@/components/difficulty/DifficultyScale";
 import { PremiumPawBadge } from "@/components/premium/PremiumPawBadge";
 import { HIKE_CARD_STAT_CHIP_CLASS, TOUR_ICONS, getDifficultyLabel, getSeasonBadgeClass, getSeasonIcon, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
@@ -127,7 +128,7 @@ export default function HikeCard({
                 {hike.trail_name}
               </h3>
               <div className="flex min-w-0 items-center gap-1.5 text-sm font-semibold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]">
-                <span>{TOUR_ICONS.location}</span>
+                <LocationIcon className="h-4 w-4" />
                 <span className="truncate">{hike.location || "Dolomites"}</span>
               </div>
               {Array.isArray(hike.tags) && hike.tags.length > 0 && (

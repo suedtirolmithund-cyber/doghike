@@ -799,7 +799,7 @@ export default function GPSTracker({ onSave }) {
         ))}
       </div>
 
-      <div className="doghike-map-frame relative h-[50vw] min-h-64 max-h-72 border-2 md:h-80 lg:h-[400px]">
+      <div className="doghike-map-frame relative h-[50vw] min-h-64 max-h-72 md:h-80 lg:h-[400px]">
         <SafeMapContainer
           resetKey={`gps-tracker-${trackingKey}`}
           center={currentPosition || myLocation || [46.5, 11.9]}

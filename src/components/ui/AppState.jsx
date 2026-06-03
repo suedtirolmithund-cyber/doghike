@@ -1,4 +1,4 @@
-import { Loader2, PawPrint } from "lucide-react";
+import { PawPrint } from "lucide-react";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 import { cn } from "@/lib/utils";
 
@@ -15,8 +15,8 @@ export function PageLoadingState({ message = "DogTrails lädt...", className }) 
 
 export function SectionLoadingState({ message = "Lädt gerade...", className }) {
   return (
-    <div className={cn("doghike-soft-panel flex items-center justify-center gap-2 px-4 py-6 text-sm font-medium text-[#C07820]", className)}>
-      <Loader2 className="h-4 w-4 shrink-0 animate-spin text-brand-400" />
+    <div className={cn("doghike-soft-panel flex flex-col items-center justify-center gap-2 px-4 py-6 text-center text-sm font-medium text-[#C07820]", className)}>
+      <PawLoadingTrail className="mt-0" />
       <span>{message}</span>
     </div>
   );

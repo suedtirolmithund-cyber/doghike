@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Cloud, Droplets, Wind, Sun, CloudRain, CloudSnow, CloudDrizzle, CloudLightning, Loader2 } from "lucide-react";
+import { Cloud, Droplets, Wind, Sun, CloudRain, CloudSnow, CloudDrizzle, CloudLightning } from "lucide-react";
 import { motion } from "framer-motion";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 
@@ -39,11 +39,8 @@ export default function HikeWeatherInfo({ location, latitude, longitude }) {
     return (
       <div className="doghike-glass-card p-4">
         <div className="text-center text-brand-600">
-          <div className="flex items-center justify-center gap-2">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            <span className="text-xs">Wetterdaten werden geladen...</span>
-          </div>
-          <PawLoadingTrail />
+          <PawLoadingTrail className="mt-0" />
+          <span className="mt-2 block text-xs font-medium">Wetterdaten werden geladen...</span>
         </div>
       </div>
     );

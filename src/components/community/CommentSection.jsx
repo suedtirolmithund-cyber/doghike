@@ -4,7 +4,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Camera, Send, Trash2, Loader2, X } from "lucide-react";
+import { EmptyState, SectionLoadingState } from "@/components/ui/AppState";
+import { Camera, Send, Trash2, Loader2, X, MessageCircle } from "lucide-react";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { motion, AnimatePresence } from "framer-motion";
@@ -204,7 +205,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
               </Button>
             </div>
 
-            <div className="doghike-soft-panel flex items-start gap-3 p-3">
+            <div className="flex items-start gap-3 rounded-2xl border border-[#F9C030]/75 bg-[#FDF0E8]/78 p-4 shadow-sm">
               <Checkbox
                 id="comment-consent"
                 checked={consentPublic}
@@ -236,9 +237,7 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
         </h3>
 
         {isLoading && (
-          <div className="flex justify-center py-8">
-            <Loader2 className="h-6 w-6 animate-spin text-brand-400" />
-          </div>
+          <SectionLoadingState message="Kommentare laden..." className="py-8" />
         )}
 
         {!isLoading && isError && (
@@ -309,10 +308,13 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
         </AnimatePresence>
 
         {!isLoading && !isError && comments.length === 0 && (
-          <div className="py-8 text-center">
-            <p className="font-medium text-[#7C3020]">Noch keine Tipps</p>
-            <p className="mt-1 text-sm text-[#C07820]">Teile den ersten Eindruck zu dieser Wanderung.</p>
-          </div>
+          <EmptyState
+            icon={MessageCircle}
+            title="Noch keine Tipps"
+            description="Teile den ersten Eindruck zu dieser Wanderung."
+            compact
+            className="py-8"
+          />
         )}
       </div>
 

@@ -34,6 +34,7 @@ import ExpandableText from "@/components/ExpandableText";
 import BackButton from "@/components/ui/BackButton";
 import { EmptyState, PageLoadingState } from "@/components/ui/AppState";
 import WaterIcon from "@/components/icons/WaterIcon";
+import LocationIcon from "@/components/icons/LocationIcon";
 import SeasonMultiPicker from "@/components/season/SeasonMultiPicker";
 import { DIFFICULTY_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
 import { formatDurationHours, hoursInputToMinutes } from "@/lib/duration";
@@ -363,7 +364,10 @@ export default function RouteDetail() {
                   {route.name}
                 </h1>
                 {route.start_location && (
-                  <p className="text-slate-600">{TOUR_ICONS.location} {route.start_location}</p>
+                  <p className="flex items-center gap-1.5 text-slate-600">
+                    <LocationIcon className="h-4 w-4" />
+                    <span>{route.start_location}</span>
+                  </p>
                 )}
               </div>
 
