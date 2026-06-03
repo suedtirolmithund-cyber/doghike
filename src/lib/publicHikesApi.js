@@ -5,6 +5,14 @@ import { normalizeSeasonValues } from "@/lib/difficultyConfig";
 const PUBLIC_HIKE_BUCKET = "journal";
 const PUBLIC_HIKE_PREFIX = "public-hikes/";
 
+async function assertAdmin() {
+  const { data, error } = await supabase.rpc("is_admin");
+  if (error) throw error;
+  if (!data) {
+    throw new Error("not_allowed");
+  }
+}
+
 function mapSupabaseWaterLevel(value) {
   if (value === 0 || value === "0") return "none";
   if (value === 1 || value === "1") return "little";
@@ -343,6 +351,8 @@ export async function triggerFreeHikeWebPush(hikeId) {
 }
 
 export async function getPublicHikeById(hikeId) {
+  await assertAdmin();
+
   const { data: hikeRow, error: hikeError } = await supabase
     .from("public_hikes")
     .select("*")
@@ -390,6 +400,8 @@ export async function getPublicHikeById(hikeId) {
 }
 
 export async function updatePublicHike(hikeId, values) {
+  await assertAdmin();
+
   const {
     photoUrls = [],
     tags = [],
