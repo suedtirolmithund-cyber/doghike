@@ -44,9 +44,14 @@ before insert or update on public.profiles
 for each row
 execute function public.apply_profile_username_normalization();
 
+update public.profiles
+set username = public.normalize_username(username)
+where username is distinct from public.normalize_username(username);
+
+drop index if exists public.profiles_username_normalized_unique;
 create unique index if not exists profiles_username_normalized_unique
-  on public.profiles ((public.normalize_username(username)))
-  where public.normalize_username(username) is not null;
+  on public.profiles (username)
+  where username is not null;
 
 create or replace view public.public_profiles
 with (security_invoker = true) as
