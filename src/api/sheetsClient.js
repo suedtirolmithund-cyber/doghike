@@ -734,6 +734,33 @@ function getJournalEntryDogIds(entry) {
   );
 }
 
+const APPROVED_JOURNAL_HIKE_LIMIT = 250;
+const APPROVED_JOURNAL_ENTRY_FIELDS = [
+  "id",
+  "user_id",
+  "title",
+  "location",
+  "latitude",
+  "longitude",
+  "photos",
+  "gpx_url",
+  "distance_km",
+  "elevation_m",
+  "duration_minutes",
+  "difficulty",
+  "dog_difficulty",
+  "water_available",
+  "season",
+  "seasons",
+  "hazard_notes",
+  "description",
+  "rating",
+  "dog_suitable",
+  "date",
+  "dog_id",
+  "dog_ids",
+].join(", ");
+
 /**
  * Fetches approved journal entries from Supabase.
  * Returns [] gracefully if Supabase is unavailable.
@@ -746,9 +773,12 @@ async function getApprovedJournalEntries() {
     // 1. Fetch approved public entries
     const { data: entries, error } = await supabase
       .from("journal_entries")
-      .select("*")
+      .select(APPROVED_JOURNAL_ENTRY_FIELDS)
       .eq("status", "approved")
-      .eq("visibility", "public");
+      .eq("visibility", "public")
+      .order("date", { ascending: false, nullsFirst: false })
+      .order("created_at", { ascending: false })
+      .limit(APPROVED_JOURNAL_HIKE_LIMIT);
 
     if (error) {
       console.error("[sheetsClient] Supabase journal fetch error:", error.message);
