@@ -392,6 +392,9 @@ begin
 end;
 $$;
 
+revoke execute on function public.prevent_profile_billing_self_update() from public;
+revoke execute on function public.prevent_profile_billing_self_update() from anon;
+
 create or replace function public.prevent_profile_role_self_update()
 returns trigger
 language plpgsql
@@ -410,6 +413,9 @@ begin
   return new;
 end;
 $$;
+
+revoke execute on function public.prevent_profile_role_self_update() from public;
+revoke execute on function public.prevent_profile_role_self_update() from anon;
 
 drop trigger if exists protect_profile_billing_fields on public.profiles;
 create trigger protect_profile_billing_fields
