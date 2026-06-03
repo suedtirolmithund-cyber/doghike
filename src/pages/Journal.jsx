@@ -99,7 +99,7 @@ function StarRating({ rating }) {
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
-          className={`w-3.5 h-3.5 ${star <= rating ? "fill-brand-100 text-brand-100" : "text-slate-300"}`}
+          className={`w-3.5 h-3.5 ${star <= rating ? "fill-brand-400 text-brand-400" : "text-slate-300"}`}
         />
       ))}
     </div>

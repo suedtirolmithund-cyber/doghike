@@ -77,7 +77,7 @@ function StarPicker({ label, value, onChange }) {
             className="focus:outline-none"
           >
             <Star className={`w-7 h-7 transition-colors ${
-              s <= (hover || value) ? "fill-brand-100 text-brand-100" : "text-slate-300"
+              s <= (hover || value) ? "fill-brand-400 text-brand-400" : "text-slate-300"
             }`} />
           </button>
         ))}
