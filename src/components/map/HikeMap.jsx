@@ -8,7 +8,7 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import L from "leaflet";
 import "leaflet.markercluster";
 import { formatDurationHours } from "@/lib/duration";
-import { SEASON_COLORS, TOUR_ICONS, getSeasonIcon, getSeasonLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { SEASON_COLORS, TOUR_ICONS, getPrimarySeasonValue, getSeasonIcon, getSeasonLabel } from "@/lib/difficultyConfig";
 import { HIKE_PLACEHOLDER_IMAGE } from "@/lib/fallbackImages";
 import { getUniqueHikeImageSources, resolveHikeImageUrl } from "@/lib/hikeImages";
 
@@ -58,9 +58,9 @@ function getCountryLabel(country) {
 }
 
 function getSeasonKey(hike) {
-  const normalizedSeasons = normalizeSeasonValues(hike?.seasons, hike?.season);
-  if (normalizedSeasons[0] && seasonConfig[normalizedSeasons[0]]) {
-    return normalizedSeasons[0];
+  const primarySeason = getPrimarySeasonValue(hike?.seasons, hike?.season);
+  if (primarySeason && seasonConfig[primarySeason]) {
+    return primarySeason;
   }
 
   const legacyKey = legacyAvailabilityMap[hike.availability];

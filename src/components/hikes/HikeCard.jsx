@@ -8,7 +8,7 @@ import WaterIcon from "@/components/icons/WaterIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import DifficultyScaleChip from "@/components/difficulty/DifficultyScale";
 import { PremiumPawBadge } from "@/components/premium/PremiumPawBadge";
-import { HIKE_CARD_STAT_CHIP_CLASS, TOUR_ICONS, getDifficultyLabel, getSeasonBadgeClass, getSeasonIcon, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { HIKE_CARD_STAT_CHIP_CLASS, TOUR_ICONS, getDifficultyLabel, getPrimarySeasonValue, getSeasonBadgeClass, getSeasonIcon, getWaterBadgeClass, getWaterLabel } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { getAvatarDataUrl, HIKE_PLACEHOLDER_IMAGE } from "@/lib/fallbackImages";
 import { formatDurationHours } from "@/lib/duration";
@@ -61,14 +61,14 @@ export default function HikeCard({
   const detailId = hikeSource === "sheets" && hike._public_hike_id ? hike.route_id || String(hike._public_hike_id) : hike.id;
   const dogDifficultyLabel = getDifficultyLabel(hike.dog_difficulty);
   const humanDifficultyLabel = getDifficultyLabel(hike.difficulty);
-  const seasonValues = useMemo(() => normalizeSeasonValues(hike.seasons, hike.season), [hike.season, hike.seasons]);
+  const primarySeason = useMemo(() => getPrimarySeasonValue(hike.seasons, hike.season), [hike.season, hike.seasons]);
   const authorPreviewPhoto = useMemo(
     () => getDisplayImageUrl(hike.dog_photo_url || hike.author_avatar, { width: 128, quality: 70 }),
     [hike.author_avatar, hike.dog_photo_url],
   );
   const isPremiumHike = hike.is_premium === true;
-  const previewIcon = seasonValues[0] ? getSeasonIcon(seasonValues[0]) : null;
-  const previewSeasonBadgeClass = seasonValues[0] ? getSeasonBadgeClass(seasonValues[0]) : "";
+  const previewIcon = primarySeason ? getSeasonIcon(primarySeason) : null;
+  const previewSeasonBadgeClass = primarySeason ? getSeasonBadgeClass(primarySeason) : "";
   const elevationValue = hike.elevation_gain_m ?? hike.elevation_m;
   const routeStats = [
     hasMetricValue(hike.distance_km) ? { icon: TOUR_ICONS.distance, value: formatDistance(hike.distance_km), label: "Strecke" } : null,

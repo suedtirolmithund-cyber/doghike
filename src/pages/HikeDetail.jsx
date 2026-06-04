@@ -37,7 +37,7 @@ import WaterIcon from "@/components/icons/WaterIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { DifficultyBars } from "@/components/difficulty/DifficultyScale";
 import { supabase } from "@/lib/supabaseClient";
-import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getDifficultyTypeChipClass, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getDifficultyTypeChipClass, getPrimarySeasonValue, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { hasActivePremiumAccess } from "@/lib/premiumAccess";
 import { formatDurationHours } from "@/lib/duration";
@@ -452,7 +452,8 @@ export default function HikeDetail() {
     getDisplayImageUrl(publicSubmitterProfile?.avatar_url, { width: 80, quality: 72 }) ||
     getAvatarDataUrl(primaryPublicSubmitterDog?.name || publicSubmitterHandle || hike?._user_id || "DogTrails-Mitglied");
   const publicSubmitterDisplayLine = primaryPublicSubmitterDog?.name || null;
-  const seasonValues = normalizeSeasonValues(hike?.seasons, hike?.season);
+  const seasonValues = useMemo(() => normalizeSeasonValues(hike?.seasons, hike?.season), [hike?.season, hike?.seasons]);
+  const primarySeason = useMemo(() => getPrimarySeasonValue(hike?.seasons, hike?.season), [hike?.season, hike?.seasons]);
   const detailStatItems = useMemo(() => {
     const items = [];
 
@@ -501,15 +502,15 @@ export default function HikeDetail() {
     if (seasonLabels.length > 0) {
       items.push({
         key: "seasons",
-        icon: getSeasonIcon(seasonValues[0]) || TOUR_ICONS.season,
+        icon: getSeasonIcon(primarySeason) || TOUR_ICONS.season,
         value: seasonLabels.join(", "),
         label: seasonLabels.length > 1 ? "Jahreszeiten" : "Jahreszeit",
-        className: getSeasonBadgeClass(seasonValues[0]),
+        className: getSeasonBadgeClass(primarySeason),
       });
     }
 
     return items;
-  }, [countryLabel, hike?.distance_km, hike?.duration_minutes, hike?.elevation_gain_m, seasonValues]);
+  }, [countryLabel, hike?.distance_km, hike?.duration_minutes, hike?.elevation_gain_m, primarySeason, seasonValues]);
 
   const deleteJournalEntryMutation = useMutation({
     mutationFn: async () => {

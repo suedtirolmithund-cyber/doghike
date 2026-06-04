@@ -429,6 +429,13 @@ export function normalizeSeasonValues(...values) {
   );
 }
 
+const PRIMARY_SEASON_PRIORITY = ["all_year", "summer", "spring", "autumn", "winter"];
+
+export function getPrimarySeasonValue(...values) {
+  const seasons = normalizeSeasonValues(...values);
+  return PRIMARY_SEASON_PRIORITY.find((season) => seasons.includes(season)) ?? seasons[0] ?? null;
+}
+
 export const WATER_BY_VALUE = Object.fromEntries(
   WATER_LEVELS.flatMap((level) => [
     [level.value, level],
