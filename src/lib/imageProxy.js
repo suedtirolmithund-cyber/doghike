@@ -7,6 +7,7 @@ if (!RAW_SUPABASE_URL) {
 const SUPABASE_URL = RAW_SUPABASE_URL.replace(/\/+$/, "");
 const PUBLIC_HIKE_PREFIX = "public-hikes/";
 const JOURNAL_BUCKET = "journal";
+const DIRECT_PUBLIC_BUCKETS = ["dog-photos", "avatars"];
 const DEFAULT_CONTENT_IMAGE_WIDTH = 1200;
 const MAX_CONTENT_IMAGE_WIDTH = 1800;
 const DEFAULT_CONTENT_IMAGE_QUALITY = 82;
@@ -38,6 +39,13 @@ function normalizeManagedStoragePath(url) {
 
   if (trimmed.startsWith(PUBLIC_HIKE_PREFIX)) {
     return `${SUPABASE_URL}/storage/v1/object/public/${JOURNAL_BUCKET}/${trimmed}`;
+  }
+
+  for (const bucket of DIRECT_PUBLIC_BUCKETS) {
+    const bucketPrefix = `${bucket}/`;
+    if (trimmed.startsWith(bucketPrefix)) {
+      return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${trimmed.slice(bucketPrefix.length)}`;
+    }
   }
 
   const bucketScopedPrefix = `${JOURNAL_BUCKET}/${PUBLIC_HIKE_PREFIX}`;

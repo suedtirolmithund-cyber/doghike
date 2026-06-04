@@ -132,6 +132,49 @@ async function fetchApprovedPublicHikesForLeaderboard() {
   return result;
 }
 
+async function hydrateLeaderboardDogs(leaderboard = []) {
+  const dogIds = [...new Set(
+    leaderboard
+      .map((entry) => entry?.dog?.id)
+      .filter(Boolean)
+  )];
+
+  if (dogIds.length === 0) return leaderboard;
+
+  try {
+    const { data: dogs, error } = await supabase
+      .from("dogs")
+      .select("id, name, breed, photo_url, user_id")
+      .in("id", dogIds);
+
+    if (error) {
+      console.warn("[topDogs] dog photo hydration failed:", error.message || error);
+      return leaderboard;
+    }
+
+    const dogMap = new Map((dogs ?? []).map((dog) => [dog.id, dog]));
+
+    return leaderboard.map((entry) => {
+      const freshDog = dogMap.get(entry?.dog?.id);
+      if (!freshDog) return entry;
+
+      return {
+        ...entry,
+        dog: {
+          ...entry.dog,
+          user_id: entry.dog?.user_id || freshDog.user_id,
+          name: freshDog.name || entry.dog?.name,
+          breed: freshDog.breed ?? entry.dog?.breed,
+          photo_url: freshDog.photo_url || entry.dog?.photo_url,
+        },
+      };
+    });
+  } catch (error) {
+    console.warn("[topDogs] dog photo hydration failed:", error?.message || error);
+    return leaderboard;
+  }
+}
+
 export async function loadLeaderboard(timeframe = "overall") {
   const { data: rpcRows, error: rpcError } = await supabase.rpc("get_top_dogs_leaderboard", {
     timeframe_value: timeframe,
@@ -231,7 +274,7 @@ export async function loadLeaderboard(timeframe = "overall") {
 
     if (publicHikesError) {
       if (isAccessError(publicHikesError) || isMissingColumnError(publicHikesError, "dog_ids")) {
-        return leaderboard;
+        return hydrateLeaderboardDogs(leaderboard);
       }
       throw publicHikesError;
     }
@@ -241,7 +284,7 @@ export async function loadLeaderboard(timeframe = "overall") {
     );
 
     if (!relevantPublicHikes.length) {
-      return leaderboard;
+      return hydrateLeaderboardDogs(leaderboard);
     }
 
     const leaderboardMap = new Map(
@@ -263,7 +306,7 @@ export async function loadLeaderboard(timeframe = "overall") {
 
       if (missingDogsError) {
         if (isAccessError(missingDogsError)) {
-          return leaderboard;
+          return hydrateLeaderboardDogs(leaderboard);
         }
         throw missingDogsError;
       }
@@ -309,9 +352,9 @@ export async function loadLeaderboard(timeframe = "overall") {
       }
     }
 
-    return [...leaderboardMap.values()].filter((row) => row.dog);
+    return hydrateLeaderboardDogs([...leaderboardMap.values()].filter((row) => row.dog));
   } catch (error) {
     console.warn("[topDogs] optional public_hikes supplement failed:", error?.message || error);
-    return leaderboard;
+    return hydrateLeaderboardDogs(leaderboard);
   }
 }
