@@ -1412,9 +1412,10 @@ export default function AddJournalEntry() {
     const normalizedDogIds = normalizeSelectedDogIds(form.dog_ids, form.dog_id);
     const normalizedSeasons = normalizeSeasonValues(form.seasons, form.season);
     const normalizedTags = normalizePublicTags(form.tagsText);
+    const { tagsText: _tagsText, ...persistedForm } = form;
 
     saveMutation.mutate({
-      ...form,
+      ...persistedForm,
       seasons: normalizedSeasons,
       dog_ids: normalizedDogIds,
       dog_id: normalizedDogIds[0] ?? null,
@@ -1935,15 +1936,15 @@ export default function AddJournalEntry() {
                   Öffentlich sichtbar sind dann Tourdaten, Fotos, dein Nutzername, optional dein Profilbild sowie Name und optionales Foto der ausgewählten Hunde.
                 </p>
                 <div className="space-y-2 rounded-lg border border-brand-100 bg-white px-3 py-3">
-                  <Label htmlFor="public-tags">Tags fÃ¼r die Ã¶ffentliche Tour</Label>
+                  <Label htmlFor="public-tags">Tags für die öffentliche Tour</Label>
                   <Input
                     id="public-tags"
                     value={form.tagsText}
                     onChange={(e) => set("tagsText", e.target.value)}
-                    placeholder="See, Schatten, Rundweg, HÃ¼tte"
+                    placeholder="See, Schatten, Rundweg, Hütte"
                   />
                   <p className="text-xs text-slate-500">
-                    Optional. Du oder der Admin kÃ¶nnt hier passende Tags ergÃ¤nzen, bevor die Tour Ã¶ffentlich erscheint.
+                    Optional. Du oder der Admin könnt hier passende Tags ergänzen, bevor die Tour öffentlich erscheint.
                   </p>
                 </div>
                 <div className="text-xs rounded-lg border border-brand-200 bg-brand-50/70 px-3 py-2 text-brand-800">
