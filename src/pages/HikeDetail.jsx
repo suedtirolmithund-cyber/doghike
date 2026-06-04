@@ -452,6 +452,12 @@ export default function HikeDetail() {
     getDisplayImageUrl(publicSubmitterProfile?.avatar_url, { width: 80, quality: 72 }) ||
     getAvatarDataUrl(primaryPublicSubmitterDog?.name || publicSubmitterHandle || hike?._user_id || "DogTrails-Mitglied");
   const publicSubmitterDisplayLine = primaryPublicSubmitterDog?.name || null;
+  const journalSubmitterDisplayPhoto =
+    getDisplayImageUrl(hike?.dog_photo_url, { width: 80, quality: 72 }) ||
+    getDisplayImageUrl(hike?.author_avatar, { width: 80, quality: 72 }) ||
+    getAvatarDataUrl(hike?.dog_name || hike?.author_username || hike?._user_id || "DogTrails-Mitglied");
+  const journalSubmitterDisplayLine = hike?.dog_name || null;
+  const journalSubmitterHandle = hike?.author_username ? `@${hike.author_username}` : null;
   const seasonValues = useMemo(() => normalizeSelectedSeasonValues(hike?.seasons, hike?.season), [hike?.season, hike?.seasons]);
   const primarySeason = useMemo(() => getSelectedSeasonValue(hike?.seasons, hike?.season), [hike?.season, hike?.seasons]);
   const detailStatItems = useMemo(() => {
@@ -798,14 +804,17 @@ export default function HikeDetail() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            {hike?._source === "journal" && (hike.author_username || hike.dog_name) && (
+            {hike?._source === "journal" && (journalSubmitterDisplayLine || journalSubmitterHandle) && (
               <div className="flex items-center gap-2 mb-3">
-                {hike.author_avatar && (
-                  <img src={hike.author_avatar} alt="" className="w-7 h-7 rounded-full object-cover border-2 border-white/50" />
-                )}
+                <img
+                  src={journalSubmitterDisplayPhoto}
+                  alt={journalSubmitterDisplayLine || journalSubmitterHandle || "DogTrails-Mitglied"}
+                  className="w-7 h-7 rounded-full object-cover border-2 border-white/50"
+                />
                 <p className="text-sm text-white/90">
-                  {hike.dog_name && <span>🐾 {hike.dog_name} · </span>}
-                  {hike.author_username && <span>@{hike.author_username}</span>}
+                  {journalSubmitterDisplayLine && <span>🐾 {journalSubmitterDisplayLine}</span>}
+                  {journalSubmitterDisplayLine && journalSubmitterHandle && <span> · </span>}
+                  {journalSubmitterHandle && <span>{journalSubmitterHandle}</span>}
                 </p>
               </div>
             )}
@@ -1181,6 +1190,18 @@ export default function HikeDetail() {
                         {publicSubmitterHandle ? ` · ${publicSubmitterHandle}` : ""}
                       </span>
                     </div>
+                  ) : hike?._source === "journal" && (journalSubmitterDisplayLine || journalSubmitterHandle) ? (
+                    <div className="inline-flex items-center gap-2 rounded-full border border-brand-100/80 bg-white/80 px-3 py-1.5 text-xs text-slate-500 shadow-sm">
+                      <img
+                        src={journalSubmitterDisplayPhoto}
+                        alt={journalSubmitterDisplayLine || journalSubmitterHandle || "DogTrails-Mitglied"}
+                        className="h-7 w-7 rounded-full object-cover"
+                      />
+                      <span className="font-medium text-slate-700">
+                        {journalSubmitterDisplayLine || "DogTrails-Hund"}
+                        {journalSubmitterHandle ? ` · ${journalSubmitterHandle}` : ""}
+                      </span>
+                    </div>
                   ) : detailAuthorName ? (
                     <p className="text-xs text-slate-400">
                       Verfasst von: {detailAuthorName}
@@ -1253,13 +1274,17 @@ export default function HikeDetail() {
               <div className="mt-4 flex flex-wrap gap-3">
                 <div className="doghike-soft-panel flex items-center gap-3 p-3">
                   <img
-                    src={getDisplayImageUrl(publicSubmitterProfile?.avatar_url, { width: 96, quality: 76 }) || getAvatarDataUrl(hike._user_id)}
-                    alt={publicSubmitterName || "DogTrails-Mitglied"}
+                    src={publicSubmitterDisplayPhoto}
+                    alt={primaryPublicSubmitterDog?.name || publicSubmitterName || "DogTrails-Mitglied"}
                     className="h-12 w-12 rounded-full object-cover"
                   />
                   <div>
-                    <p className="font-medium text-slate-900">{publicSubmitterName || "DogTrails-Mitglied"}</p>
-                    <p className="text-sm text-slate-500">Wanderung eingereicht</p>
+                    <p className="font-medium text-slate-900">
+                      {primaryPublicSubmitterDog?.name || publicSubmitterName || "DogTrails-Mitglied"}
+                    </p>
+                    <p className="text-sm text-slate-500">
+                      {publicSubmitterHandle || "Wanderung eingereicht"}
+                    </p>
                   </div>
                 </div>
 
