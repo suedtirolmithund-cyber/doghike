@@ -1018,7 +1018,7 @@ export default function AddJournalEntry() {
     editId && isAdmin && existing?.user_id && existing.user_id !== user?.id
   );
 
-  const { data: userDogs = [] } = useQuery({
+  const { data: userDogs = [], isFetched: userDogsLoaded } = useQuery({
     queryKey: ["dogs", dogOwnerId],
     queryFn: () => getDogs(dogOwnerId),
     enabled: !!dogOwnerId,
@@ -1061,6 +1061,27 @@ export default function AddJournalEntry() {
       });
     }
   }, [existing]);
+
+  useEffect(() => {
+    if (!editId || !userDogsLoaded) return;
+
+    const availableDogIds = new Set(userDogs.map((dog) => String(dog.id)));
+
+    setForm((prev) => {
+      const currentDogIds = normalizeSelectedDogIds(prev.dog_ids, prev.dog_id);
+      const filteredDogIds = currentDogIds.filter((dogId) => availableDogIds.has(String(dogId)));
+
+      if (filteredDogIds.length === currentDogIds.length && (filteredDogIds[0] ?? null) === (prev.dog_id ?? null)) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        dog_ids: filteredDogIds,
+        dog_id: filteredDogIds[0] ?? null,
+      };
+    });
+  }, [editId, userDogs, userDogsLoaded]);
 
   useEffect(() => {
     if (isAdminReviewingForeignEntry) {
@@ -1168,7 +1189,16 @@ export default function AddJournalEntry() {
       }
       navigate(createPageUrl("Journal"));
     },
-    onError: () => toast.error("Die Wanderung wollte gerade nicht ins Tagebuch. Versuch es gleich noch einmal."),
+    onError: (error) => {
+      const message = String(error?.message ?? "");
+
+      if (message.toLowerCase().includes("dogs")) {
+        toast.error("Mindestens ein verknüpfter Hund existiert nicht mehr. Bitte prüfe die Hundeauswahl der Tour.");
+        return;
+      }
+
+      toast.error("Die Wanderung wollte gerade nicht ins Tagebuch. Versuch es gleich noch einmal.");
+    },
   });
 
   const handlePhotoUpload = async (e) => {
