@@ -172,9 +172,11 @@ function getGroupedHikes(hikes) {
   const groups = new Map();
 
   hikes.forEach((hike) => {
-    if (!hike.latitude || !hike.longitude) return;
+    const latitude = Number(hike?.latitude);
+    const longitude = Number(hike?.longitude);
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return;
 
-    const key = `${Number(hike.latitude).toFixed(5)}:${Number(hike.longitude).toFixed(5)}`;
+    const key = `${latitude.toFixed(5)}:${longitude.toFixed(5)}`;
     const existingGroup = groups.get(key);
 
     if (existingGroup) {
@@ -183,8 +185,8 @@ function getGroupedHikes(hikes) {
     }
 
     groups.set(key, {
-      latitude: Number(hike.latitude),
-      longitude: Number(hike.longitude),
+      latitude,
+      longitude,
       hikes: [hike],
     });
   });
@@ -301,8 +303,8 @@ function MarkersLayer({ hikes }) {
     clusterRef.current = cluster;
 
     const coords = hikes
-      .filter((hike) => hike.latitude && hike.longitude)
-      .map((hike) => [hike.latitude, hike.longitude]);
+      .filter((hike) => Number.isFinite(Number(hike?.latitude)) && Number.isFinite(Number(hike?.longitude)))
+      .map((hike) => [Number(hike.latitude), Number(hike.longitude)]);
 
     if (coords.length > 0) {
       const bounds = L.latLngBounds(coords);
@@ -330,7 +332,9 @@ export default function HikeMap({
   height = "400px",
   showLegend = true,
 }) {
-  const hikesWithCoords = hikes.filter((hike) => hike.latitude && hike.longitude);
+  const hikesWithCoords = hikes.filter(
+    (hike) => Number.isFinite(Number(hike?.latitude)) && Number.isFinite(Number(hike?.longitude))
+  );
 
   return (
     <div

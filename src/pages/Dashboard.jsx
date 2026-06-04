@@ -68,7 +68,7 @@ export default function Dashboard() {
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
     staleTime: 5 * 60_000,
-    refetchOnMount: false,
+    refetchOnMount: "always",
     refetchOnWindowFocus: false,
   });
 
@@ -100,7 +100,9 @@ export default function Dashboard() {
 
   const visibleHikes   = filteredHikes.slice(0, visibleCount);
   const hasMore        = visibleCount < filteredHikes.length;
-  const hikesWithCoords = filteredHikes.filter((h) => h.latitude && h.longitude);
+  const hikesWithCoords = filteredHikes.filter(
+    (h) => Number.isFinite(Number(h?.latitude)) && Number.isFinite(Number(h?.longitude))
+  );
 
   const seasonLabel = { spring: "Frühling", summer: "Sommer", autumn: "Herbst", winter: "Winter" }[season];
 
