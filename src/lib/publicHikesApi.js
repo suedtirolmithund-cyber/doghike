@@ -421,7 +421,7 @@ export async function updatePublicHike(hikeId, values) {
   };
   const { data: existingPhotos = [], error: existingPhotosError } = await supabase
     .from("public_hike_photos")
-    .select("photo_url, sort_order")
+    .select("id, photo_url, sort_order")
     .eq("hike_id", hikeId)
     .order("sort_order", { ascending: true });
 
@@ -521,15 +521,12 @@ export async function updatePublicHike(hikeId, values) {
     return data;
   }
 
-  const { error: deletePhotosError } = await supabase
-    .from("public_hike_photos")
-    .delete()
-    .eq("hike_id", hikeId);
-
-  if (deletePhotosError) throw deletePhotosError;
+  const existingPhotoIds = existingPhotos
+    .map((photo) => photo.id)
+    .filter(Boolean);
 
   if (cleanedPhotoUrls.length > 0) {
-    const { error: insertPhotosError } = await supabase
+    const { data: insertedPhotos = [], error: insertPhotosError } = await supabase
       .from("public_hike_photos")
       .insert(
         cleanedPhotoUrls.map((photoUrl, index) => ({
@@ -537,22 +534,47 @@ export async function updatePublicHike(hikeId, values) {
           photo_url: photoUrl,
           sort_order: index,
         }))
-      );
+      )
+      .select("id");
 
-    if (insertPhotosError) {
-      if (existingPhotos.length > 0) {
-        await supabase
-          .from("public_hike_photos")
-          .insert(
-            existingPhotos.map((photo) => ({
-              hike_id: hikeId,
-              photo_url: photo.photo_url,
-              sort_order: photo.sort_order ?? 0,
-            }))
-          );
+    if (insertPhotosError) throw insertPhotosError;
+
+    if (existingPhotoIds.length > 0) {
+      const { error: deletePhotosError } = await supabase
+        .from("public_hike_photos")
+        .delete()
+        .in("id", existingPhotoIds);
+
+      if (deletePhotosError) {
+        const insertedPhotoIds = insertedPhotos
+          .map((photo) => photo.id)
+          .filter(Boolean);
+
+        let cleanupError = null;
+        if (insertedPhotoIds.length > 0) {
+          const { error: insertedCleanupError } = await supabase
+            .from("public_hike_photos")
+            .delete()
+            .in("id", insertedPhotoIds);
+          cleanupError = insertedCleanupError;
+        }
+
+        const rollbackError = new Error(
+          cleanupError
+            ? `Neue Fotos konnten nicht zurückgerollt werden: ${cleanupError.message}`
+            : deletePhotosError.message
+        );
+        rollbackError.cause = deletePhotosError;
+        throw rollbackError;
       }
-      throw insertPhotosError;
     }
+  } else if (existingPhotoIds.length > 0) {
+    const { error: deletePhotosError } = await supabase
+      .from("public_hike_photos")
+      .delete()
+      .in("id", existingPhotoIds);
+
+    if (deletePhotosError) throw deletePhotosError;
   }
 
   const removedManagedPhotoUrls = existingPhotoUrls.filter(
