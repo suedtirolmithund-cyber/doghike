@@ -53,8 +53,7 @@ create unique index if not exists profiles_username_normalized_unique
   on public.profiles (username)
   where username is not null;
 
-create or replace view public.public_profiles
-with (security_invoker = true) as
+create or replace view public.public_profiles as
 select
   user_id,
   username,
