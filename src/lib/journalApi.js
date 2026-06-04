@@ -358,17 +358,34 @@ async function requireCurrentUserId() {
   return userId;
 }
 
-async function isCurrentUserAdmin() {
-  try {
-    const { data, error } = await supabase.rpc("is_admin");
-    if (error) {
-      console.error("[isCurrentUserAdmin] failed:", error.message);
-      return false;
+async function runJournalEntryUpdate(id, entry, currentUserId, scopeToOwner) {
+  let nextEntry = entry;
+
+  while (true) {
+    let updateQuery = supabase
+      .from("journal_entries")
+      .update(nextEntry)
+      .eq("id", id)
+      .select();
+
+    if (scopeToOwner) {
+      updateQuery = updateQuery.eq("user_id", currentUserId);
     }
-    return Boolean(data);
-  } catch (error) {
-    console.error("[isCurrentUserAdmin] exception:", error);
-    return false;
+
+    const { data, error } = await updateQuery.maybeSingle();
+
+    if (error && isMissingOptionalJournalColumnError(error)) {
+      const fallbackEntry = withoutUnsupportedOptionalColumns(nextEntry, error);
+      const didChangePayload =
+        Object.keys(fallbackEntry).length !== Object.keys(nextEntry).length;
+
+      if (didChangePayload) {
+        nextEntry = fallbackEntry;
+        continue;
+      }
+    }
+
+    return { data, error };
   }
 }
 
@@ -394,35 +411,16 @@ export async function createJournalEntry(userId, entry) {
 
 export async function updateJournalEntry(id, entry) {
   const currentUserId = await requireCurrentUserId();
-  const currentUserIsAdmin = await isCurrentUserAdmin();
+  let { data, error } = await runJournalEntryUpdate(id, entry, currentUserId, true);
 
-  let updateQuery = supabase
-    .from("journal_entries")
-    .update(entry)
-    .eq("id", id)
-    .select();
-
-  if (!currentUserIsAdmin) {
-    updateQuery = updateQuery.eq("user_id", currentUserId);
-  }
-
-  let { data, error } = await updateQuery.single();
-
-  if (error && isMissingOptionalJournalColumnError(error)) {
-    let fallbackUpdateQuery = supabase
-      .from("journal_entries")
-      .update(withoutUnsupportedOptionalColumns(entry, error))
-      .eq("id", id)
-      .select();
-
-    if (!currentUserIsAdmin) {
-      fallbackUpdateQuery = fallbackUpdateQuery.eq("user_id", currentUserId);
-    }
-
-    ({ data, error } = await fallbackUpdateQuery.single());
+  if (!data && !error) {
+    ({ data, error } = await runJournalEntryUpdate(id, entry, currentUserId, false));
   }
 
   if (error) throw error;
+  if (!data) {
+    throw new Error("Eintrag nicht gefunden oder keine Berechtigung.");
+  }
   return data;
 }
 
