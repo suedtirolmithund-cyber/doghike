@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { optimizeImageForUpload, validateImageUpload } from "@/lib/uploadValidation";
-import { normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { getPrimarySeasonValue, normalizeSeasonValues } from "@/lib/difficultyConfig";
 
 const PUBLIC_HIKE_BUCKET = "journal";
 const PUBLIC_HIKE_PREFIX = "public-hikes/";
@@ -392,7 +392,7 @@ export async function getPublicHikeById(hikeId) {
     water_availability: mapSupabaseWaterLevel(hikeRow.water_availability),
     difficulty: hikeRow.difficulty != null ? String(hikeRow.difficulty) : null,
     dog_difficulty: hikeRow.dog_difficulty != null ? String(hikeRow.dog_difficulty) : null,
-    season: normalizeSeasonValues(hikeRow.seasons, hikeRow.season)[0] || null,
+    season: getPrimarySeasonValue(hikeRow.seasons, hikeRow.season),
     seasons: normalizeSeasonValues(hikeRow.seasons, hikeRow.season),
     grazing_animals: !!hikeRow.grazing_animals,
     muzzle_recommended: !!hikeRow.muzzle_recommended,
@@ -446,7 +446,7 @@ export async function updatePublicHike(hikeId, values) {
   const basePayload = {
     ...hikeValues,
     updated_at: new Date().toISOString(),
-    season: cleanedSeasons[0] || hikeValues.season || null,
+    season: getPrimarySeasonValue(cleanedSeasons, hikeValues.season),
     ...legacyPhotoColumns,
     tags,
     dog_id: cleanedDogIds[0] || null,
@@ -489,7 +489,7 @@ export async function updatePublicHike(hikeId, values) {
     let removedUnsupportedField = false;
 
     if (missingSeasonsColumn && Object.prototype.hasOwnProperty.call(updatePayload, "seasons")) {
-      updatePayload.season = cleanedSeasons[0] || null;
+      updatePayload.season = getPrimarySeasonValue(cleanedSeasons, hikeValues.season);
       delete updatePayload.seasons;
       removedUnsupportedField = true;
     }

@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { resolvePublicHikePhotoReferences } from "@/lib/publicHikesApi";
-import { normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { getPrimarySeasonValue, normalizeSeasonValues } from "@/lib/difficultyConfig";
 
 const SHEETS_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vS6YeL4WqJZWHAQ8HBuodH98vwfIeaUV4p89bAvnM3TDavLKtnsmGUOfcSyAN0ID0rcVYd-OCQUkbiv/pub?gid=624993458&single=true&output=csv";
@@ -110,12 +110,9 @@ function buildComparableHikeKey(hike) {
 function mergeMissingLegacyFieldsIntoPublicHike(publicHike, legacyHike) {
   if (!publicHike || !legacyHike) return publicHike;
 
-  const hasPublicSeasons = Array.isArray(publicHike.seasons) && publicHike.seasons.length > 0;
-  const legacySeasons = Array.isArray(legacyHike.seasons)
-    ? legacyHike.seasons.filter(Boolean)
-    : legacyHike.season
-      ? [legacyHike.season]
-      : [];
+  const publicSeasons = normalizeSeasonValues(publicHike.seasons, publicHike.season);
+  const legacySeasons = normalizeSeasonValues(legacyHike.seasons, legacyHike.season);
+  const seasons = publicSeasons.length > 0 ? publicSeasons : legacySeasons;
 
   return {
     ...publicHike,
@@ -123,8 +120,8 @@ function mergeMissingLegacyFieldsIntoPublicHike(publicHike, legacyHike) {
     hazard_notes: publicHike.hazard_notes || legacyHike.hazard_notes || null,
     parking_info: publicHike.parking_info || legacyHike.parking_info || null,
     restaurant_info: publicHike.restaurant_info || legacyHike.restaurant_info || null,
-    season: publicHike.season || legacyHike.season || null,
-    seasons: hasPublicSeasons ? publicHike.seasons : legacySeasons,
+    season: getPrimarySeasonValue(seasons, publicHike.season, legacyHike.season),
+    seasons,
     tags: Array.isArray(publicHike.tags) && publicHike.tags.length > 0
       ? publicHike.tags
       : Array.isArray(legacyHike.tags)
@@ -514,7 +511,7 @@ function publicHikeRowToHike(row, photos = [], photoReferences = []) {
     status: row.status,
     visibility: "public",
 
-    season: seasons[0] || null,
+    season: getPrimarySeasonValue(seasons, row.season),
     seasons,
     availability: null,
 
@@ -695,7 +692,7 @@ function journalEntryToHike(entry, dog = null, profile = null) {
     status: "approved",
     visibility: "public",
 
-    season: seasons[0] || null,
+    season: getPrimarySeasonValue(seasons, entry.season),
     seasons,
     availability: null,
 

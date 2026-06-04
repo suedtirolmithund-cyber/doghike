@@ -67,8 +67,16 @@ function getSeasonKey(hike) {
   return legacyKey && seasonConfig[legacyKey] ? legacyKey : null;
 }
 
-function getColor(hike) {
-  const seasonKey = getSeasonKey(hike);
+function getGroupSeasonKey(hikes) {
+  const seasonKeys = hikes
+    .map((hike) => getSeasonKey(hike))
+    .filter(Boolean);
+
+  return getPrimarySeasonValue(seasonKeys);
+}
+
+function getGroupColor(hikes) {
+  const seasonKey = getGroupSeasonKey(hikes);
   return seasonKey ? seasonConfig[seasonKey].color : DEFAULT_COLOR;
 }
 
@@ -277,13 +285,14 @@ function MarkersLayer({ hikes }) {
 
     groupedHikes.forEach((group) => {
       const primaryHike = group.hikes[0];
+      const groupSeasonKey = getGroupSeasonKey(group.hikes);
 
       const marker = L.marker([group.latitude, group.longitude], {
         icon: createGroupedIcon({
-          color: getColor(primaryHike),
+          color: getGroupColor(group.hikes),
           photoUrl: null,
           count: group.hikes.length,
-          seasonIcon: group.hikes.length === 1 ? getSeasonIcon(getSeasonKey(primaryHike)) : null,
+          seasonIcon: group.hikes.length === 1 ? getSeasonIcon(groupSeasonKey) : null,
         }),
       });
 

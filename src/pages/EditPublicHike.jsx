@@ -24,7 +24,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 import WaterIcon from "@/components/icons/WaterIcon";
 import SeasonMultiPicker from "@/components/season/SeasonMultiPicker";
-import { DIFFICULTY_LEVELS, DOG_PRIVATE_TAGS, TOUR_ICONS, WATER_LEVELS, normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { DIFFICULTY_LEVELS, DOG_PRIVATE_TAGS, TOUR_ICONS, WATER_LEVELS, getPrimarySeasonValue, normalizeSeasonValues } from "@/lib/difficultyConfig";
 import { hoursInputToMinutes, minutesToHoursInput } from "@/lib/duration";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
 import { getImageUploadErrorMessage } from "@/lib/uploadValidation";
@@ -348,7 +348,7 @@ export default function EditPublicHike() {
         water_availability: formData.water_availability === "unset"
           ? null
           : WATER_LEVELS.find((level) => level.value === formData.water_availability)?.numeric ?? null,
-        season: formData.seasons[0] || null,
+        season: getPrimarySeasonValue(formData.seasons, formData.season),
         seasons: formData.seasons,
         dog_ids: normalizeSelectedDogIds(formData.dog_ids),
         dog_mood_tags: normalizeDogMoodTags(formData.dog_mood_tags),

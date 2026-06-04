@@ -28,7 +28,7 @@ import ConsentDialog from "@/components/ConsentDialog";
 import WaterIcon from "@/components/icons/WaterIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import SeasonMultiPicker from "@/components/season/SeasonMultiPicker";
-import { DIFFICULTY_LEVELS, TOUR_ICONS, WATER_LEVELS } from "@/lib/difficultyConfig";
+import { DIFFICULTY_LEVELS, TOUR_ICONS, WATER_LEVELS, getPrimarySeasonValue } from "@/lib/difficultyConfig";
 import { hoursInputToMinutes, minutesToHoursInput } from "@/lib/duration";
 import { getAvatarDataUrl } from "@/lib/fallbackImages";
 
@@ -288,7 +288,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
     
     const dataToSave = {
       ...formData,
-      season: formData.seasons?.[0] || null,
+      season: getPrimarySeasonValue(formData.seasons, formData.season),
       seasons: Array.isArray(formData.seasons) ? formData.seasons.filter(Boolean) : [],
       distance_km: formData.distance_km ? Number(formData.distance_km) : null,
       elevation_gain_m: formData.elevation_gain_m ? Number(formData.elevation_gain_m) : null,

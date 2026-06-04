@@ -58,6 +58,7 @@ import {
   WATER_LEVELS,
   getDifficultyLabel,
   getDifficultyTextColor,
+  getPrimarySeasonValue,
   getWaterLabel,
   normalizeSeasonValues,
 } from "@/lib/difficultyConfig";
@@ -1416,6 +1417,7 @@ export default function AddJournalEntry() {
 
     saveMutation.mutate({
       ...persistedForm,
+      season: getPrimarySeasonValue(normalizedSeasons, form.season),
       seasons: normalizedSeasons,
       dog_ids: normalizedDogIds,
       dog_id: normalizedDogIds[0] ?? null,
