@@ -8,7 +8,7 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import L from "leaflet";
 import "leaflet.markercluster";
 import { formatDurationHours } from "@/lib/duration";
-import { SEASON_COLORS, TOUR_ICONS, normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { SEASON_COLORS, TOUR_ICONS, getSeasonIcon, getSeasonLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
 import { HIKE_PLACEHOLDER_IMAGE } from "@/lib/fallbackImages";
 import { getUniqueHikeImageSources, resolveHikeImageUrl } from "@/lib/hikeImages";
 
@@ -72,7 +72,7 @@ function getColor(hike) {
   return seasonKey ? seasonConfig[seasonKey].color : DEFAULT_COLOR;
 }
 
-function createGroupedIcon({ color, photoUrl, count }) {
+function createGroupedIcon({ color, photoUrl, count, seasonIcon }) {
   if (photoUrl) {
     const html = `
       <div style="position:relative;width:40px;height:40px;">
@@ -160,8 +160,10 @@ function createGroupedIcon({ color, photoUrl, count }) {
     </div>
   `;
 
+  const markerHtml = seasonIcon ? html.replace("ðŸ¾", seasonIcon) : html;
+
   return L.divIcon({
-    html,
+    html: markerHtml,
     className: "paw-marker",
     iconSize: [40, 40],
     iconAnchor: [18, 36],
@@ -202,7 +204,13 @@ function buildHikePopupItem(hike, isGrouped) {
       ? hike.route_id || String(hike._public_hike_id)
       : hike.id;
   const seasonKey = getSeasonKey(hike);
-  const season = seasonKey ? seasonConfig[seasonKey] : null;
+  const season = seasonKey
+    ? {
+        ...seasonConfig[seasonKey],
+        label: getSeasonLabel(seasonKey) || seasonConfig[seasonKey]?.label || seasonKey,
+        icon: getSeasonIcon(seasonKey),
+      }
+    : null;
 
   const popupPhotoSource = getUniqueHikeImageSources(
     hike.image,
@@ -230,7 +238,7 @@ function buildHikePopupItem(hike, isGrouped) {
     >
       <div class="hike-popup-photo">
         ${imageHtml}
-        ${season ? `<span class="hike-popup-badge" style="background:${season.background};border-color:${season.color};color:${season.text}">${season.label}</span>` : ""}
+        ${season ? `<span class="hike-popup-badge" style="background:${season.background};border-color:${season.color};color:${season.text}">${season.icon} ${season.label}</span>` : ""}
       </div>
       <div class="hike-popup-content">
         <div class="hike-popup-title">${escapeHtml(hike.trail_name)}</div>
@@ -275,6 +283,7 @@ function MarkersLayer({ hikes }) {
           color: getColor(primaryHike),
           photoUrl: null,
           count: group.hikes.length,
+          seasonIcon: group.hikes.length === 1 ? getSeasonIcon(getSeasonKey(primaryHike)) : null,
         }),
       });
 

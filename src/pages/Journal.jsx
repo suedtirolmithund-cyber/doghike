@@ -39,7 +39,15 @@ import { useAuth } from "@/lib/AuthContext";
 import { getJournalEntriesForDisplay, deleteJournalEntry } from "@/lib/journalApi";
 import WaterIcon from "@/components/icons/WaterIcon";
 import DifficultyScaleChip from "@/components/difficulty/DifficultyScale";
-import { getWaterBadgeClass, getWaterLabel, TOUR_ICONS } from "@/lib/difficultyConfig";
+import {
+  getSeasonBadgeClass,
+  getSeasonIcon,
+  getSeasonLabel,
+  getWaterBadgeClass,
+  getWaterLabel,
+  normalizeSeasonValues,
+  TOUR_ICONS,
+} from "@/lib/difficultyConfig";
 import { formatDurationHours } from "@/lib/duration";
 import { matchesTextSearch } from "@/lib/hikeSearch";
 import { getDisplayImageUrl } from "@/lib/imageProxy";
@@ -159,6 +167,8 @@ function JournalEntryActions({ entry, onDelete }) {
 }
 
 function JournalEntryMeta({ entry, compact = false }) {
+  const seasonValues = normalizeSeasonValues(entry?.seasons, entry?.season);
+
   return (
     <>
       <div className={`${compact ? "mb-3" : "my-3"} grid grid-cols-2 gap-2 sm:flex sm:flex-wrap`}>
@@ -201,6 +211,15 @@ function JournalEntryMeta({ entry, compact = false }) {
             GPX
           </Badge>
         )}
+        {seasonValues.map((season) => (
+          <Badge
+            key={season}
+            variant="secondary"
+            className={`${compact ? "" : "w-full sm:w-auto"} min-h-8 border px-2 py-1 text-sm md:px-3 md:text-xs ${getSeasonBadgeClass(season)}`}
+          >
+            {getSeasonIcon(season)} {getSeasonLabel(season) || season}
+          </Badge>
+        ))}
       </div>
     </>
   );

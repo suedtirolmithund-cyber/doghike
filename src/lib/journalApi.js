@@ -21,6 +21,7 @@ const JOURNAL_DISPLAY_SELECT = [
   "gpx_url",
   "photos",
   "rating",
+  "seasons",
 ].join(", ");
 
 export function getMissingPrivateJournalFields(entry) {
