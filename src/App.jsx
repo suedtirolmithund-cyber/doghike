@@ -117,6 +117,8 @@ const PageShell = ({ children, currentPageName }) => (
   </LayoutWrapper>
 );
 
+const PUBLIC_PAGE_NAMES = ["AGB", "Datenschutz", "Impressum", "Legal", "Support"];
+
 const ScrollToTop = () => {
   const location = useLocation();
 
@@ -179,7 +181,29 @@ const AuthenticatedApp = () => {
   }
 
   if (!isAuthenticated) {
-    return <GuestWelcomeScreen />;
+    return (
+      <Routes>
+        <Route path="/" element={<GuestWelcomeScreen />} />
+        <Route path={createPageUrl("Login")} element={<GuestWelcomeScreen />} />
+        {PUBLIC_PAGE_NAMES.map((path) => {
+          const Page = Pages[path];
+          if (!Page) return null;
+
+          return (
+            <Route
+              key={path}
+              path={createPageUrl(path)}
+              element={
+                <PageShell currentPageName={path}>
+                  <Page />
+                </PageShell>
+              }
+            />
+          );
+        })}
+        <Route path="*" element={<GuestWelcomeScreen />} />
+      </Routes>
+    );
   }
 
   // Render the main app
