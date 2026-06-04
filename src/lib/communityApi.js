@@ -364,7 +364,7 @@ export async function deleteComment(id) {
     .eq("id", id)
     .eq("user_id", currentUserId)
     .single();
-  if (fetchError) throw fetchError;
+  if (fetchError && fetchError.code !== "PGRST116") throw fetchError;
 
   const { error } = await supabase
     .from("comments")
