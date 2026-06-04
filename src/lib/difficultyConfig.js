@@ -429,11 +429,22 @@ export function normalizeSeasonValues(...values) {
   );
 }
 
-const PRIMARY_SEASON_PRIORITY = ["all_year", "summer", "spring", "autumn", "winter"];
+const PRIMARY_SEASON_PRIORITY = ["summer", "spring", "autumn", "winter", "all_year"];
 
 export function getPrimarySeasonValue(...values) {
   const seasons = normalizeSeasonValues(...values);
   return PRIMARY_SEASON_PRIORITY.find((season) => seasons.includes(season)) ?? seasons[0] ?? null;
+}
+
+export function normalizeSelectedSeasonValues(seasons, fallbackSeason = null) {
+  const selectedSeasons = normalizeSeasonValues(seasons);
+  return selectedSeasons.length > 0 ? selectedSeasons : normalizeSeasonValues(fallbackSeason);
+}
+
+export function getSelectedSeasonValue(seasons, fallbackSeason = null) {
+  const selectedSeasons = normalizeSelectedSeasonValues(seasons, fallbackSeason);
+  if (selectedSeasons.length === 1) return selectedSeasons[0];
+  return getPrimarySeasonValue(selectedSeasons);
 }
 
 export const WATER_BY_VALUE = Object.fromEntries(
