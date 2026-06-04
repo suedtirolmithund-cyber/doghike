@@ -919,6 +919,25 @@ const EMPTY_FORM = {
   tagsText: "",
 };
 
+function getJournalDraftKey(userId, editId) {
+  if (!userId) return null;
+  return `dogtrails:journal-draft:${userId}:${editId || "new"}`;
+}
+
+function normalizeJournalDraft(rawDraft) {
+  if (!rawDraft || typeof rawDraft !== "object") return null;
+
+  return {
+    ...rawDraft,
+    photos: Array.isArray(rawDraft.photos) ? rawDraft.photos : [],
+    seasons: Array.isArray(rawDraft.seasons) ? rawDraft.seasons : [],
+    dog_ids: Array.isArray(rawDraft.dog_ids) ? rawDraft.dog_ids : [],
+    dog_mood_tags: Array.isArray(rawDraft.dog_mood_tags) ? rawDraft.dog_mood_tags : [],
+    gpx_url: rawDraft.gpx_url || "",
+    tagsText: rawDraft.tagsText || "",
+  };
+}
+
 export default function AddJournalEntry() {
   const { user, isAuthenticated, isAdmin } = useAuth();
   const navigate = useNavigate();
@@ -999,6 +1018,8 @@ export default function AddJournalEntry() {
   const removedExistingGpxRef = useRef([]);
   const keepUploadedMediaRef = useRef(false);
   const photoPreviewCacheRef = useRef({});
+  const restoredDraftRef = useRef(false);
+  const journalDraftKey = getJournalDraftKey(user?.id, editId);
 
   const set = (key, val) =>
     setForm((p) => ({
@@ -1061,6 +1082,48 @@ export default function AddJournalEntry() {
       });
     }
   }, [existing]);
+
+  useEffect(() => {
+    if (!journalDraftKey || restoredDraftRef.current || typeof window === "undefined") return;
+    if (editId && loadingEntry) return;
+
+    try {
+      const rawDraft = window.localStorage.getItem(journalDraftKey);
+      if (!rawDraft) {
+        restoredDraftRef.current = true;
+        return;
+      }
+
+      const normalizedDraft = normalizeJournalDraft(JSON.parse(rawDraft));
+      if (!normalizedDraft) {
+        restoredDraftRef.current = true;
+        return;
+      }
+
+      setForm((prev) => ({
+        ...prev,
+        ...normalizedDraft,
+      }));
+      keepUploadedMediaRef.current = true;
+    } catch (error) {
+      console.error("[add-journal-entry] restore draft failed:", error);
+    } finally {
+      restoredDraftRef.current = true;
+    }
+  }, [editId, journalDraftKey, loadingEntry]);
+
+  useEffect(() => {
+    if (!journalDraftKey || !restoredDraftRef.current || typeof window === "undefined") return;
+
+    try {
+      window.localStorage.setItem(journalDraftKey, JSON.stringify(form));
+      if ((form.photos?.length ?? 0) > 0 || form.gpx_url) {
+        keepUploadedMediaRef.current = true;
+      }
+    } catch (error) {
+      console.error("[add-journal-entry] persist draft failed:", error);
+    }
+  }, [form, journalDraftKey]);
 
   useEffect(() => {
     if (!editId || !userDogsLoaded) return;
@@ -1137,6 +1200,9 @@ export default function AddJournalEntry() {
         ? updateJournalEntry(editId, data)
         : createJournalEntry(user.id, data),
     onSuccess: async (savedEntry) => {
+      if (journalDraftKey && typeof window !== "undefined") {
+        window.localStorage.removeItem(journalDraftKey);
+      }
       const filesToDelete = [
         ...removedExistingPhotosRef.current,
         ...removedExistingGpxRef.current,
