@@ -490,12 +490,12 @@ export default function Login() {
                         style={{ background: "#FFFFFF", color: BROWN_DARK, fontFamily: "Nunito, sans-serif" }}
                         autoComplete="new-password"
                       />
-                      <div className="flex items-start gap-3 px-1">
+                      <div className="flex items-start gap-3 rounded-xl border border-white/35 bg-white/15 p-3">
                         <Checkbox
                           id="privacy"
                           checked={privacyAccepted}
-                          onCheckedChange={setPrivacyAccepted}
-                          className="mt-0.5 border-white/60 data-[state=checked]:bg-[#A8003C] data-[state=checked]:border-[#A8003C]"
+                          onCheckedChange={(checked) => setPrivacyAccepted(checked === true)}
+                          className="mt-0.5 h-5 w-5 shrink-0 border-2 border-white bg-white/85 data-[state=checked]:border-[#A8003C] data-[state=checked]:bg-[#A8003C]"
                         />
                         <label htmlFor="privacy" className="text-xs text-white/80 cursor-pointer leading-relaxed">
                           Ich akzeptiere die{" "}

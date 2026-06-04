@@ -372,12 +372,12 @@ export default function GuestWelcomeScreen() {
                         className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-slate-950 outline-none placeholder:text-slate-500"
                         autoComplete="new-password"
                       />
-                      <div className="flex items-start gap-3 px-1">
+                      <div className="flex items-start gap-3 rounded-xl border border-white/35 bg-white/15 p-3">
                         <Checkbox
                           id="guest-privacy"
                           checked={privacyAccepted}
-                          onCheckedChange={setPrivacyAccepted}
-                          className="mt-0.5 border-white/70 data-[state=checked]:border-[#A8003C] data-[state=checked]:bg-[#A8003C]"
+                          onCheckedChange={(checked) => setPrivacyAccepted(checked === true)}
+                          className="mt-0.5 h-5 w-5 shrink-0 border-2 border-white bg-white/85 data-[state=checked]:border-[#A8003C] data-[state=checked]:bg-[#A8003C]"
                         />
                         <label htmlFor="guest-privacy" className="text-xs leading-relaxed text-white/80">
                           Ich akzeptiere die{" "}
