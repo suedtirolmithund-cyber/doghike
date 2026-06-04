@@ -78,13 +78,12 @@ export default function ConsentDialog({
               checked={accepted}
               onCheckedChange={(checked) => setAccepted(checked === true)}
             />
-            <Label
-              htmlFor="consent"
-              className="flex-1 cursor-pointer text-sm font-medium"
-            >
+            <div className="flex-1 text-sm font-medium">
               {isRegistrationConsent ? (
-                <>
-                  Ich akzeptiere die aktuelle{" "}
+                <p>
+                  <Label htmlFor="consent" className="cursor-pointer">
+                    Ich akzeptiere die aktuelle
+                  </Label>{" "}
                   <a
                     href={createPageUrl("Datenschutz")}
                     target="_blank"
@@ -93,7 +92,9 @@ export default function ConsentDialog({
                   >
                     Datenschutzerklärung
                   </a>{" "}
-                  und die aktuellen{" "}
+                  <Label htmlFor="consent" className="cursor-pointer">
+                    und die aktuellen
+                  </Label>{" "}
                   <a
                     href={createPageUrl("AGB")}
                     target="_blank"
@@ -102,11 +103,13 @@ export default function ConsentDialog({
                   >
                     Nutzungsbedingungen
                   </a>
-                </>
+                </p>
               ) : (
-                config.checkbox
+                <Label htmlFor="consent" className="cursor-pointer">
+                  {config.checkbox}
+                </Label>
               )}
-            </Label>
+            </div>
           </div>
 
           {errorMessage && (
