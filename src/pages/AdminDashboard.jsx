@@ -1073,7 +1073,7 @@ export default function AdminDashboard() {
                         disabled={publicHikePage <= 1}
                         onClick={() => setPublicHikePage((value) => Math.max(1, value - 1))}
                       >
-                        ZurÃ¼ck
+                        Zurück
                       </Button>
                       <Button
                         type="button"
