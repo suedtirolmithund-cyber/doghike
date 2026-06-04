@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -381,13 +381,25 @@ export default function GuestWelcomeScreen() {
                         />
                         <label htmlFor="guest-privacy" className="text-xs leading-relaxed text-white/80">
                           Ich akzeptiere die{" "}
-                          <Link to={createPageUrl("Datenschutz")} className="text-white underline" target="_blank">
+                          <a
+                            href={createPageUrl("Datenschutz")}
+                            className="text-white underline"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(event) => event.stopPropagation()}
+                          >
                             Datenschutzerklärung
-                          </Link>
+                          </a>
                           {" "}und die{" "}
-                          <Link to={createPageUrl("AGB")} className="text-white underline" target="_blank">
+                          <a
+                            href={createPageUrl("AGB")}
+                            className="text-white underline"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(event) => event.stopPropagation()}
+                          >
                             Nutzungsbedingungen
-                          </Link>
+                          </a>
                           .
                         </label>
                       </div>
@@ -436,13 +448,13 @@ export default function GuestWelcomeScreen() {
           )}
 
           <p className="mt-4 text-center text-xs text-white/55">
-            <Link to={createPageUrl("Datenschutz")} className="hover:text-white">
+            <a href={createPageUrl("Datenschutz")} target="_blank" rel="noopener noreferrer" className="hover:text-white">
               Datenschutz
-            </Link>
+            </a>
             {" · "}
-            <Link to={createPageUrl("AGB")} className="hover:text-white">
+            <a href={createPageUrl("AGB")} target="_blank" rel="noopener noreferrer" className="hover:text-white">
               Nutzungsbedingungen
-            </Link>
+            </a>
           </p>
         </motion.div>
       </motion.section>

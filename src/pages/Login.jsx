@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -499,13 +499,25 @@ export default function Login() {
                         />
                         <label htmlFor="privacy" className="text-xs text-white/80 cursor-pointer leading-relaxed">
                           Ich akzeptiere die{" "}
-                          <Link to={createPageUrl("Datenschutz")} className="underline text-white" target="_blank">
+                          <a
+                            href={createPageUrl("Datenschutz")}
+                            className="underline text-white"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(event) => event.stopPropagation()}
+                          >
                             Datenschutzerklärung
-                          </Link>{" "}
+                          </a>{" "}
                           und die{" "}
-                          <Link to={createPageUrl("AGB")} className="underline text-white" target="_blank">
+                          <a
+                            href={createPageUrl("AGB")}
+                            className="underline text-white"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(event) => event.stopPropagation()}
+                          >
                             Nutzungsbedingungen
-                          </Link>
+                          </a>
                           .{" "}
                           <span className="text-brand-300">*</span>
                         </label>
@@ -591,9 +603,13 @@ export default function Login() {
 
         <div className="text-center pb-4 px-4">
           <p className="text-xs text-white/50" style={{ fontFamily: "Nunito, sans-serif" }}>
-            <Link to={createPageUrl("Datenschutz")} className="hover:text-white/80">Datenschutz</Link>
+            <a href={createPageUrl("Datenschutz")} target="_blank" rel="noopener noreferrer" className="hover:text-white/80">
+              Datenschutz
+            </a>
             {" · "}
-            <Link to={createPageUrl("AGB")} className="hover:text-white/80">Nutzungsbedingungen</Link>
+            <a href={createPageUrl("AGB")} target="_blank" rel="noopener noreferrer" className="hover:text-white/80">
+              Nutzungsbedingungen
+            </a>
           </p>
         </div>
       </motion.div>
