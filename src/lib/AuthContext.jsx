@@ -52,7 +52,6 @@ export const AuthProvider = ({ children }) => {
   const applySessionState = (session) => {
     setUser(session?.user ?? null);
     setIsAuthenticated(!!session?.user);
-    setIsLoadingAuth(false);
   };
 
   // Ensure a profile row exists. This should never overwrite an existing profile.
@@ -135,16 +134,21 @@ export const AuthProvider = ({ children }) => {
         if (hydrationRunRef.current !== runId) return;
         setIsAdmin(false);
       }
+
+      if (hydrationRunRef.current !== runId) return;
+      setIsLoadingAuth(false);
     };
 
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       const runId = ++hydrationRunRef.current;
+      setIsLoadingAuth(true);
       applySessionState(session);
       await hydrateSessionData(session, runId);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       const runId = ++hydrationRunRef.current;
+      setIsLoadingAuth(true);
       applySessionState(session);
       void hydrateSessionData(session, runId);
     });
