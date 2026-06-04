@@ -120,6 +120,27 @@ const PageShell = ({ children, currentPageName }) => (
 
 const PUBLIC_PAGE_NAMES = ["AGB", "Datenschutz", "Impressum", "Legal", "Support"];
 
+const PublicPageRoutes = () => (
+  <>
+    {PUBLIC_PAGE_NAMES.map((path) => {
+      const Page = Pages[path];
+      if (!Page) return null;
+
+      return (
+        <Route
+          key={path}
+          path={createPageUrl(path)}
+          element={
+            <PageShell currentPageName={path}>
+              <Page />
+            </PageShell>
+          }
+        />
+      );
+    })}
+  </>
+);
+
 const ScrollToTop = () => {
   const location = useLocation();
 
@@ -174,6 +195,7 @@ const DogProfileRedirect = () => {
 };
 
 const AuthenticatedApp = () => {
+  const location = useLocation();
   const {
     isAuthenticated,
     isLoadingAuth,
@@ -183,6 +205,7 @@ const AuthenticatedApp = () => {
   } = useAuth();
   const [isAcceptingRegistrationConsent, setIsAcceptingRegistrationConsent] = useState(false);
   const isBootLoading = isLoadingAuth;
+  const publicPageName = PUBLIC_PAGE_NAMES.find((pageName) => location.pathname === createPageUrl(pageName));
 
   if (isBootLoading) {
     return <BootLoadingGate />;
@@ -193,24 +216,19 @@ const AuthenticatedApp = () => {
       <Routes>
         <Route path="/" element={<GuestWelcomeScreen />} />
         <Route path={createPageUrl("Login")} element={<GuestWelcomeScreen />} />
-        {PUBLIC_PAGE_NAMES.map((path) => {
-          const Page = Pages[path];
-          if (!Page) return null;
-
-          return (
-            <Route
-              key={path}
-              path={createPageUrl(path)}
-              element={
-                <PageShell currentPageName={path}>
-                  <Page />
-                </PageShell>
-              }
-            />
-          );
-        })}
+        <PublicPageRoutes />
         <Route path="*" element={<GuestWelcomeScreen />} />
       </Routes>
+    );
+  }
+
+  if (publicPageName) {
+    const PublicPage = Pages[publicPageName];
+
+    return (
+      <PageShell currentPageName={publicPageName}>
+        <PublicPage />
+      </PageShell>
     );
   }
 
