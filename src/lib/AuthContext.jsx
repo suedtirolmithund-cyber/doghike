@@ -41,6 +41,25 @@ function clearPendingRegistrationConsent() {
   }
 }
 
+function isConsentCurrent(consent) {
+  return (
+    consent?.privacyVersion === CONSENT_VERSION ||
+    consent?.privacy_version === CONSENT_VERSION
+  ) && (
+    consent?.termsVersion === CONSENT_VERSION ||
+    consent?.terms_version === CONSENT_VERSION
+  );
+}
+
+function createRegistrationConsent(source) {
+  return {
+    privacyVersion: CONSENT_VERSION,
+    termsVersion: CONSENT_VERSION,
+    acceptedAt: new Date().toISOString(),
+    source,
+  };
+}
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -123,16 +142,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const fetchRegistrationConsentStatus = async (userId) => {
-    if (!userId) {
+  const fetchRegistrationConsentStatus = async (nextUser) => {
+    if (!nextUser?.id) {
       return false;
+    }
+
+    if (isConsentCurrent(nextUser.user_metadata?.registration_consent)) {
+      return true;
     }
 
     try {
       const { data, error } = await supabase
         .from("registration_consents")
         .select("privacy_version, terms_version")
-        .eq("user_id", userId)
+        .eq("user_id", nextUser.id)
         .maybeSingle();
 
       if (error) {
@@ -153,21 +176,32 @@ export const AuthProvider = ({ children }) => {
     }
 
     setAuthError(null);
+    const consent = createRegistrationConsent(source);
 
     const { error } = await supabase.from("registration_consents").upsert(
       {
         user_id: user.id,
-        privacy_version: CONSENT_VERSION,
-        terms_version: CONSENT_VERSION,
-        accepted_at: new Date().toISOString(),
-        accepted_source: source,
+        privacy_version: consent.privacyVersion,
+        terms_version: consent.termsVersion,
+        accepted_at: consent.acceptedAt,
+        accepted_source: consent.source,
       },
       { onConflict: "user_id" },
     );
 
     if (error) {
-      setAuthError(error.message);
-      return { error };
+      const { data: authData, error: metadataError } = await supabase.auth.updateUser({
+        data: {
+          registration_consent: consent,
+        },
+      });
+
+      if (metadataError) {
+        setAuthError(metadataError.message || error.message);
+        return { error: metadataError };
+      }
+
+      setUser(authData.user);
     }
 
     setIsRegistrationConsentCurrent(true);
@@ -180,7 +214,7 @@ export const AuthProvider = ({ children }) => {
         await ensureProfile(session.user);
         const [nextIsAdmin, nextConsentCurrent] = await Promise.all([
           fetchRole(session.user.id),
-          fetchRegistrationConsentStatus(session.user.id),
+          fetchRegistrationConsentStatus(session.user),
         ]);
 
         if (hydrationRunRef.current !== runId) return;
