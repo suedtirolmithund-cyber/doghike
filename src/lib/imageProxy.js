@@ -1,6 +1,10 @@
-const SUPABASE_URL =
-  import.meta.env.VITE_SUPABASE_URL?.replace(/\/+$/, "") ||
-  "https://vaprabanohjkandbzvba.supabase.co";
+const RAW_SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL?.trim();
+
+if (!RAW_SUPABASE_URL) {
+  throw new Error("VITE_SUPABASE_URL is required for imageProxy.");
+}
+
+const SUPABASE_URL = RAW_SUPABASE_URL.replace(/\/+$/, "");
 const PUBLIC_HIKE_PREFIX = "public-hikes/";
 const JOURNAL_BUCKET = "journal";
 const DEFAULT_CONTENT_IMAGE_WIDTH = 1200;

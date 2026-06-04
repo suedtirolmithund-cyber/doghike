@@ -1,8 +1,21 @@
-const ALLOWED_HOSTS = new Set([
-  "vaprabanohjkandbzvba.supabase.co",
-  "image.jimcdn.com",
-  "jimcdn.com",
-]);
+function getAllowedHosts() {
+  const rawSupabaseUrl =
+    process.env.VITE_SUPABASE_URL?.trim() ||
+    process.env.SUPABASE_URL?.trim() ||
+    "";
+
+  if (!rawSupabaseUrl) {
+    throw new Error("VITE_SUPABASE_URL or SUPABASE_URL is required for image-proxy.");
+  }
+
+  const supabaseHost = new URL(rawSupabaseUrl).hostname;
+
+  return new Set([
+    supabaseHost,
+    "image.jimcdn.com",
+    "jimcdn.com",
+  ]);
+}
 const ALLOWED_IMAGE_CONTENT_TYPES = new Set([
   "image/jpeg",
   "image/png",
@@ -14,9 +27,10 @@ const MAX_PROXY_IMAGE_BYTES = 12 * 1024 * 1024;
 
 function isAllowedImageUrl(rawUrl) {
   try {
+    const allowedHosts = getAllowedHosts();
     const url = new URL(rawUrl);
     if (url.protocol !== "https:") return false;
-    if (ALLOWED_HOSTS.has(url.hostname)) return true;
+    if (allowedHosts.has(url.hostname)) return true;
     return url.hostname.endsWith(".jimcdn.com");
   } catch {
     return false;
@@ -101,6 +115,15 @@ async function readResponseBodyWithLimit(response, maxBytes) {
 }
 
 export async function fetchProxiedImage(rawUrl, method = "GET") {
+  try {
+    getAllowedHosts();
+  } catch (error) {
+    return {
+      status: 500,
+      body: error?.message || "Image proxy configuration missing",
+    };
+  }
+
   if (method !== "GET" && method !== "HEAD") {
     return {
       status: 405,
