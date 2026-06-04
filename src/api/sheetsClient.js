@@ -735,6 +735,24 @@ function getJournalEntryDogIds(entry) {
 }
 
 const APPROVED_JOURNAL_HIKE_LIMIT = 250;
+const APPROVED_JOURNAL_ENTRY_CORE_FIELDS = [
+  "id",
+  "user_id",
+  "title",
+  "location",
+  "latitude",
+  "longitude",
+  "photos",
+  "distance_km",
+  "elevation_m",
+  "duration_minutes",
+  "difficulty",
+  "dog_difficulty",
+  "water_available",
+  "description",
+  "date",
+  "dog_id",
+];
 const APPROVED_JOURNAL_ENTRY_FIELD_LIST = [
   "id",
   "user_id",
@@ -770,6 +788,11 @@ function isMissingApprovedJournalOptionalFieldError(error) {
   );
 }
 
+function isMissingApprovedJournalColumnError(error) {
+  const message = String(error?.message ?? "");
+  return message.includes("column");
+}
+
 function stripMissingApprovedJournalOptionalFields(fields, error) {
   const message = String(error?.message ?? "");
   return fields.filter((field) => !(message.includes(field) && message.includes("column")));
@@ -803,6 +826,10 @@ async function getApprovedJournalEntries() {
         error
       );
       ({ data: entries, error } = await runApprovedJournalQuery(fallbackFields));
+    }
+
+    if (error && isMissingApprovedJournalColumnError(error)) {
+      ({ data: entries, error } = await runApprovedJournalQuery(APPROVED_JOURNAL_ENTRY_CORE_FIELDS));
     }
 
     if (error) {
