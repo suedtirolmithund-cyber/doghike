@@ -938,6 +938,15 @@ function normalizeJournalDraft(rawDraft) {
   };
 }
 
+function persistJournalDraft(draftKey, formState, keepUploadedMediaRef) {
+  if (!draftKey || typeof window === "undefined") return;
+
+  window.localStorage.setItem(draftKey, JSON.stringify(formState));
+  if ((formState.photos?.length ?? 0) > 0 || formState.gpx_url) {
+    keepUploadedMediaRef.current = true;
+  }
+}
+
 export default function AddJournalEntry() {
   const { user, isAuthenticated, isAdmin } = useAuth();
   const navigate = useNavigate();
@@ -1019,6 +1028,7 @@ export default function AddJournalEntry() {
   const keepUploadedMediaRef = useRef(false);
   const photoPreviewCacheRef = useRef({});
   const restoredDraftRef = useRef(false);
+  const currentFormRef = useRef(form);
   const journalDraftKey = getJournalDraftKey(user?.id, editId);
 
   const set = (key, val) =>
@@ -1116,14 +1126,41 @@ export default function AddJournalEntry() {
     if (!journalDraftKey || !restoredDraftRef.current || typeof window === "undefined") return;
 
     try {
-      window.localStorage.setItem(journalDraftKey, JSON.stringify(form));
-      if ((form.photos?.length ?? 0) > 0 || form.gpx_url) {
-        keepUploadedMediaRef.current = true;
-      }
+      persistJournalDraft(journalDraftKey, form, keepUploadedMediaRef);
     } catch (error) {
       console.error("[add-journal-entry] persist draft failed:", error);
     }
   }, [form, journalDraftKey]);
+
+  useEffect(() => {
+    currentFormRef.current = form;
+  }, [form]);
+
+  useEffect(() => {
+    if (!journalDraftKey || !restoredDraftRef.current || typeof window === "undefined") return;
+
+    const persistCurrentDraft = () => {
+      try {
+        persistJournalDraft(journalDraftKey, currentFormRef.current, keepUploadedMediaRef);
+      } catch (error) {
+        console.error("[add-journal-entry] persist mobile draft failed:", error);
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        persistCurrentDraft();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("pagehide", persistCurrentDraft);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("pagehide", persistCurrentDraft);
+    };
+  }, [journalDraftKey]);
 
   useEffect(() => {
     if (!editId || !userDogsLoaded) return;
