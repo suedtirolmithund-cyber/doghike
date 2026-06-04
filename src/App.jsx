@@ -10,6 +10,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import AppLoadingScreen from '@/components/AppLoadingScreen';
 import PawLoadingTrail from '@/components/PawLoadingTrail';
 import GuestWelcomeScreen from '@/components/GuestWelcomeScreen';
+import ConsentDialog from '@/components/ConsentDialog';
 import { getDogs } from '@/lib/profilesApi';
 import { hasSeenDogNudgeThisSession, markDogNudgeSeenThisSession } from '@/lib/dogNudgeSession';
 import { createPageUrl } from '@/utils';
@@ -173,7 +174,14 @@ const DogProfileRedirect = () => {
 };
 
 const AuthenticatedApp = () => {
-  const { isAuthenticated, isLoadingAuth } = useAuth();
+  const {
+    isAuthenticated,
+    isLoadingAuth,
+    isRegistrationConsentCurrent,
+    acceptCurrentRegistrationConsent,
+    authError,
+  } = useAuth();
+  const [isAcceptingRegistrationConsent, setIsAcceptingRegistrationConsent] = useState(false);
   const isBootLoading = isLoadingAuth;
 
   if (isBootLoading) {
@@ -203,6 +211,28 @@ const AuthenticatedApp = () => {
         })}
         <Route path="*" element={<GuestWelcomeScreen />} />
       </Routes>
+    );
+  }
+
+  if (isRegistrationConsentCurrent === null) {
+    return <BootLoadingGate />;
+  }
+
+  if (!isRegistrationConsentCurrent) {
+    return (
+      <ConsentDialog
+        type="registration_update"
+        open
+        isSubmitting={isAcceptingRegistrationConsent}
+        errorMessage={authError}
+        onAccept={async () => {
+          setIsAcceptingRegistrationConsent(true);
+          const result = await acceptCurrentRegistrationConsent("post_login_update");
+          if (result?.error) {
+            setIsAcceptingRegistrationConsent(false);
+          }
+        }}
+      />
     );
   }
 

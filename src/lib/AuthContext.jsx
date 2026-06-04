@@ -5,7 +5,7 @@ import { createPageUrl } from "@/utils";
 
 const AuthContext = createContext();
 const REGISTRATION_CONSENT_KEY = "doghike_pending_registration_consent";
-const CONSENT_VERSION = "2026-06";
+export const CONSENT_VERSION = "2026-06";
 
 function getPendingRegistrationConsent() {
   try {
@@ -46,6 +46,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
+  const [isRegistrationConsentCurrent, setIsRegistrationConsentCurrent] = useState(null);
   const [authError, setAuthError] = useState(null);
   const hydrationRunRef = useRef(0);
 
@@ -122,17 +123,73 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const fetchRegistrationConsentStatus = async (userId) => {
+    if (!userId) {
+      return false;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from("registration_consents")
+        .select("privacy_version, terms_version")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+      if (error) {
+        console.error("[fetchRegistrationConsentStatus] error:", error.message);
+        return false;
+      }
+
+      return data?.privacy_version === CONSENT_VERSION && data?.terms_version === CONSENT_VERSION;
+    } catch (error) {
+      console.error("[fetchRegistrationConsentStatus] exception:", error);
+      return false;
+    }
+  };
+
+  const acceptCurrentRegistrationConsent = async (source = "post_login_update") => {
+    if (!user?.id) {
+      return { error: new Error("Kein angemeldeter Nutzer gefunden.") };
+    }
+
+    setAuthError(null);
+
+    const { error } = await supabase.from("registration_consents").upsert(
+      {
+        user_id: user.id,
+        privacy_version: CONSENT_VERSION,
+        terms_version: CONSENT_VERSION,
+        accepted_at: new Date().toISOString(),
+        accepted_source: source,
+      },
+      { onConflict: "user_id" },
+    );
+
+    if (error) {
+      setAuthError(error.message);
+      return { error };
+    }
+
+    setIsRegistrationConsentCurrent(true);
+    return {};
+  };
+
   useEffect(() => {
     const hydrateSessionData = async (session, runId) => {
       if (session?.user) {
         await ensureProfile(session.user);
-        const nextIsAdmin = await fetchRole(session.user.id);
+        const [nextIsAdmin, nextConsentCurrent] = await Promise.all([
+          fetchRole(session.user.id),
+          fetchRegistrationConsentStatus(session.user.id),
+        ]);
 
         if (hydrationRunRef.current !== runId) return;
         setIsAdmin(nextIsAdmin);
+        setIsRegistrationConsentCurrent(nextConsentCurrent);
       } else {
         if (hydrationRunRef.current !== runId) return;
         setIsAdmin(false);
+        setIsRegistrationConsentCurrent(null);
       }
 
       if (hydrationRunRef.current !== runId) return;
@@ -172,6 +229,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setIsAuthenticated(false);
     setIsAdmin(false);
+    setIsRegistrationConsentCurrent(null);
   };
 
   const loginWithEmail = async (email, password) => {
@@ -258,8 +316,10 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated,
         isAdmin,
         isLoadingAuth,
+        isRegistrationConsentCurrent,
         authError,
         logout,
+        acceptCurrentRegistrationConsent,
         loginWithEmail,
         signUpWithEmail,
         loginWithGoogle,

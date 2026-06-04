@@ -9,8 +9,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { createPageUrl } from "@/utils";
 
-export default function ConsentDialog({ type, onAccept, onDecline, open = true }) {
+export default function ConsentDialog({
+  type,
+  onAccept,
+  onDecline,
+  open = true,
+  isSubmitting = false,
+  errorMessage = null,
+}) {
   const [accepted, setAccepted] = useState(false);
 
   const configs = {
@@ -20,6 +28,13 @@ export default function ConsentDialog({ type, onAccept, onDecline, open = true }
         "Bitte bestätige, dass du unserer Datenschutzerklärung und den Nutzungsbedingungen zustimmst, bevor du fortfährst.",
       checkbox:
         "Ich akzeptiere die Datenschutzerklärung und Nutzungsbedingungen",
+    },
+    registration_update: {
+      title: "Datenschutz und Nutzungsbedingungen",
+      description:
+        "Bitte bestätige einmalig die aktuelle Datenschutzerklärung und die aktuellen Nutzungsbedingungen, bevor du die App weiter nutzt.",
+      checkbox:
+        "Ich akzeptiere die aktuelle Datenschutzerklärung und die aktuellen Nutzungsbedingungen",
     },
     photo: {
       title: "Foto-Freigabe & Urheberrecht",
@@ -38,13 +53,18 @@ export default function ConsentDialog({ type, onAccept, onDecline, open = true }
   };
 
   const config = configs[type] || configs.registration;
+  const isRegistrationConsent = type === "registration" || type === "registration_update";
+  const canDecline = !isRegistrationConsent;
 
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => {
-      if (!isOpen && type !== "registration") {
-        onDecline?.();
-      }
-    }}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        if (!isOpen && canDecline) {
+          onDecline?.();
+        }
+      }}
+    >
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>{config.title}</DialogTitle>
@@ -52,22 +72,51 @@ export default function ConsentDialog({ type, onAccept, onDecline, open = true }
         </DialogHeader>
 
         <div className="space-y-4">
-          <div className="flex items-center gap-3 p-3 bg-brand-50/70 rounded-lg">
+          <div className="flex items-center gap-3 rounded-lg bg-brand-50/70 p-3">
             <Checkbox
               id="consent"
               checked={accepted}
-              onCheckedChange={setAccepted}
+              onCheckedChange={(checked) => setAccepted(checked === true)}
             />
             <Label
               htmlFor="consent"
-              className="text-sm font-medium cursor-pointer flex-1"
+              className="flex-1 cursor-pointer text-sm font-medium"
             >
-              {config.checkbox}
+              {isRegistrationConsent ? (
+                <>
+                  Ich akzeptiere die aktuelle{" "}
+                  <a
+                    href={createPageUrl("Datenschutz")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline"
+                  >
+                    Datenschutzerklärung
+                  </a>{" "}
+                  und die aktuellen{" "}
+                  <a
+                    href={createPageUrl("AGB")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline"
+                  >
+                    Nutzungsbedingungen
+                  </a>
+                </>
+              ) : (
+                config.checkbox
+              )}
             </Label>
           </div>
 
+          {errorMessage && (
+            <p className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
+              {errorMessage}
+            </p>
+          )}
+
           <div className="flex gap-3">
-            {type !== "registration" && (
+            {canDecline && (
               <Button
                 variant="outline"
                 onClick={onDecline}
@@ -78,14 +127,14 @@ export default function ConsentDialog({ type, onAccept, onDecline, open = true }
             )}
             <Button
               onClick={() => {
-                if (accepted) {
+                if (accepted && !isSubmitting) {
                   onAccept();
                 }
               }}
-              disabled={!accepted}
+              disabled={!accepted || isSubmitting}
               className="flex-1"
             >
-              Akzeptieren
+              {isSubmitting ? "Speichern..." : "Akzeptieren"}
             </Button>
           </div>
         </div>
