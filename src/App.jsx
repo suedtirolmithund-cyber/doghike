@@ -153,7 +153,7 @@ const DogProfileRedirect = () => {
 
   const { data: dogs = [], isFetched, isError } = useQuery({
     queryKey: ["dogs", user?.id],
-    queryFn: () => getDogs(user.id),
+    queryFn: () => getDogs(user?.id),
     enabled: isAuthenticated && !!user?.id,
     staleTime: 30_000,
   });
