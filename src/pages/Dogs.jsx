@@ -53,23 +53,45 @@ export default function Dogs() {
     queryFn: async () => {
       if (!dogs.length) return {};
 
-      const dogIds = dogs.map((dog) => dog.id);
-      const { data, error } = await supabase
+      const dogIds = dogs.map((dog) => String(dog.id));
+      const knownDogIds = new Set(dogIds);
+      let { data, error } = await supabase
         .from("journal_entries")
-        .select("dog_id, distance_km, elevation_m")
-        .eq("user_id", user.id)
-        .in("dog_id", dogIds);
+        .select("dog_id, dog_ids, distance_km, elevation_m")
+        .eq("user_id", user.id);
+
+      const missingDogIdsColumn =
+        String(error?.message ?? "").includes("dog_ids") && String(error?.message ?? "").includes("column");
+
+      if (error && missingDogIdsColumn) {
+        ({ data, error } = await supabase
+          .from("journal_entries")
+          .select("dog_id, distance_km, elevation_m")
+          .eq("user_id", user.id));
+      }
 
       if (error) return {};
 
       const map = {};
       for (const entry of data ?? []) {
-        if (!map[entry.dog_id]) {
-          map[entry.dog_id] = { tourCount: 0, totalDistance: 0, totalElevation: 0 };
-        }
-        map[entry.dog_id].tourCount += 1;
-        map[entry.dog_id].totalDistance += entry.distance_km ?? 0;
-        map[entry.dog_id].totalElevation += entry.elevation_m ?? 0;
+        const linkedDogIds = new Set(
+          [
+            entry?.dog_id,
+            ...(Array.isArray(entry?.dog_ids) ? entry.dog_ids : []),
+          ]
+            .filter(Boolean)
+            .map(String)
+            .filter((dogId) => knownDogIds.has(dogId))
+        );
+
+        linkedDogIds.forEach((dogId) => {
+          if (!map[dogId]) {
+            map[dogId] = { tourCount: 0, totalDistance: 0, totalElevation: 0 };
+          }
+          map[dogId].tourCount += 1;
+          map[dogId].totalDistance += entry.distance_km ?? 0;
+          map[dogId].totalElevation += entry.elevation_m ?? 0;
+        });
       }
 
       return map;
