@@ -144,6 +144,14 @@ export const AuthProvider = ({ children }) => {
       setIsLoadingAuth(true);
       applySessionState(session);
       await hydrateSessionData(session, runId);
+    }).catch((error) => {
+      const runId = ++hydrationRunRef.current;
+      console.error("[AuthContext] getSession failed:", error);
+      setAuthError(error?.message || "Die Anmeldung konnte nicht geladen werden.");
+      applySessionState(null);
+      setIsAdmin(false);
+      if (hydrationRunRef.current !== runId) return;
+      setIsLoadingAuth(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
