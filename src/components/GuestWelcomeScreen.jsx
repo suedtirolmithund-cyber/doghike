@@ -193,14 +193,14 @@ export default function GuestWelcomeScreen() {
   const handleGoogle = async () => {
     setLocalError(null);
     setSuccessMsg(null);
-    if (!privacyAccepted) {
+    if (mode === "register" && !privacyAccepted) {
       setLocalError("Bitte akzeptiere die Datenschutzerklärung und Nutzungsbedingungen.");
       return;
     }
     setGoogleLoading(true);
     const result = await loginWithGoogle(
       mode === "register" ? createPageUrl("Profile") : "/",
-      "google_registration"
+      mode === "register" ? "google_registration" : null
     );
     if (result?.error) {
       setGoogleLoading(false);

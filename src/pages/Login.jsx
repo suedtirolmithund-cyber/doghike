@@ -187,14 +187,14 @@ export default function Login() {
     setLocalError(null);
     setSuccessMsg(null);
 
-    if (!privacyAccepted) {
+    if (mode === "register" && !privacyAccepted) {
       setLocalError("Bitte akzeptiere die Datenschutzerklärung und Nutzungsbedingungen.");
       return;
     }
 
     setGoogleLoading(true);
     try {
-      const result = await loginWithGoogle("/", "google_registration");
+      const result = await loginWithGoogle("/", mode === "register" ? "google_registration" : null);
       if (result?.error) {
         setGoogleLoading(false);
         setLocalError(mapAuthError(result.error.message));
