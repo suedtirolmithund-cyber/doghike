@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { resolvePublicHikePhotoReferences } from "@/lib/publicHikesApi";
-import { getPrimarySeasonValue, normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { getSelectedSeasonValue, normalizeSelectedSeasonValues } from "@/lib/difficultyConfig";
 
 const SHEETS_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vS6YeL4WqJZWHAQ8HBuodH98vwfIeaUV4p89bAvnM3TDavLKtnsmGUOfcSyAN0ID0rcVYd-OCQUkbiv/pub?gid=624993458&single=true&output=csv";
@@ -110,8 +110,8 @@ function buildComparableHikeKey(hike) {
 function mergeMissingLegacyFieldsIntoPublicHike(publicHike, legacyHike) {
   if (!publicHike || !legacyHike) return publicHike;
 
-  const publicSeasons = normalizeSeasonValues(publicHike.seasons, publicHike.season);
-  const legacySeasons = normalizeSeasonValues(legacyHike.seasons, legacyHike.season);
+  const publicSeasons = normalizeSelectedSeasonValues(publicHike.seasons, publicHike.season);
+  const legacySeasons = normalizeSelectedSeasonValues(legacyHike.seasons, legacyHike.season);
   const seasons = publicSeasons.length > 0 ? publicSeasons : legacySeasons;
 
   return {
@@ -120,7 +120,7 @@ function mergeMissingLegacyFieldsIntoPublicHike(publicHike, legacyHike) {
     hazard_notes: publicHike.hazard_notes || legacyHike.hazard_notes || null,
     parking_info: publicHike.parking_info || legacyHike.parking_info || null,
     restaurant_info: publicHike.restaurant_info || legacyHike.restaurant_info || null,
-    season: getPrimarySeasonValue(seasons, publicHike.season, legacyHike.season),
+    season: getSelectedSeasonValue(seasons, publicHike.season || legacyHike.season),
     seasons,
     tags: Array.isArray(publicHike.tags) && publicHike.tags.length > 0
       ? publicHike.tags
@@ -466,7 +466,7 @@ function preferManagedPhotoReferences(photoReferences) {
 }
 
 function publicHikeRowToHike(row, photos = [], photoReferences = []) {
-  const seasons = normalizeSeasonValues(row.seasons, row.season);
+  const seasons = normalizeSelectedSeasonValues(row.seasons, row.season);
   const cleanedPhotos = Array.isArray(photos) ? photos.filter(Boolean) : [];
   const cleanedPhotoReferences = Array.isArray(photoReferences) ? photoReferences.filter(Boolean) : [];
   const effectivePhotos = cleanedPhotos.length > 0 ? cleanedPhotos : cleanedPhotoReferences;
@@ -511,7 +511,7 @@ function publicHikeRowToHike(row, photos = [], photoReferences = []) {
     status: row.status,
     visibility: "public",
 
-    season: getPrimarySeasonValue(seasons, row.season),
+    season: getSelectedSeasonValue(seasons, row.season),
     seasons,
     availability: null,
 
@@ -659,7 +659,7 @@ export async function getHikes() {
  */
 // dog and profile are pre-fetched objects passed in from getApprovedJournalEntries
 function journalEntryToHike(entry, dog = null, profile = null) {
-  const seasons = normalizeSeasonValues(entry.seasons, entry.season);
+  const seasons = normalizeSelectedSeasonValues(entry.seasons, entry.season);
 
   return {
     id: `journal-${entry.id}`,
@@ -692,7 +692,7 @@ function journalEntryToHike(entry, dog = null, profile = null) {
     status: "approved",
     visibility: "public",
 
-    season: getPrimarySeasonValue(seasons, entry.season),
+    season: getSelectedSeasonValue(seasons, entry.season),
     seasons,
     availability: null,
 

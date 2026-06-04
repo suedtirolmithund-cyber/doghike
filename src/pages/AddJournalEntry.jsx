@@ -58,9 +58,9 @@ import {
   WATER_LEVELS,
   getDifficultyLabel,
   getDifficultyTextColor,
-  getPrimarySeasonValue,
+  getSelectedSeasonValue,
   getWaterLabel,
-  normalizeSeasonValues,
+  normalizeSelectedSeasonValues,
 } from "@/lib/difficultyConfig";
 import { hoursInputToMinutes, minutesToHoursInput } from "@/lib/duration";
 
@@ -947,7 +947,7 @@ export default function AddJournalEntry() {
     grazing_animals: routePrefill?.grazing_animals ?? false,
     muzzle_recommended: routePrefill?.muzzle_recommended ?? false,
     hazard_notes: routePrefill?.hazard_notes ?? "",
-    seasons: normalizeSeasonValues(routePrefill?.seasons, routePrefill?.season),
+    seasons: normalizeSelectedSeasonValues(routePrefill?.seasons, routePrefill?.season),
     dog_id: routePrefill?.dog_id ?? null,
     dog_ids: normalizeSelectedDogIds(routePrefill?.dog_ids, routePrefill?.dog_id),
     dog_mood_tags: normalizeDogMoodTags(routePrefill?.dog_mood_tags),
@@ -1026,7 +1026,7 @@ export default function AddJournalEntry() {
 
   useEffect(() => {
     if (existing) {
-      const normalizedExistingSeasons = normalizeSeasonValues(existing.seasons, existing.season);
+      const normalizedExistingSeasons = normalizeSelectedSeasonValues(existing.seasons, existing.season);
       const normalizedExistingDogIds = normalizeSelectedDogIds(existing.dog_ids, existing.dog_id);
       originalPhotosRef.current = existing.photos ?? [];
       originalGpxRef.current = existing.gpx_url ?? "";
@@ -1411,13 +1411,13 @@ export default function AddJournalEntry() {
           : "draft";
 
     const normalizedDogIds = normalizeSelectedDogIds(form.dog_ids, form.dog_id);
-    const normalizedSeasons = normalizeSeasonValues(form.seasons, form.season);
+    const normalizedSeasons = normalizeSelectedSeasonValues(form.seasons, form.season);
     const normalizedTags = normalizePublicTags(form.tagsText);
     const { tagsText: _tagsText, ...persistedForm } = form;
 
     saveMutation.mutate({
       ...persistedForm,
-      season: getPrimarySeasonValue(normalizedSeasons, form.season),
+      season: getSelectedSeasonValue(normalizedSeasons, form.season),
       seasons: normalizedSeasons,
       dog_ids: normalizedDogIds,
       dog_id: normalizedDogIds[0] ?? null,

@@ -37,7 +37,7 @@ import WaterIcon from "@/components/icons/WaterIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import { DifficultyBars } from "@/components/difficulty/DifficultyScale";
 import { supabase } from "@/lib/supabaseClient";
-import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getDifficultyTypeChipClass, getPrimarySeasonValue, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel, normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { TOUR_ICONS, getDifficultyLabel, getDifficultyLevel, getDifficultyTypeChipClass, getSelectedSeasonValue, getSeasonBadgeClass, getSeasonIcon, getSeasonLabel, getWaterBadgeClass, getWaterLabel, normalizeSelectedSeasonValues } from "@/lib/difficultyConfig";
 import { PREMIUM_FEATURES_ENABLED } from "@/lib/premiumConfig";
 import { hasActivePremiumAccess } from "@/lib/premiumAccess";
 import { formatDurationHours } from "@/lib/duration";
@@ -452,8 +452,8 @@ export default function HikeDetail() {
     getDisplayImageUrl(publicSubmitterProfile?.avatar_url, { width: 80, quality: 72 }) ||
     getAvatarDataUrl(primaryPublicSubmitterDog?.name || publicSubmitterHandle || hike?._user_id || "DogTrails-Mitglied");
   const publicSubmitterDisplayLine = primaryPublicSubmitterDog?.name || null;
-  const seasonValues = useMemo(() => normalizeSeasonValues(hike?.seasons, hike?.season), [hike?.season, hike?.seasons]);
-  const primarySeason = useMemo(() => getPrimarySeasonValue(hike?.seasons, hike?.season), [hike?.season, hike?.seasons]);
+  const seasonValues = useMemo(() => normalizeSelectedSeasonValues(hike?.seasons, hike?.season), [hike?.season, hike?.seasons]);
+  const primarySeason = useMemo(() => getSelectedSeasonValue(hike?.seasons, hike?.season), [hike?.season, hike?.seasons]);
   const detailStatItems = useMemo(() => {
     const items = [];
 

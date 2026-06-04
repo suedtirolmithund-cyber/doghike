@@ -1,4 +1,4 @@
-import { normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { normalizeSelectedSeasonValues } from "@/lib/difficultyConfig";
 
 const EASY_TERMS = ["leicht", "einfach", "gemuetlich", "gemutlich", "easy"];
 const DOG_TERMS = ["hund", "hunde", "mit hund", "hundefreundlich", "dog"];
@@ -37,7 +37,7 @@ function removeTerms(query, terms) {
 }
 
 function getSeasonValues(hike) {
-  return normalizeSeasonValues(hike?.seasons, hike?.season);
+  return normalizeSelectedSeasonValues(hike?.seasons, hike?.season);
 }
 
 function getCountryAliases(country) {

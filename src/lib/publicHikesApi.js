@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { optimizeImageForUpload, validateImageUpload } from "@/lib/uploadValidation";
-import { getPrimarySeasonValue, normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { getSelectedSeasonValue, normalizeSelectedSeasonValues } from "@/lib/difficultyConfig";
 
 const PUBLIC_HIKE_BUCKET = "journal";
 const PUBLIC_HIKE_PREFIX = "public-hikes/";
@@ -392,8 +392,8 @@ export async function getPublicHikeById(hikeId) {
     water_availability: mapSupabaseWaterLevel(hikeRow.water_availability),
     difficulty: hikeRow.difficulty != null ? String(hikeRow.difficulty) : null,
     dog_difficulty: hikeRow.dog_difficulty != null ? String(hikeRow.dog_difficulty) : null,
-    season: getPrimarySeasonValue(hikeRow.seasons, hikeRow.season),
-    seasons: normalizeSeasonValues(hikeRow.seasons, hikeRow.season),
+    season: getSelectedSeasonValue(hikeRow.seasons, hikeRow.season),
+    seasons: normalizeSelectedSeasonValues(hikeRow.seasons, hikeRow.season),
     grazing_animals: !!hikeRow.grazing_animals,
     muzzle_recommended: !!hikeRow.muzzle_recommended,
   };
@@ -428,7 +428,7 @@ export async function updatePublicHike(hikeId, values) {
   if (existingPhotosError) throw existingPhotosError;
   const existingPhotoUrls = existingPhotos.map((photo) => photo.photo_url).filter(Boolean);
 
-  const cleanedSeasons = normalizeSeasonValues(seasons, hikeValues.season);
+  const cleanedSeasons = normalizeSelectedSeasonValues(seasons, hikeValues.season);
   const cleanedDogIds = Array.from(
     new Set(
       (Array.isArray(dog_ids) ? dog_ids : [])
@@ -446,7 +446,7 @@ export async function updatePublicHike(hikeId, values) {
   const basePayload = {
     ...hikeValues,
     updated_at: new Date().toISOString(),
-    season: getPrimarySeasonValue(cleanedSeasons, hikeValues.season),
+    season: getSelectedSeasonValue(cleanedSeasons, hikeValues.season),
     ...legacyPhotoColumns,
     tags,
     dog_id: cleanedDogIds[0] || null,
@@ -489,7 +489,7 @@ export async function updatePublicHike(hikeId, values) {
     let removedUnsupportedField = false;
 
     if (missingSeasonsColumn && Object.prototype.hasOwnProperty.call(updatePayload, "seasons")) {
-      updatePayload.season = getPrimarySeasonValue(cleanedSeasons, hikeValues.season);
+      updatePayload.season = getSelectedSeasonValue(cleanedSeasons, hikeValues.season);
       delete updatePayload.seasons;
       removedUnsupportedField = true;
     }

@@ -45,7 +45,7 @@ import {
   getSeasonLabel,
   getWaterBadgeClass,
   getWaterLabel,
-  normalizeSeasonValues,
+  normalizeSelectedSeasonValues,
   TOUR_ICONS,
 } from "@/lib/difficultyConfig";
 import { formatDurationHours } from "@/lib/duration";
@@ -167,7 +167,7 @@ function JournalEntryActions({ entry, onDelete }) {
 }
 
 function JournalEntryMeta({ entry, compact = false }) {
-  const seasonValues = normalizeSeasonValues(entry?.seasons, entry?.season);
+  const seasonValues = normalizeSelectedSeasonValues(entry?.seasons, entry?.season);
 
   return (
     <>

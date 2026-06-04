@@ -28,7 +28,7 @@ import {
   WATER_GUIDE_NOTE,
   WATER_LEVELS,
   getDifficultyLabel,
-  getPrimarySeasonValue,
+  getSelectedSeasonValue,
   getSeasonBadgeClass,
   getSeasonIcon,
   getSeasonLabel,
@@ -595,7 +595,7 @@ export default function Hikes() {
                   hikeSource === "sheets" && hike._public_hike_id
                     ? hike.route_id || String(hike._public_hike_id)
                     : hike.id;
-                const primarySeason = getPrimarySeasonValue(hike.seasons, hike.season);
+                const primarySeason = getSelectedSeasonValue(hike.seasons, hike.season);
                 const seasonIcon = primarySeason ? getSeasonIcon(primarySeason) : null;
                 const seasonLabel = primarySeason ? getSeasonLabel(primarySeason) : null;
                 const seasonBadgeClass = primarySeason ? getSeasonBadgeClass(primarySeason) : "";

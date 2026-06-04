@@ -429,7 +429,7 @@ export function normalizeSeasonValues(...values) {
   );
 }
 
-const PRIMARY_SEASON_PRIORITY = ["summer", "spring", "autumn", "winter", "all_year"];
+const PRIMARY_SEASON_PRIORITY = ["all_year", "summer", "spring", "autumn", "winter"];
 
 export function getPrimarySeasonValue(...values) {
   const seasons = normalizeSeasonValues(...values);

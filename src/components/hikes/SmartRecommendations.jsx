@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Sparkles } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
-import { normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { normalizeSelectedSeasonValues } from "@/lib/difficultyConfig";
 import { supabase } from "@/lib/supabaseClient";
 import HikeCard from "./HikeCard";
 
@@ -91,7 +91,7 @@ export default function SmartRecommendations({ allHikes = [], currentHike = null
     const preferredDiff = Object.entries(diffCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
     const currentLocationTokens = getUniqueTokens(currentHike?.location, currentHike?.country);
     const currentTagTokens = getUniqueTokens(currentHike?.tags);
-    const currentSeasonValues = normalizeSeasonValues(currentHike?.seasons, currentHike?.season);
+    const currentSeasonValues = normalizeSelectedSeasonValues(currentHike?.seasons, currentHike?.season);
     const currentTrailName = normalizeCompareText(currentHike?.trail_name);
     const currentLocationName = normalizeCompareText(currentHike?.location);
 
@@ -109,7 +109,7 @@ export default function SmartRecommendations({ allHikes = [], currentHike = null
       .map((hike) => {
         const hikeLocationTokens = getUniqueTokens(hike.location, hike.country);
         const hikeTagTokens = getUniqueTokens(hike.tags);
-        const hikeSeasonValues = normalizeSeasonValues(hike.seasons, hike.season);
+        const hikeSeasonValues = normalizeSelectedSeasonValues(hike.seasons, hike.season);
         const distanceInKm = getDistanceInKm(currentHike, hike);
         const hasExactLocationMatch =
           currentHike?.location &&

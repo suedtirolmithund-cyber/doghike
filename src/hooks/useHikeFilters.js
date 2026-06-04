@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { matchesHikeSearch } from "@/lib/hikeSearch";
-import { normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { normalizeSelectedSeasonValues } from "@/lib/difficultyConfig";
 
 const INITIAL_FILTERS = {
   searchQuery: "",
@@ -18,7 +18,7 @@ const INITIAL_FILTERS = {
 };
 
 function getSeasonValues(hike) {
-  return normalizeSeasonValues(hike?.seasons, hike?.season);
+  return normalizeSelectedSeasonValues(hike?.seasons, hike?.season);
 }
 
 export function useHikeFilters(hikes = [], initialFilters = {}) {

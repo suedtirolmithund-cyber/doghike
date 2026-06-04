@@ -14,7 +14,7 @@ import HikeMap from "@/components/map/HikeMap";
 import PawLoadingTrail from "@/components/PawLoadingTrail";
 import { getDogProfileCount } from "@/lib/profilesApi";
 import { matchesHikeSearch } from "@/lib/hikeSearch";
-import { normalizeSeasonValues } from "@/lib/difficultyConfig";
+import { normalizeSelectedSeasonValues } from "@/lib/difficultyConfig";
 
 const PAGE_SIZE = 10;
 
@@ -47,7 +47,7 @@ function normalizeCountryKey(country) {
 function sortBySeason(hikes, season) {
   return [...hikes].sort((a, b) => {
     const score = (h) => {
-      const seasons = normalizeSeasonValues(h?.seasons, h?.season);
+      const seasons = normalizeSelectedSeasonValues(h?.seasons, h?.season);
 
       return seasons.includes(season) ? 3 : seasons.includes("all_year") ? 2 : seasons.length > 0 ? 1 : 0;
     };
