@@ -187,14 +187,14 @@ export default function Login() {
     setLocalError(null);
     setSuccessMsg(null);
 
-    if (mode === "register" && !privacyAccepted) {
+    if (!privacyAccepted) {
       setLocalError("Bitte akzeptiere die Datenschutzerklärung und Nutzungsbedingungen.");
       return;
     }
 
     setGoogleLoading(true);
     try {
-      const result = await loginWithGoogle("/", mode === "register" ? "google_registration" : null);
+      const result = await loginWithGoogle("/", "google_registration");
       if (result?.error) {
         setGoogleLoading(false);
         setLocalError(mapAuthError(result.error.message));
@@ -473,7 +473,7 @@ export default function Login() {
                 </div>
 
                 <AnimatePresence>
-                  {(mode === "register" || mode === "login") && (
+                  {mode === "register" && (
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
