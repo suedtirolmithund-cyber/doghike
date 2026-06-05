@@ -311,6 +311,7 @@ create table if not exists public.journal_entries (
 --   add column if not exists longitude numeric(10,7),
 --   add column if not exists dog_id uuid references public.dogs(id) on delete set null,
 --   add column if not exists dog_ids uuid[] default '{}',
+--   add column if not exists tags text[] default '{}',
 --   add column if not exists grazing_animals boolean default false,
 --   add column if not exists muzzle_recommended boolean default false,
 --   add column if not exists dog_mood_tags text[] default '{}',
