@@ -174,7 +174,7 @@ function MapClickHandler({ onMapClick, cursor }) {
 
 function MapFlyTo({ center, zoom }) {
   const map = useMap();
-  useEffect(() => { if (center) map.flyTo(center, zoom, { duration: 0.8 }); }, [center, zoom]);
+  useEffect(() => { if (center) map.flyTo(center, zoom, { duration: 0.8 }); }, [center, map, zoom]);
   return null;
 }
 

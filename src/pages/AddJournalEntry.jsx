@@ -416,7 +416,7 @@ function MapFlyTo({ center, zoom }) {
   const map = useMap();
   useEffect(() => {
     if (center) map.flyTo(center, zoom, { duration: 1 });
-  }, [center, zoom]);
+  }, [center, map, zoom]);
   return null;
 }
 
