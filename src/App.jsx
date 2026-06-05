@@ -20,6 +20,7 @@ import { Suspense, lazy } from 'react';
 
 const CHUNK_RELOAD_KEY = "doghike_chunk_reload_attempted";
 const REACT130_RELOAD_KEY = "doghike_react130_reload_attempted";
+const GENERIC_LOAD_RELOAD_KEY = "doghike_generic_load_reload_attempted";
 const CACHE_BUST_PARAM = "__doghike_reload";
 function hardReloadWithCacheBust() {
   const url = new URL(window.location.href);
@@ -44,6 +45,7 @@ class ErrorBoundary extends React.Component {
       const isInvalidElementTypeError =
         errorMessage.includes("Minified React error #130")
         || errorMessage.includes("Element type is invalid");
+      const isGenericLoadError = errorMessage.trim() === "Error";
 
       if (isChunkLoadError && typeof window !== "undefined") {
         const alreadyRetried = window.sessionStorage.getItem(CHUNK_RELOAD_KEY) === "1";
@@ -76,6 +78,25 @@ class ErrorBoundary extends React.Component {
               <div className="doghike-glass-card max-w-md p-6">
                 <h2 className="mb-2 text-lg font-semibold text-slate-900">App wird aktualisiert</h2>
                 <p className="text-sm text-slate-500">DogTrails lädt den aktuellen Stand einmal neu.</p>
+                <PawLoadingTrail />
+              </div>
+            </div>
+          );
+        }
+      }
+
+      if (isGenericLoadError && typeof window !== "undefined") {
+        const alreadyRetried = window.sessionStorage.getItem(GENERIC_LOAD_RELOAD_KEY) === "1";
+
+        if (!alreadyRetried) {
+          window.sessionStorage.setItem(GENERIC_LOAD_RELOAD_KEY, "1");
+          hardReloadWithCacheBust();
+
+          return (
+            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-50 via-white to-brand-50/10 px-6 text-center">
+              <div className="doghike-glass-card max-w-md p-6">
+                <h2 className="mb-2 text-lg font-semibold text-slate-900">App wird aktualisiert</h2>
+                <p className="text-sm text-slate-500">DogTrails lädt die aktuelle Version noch einmal neu.</p>
                 <PawLoadingTrail />
               </div>
             </div>
