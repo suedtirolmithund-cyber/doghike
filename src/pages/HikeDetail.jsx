@@ -227,7 +227,7 @@ export default function HikeDetail() {
   };
 
   const { data: hike, isLoading } = useQuery({
-    queryKey: ["hike", hikeSource, hikeId],
+    queryKey: ["hike", hikeSource, normalizedHikeId],
     placeholderData: initialHike,
     queryFn: async () => {
       const hikes = await queryClient.fetchQuery({
