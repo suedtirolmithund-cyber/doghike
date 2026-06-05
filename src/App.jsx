@@ -171,24 +171,42 @@ const PageShell = ({ children, currentPageName }) => (
   </LayoutWrapper>
 );
 
-const PUBLIC_PAGE_NAMES = ["AGB", "Datenschutz", "Impressum", "Legal", "Support"];
+const PUBLIC_PAGE_DEFINITIONS = [
+  { name: "AGB", paths: [createPageUrl("AGB"), "/agb", "/nutzungsbedingungen", "/terms"] },
+  { name: "Datenschutz", paths: [createPageUrl("Datenschutz"), "/datenschutz", "/privacy"] },
+  { name: "Impressum", paths: [createPageUrl("Impressum"), "/impressum"] },
+  { name: "Legal", paths: [createPageUrl("Legal"), "/legal", "/rechtliches", "/rechtliche-hinweise"] },
+  { name: "Support", paths: [createPageUrl("Support"), "/support", "/hilfe"] },
+];
+
+function normalizeAppPath(pathname) {
+  const withoutTrailingSlash = pathname.replace(/\/+$/, "");
+  return (withoutTrailingSlash || "/").toLowerCase();
+}
+
+function getPublicPageName(pathname) {
+  const normalizedPath = normalizeAppPath(pathname);
+  return PUBLIC_PAGE_DEFINITIONS.find(({ paths }) =>
+    paths.some((path) => normalizeAppPath(path) === normalizedPath)
+  )?.name ?? null;
+}
 
 function renderPublicPageRoutes() {
-  return PUBLIC_PAGE_NAMES.map((path) => {
-    const Page = Pages[path];
+  return PUBLIC_PAGE_DEFINITIONS.flatMap(({ name, paths }) => {
+    const Page = Pages[name];
     if (!Page) return null;
 
-    return (
+    return [...new Set(paths.map(normalizeAppPath))].map((path) => (
       <Route
         key={path}
-        path={createPageUrl(path)}
+        path={path}
         element={
-          <PageShell currentPageName={path}>
+          <PageShell currentPageName={name}>
             <Page />
           </PageShell>
         }
       />
-    );
+    ));
   });
 }
 
@@ -256,7 +274,7 @@ const AuthenticatedApp = () => {
   } = useAuth();
   const [isAcceptingRegistrationConsent, setIsAcceptingRegistrationConsent] = useState(false);
   const isBootLoading = isLoadingAuth;
-  const publicPageName = PUBLIC_PAGE_NAMES.find((pageName) => location.pathname === createPageUrl(pageName));
+  const publicPageName = getPublicPageName(location.pathname);
 
   if (isBootLoading) {
     return <BootLoadingGate />;
