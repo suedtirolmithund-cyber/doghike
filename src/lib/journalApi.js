@@ -315,6 +315,10 @@ function withoutUnsupportedOptionalColumns(entry = {}, error) {
   const fallbackEntry = { ...entry };
   const message = String(error?.message ?? "");
 
+  if (message.includes("season") && message.includes("column")) {
+    delete fallbackEntry.season;
+  }
+
   if (message.includes("dog_ids") && message.includes("column")) {
     delete fallbackEntry.dog_ids;
     if (!fallbackEntry.dog_id && Array.isArray(entry.dog_ids) && entry.dog_ids.length > 0) {
@@ -340,6 +344,7 @@ function withoutUnsupportedOptionalColumns(entry = {}, error) {
 function isMissingOptionalJournalColumnError(error) {
   const message = String(error?.message ?? "");
   return (
+    (message.includes("season") && message.includes("column")) ||
     (message.includes("dog_ids") && message.includes("column")) ||
     (message.includes("dog_mood_tags") && message.includes("column")) ||
     (message.includes("tags") && message.includes("column")) ||
