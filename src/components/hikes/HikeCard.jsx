@@ -123,6 +123,24 @@ export default function HikeCard({
               </span>
             )}
 
+            {Array.isArray(hike.tags) && hike.tags.length > 0 && (
+              <div className="pointer-events-none absolute left-4 right-16 top-16 flex flex-wrap items-center gap-1.5">
+                {hike.tags.slice(0, 3).map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex min-h-7 items-center rounded-full border border-[#F9C030]/70 bg-[#FDF0E8]/88 px-2.5 py-1 text-xs font-semibold leading-none text-[#7C3020] shadow-sm backdrop-blur-md"
+                  >
+                    {tag}
+                  </span>
+                ))}
+                {hike.tags.length > 3 && (
+                  <span className="inline-flex min-h-7 items-center rounded-full border border-[#F9C030]/60 bg-[#FDF0E8]/78 px-2.5 py-1 text-xs font-semibold leading-none text-[#7C3020]/82 shadow-sm backdrop-blur-md">
+                    +{hike.tags.length - 3}
+                  </span>
+                )}
+              </div>
+            )}
+
             <div className="pointer-events-none absolute bottom-4 left-4 right-4 p-3">
               <h3 className="mb-1 line-clamp-2 text-base font-semibold leading-tight text-white drop-shadow-[0_2px_5px_rgba(0,0,0,0.65)]">
                 {hike.trail_name}
@@ -160,23 +178,6 @@ export default function HikeCard({
                   ))}
                 </div>
               ) : null}
-              {Array.isArray(hike.tags) && hike.tags.length > 0 && (
-                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                  {hike.tags.slice(0, 3).map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex min-h-7 items-center rounded-full border border-brand-100 bg-brand-50/70 px-2.5 py-1 text-xs font-semibold leading-none text-brand-700"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                  {hike.tags.length > 3 && (
-                    <span className="inline-flex min-h-7 items-center rounded-full border border-brand-100 bg-brand-50/60 px-2.5 py-1 text-xs font-semibold leading-none text-brand-600">
-                      +{hike.tags.length - 3}
-                    </span>
-                  )}
-                </div>
-              )}
             </div>
             {hike.notes && (
               <div className="mb-3">

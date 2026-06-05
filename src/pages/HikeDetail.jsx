@@ -1135,27 +1135,6 @@ export default function HikeDetail() {
               </motion.div>
             )}
 
-            {Array.isArray(hike.tags) && hike.tags.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 }}
-                className="doghike-glass-card p-6"
-              >
-                <h2 className="doghike-card-title mb-4">Tags</h2>
-                <div className="flex flex-wrap gap-2">
-                  {hike.tags.filter(Boolean).map((tag) => (
-                    <Badge
-                      key={tag}
-                      className="border border-brand-100 bg-brand-50/70 text-brand-700"
-                    >
-                      #{tag}
-                    </Badge>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-
             {/* Photo Gallery */}
             {photos.length > 0 && (
               <motion.div
