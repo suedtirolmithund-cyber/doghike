@@ -93,6 +93,29 @@ function buildInitialFormData(hike) {
   };
 }
 
+function getPublicHikeDraftKey(hikeId) {
+  if (!hikeId) return null;
+  return `dogtrails:public-hike-draft:${hikeId}`;
+}
+
+function normalizePublicHikeDraft(rawDraft) {
+  if (!rawDraft || typeof rawDraft !== "object") return null;
+
+  return {
+    ...rawDraft,
+    seasons: Array.isArray(rawDraft.seasons) ? rawDraft.seasons : [],
+    dog_ids: normalizeSelectedDogIds(rawDraft.dog_ids),
+    dog_mood_tags: normalizeDogMoodTags(rawDraft.dog_mood_tags),
+    photoUrls: Array.isArray(rawDraft.photoUrls) ? rawDraft.photoUrls : [],
+    tagsText: rawDraft.tagsText || "",
+  };
+}
+
+function persistPublicHikeDraft(draftKey, formState) {
+  if (!draftKey || !formState || typeof window === "undefined") return;
+  window.sessionStorage.setItem(draftKey, JSON.stringify(formState));
+}
+
 function getFriendlySaveErrorMessage(error) {
   if (!error) {
     return "Die öffentliche Wanderung konnte gerade nicht gespeichert werden. Bitte versuche es noch einmal.";
@@ -139,6 +162,9 @@ export default function EditPublicHike() {
   const uploadedDuringEditRef = useRef(new Set());
   const savedPhotoUrlsRef = useRef(new Set());
   const saveInFlightRef = useRef(false);
+  const restoredDraftRef = useRef(false);
+  const currentFormDataRef = useRef(formData);
+  const publicHikeDraftKey = getPublicHikeDraftKey(hikeId);
 
   const { data: userDogs = [] } = useQuery({
     queryKey: ["dogs", user?.id],
@@ -161,10 +187,68 @@ export default function EditPublicHike() {
 
   useEffect(() => {
     if (hike && !formData) {
-      setFormData(buildInitialFormData(hike));
+      let nextFormData = buildInitialFormData(hike);
+
+      if (publicHikeDraftKey && typeof window !== "undefined") {
+        try {
+          const rawDraft = window.sessionStorage.getItem(publicHikeDraftKey);
+          const normalizedDraft = rawDraft ? normalizePublicHikeDraft(JSON.parse(rawDraft)) : null;
+          if (normalizedDraft) {
+            nextFormData = {
+              ...nextFormData,
+              ...normalizedDraft,
+            };
+            restoredDraftRef.current = true;
+          }
+        } catch (error) {
+          console.error("[EditPublicHike] restore draft failed:", error);
+        }
+      }
+
+      setFormData(nextFormData);
       savedPhotoUrlsRef.current = new Set(Array.isArray(hike._photo_references) ? hike._photo_references : []);
     }
-  }, [hike, formData]);
+  }, [hike, formData, publicHikeDraftKey]);
+
+  useEffect(() => {
+    currentFormDataRef.current = formData;
+  }, [formData]);
+
+  useEffect(() => {
+    if (!publicHikeDraftKey || !formData || typeof window === "undefined") return;
+
+    try {
+      persistPublicHikeDraft(publicHikeDraftKey, formData);
+    } catch (error) {
+      console.error("[EditPublicHike] persist draft failed:", error);
+    }
+  }, [formData, publicHikeDraftKey]);
+
+  useEffect(() => {
+    if (!publicHikeDraftKey || typeof window === "undefined") return;
+
+    const persistCurrentDraft = () => {
+      try {
+        persistPublicHikeDraft(publicHikeDraftKey, currentFormDataRef.current);
+      } catch (error) {
+        console.error("[EditPublicHike] persist draft on hide failed:", error);
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        persistCurrentDraft();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("pagehide", persistCurrentDraft);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("pagehide", persistCurrentDraft);
+    };
+  }, [publicHikeDraftKey]);
 
   useEffect(() => {
     let cancelled = false;
@@ -367,6 +451,9 @@ export default function EditPublicHike() {
       });
     },
     onSuccess: () => {
+      if (publicHikeDraftKey && typeof window !== "undefined") {
+        window.sessionStorage.removeItem(publicHikeDraftKey);
+      }
       const wasPublishedPremium = hike?.status === "approved" && hike?.is_premium === true;
       const isPublishedPremium = formData.status === "approved" && formData.is_premium === "true";
       const wasPublishedFree = hike?.status === "approved" && hike?.is_premium !== true;
