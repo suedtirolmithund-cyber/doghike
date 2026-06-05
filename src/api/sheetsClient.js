@@ -817,14 +817,17 @@ async function getApprovedJournalEntries() {
         .order("created_at", { ascending: false })
         .limit(APPROVED_JOURNAL_HIKE_LIMIT);
 
-    let { data: entries, error } = await runApprovedJournalQuery(APPROVED_JOURNAL_ENTRY_FIELD_LIST);
+    let queryFields = [...APPROVED_JOURNAL_ENTRY_FIELD_LIST];
+    let { data: entries, error } = await runApprovedJournalQuery(queryFields);
 
-    if (error && isMissingApprovedJournalOptionalFieldError(error)) {
-      const fallbackFields = stripMissingApprovedJournalOptionalFields(
-        APPROVED_JOURNAL_ENTRY_FIELD_LIST,
-        error
-      );
-      ({ data: entries, error } = await runApprovedJournalQuery(fallbackFields));
+    while (error && isMissingApprovedJournalOptionalFieldError(error)) {
+      const fallbackFields = stripMissingApprovedJournalOptionalFields(queryFields, error);
+      if (fallbackFields.length === queryFields.length) {
+        break;
+      }
+
+      queryFields = fallbackFields;
+      ({ data: entries, error } = await runApprovedJournalQuery(queryFields));
     }
 
     if (error && isMissingApprovedJournalColumnError(error)) {

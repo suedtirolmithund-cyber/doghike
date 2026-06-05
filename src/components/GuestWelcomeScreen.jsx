@@ -481,7 +481,7 @@ function OnboardingScreen({ onContinue }) {
         </picture>
         <div className="absolute inset-0 bg-[linear-gradient(0deg,#000000_-31.83%,rgba(0,0,0,0)_43.72%)]" />
 
-        <div className="absolute bottom-[72px] left-4 h-[216px] w-[343px] opacity-80 md:left-1/2 md:-translate-x-1/2">
+        <div className="absolute bottom-[92px] left-4 h-[216px] w-[343px] opacity-80 md:left-1/2 md:-translate-x-1/2">
           <h1 className="absolute left-0 top-0 h-[113px] w-[343px] text-center font-['Nunito',sans-serif] text-[40px] font-normal leading-[47px] text-white">
             Hundefreundliche Wanderungen
           </h1>
@@ -493,10 +493,15 @@ function OnboardingScreen({ onContinue }) {
         <button
           type="button"
           onClick={onContinue}
-          aria-label="Weiter"
-          className="absolute bottom-[7px] left-[161px] z-30 grid h-[54px] w-[52px] place-items-center rounded-full bg-[#A8003C]/80 text-white shadow-[0_10px_28px_rgba(0,0,0,0.28)] ring-1 ring-white/30 md:left-1/2 md:-translate-x-1/2"
+          aria-label="Weiter zum Login"
+          className="absolute bottom-5 left-1/2 z-30 inline-flex min-h-[58px] -translate-x-1/2 items-center justify-center gap-2.5 rounded-full border border-white/70 bg-[#A8003C]/92 px-4 pr-5 text-white shadow-[0_14px_34px_rgba(0,0,0,0.34)] ring-1 ring-[#F9C030]/55 transition hover:bg-[#A8003C] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#F9C030]/60 active:scale-[0.98] md:bottom-7"
         >
-          <FourToePaw className="h-[38px] w-[38px] text-white" />
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/16">
+            <FourToePaw className="h-8 w-8 text-white" />
+          </span>
+          <span className="whitespace-nowrap text-base font-extrabold leading-none tracking-[0.01em]">
+            Los geht's
+          </span>
         </button>
       </section>
     </div>
