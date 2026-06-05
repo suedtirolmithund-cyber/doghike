@@ -1035,6 +1035,7 @@ export default function AddJournalEntry() {
   const restoredDraftFromStorageRef = useRef(false);
   const currentFormRef = useRef(form);
   const journalDraftKey = getJournalDraftKey(user?.id, editId);
+  const [isDraftRestoreReady, setIsDraftRestoreReady] = useState(false);
 
   const set = (key, val) =>
     setForm((p) => ({
@@ -1045,6 +1046,7 @@ export default function AddJournalEntry() {
   useEffect(() => {
     restoredDraftRef.current = false;
     restoredDraftFromStorageRef.current = false;
+    setIsDraftRestoreReady(false);
   }, [journalDraftKey]);
 
   // Load existing entry for editing
@@ -1135,25 +1137,26 @@ export default function AddJournalEntry() {
       console.error("[add-journal-entry] restore draft failed:", error);
     } finally {
       restoredDraftRef.current = true;
+      setIsDraftRestoreReady(true);
     }
   }, [editId, journalDraftKey, loadingEntry]);
 
   useEffect(() => {
-    if (!journalDraftKey || !restoredDraftRef.current || typeof window === "undefined") return;
+    if (!journalDraftKey || !isDraftRestoreReady || typeof window === "undefined") return;
 
     try {
       persistJournalDraft(journalDraftKey, form, keepUploadedMediaRef);
     } catch (error) {
       console.error("[add-journal-entry] persist draft failed:", error);
     }
-  }, [form, journalDraftKey]);
+  }, [form, isDraftRestoreReady, journalDraftKey]);
 
   useEffect(() => {
     currentFormRef.current = form;
   }, [form]);
 
   useEffect(() => {
-    if (!journalDraftKey || !restoredDraftRef.current || typeof window === "undefined") return;
+    if (!journalDraftKey || !isDraftRestoreReady || typeof window === "undefined") return;
 
     const persistCurrentDraft = () => {
       try {
@@ -1176,7 +1179,7 @@ export default function AddJournalEntry() {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("pagehide", persistCurrentDraft);
     };
-  }, [journalDraftKey]);
+  }, [isDraftRestoreReady, journalDraftKey]);
 
   useEffect(() => {
     if (!editId || !userDogsLoaded) return;
