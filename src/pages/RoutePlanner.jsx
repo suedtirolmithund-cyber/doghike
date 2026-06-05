@@ -661,6 +661,7 @@ export default function RoutePlanner() {
     start_location: "",
     notes: "",
   });
+  const [isSubmittingRoute, setIsSubmittingRoute] = useState(false);
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -695,36 +696,40 @@ export default function RoutePlanner() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmittingRoute) return;
+
     if (!routeGeometry || !routeData.name) {
       toast.error("Name und Route fehlen noch.");
-      return;
-    }
-
-    if (activeTab === "track") {
-      const savedRoute = await createRouteMutation.mutateAsync({
-        name: routeData.name,
-        description: routeData.description,
-        start_location: routeData.start_location,
-        route_type: "recorded",
-        waypoints: routeGeometry.positions ?? routeGeometry.coordinates ?? [],
-        is_public: false,
-        distance_km: routeGeometry.distance_km,
-        elevation_gain_m: routeGeometry.elevation_gain_m || null,
-        duration_minutes: routeGeometry.duration_minutes || null,
-      });
-      toast.success("Deine Aufzeichnung ist als Route gespeichert.");
-      navigate(createPageUrl("AddJournalEntry"), {
-        state: {
-          routePrefill: buildJournalPrefillFromRecordedRoute(),
-          savedRouteId: savedRoute.id,
-        },
-      });
       return;
     }
 
     let uploadedGpxUrl = null;
 
     try {
+      setIsSubmittingRoute(true);
+
+      if (activeTab === "track") {
+        const savedRoute = await createRouteMutation.mutateAsync({
+          name: routeData.name,
+          description: routeData.description,
+          start_location: routeData.start_location,
+          route_type: "recorded",
+          waypoints: routeGeometry.positions ?? routeGeometry.coordinates ?? [],
+          is_public: false,
+          distance_km: routeGeometry.distance_km,
+          elevation_gain_m: routeGeometry.elevation_gain_m || null,
+          duration_minutes: routeGeometry.duration_minutes || null,
+        });
+        toast.success("Deine Aufzeichnung ist als Route gespeichert.");
+        navigate(createPageUrl("AddJournalEntry"), {
+          state: {
+            routePrefill: buildJournalPrefillFromRecordedRoute(),
+            savedRouteId: savedRoute.id,
+          },
+        });
+        return;
+      }
+
       if (activeTab === "gpx" && routeGeometry.rawFile) {
         uploadedGpxUrl = await uploadJournalGpx(user.id, routeGeometry.rawFile);
       }
@@ -751,6 +756,8 @@ export default function RoutePlanner() {
       }
 
       throw error;
+    } finally {
+      setIsSubmittingRoute(false);
     }
   };
 
@@ -895,8 +902,8 @@ export default function RoutePlanner() {
                 <Button type="button" variant="outline" onClick={() => setRouteGeometry(null)} className="w-full sm:w-auto">
                   Abbrechen
                 </Button>
-                <Button type="submit" disabled={createRouteMutation.isPending} className="w-full bg-[#A8003C] hover:bg-[#7C3020] sm:w-auto">
-                  {createRouteMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                <Button type="submit" disabled={isSubmittingRoute || createRouteMutation.isPending} className="w-full bg-[#A8003C] hover:bg-[#7C3020] sm:w-auto">
+                  {(isSubmittingRoute || createRouteMutation.isPending) && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                   {activeTab === "track"
                     ? "Speichern & ins Tagebuch"
                     : activeTab === "gpx"
