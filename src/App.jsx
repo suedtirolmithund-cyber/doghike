@@ -38,7 +38,37 @@ class ErrorBoundary extends React.Component {
   }
   render() {
     if (this.state.error) {
-      const errorMessage = String(this.state.error);
+      const rawError = this.state.error;
+      const errorMessage = String(rawError);
+      const errorName = rawError?.name ? String(rawError.name) : "";
+      const errorStack = rawError?.stack ? String(rawError.stack) : "";
+      const errorCause = rawError?.cause
+        ? (() => {
+            try {
+              return typeof rawError.cause === "string"
+                ? rawError.cause
+                : JSON.stringify(rawError.cause, null, 2);
+            } catch {
+              return String(rawError.cause);
+            }
+          })()
+        : "";
+      const serializedError = (() => {
+        try {
+          return JSON.stringify(rawError, Object.getOwnPropertyNames(rawError ?? {}), 2);
+        } catch {
+          return "";
+        }
+      })();
+      const diagnosticText = [
+        errorName && errorName !== "Error" ? `Name: ${errorName}` : "",
+        errorMessage ? `Message: ${errorMessage}` : "",
+        errorCause ? `Cause: ${errorCause}` : "",
+        errorStack ? `Stack:\n${errorStack}` : "",
+        serializedError && serializedError !== "{}" ? `Details:\n${serializedError}` : "",
+      ]
+        .filter(Boolean)
+        .join("\n\n");
       const isChunkLoadError =
         errorMessage.includes("Failed to fetch dynamically imported module")
         || errorMessage.includes("Importing a module script failed");
@@ -107,7 +137,9 @@ class ErrorBoundary extends React.Component {
       return (
         <div className="min-h-screen bg-brand-50 p-8 text-[#7C3020]">
           <h2 className="doghike-section-title mb-3">Fehler beim Laden der App</h2>
-          <pre style={{ color: 'red', whiteSpace: 'pre-wrap', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' }}>{String(this.state.error)}</pre>
+          <pre style={{ color: 'red', whiteSpace: 'pre-wrap', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' }}>
+            {diagnosticText || errorMessage}
+          </pre>
         </div>
       );
     }
