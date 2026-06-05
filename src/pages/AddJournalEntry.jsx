@@ -17,6 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import WaterIcon from "@/components/icons/WaterIcon";
 import { toast } from "sonner";
@@ -895,6 +896,7 @@ const EMPTY_FORM = {
   title: "",
   date: new Date().toISOString().split("T")[0],
   location: "",
+  country: "italy",
   latitude: "",
   longitude: "",
   distance_km: "",
@@ -961,6 +963,7 @@ export default function AddJournalEntry() {
   const prefill = {
     title: routePrefill?.title ?? searchParams.get("prefill_title") ?? "",
     location: routePrefill?.location ?? searchParams.get("prefill_location") ?? "",
+    country: routePrefill?.country ?? "italy",
     date: routePrefill?.date ?? "",
     latitude: routePrefill?.latitude ?? "",
     longitude: routePrefill?.longitude ?? "",
@@ -992,6 +995,7 @@ export default function AddJournalEntry() {
       title: prefill.title || EMPTY_FORM.title,
       date: prefill.date || EMPTY_FORM.date,
       location: prefill.location || EMPTY_FORM.location,
+      country: prefill.country || EMPTY_FORM.country,
       latitude: prefill.latitude || EMPTY_FORM.latitude,
       longitude: prefill.longitude || EMPTY_FORM.longitude,
       distance_km: prefill.distance_km || EMPTY_FORM.distance_km,
@@ -1067,6 +1071,7 @@ export default function AddJournalEntry() {
         title: existing.title ?? "",
         date: existing.date ?? EMPTY_FORM.date,
         location: existing.location ?? "",
+        country: existing.country ?? EMPTY_FORM.country,
         latitude: existing.latitude ?? "",
         longitude: existing.longitude ?? "",
         distance_km: existing.distance_km ?? "",
@@ -1672,17 +1677,36 @@ export default function AddJournalEntry() {
                 placeholder="z.B. Pragser Wildsee Rundweg" required className="mt-1" />
             </div>
 
-            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
               <div>
                 <Label htmlFor="date" className="flex h-5 items-center">Datum</Label>
                 <Input id="date" type="date" value={form.date} onChange={(e) => set("date", e.target.value)}
                   className="mt-1" />
               </div>
-              <div>
+              <div className="sm:col-span-2">
                 <Label htmlFor="location" className="flex h-5 items-center gap-1"><MapPin className="w-3.5 h-3.5" /> Ort *</Label>
                 <Input id="location" value={form.location} onChange={(e) => set("location", e.target.value)}
                   placeholder="z.B. Prags, Südtirol" className="mt-1" />
               </div>
+            </div>
+
+            <div>
+              <Label htmlFor="country">Land {TOUR_ICONS.country}</Label>
+              <Select value={form.country || "italy"} onValueChange={(value) => set("country", value)}>
+                <SelectTrigger id="country" className="mt-1">
+                  <SelectValue placeholder="Land wÃ¤hlen" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="italy">Italien</SelectItem>
+                  <SelectItem value="austria">Ã–sterreich</SelectItem>
+                  <SelectItem value="germany">Deutschland</SelectItem>
+                  <SelectItem value="switzerland">Schweiz</SelectItem>
+                  <SelectItem value="spain">Spanien</SelectItem>
+                  <SelectItem value="croatia">Kroatien</SelectItem>
+                  <SelectItem value="slovenia">Slowenien</SelectItem>
+                  <SelectItem value="other">Anderes</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
