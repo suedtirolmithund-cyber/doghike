@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
@@ -664,16 +664,22 @@ export default function AdminDashboard() {
   const approvedPublicHikesCount = publicHikeStats?.approvedCount ?? 0;
   const draftPublicHikesCount = publicHikeStats?.draftCount ?? 0;
   const premiumPublicHikesCount = publicHikeStats?.premiumCount ?? 0;
+  const publicHikeFilterKey = `${publicHikeSearch}__${publicHikeStatusFilter}__${publicHikePremiumFilter}`;
+  const previousPublicHikeFilterKeyRef = useRef(publicHikeFilterKey);
 
   useEffect(() => {
-    setPublicHikePage(1);
-  }, [publicHikeSearch, publicHikeStatusFilter, publicHikePremiumFilter]);
+    if (previousPublicHikeFilterKeyRef.current !== publicHikeFilterKey) {
+      previousPublicHikeFilterKeyRef.current = publicHikeFilterKey;
+      if (publicHikePage !== 1) {
+        setPublicHikePage(1);
+      }
+      return;
+    }
 
-  useEffect(() => {
     if (publicHikePage > totalPublicHikePages) {
       setPublicHikePage(totalPublicHikePages);
     }
-  }, [publicHikePage, totalPublicHikePages]);
+  }, [publicHikeFilterKey, publicHikePage, totalPublicHikePages]);
 
   const filteredComments = useMemo(() => {
     return comments.filter((comment) => {
