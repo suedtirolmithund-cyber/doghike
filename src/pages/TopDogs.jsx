@@ -21,24 +21,31 @@ const RANK_STYLE = [
   { ring: "ring-2 ring-brand-200", bg: "bg-gradient-to-br from-brand-50 to-brand-50", border: "border-brand-100", medal: "🥉", num: "text-brand-400" },
 ];
 
-function dogPreviewPhoto(dog, width = 160) {
-  return getDisplayImageUrl(dog?.photo_url, { width, quality: 70 }) || getAvatarDataUrl(dog?.name ?? "dog");
+function getDogPhotoSources(dog, width = 160) {
+  const fallbackSrc = getAvatarDataUrl(dog?.name ?? "dog");
+  const rawSrc = typeof dog?.photo_url === "string" ? dog.photo_url.trim() : "";
+  const optimizedSrc = rawSrc ? getDisplayImageUrl(rawSrc, { width, quality: 70 }) : "";
+
+  return Array.from(new Set([optimizedSrc, rawSrc, fallbackSrc].filter(Boolean)));
 }
 
 function DogPhoto({ dog, width = 160, alt, className }) {
-  const fallbackSrc = getAvatarDataUrl(dog?.name ?? "dog");
-  const src = dogPreviewPhoto(dog, width);
+  const sources = getDogPhotoSources(dog, width);
 
   return (
     <img
-      src={src}
+      src={sources[0]}
       alt={alt}
       loading="lazy"
       decoding="async"
       className={className}
       onError={(event) => {
-        if (event.currentTarget.src !== fallbackSrc) {
-          event.currentTarget.src = fallbackSrc;
+        const currentIndex = Number(event.currentTarget.dataset.sourceIndex || "0");
+        const nextSource = sources[currentIndex + 1];
+
+        if (nextSource) {
+          event.currentTarget.dataset.sourceIndex = String(currentIndex + 1);
+          event.currentTarget.src = nextSource;
         }
       }}
     />

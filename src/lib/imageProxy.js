@@ -46,6 +46,23 @@ function normalizeManagedStoragePath(url) {
     if (trimmed.startsWith(bucketPrefix)) {
       return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${trimmed.slice(bucketPrefix.length)}`;
     }
+
+    const publicMarker = `/storage/v1/object/public/${bucket}/`;
+    const signedMarker = `/storage/v1/object/sign/${bucket}/`;
+    const publicIndex = trimmed.indexOf(publicMarker);
+    const signedIndex = trimmed.indexOf(signedMarker);
+
+    if (publicIndex > -1) {
+      const objectPath = trimmed.slice(publicIndex + publicMarker.length);
+      return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${objectPath}`;
+    }
+
+    if (signedIndex > -1) {
+      const objectPath = trimmed
+        .slice(signedIndex + signedMarker.length)
+        .split("?")[0];
+      return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${objectPath}`;
+    }
   }
 
   const bucketScopedPrefix = `${JOURNAL_BUCKET}/${PUBLIC_HIKE_PREFIX}`;
