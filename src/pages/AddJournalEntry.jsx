@@ -1032,6 +1032,7 @@ export default function AddJournalEntry() {
   const keepUploadedMediaRef = useRef(false);
   const photoPreviewCacheRef = useRef({});
   const restoredDraftRef = useRef(false);
+  const restoredDraftFromStorageRef = useRef(false);
   const currentFormRef = useRef(form);
   const journalDraftKey = getJournalDraftKey(user?.id, editId);
 
@@ -1040,6 +1041,11 @@ export default function AddJournalEntry() {
       ...p,
       [key]: typeof val === "function" ? val(p[key]) : val,
     }));
+
+  useEffect(() => {
+    restoredDraftRef.current = false;
+    restoredDraftFromStorageRef.current = false;
+  }, [journalDraftKey]);
 
   // Load existing entry for editing
   const { data: existing, isLoading: loadingEntry } = useQuery({
@@ -1061,6 +1067,10 @@ export default function AddJournalEntry() {
 
   useEffect(() => {
     if (existing) {
+      if (restoredDraftFromStorageRef.current) {
+        return;
+      }
+
       const normalizedExistingSeasons = normalizeSelectedSeasonValues(existing.seasons, existing.season);
       const normalizedExistingDogIds = normalizeSelectedDogIds(existing.dog_ids, existing.dog_id);
       originalPhotosRef.current = existing.photos ?? [];
@@ -1119,6 +1129,7 @@ export default function AddJournalEntry() {
         ...prev,
         ...normalizedDraft,
       }));
+      restoredDraftFromStorageRef.current = true;
       keepUploadedMediaRef.current = true;
     } catch (error) {
       console.error("[add-journal-entry] restore draft failed:", error);
