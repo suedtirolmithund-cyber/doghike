@@ -465,6 +465,7 @@ $$;
 
 revoke execute on function public.prevent_profile_billing_self_update() from public;
 revoke execute on function public.prevent_profile_billing_self_update() from anon;
+revoke execute on function public.prevent_profile_billing_self_update() from authenticated;
 
 create or replace function public.prevent_profile_role_self_update()
 returns trigger
@@ -487,6 +488,7 @@ $$;
 
 revoke execute on function public.prevent_profile_role_self_update() from public;
 revoke execute on function public.prevent_profile_role_self_update() from anon;
+revoke execute on function public.prevent_profile_role_self_update() from authenticated;
 
 drop trigger if exists protect_profile_billing_fields on public.profiles;
 create trigger protect_profile_billing_fields
