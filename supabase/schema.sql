@@ -1040,6 +1040,8 @@ create table if not exists public.support_requests (
 
 alter table public.support_requests enable row level security;
 
+drop policy if exists "support_requests_admin_read" on public.support_requests;
+drop policy if exists "support_requests_insert_own" on public.support_requests;
 create policy "Eigene Support-Anfragen lesen" on public.support_requests
   for select using (auth.uid() = user_id);
 
