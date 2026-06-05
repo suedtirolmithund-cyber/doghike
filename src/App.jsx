@@ -173,26 +173,24 @@ const PageShell = ({ children, currentPageName }) => (
 
 const PUBLIC_PAGE_NAMES = ["AGB", "Datenschutz", "Impressum", "Legal", "Support"];
 
-const PublicPageRoutes = () => (
-  <>
-    {PUBLIC_PAGE_NAMES.map((path) => {
-      const Page = Pages[path];
-      if (!Page) return null;
+function renderPublicPageRoutes() {
+  return PUBLIC_PAGE_NAMES.map((path) => {
+    const Page = Pages[path];
+    if (!Page) return null;
 
-      return (
-        <Route
-          key={path}
-          path={createPageUrl(path)}
-          element={
-            <PageShell currentPageName={path}>
-              <Page />
-            </PageShell>
-          }
-        />
-      );
-    })}
-  </>
-);
+    return (
+      <Route
+        key={path}
+        path={createPageUrl(path)}
+        element={
+          <PageShell currentPageName={path}>
+            <Page />
+          </PageShell>
+        }
+      />
+    );
+  });
+}
 
 const ScrollToTop = () => {
   const location = useLocation();
@@ -269,7 +267,7 @@ const AuthenticatedApp = () => {
       <Routes>
         <Route path="/" element={<GuestWelcomeScreen />} />
         <Route path={createPageUrl("Login")} element={<GuestWelcomeScreen />} />
-        <PublicPageRoutes />
+        {renderPublicPageRoutes()}
         <Route path="*" element={<GuestWelcomeScreen />} />
       </Routes>
     );
