@@ -131,23 +131,6 @@ export default function HikeCard({
                 <LocationIcon className="h-4 w-4" />
                 <span className="truncate">{hike.location || "Dolomites"}</span>
               </div>
-              {Array.isArray(hike.tags) && hike.tags.length > 0 && (
-                <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                  {hike.tags.slice(0, 3).map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex min-h-7 items-center rounded-full border border-[#F9C030]/70 bg-[#FDF0E8]/88 px-2.5 py-1 text-xs font-semibold leading-none text-[#7C3020] shadow-sm backdrop-blur-md"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                  {hike.tags.length > 3 && (
-                    <span className="inline-flex min-h-7 items-center rounded-full border border-[#F9C030]/60 bg-[#FDF0E8]/78 px-2.5 py-1 text-xs font-semibold leading-none text-[#7C3020]/82 shadow-sm backdrop-blur-md">
-                      +{hike.tags.length - 3}
-                    </span>
-                  )}
-                </div>
-              )}
             </div>
           </div>
 
@@ -177,6 +160,23 @@ export default function HikeCard({
                   ))}
                 </div>
               ) : null}
+              {Array.isArray(hike.tags) && hike.tags.length > 0 && (
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  {hike.tags.slice(0, 3).map((tag) => (
+                    <span
+                      key={tag}
+                      className="inline-flex min-h-7 items-center rounded-full border border-brand-100 bg-brand-50/70 px-2.5 py-1 text-xs font-semibold leading-none text-brand-700"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                  {hike.tags.length > 3 && (
+                    <span className="inline-flex min-h-7 items-center rounded-full border border-brand-100 bg-brand-50/60 px-2.5 py-1 text-xs font-semibold leading-none text-brand-600">
+                      +{hike.tags.length - 3}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
             {hike.notes && (
               <div className="mb-3">
