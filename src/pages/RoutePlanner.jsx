@@ -279,7 +279,7 @@ function SmartRoutePlanner({ onRouteReady }) {
       .finally(() => { if (!cancelled) setCalculating(false); });
 
     return () => { cancelled = true; };
-  }, [waypoints, routingMode]);
+  }, [onRouteReady, waypoints, routingMode]);
 
   const handleMapClick = useCallback(({ lat, lng }) => {
     setWaypoints((prev) => relabelWaypoints([...prev, { lat, lng, label: "" }]));

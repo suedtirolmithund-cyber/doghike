@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { getRoute, updateRoute } from "@/lib/routesApi";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,16 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Map, Loader2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import EditableRouteDrawer from "@/components/routes/EditableRouteDrawer";
 import RoutePreviewMap from "@/components/routes/RoutePreviewMap";
 import BackButton from "@/components/ui/BackButton";
@@ -16,6 +26,54 @@ import { EmptyState, PageLoadingState } from "@/components/ui/AppState";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { formatDurationHours } from "@/lib/duration";
+
+function getRouteDraftKey(routeId) {
+  if (!routeId) return null;
+  return `dogtrails:edit-route-draft:${routeId}`;
+}
+
+function buildInitialRouteDraft(route) {
+  if (!route) return null;
+
+  return {
+    routeData: {
+      name: route.name ?? "",
+      description: route.description ?? "",
+      start_location: route.start_location ?? "",
+      notes: route.notes ?? "",
+    },
+    routeGeometry: {
+      coordinates: Array.isArray(route.waypoints) ? route.waypoints : [],
+      distance_km: route.distance_km ?? 0,
+      duration_minutes: route.duration_minutes ?? null,
+      elevation_gain_m: route.elevation_gain_m ?? null,
+    },
+  };
+}
+
+function normalizeRouteDraft(rawDraft) {
+  if (!rawDraft || typeof rawDraft !== "object") return null;
+
+  return {
+    routeData: {
+      name: rawDraft.routeData?.name ?? "",
+      description: rawDraft.routeData?.description ?? "",
+      start_location: rawDraft.routeData?.start_location ?? "",
+      notes: rawDraft.routeData?.notes ?? "",
+    },
+    routeGeometry: {
+      coordinates: Array.isArray(rawDraft.routeGeometry?.coordinates) ? rawDraft.routeGeometry.coordinates : [],
+      distance_km: rawDraft.routeGeometry?.distance_km ?? 0,
+      duration_minutes: rawDraft.routeGeometry?.duration_minutes ?? null,
+      elevation_gain_m: rawDraft.routeGeometry?.elevation_gain_m ?? null,
+    },
+  };
+}
+
+function persistRouteDraft(draftKey, draftState) {
+  if (!draftKey || !draftState || typeof window === "undefined") return;
+  window.sessionStorage.setItem(draftKey, JSON.stringify(draftState));
+}
 
 export default function EditRoute() {
   const navigate = useNavigate();
@@ -27,6 +85,13 @@ export default function EditRoute() {
   const [routeData, setRouteData] = useState(null);
   const [routeGeometry, setRouteGeometry] = useState(null);
   const [editingMap, setEditingMap] = useState(false);
+  const [showLeaveDialog, setShowLeaveDialog] = useState(false);
+
+  const currentDraftRef = useRef(null);
+  const saveInFlightRef = useRef(false);
+  const draftKey = getRouteDraftKey(routeId);
+  const detailPageUrl = `${createPageUrl("RouteDetail")}?id=${routeId}`;
+  const profilePageUrl = createPageUrl("Profile");
 
   const { data: route, isLoading } = useQuery({
     queryKey: ["route", routeId],
@@ -34,32 +99,112 @@ export default function EditRoute() {
     enabled: !!routeId,
   });
 
+  const initialDraft = useMemo(() => buildInitialRouteDraft(route), [route]);
+
+  const currentDraft = useMemo(() => {
+    if (!routeData || !routeGeometry) return null;
+    return { routeData, routeGeometry };
+  }, [routeData, routeGeometry]);
+
+  const hasUnsavedChanges = useMemo(() => {
+    if (!initialDraft || !currentDraft) return false;
+    return JSON.stringify(currentDraft) !== JSON.stringify(initialDraft);
+  }, [currentDraft, initialDraft]);
+
   useEffect(() => {
-    if (route) {
-      setRouteData({
-        name: route.name ?? "",
-        description: route.description ?? "",
-        start_location: route.start_location ?? "",
-        notes: route.notes ?? "",
-      });
-      setRouteGeometry({
-        coordinates: route.waypoints ?? [],
-        distance_km: route.distance_km ?? 0,
-        duration_minutes: route.duration_minutes ?? null,
-        elevation_gain_m: route.elevation_gain_m ?? null,
-      });
+    if (!route || routeData || routeGeometry) return;
+
+    let nextDraft = buildInitialRouteDraft(route);
+
+    if (draftKey && typeof window !== "undefined") {
+      try {
+        const rawDraft = window.sessionStorage.getItem(draftKey);
+        const normalizedDraft = rawDraft ? normalizeRouteDraft(JSON.parse(rawDraft)) : null;
+        if (normalizedDraft) {
+          nextDraft = normalizedDraft;
+        }
+      } catch (error) {
+        console.error("[EditRoute] restore draft failed:", error);
+      }
     }
-  }, [route]);
+
+    if (nextDraft) {
+      setRouteData(nextDraft.routeData);
+      setRouteGeometry(nextDraft.routeGeometry);
+    }
+  }, [draftKey, route, routeData, routeGeometry]);
+
+  useEffect(() => {
+    currentDraftRef.current = currentDraft;
+  }, [currentDraft]);
+
+  useEffect(() => {
+    if (!draftKey || !currentDraft || typeof window === "undefined") return;
+
+    try {
+      persistRouteDraft(draftKey, currentDraft);
+    } catch (error) {
+      console.error("[EditRoute] persist draft failed:", error);
+    }
+  }, [currentDraft, draftKey]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+
+    const handleBeforeUnload = (event) => {
+      if (!hasUnsavedChanges || saveInFlightRef.current) return;
+      event.preventDefault();
+      event.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [hasUnsavedChanges]);
+
+  useEffect(() => {
+    if (!draftKey || typeof window === "undefined") return undefined;
+
+    const persistCurrentDraft = () => {
+      try {
+        persistRouteDraft(draftKey, currentDraftRef.current);
+      } catch (error) {
+        console.error("[EditRoute] persist draft on hide failed:", error);
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        persistCurrentDraft();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("pagehide", persistCurrentDraft);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("pagehide", persistCurrentDraft);
+    };
+  }, [draftKey]);
 
   const updateMutation = useMutation({
     mutationFn: (data) => updateRoute(routeId, data),
     onSuccess: () => {
+      saveInFlightRef.current = false;
+      if (draftKey && typeof window !== "undefined") {
+        window.sessionStorage.removeItem(draftKey);
+      }
       queryClient.invalidateQueries({ queryKey: ["userRoutes", user?.id] });
       queryClient.invalidateQueries({ queryKey: ["route", routeId] });
       toast.success("Deine Route ist wieder rund.");
-      navigate(`${createPageUrl("RouteDetail")}?id=${routeId}`);
+      navigate(detailPageUrl);
     },
-    onError: () => toast.error("Die Route wollte gerade nicht speichern."),
+    onError: () => {
+      saveInFlightRef.current = false;
+      toast.error("Die Route wollte gerade nicht speichern.");
+    },
   });
 
   const handleSubmit = async (event) => {
@@ -68,6 +213,8 @@ export default function EditRoute() {
       toast.error("Der Route fehlt noch ein Name.");
       return;
     }
+
+    saveInFlightRef.current = true;
 
     await updateMutation.mutateAsync({
       name: routeData.name,
@@ -82,6 +229,20 @@ export default function EditRoute() {
     });
   };
 
+  const handleLeaveRequest = () => {
+    if (hasUnsavedChanges) {
+      setShowLeaveDialog(true);
+      return;
+    }
+
+    navigate(detailPageUrl);
+  };
+
+  const confirmLeave = () => {
+    setShowLeaveDialog(false);
+    navigate(detailPageUrl);
+  };
+
   if (isLoading) {
     return <PageLoadingState message="Deine Route lädt..." />;
   }
@@ -93,7 +254,7 @@ export default function EditRoute() {
           icon={Map}
           title="Route nicht gefunden"
           description="Diese Route gibt es nicht mehr oder du hast keinen Zugriff."
-          action={<BackButton to={createPageUrl("Profile")} variant="default" />}
+          action={<BackButton to={profilePageUrl} variant="default" />}
         />
       </div>
     );
@@ -102,7 +263,7 @@ export default function EditRoute() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
       <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8">
-        <BackButton to={`${createPageUrl("RouteDetail")}?id=${routeId}`} className="mb-3 md:mb-4" />
+        <BackButton onClick={handleLeaveRequest} className="mb-3 md:mb-4" />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -210,9 +371,9 @@ export default function EditRoute() {
             </div>
 
             <div className="flex gap-3 pt-2">
-              <Link to={`${createPageUrl("RouteDetail")}?id=${routeId}`}>
-                <Button type="button" variant="outline" size="sm">Abbrechen</Button>
-              </Link>
+              <Button type="button" variant="outline" size="sm" onClick={handleLeaveRequest}>
+                Abbrechen
+              </Button>
               <Button
                 type="submit"
                 disabled={updateMutation.isPending}
@@ -225,6 +386,23 @@ export default function EditRoute() {
             </div>
           </form>
         </motion.div>
+
+        <AlertDialog open={showLeaveDialog} onOpenChange={setShowLeaveDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Änderungen verwerfen?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Deine Änderungen an dieser Route sind noch nicht gespeichert und würden beim Verlassen verloren gehen.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Weiter bearbeiten</AlertDialogCancel>
+              <AlertDialogAction onClick={confirmLeave} className="bg-brand-400 hover:bg-brand-500">
+                Trotzdem verlassen
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );
