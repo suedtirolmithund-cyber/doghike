@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { getDogs, createDog, updateDog, deleteDog } from "@/lib/profilesApi";
@@ -48,13 +48,17 @@ export default function Dogs() {
     enabled: !!user?.id,
   });
 
+  const stableDogIds = useMemo(
+    () => dogs.map((dog) => String(dog.id)).sort(),
+    [dogs]
+  );
+
   const { data: statsMap = {} } = useQuery({
-    queryKey: ["dogStats", user?.id, dogs.map((dog) => dog.id).join(",")],
+    queryKey: ["dogStats", user?.id, stableDogIds],
     queryFn: async () => {
       if (!dogs.length) return {};
 
-      const dogIds = dogs.map((dog) => String(dog.id));
-      const knownDogIds = new Set(dogIds);
+      const knownDogIds = new Set(stableDogIds);
       let { data, error } = await supabase
         .from("journal_entries")
         .select("dog_id, dog_ids, distance_km, elevation_m")
