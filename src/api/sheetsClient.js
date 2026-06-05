@@ -737,7 +737,6 @@ const APPROVED_JOURNAL_ENTRY_CORE_FIELDS = [
   "user_id",
   "title",
   "location",
-  "country",
   "latitude",
   "longitude",
   "photos",
@@ -783,7 +782,7 @@ const APPROVED_JOURNAL_ENTRY_FIELDS = APPROVED_JOURNAL_ENTRY_FIELD_LIST.join(", 
 
 function isMissingApprovedJournalOptionalFieldError(error) {
   const message = String(error?.message ?? "");
-  return ["season", "dog_ids", "tags", "seasons"].some(
+  return ["country", "season", "dog_ids", "tags", "seasons"].some(
     (field) => message.includes(field) && message.includes("column")
   );
 }
