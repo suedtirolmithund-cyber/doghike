@@ -275,6 +275,7 @@ create table if not exists public.journal_entries (
   title             text not null,
   date              date not null,
   location          text,
+  country           text,
   distance_km       numeric(6,2),
   elevation_m       integer,
   duration_minutes  integer,
@@ -305,6 +306,7 @@ create table if not exists public.journal_entries (
 
 -- Falls die Tabelle bereits existiert, einmalig ausführen:
 -- alter table public.journal_entries
+--   add column if not exists country text,
 --   add column if not exists latitude numeric(10,7),
 --   add column if not exists longitude numeric(10,7),
 --   add column if not exists dog_id uuid references public.dogs(id) on delete set null,
