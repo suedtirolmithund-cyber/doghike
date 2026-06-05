@@ -256,13 +256,17 @@ create policy "Eigene Hunde löschen"
 create or replace function public.get_public_dog_profile_count()
 returns integer
 language sql
-security invoker
+security definer
 stable
 set search_path = public
 as $$
   select count(*)::integer
   from public.dogs;
 $$;
+
+grant execute on function public.get_public_dog_profile_count() to authenticated;
+grant execute on function public.get_public_dog_profile_count() to anon;
+revoke execute on function public.get_public_dog_profile_count() from public;
 
 -- JOURNAL ENTRIES
 create table if not exists public.journal_entries (
