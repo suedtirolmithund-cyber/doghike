@@ -64,8 +64,7 @@ export default function GuestWelcomeScreen() {
     const search = window.location.search || "";
     const recoveryDetected =
       hash.includes("type=recovery") ||
-      search.includes("type=recovery") ||
-      (hash.includes("access_token=") && hash.includes("refresh_token="));
+      search.includes("type=recovery");
 
     if (recoveryDetected) {
       setShowAuth(true);
@@ -193,14 +192,14 @@ export default function GuestWelcomeScreen() {
   const handleGoogle = async () => {
     setLocalError(null);
     setSuccessMsg(null);
-    if (mode === "register" && !privacyAccepted) {
+    if (!privacyAccepted) {
       setLocalError("Bitte akzeptiere die Datenschutzerklärung und Nutzungsbedingungen.");
       return;
     }
     setGoogleLoading(true);
     const result = await loginWithGoogle(
       mode === "register" ? createPageUrl("Profile") : "/",
-      mode === "register" ? "google_registration" : null
+      mode === "register" ? "google_registration" : "google_login_or_registration"
     );
     if (result?.error) {
       setGoogleLoading(false);
@@ -424,6 +423,40 @@ export default function GuestWelcomeScreen() {
                 <span className="text-xs text-white/60">oder</span>
                 <div className="h-px flex-1 bg-white/20" />
               </div>
+
+              {mode === "login" && (
+                <div className="mb-3 flex items-start gap-3 rounded-xl border border-white/35 bg-white/15 p-3">
+                  <Checkbox
+                    id="guest-google-privacy"
+                    checked={privacyAccepted}
+                    onCheckedChange={(checked) => setPrivacyAccepted(checked === true)}
+                    className="mt-0.5 h-5 w-5 shrink-0 border-2 border-white bg-white/85 data-[state=checked]:border-[#A8003C] data-[state=checked]:bg-[#A8003C]"
+                  />
+                  <label htmlFor="guest-google-privacy" className="text-xs leading-relaxed text-white/80">
+                    Für Google-Anmeldung oder Kontoerstellung akzeptiere ich die{" "}
+                    <a
+                      href={createPageUrl("Datenschutz")}
+                      className="text-white underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      Datenschutzerklärung
+                    </a>
+                    {" "}und die{" "}
+                    <a
+                      href={createPageUrl("AGB")}
+                      className="text-white underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      Nutzungsbedingungen
+                    </a>
+                    .
+                  </label>
+                </div>
+              )}
 
               <button
                 type="button"
