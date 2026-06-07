@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Cookie } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -58,12 +56,12 @@ export default function CookieBanner() {
                   <h3 className="text-sm font-bold leading-tight text-brand-900">Nur notwendige Cookies</h3>
                   <p className="mt-1 text-[11px] leading-snug text-brand-700 sm:text-xs">
                     DogTrails speichert nur, was Login, Sicherheit und App-Funktionen brauchen. Kein Tracking.{" "}
-                    <Link
-                      to={createPageUrl("Datenschutz")}
+                    <a
+                      href="/datenschutz"
                       className="font-semibold text-brand-600 underline underline-offset-2 hover:text-brand-700"
                     >
                       Datenschutz
-                    </Link>
+                    </a>
                   </p>
                 </div>
               </div>

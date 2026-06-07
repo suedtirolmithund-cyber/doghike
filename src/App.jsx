@@ -276,6 +276,16 @@ const AuthenticatedApp = () => {
   const isBootLoading = isLoadingAuth;
   const publicPageName = getPublicPageName(location.pathname);
 
+  if (publicPageName) {
+    const PublicPage = Pages[publicPageName];
+
+    return (
+      <PageShell currentPageName={publicPageName}>
+        <PublicPage />
+      </PageShell>
+    );
+  }
+
   if (isBootLoading) {
     return <BootLoadingGate />;
   }
@@ -288,16 +298,6 @@ const AuthenticatedApp = () => {
         {renderPublicPageRoutes()}
         <Route path="*" element={<GuestWelcomeScreen />} />
       </Routes>
-    );
-  }
-
-  if (publicPageName) {
-    const PublicPage = Pages[publicPageName];
-
-    return (
-      <PageShell currentPageName={publicPageName}>
-        <PublicPage />
-      </PageShell>
     );
   }
 
