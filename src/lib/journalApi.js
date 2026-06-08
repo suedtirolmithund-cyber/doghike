@@ -429,7 +429,12 @@ async function runJournalEntryUpdate(id, entry, currentUserId, scopeToOwner = tr
 }
 
 export async function createJournalEntry(userId, entry) {
-  const payload = { user_id: userId, ...entry };
+  const currentUserId = await requireCurrentUserId();
+  if (userId && String(userId) !== String(currentUserId)) {
+    throw new Error("Du kannst nur Einträge für dein eigenes Konto anlegen.");
+  }
+
+  const payload = { user_id: currentUserId, ...entry };
   let { data, error } = await supabase
     .from("journal_entries")
     .insert(payload)
