@@ -128,10 +128,12 @@ export async function rejectFriendRequest(friendshipId) {
 
 // Remove a friend (either side can do this)
 export async function removeFriend(friendshipId) {
+  const currentUserId = await requireCurrentUserId();
   const { error } = await supabase
     .from("friendships")
     .delete()
-    .eq("id", friendshipId);
+    .eq("id", friendshipId)
+    .or(`requester_id.eq.${currentUserId},receiver_id.eq.${currentUserId}`);
   if (error) throw error;
 }
 
