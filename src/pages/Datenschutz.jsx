@@ -206,6 +206,7 @@ export default function Datenschutz() {
                   <div className="border border-brand-100 rounded-xl p-4">
                     <p className="font-semibold text-slate-900 mb-1">Supabase Inc. (Authentifizierung, Datenbank, Storage)</p>
                     <p>Speichert Nutzerkonten, Session-Tokens und App-Daten. Journal-Dateien werden in Supabase Storage gespeichert und in der App je nach Freigabe privat, für Freunde oder öffentlich ausgeliefert.</p>
+                    <p className="mt-1 text-slate-500">Primäre Projektregion für Datenbank und Storage: <strong>eu-west-1 (Irland, EU)</strong>.</p>
                     <p className="mt-1 text-slate-500">Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO für Konto, Anmeldung und App-Funktionen; Art. 6 Abs. 1 lit. f DSGVO für Sicherheit, Fehlerbehebung und Missbrauchsschutz.</p>
               <p className="mt-1 text-slate-500">Datenschutz: <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">supabase.com/privacy</a></p>
                   </div>
@@ -300,7 +301,7 @@ export default function Datenschutz() {
                     <tbody className="divide-y divide-stone-100">
                       <tr>
                         <td className="p-3">Supabase Inc.</td>
-                        <td className="p-3">EU-US Data Privacy Framework, sofern zertifiziert; ergänzend oder alternativ Standardvertragsklauseln gem. Art. 46 Abs. 2 lit. c DSGVO</td>
+                        <td className="p-3">Primäre Datenbank- und Storage-Verarbeitung in der Projektregion eu-west-1 (Irland, EU). Drittlandbezug kann bei Supabase-Support, Sicherheits-, Betriebs- oder Unterauftragsverarbeitungen entstehen; dafür EU-US Data Privacy Framework, sofern zertifiziert, ergänzend oder alternativ Standardvertragsklauseln gem. Art. 46 Abs. 2 lit. c DSGVO.</td>
                       </tr>
                       <tr className="bg-brand-50/70">
                         <td className="p-3">Vercel Inc.</td>
