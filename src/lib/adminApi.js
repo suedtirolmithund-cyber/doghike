@@ -215,10 +215,11 @@ export async function getAdminPublicHikes({
     .from("journal_entries")
     .select(ADMIN_PUBLIC_JOURNAL_HIKE_FIELDS)
     .eq("visibility", "public")
+    .eq("status", "approved")
     .order("created_at", { ascending: false });
 
-  if (statusFilter !== "all") {
-    publicJournalQuery = publicJournalQuery.eq("status", statusFilter);
+  if (statusFilter !== "all" && statusFilter !== "approved") {
+    publicJournalQuery = publicJournalQuery.eq("id", "__no_match__");
   }
 
   if (premiumFilter === "premium") {
