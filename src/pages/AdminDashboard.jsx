@@ -692,9 +692,11 @@ export default function AdminDashboard() {
   const totalPublicHikes = publicHikesData?.totalCount ?? 0;
   const totalPublicHikePages = Math.max(1, Math.ceil(totalPublicHikes / PUBLIC_HIKES_PAGE_SIZE));
   const pendingCommentsCount = commentsData?.pendingCount ?? 0;
+  const totalManagedPublicHikesCount = publicHikeStats?.totalCount ?? 0;
   const approvedPublicHikesCount = publicHikeStats?.approvedCount ?? 0;
   const draftPublicHikesCount = publicHikeStats?.draftCount ?? 0;
-  const premiumPublicHikesCount = publicHikeStats?.premiumCount ?? 0;
+  const premiumPublishedPublicHikesCount = publicHikeStats?.premiumPublishedCount ?? 0;
+  const freePublishedPublicHikesCount = publicHikeStats?.freePublishedCount ?? 0;
   const publicHikeFilterKey = `${publicHikeSearch}__${publicHikeStatusFilter}__${publicHikePremiumFilter}`;
   const commentFilterKey = `${commentSearch}__${commentFilter}`;
   const previousCommentFilterKeyRef = useRef(commentFilterKey);
@@ -1048,12 +1050,18 @@ export default function AdminDashboard() {
 
           <TabsContent value="public-hikes">
             <div className="mb-4 grid gap-4 md:grid-cols-[1.05fr_0.95fr]">
-              <div className="grid gap-3 sm:grid-cols-3">
+              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+                <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
+                  <p className="text-2xl font-bold text-slate-900">
+                    {publicHikeStatsLoading ? "..." : totalManagedPublicHikesCount}
+                  </p>
+                  <p className="mt-1 text-xs text-slate-500">Insgesamt</p>
+                </div>
                 <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
                   <p className="text-2xl font-bold text-slate-900">
                     {publicHikeStatsLoading ? "..." : approvedPublicHikesCount}
                   </p>
-                  <p className="mt-1 text-xs text-slate-500">Freigegeben</p>
+                  <p className="mt-1 text-xs text-slate-500">Veröffentlicht</p>
                 </div>
                 <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
                   <p className="text-2xl font-bold text-slate-900">
@@ -1063,9 +1071,15 @@ export default function AdminDashboard() {
                 </div>
                 <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
                   <p className="text-2xl font-bold text-slate-900">
-                    {publicHikeStatsLoading ? "..." : premiumPublicHikesCount}
+                    {publicHikeStatsLoading ? "..." : premiumPublishedPublicHikesCount}
                   </p>
-                  <p className="mt-1 text-xs text-slate-500">Premium</p>
+                  <p className="mt-1 text-xs text-slate-500">Davon Premium</p>
+                </div>
+                <div className="rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl">
+                  <p className="text-2xl font-bold text-slate-900">
+                    {publicHikeStatsLoading ? "..." : freePublishedPublicHikesCount}
+                  </p>
+                  <p className="mt-1 text-xs text-slate-500">Davon Frei</p>
                 </div>
               </div>
 

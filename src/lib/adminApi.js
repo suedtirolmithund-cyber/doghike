@@ -144,7 +144,22 @@ export async function getPendingEntries() {
 export async function getAdminPublicHikeStats() {
   await assertAdmin();
 
-  const [approvedResult, approvedJournalResult, draftResult, draftJournalResult, premiumResult] = await Promise.all([
+  const [
+    totalPublicResult,
+    totalJournalResult,
+    approvedResult,
+    approvedJournalResult,
+    draftResult,
+    draftJournalResult,
+    premiumResult,
+  ] = await Promise.all([
+    supabase
+      .from("public_hikes")
+      .select("id", { count: "exact", head: true }),
+    supabase
+      .from("journal_entries")
+      .select("id", { count: "exact", head: true })
+      .eq("visibility", "public"),
     supabase
       .from("public_hikes")
       .select("id", { count: "exact", head: true })
@@ -166,19 +181,28 @@ export async function getAdminPublicHikeStats() {
     supabase
       .from("public_hikes")
       .select("id", { count: "exact", head: true })
+      .eq("status", "approved")
       .eq("is_premium", true),
   ]);
 
+  if (totalPublicResult.error) throw totalPublicResult.error;
+  if (totalJournalResult.error) throw totalJournalResult.error;
   if (approvedResult.error) throw approvedResult.error;
   if (approvedJournalResult.error) throw approvedJournalResult.error;
   if (draftResult.error) throw draftResult.error;
   if (draftJournalResult.error) throw draftJournalResult.error;
   if (premiumResult.error) throw premiumResult.error;
 
+  const approvedCount = (approvedResult.count ?? 0) + (approvedJournalResult.count ?? 0);
+  const draftCount = (draftResult.count ?? 0) + (draftJournalResult.count ?? 0);
+  const premiumPublishedCount = premiumResult.count ?? 0;
+
   return {
-    approvedCount: (approvedResult.count ?? 0) + (approvedJournalResult.count ?? 0),
-    draftCount: (draftResult.count ?? 0) + (draftJournalResult.count ?? 0),
-    premiumCount: premiumResult.count ?? 0,
+    totalCount: (totalPublicResult.count ?? 0) + (totalJournalResult.count ?? 0),
+    approvedCount,
+    draftCount,
+    premiumPublishedCount,
+    freePublishedCount: Math.max(0, approvedCount - premiumPublishedCount),
   };
 }
 
