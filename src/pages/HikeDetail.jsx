@@ -157,6 +157,7 @@ export default function HikeDetail() {
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
   const [failedPhotoKeys, setFailedPhotoKeys] = useState(() => new Set());
   const [copied, setCopied] = useState(false);
+  const lightboxDialogRef = useRef(null);
   const lightboxScrollerRef = useRef(null);
   const lightboxDragRef = useRef({
     isDragging: false,
@@ -424,6 +425,14 @@ export default function HikeDetail() {
     // The selected index is set before opening. After that, scrolling updates it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lightboxOpen]);
+
+  useEffect(() => {
+    if (!lightboxOpen || showPremiumPreviewOnly || photos.length === 0) return;
+
+    requestAnimationFrame(() => {
+      lightboxDialogRef.current?.focus();
+    });
+  }, [lightboxOpen, photos.length, showPremiumPreviewOnly]);
 
   const isOwnHike = Boolean(
     currentUser?.id && hike?._user_id && currentUser.id === hike._user_id
@@ -704,6 +713,26 @@ export default function HikeDetail() {
       startX: 0,
       scrollLeft: 0,
     };
+  };
+  const handleLightboxKeyDown = (event) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      setLightboxOpen(false);
+      return;
+    }
+
+    if (photos.length <= 1) return;
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      showPreviousLightboxPhoto();
+      return;
+    }
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      showNextLightboxPhoto();
+    }
   };
   const canComment = hike?._source === "sheets" || hike?.visibility === "public";
   const canAdminEditJournalHike = Boolean(
@@ -1313,9 +1342,12 @@ export default function HikeDetail() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            ref={lightboxDialogRef}
             role="dialog"
             aria-modal="true"
             aria-label="Foto-Lightbox"
+            tabIndex={-1}
+            onKeyDown={handleLightboxKeyDown}
             className="fixed inset-0 z-[100] bg-black/95"
           >
             <button
