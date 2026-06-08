@@ -4,13 +4,15 @@ const EASY_TERMS = ["leicht", "einfach", "gemuetlich", "gemutlich", "easy"];
 const DOG_TERMS = ["hund", "hunde", "mit hund", "hundefreundlich", "dog"];
 const WATER_TERMS = ["bach", "wasser", "see", "fluss", "quelle", "teich"];
 const SHORT_TERMS = ["nicht zu weit", "nicht so weit", "kurz", "kurze", "wenig km", "nah"];
-const LOW_ELEVATION_TERMS = ["wenig hoehenmeter", "wenig höhenmeter", "flach"];
+const LOW_ELEVATION_TERMS = ["wenig hoehenmeter", "wenig h\u00f6henmeter", "flach"];
+// "Leicht" in der Freitextsuche soll Stufe 1 (Sehr leicht) und 2 (Leicht) treffen.
+const MAX_EASY_HUMAN_DIFFICULTY = 2;
 const SEASON_TERMS = {
-  fruehling: ["fruehling", "frühling", "spring"],
+  fruehling: ["fruehling", "fr\u00fchling", "spring"],
   sommer: ["sommer", "summer"],
   herbst: ["herbst", "autumn", "fall"],
   winter: ["winter"],
-  all_year: ["ganzjaehrig", "ganzjährig", "ganzes jahr", "all year"],
+  all_year: ["ganzjaehrig", "ganzj\u00e4hrig", "ganzes jahr", "all year"],
 };
 
 function toComparableText(value) {
@@ -48,8 +50,8 @@ function getCountryAliases(country) {
       return ["italy", "italien"];
     case "austria":
     case "oesterreich":
-    case "österreich":
-      return ["austria", "oesterreich", "österreich"];
+    case "\u00f6sterreich":
+      return ["austria", "oesterreich", "\u00f6sterreich"];
     case "germany":
     case "deutschland":
       return ["germany", "deutschland"];
@@ -58,7 +60,7 @@ function getCountryAliases(country) {
       return ["switzerland", "schweiz"];
     case "spain":
     case "spanien":
-      return ["spain", "spanien", "espana", "españa"];
+      return ["spain", "spanien", "espana", "espa\u00f1a"];
     case "croatia":
     case "kroatien":
       return ["croatia", "kroatien", "hrvatska"];
@@ -119,7 +121,7 @@ function matchesRecognizedFilters(hike, query) {
 
   if (wantsEasy) {
     const humanDifficulty = getDifficultyNumber(hike?.difficulty);
-    if (humanDifficulty !== null && humanDifficulty > 2) return false;
+    if (humanDifficulty !== null && humanDifficulty > MAX_EASY_HUMAN_DIFFICULTY) return false;
   }
 
   if (wantsDogFriendly && hike?.dog_suitable === false) {
