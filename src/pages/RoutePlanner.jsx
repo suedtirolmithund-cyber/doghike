@@ -753,8 +753,6 @@ export default function RoutePlanner() {
           await deleteJournalFiles([uploadedGpxUrl]);
         } catch {}
       }
-
-      throw error;
     } finally {
       setIsSubmittingRoute(false);
     }
