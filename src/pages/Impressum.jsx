@@ -73,6 +73,12 @@ export default function Impressum() {
               <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Der Betreiber ist nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen. Für außergerichtliche Streitbeilegung in Italien ist das <a href="https://www.conciliaweb.agcom.it" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">AGCOM Conciliaweb-Verfahren</a> zuständig, soweit es sich um elektronische Kommunikationsdienste handelt.
               </p>
+              <p className="mt-3 text-sm md:text-base text-slate-600 leading-relaxed">
+                Die frühere EU-Plattform zur Online-Streitbeilegung (ODR/OS-Plattform) wurde zum 20. Juli 2025 eingestellt. Aktuelle Informationen zu Verbraucherbeschwerden und außergerichtlicher Streitbeilegung in der EU stellt die Europäische Kommission hier bereit:{" "}
+                <a href="https://consumer-redress.ec.europa.eu/index_de" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">
+                  consumer-redress.ec.europa.eu
+                </a>.
+              </p>
             </section>
 
             <section className="border-t border-brand-100 pt-6 md:pt-8">
