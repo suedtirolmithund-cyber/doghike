@@ -254,7 +254,6 @@ function SmartRoutePlanner({ onRouteReady }) {
   const [tileLayerId, setTileLayerId] = useState(ROUTE_TILE_LAYER.id);
   const routeRef = useRef(null);
   const tile = getRouteTileLayer(tileLayerId);
-  const mapResetKey = `planner-${routingMode}`;
 
   useEffect(() => {
     if (waypoints.length < 2) {
@@ -453,7 +452,7 @@ function SmartRoutePlanner({ onRouteReady }) {
       {/* Map */}
       <div className="doghike-map-frame relative h-[68vw] min-h-[310px] max-h-[500px] md:h-[440px] md:max-h-none">
         <SafeMapContainer
-          resetKey={mapResetKey}
+          resetKey="planner"
           center={[46.5, 11.3]}
           zoom={10}
           maxZoom={tile.maxZoom}
