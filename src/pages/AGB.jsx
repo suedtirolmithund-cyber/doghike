@@ -17,7 +17,7 @@ export default function AGB() {
             <h1 className="doghike-page-title">Nutzungsbedingungen</h1>
           </div>
           <p className="text-xs text-slate-400 mb-8">
-            Letzte Aktualisierung: April 2026 · Gilt für doghike-suedtirol.vercel.app
+            Letzte Aktualisierung: Juni 2026 · Gilt für doghike-suedtirol.vercel.app
           </p>
 
           <div className="mb-8 rounded-2xl border border-brand-100/80 bg-white/65 p-5 text-slate-700">
@@ -281,7 +281,7 @@ export default function AGB() {
 
             <section className="border-t border-brand-100 pt-6">
               <div className="flex flex-wrap gap-4 text-xs text-slate-400">
-                <span>Letzte Aktualisierung: April 2026</span>
+                <span>Letzte Aktualisierung: Juni 2026</span>
                 <span>·</span>
             <Link to={createPageUrl("Datenschutz")} className="text-brand-600 underline">Datenschutz</Link>
             <Link to={createPageUrl("Impressum")} className="text-brand-600 underline">Impressum</Link>

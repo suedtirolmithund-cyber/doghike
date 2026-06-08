@@ -170,7 +170,7 @@ export default function Impressum() {
             </section>
 
             <section className="border-t border-brand-100 pt-6">
-              <p className="text-xs text-slate-400">Letzte Aktualisierung: Mai 2026 · Angaben gemäß D.Lgs. 70/2003</p>
+              <p className="text-xs text-slate-400">Letzte Aktualisierung: Juni 2026 · Angaben gemäß D.Lgs. 70/2003</p>
             </section>
           </div>
         </div>

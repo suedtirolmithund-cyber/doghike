@@ -15,7 +15,7 @@ export default function Legal() {
             </div>
             <h1 className="doghike-page-title">Rechtliche Hinweise</h1>
           </div>
-          <p className="text-xs text-slate-400 mb-8">Letzte Aktualisierung: Mai 2026</p>
+          <p className="text-xs text-slate-400 mb-8">Letzte Aktualisierung: Juni 2026</p>
 
           <div className="mb-6 rounded-2xl border border-brand-200/70 bg-brand-50/60 p-5 text-slate-700">
             <div className="flex gap-3 items-start">
