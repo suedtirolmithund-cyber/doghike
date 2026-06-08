@@ -387,9 +387,9 @@ function RankingTab({ rows, metric, myDogIds, showOwnRank = true }) {
   const top3 = sorted.slice(0, 3);
   const nextTwo = sorted.slice(3, 5);
   const ownDogIdSet = new Set(myDogIds ?? []);
-  const myIdx = sorted.findIndex((r) => ownDogIdSet.has(r.dog?.id));
-  const myEntry = myIdx >= 0 ? sorted[myIdx] : null;
-  const showOwnRankCard = showOwnRank && myIdx >= 5;
+  const myRankEntries = sorted
+    .map((entry, index) => ({ entry, rank: index + 1 }))
+    .filter(({ entry, rank }) => ownDogIdSet.has(entry.dog?.id) && rank >= 6);
 
   if (!sorted.length) {
     return (
@@ -420,9 +420,16 @@ function RankingTab({ rows, metric, myDogIds, showOwnRank = true }) {
         </div>
       )}
       {/* Dein Hund falls außerhalb Top 5 */}
-      {showOwnRankCard && myEntry && (
-        <MyDogCard entry={myEntry} rank={myIdx + 1} totalCount={sorted.length} metric={metric} />
-      )}
+      {showOwnRank &&
+        myRankEntries.map(({ entry, rank }) => (
+          <MyDogCard
+            key={entry.dog.id}
+            entry={entry}
+            rank={rank}
+            totalCount={sorted.length}
+            metric={metric}
+          />
+        ))}
     </div>
   );
 }
@@ -460,21 +467,22 @@ export default function TopDogs() {
     refetchOnWindowFocus: false,
   });
   const myDogIds = myDogs.map((dog) => dog.id);
-  const friendIdSet = useMemo(
-    () => new Set((friendIds ?? []).map((friendId) => String(friendId))),
-    [friendIds]
+  const friendScopeUserIdSet = useMemo(
+    () =>
+      new Set(
+        [...(friendIds ?? []), user?.id]
+          .filter(Boolean)
+          .map((friendId) => String(friendId))
+      ),
+    [friendIds, user?.id]
   );
   const displayRows = useMemo(() => {
     if (scope !== "friends") {
       return rows;
     }
 
-    return rows.filter(
-      (entry) =>
-        friendIdSet.has(String(entry?.dog?.user_id ?? "")) &&
-        String(entry?.dog?.user_id ?? "") !== String(user?.id ?? "")
-    );
-  }, [friendIdSet, rows, scope, user?.id]);
+    return rows.filter((entry) => friendScopeUserIdSet.has(String(entry?.dog?.user_id ?? "")));
+  }, [friendScopeUserIdSet, rows, scope]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20 pb-24 md:pb-8">
@@ -525,13 +533,13 @@ export default function TopDogs() {
               </TabsList>
 
               <TabsContent value="tours">
-                <RankingTab rows={displayRows} metric="tours" myDogIds={myDogIds} showOwnRank={scope !== "friends"} />
+                <RankingTab rows={displayRows} metric="tours" myDogIds={myDogIds} showOwnRank />
               </TabsContent>
               <TabsContent value="distance">
-                <RankingTab rows={displayRows} metric="distance" myDogIds={myDogIds} showOwnRank={scope !== "friends"} />
+                <RankingTab rows={displayRows} metric="distance" myDogIds={myDogIds} showOwnRank />
               </TabsContent>
               <TabsContent value="elevation">
-                <RankingTab rows={displayRows} metric="elevation" myDogIds={myDogIds} showOwnRank={scope !== "friends"} />
+                <RankingTab rows={displayRows} metric="elevation" myDogIds={myDogIds} showOwnRank />
               </TabsContent>
             </Tabs>
 
