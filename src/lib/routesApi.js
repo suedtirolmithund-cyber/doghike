@@ -57,14 +57,20 @@ export async function updateRoute(id, updates) {
 }
 
 export async function deleteRoute(id) {
+  const currentUserId = await requireCurrentUserId();
   const { data: existingRoute, error: fetchError } = await supabase
     .from("user_routes")
     .select("gpx_url")
     .eq("id", id)
+    .eq("user_id", currentUserId)
     .single();
   if (fetchError && fetchError.code !== "PGRST116") throw fetchError;
 
-  const { error } = await supabase.from("user_routes").delete().eq("id", id);
+  const { error } = await supabase
+    .from("user_routes")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", currentUserId);
   if (error) throw error;
 
   if (existingRoute?.gpx_url) {
