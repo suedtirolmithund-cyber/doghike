@@ -307,7 +307,7 @@ export default function Datenschutz() {
                         <td className="p-3">EU-US Data Privacy Framework, sofern zertifiziert; ergänzend oder alternativ Standardvertragsklauseln gem. Art. 46 Abs. 2 lit. c DSGVO</td>
                       </tr>
                       <tr>
-                        <td className="p-3">Google LLC</td>
+                        <td className="p-3">Google LLC (Sign-in mit Google / OAuth; Google Sheets / öffentliche Wanderungsdaten)</td>
                         <td className="p-3">EU-US Data Privacy Framework, sofern zertifiziert; ergänzend oder alternativ Standardvertragsklauseln gem. Art. 46 Abs. 2 lit. c DSGVO</td>
                       </tr>
                       <tr className="bg-brand-50/70">
