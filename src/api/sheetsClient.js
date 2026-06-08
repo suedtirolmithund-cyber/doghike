@@ -731,7 +731,7 @@ function getJournalEntryDogIds(entry) {
   );
 }
 
-const APPROVED_JOURNAL_HIKE_LIMIT = 250;
+const APPROVED_JOURNAL_HIKE_LIMIT = 1000;
 const APPROVED_JOURNAL_ENTRY_CORE_FIELDS = [
   "id",
   "user_id",
