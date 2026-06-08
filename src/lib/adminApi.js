@@ -3,7 +3,6 @@ import { publishPendingCommentPhoto } from "./communityApi";
 import { hydrateJournalEntriesMedia, validatePublicJournalEntry } from "./journalApi";
 import { resolvePublicHikePhotoReferences } from "./publicHikesApi";
 
-const ADMIN_COMMENTS_LIMIT = 250;
 const PENDING_ENTRY_FIELDS = [
   "id",
   "user_id",
@@ -58,6 +57,10 @@ const ADMIN_PUBLIC_JOURNAL_HIKE_FIELDS = [
 
 function normalizeHikeSource(value) {
   return value ?? "sheets";
+}
+
+function escapeSearchTerm(value) {
+  return String(value ?? "").trim().replace(/[\\%_]/g, "\\$&").replace(/,/g, " ");
 }
 
 async function assertAdmin() {
@@ -278,6 +281,47 @@ export async function getAdminPublicHikes({
   };
 }
 
+async function resolveAdminCommentSearchTargets(trimmedSearch) {
+  if (!trimmedSearch) {
+    return {
+      matchingUserIds: [],
+      matchingPublicHikeIds: [],
+      matchingJournalHikeIds: [],
+    };
+  }
+
+  const escapedSearch = escapeSearchTerm(trimmedSearch);
+
+  const [
+    { data: matchingProfiles = [], error: matchingProfilesError },
+    { data: matchingPublicHikes = [], error: matchingPublicHikesError },
+    { data: matchingJournalEntries = [], error: matchingJournalEntriesError },
+  ] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("user_id")
+      .or(`username.ilike.%${escapedSearch}%,full_name.ilike.%${escapedSearch}%`),
+    supabase
+      .from("public_hikes")
+      .select("id")
+      .ilike("title", `%${escapedSearch}%`),
+    supabase
+      .from("journal_entries")
+      .select("id")
+      .ilike("title", `%${escapedSearch}%`),
+  ]);
+
+  if (matchingProfilesError) throw matchingProfilesError;
+  if (matchingPublicHikesError) throw matchingPublicHikesError;
+  if (matchingJournalEntriesError) throw matchingJournalEntriesError;
+
+  return {
+    matchingUserIds: matchingProfiles.map((profile) => profile.user_id).filter(Boolean),
+    matchingPublicHikeIds: matchingPublicHikes.map((hike) => hike.id).filter(Boolean),
+    matchingJournalHikeIds: matchingJournalEntries.map((entry) => entry.id).filter(Boolean),
+  };
+}
+
 export async function approveEntry(id) {
   await assertAdmin();
 
@@ -306,16 +350,77 @@ export async function rejectEntry(id, reason) {
   if (error) throw error;
 }
 
-export async function getAllComments() {
+export async function getAdminComments({
+  page = 1,
+  pageSize = 50,
+  search = "",
+  filter = "all",
+} = {}) {
   await assertAdmin();
 
-  const { data, error } = await supabase
+  const normalizedPage = Number.isFinite(page) ? Math.max(1, page) : 1;
+  const normalizedPageSize = Number.isFinite(pageSize) ? Math.max(1, pageSize) : 50;
+  const trimmedSearch = search.trim();
+  const rangeStart = (normalizedPage - 1) * normalizedPageSize;
+  const rangeEnd = rangeStart + normalizedPageSize - 1;
+
+  const pendingCountQuery = supabase
     .from("comments")
-    .select(ADMIN_COMMENT_FIELDS)
-    .order("created_at", { ascending: false })
-    .limit(ADMIN_COMMENTS_LIMIT);
+    .select("id", { count: "exact", head: true })
+    .eq("reported", true);
+
+  let commentsQuery = supabase
+    .from("comments")
+    .select(ADMIN_COMMENT_FIELDS, { count: "exact" })
+    .order("created_at", { ascending: false });
+
+  if (filter === "pending") {
+    commentsQuery = commentsQuery.eq("reported", true);
+  }
+
+  if (trimmedSearch) {
+    const escapedSearch = escapeSearchTerm(trimmedSearch);
+    const {
+      matchingUserIds,
+      matchingPublicHikeIds,
+      matchingJournalHikeIds,
+    } = await resolveAdminCommentSearchTargets(trimmedSearch);
+
+    const searchConditions = [`text.ilike.%${escapedSearch}%`];
+
+    if (matchingUserIds.length > 0) {
+      searchConditions.push(`user_id.in.(${matchingUserIds.join(",")})`);
+    }
+
+    if (matchingPublicHikeIds.length > 0) {
+      searchConditions.push(
+        `and(hike_source.eq.sheets,hike_id.in.(${matchingPublicHikeIds.join(",")}))`
+      );
+    }
+
+    if (matchingJournalHikeIds.length > 0) {
+      searchConditions.push(
+        `and(hike_source.eq.journal,hike_id.in.(${matchingJournalHikeIds.join(",")}))`
+      );
+    }
+
+    commentsQuery = commentsQuery.or(searchConditions.join(","));
+  }
+
+  const [
+    { data, error, count },
+    { count: pendingCount = 0, error: pendingCountError },
+  ] = await Promise.all([commentsQuery.range(rangeStart, rangeEnd), pendingCountQuery]);
+
+  if (pendingCountError) throw pendingCountError;
   if (error) throw error;
-  if (!data?.length) return [];
+  if (!data?.length) {
+    return {
+      items: [],
+      totalCount: count ?? 0,
+      pendingCount,
+    };
+  }
 
   const userIds = [...new Set(data.map((c) => c.user_id))];
   const { data: profiles } = await supabase
@@ -371,7 +476,7 @@ export async function getAllComments() {
           .createSignedUrl(storageDescriptor.path, 60 * 60);
 
         if (signedUrlError) {
-          console.error("[getAllComments] pending photo preview failed:", signedUrlError.message);
+          console.error("[getAdminComments] pending photo preview failed:", signedUrlError.message);
         }
 
         return {
@@ -391,7 +496,7 @@ export async function getAllComments() {
           .createSignedUrl(storageDescriptor.path, 60 * 60);
 
         if (signedUrlError) {
-          console.error("[getAllComments] approved photo preview failed:", signedUrlError.message);
+          console.error("[getAdminComments] approved photo preview failed:", signedUrlError.message);
         }
 
         return {
@@ -415,7 +520,11 @@ export async function getAllComments() {
     })
   );
 
-  return commentsWithPreview;
+  return {
+    items: commentsWithPreview,
+    totalCount: count ?? 0,
+    pendingCount,
+  };
 }
 
 export async function getAdminUsers() {

@@ -35,7 +35,7 @@ import {
   getPendingEntries,
   approveEntry,
   rejectEntry,
-  getAllComments,
+  getAdminComments,
   approveComment,
   adminDeleteComment,
   getAdminPublicHikes,
@@ -115,6 +115,7 @@ function StatusBadge({ status }) {
 }
 
 const PUBLIC_HIKES_PAGE_SIZE = 24;
+const ADMIN_COMMENTS_PAGE_SIZE = 50;
 
 function getApproveEntryErrorMessage(error) {
   const rawMessage = typeof error?.message === "string" ? error.message.trim() : "";
@@ -612,6 +613,7 @@ export default function AdminDashboard() {
   const [deletingUserId, setDeletingUserId] = useState(null);
   const [commentSearch, setCommentSearch] = useState("");
   const [commentFilter, setCommentFilter] = useState("all");
+  const [commentPage, setCommentPage] = useState(1);
   const [publicHikeSearch, setPublicHikeSearch] = useState("");
   const [publicHikeStatusFilter, setPublicHikeStatusFilter] = useState("all");
   const [publicHikePremiumFilter, setPublicHikePremiumFilter] = useState("all");
@@ -636,9 +638,15 @@ export default function AdminDashboard() {
     refetchInterval: 60_000,
   });
 
-  const { data: comments = [], isLoading: commentsLoading } = useQuery({
-    queryKey: ["admin_comments"],
-    queryFn: getAllComments,
+  const { data: commentsData, isLoading: commentsLoading } = useQuery({
+    queryKey: ["admin_comments", commentPage, commentSearch, commentFilter],
+    queryFn: () =>
+      getAdminComments({
+        page: commentPage,
+        pageSize: ADMIN_COMMENTS_PAGE_SIZE,
+        search: commentSearch,
+        filter: commentFilter,
+      }),
     enabled: canAccessAdmin,
     refetchInterval: 60_000,
   });
@@ -677,15 +685,34 @@ export default function AdminDashboard() {
     refetchInterval: 60_000,
   });
 
+  const comments = commentsData?.items ?? [];
+  const totalComments = commentsData?.totalCount ?? 0;
+  const totalCommentPages = Math.max(1, Math.ceil(totalComments / ADMIN_COMMENTS_PAGE_SIZE));
   const publicHikes = publicHikesData?.items ?? [];
   const totalPublicHikes = publicHikesData?.totalCount ?? 0;
   const totalPublicHikePages = Math.max(1, Math.ceil(totalPublicHikes / PUBLIC_HIKES_PAGE_SIZE));
-  const pendingCommentsCount = comments.filter((comment) => comment.reported).length;
+  const pendingCommentsCount = commentsData?.pendingCount ?? 0;
   const approvedPublicHikesCount = publicHikeStats?.approvedCount ?? 0;
   const draftPublicHikesCount = publicHikeStats?.draftCount ?? 0;
   const premiumPublicHikesCount = publicHikeStats?.premiumCount ?? 0;
   const publicHikeFilterKey = `${publicHikeSearch}__${publicHikeStatusFilter}__${publicHikePremiumFilter}`;
+  const commentFilterKey = `${commentSearch}__${commentFilter}`;
+  const previousCommentFilterKeyRef = useRef(commentFilterKey);
   const previousPublicHikeFilterKeyRef = useRef(publicHikeFilterKey);
+
+  useEffect(() => {
+    if (previousCommentFilterKeyRef.current !== commentFilterKey) {
+      previousCommentFilterKeyRef.current = commentFilterKey;
+      if (commentPage !== 1) {
+        setCommentPage(1);
+      }
+      return;
+    }
+
+    if (commentPage > totalCommentPages) {
+      setCommentPage(totalCommentPages);
+    }
+  }, [commentFilterKey, commentPage, totalCommentPages]);
 
   useEffect(() => {
     if (previousPublicHikeFilterKeyRef.current !== publicHikeFilterKey) {
@@ -700,22 +727,6 @@ export default function AdminDashboard() {
       setPublicHikePage(totalPublicHikePages);
     }
   }, [publicHikeFilterKey, publicHikePage, totalPublicHikePages]);
-
-  const filteredComments = useMemo(() => {
-    return comments.filter((comment) => {
-      if (commentFilter === "pending" && !comment.reported) return false;
-      return matchesTextSearch(
-        [
-          comment.text,
-          comment.profiles?.full_name,
-          comment.profiles?.username,
-          comment.hike_title,
-          comment.hike_id,
-        ],
-        commentSearch
-      );
-    });
-  }, [commentFilter, commentSearch, comments]);
 
   const filteredUsers = useMemo(() => {
     return adminUsers.filter((profile) => {
@@ -945,7 +956,7 @@ export default function AdminDashboard() {
                       <MessageSquare className="h-5 w-5 text-brand-400" />
                     </div>
                     <div>
-                      <p className="text-2xl font-bold leading-none text-slate-900">{comments.length}</p>
+                      <p className="text-2xl font-bold leading-none text-slate-900">{totalComments}</p>
                       <p className="text-xs text-slate-500">Neueste Kommentare</p>
                     </div>
                   </div>
@@ -975,14 +986,14 @@ export default function AdminDashboard() {
                   </FilterButton>
                 </div>
                 <p className="mt-2 text-xs text-slate-400">
-                  Aus Datenschutz- und Performancegründen werden maximal die neuesten 250 Kommentare geladen.
+                  Es werden jeweils 50 Kommentare pro Seite geladen. Foto-Vorschauen werden nur für die aktuelle Seite signiert.
                 </p>
               </div>
             </div>
 
             {commentsLoading ? (
               <SectionLoadingState message="Kommentare laden..." className="py-16" />
-            ) : filteredComments.length === 0 ? (
+            ) : comments.length === 0 ? (
               <div className="doghike-empty-state">
                 <CheckCircle2 className="doghike-empty-icon text-brand-400" />
                 <h3 className="doghike-empty-title">Keine passenden Kommentare</h3>
@@ -991,7 +1002,7 @@ export default function AdminDashboard() {
             ) : (
               <div className="space-y-3">
                 <AnimatePresence>
-                  {filteredComments.map((comment) => (
+                  {comments.map((comment) => (
                     <CommentCard
                       key={comment.id}
                       comment={comment}
@@ -1002,6 +1013,35 @@ export default function AdminDashboard() {
                     />
                   ))}
                 </AnimatePresence>
+                {totalCommentPages > 1 && (
+                  <div className="flex flex-col gap-3 rounded-3xl border border-white/70 bg-white/68 p-4 shadow-sm backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between">
+                    <p className="text-sm text-slate-500">
+                      Seite {commentPage} von {totalCommentPages}
+                      {" · "}
+                      {totalComments} Kommentar{totalComments !== 1 ? "e" : ""} gesamt
+                    </p>
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        disabled={commentPage <= 1}
+                        onClick={() => setCommentPage((value) => Math.max(1, value - 1))}
+                      >
+                        Zurück
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        disabled={commentPage >= totalCommentPages}
+                        onClick={() => setCommentPage((value) => Math.min(totalCommentPages, value + 1))}
+                      >
+                        Weiter
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </TabsContent>
