@@ -369,19 +369,16 @@ async function requireCurrentUserId() {
   return userId;
 }
 
-async function runJournalEntryUpdate(id, entry, currentUserId, scopeToOwner) {
+async function runJournalEntryUpdate(id, entry, currentUserId) {
   let nextEntry = entry;
 
   while (true) {
-    let updateQuery = supabase
+    const updateQuery = supabase
       .from("journal_entries")
       .update(nextEntry)
       .eq("id", id)
+      .eq("user_id", currentUserId)
       .select();
-
-    if (scopeToOwner) {
-      updateQuery = updateQuery.eq("user_id", currentUserId);
-    }
 
     const { data, error } = await updateQuery.maybeSingle();
 
@@ -422,11 +419,7 @@ export async function createJournalEntry(userId, entry) {
 
 export async function updateJournalEntry(id, entry) {
   const currentUserId = await requireCurrentUserId();
-  let { data, error } = await runJournalEntryUpdate(id, entry, currentUserId, true);
-
-  if (!data && !error) {
-    ({ data, error } = await runJournalEntryUpdate(id, entry, currentUserId, false));
-  }
+  const { data, error } = await runJournalEntryUpdate(id, entry, currentUserId);
 
   if (error) throw error;
   if (!data) {
