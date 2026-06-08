@@ -51,11 +51,19 @@ export async function getFriendIds(userId) {
 
 // Send a friend request
 export async function sendFriendRequest(requesterId, receiverId) {
-  if (!requesterId || !receiverId) {
-    throw new Error("Freundschaftsanfrage unvollständig.");
+  const currentUserId = await requireCurrentUserId();
+  const effectiveRequesterId = String(currentUserId);
+  const normalizedReceiverId = receiverId ? String(receiverId) : receiverId;
+
+  if (requesterId && String(requesterId) !== effectiveRequesterId) {
+    throw new Error("Du kannst Anfragen nur von deinem eigenen Konto senden.");
   }
 
-  if (requesterId === receiverId) {
+  if (!effectiveRequesterId || !normalizedReceiverId) {
+    throw new Error("Freundschaftsanfrage unvollstaendig.");
+  }
+
+  if (effectiveRequesterId === normalizedReceiverId) {
     throw new Error("Du kannst dir nicht selbst eine Freundschaftsanfrage senden.");
   }
 
@@ -63,7 +71,7 @@ export async function sendFriendRequest(requesterId, receiverId) {
     .from("friendships")
     .select("id, requester_id, receiver_id, status")
     .or(
-      `and(requester_id.eq.${requesterId},receiver_id.eq.${receiverId}),and(requester_id.eq.${receiverId},receiver_id.eq.${requesterId})`
+      `and(requester_id.eq.${effectiveRequesterId},receiver_id.eq.${normalizedReceiverId}),and(requester_id.eq.${normalizedReceiverId},receiver_id.eq.${effectiveRequesterId})`
     );
 
   if (existingError) throw existingError;
@@ -85,7 +93,7 @@ export async function sendFriendRequest(requesterId, receiverId) {
 
   const { data, error } = await supabase
     .from("friendships")
-    .insert({ requester_id: requesterId, receiver_id: receiverId })
+    .insert({ requester_id: effectiveRequesterId, receiver_id: normalizedReceiverId })
     .select()
     .single();
   if (error) throw error;
