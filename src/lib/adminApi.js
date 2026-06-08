@@ -144,7 +144,7 @@ export async function getPendingEntries() {
 export async function getAdminPublicHikeStats() {
   await assertAdmin();
 
-  const [approvedResult, approvedJournalResult, draftResult, premiumResult] = await Promise.all([
+  const [approvedResult, approvedJournalResult, draftResult, draftJournalResult, premiumResult] = await Promise.all([
     supabase
       .from("public_hikes")
       .select("id", { count: "exact", head: true })
@@ -159,6 +159,11 @@ export async function getAdminPublicHikeStats() {
       .select("id", { count: "exact", head: true })
       .eq("status", "draft"),
     supabase
+      .from("journal_entries")
+      .select("id", { count: "exact", head: true })
+      .eq("visibility", "public")
+      .in("status", ["pending", "draft"]),
+    supabase
       .from("public_hikes")
       .select("id", { count: "exact", head: true })
       .eq("is_premium", true),
@@ -167,11 +172,12 @@ export async function getAdminPublicHikeStats() {
   if (approvedResult.error) throw approvedResult.error;
   if (approvedJournalResult.error) throw approvedJournalResult.error;
   if (draftResult.error) throw draftResult.error;
+  if (draftJournalResult.error) throw draftJournalResult.error;
   if (premiumResult.error) throw premiumResult.error;
 
   return {
     approvedCount: (approvedResult.count ?? 0) + (approvedJournalResult.count ?? 0),
-    draftCount: draftResult.count ?? 0,
+    draftCount: (draftResult.count ?? 0) + (draftJournalResult.count ?? 0),
     premiumCount: premiumResult.count ?? 0,
   };
 }
@@ -215,11 +221,14 @@ export async function getAdminPublicHikes({
     .from("journal_entries")
     .select(ADMIN_PUBLIC_JOURNAL_HIKE_FIELDS)
     .eq("visibility", "public")
-    .eq("status", "approved")
     .order("created_at", { ascending: false });
 
-  if (statusFilter !== "all" && statusFilter !== "approved") {
-    publicJournalQuery = publicJournalQuery.eq("id", "__no_match__");
+  if (statusFilter === "approved") {
+    publicJournalQuery = publicJournalQuery.eq("status", "approved");
+  } else if (statusFilter === "draft") {
+    publicJournalQuery = publicJournalQuery.in("status", ["pending", "draft"]);
+  } else if (statusFilter === "archived") {
+    publicJournalQuery = publicJournalQuery.eq("status", "archived");
   }
 
   if (premiumFilter === "premium") {
