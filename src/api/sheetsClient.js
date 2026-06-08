@@ -116,6 +116,7 @@ function mergeMissingLegacyFieldsIntoPublicHike(publicHike, legacyHike) {
 
   return {
     ...publicHike,
+    is_premium: publicHike.is_premium === true || legacyHike.is_premium === true,
     notes: publicHike.notes || legacyHike.notes || null,
     hazard_notes: publicHike.hazard_notes || legacyHike.hazard_notes || null,
     parking_info: publicHike.parking_info || legacyHike.parking_info || null,
@@ -168,6 +169,34 @@ function isTruthyFlag(value) {
 
   return ["true", "1"].includes(normalized);
 }
+
+function getPremiumFlag(row) {
+  return isTruthyFlag(
+    row?.is_premium ??
+    row?.premium ??
+    row?.premium_hike ??
+    row?.isPremium
+  );
+}
+
+const HIKE_NOTES_FIELDS = [
+  "notes",
+  "description",
+  "beschreibung",
+  "text",
+  "details",
+  "tipps",
+  "summary",
+  "short_description",
+  "short_text",
+  "preview_text",
+  "preview",
+  "excerpt",
+  "teaser",
+  "kurzbeschreibung",
+  "info_box",
+  "infobox_text",
+];
 
 function pickFirstText(row, keys) {
   for (const key of keys) {
@@ -224,7 +253,7 @@ function rowToHike(row, index) {
     // water → water_availability (none | little | moderate | plenty)
     water_availability: (() => { const w = row.water?.trim(); if (!w) return null; return mapSupabaseWaterLevel(w) ?? w; })(),
 
-    is_premium: false,
+    is_premium: getPremiumFlag(row),
 
     status: normalizedStatus || null,
     // Sheets hikes are always public
@@ -236,7 +265,7 @@ function rowToHike(row, index) {
     hazard_notes: pickFirstText(row, ["hazard_notes", "hazards", "danger_notes", "danger", "warning", "warnings", "achtung", "gefahr", "gefahren"]),
     parking_info: pickFirstText(row, ["parking_info", "parking", "parking_notes", "parken", "ausgangspunkt"]),
     restaurant_info: pickFirstText(row, ["restaurant_info", "restaurant", "restaurant_notes", "einkehr", "hutte", "hütte"]),
-    notes: pickFirstText(row, ["notes", "description", "beschreibung", "text", "details", "tipps"]),
+    notes: pickFirstText(row, HIKE_NOTES_FIELDS),
     date: row.date || row.datum || null,
 
     // Mark origin so consumers can distinguish Sheets hikes from journal hikes
@@ -507,7 +536,7 @@ function publicHikeRowToHike(row, photos = [], photoReferences = []) {
     dog_difficulty: row.dog_difficulty != null ? String(row.dog_difficulty) : null,
     water_availability: mapSupabaseWaterLevel(row.water_availability),
 
-    is_premium: row.is_premium === true,
+    is_premium: getPremiumFlag(row),
     status: row.status,
     visibility: "public",
 
@@ -518,7 +547,7 @@ function publicHikeRowToHike(row, photos = [], photoReferences = []) {
     hazard_notes: pickFirstText(row, ["hazard_notes", "hazards", "danger_notes", "danger", "warning", "warnings", "achtung", "gefahr", "gefahren"]),
     parking_info: pickFirstText(row, ["parking_info", "parking", "parking_notes", "parken", "ausgangspunkt"]),
     restaurant_info: pickFirstText(row, ["restaurant_info", "restaurant", "restaurant_notes", "einkehr", "hutte", "hütte"]),
-    notes: pickFirstText(row, ["notes", "description", "beschreibung", "text", "details", "tipps"]),
+    notes: pickFirstText(row, HIKE_NOTES_FIELDS),
     date: row.date || null,
     created_at: row.created_at || null,
     updated_at: row.updated_at || null,
