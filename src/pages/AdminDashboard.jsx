@@ -377,15 +377,35 @@ function CommentCard({ comment, onApprove, onDelete, approving, deleting }) {
               Freigeben
             </Button>
           )}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => onDelete(comment.id)}
-            disabled={deleting || approving}
-            className="h-8 w-8 text-slate-400 hover:text-brand-400"
-          >
-            {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                disabled={deleting || approving}
+                className="h-8 w-8 text-slate-400 hover:text-brand-400"
+              >
+                {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Kommentar wirklich löschen?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Dieser Kommentar wird endgültig entfernt. Falls ein Foto angehängt ist, wird es ebenfalls aus dem Speicher gelöscht.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => onDelete(comment.id)}
+                  className="bg-brand-400 text-white hover:bg-brand-500"
+                >
+                  Endgültig löschen
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
 
