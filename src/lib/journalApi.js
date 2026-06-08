@@ -296,11 +296,21 @@ export async function getDogJournalUsageCounts(userId) {
 }
 
 export async function getJournalEntry(id) {
-  const { data, error } = await supabase
+  const { userId, isAdmin } = await requireCurrentJournalAccessContext();
+  let { data, error } = await supabase
     .from("journal_entries")
     .select("*")
     .eq("id", id)
-    .single();
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (!data && !error && isAdmin) {
+    ({ data, error } = await supabase
+      .from("journal_entries")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle());
+  }
   // PGRST116 = row not found — return null instead of throwing
   if (error && error.code !== "PGRST116") throw error;
   return data ?? null;
@@ -369,16 +379,37 @@ async function requireCurrentUserId() {
   return userId;
 }
 
-async function runJournalEntryUpdate(id, entry, currentUserId) {
+async function requireCurrentJournalAccessContext() {
+  const userId = await requireCurrentUserId();
+  let isAdmin = false;
+
+  try {
+    const { data, error } = await supabase.rpc("is_admin");
+    if (error) {
+      console.error("[journalApi] is_admin check failed:", error.message);
+    } else {
+      isAdmin = Boolean(data);
+    }
+  } catch (error) {
+    console.error("[journalApi] is_admin check exception:", error);
+  }
+
+  return { userId, isAdmin };
+}
+
+async function runJournalEntryUpdate(id, entry, currentUserId, scopeToOwner = true) {
   let nextEntry = entry;
 
   while (true) {
-    const updateQuery = supabase
+    let updateQuery = supabase
       .from("journal_entries")
       .update(nextEntry)
       .eq("id", id)
-      .eq("user_id", currentUserId)
       .select();
+
+    if (scopeToOwner) {
+      updateQuery = updateQuery.eq("user_id", currentUserId);
+    }
 
     const { data, error } = await updateQuery.maybeSingle();
 
@@ -418,8 +449,12 @@ export async function createJournalEntry(userId, entry) {
 }
 
 export async function updateJournalEntry(id, entry) {
-  const currentUserId = await requireCurrentUserId();
-  const { data, error } = await runJournalEntryUpdate(id, entry, currentUserId);
+  const { userId: currentUserId, isAdmin } = await requireCurrentJournalAccessContext();
+  let { data, error } = await runJournalEntryUpdate(id, entry, currentUserId, true);
+
+  if (!data && !error && isAdmin) {
+    ({ data, error } = await runJournalEntryUpdate(id, entry, currentUserId, false));
+  }
 
   if (error) throw error;
   if (!data) {
