@@ -116,7 +116,6 @@ function mergeMissingLegacyFieldsIntoPublicHike(publicHike, legacyHike) {
 
   return {
     ...publicHike,
-    is_premium: publicHike.is_premium === true || legacyHike.is_premium === true,
     notes: publicHike.notes || legacyHike.notes || null,
     hazard_notes: publicHike.hazard_notes || legacyHike.hazard_notes || null,
     parking_info: publicHike.parking_info || legacyHike.parking_info || null,
