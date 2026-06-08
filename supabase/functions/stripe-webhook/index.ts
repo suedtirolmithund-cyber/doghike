@@ -343,6 +343,7 @@ Deno.serve(async (request) => {
           {
             is_premium: false,
             subscription_status: "past_due",
+            premium_current_period_end: null,
             premium_updated_at: new Date().toISOString(),
           },
         );
