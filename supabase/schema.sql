@@ -442,6 +442,27 @@ grant execute on function public.is_admin() to authenticated;
 revoke execute on function public.is_admin() from public;
 revoke execute on function public.is_admin() from anon;
 
+-- Helper: PrÃ¼ft ob der aktuelle Nutzer aktiven Premium-Zugang hat
+create or replace function public.has_active_premium_access()
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.profiles
+    where user_id = auth.uid()
+      and is_premium = true
+      and premium_current_period_end is not null
+      and premium_current_period_end > now()
+  );
+$$;
+
+grant execute on function public.has_active_premium_access() to authenticated;
+grant execute on function public.has_active_premium_access() to anon;
+revoke execute on function public.has_active_premium_access() from public;
+
 create or replace function public.prevent_profile_billing_self_update()
 returns trigger
 language plpgsql
@@ -1108,7 +1129,15 @@ alter table public.public_hike_photos enable row level security;
 create policy "Öffentliche Touren lesen"
   on public.public_hikes for select
   using (
-    (status = 'approved')
+    (
+      status = 'approved'
+      and (
+        is_premium is not true
+        or auth.uid() = user_id
+        or public.is_admin()
+        or public.has_active_premium_access()
+      )
+    )
     or (auth.uid() = user_id)
     or public.is_admin()
   );
@@ -1146,7 +1175,15 @@ create policy "Öffentliche Tourfotos lesen"
       from public.public_hikes h
       where h.id = public.public_hike_photos.hike_id
         and (
-          h.status = 'approved'
+          (
+            h.status = 'approved'
+            and (
+              h.is_premium is not true
+              or h.user_id = auth.uid()
+              or public.is_admin()
+              or public.has_active_premium_access()
+            )
+          )
           or h.user_id = auth.uid()
           or public.is_admin()
         )
