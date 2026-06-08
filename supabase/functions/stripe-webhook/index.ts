@@ -192,7 +192,20 @@ async function updateProfile(
   };
 
   const target = await resolveProfileUpdateTarget(adminClient, identifiers);
-  return adminClient.from("profiles").update(payload).eq(target.column, target.value);
+  const { data, error } = await adminClient
+    .from("profiles")
+    .update(payload)
+    .eq(target.column, target.value)
+    .select("user_id");
+
+  if (error) return { error };
+  if (!data || data.length !== 1) {
+    return {
+      error: new Error(`Expected exactly one profile update for ${target.column}`),
+    };
+  }
+
+  return { error: null };
 }
 
 Deno.serve(async (request) => {
