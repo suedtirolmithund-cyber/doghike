@@ -34,9 +34,15 @@ export async function getRoute(id) {
 }
 
 export async function createRoute(userId, routeData) {
+  const currentUserId = await requireCurrentUserId();
+
+  if (userId && String(userId) !== String(currentUserId)) {
+    throw new Error("Du kannst Routen nur für dein eigenes Konto speichern.");
+  }
+
   const { data, error } = await supabase
     .from("user_routes")
-    .insert({ user_id: userId, ...routeData })
+    .insert({ user_id: currentUserId, ...routeData })
     .select()
     .single();
   if (error) throw error;
