@@ -163,15 +163,34 @@ export async function getFriendFeedEntries(friendIds) {
     .order("created_at", { ascending: false })
     .limit(50);
   if (error) throw error;
-  if (!data?.length) return [];
+  return hydrateFriendFeedEntries(data, friendIds);
+}
 
-  // Fetch author profiles
+export async function getFriendFeedEntriesByUser(friendId) {
+  if (!friendId) return [];
+
+  const normalizedFriendId = String(friendId);
+  const { data, error } = await supabase
+    .from("journal_entries")
+    .select("*")
+    .eq("user_id", normalizedFriendId)
+    .or("and(visibility.eq.friends,status.eq.approved),and(visibility.eq.public,status.eq.approved)")
+    .order("created_at", { ascending: false })
+    .limit(50);
+  if (error) throw error;
+
+  return hydrateFriendFeedEntries(data, [normalizedFriendId]);
+}
+
+async function hydrateFriendFeedEntries(entries, profileIds) {
+  if (!entries?.length) return [];
+
   const { data: profiles } = await supabase
     .from("public_profiles")
     .select("user_id, username, full_name, avatar_url")
-    .in("user_id", friendIds);
-  const profileMap = Object.fromEntries((profiles ?? []).map((p) => [p.user_id, p]));
+    .in("user_id", profileIds);
+  const profileMap = Object.fromEntries((profiles ?? []).map((profile) => [profile.user_id, profile]));
 
-  const hydratedEntries = await hydrateJournalEntriesMedia(data);
+  const hydratedEntries = await hydrateJournalEntriesMedia(entries);
   return hydratedEntries.map((entry) => ({ ...entry, profile: profileMap[entry.user_id] ?? null }));
 }

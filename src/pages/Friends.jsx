@@ -32,6 +32,7 @@ import {
   getFriendships,
   getFriendIds,
   getFriendFeedEntries,
+  getFriendFeedEntriesByUser,
   sendFriendRequest,
   acceptFriendRequest,
   rejectFriendRequest,
@@ -229,11 +230,20 @@ export default function Friends() {
   });
 
   const stableFriendIds = useMemo(() => [...friendIds].sort(), [friendIds]);
+  const selectedFriendId = searchParams.get("friend") || "";
+  const selectedFriendIsAccepted = !!selectedFriendId && stableFriendIds.includes(selectedFriendId);
 
   const { data: feedEntries = [], isLoading: feedLoading } = useQuery({
     queryKey: ["friendFeed", user?.id, stableFriendIds.join(",")],
     queryFn: () => getFriendFeedEntries(stableFriendIds),
     enabled: stableFriendIds.length > 0,
+    refetchInterval: 5 * 60_000,
+  });
+
+  const { data: selectedFriendFeedEntries = [], isLoading: selectedFriendFeedLoading } = useQuery({
+    queryKey: ["friendFeed", user?.id, "friend", selectedFriendId],
+    queryFn: () => getFriendFeedEntriesByUser(selectedFriendId),
+    enabled: selectedFriendIsAccepted,
     refetchInterval: 5 * 60_000,
   });
 
@@ -247,7 +257,6 @@ export default function Friends() {
 
   const requestedTab = searchParams.get("tab");
   const activeTab = requestedTab || "friends";
-  const selectedFriendId = searchParams.get("friend") || "";
 
   useEffect(() => {
     if (requestedTab || isLoading) return;
@@ -311,11 +320,8 @@ export default function Friends() {
     profileMap[friendship.requester_id === user?.id ? friendship.receiver_id : friendship.requester_id];
 
   const selectedFriendProfile = selectedFriendId ? profileMap[selectedFriendId] : null;
-
-  const filteredFeedEntries = useMemo(() => {
-    if (!selectedFriendId) return feedEntries;
-    return feedEntries.filter((entry) => entry.user_id === selectedFriendId);
-  }, [feedEntries, selectedFriendId]);
+  const filteredFeedEntries = selectedFriendId ? selectedFriendFeedEntries : feedEntries;
+  const isFeedLoading = selectedFriendId ? selectedFriendFeedLoading : feedLoading;
 
   const updatePageState = (nextTab, nextFriendId = "") => {
     const nextParams = new URLSearchParams(searchParams);
@@ -760,7 +766,7 @@ export default function Friends() {
           </TabsContent>
 
           <TabsContent value="feed">
-            {feedLoading ? (
+            {isFeedLoading ? (
               <SectionLoadingState message="Wanderungen laden..." className="py-16" />
             ) : friendIds.length === 0 ? (
               <div className="doghike-empty-state">
@@ -770,7 +776,7 @@ export default function Friends() {
                   Füge Freunde hinzu, um ihre Wanderungen zu sehen.
                 </p>
               </div>
-            ) : feedEntries.length === 0 ? (
+            ) : !selectedFriendId && feedEntries.length === 0 ? (
               <div className="doghike-empty-state">
                 <BookOpen className="doghike-empty-icon" />
                 <p className="mb-1 font-medium text-slate-600">Noch keine geteilten Wanderungen</p>
