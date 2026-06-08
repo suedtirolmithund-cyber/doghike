@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { matchesHikeSearch } from "@/lib/hikeSearch";
 import { normalizeSelectedSeasonValues } from "@/lib/difficultyConfig";
 
@@ -46,6 +46,15 @@ export function useHikeFilters(hikes = [], initialFilters = {}) {
   const applyFilters = () => {
     setAppliedFilters(draftFilters);
   };
+
+  const syncSearchQuery = useCallback((value) => {
+    setDraftFilters((prev) => (
+      prev.searchQuery === value ? prev : { ...prev, searchQuery: value }
+    ));
+    setAppliedFilters((prev) => (
+      prev.searchQuery === value ? prev : { ...prev, searchQuery: value }
+    ));
+  }, []);
 
   const resetFilters = () => {
     setDraftFilters(INITIAL_FILTERS);
@@ -97,6 +106,7 @@ export function useHikeFilters(hikes = [], initialFilters = {}) {
     searchQuery: draftFilters.searchQuery,
     setSearchQuery,
     activeSearchQuery: appliedFilters.searchQuery,
+    syncSearchQuery,
     activeFilters: appliedFilters,
     sortBy: draftFilters.sortBy,
     setSortBy,

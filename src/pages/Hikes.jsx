@@ -182,6 +182,7 @@ export default function Hikes() {
     searchQuery,
     setSearchQuery,
     activeSearchQuery,
+    syncSearchQuery,
     activeFilters,
     sortBy,
     setSortBy,
@@ -251,6 +252,14 @@ export default function Hikes() {
   useEffect(() => {
     setCurrentPage(1);
   }, [filteredHikes]);
+
+  useEffect(() => {
+    if (searchQuery === initialSearchQuery && activeSearchQuery === initialSearchQuery) {
+      return;
+    }
+
+    syncSearchQuery(initialSearchQuery);
+  }, [activeSearchQuery, initialSearchQuery, searchQuery, syncSearchQuery]);
 
   return (
     <div className="doghike-page-shell">
