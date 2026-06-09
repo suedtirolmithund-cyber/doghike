@@ -367,6 +367,30 @@ function isMissingOptionalJournalColumnError(error) {
   );
 }
 
+const OPTIONAL_JOURNAL_FIELD_LABELS = {
+  country: "Land",
+  season: "Jahreszeit",
+  dog_ids: "Hunde",
+  dog_mood_tags: "Hundestimmung",
+  tags: "Tags",
+  seasons: "Jahreszeiten",
+};
+
+function getDroppedOptionalFieldLabels(previousEntry, nextEntry) {
+  return Object.entries(OPTIONAL_JOURNAL_FIELD_LABELS)
+    .filter(([field]) => field in previousEntry && !(field in nextEntry))
+    .map(([, label]) => label);
+}
+
+function withJournalSaveWarnings(entry, warningLabels) {
+  if (!entry || warningLabels.length === 0) return entry;
+
+  return {
+    ...entry,
+    _saveWarnings: warningLabels,
+  };
+}
+
 async function requireCurrentUserId() {
   const { data, error } = await supabase.auth.getUser();
   if (error) throw error;
@@ -399,6 +423,7 @@ async function requireCurrentJournalAccessContext() {
 
 async function runJournalEntryUpdate(id, entry, currentUserId, scopeToOwner = true) {
   let nextEntry = entry;
+  const warningLabels = new Set();
 
   while (true) {
     let updateQuery = supabase
@@ -419,12 +444,50 @@ async function runJournalEntryUpdate(id, entry, currentUserId, scopeToOwner = tr
         Object.keys(fallbackEntry).length !== Object.keys(nextEntry).length;
 
       if (didChangePayload) {
+        getDroppedOptionalFieldLabels(nextEntry, fallbackEntry).forEach((label) => {
+          warningLabels.add(label);
+        });
         nextEntry = fallbackEntry;
         continue;
       }
     }
 
-    return { data, error };
+    return {
+      data: withJournalSaveWarnings(data, Array.from(warningLabels)),
+      error,
+    };
+  }
+}
+
+async function runJournalEntryInsert(payload) {
+  let nextPayload = payload;
+  const warningLabels = new Set();
+
+  while (true) {
+    const { data, error } = await supabase
+      .from("journal_entries")
+      .insert(nextPayload)
+      .select()
+      .single();
+
+    if (error && isMissingOptionalJournalColumnError(error)) {
+      const fallbackPayload = withoutUnsupportedOptionalColumns(nextPayload, error);
+      const didChangePayload =
+        Object.keys(fallbackPayload).length !== Object.keys(nextPayload).length;
+
+      if (didChangePayload) {
+        getDroppedOptionalFieldLabels(nextPayload, fallbackPayload).forEach((label) => {
+          warningLabels.add(label);
+        });
+        nextPayload = fallbackPayload;
+        continue;
+      }
+    }
+
+    return {
+      data: withJournalSaveWarnings(data, Array.from(warningLabels)),
+      error,
+    };
   }
 }
 
@@ -435,19 +498,7 @@ export async function createJournalEntry(userId, entry) {
   }
 
   const payload = { user_id: currentUserId, ...entry };
-  let { data, error } = await supabase
-    .from("journal_entries")
-    .insert(payload)
-    .select()
-    .single();
-
-  if (error && isMissingOptionalJournalColumnError(error)) {
-    ({ data, error } = await supabase
-      .from("journal_entries")
-      .insert(withoutUnsupportedOptionalColumns(payload, error))
-      .select()
-      .single());
-  }
+  const { data, error } = await runJournalEntryInsert(payload);
 
   if (error) throw error;
   return data;

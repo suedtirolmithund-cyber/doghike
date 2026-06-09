@@ -1256,6 +1256,10 @@ export default function AddJournalEntry() {
         ? updateJournalEntry(editId, data)
         : createJournalEntry(user.id, data),
     onSuccess: async (savedEntry) => {
+      const saveWarnings = Array.isArray(savedEntry?._saveWarnings)
+        ? savedEntry._saveWarnings.filter(Boolean)
+        : [];
+
       if (journalDraftKey && typeof window !== "undefined") {
         window.localStorage.removeItem(journalDraftKey);
       }
@@ -1289,6 +1293,11 @@ export default function AddJournalEntry() {
         showSavedFeedback("Wanderung gespeichert", `${selectedDogs.length} Hunde und du habt diesen Tag festgehalten.`);
       } else {
         showSavedFeedback("Wanderung gespeichert", "Diese Wanderung ist jetzt in deinem Tagebuch.");
+      }
+      if (saveWarnings.length > 0) {
+        toast.warning(
+          `Einige Felder konnten auf diesem System noch nicht gespeichert werden: ${saveWarnings.join(", ")}.`
+        );
       }
       if (
         !editId &&
