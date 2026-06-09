@@ -2,6 +2,7 @@ import { supabase } from "./supabaseClient";
 import { optimizeImageForUpload, validateImageUpload } from "./uploadValidation";
 
 const COMMENT_SIGNED_URL_TTL_SECONDS = 60 * 60;
+export const COMMENT_MAX_LENGTH = 1000;
 const COMMENT_REVIEW_PATTERNS = [
   /\bwhatsapp\b/i,
   /\btelegram\b/i,
@@ -341,7 +342,12 @@ export async function createComment(
     throw new Error("Du kannst Kommentare nur für dein eigenes Konto erstellen.");
   }
 
-  if (!text?.trim()) throw new Error("Kommentar darf nicht leer sein.");
+  const normalizedText = String(text ?? "").trim();
+  if (!normalizedText) throw new Error("Kommentar darf nicht leer sein.");
+  if (normalizedText.length > COMMENT_MAX_LENGTH) {
+    throw new Error(`Kommentare dürfen maximal ${COMMENT_MAX_LENGTH} Zeichen lang sein.`);
+  }
+
   const normalizedHikeId = String(hikeId);
   const normalizedHikeSource = normalizeHikeSource(hikeSource);
   const { data, error } = await supabase
@@ -350,7 +356,7 @@ export async function createComment(
       user_id: currentUserId,
       hike_id: normalizedHikeId,
       hike_source: normalizedHikeSource,
-      text,
+      text: normalizedText,
       photo_url: photoUrl,
       reported: needsReview,
       reported_reason: needsReview ? "trigger_word" : null,

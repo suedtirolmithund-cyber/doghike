@@ -27,6 +27,7 @@ import {
   uploadCommentPhoto,
   commentNeedsReview,
   deleteUploadedCommentPhoto,
+  COMMENT_MAX_LENGTH,
 } from "@/lib/communityApi";
 import { getImageUploadErrorMessage, validateImageUpload } from "@/lib/uploadValidation";
 
@@ -156,7 +157,11 @@ export default function CommentSection({ hikeId, hikeAliases = [], hikeSource = 
             onChange={(event) => setText(event.target.value)}
             className="mb-3 text-sm md:text-base"
             rows={4}
+            maxLength={COMMENT_MAX_LENGTH}
           />
+          <p className="mb-3 text-right text-xs text-slate-500">
+            {text.length}/{COMMENT_MAX_LENGTH}
+          </p>
 
           {photoPreviewUrl && (
             <div className="relative w-24 mb-3">
