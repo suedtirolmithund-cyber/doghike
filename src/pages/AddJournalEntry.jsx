@@ -1113,6 +1113,11 @@ export default function AddJournalEntry() {
   useEffect(() => {
     if (!journalDraftKey || restoredDraftRef.current || typeof window === "undefined") return;
     if (editId && loadingEntry) return;
+    if (editId) {
+      restoredDraftRef.current = true;
+      setIsDraftRestoreReady(true);
+      return;
+    }
 
     try {
       const rawDraft = window.localStorage.getItem(journalDraftKey);
