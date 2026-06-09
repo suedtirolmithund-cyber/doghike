@@ -89,6 +89,7 @@ export default function Premium() {
 
   const premiumEndDate = profile?.premium_current_period_end ? new Date(profile.premium_current_period_end) : null;
   const isPremium = hasActivePremiumAccess(profile);
+  const isLoggedIn = !!user?.id;
   const canOpenPortal = !!profile?.stripe_customer_id;
   const currentPeriodEnd = premiumEndDate
     ? new Intl.DateTimeFormat("de-DE", { dateStyle: "medium" }).format(premiumEndDate)
@@ -138,6 +139,10 @@ export default function Premium() {
 
   const checkoutMutation = useMutation({
     mutationFn: async (plan = "monthly") => {
+      if (!isLoggedIn) {
+        throw new Error("Bitte melde dich an, bevor du Premium startest.");
+      }
+
       const premiumUrl = `${window.location.origin}${createPageUrl("Premium")}`;
       const { data, error } = await supabase.functions.invoke("create-checkout-session", {
         body: {
@@ -321,45 +326,55 @@ export default function Premium() {
               </ul>
 
               <div className="space-y-3 rounded-2xl border border-white/22 bg-white/14 p-5 backdrop-blur-md">
-                <label className="flex items-start gap-3 cursor-pointer rounded-xl border border-white/20 bg-white/10 p-3 text-left">
-                  <Checkbox
-                    id="withdrawal-consent"
-                    checked={withdrawalConsent}
-                    onCheckedChange={setWithdrawalConsent}
-                    className="mt-0.5 shrink-0 border-white/50 data-[state=checked]:bg-white data-[state=checked]:text-[#7C3020]"
-                  />
-                  <span className="text-xs leading-relaxed text-white/85">
-                    Ich stimme zu, dass der Premium-Zugang sofort nach Zahlung freigeschaltet wird,
-                    und nehme zur Kenntnis, dass ich damit mein 14-tägiges Widerrufsrecht gemäß
-                    Art. 59 lit. a D.Lgs. 206/2005 verliere.
-                  </span>
-                </label>
+                {isLoggedIn ? (
+                  <>
+                    <label className="flex items-start gap-3 cursor-pointer rounded-xl border border-white/20 bg-white/10 p-3 text-left">
+                      <Checkbox
+                        id="withdrawal-consent"
+                        checked={withdrawalConsent}
+                        onCheckedChange={setWithdrawalConsent}
+                        className="mt-0.5 shrink-0 border-white/50 data-[state=checked]:bg-white data-[state=checked]:text-[#7C3020]"
+                      />
+                      <span className="text-xs leading-relaxed text-white/85">
+                        Ich stimme zu, dass der Premium-Zugang sofort nach Zahlung freigeschaltet wird,
+                        und nehme zur Kenntnis, dass ich damit mein 14-tägiges Widerrufsrecht gemäß
+                        Art. 59 lit. a D.Lgs. 206/2005 verliere.
+                      </span>
+                    </label>
 
-                <Button
-                  className="h-12 w-full rounded-xl bg-white text-[#7C3020] hover:bg-white/90 disabled:opacity-50 md:h-14 md:text-lg"
-                  onClick={() => checkoutMutation.mutate("monthly")}
-                  disabled={checkoutLocked || checkoutMutation.isPending || isFetching || !withdrawalConsent}
-                >
-                  {isStartingMonthly ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <CreditCard className="mr-2 h-4 w-4" />
-                  )}
-                  Monatliches Abo starten
-                </Button>
-                <Button
-                  variant="outline"
-                  className="h-12 w-full rounded-xl border-white/30 bg-white/10 text-white hover:bg-white/20 disabled:opacity-50 md:h-14 md:text-lg"
-                  onClick={() => checkoutMutation.mutate("one_time")}
-                  disabled={checkoutLocked || checkoutMutation.isPending || isFetching || !withdrawalConsent}
-                >
-                  {isStartingOneTime ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <CalendarClock className="mr-2 h-4 w-4" />
-                  )}
-                  1 Monat einmalig kaufen
-                </Button>
+                    <Button
+                      className="h-12 w-full rounded-xl bg-white text-[#7C3020] hover:bg-white/90 disabled:opacity-50 md:h-14 md:text-lg"
+                      onClick={() => checkoutMutation.mutate("monthly")}
+                      disabled={checkoutLocked || checkoutMutation.isPending || isFetching || !withdrawalConsent}
+                    >
+                      {isStartingMonthly ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        <CreditCard className="mr-2 h-4 w-4" />
+                      )}
+                      Monatliches Abo starten
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="h-12 w-full rounded-xl border-white/30 bg-white/10 text-white hover:bg-white/20 disabled:opacity-50 md:h-14 md:text-lg"
+                      onClick={() => checkoutMutation.mutate("one_time")}
+                      disabled={checkoutLocked || checkoutMutation.isPending || isFetching || !withdrawalConsent}
+                    >
+                      {isStartingOneTime ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        <CalendarClock className="mr-2 h-4 w-4" />
+                      )}
+                      1 Monat einmalig kaufen
+                    </Button>
+                  </>
+                ) : (
+                  <Link to={createPageUrl("Login")} className="block">
+                    <Button className="h-12 w-full rounded-xl bg-white text-[#7C3020] hover:bg-white/90 md:h-14 md:text-lg">
+                      Einloggen und Premium starten
+                    </Button>
+                  </Link>
+                )}
                 {canOpenPortal && (
                   <Button
                     variant="outline"
