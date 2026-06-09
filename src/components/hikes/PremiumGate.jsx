@@ -67,7 +67,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Link to={createPageUrl("Premium")} className="w-full sm:w-auto">
-            <Button className="w-full sm:w-auto">
+            <Button className="w-full bg-[#A8003C] text-white hover:bg-[#8C002F] sm:w-auto">
               Jetzt Premium werden
             </Button>
           </Link>
@@ -111,7 +111,7 @@ export default function PremiumGate({ hikeName, coverPhoto, variant = "page" }) 
           <PremiumList title="Premium beinhaltet:" items={premiumItems} />
 
           <Link to={createPageUrl("Premium")}>
-            <Button className="mb-3 h-12 w-full text-base">
+            <Button className="mb-3 h-12 w-full bg-[#A8003C] text-base text-white hover:bg-[#8C002F]">
               Jetzt Premium werden
             </Button>
           </Link>
