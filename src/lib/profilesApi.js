@@ -99,11 +99,16 @@ export async function getProfile(userId) {
 }
 
 export async function upsertProfile(userId, updates) {
+  const currentUserId = await requireCurrentUserId();
+  if (userId && String(userId) !== String(currentUserId)) {
+    throw new Error("Du kannst nur dein eigenes Profil speichern.");
+  }
+
   const nextUpdates = sanitizeProfileUpdates(updates);
 
   const { data, error } = await supabase
     .from("profiles")
-    .upsert({ user_id: userId, ...nextUpdates }, { onConflict: "user_id" })
+    .upsert({ user_id: currentUserId, ...nextUpdates }, { onConflict: "user_id" })
     .select()
     .single();
   if (error) {
