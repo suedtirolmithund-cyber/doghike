@@ -13,6 +13,18 @@ async function assertAdmin() {
   }
 }
 
+async function requireCurrentUserId() {
+  const { data, error } = await supabase.auth.getUser();
+  if (error) throw error;
+
+  const currentUserId = data?.user?.id;
+  if (!currentUserId) {
+    throw new Error("Du musst eingeloggt sein.");
+  }
+
+  return currentUserId;
+}
+
 function mapSupabaseWaterLevel(value) {
   if (value === 0 || value === "0") return "none";
   if (value === 1 || value === "1") return "little";
@@ -298,13 +310,19 @@ export async function resolvePublicHikePhotoReferences(photoReferences = []) {
 }
 
 export async function uploadPublicHikePhoto(userId, file) {
+  await assertAdmin();
+  const currentUserId = await requireCurrentUserId();
+  if (userId && String(userId) !== String(currentUserId)) {
+    throw new Error("Du kannst Fotos nur über dein eigenes Admin-Konto hochladen.");
+  }
+
   validateImageUpload(file);
   const preparedFile = await optimizeImageForUpload(file);
   const sanitizedName = preparedFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
   const uniqueId =
     globalThis.crypto?.randomUUID?.() ??
     `${Date.now()}_${Math.random().toString(36).slice(2)}`;
-  const path = `${PUBLIC_HIKE_PREFIX}${userId}/${uniqueId}_${sanitizedName}`;
+  const path = `${PUBLIC_HIKE_PREFIX}${currentUserId}/${uniqueId}_${sanitizedName}`;
   const { data, error } = await supabase.storage
     .from(PUBLIC_HIKE_BUCKET)
     .upload(path, preparedFile, { upsert: false, contentType: preparedFile.type });
@@ -314,6 +332,7 @@ export async function uploadPublicHikePhoto(userId, file) {
 }
 
 export async function deleteUploadedPublicHikePhoto(photoUrl) {
+  await assertAdmin();
   const storageDescriptor = getPublicHikeStorageDescriptor(photoUrl);
   if (!storageDescriptor) return;
 
