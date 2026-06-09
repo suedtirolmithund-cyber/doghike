@@ -842,28 +842,42 @@ begin
       select public.extract_storage_object_name('journal', ur.gpx_url)
       from public.user_routes ur
       where ur.user_id = target_user_id
-      union
-      select public.extract_storage_object_name('journal', ph.photo_url)
-      from public.public_hikes phike
-      join public.public_hike_photos ph on ph.hike_id = phike.id
-      where phike.user_id = target_user_id
-      union
-      select public.extract_storage_object_name('journal', phike.image)
-      from public.public_hikes phike
-      where phike.user_id = target_user_id
-      union
-      select public.extract_storage_object_name('journal', phike.image2)
-      from public.public_hikes phike
-      where phike.user_id = target_user_id
-      union
-      select public.extract_storage_object_name('journal', phike.image3)
-      from public.public_hikes phike
-      where phike.user_id = target_user_id
-      union
-      select public.extract_storage_object_name('journal', phike.image4)
-      from public.public_hikes phike
-      where phike.user_id = target_user_id
     );
+
+  if exists (
+    select 1
+    from information_schema.columns
+    where table_schema = 'public'
+      and table_name = 'public_hikes'
+      and column_name = 'user_id'
+  ) then
+    execute $sql$
+      delete from storage.objects
+      where bucket_id = 'journal'
+        and name in (
+          select public.extract_storage_object_name('journal', ph.photo_url)
+          from public.public_hikes phike
+          join public.public_hike_photos ph on ph.hike_id = phike.id
+          where phike.user_id = $1
+          union
+          select public.extract_storage_object_name('journal', phike.image)
+          from public.public_hikes phike
+          where phike.user_id = $1
+          union
+          select public.extract_storage_object_name('journal', phike.image2)
+          from public.public_hikes phike
+          where phike.user_id = $1
+          union
+          select public.extract_storage_object_name('journal', phike.image3)
+          from public.public_hikes phike
+          where phike.user_id = $1
+          union
+          select public.extract_storage_object_name('journal', phike.image4)
+          from public.public_hikes phike
+          where phike.user_id = $1
+        )
+    $sql$ using target_user_id;
+  end if;
 
   delete from storage.objects
   where bucket_id = 'comments'
@@ -884,8 +898,16 @@ begin
   delete from public.support_requests
   where user_id = target_user_id;
 
-  delete from public.public_hikes
-  where user_id = target_user_id;
+  if exists (
+    select 1
+    from information_schema.columns
+    where table_schema = 'public'
+      and table_name = 'public_hikes'
+      and column_name = 'user_id'
+  ) then
+    execute 'delete from public.public_hikes where user_id = $1'
+      using target_user_id;
+  end if;
 
   delete from auth.users
   where id = target_user_id;
@@ -994,28 +1016,42 @@ begin
       select public.extract_storage_object_name('journal', ur.gpx_url)
       from public.user_routes ur
       where ur.user_id = current_user_id
-      union
-      select public.extract_storage_object_name('journal', ph.photo_url)
-      from public.public_hikes phike
-      join public.public_hike_photos ph on ph.hike_id = phike.id
-      where phike.user_id = current_user_id
-      union
-      select public.extract_storage_object_name('journal', phike.image)
-      from public.public_hikes phike
-      where phike.user_id = current_user_id
-      union
-      select public.extract_storage_object_name('journal', phike.image2)
-      from public.public_hikes phike
-      where phike.user_id = current_user_id
-      union
-      select public.extract_storage_object_name('journal', phike.image3)
-      from public.public_hikes phike
-      where phike.user_id = current_user_id
-      union
-      select public.extract_storage_object_name('journal', phike.image4)
-      from public.public_hikes phike
-      where phike.user_id = current_user_id
     );
+
+  if exists (
+    select 1
+    from information_schema.columns
+    where table_schema = 'public'
+      and table_name = 'public_hikes'
+      and column_name = 'user_id'
+  ) then
+    execute $sql$
+      delete from storage.objects
+      where bucket_id = 'journal'
+        and name in (
+          select public.extract_storage_object_name('journal', ph.photo_url)
+          from public.public_hikes phike
+          join public.public_hike_photos ph on ph.hike_id = phike.id
+          where phike.user_id = $1
+          union
+          select public.extract_storage_object_name('journal', phike.image)
+          from public.public_hikes phike
+          where phike.user_id = $1
+          union
+          select public.extract_storage_object_name('journal', phike.image2)
+          from public.public_hikes phike
+          where phike.user_id = $1
+          union
+          select public.extract_storage_object_name('journal', phike.image3)
+          from public.public_hikes phike
+          where phike.user_id = $1
+          union
+          select public.extract_storage_object_name('journal', phike.image4)
+          from public.public_hikes phike
+          where phike.user_id = $1
+        )
+    $sql$ using current_user_id;
+  end if;
 
   delete from storage.objects
   where bucket_id = 'comments'
@@ -1036,8 +1072,16 @@ begin
   delete from public.support_requests
   where user_id = current_user_id;
 
-  delete from public.public_hikes
-  where user_id = current_user_id;
+  if exists (
+    select 1
+    from information_schema.columns
+    where table_schema = 'public'
+      and table_name = 'public_hikes'
+      and column_name = 'user_id'
+  ) then
+    execute 'delete from public.public_hikes where user_id = $1'
+      using current_user_id;
+  end if;
 
   delete from auth.users
   where id = current_user_id;
