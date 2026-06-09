@@ -1131,12 +1131,6 @@ create policy "Öffentliche Touren lesen"
   using (
     (
       status = 'approved'
-      and (
-        is_premium is not true
-        or auth.uid() = user_id
-        or public.is_admin()
-        or public.has_active_premium_access()
-      )
     )
     or (auth.uid() = user_id)
     or public.is_admin()
@@ -1177,12 +1171,6 @@ create policy "Öffentliche Tourfotos lesen"
         and (
           (
             h.status = 'approved'
-            and (
-              h.is_premium is not true
-              or h.user_id = auth.uid()
-              or public.is_admin()
-              or public.has_active_premium_access()
-            )
           )
           or h.user_id = auth.uid()
           or public.is_admin()
