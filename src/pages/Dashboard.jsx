@@ -168,17 +168,22 @@ export default function Dashboard() {
           </form>
         </div>
 
-        <div className="absolute left-1/2 top-0 hidden h-[507px] w-full max-w-[1280px] -translate-x-1/2 md:block">
-          <div className="absolute left-[-14.19px] top-[403.95px] h-[159.45px] w-[1333.01px] -rotate-[0.07deg] bg-white/30 opacity-70 blur-[8.25px]" />
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <h1 className="absolute left-[24px] top-[78.2px] h-[63px] w-[1232px] text-center text-[60px] font-light leading-[63px] tracking-[-1.2px] text-white">
+        <div className="absolute inset-0 hidden md:block">
+          <div className="absolute inset-x-[-4vw] bottom-[-56px] h-[159px] -rotate-[0.07deg] bg-white/30 opacity-70 blur-[8.25px]" />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="relative z-10 mx-auto flex h-full max-w-[1280px] flex-col items-center px-6 pt-[78px] text-center"
+          >
+            <h1 className="w-full max-w-[1232px] text-[clamp(44px,4.7vw,60px)] font-light leading-[1.05] tracking-[-0.02em] text-white">
               Hundefreundliche Wanderungen
             </h1>
-            <p className="absolute left-[300px] top-[162.4px] h-[60px] w-[680px] text-center text-[18px] font-normal leading-[30px] text-white">
+            <p className="mt-5 max-w-[680px] text-[18px] font-normal leading-[30px] text-white">
               Entdecke die schönsten Wanderungen in den Bergen,<br />
               zusammen mit deinem Vierbeiner.
             </p>
-            <div className="absolute left-1/2 top-[281px] flex h-[46px] -translate-x-1/2 items-center justify-center gap-2">
+            <div className="mt-[54px] flex min-h-[46px] max-w-full flex-wrap items-center justify-center gap-3">
               <Link to={createPageUrl("Hikes")}>
                 <Button size="lg" variant="outline" className="h-[46px] w-[224.19px] border !border-[#F9C030] !bg-[#FDF0E8] px-0 text-[16px] font-bold leading-[19px] !text-[#7C3020] !whitespace-nowrap shadow-[0_12px_26px_rgba(249,192,48,0.2)] hover:!bg-[#FDF0E8] hover:!text-[#7C3020]">
                   <Mountain className="mr-0 h-[18px] w-[18px] shrink-0 text-[#F07030]" /> Wanderungen entdecken
@@ -198,13 +203,13 @@ export default function Dashboard() {
               )}
             </div>
 
-            <form onSubmit={handleHeroSearchSubmit} className="absolute left-1/2 top-[386px] h-[56px] w-[672px] -translate-x-1/2">
+            <form onSubmit={handleHeroSearchSubmit} className="relative mt-[58px] h-[56px] w-full max-w-[672px]">
               <Search className="absolute left-[16px] top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-[#F07030]" />
               <Input
                 placeholder="Wanderung oder Ort suchen..."
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE); }}
-                className="h-[56px] w-[672px] rounded-xl border border-[#F9C030] bg-[#FDF0E8]/92 pl-12 pr-[18px] text-sm font-bold leading-[24px] text-[#7C3020] shadow-[0_10px_28px_rgba(249,192,48,0.2)] placeholder:text-[#7C3020]/75"
+                className="h-[56px] w-full rounded-xl border border-[#F9C030] bg-[#FDF0E8]/92 pl-12 pr-[18px] text-sm font-bold leading-[24px] text-[#7C3020] shadow-[0_10px_28px_rgba(249,192,48,0.2)] placeholder:text-[#7C3020]/75"
               />
             </form>
           </motion.div>
