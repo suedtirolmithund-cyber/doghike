@@ -581,7 +581,7 @@ export default function JournalDetail() {
                 <span className="text-xs text-slate-500 w-28">Bewertung</span>
                 <div className="flex gap-0.5">
                   {[1,2,3,4,5].map((s) => (
-                    <Star key={s} className={`w-4 h-4 ${s <= entry.rating ? "fill-brand-100 text-brand-100" : "text-brand-100"}`} />
+                    <Star key={s} className={`w-4 h-4 ${s <= entry.rating ? "fill-brand-400 text-brand-400" : "text-brand-100"}`} />
                   ))}
                 </div>
               </div>

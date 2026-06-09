@@ -590,7 +590,7 @@ export default function RouteDetail() {
                     {route.completed_rating > 0 && (
                       <div className="flex gap-0.5 mt-1">
                         {[1,2,3,4,5].map(s => (
-                          <Star key={s} className={`w-4 h-4 ${s <= route.completed_rating ? "fill-brand-100 text-brand-100" : "text-slate-300"}`} />
+                          <Star key={s} className={`w-4 h-4 ${s <= route.completed_rating ? "fill-brand-400 text-brand-400" : "text-slate-300"}`} />
                         ))}
                       </div>
                     )}
@@ -727,7 +727,7 @@ export default function RouteDetail() {
                               onMouseEnter={() => setHoverRating(star)}
                               onMouseLeave={() => setHoverRating(0)}
                             >
-                              <Star className={`w-8 h-8 transition-colors ${star <= (hoverRating || completeData.completed_rating) ? "fill-brand-100 text-brand-100" : "text-slate-300"}`} />
+                              <Star className={`w-8 h-8 transition-colors ${star <= (hoverRating || completeData.completed_rating) ? "fill-brand-400 text-brand-400" : "text-slate-300"}`} />
                             </button>
                           ))}
                         </div>

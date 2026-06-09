@@ -692,7 +692,7 @@ export default function HikeForm({ hike, dogs = [], onSave, onCancel, submitLabe
               <Star
                 className={`w-8 h-8 ${
                   star <= (formData.rating || 0)
-                    ? "fill-brand-100 text-brand-100"
+                    ? "fill-brand-400 text-brand-400"
                     : "text-slate-300"
                 }`}
               />

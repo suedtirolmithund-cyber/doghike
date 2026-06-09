@@ -152,7 +152,7 @@ function FeedCard({ entry }) {
             )}
             {entry.rating > 0 && (
               <span className="flex items-center gap-1 text-brand-500">
-                <Star className="h-3 w-3 fill-brand-100" />
+                <Star className="h-3 w-3 fill-brand-400 text-brand-400" />
                 {entry.rating}/5
               </span>
             )}
