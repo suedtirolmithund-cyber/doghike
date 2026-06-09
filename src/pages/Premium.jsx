@@ -24,7 +24,7 @@ import { PremiumPawMark } from "@/components/premium/PremiumPawBadge";
 import { hasActivePremiumAccess } from "@/lib/premiumAccess";
 
 const features = [
-  "Schalte ausgewählte Wanderungen frei, die du sonst nur als Vorschau siehst",
+  "Schalte alle Premium-Wanderungen frei, die du sonst nur als Vorschau siehst",
   "Plane entspannter mit mehr Details, Kartenansicht und hilfreichen Wanderungsinfos",
   "Sieh Wetterinfos direkt dort, wo du deine Wanderung planst",
   "Entdecke sorgfältig ergänzte Hinweise und Tipps, die unterwegs wirklich zählen",
