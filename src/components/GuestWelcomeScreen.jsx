@@ -486,7 +486,7 @@ function OnboardingScreen({ onContinue }) {
         </picture>
         <div className="absolute inset-0 bg-[linear-gradient(0deg,#000000_-31.83%,rgba(0,0,0,0)_43.72%)]" />
 
-        <div className="absolute bottom-[92px] left-4 h-[216px] w-[343px] opacity-80 md:left-1/2 md:-translate-x-1/2">
+        <div className="absolute bottom-[92px] left-4 h-[216px] w-[343px] opacity-80 md:bottom-[150px] md:left-1/2 md:-translate-x-1/2">
           <h1 className="absolute left-0 top-0 h-[113px] w-[343px] text-center font-['Nunito',sans-serif] text-[40px] font-normal leading-[47px] text-white">
             Hundefreundliche Wanderungen
           </h1>
@@ -499,12 +499,12 @@ function OnboardingScreen({ onContinue }) {
           type="button"
           onClick={onContinue}
           aria-label="Weiter zum Login"
-          className="absolute bottom-5 left-1/2 z-30 inline-flex min-h-[58px] -translate-x-1/2 items-center justify-center gap-2.5 rounded-full border border-white/70 bg-[#A8003C]/92 px-4 pr-5 text-white shadow-[0_14px_34px_rgba(0,0,0,0.34)] ring-1 ring-[#F9C030]/55 transition hover:bg-[#A8003C] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#F9C030]/60 active:scale-[0.98] md:bottom-7"
+          className="absolute bottom-5 left-1/2 z-30 inline-flex min-h-[58px] -translate-x-1/2 items-center justify-center gap-2.5 rounded-full border border-white/70 bg-[#A8003C]/92 px-4 pr-5 text-white shadow-[0_14px_34px_rgba(0,0,0,0.34)] ring-1 ring-[#F9C030]/55 transition hover:bg-[#A8003C] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#F9C030]/60 active:scale-[0.98] md:bottom-14 md:min-h-[72px] md:min-w-[260px] md:gap-4 md:border-2 md:border-[#F9C030]/90 md:bg-[#A8003C] md:px-8 md:pr-10 md:shadow-[0_22px_60px_rgba(168,0,60,0.42)]"
         >
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/16">
-            <FourToePaw className="h-8 w-8 text-white" />
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/16 md:h-14 md:w-14 md:bg-[#F9C030]">
+            <FourToePaw className="h-8 w-8 text-white md:h-9 md:w-9 md:text-[#A8003C]" />
           </span>
-          <span className="whitespace-nowrap text-base font-extrabold leading-none tracking-[0.01em]">
+          <span className="whitespace-nowrap text-base font-extrabold leading-none tracking-[0.01em] md:text-xl">
             Los geht's
           </span>
         </button>
