@@ -187,7 +187,7 @@ export default function Login() {
     setLocalError(null);
     setSuccessMsg(null);
 
-    if (!privacyAccepted) {
+    if (mode === "register" && !privacyAccepted) {
       setLocalError("Bitte akzeptiere die Datenschutzerklärung und Nutzungsbedingungen.");
       return;
     }
@@ -196,7 +196,7 @@ export default function Login() {
     try {
       const result = await loginWithGoogle(
         "/",
-        mode === "register" ? "google_registration" : "google_login_or_registration"
+        mode === "register" ? "google_registration" : null
       );
       if (result?.error) {
         setGoogleLoading(false);
@@ -569,40 +569,6 @@ export default function Login() {
                 <span className="text-xs text-white/50">oder</span>
                 <div className="flex-1 border-t border-white/20" />
               </div>
-
-              {mode === "login" && (
-                <div className="mb-3 flex items-start gap-3 rounded-xl border border-white/35 bg-white/15 p-3">
-                  <Checkbox
-                    id="google-privacy"
-                    checked={privacyAccepted}
-                    onCheckedChange={(checked) => setPrivacyAccepted(checked === true)}
-                    className="mt-0.5 h-5 w-5 shrink-0 border-2 border-white bg-white/85 data-[state=checked]:border-[#A8003C] data-[state=checked]:bg-[#A8003C]"
-                  />
-                  <label htmlFor="google-privacy" className="text-xs text-white/80 cursor-pointer leading-relaxed">
-                    Für Google-Anmeldung oder Kontoerstellung akzeptiere ich die{" "}
-                    <a
-                      href={createPageUrl("Datenschutz")}
-                      className="underline text-white"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(event) => event.stopPropagation()}
-                    >
-                      Datenschutzerklärung
-                    </a>{" "}
-                    und die{" "}
-                    <a
-                      href={createPageUrl("AGB")}
-                      className="underline text-white"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(event) => event.stopPropagation()}
-                    >
-                      Nutzungsbedingungen
-                    </a>
-                    .
-                  </label>
-                </div>
-              )}
 
               <button
                 type="button"
