@@ -458,7 +458,7 @@ export function commentNeedsReview(text) {
 export async function uploadCommentPhoto(userId, file, { needsReview = false } = {}) {
   validateImageUpload(file);
   const preparedFile = await optimizeImageForUpload(file);
-  const bucket = "comments";
+  const bucket = needsReview ? "comments-pending" : "comments";
   const sanitizedName = preparedFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
   const path = `${userId}/${Date.now()}_${sanitizedName}`;
   const { data, error } = await supabase.storage
@@ -466,7 +466,7 @@ export async function uploadCommentPhoto(userId, file, { needsReview = false } =
     .upload(path, preparedFile, { upsert: true, contentType: preparedFile.type });
   if (error) throw error;
 
-  return `comments/${data.path}`;
+  return needsReview ? `pending://${data.path}` : `comments/${data.path}`;
 }
 
 export async function deleteUploadedCommentPhoto(photoReference) {
