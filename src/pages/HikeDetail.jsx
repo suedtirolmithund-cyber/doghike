@@ -426,14 +426,6 @@ export default function HikeDetail() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lightboxOpen]);
 
-  useEffect(() => {
-    if (!lightboxOpen || showPremiumPreviewOnly || photos.length === 0) return;
-
-    requestAnimationFrame(() => {
-      lightboxDialogRef.current?.focus();
-    });
-  }, [lightboxOpen, photos.length, showPremiumPreviewOnly]);
-
   const isOwnHike = Boolean(
     currentUser?.id && hike?._user_id && currentUser.id === hike._user_id
   );
@@ -545,6 +537,23 @@ export default function HikeDetail() {
     },
   });
 
+  const isPremiumContent = PREMIUM_FEATURES_ENABLED && hike?.is_premium === true;
+  const isPremiumHike = Boolean(isPremiumContent && !isAdmin && !isOwnHike);
+  const userHasPremium = isAdmin || hasActivePremiumAccess(currentProfile);
+  const showPremiumPreviewOnly = isPremiumHike && !userHasPremium;
+  const photos = detailPhotoSource.filter((photo) => {
+    const photoKey = getRenderablePhotoKey(photo);
+    return photoKey && !failedPhotoKeys.has(photoKey);
+  });
+
+  useEffect(() => {
+    if (!lightboxOpen || showPremiumPreviewOnly || photos.length === 0) return;
+
+    requestAnimationFrame(() => {
+      lightboxDialogRef.current?.focus();
+    });
+  }, [lightboxOpen, photos.length, showPremiumPreviewOnly]);
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50/20">
@@ -588,17 +597,7 @@ export default function HikeDetail() {
       </div>
     );
   }
-  // Premium gate: admins may inspect premium hikes, but downloads still require active Premium.
-  const isPremiumContent = PREMIUM_FEATURES_ENABLED && hike.is_premium === true;
-  const isPremiumHike = isPremiumContent && !isAdmin && !isOwnHike;
-  const userHasPremium = isAdmin || hasActivePremiumAccess(currentProfile);
-  const showPremiumPreviewOnly = isPremiumHike && !userHasPremium;
-
   const hikeDogs = dogs.filter(d => hike.dogs?.includes(d.id));
-  const photos = detailPhotoSource.filter((photo) => {
-    const photoKey = getRenderablePhotoKey(photo);
-    return photoKey && !failedPhotoKeys.has(photoKey);
-  });
   const coverPhoto = heroPhotoIndex >= 0 ? photos[heroPhotoIndex] || HIKE_PLACEHOLDER_IMAGE : HIKE_PLACEHOLDER_IMAGE;
   const heroPreviewPhoto = resolveHikeImageUrl(coverPhoto, { width: 1600, quality: 80 });
   const detailId = hike?._source === "sheets" && hike?._public_hike_id
@@ -620,7 +619,7 @@ export default function HikeDetail() {
     : communityHikeId
       ? [String(communityHikeId)]
       : [];
-  
+
   const markPhotoAsFailed = (photo) => {
     const photoKey = getRenderablePhotoKey(photo);
     if (!photoKey) return;
