@@ -32,14 +32,13 @@ export default function RatingSection({ hikeId, hikeAliases = [], hikeSource = "
 
   useEffect(() => {
     setSelectedRating(userRating?.rating ?? 0);
-    setConsentPublic(true);
   }, [userRating?.rating]);
 
   const ratingMutation = useMutation({
     mutationFn: () => upsertRating(user.id, normalizedHikeId, hikeSource, selectedRating),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ratings", hikeSource, normalizedHikeId] });
-      setConsentPublic(true);
+      setConsentPublic(false);
       toast.success("Danke. Sag den anderen, wie hundefreundlich die Wanderung war.");
     },
     onError: () => {
