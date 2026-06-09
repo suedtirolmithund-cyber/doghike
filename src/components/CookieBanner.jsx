@@ -40,12 +40,12 @@ export default function CookieBanner() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
           transition={{ type: "spring", stiffness: 260, damping: 24 }}
-          className="fixed inset-x-3 bottom-20 z-[9999] sm:inset-x-4 md:bottom-5"
+          className="fixed inset-x-0 bottom-0 z-[9999] sm:inset-x-4 sm:bottom-4 md:bottom-5"
         >
           <div
             role="region"
             aria-label="Cookie-Hinweis"
-            className="mx-auto max-w-xl rounded-2xl border border-brand-200/80 bg-white/95 p-3 text-brand-900 shadow-[0_12px_32px_rgba(124,48,32,0.16)] backdrop-blur-xl sm:p-3.5"
+            className="mx-auto max-w-xl rounded-t-2xl border border-brand-200/80 bg-white/95 p-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] text-brand-900 shadow-[0_12px_32px_rgba(124,48,32,0.16)] backdrop-blur-xl sm:rounded-2xl sm:p-3.5"
           >
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <div className="flex min-w-0 flex-1 items-start gap-2.5">
