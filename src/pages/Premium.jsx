@@ -25,7 +25,7 @@ import { hasActivePremiumAccess } from "@/lib/premiumAccess";
 
 const features = [
   "Schalte alle Premium-Wanderungen frei, die du sonst nur als Vorschau siehst",
-  "Plane entspannter mit mehr Details, Kartenansicht und hilfreichen Wanderungsinfos",
+  "Plane entspannter mit mehr Details aus Wanderungen, die von uns sorgfältig getestet wurden",
   "Sieh Wetterinfos direkt dort, wo du deine Wanderung planst",
   "Entdecke sorgfältig ergänzte Hinweise und Tipps, die unterwegs wirklich zählen",
   "Speichere Premium-Wanderungen als PDF, wenn du offline oder ohne Empfang unterwegs bist",
