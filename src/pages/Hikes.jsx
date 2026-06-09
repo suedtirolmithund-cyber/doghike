@@ -39,6 +39,59 @@ import { HIKE_PLACEHOLDER_IMAGE } from "@/lib/fallbackImages";
 import { getUniqueHikeImageSources, resolveHikeImageUrl } from "@/lib/hikeImages";
 
 const HIKES_PAGE_SIZE = 10;
+const HIKES_PAGE_SESSION_KEY = "doghike:hikes-page-state";
+
+function sanitizeHikesViewMode(value) {
+  return value === "list" ? "list" : "grid";
+}
+
+function readHikesPageState({ hasSearchQueryParam, requestedSearchQuery }) {
+  if (typeof window === "undefined") {
+    return {
+      viewMode: "grid",
+      draftFilters: {},
+      appliedFilters: {},
+    };
+  }
+
+  try {
+    const rawState = window.sessionStorage.getItem(HIKES_PAGE_SESSION_KEY);
+    if (!rawState) {
+      return {
+        viewMode: "grid",
+        draftFilters: hasSearchQueryParam ? { searchQuery: requestedSearchQuery } : {},
+        appliedFilters: hasSearchQueryParam ? { searchQuery: requestedSearchQuery } : {},
+      };
+    }
+
+    const parsedState = JSON.parse(rawState);
+    const draftFilters =
+      parsedState && typeof parsedState.draftFilters === "object" && parsedState.draftFilters
+        ? parsedState.draftFilters
+        : {};
+    const appliedFilters =
+      parsedState && typeof parsedState.appliedFilters === "object" && parsedState.appliedFilters
+        ? parsedState.appliedFilters
+        : {};
+
+    if (hasSearchQueryParam) {
+      draftFilters.searchQuery = requestedSearchQuery;
+      appliedFilters.searchQuery = requestedSearchQuery;
+    }
+
+    return {
+      viewMode: sanitizeHikesViewMode(parsedState?.viewMode),
+      draftFilters,
+      appliedFilters,
+    };
+  } catch {
+    return {
+      viewMode: "grid",
+      draftFilters: hasSearchQueryParam ? { searchQuery: requestedSearchQuery } : {},
+      appliedFilters: hasSearchQueryParam ? { searchQuery: requestedSearchQuery } : {},
+    };
+  }
+}
 
 function getRangeValidationError(label, min, max) {
   const minValue = min === "" ? null : Number(min);
@@ -167,18 +220,26 @@ function WaterInfoDialog() {
 }
 
 export default function Hikes() {
-  const [viewMode, setViewMode] = useState("grid");
-  const [currentPage, setCurrentPage] = useState(1);
   const [searchParams] = useSearchParams();
-  const initialSearchQuery = (searchParams.get("q") || "").trim();
+  const hasSearchQueryParam = searchParams.has("q");
+  const requestedSearchQuery = (searchParams.get("q") || "").trim();
+  const [persistedPageState] = useState(() =>
+    readHikesPageState({ hasSearchQueryParam, requestedSearchQuery })
+  );
+  const initialSearchQuery = hasSearchQueryParam
+    ? requestedSearchQuery
+    : String(persistedPageState?.draftFilters?.searchQuery ?? "").trim();
+  const [viewMode, setViewMode] = useState(() => sanitizeHikesViewMode(persistedPageState?.viewMode));
+  const [currentPage, setCurrentPage] = useState(1);
   const { data: hikes = [], isLoading } = useQuery({
     queryKey: ["allHikes"],
     queryFn: getAllHikes,
     staleTime: 5 * 60_000,
-    refetchOnMount: "always",
+    refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
   const {
+    draftFilters,
     searchQuery,
     setSearchQuery,
     activeSearchQuery,
@@ -211,7 +272,10 @@ export default function Hikes() {
     applyFilters,
     resetFilters,
     filteredHikes,
-  } = useHikeFilters(hikes, { searchQuery: initialSearchQuery });
+  } = useHikeFilters(hikes, {
+    initialDraftFilters: persistedPageState?.draftFilters ?? { searchQuery: initialSearchQuery },
+    initialAppliedFilters: persistedPageState?.appliedFilters ?? { searchQuery: initialSearchQuery },
+  });
   const isHikesLoading = isLoading && hikes.length === 0;
   const hasActiveFilters =
     activeFilters.searchQuery.trim() !== "" ||
@@ -260,6 +324,19 @@ export default function Hikes() {
 
     syncSearchQuery(initialSearchQuery);
   }, [activeSearchQuery, initialSearchQuery, searchQuery, syncSearchQuery]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    window.sessionStorage.setItem(
+      HIKES_PAGE_SESSION_KEY,
+      JSON.stringify({
+        viewMode,
+        draftFilters,
+        appliedFilters: activeFilters,
+      })
+    );
+  }, [activeFilters, draftFilters, viewMode]);
 
   return (
     <div className="doghike-page-shell">

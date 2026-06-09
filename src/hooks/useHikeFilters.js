@@ -22,13 +22,20 @@ function getSeasonValues(hike) {
 }
 
 export function useHikeFilters(hikes = [], initialFilters = {}) {
-  const mergedInitialFilters = {
+  const initialDraftFilters = initialFilters.initialDraftFilters ?? initialFilters;
+  const initialAppliedFilters = initialFilters.initialAppliedFilters ?? initialFilters;
+
+  const mergedInitialDraftFilters = {
     ...INITIAL_FILTERS,
-    ...initialFilters,
+    ...initialDraftFilters,
+  };
+  const mergedInitialAppliedFilters = {
+    ...INITIAL_FILTERS,
+    ...initialAppliedFilters,
   };
 
-  const [draftFilters, setDraftFilters] = useState(mergedInitialFilters);
-  const [appliedFilters, setAppliedFilters] = useState(mergedInitialFilters);
+  const [draftFilters, setDraftFilters] = useState(mergedInitialDraftFilters);
+  const [appliedFilters, setAppliedFilters] = useState(mergedInitialAppliedFilters);
 
   const setSearchQuery = (value) => setDraftFilters((prev) => ({ ...prev, searchQuery: value }));
   const setSortBy = (value) => setDraftFilters((prev) => ({ ...prev, sortBy: value }));
@@ -103,6 +110,7 @@ export function useHikeFilters(hikes = [], initialFilters = {}) {
   }, [hikes, appliedFilters]);
 
   return {
+    draftFilters,
     searchQuery: draftFilters.searchQuery,
     setSearchQuery,
     activeSearchQuery: appliedFilters.searchQuery,
