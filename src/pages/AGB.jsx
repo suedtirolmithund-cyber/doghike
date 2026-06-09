@@ -237,7 +237,10 @@ export default function AGB() {
                   Für Streitigkeiten mit Unternehmern gilt als Gerichtsstand <strong>Bruneck (BZ), Italien</strong>.
                 </p>
                 <p>
-                  Die frühere EU-Plattform zur Online-Streitbeilegung (ODR/OS-Plattform) wurde zum 20. Juli 2025 eingestellt. Aktuelle Informationen zu Verbraucherbeschwerden und außergerichtlicher Streitbeilegung in der EU stellt die Europäische Kommission hier bereit:{" "}
+                  Die frühere EU-Plattform zur Online-Streitbeilegung (ODR/OS-Plattform, ehemals{" "}
+                  <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">
+                    ec.europa.eu/consumers/odr/
+                  </a>) wurde zum 20. Juli 2025 eingestellt. Aktuelle Informationen zu Verbraucherbeschwerden und außergerichtlicher Streitbeilegung in der EU stellt die Europäische Kommission hier bereit:{" "}
                   <a href="https://consumer-redress.ec.europa.eu/index_de" target="_blank" rel="noopener noreferrer" className="text-brand-600 underline">
                     consumer-redress.ec.europa.eu
                   </a>.
