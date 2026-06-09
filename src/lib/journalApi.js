@@ -323,48 +323,36 @@ export async function getJournalEntryForDisplay(id) {
 
 function withoutUnsupportedOptionalColumns(entry = {}, error) {
   const fallbackEntry = { ...entry };
-  const message = String(error?.message ?? "");
+  const unsupportedFields = getMissingOptionalJournalFields(error);
 
-  if (message.includes("country") && message.includes("column")) {
+  if (unsupportedFields.includes("country")) {
     delete fallbackEntry.country;
   }
 
-  if (message.includes("season") && message.includes("column")) {
+  if (unsupportedFields.includes("season")) {
     delete fallbackEntry.season;
   }
 
-  if (message.includes("dog_ids") && message.includes("column")) {
+  if (unsupportedFields.includes("dog_ids")) {
     delete fallbackEntry.dog_ids;
     if (!fallbackEntry.dog_id && Array.isArray(entry.dog_ids) && entry.dog_ids.length > 0) {
       fallbackEntry.dog_id = entry.dog_ids[0];
     }
   }
 
-  if (message.includes("dog_mood_tags") && message.includes("column")) {
+  if (unsupportedFields.includes("dog_mood_tags")) {
     delete fallbackEntry.dog_mood_tags;
   }
 
-  if (message.includes("tags") && message.includes("column")) {
+  if (unsupportedFields.includes("tags")) {
     delete fallbackEntry.tags;
   }
 
-  if (message.includes("seasons") && message.includes("column")) {
+  if (unsupportedFields.includes("seasons")) {
     delete fallbackEntry.seasons;
   }
 
   return fallbackEntry;
-}
-
-function isMissingOptionalJournalColumnError(error) {
-  const message = String(error?.message ?? "");
-  return (
-    (message.includes("country") && message.includes("column")) ||
-    (message.includes("season") && message.includes("column")) ||
-    (message.includes("dog_ids") && message.includes("column")) ||
-    (message.includes("dog_mood_tags") && message.includes("column")) ||
-    (message.includes("tags") && message.includes("column")) ||
-    (message.includes("seasons") && message.includes("column"))
-  );
 }
 
 const OPTIONAL_JOURNAL_FIELD_LABELS = {
@@ -375,6 +363,25 @@ const OPTIONAL_JOURNAL_FIELD_LABELS = {
   tags: "Tags",
   seasons: "Jahreszeiten",
 };
+
+const OPTIONAL_JOURNAL_FIELDS = Object.keys(OPTIONAL_JOURNAL_FIELD_LABELS);
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function getMissingOptionalJournalFields(error) {
+  const message = String(error?.message ?? "").toLowerCase();
+  if (!message.includes("column")) return [];
+
+  return OPTIONAL_JOURNAL_FIELDS.filter((field) =>
+    new RegExp(`(^|[^a-z0-9_])${escapeRegExp(field)}([^a-z0-9_]|$)`, "i").test(message)
+  );
+}
+
+function isMissingOptionalJournalColumnError(error) {
+  return getMissingOptionalJournalFields(error).length > 0;
+}
 
 function getDroppedOptionalFieldLabels(previousEntry, nextEntry) {
   return Object.entries(OPTIONAL_JOURNAL_FIELD_LABELS)

@@ -171,6 +171,10 @@ const PageShell = ({ children, currentPageName }) => (
   </LayoutWrapper>
 );
 
+const StandalonePage = ({ children }) => (
+  <Suspense fallback={<PageFallback />}>{children}</Suspense>
+);
+
 const PUBLIC_PAGE_DEFINITIONS = [
   { name: "AGB", paths: [createPageUrl("AGB"), "/agb", "/nutzungsbedingungen", "/terms"] },
   { name: "Datenschutz", paths: [createPageUrl("Datenschutz"), "/datenschutz", "/privacy"] },
@@ -291,10 +295,19 @@ const AuthenticatedApp = () => {
   }
 
   if (!isAuthenticated) {
+    const LoginPage = Pages.Login;
+
     return (
       <Routes>
         <Route path="/" element={<GuestWelcomeScreen />} />
-        <Route path={createPageUrl("Login")} element={<GuestWelcomeScreen skipOnboarding />} />
+        <Route
+          path={createPageUrl("Login")}
+          element={
+            <StandalonePage>
+              <LoginPage />
+            </StandalonePage>
+          }
+        />
         {renderPublicPageRoutes()}
         <Route path="*" element={<GuestWelcomeScreen skipOnboarding />} />
       </Routes>
