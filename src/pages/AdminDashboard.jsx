@@ -131,6 +131,24 @@ function getApproveEntryErrorMessage(error) {
   return "Der Eintrag konnte gerade nicht freigegeben werden. Bitte versuche es noch einmal.";
 }
 
+function getDeleteUserErrorMessage(error) {
+  const message = String(error?.message ?? "").trim();
+
+  if (!message) {
+    return "Das Nutzerkonto konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal.";
+  }
+
+  if (message.includes("not_allowed")) {
+    return "Das Löschen ist nur mit einem echten Admin-Konto erlaubt.";
+  }
+
+  if (message.includes("invalid input syntax for type uuid")) {
+    return "Die Nutzer-ID ist ungültig. Bitte lade den Admin-Bereich neu.";
+  }
+
+  return `Nutzerkonto löschen fehlgeschlagen: ${message}`;
+}
+
 function EntryCard({ entry, onApprove, onReject, approving, rejecting }) {
   const [expanded, setExpanded] = useState(false);
   const [showRejectForm, setShowRejectForm] = useState(false);
@@ -821,8 +839,8 @@ export default function AdminDashboard() {
       queryClient.invalidateQueries({ queryKey: ["admin_users"] });
       toast.success("Nutzerkonto gelöscht.");
     },
-    onError: () =>
-      toast.error("Das Nutzerkonto konnte gerade nicht gelöscht werden. Bitte versuche es noch einmal."),
+    onError: (error) =>
+      toast.error(getDeleteUserErrorMessage(error)),
     onSettled: () => {
       setDeletingUserId(null);
     },
