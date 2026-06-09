@@ -360,6 +360,18 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
                   autoComplete={mode === "login" ? "current-password" : "new-password"}
                 />
 
+                {mode === "login" && (
+                  <div className="-mt-1 flex justify-end">
+                    <button
+                      type="button"
+                      onClick={() => switchMode("reset")}
+                      className="flex min-h-10 max-w-full items-center justify-center rounded-full border border-[#F9C030]/70 bg-[#FDF0E8]/85 px-3 py-2 text-right text-sm font-bold leading-tight text-[#7C3020] shadow-sm hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F9C030]/70"
+                    >
+                      Passwort oder E-Mail vergessen?
+                    </button>
+                  </div>
+                )}
+
                 <AnimatePresence>
                   {mode === "register" && (
                     <motion.div
@@ -440,15 +452,6 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
                 Mit Google {mode === "login" ? "anmelden" : "registrieren"}
               </button>
 
-              {mode === "login" && (
-                <button
-                  type="button"
-                  onClick={() => switchMode("reset")}
-                  className="mt-3 min-h-10 w-full px-2 py-2 text-center text-sm leading-tight text-white/75"
-                >
-                  Passwort oder E-Mail vergessen?
-                </button>
-              )}
             </>
           )}
 
