@@ -294,9 +294,9 @@ const AuthenticatedApp = () => {
     return (
       <Routes>
         <Route path="/" element={<GuestWelcomeScreen />} />
-        <Route path={createPageUrl("Login")} element={<GuestWelcomeScreen />} />
+        <Route path={createPageUrl("Login")} element={<GuestWelcomeScreen skipOnboarding />} />
         {renderPublicPageRoutes()}
-        <Route path="*" element={<GuestWelcomeScreen />} />
+        <Route path="*" element={<GuestWelcomeScreen skipOnboarding />} />
       </Routes>
     );
   }

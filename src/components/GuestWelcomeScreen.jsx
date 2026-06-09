@@ -36,7 +36,7 @@ function mapAuthError(message) {
   return "Das hat gerade nicht geklappt. Versuch es gleich noch einmal.";
 }
 
-export default function GuestWelcomeScreen() {
+export default function GuestWelcomeScreen({ skipOnboarding = false }) {
   const {
     loginWithEmail,
     signUpWithEmail,
@@ -46,7 +46,7 @@ export default function GuestWelcomeScreen() {
     authError,
   } = useAuth();
   const navigate = useNavigate();
-  const [showAuth, setShowAuth] = useState(false);
+  const [showAuth, setShowAuth] = useState(skipOnboarding);
   const [mode, setMode] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -73,6 +73,12 @@ export default function GuestWelcomeScreen() {
       setSuccessMsg("Lege jetzt dein neues Passwort fest.");
     }
   }, []);
+
+  useEffect(() => {
+    if (skipOnboarding) {
+      setShowAuth(true);
+    }
+  }, [skipOnboarding]);
 
   const switchMode = (nextMode) => {
     setMode(nextMode);
