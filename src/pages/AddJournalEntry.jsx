@@ -1717,11 +1717,11 @@ export default function AddJournalEntry() {
               <Label htmlFor="country">Land {TOUR_ICONS.country}</Label>
               <Select value={form.country || "italy"} onValueChange={(value) => set("country", value)}>
                 <SelectTrigger id="country" className="mt-1">
-                  <SelectValue placeholder="Land wÃ¤hlen" />
+                  <SelectValue placeholder="Land wählen" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="italy">Italien</SelectItem>
-                  <SelectItem value="austria">Ã–sterreich</SelectItem>
+                  <SelectItem value="austria">Österreich</SelectItem>
                   <SelectItem value="germany">Deutschland</SelectItem>
                   <SelectItem value="switzerland">Schweiz</SelectItem>
                   <SelectItem value="spain">Spanien</SelectItem>
