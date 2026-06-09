@@ -15,7 +15,7 @@ function mapAuthError(message) {
   const msg = String(message || "").toLowerCase();
   if (msg.includes("invalid login credentials")) return "E-Mail oder Passwort stimmen nicht.";
   if (msg.includes("account_not_found") || msg.includes("account not found") || msg.includes("user not found")) {
-    return "FÃ¼r diese E-Mail gibt es noch kein Konto.";
+    return "Für diese E-Mail gibt es noch kein Konto.";
   }
   if (
     msg.includes("expired_token") ||
@@ -26,12 +26,12 @@ function mapAuthError(message) {
   ) {
     return "Der Link ist abgelaufen. Fordere bitte einen neuen Link an.";
   }
-  if (msg.includes("email not confirmed")) return "Bitte bestÃ¤tige zuerst deine E-Mail-Adresse.";
-  if (msg.includes("user already registered")) return "FÃ¼r diese E-Mail gibt es schon ein Konto.";
+  if (msg.includes("email not confirmed")) return "Bitte bestätige zuerst deine E-Mail-Adresse.";
+  if (msg.includes("user already registered")) return "Für diese E-Mail gibt es schon ein Konto.";
   if (msg.includes("password should be at least")) return "Das Passwort ist zu kurz.";
-  if (msg.includes("unable to validate email address")) return "Bitte gib eine gÃ¼ltige E-Mail-Adresse ein.";
-  if (msg.includes("signup is disabled")) return "Registrierungen sind gerade nicht mÃ¶glich.";
-  if (msg.includes("same password")) return "Bitte wÃ¤hle ein anderes Passwort als bisher.";
+  if (msg.includes("unable to validate email address")) return "Bitte gib eine gültige E-Mail-Adresse ein.";
+  if (msg.includes("signup is disabled")) return "Registrierungen sind gerade nicht möglich.";
+  if (msg.includes("same password")) return "Bitte wähle ein anderes Passwort als bisher.";
   if (msg.includes("for security purposes")) return "Warte kurz. Dann probieren wir es noch einmal.";
   return "Das hat gerade nicht geklappt. Versuch es gleich noch einmal.";
 }
@@ -105,11 +105,11 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
         return;
       }
       if (password !== confirmPassword) {
-        setLocalError("Die PasswÃ¶rter stimmen nicht Ã¼berein.");
+        setLocalError("Die Passwörter stimmen nicht überein.");
         return;
       }
       if (!privacyAccepted) {
-        setLocalError("Bitte akzeptiere die DatenschutzerklÃ¤rung und Nutzungsbedingungen.");
+        setLocalError("Bitte akzeptiere die Datenschutzerklärung und Nutzungsbedingungen.");
         return;
       }
 
@@ -118,10 +118,10 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
       setLoading(false);
       if (err) {
         setLocalError(mapAuthError(err.message));
-      } else if (data?.session || data?.user) {
+      } else if (data?.session) {
         navigate(createPageUrl("Profile"), { replace: true });
       } else {
-        setSuccessMsg("Registrierung erfolgreich. Bitte bestÃ¤tige dein Konto per E-Mail.");
+        setSuccessMsg("Registrierung erfolgreich. Bitte bestätige dein Konto per E-Mail.");
         setPassword("");
         setConfirmPassword("");
       }
@@ -157,7 +157,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
     if (err) {
       setLocalError(mapAuthError(err.message));
     } else {
-      setSuccessMsg("E-Mail gesendet. PrÃ¼fe dein Postfach.");
+      setSuccessMsg("E-Mail gesendet. Prüfe dein Postfach.");
     }
   };
 
@@ -175,7 +175,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
       return;
     }
     if (password !== confirmPassword) {
-      setLocalError("Die PasswÃ¶rter stimmen nicht Ã¼berein.");
+      setLocalError("Die Passwörter stimmen nicht überein.");
       return;
     }
 
@@ -189,7 +189,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
     }
 
     window.history.replaceState({}, document.title, createPageUrl("Login"));
-    setSuccessMsg("Passwort erfolgreich geÃ¤ndert. Du kannst dich jetzt anmelden.");
+    setSuccessMsg("Passwort erfolgreich geändert. Du kannst dich jetzt anmelden.");
     setPassword("");
     setConfirmPassword("");
     setMode("login");
@@ -199,7 +199,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
     setLocalError(null);
     setSuccessMsg(null);
     if (mode === "register" && !privacyAccepted) {
-      setLocalError("Bitte akzeptiere die DatenschutzerklÃ¤rung und Nutzungsbedingungen.");
+      setLocalError("Bitte akzeptiere die Datenschutzerklärung und Nutzungsbedingungen.");
       return;
     }
     setGoogleLoading(true);
@@ -277,7 +277,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
           {mode === "reset" && (
             <form onSubmit={handleReset} className="space-y-3">
               <p className="text-sm leading-relaxed text-white/80">
-                Gib deine E-Mail-Adresse ein. Wir senden dir einen Link zum ZurÃ¼cksetzen.
+                Gib deine E-Mail-Adresse ein. Wir senden dir einen Link zum Zurücksetzen.
               </p>
               <input
                 type="email"
@@ -299,7 +299,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
               </button>
               <BackButton
                 onClick={() => switchMode("login")}
-                label="ZurÃ¼ck zur Anmeldung"
+                label="Zurück zur Anmeldung"
                 className="w-full border-transparent bg-transparent px-2 py-2 text-sm text-white/70 shadow-none hover:bg-white/10 hover:text-white"
               />
             </form>
@@ -308,7 +308,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
           {mode === "update-password" && (
             <form onSubmit={handleUpdatePassword} className="space-y-3">
               <p className="text-sm leading-relaxed text-white/80">
-                Gib jetzt dein neues Passwort ein und bestÃ¤tige es.
+                Gib jetzt dein neues Passwort ein und bestätige es.
               </p>
               <PasswordField
                 showPassword={showPassword}
@@ -320,7 +320,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
               />
               <input
                 type={showPassword ? "text" : "password"}
-                placeholder="Neues Passwort bestÃ¤tigen"
+                placeholder="Neues Passwort bestätigen"
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
                 className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-slate-950 outline-none placeholder:text-slate-500"
@@ -371,7 +371,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
                     >
                       <input
                         type={showPassword ? "text" : "password"}
-                        placeholder="Passwort bestÃ¤tigen"
+                        placeholder="Passwort bestätigen"
                         value={confirmPassword}
                         onChange={(event) => setConfirmPassword(event.target.value)}
                         className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-slate-950 outline-none placeholder:text-slate-500"
@@ -393,7 +393,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
                             rel="noopener noreferrer"
                             onClick={(event) => event.stopPropagation()}
                           >
-                            DatenschutzerklÃ¤rung
+                            Datenschutzerklärung
                           </a>
                           {" "}und die{" "}
                           <a
@@ -456,7 +456,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
             <a href={createPageUrl("Datenschutz")} target="_blank" rel="noopener noreferrer" className="hover:text-white">
               Datenschutz
             </a>
-            {" Â· "}
+            {" · "}
             <a href={createPageUrl("AGB")} target="_blank" rel="noopener noreferrer" className="hover:text-white">
               Nutzungsbedingungen
             </a>
@@ -491,7 +491,7 @@ function OnboardingScreen({ onContinue }) {
             Hundefreundliche Wanderungen
           </h1>
           <p className="absolute left-0 top-[131px] h-[85px] w-[343px] text-center text-[25px] font-medium leading-[29px] text-white">
-            Entdecke die perfekte Wanderung fÃ¼r dich und deinen Hund
+            Entdecke die perfekte Wanderung für dich und deinen Hund
           </p>
         </div>
 
