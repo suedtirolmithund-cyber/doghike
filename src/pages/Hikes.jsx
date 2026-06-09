@@ -2,7 +2,7 @@ import { getAllHikes } from "@/api/sheetsClient";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { CircleHelp, List, Mountain, PawPrint, RotateCcw, Search, LayoutGrid } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -223,6 +223,7 @@ export default function Hikes() {
   const [searchParams] = useSearchParams();
   const hasSearchQueryParam = searchParams.has("q");
   const requestedSearchQuery = (searchParams.get("q") || "").trim();
+  const lastUrlSearchQueryRef = useRef(requestedSearchQuery);
   const [persistedPageState] = useState(() =>
     readHikesPageState({ hasSearchQueryParam, requestedSearchQuery })
   );
@@ -318,12 +319,13 @@ export default function Hikes() {
   }, [filteredHikes]);
 
   useEffect(() => {
-    if (searchQuery === initialSearchQuery && activeSearchQuery === initialSearchQuery) {
+    if (requestedSearchQuery === lastUrlSearchQueryRef.current) {
       return;
     }
 
-    syncSearchQuery(initialSearchQuery);
-  }, [activeSearchQuery, initialSearchQuery, searchQuery, syncSearchQuery]);
+    lastUrlSearchQueryRef.current = requestedSearchQuery;
+    syncSearchQuery(requestedSearchQuery);
+  }, [requestedSearchQuery, syncSearchQuery]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
