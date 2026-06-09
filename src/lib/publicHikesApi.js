@@ -326,6 +326,7 @@ export async function deleteUploadedPublicHikePhoto(photoUrl) {
 
 export async function triggerPremiumHikeWebPush(hikeId) {
   if (!hikeId) return;
+  await assertAdmin();
 
   const { error } = await supabase.functions.invoke("send-web-push", {
     body: {
@@ -339,6 +340,7 @@ export async function triggerPremiumHikeWebPush(hikeId) {
 
 export async function triggerFreeHikeWebPush(hikeId) {
   if (!hikeId) return;
+  await assertAdmin();
 
   const { error } = await supabase.functions.invoke("send-web-push", {
     body: {
