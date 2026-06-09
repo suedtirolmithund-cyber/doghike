@@ -37,15 +37,20 @@ import { useHikeFilters } from "@/hooks/useHikeFilters";
 import { formatDurationHours } from "@/lib/duration";
 import { HIKE_PLACEHOLDER_IMAGE } from "@/lib/fallbackImages";
 import { getUniqueHikeImageSources, resolveHikeImageUrl } from "@/lib/hikeImages";
+import { useAuth } from "@/lib/AuthContext";
 
 const HIKES_PAGE_SIZE = 10;
-const HIKES_PAGE_SESSION_KEY = "doghike:hikes-page-state";
+const HIKES_PAGE_SESSION_KEY_PREFIX = "doghike:hikes-page-state";
 
 function sanitizeHikesViewMode(value) {
   return value === "list" ? "list" : "grid";
 }
 
-function readHikesPageState({ hasSearchQueryParam, requestedSearchQuery }) {
+function getHikesPageSessionKey(ownerKey) {
+  return `${HIKES_PAGE_SESSION_KEY_PREFIX}:${ownerKey || "guest"}`;
+}
+
+function readHikesPageState({ storageKey, hasSearchQueryParam, requestedSearchQuery }) {
   if (typeof window === "undefined") {
     return {
       viewMode: "grid",
@@ -55,7 +60,7 @@ function readHikesPageState({ hasSearchQueryParam, requestedSearchQuery }) {
   }
 
   try {
-    const rawState = window.sessionStorage.getItem(HIKES_PAGE_SESSION_KEY);
+    const rawState = window.sessionStorage.getItem(storageKey);
     if (!rawState) {
       return {
         viewMode: "grid",
@@ -219,13 +224,17 @@ function WaterInfoDialog() {
   );
 }
 
-export default function Hikes() {
-  const [searchParams] = useSearchParams();
+function HikesPageContent({ searchParams, storageOwnerKey }) {
   const hasSearchQueryParam = searchParams.has("q");
   const requestedSearchQuery = (searchParams.get("q") || "").trim();
+  const hikesPageSessionKey = getHikesPageSessionKey(storageOwnerKey);
   const lastUrlSearchQueryRef = useRef(requestedSearchQuery);
   const [persistedPageState] = useState(() =>
-    readHikesPageState({ hasSearchQueryParam, requestedSearchQuery })
+    readHikesPageState({
+      storageKey: hikesPageSessionKey,
+      hasSearchQueryParam,
+      requestedSearchQuery,
+    })
   );
   const initialSearchQuery = hasSearchQueryParam
     ? requestedSearchQuery
@@ -331,14 +340,14 @@ export default function Hikes() {
     if (typeof window === "undefined") return;
 
     window.sessionStorage.setItem(
-      HIKES_PAGE_SESSION_KEY,
+      hikesPageSessionKey,
       JSON.stringify({
         viewMode,
         draftFilters,
         appliedFilters: activeFilters,
       })
     );
-  }, [activeFilters, draftFilters, viewMode]);
+  }, [activeFilters, draftFilters, hikesPageSessionKey, viewMode]);
 
   return (
     <div className="doghike-page-shell">
@@ -816,5 +825,43 @@ export default function Hikes() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function Hikes() {
+  const [searchParams] = useSearchParams();
+  const { user, isLoadingAuth } = useAuth();
+
+  if (isLoadingAuth) {
+    return (
+      <div className="doghike-page-shell">
+        <div className="doghike-content-shell pb-32 md:pb-10">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="doghike-glass-card flex flex-col items-center justify-center gap-3 rounded-3xl px-6 py-12 text-center"
+          >
+            <div className="text-sm font-semibold uppercase tracking-[0.18em] text-[#C07820]">
+              Lädt...
+            </div>
+            <PawLoadingTrail />
+            <div className="space-y-1">
+              <p className="text-lg font-semibold text-slate-800">Wanderungen werden vorbereitet</p>
+              <p className="max-w-md text-sm text-slate-500">
+                Wir stellen gerade deine Ansicht bereit.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <HikesPageContent
+      key={user?.id ?? "guest"}
+      searchParams={searchParams}
+      storageOwnerKey={user?.id ?? "guest"}
+    />
   );
 }
