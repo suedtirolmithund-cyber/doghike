@@ -375,21 +375,6 @@ export default function Premium() {
                     </Button>
                   </Link>
                 )}
-                {canOpenPortal && (
-                  <Button
-                    variant="outline"
-                    className="h-12 w-full rounded-xl border-white/30 bg-white/10 text-white hover:bg-white/20 md:h-14 md:text-lg"
-                    onClick={() => portalMutation.mutate()}
-                    disabled={portalMutation.isPending}
-                  >
-                    {portalMutation.isPending ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ) : (
-                      <Settings className="mr-2 h-4 w-4" />
-                    )}
-                    Abo verwalten / kündigen
-                  </Button>
-                )}
                 <p className="flex items-center justify-center gap-2 text-xs text-white/62">
                   <ShieldCheck className="h-3.5 w-3.5" />
                   Sichere Zahlung und Aboverwaltung über Stripe.
