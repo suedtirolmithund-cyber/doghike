@@ -461,7 +461,7 @@ export default function Journal() {
               <p className="doghike-page-subtitle">Deine persönlichen Wandererlebnisse</p>
               {entries.length > 0 && (
                 <Link to={createPageUrl("AddJournalEntry")} className="mt-3 inline-flex">
-                  <Button className="doghike-primary-action doghike-compact-action">
+                  <Button className="doghike-primary-action doghike-compact-action !bg-[#A8003C] hover:!bg-[#8C002F]">
                     <Plus className="w-4 h-4 mr-2" />
                     Wanderung
                   </Button>
