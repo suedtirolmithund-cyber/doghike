@@ -158,10 +158,15 @@ export async function getDogProfileCount() {
 }
 
 export async function createDog(userId, dogData) {
+  const currentUserId = await requireCurrentUserId();
+  if (userId && String(userId) !== String(currentUserId)) {
+    throw new Error("Du kannst Hunde nur für dein eigenes Konto anlegen.");
+  }
+
   const payload = sanitizeDogPayload(dogData);
   const { data, error } = await supabase
     .from("dogs")
-    .insert({ user_id: userId, ...payload })
+    .insert({ user_id: currentUserId, ...payload })
     .select()
     .single();
   if (error) throw error;
