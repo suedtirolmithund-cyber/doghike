@@ -6,6 +6,7 @@ import { createPageUrl } from "@/utils";
 const AuthContext = createContext();
 const REGISTRATION_CONSENT_KEY = "doghike_pending_registration_consent";
 export const CONSENT_VERSION = "2026-06";
+const GENERIC_LOGIN_ERROR_MESSAGE = "E-Mail oder Passwort stimmen nicht.";
 
 function getPendingRegistrationConsent() {
   try {
@@ -270,8 +271,9 @@ export const AuthProvider = ({ children }) => {
     setAuthError(null);
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
-      setAuthError(error.message);
-      return { error };
+      const publicError = new Error("invalid_login_credentials");
+      setAuthError(GENERIC_LOGIN_ERROR_MESSAGE);
+      return { error: publicError };
     }
     return { data };
   };
