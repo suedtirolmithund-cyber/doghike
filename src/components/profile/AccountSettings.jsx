@@ -1,25 +1,20 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
   AlertTriangle,
   Bug,
-  CalendarClock,
-  CreditCard,
   Crown,
   ExternalLink,
   LogOut,
   Loader2,
   Mail,
   MessageCircle,
-  Settings,
   Shield,
   Trash2,
   User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -40,89 +35,16 @@ import { hasActivePremiumAccess } from "@/lib/premiumAccess";
 
 const SUPPORT_EMAIL = "suedtirolmithund@gmail.com";
 
-async function getFunctionErrorMessage(error, fallback) {
-  const response = error?.context;
-
-  if (response && typeof response.clone === "function") {
-    const data = await response.clone().json().catch(() => null);
-    if (data?.error) return data.error;
-    if (data?.message) return data.message;
-
-    const text = await response.clone().text().catch(() => "");
-    if (text) return text;
-  }
-
-  return error?.message || fallback;
-}
-
 export default function AccountSettings({ user, profile }) {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isSigningOutAll, setIsSigningOutAll] = useState(false);
-  const [pendingPlan, setPendingPlan] = useState(null);
-  const [premiumWithdrawalConsent, setPremiumWithdrawalConsent] = useState(false);
   const premiumEndDate = profile?.premium_current_period_end ? new Date(profile.premium_current_period_end) : null;
   const isPremium = hasActivePremiumAccess(profile);
-  const canOpenPortal = !!profile?.stripe_customer_id;
   const currentPeriodEnd = premiumEndDate
     ? new Intl.DateTimeFormat("de-DE", { dateStyle: "medium" }).format(premiumEndDate)
     : null;
-
-  const checkoutMutation = useMutation({
-    mutationFn: async (plan = "monthly") => {
-      const premiumUrl = `${window.location.origin}${createPageUrl("Premium")}`;
-      const { data, error } = await supabase.functions.invoke("create-checkout-session", {
-        body: {
-          plan,
-          withdrawalConsent: premiumWithdrawalConsent,
-          withdrawalConsentAt: new Date().toISOString(),
-          successUrl: `${premiumUrl}?checkout=success`,
-          cancelUrl: `${premiumUrl}?checkout=cancelled`,
-        },
-      });
-
-      if (error) {
-        throw new Error(await getFunctionErrorMessage(error, "Checkout konnte gerade nicht gestartet werden."));
-      }
-      if (data?.error) throw new Error(data.error);
-      if (!data?.url) throw new Error("Stripe hat keine Checkout-URL zurückgegeben.");
-
-      return data.url;
-    },
-    onSuccess: (url) => {
-      setPendingPlan(null);
-      window.location.assign(url);
-    },
-    onError: (error) => {
-      setPendingPlan(null);
-      toast.error(error?.message || "Checkout konnte gerade nicht gestartet werden.");
-    },
-  });
-
-  const portalMutation = useMutation({
-    mutationFn: async () => {
-      const { data, error } = await supabase.functions.invoke("create-billing-portal-session", {
-        body: {
-          returnUrl: `${window.location.origin}${createPageUrl("Profile")}`,
-        },
-      });
-
-      if (error) {
-        throw new Error(await getFunctionErrorMessage(error, "Abo-Verwaltung konnte gerade nicht geöffnet werden."));
-      }
-      if (data?.error) throw new Error(data.error);
-      if (!data?.url) throw new Error("Stripe hat keine Portal-URL zurückgegeben.");
-
-      return data.url;
-    },
-    onSuccess: (url) => {
-      window.location.assign(url);
-    },
-    onError: (error) => {
-      toast.error(error?.message || "Abo-Verwaltung konnte gerade nicht geöffnet werden.");
-    },
-  });
 
   const handleDeleteAccount = async () => {
     setIsDeleting(true);
@@ -180,83 +102,21 @@ export default function AccountSettings({ user, profile }) {
                 ? currentPeriodEnd
                   ? `Dein aktueller Premium-Zeitraum läuft bis ${currentPeriodEnd}.`
                   : "Dein Premium-Zugang ist aktiv."
-                : "Starte Premium monatlich oder kaufe einmalig 1 Monat Zugang."}
+                : "Alle Infos, Vorteile und Preise findest du auf der Premium-Seite."}
             </p>
           </div>
 
-          {!isPremium && (
-            <label className="flex items-start gap-3 rounded-2xl border border-brand-100 bg-white/70 p-3 text-left">
-              <Checkbox
-                id="profile-premium-withdrawal-consent"
-                checked={premiumWithdrawalConsent}
-                onCheckedChange={(checked) => setPremiumWithdrawalConsent(checked === true)}
-                className="mt-0.5 shrink-0"
-              />
-              <span className="text-xs leading-relaxed text-slate-500">
-                Ich stimme zu, dass der Premium-Zugang sofort nach Zahlung freigeschaltet wird,
-                und nehme zur Kenntnis, dass ich damit mein 14-tägiges Widerrufsrecht gemäß
-                Art. 59 lit. a D.Lgs. 206/2005 verliere.
-              </span>
-            </label>
-          )}
-
-          <div className="grid gap-2 sm:grid-cols-2">
-            {!isPremium && (
-              <>
-                <Button
-                  className="doghike-primary-action min-h-11 py-2"
-                  onClick={() => { setPendingPlan("monthly"); checkoutMutation.mutate("monthly"); }}
-                  disabled={!!pendingPlan || !premiumWithdrawalConsent}
-                >
-                  {pendingPlan === "monthly" ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <CreditCard className="mr-2 h-4 w-4" />
-                  )}
-                  Abo starten
-                </Button>
-                <Button
-                  variant="outline"
-                  className="min-h-11 py-2"
-                  onClick={() => { setPendingPlan("one_time"); checkoutMutation.mutate("one_time"); }}
-                  disabled={!!pendingPlan || !premiumWithdrawalConsent}
-                >
-                  {pendingPlan === "one_time" ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <CalendarClock className="mr-2 h-4 w-4" />
-                  )}
-                  1 Monat kaufen
-                </Button>
-              </>
-            )}
-
-            <Link to={createPageUrl("Premium")}>
+          <div>
+            <Link to={createPageUrl("Premium")} className="block">
               <Button variant="outline" className="min-h-11 w-full py-2">
                 <Crown className="mr-2 h-4 w-4" />
                 Premium ansehen
               </Button>
             </Link>
-
-            {canOpenPortal && (
-              <Button
-                variant="outline"
-                className="min-h-11 py-2"
-                onClick={() => portalMutation.mutate()}
-                disabled={portalMutation.isPending}
-              >
-                {portalMutation.isPending ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <Settings className="mr-2 h-4 w-4" />
-                )}
-                Abo verwalten / kündigen
-              </Button>
-            )}
           </div>
 
           <p className="text-xs text-slate-400">
-            Änderungen, Kündigung und Zahlungsmethode laufen sicher über Stripe.
+            Die Premium-Seite erklärt dir alles in Ruhe.
           </p>
         </div>
       </div>
