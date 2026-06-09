@@ -108,7 +108,7 @@ export default function AccountSettings({ user, profile }) {
 
           <div>
             <Link to={createPageUrl("Premium")} className="block">
-              <Button variant="outline" className="min-h-11 w-full py-2">
+              <Button className="doghike-primary-action min-h-11 w-full py-2">
                 <Crown className="mr-2 h-4 w-4" />
                 Premium ansehen
               </Button>
