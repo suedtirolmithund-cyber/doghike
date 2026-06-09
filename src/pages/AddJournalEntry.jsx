@@ -27,7 +27,7 @@ import { supabase } from "@/lib/supabaseClient";
 import {
   createJournalEntry,
   updateJournalEntry,
-  getJournalEntry,
+  getEditableJournalEntryForCurrentUser,
   getSignedJournalUrls,
   uploadJournalFile,
   uploadJournalGpx,
@@ -1052,7 +1052,7 @@ export default function AddJournalEntry() {
   // Load existing entry for editing
   const { data: existing, isLoading: loadingEntry } = useQuery({
     queryKey: ["journalEntry", editId],
-    queryFn: () => getJournalEntry(editId),
+    queryFn: () => getEditableJournalEntryForCurrentUser(editId),
     enabled: !!editId,
   });
 

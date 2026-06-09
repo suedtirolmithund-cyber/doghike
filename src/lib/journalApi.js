@@ -295,7 +295,7 @@ export async function getDogJournalUsageCounts(userId) {
   }, {});
 }
 
-export async function getJournalEntry(id) {
+async function getEditableJournalEntry(id) {
   const { userId, isAdmin } = await requireCurrentJournalAccessContext();
   let { data, error } = await supabase
     .from("journal_entries")
@@ -311,7 +311,19 @@ export async function getJournalEntry(id) {
       .eq("id", id)
       .maybeSingle());
   }
-  // PGRST116 = row not found — return null instead of throwing
+  // PGRST116 = row not found - return null instead of throwing
+  if (error && error.code !== "PGRST116") throw error;
+  return data ?? null;
+}
+
+export async function getJournalEntry(id) {
+  const { data, error } = await supabase
+    .from("journal_entries")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  // PGRST116 = row not found - return null instead of throwing
   if (error && error.code !== "PGRST116") throw error;
   return data ?? null;
 }
@@ -319,6 +331,10 @@ export async function getJournalEntry(id) {
 export async function getJournalEntryForDisplay(id) {
   const entry = await getJournalEntry(id);
   return hydrateJournalEntryMedia(entry);
+}
+
+export async function getEditableJournalEntryForCurrentUser(id) {
+  return getEditableJournalEntry(id);
 }
 
 function withoutUnsupportedOptionalColumns(entry = {}, error) {

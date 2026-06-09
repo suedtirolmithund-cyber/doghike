@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
@@ -10,12 +10,14 @@ import { useAuth } from "@/lib/AuthContext";
 
 const ONBOARDING_IMAGE = "/onboarding/A739105-desktop.webp";
 const ONBOARDING_IMAGE_MOBILE = "/onboarding/A739105-mobile.webp";
+const LOGIN_RETRY_COOLDOWN_MS = 4000;
 
 function mapAuthError(message) {
   const msg = String(message || "").toLowerCase();
+
   if (msg.includes("invalid login credentials")) return "E-Mail oder Passwort stimmen nicht.";
   if (msg.includes("account_not_found") || msg.includes("account not found") || msg.includes("user not found")) {
-    return "Für diese E-Mail gibt es noch kein Konto.";
+    return "F\u00FCr diese E-Mail gibt es noch kein Konto.";
   }
   if (
     msg.includes("expired_token") ||
@@ -26,13 +28,14 @@ function mapAuthError(message) {
   ) {
     return "Der Link ist abgelaufen. Fordere bitte einen neuen Link an.";
   }
-  if (msg.includes("email not confirmed")) return "Bitte bestätige zuerst deine E-Mail-Adresse.";
-  if (msg.includes("user already registered")) return "Für diese E-Mail gibt es schon ein Konto.";
+  if (msg.includes("email not confirmed")) return "Bitte best\u00E4tige zuerst deine E-Mail-Adresse.";
+  if (msg.includes("user already registered")) return "F\u00FCr diese E-Mail gibt es schon ein Konto.";
   if (msg.includes("password should be at least")) return "Das Passwort ist zu kurz.";
-  if (msg.includes("unable to validate email address")) return "Bitte gib eine gültige E-Mail-Adresse ein.";
-  if (msg.includes("signup is disabled")) return "Registrierungen sind gerade nicht möglich.";
-  if (msg.includes("same password")) return "Bitte wähle ein anderes Passwort als bisher.";
-  if (msg.includes("for security purposes")) return "Warte kurz. Dann probieren wir es noch einmal.";
+  if (msg.includes("unable to validate email address")) return "Bitte gib eine g\u00FCltige E-Mail-Adresse ein.";
+  if (msg.includes("signup is disabled")) return "Registrierungen sind gerade nicht m\u00F6glich.";
+  if (msg.includes("same password")) return "Bitte w\u00E4hle ein anderes Passwort als bisher.";
+  if (msg.includes("for security purposes")) return "Bitte warte einen Moment und versuche es dann noch einmal.";
+
   return "Das hat gerade nicht geklappt. Versuch es gleich noch einmal.";
 }
 
@@ -57,14 +60,14 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [localError, setLocalError] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
+  const [loginRetryBlocked, setLoginRetryBlocked] = useState(false);
+  const loginRetryTimeoutRef = useRef(null);
   const error = localError || authError;
 
   useEffect(() => {
     const hash = window.location.hash || "";
     const search = window.location.search || "";
-    const recoveryDetected =
-      hash.includes("type=recovery") ||
-      search.includes("type=recovery");
+    const recoveryDetected = hash.includes("type=recovery") || search.includes("type=recovery");
 
     if (recoveryDetected) {
       setShowAuth(true);
@@ -80,6 +83,34 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
     }
   }, [skipOnboarding]);
 
+  useEffect(() => {
+    return () => {
+      if (loginRetryTimeoutRef.current) {
+        window.clearTimeout(loginRetryTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const clearLoginRetryCooldown = () => {
+    if (loginRetryTimeoutRef.current) {
+      window.clearTimeout(loginRetryTimeoutRef.current);
+      loginRetryTimeoutRef.current = null;
+    }
+    setLoginRetryBlocked(false);
+  };
+
+  const triggerLoginRetryCooldown = () => {
+    if (loginRetryTimeoutRef.current) {
+      window.clearTimeout(loginRetryTimeoutRef.current);
+    }
+
+    setLoginRetryBlocked(true);
+    loginRetryTimeoutRef.current = window.setTimeout(() => {
+      setLoginRetryBlocked(false);
+      loginRetryTimeoutRef.current = null;
+    }, LOGIN_RETRY_COOLDOWN_MS);
+  };
+
   const switchMode = (nextMode) => {
     setMode(nextMode);
     setLocalError(null);
@@ -87,12 +118,18 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
     setPassword("");
     setConfirmPassword("");
     setPrivacyAccepted(false);
+    clearLoginRetryCooldown();
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLocalError(null);
     setSuccessMsg(null);
+
+    if (mode === "login" && loginRetryBlocked) {
+      setLocalError("Bitte warte einen Moment und versuche es dann noch einmal.");
+      return;
+    }
 
     if (!email || !password) {
       setLocalError("E-Mail und Passwort fehlen noch.");
@@ -105,23 +142,24 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
         return;
       }
       if (password !== confirmPassword) {
-        setLocalError("Die Passwörter stimmen nicht überein.");
+        setLocalError("Die Passw\u00F6rter stimmen nicht \u00FCberein.");
         return;
       }
       if (!privacyAccepted) {
-        setLocalError("Bitte akzeptiere die Datenschutzerklärung und Nutzungsbedingungen.");
+        setLocalError("Bitte akzeptiere die Datenschutzerkl\u00E4rung und Nutzungsbedingungen.");
         return;
       }
 
       setLoading(true);
       const { data, error: err } = await signUpWithEmail(email, password, "email_registration");
       setLoading(false);
+
       if (err) {
         setLocalError(mapAuthError(err.message));
       } else if (data?.session) {
         navigate(createPageUrl("Profile"), { replace: true });
       } else {
-        setSuccessMsg("Registrierung erfolgreich. Bitte bestätige dein Konto per E-Mail.");
+        setSuccessMsg("Registrierung erfolgreich. Bitte best\u00E4tige dein Konto per E-Mail.");
         setPassword("");
         setConfirmPassword("");
       }
@@ -131,8 +169,12 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
     setLoading(true);
     const { error: err } = await loginWithEmail(email, password);
     setLoading(false);
+
     if (err) {
+      triggerLoginRetryCooldown();
       setLocalError(mapAuthError(err.message));
+    } else {
+      clearLoginRetryCooldown();
     }
   };
 
@@ -157,7 +199,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
     if (err) {
       setLocalError(mapAuthError(err.message));
     } else {
-      setSuccessMsg("E-Mail gesendet. Prüfe dein Postfach.");
+      setSuccessMsg("E-Mail gesendet. Pr\u00FCfe dein Postfach.");
     }
   };
 
@@ -175,7 +217,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
       return;
     }
     if (password !== confirmPassword) {
-      setLocalError("Die Passwörter stimmen nicht überein.");
+      setLocalError("Die Passw\u00F6rter stimmen nicht \u00FCberein.");
       return;
     }
 
@@ -189,7 +231,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
     }
 
     window.history.replaceState({}, document.title, createPageUrl("Login"));
-    setSuccessMsg("Passwort erfolgreich geändert. Du kannst dich jetzt anmelden.");
+    setSuccessMsg("Passwort erfolgreich ge\u00E4ndert. Du kannst dich jetzt anmelden.");
     setPassword("");
     setConfirmPassword("");
     setMode("login");
@@ -198,15 +240,18 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
   const handleGoogle = async () => {
     setLocalError(null);
     setSuccessMsg(null);
+
     if (mode === "register" && !privacyAccepted) {
-      setLocalError("Bitte akzeptiere die Datenschutzerklärung und Nutzungsbedingungen.");
+      setLocalError("Bitte akzeptiere die Datenschutzerkl\u00E4rung und Nutzungsbedingungen.");
       return;
     }
+
     setGoogleLoading(true);
     const result = await loginWithGoogle(
       mode === "register" ? createPageUrl("Profile") : "/",
       mode === "register" ? "google_registration" : null
     );
+
     if (result?.error) {
       setGoogleLoading(false);
       setLocalError(mapAuthError(result.error.message));
@@ -228,9 +273,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
       >
         <WarmGlassBackground mobileFrame />
 
-        {mode !== "reset" && mode !== "update-password" && (
-          <LoginWelcomeIntro />
-        )}
+        {mode !== "reset" && mode !== "update-password" && <LoginWelcomeIntro />}
 
         <motion.div
           initial={{ opacity: 0, y: 22 }}
@@ -277,7 +320,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
           {mode === "reset" && (
             <form onSubmit={handleReset} className="space-y-3">
               <p className="text-sm leading-relaxed text-white/80">
-                Gib deine E-Mail-Adresse ein. Wir senden dir einen Link zum Zurücksetzen.
+                {"Gib deine E-Mail-Adresse ein. Wir senden dir einen Link zum Zur\u00FCcksetzen."}
               </p>
               <input
                 type="email"
@@ -299,7 +342,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
               </button>
               <BackButton
                 onClick={() => switchMode("login")}
-                label="Zurück zur Anmeldung"
+                label={"Zur\u00FCck zur Anmeldung"}
                 className="w-full border-transparent bg-transparent px-2 py-2 text-sm text-white/70 shadow-none hover:bg-white/10 hover:text-white"
               />
             </form>
@@ -308,7 +351,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
           {mode === "update-password" && (
             <form onSubmit={handleUpdatePassword} className="space-y-3">
               <p className="text-sm leading-relaxed text-white/80">
-                Gib jetzt dein neues Passwort ein und bestätige es.
+                {"Gib jetzt dein neues Passwort ein und best\u00E4tige es."}
               </p>
               <PasswordField
                 showPassword={showPassword}
@@ -320,7 +363,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
               />
               <input
                 type={showPassword ? "text" : "password"}
-                placeholder="Neues Passwort bestätigen"
+                placeholder={"Neues Passwort best\u00E4tigen"}
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
                 className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-slate-950 outline-none placeholder:text-slate-500"
@@ -383,7 +426,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
                     >
                       <input
                         type={showPassword ? "text" : "password"}
-                        placeholder="Passwort bestätigen"
+                        placeholder={"Passwort best\u00E4tigen"}
                         value={confirmPassword}
                         onChange={(event) => setConfirmPassword(event.target.value)}
                         className="h-[54px] w-full rounded-[14px] border-0 bg-[#F0F0F0] px-4 text-base text-slate-950 outline-none placeholder:text-slate-500"
@@ -397,7 +440,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
                           className="mt-0.5 h-5 w-5 shrink-0 border-2 border-white bg-white/85 data-[state=checked]:border-[#A8003C] data-[state=checked]:bg-[#A8003C]"
                         />
                         <label htmlFor="guest-privacy" className="text-xs leading-relaxed text-white/80">
-                          Ich akzeptiere die{" "}
+                          {"Ich akzeptiere die "}
                           <a
                             href={createPageUrl("Datenschutz")}
                             className="text-white underline"
@@ -405,9 +448,9 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
                             rel="noopener noreferrer"
                             onClick={(event) => event.stopPropagation()}
                           >
-                            Datenschutzerklärung
+                            {"Datenschutzerkl\u00E4rung"}
                           </a>
-                          {" "}und die{" "}
+                          {" und die "}
                           <a
                             href={createPageUrl("AGB")}
                             className="text-white underline"
@@ -428,11 +471,11 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
 
                 <button
                   type="submit"
-                  disabled={loading || googleLoading}
+                  disabled={loading || googleLoading || (mode === "login" && loginRetryBlocked)}
                   className="flex min-h-11 w-full flex-wrap items-center justify-center gap-2 rounded-[10px] bg-[#A8003C] px-3 py-2 text-center font-medium leading-tight text-white disabled:opacity-70"
                 >
                   {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-                  {mode === "login" ? "Anmelden" : "Konto erstellen"}
+                  {mode === "login" ? (loginRetryBlocked ? "Kurz warten..." : "Anmelden") : "Konto erstellen"}
                 </button>
               </form>
 
@@ -451,7 +494,6 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
                 {googleLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <GoogleIcon />}
                 Mit Google {mode === "login" ? "anmelden" : "registrieren"}
               </button>
-
             </>
           )}
 
@@ -459,7 +501,7 @@ export default function GuestWelcomeScreen({ skipOnboarding = false }) {
             <a href={createPageUrl("Datenschutz")} target="_blank" rel="noopener noreferrer" className="hover:text-white">
               Datenschutz
             </a>
-            {" · "}
+            {" \u00B7 "}
             <a href={createPageUrl("AGB")} target="_blank" rel="noopener noreferrer" className="hover:text-white">
               Nutzungsbedingungen
             </a>
@@ -481,11 +523,7 @@ function OnboardingScreen({ onContinue }) {
       <section className="relative mx-auto h-[100dvh] w-full max-w-[375px] overflow-hidden rounded-[23px] bg-black md:max-w-none md:rounded-none">
         <picture>
           <source media="(max-width: 767px)" srcSet={ONBOARDING_IMAGE_MOBILE} />
-          <img
-            src={ONBOARDING_IMAGE}
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          />
+          <img src={ONBOARDING_IMAGE} alt="" className="absolute inset-0 h-full w-full object-cover object-center" />
         </picture>
         <div className="absolute inset-0 bg-[linear-gradient(0deg,#000000_-31.83%,rgba(0,0,0,0)_43.72%)]" />
 
@@ -494,7 +532,7 @@ function OnboardingScreen({ onContinue }) {
             Hundefreundliche Wanderungen
           </h1>
           <p className="absolute left-0 top-[131px] h-[85px] w-[343px] text-center text-[25px] font-medium leading-[29px] text-white">
-            Entdecke die perfekte Wanderung für dich und deinen Hund
+            {"Entdecke die perfekte Wanderung f\u00FCr dich und deinen Hund"}
           </p>
         </div>
 
@@ -560,11 +598,7 @@ function WarmGlassBackground({ mobileFrame = false }) {
       <div className="absolute -left-20 top-16 h-72 w-72 rounded-full bg-[#F9C030]/45 blur-3xl md:h-[34rem] md:w-[34rem]" />
       <div className="absolute -right-24 top-28 h-80 w-80 rounded-full bg-[#F07030]/35 blur-3xl md:h-[36rem] md:w-[36rem]" />
       <div className="absolute bottom-[-8rem] left-1/2 h-96 w-[34rem] -translate-x-1/2 rounded-[50%] bg-[#A8003C]/30 blur-3xl md:w-[54rem]" />
-      <svg
-        className="absolute inset-x-[-8%] bottom-0 h-[43%] w-[116%] opacity-75"
-        viewBox="0 0 430 170"
-        preserveAspectRatio="none"
-      >
+      <svg className="absolute inset-x-[-8%] bottom-0 h-[43%] w-[116%] opacity-75" viewBox="0 0 430 170" preserveAspectRatio="none">
         <path d="M0 96 L34 82 L70 92 L112 64 L152 88 L198 50 L239 90 L286 60 L329 92 L375 70 L430 88 L430 170 L0 170 Z" fill="#FFD8BD" opacity="0.78" />
         <path d="M0 121 L43 108 L83 126 L126 94 L169 119 L215 84 L259 123 L311 98 L355 126 L430 107 L430 170 L0 170 Z" fill="#F6865E" opacity="0.8" />
         <path d="M0 142 L47 131 L93 142 L141 116 L188 144 L234 111 L281 144 L334 123 L386 143 L430 134 L430 170 L0 170 Z" fill="#D4547A" opacity="0.76" />

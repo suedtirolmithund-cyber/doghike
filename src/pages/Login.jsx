@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -10,6 +10,7 @@ import BackButton from "@/components/ui/BackButton";
 
 const BROWN = "#A8003C";
 const BROWN_DARK = "#7C3020";
+const LOGIN_RETRY_COOLDOWN_MS = 4000;
 
 function FourToePaw({ className = "" }) {
   return (
@@ -115,6 +116,8 @@ export default function Login() {
   const [successMsg, setSuccessMsg] = useState(null);
   const [showResend, setShowResend] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
+  const [loginRetryBlocked, setLoginRetryBlocked] = useState(false);
+  const loginRetryTimeoutRef = useRef(null);
 
   const error = localError || authError;
 
@@ -132,10 +135,36 @@ export default function Login() {
     }
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (loginRetryTimeoutRef.current) {
+        window.clearTimeout(loginRetryTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const triggerLoginRetryCooldown = () => {
+    if (loginRetryTimeoutRef.current) {
+      window.clearTimeout(loginRetryTimeoutRef.current);
+    }
+
+    setLoginRetryBlocked(true);
+    loginRetryTimeoutRef.current = window.setTimeout(() => {
+      setLoginRetryBlocked(false);
+      loginRetryTimeoutRef.current = null;
+    }, LOGIN_RETRY_COOLDOWN_MS);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLocalError(null);
     setSuccessMsg(null);
+    setShowResend(false);
+
+    if (mode === "login" && loginRetryBlocked) {
+      setLocalError("Bitte warte einen Moment und versuche es dann noch einmal.");
+      return;
+    }
 
     if (!email || !password) {
       setLocalError("E-Mail und Passwort fehlen noch.");
@@ -176,9 +205,13 @@ export default function Login() {
     setLoading(false);
 
     if (err) {
+      if (mode === "login") {
+        triggerLoginRetryCooldown();
+      }
       setLocalError(mapAuthError(err.message));
       setShowResend(String(err.message).toLowerCase().includes("email not confirmed"));
     } else {
+      setLoginRetryBlocked(false);
       navigate(createPageUrl("Dashboard"));
     }
   };
@@ -216,6 +249,11 @@ export default function Login() {
     setPassword("");
     setConfirmPassword("");
     setPrivacyAccepted(false);
+    setLoginRetryBlocked(false);
+    if (loginRetryTimeoutRef.current) {
+      window.clearTimeout(loginRetryTimeoutRef.current);
+      loginRetryTimeoutRef.current = null;
+    }
   };
 
   const handleReset = async (e) => {
@@ -555,12 +593,16 @@ export default function Login() {
 
                 <button
                   type="submit"
-                  disabled={loading || googleLoading}
+                  disabled={loading || googleLoading || (mode === "login" && loginRetryBlocked)}
                   className="flex min-h-11 w-full flex-wrap items-center justify-center gap-2 rounded-xl px-3 py-2 text-center font-medium leading-tight text-white"
                   style={{ background: BROWN, fontFamily: "Nunito, sans-serif" }}
                 >
                   {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-                  {mode === "login" ? "Anmelden" : "Konto erstellen"}
+                  {mode === "login"
+                    ? loginRetryBlocked
+                      ? "Kurz warten..."
+                      : "Anmelden"
+                    : "Konto erstellen"}
                 </button>
               </form>
 
