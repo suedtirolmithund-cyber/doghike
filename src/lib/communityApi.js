@@ -198,13 +198,18 @@ export async function getSavedHikes(userId) {
 }
 
 export async function saveHike(userId, hikeId, hikeSource = "sheets") {
+  const currentUserId = await requireCurrentUserId();
+  if (userId && String(userId) !== String(currentUserId)) {
+    throw new Error("Du kannst Lesezeichen nur für dein eigenes Konto speichern.");
+  }
+
   const normalizedHikeId = String(hikeId);
   const normalizedHikeSource = normalizeHikeSource(hikeSource);
 
   const { data: existingRows, error: existingError } = await supabase
     .from("saved_hikes")
     .select("*")
-    .eq("user_id", userId)
+    .eq("user_id", currentUserId)
     .eq("hike_id", normalizedHikeId);
   if (existingError) throw existingError;
 
@@ -221,7 +226,7 @@ export async function saveHike(userId, hikeId, hikeSource = "sheets") {
 
   const { data, error } = await supabase
     .from("saved_hikes")
-    .insert({ user_id: userId, hike_id: normalizedHikeId, hike_source: normalizedHikeSource })
+    .insert({ user_id: currentUserId, hike_id: normalizedHikeId, hike_source: normalizedHikeSource })
     .select()
     .single();
   if (error) throw error;
@@ -232,13 +237,18 @@ export async function saveHike(userId, hikeId, hikeSource = "sheets") {
 }
 
 export async function unsaveHike(userId, hikeId, hikeSource = "sheets") {
+  const currentUserId = await requireCurrentUserId();
+  if (userId && String(userId) !== String(currentUserId)) {
+    throw new Error("Du kannst Lesezeichen nur für dein eigenes Konto entfernen.");
+  }
+
   const normalizedHikeId = String(hikeId);
   const normalizedHikeSource = normalizeHikeSource(hikeSource);
 
   const { data: existingRows, error: fetchError } = await supabase
     .from("saved_hikes")
     .select("id, hike_source")
-    .eq("user_id", userId)
+    .eq("user_id", currentUserId)
     .eq("hike_id", normalizedHikeId);
   if (fetchError) throw fetchError;
 
@@ -253,6 +263,7 @@ export async function unsaveHike(userId, hikeId, hikeSource = "sheets") {
   const { error } = await supabase
     .from("saved_hikes")
     .delete()
+    .eq("user_id", currentUserId)
     .in("id", idsToDelete);
   if (error) throw error;
 }
