@@ -336,13 +336,18 @@ export async function createComment(
   photoUrl = null,
   needsReview = false
 ) {
+  const currentUserId = await requireCurrentUserId();
+  if (userId && String(userId) !== String(currentUserId)) {
+    throw new Error("Du kannst Kommentare nur für dein eigenes Konto erstellen.");
+  }
+
   if (!text?.trim()) throw new Error("Kommentar darf nicht leer sein.");
   const normalizedHikeId = String(hikeId);
   const normalizedHikeSource = normalizeHikeSource(hikeSource);
   const { data, error } = await supabase
     .from("comments")
     .insert({
-      user_id: userId,
+      user_id: currentUserId,
       hike_id: normalizedHikeId,
       hike_source: normalizedHikeSource,
       text,
