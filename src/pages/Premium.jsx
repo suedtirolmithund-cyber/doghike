@@ -260,7 +260,7 @@ export default function Premium() {
                   ) : (
                     <Settings className="mr-2 h-4 w-4" />
                   )}
-                  Abo verwalten
+                  Premium verwalten / kündigen
                 </Button>
               )}
             </div>
