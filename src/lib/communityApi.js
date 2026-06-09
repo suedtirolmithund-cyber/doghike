@@ -21,6 +21,44 @@ const COMMENT_REVIEW_PATTERNS = [
   /\b(?:schreib mir|melde dich|kontaktiere mich)\b/i,
 ];
 
+const COMMENT_HOMOGLYPH_MAP = {
+  "\u0430": "a",
+  "\u0435": "e",
+  "\u043E": "o",
+  "\u0440": "p",
+  "\u0441": "c",
+  "\u0445": "x",
+  "\u0443": "y",
+  "\u0456": "i",
+  "\u0406": "i",
+  "\u03BF": "o",
+  "\u03B1": "a",
+};
+
+const COMMENT_LEETSPEAK_MAP = {
+  "@": "a",
+  "4": "a",
+  "3": "e",
+  "1": "i",
+  "!": "i",
+  "|": "i",
+  "0": "o",
+  "$": "s",
+  "5": "s",
+  "7": "t",
+};
+
+function normalizeCommentModerationText(text) {
+  return Array.from(
+    String(text ?? "")
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+  )
+    .map((char) => COMMENT_HOMOGLYPH_MAP[char] ?? COMMENT_LEETSPEAK_MAP[char] ?? char)
+    .join("");
+}
+
 function normalizeHikeSource(value) {
   return value ?? "sheets";
 }
@@ -398,12 +436,12 @@ export async function deleteComment(id) {
 export function commentNeedsReview(text) {
   if (typeof text !== "string") return false;
 
-  const normalizedText = text
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase();
+  const normalizedText = normalizeCommentModerationText(text);
+  const compactText = normalizedText.replace(/[^a-z0-9]+/g, "");
 
-  return COMMENT_REVIEW_PATTERNS.some((pattern) => pattern.test(normalizedText));
+  return COMMENT_REVIEW_PATTERNS.some(
+    (pattern) => pattern.test(normalizedText) || pattern.test(compactText)
+  );
 }
 
 export async function uploadCommentPhoto(userId, file, { needsReview = false } = {}) {
