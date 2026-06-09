@@ -526,8 +526,11 @@ create trigger protect_profile_role_field
 
 create policy "Eigene Einträge lesen"
   on public.journal_entries for select
-  using (auth.uid() = user_id OR public.is_admin())
-  with check (auth.uid() = user_id OR public.is_admin());
+  using (auth.uid() = user_id OR public.is_admin());
+
+create policy "Öffentliche Einträge lesen"
+  on public.journal_entries for select
+  using (visibility = 'public' and status = 'approved');
 
 create policy "Freunde und öffentliche Einträge lesen"
   on public.journal_entries for select
@@ -556,11 +559,12 @@ create policy "Eigene Einträge anlegen"
 
 create policy "Eigene Einträge oder Admin bearbeiten"
   on public.journal_entries for update
-  using (auth.uid() = user_id OR public.is_admin());
+  using (auth.uid() = user_id OR public.is_admin())
+  with check (auth.uid() = user_id OR public.is_admin());
 
 create policy "Eigene Einträge löschen"
   on public.journal_entries for delete
-  using (auth.uid() = user_id OR public.is_admin());
+  using (auth.uid() = user_id);
 
 -- Falls die Tabelle bereits mit boolean angelegt wurde, einmalig ausführen:
 -- alter table public.journal_entries
