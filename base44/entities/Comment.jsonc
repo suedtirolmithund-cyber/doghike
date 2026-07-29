@@ -1,0 +1,49 @@
+{
+  "name": "Comment",
+  "type": "object",
+  "properties": {
+    "hike_id": {
+      "type": "string",
+      "description": "ID of the hike this comment belongs to"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "Name of the user who posted the comment"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email of the user who posted the comment"
+    },
+    "text": {
+      "type": "string",
+      "description": "Comment text"
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Photos uploaded with the comment"
+    }
+  },
+  "required": [
+    "hike_id",
+    "text"
+  ],
+  "rls": {
+    "create": {
+      "data.user_email": "{{user.email}}"
+    },
+    "read": {
+      "user_condition": {
+        "role": "user"
+      }
+    },
+    "update": {
+      "data.user_email": "{{user.email}}"
+    },
+    "delete": {
+      "data.user_email": "{{user.email}}"
+    }
+  }
+}

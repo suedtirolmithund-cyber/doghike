@@ -1,0 +1,32 @@
+{
+  "name": "SavedHike",
+  "type": "object",
+  "properties": {
+    "hike_id": {
+      "type": "string",
+      "description": "ID of the saved hike"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email of the user who saved the hike"
+    }
+  },
+  "required": [
+    "hike_id",
+    "user_email"
+  ],
+  "rls": {
+    "create": {
+      "data.user_email": "{{user.email}}"
+    },
+    "read": {
+      "data.user_email": "{{user.email}}"
+    },
+    "update": {
+      "data.user_email": "{{user.email}}"
+    },
+    "delete": {
+      "data.user_email": "{{user.email}}"
+    }
+  }
+}

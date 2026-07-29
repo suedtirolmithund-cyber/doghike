@@ -1,0 +1,61 @@
+{
+  "name": "Dog",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Dog's name"
+    },
+    "breed": {
+      "type": "string",
+      "description": "Dog's breed"
+    },
+    "photo_url": {
+      "type": "string",
+      "description": "URL to dog's photo"
+    },
+    "birth_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Dog's birth date"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Favorite routes"
+    },
+    "favorite_food": {
+      "type": "string",
+      "description": "Dog's favorite food"
+    },
+    "character": {
+      "type": "string",
+      "description": "Dog's character traits"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

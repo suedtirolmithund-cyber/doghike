@@ -1,0 +1,135 @@
+{
+  "name": "UserRoute",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the route"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the route"
+    },
+    "route_type": {
+      "type": "string",
+      "enum": [
+        "planned",
+        "recorded"
+      ],
+      "description": "Whether this route was planned or recorded via GPS"
+    },
+    "coordinates": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 2,
+        "maxItems": 2
+      },
+      "description": "Array of [latitude, longitude] pairs representing the route"
+    },
+    "distance_km": {
+      "type": "number",
+      "description": "Total distance in kilometers"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "description": "Duration in minutes (for recorded routes)"
+    },
+    "elevation_gain_m": {
+      "type": "number",
+      "description": "Total elevation gain in meters"
+    },
+    "avg_speed_kmh": {
+      "type": "number",
+      "description": "Average speed in km/h (for recorded routes)"
+    },
+    "start_location": {
+      "type": "string",
+      "description": "Starting point description"
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Photos from the route"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes about the route"
+    },
+    "is_public": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the route is visible to other users"
+    },
+    "completed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the user has completed this route"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date when the route was completed"
+    },
+    "completed_notes": {
+      "type": "string",
+      "description": "Notes about the completed tour"
+    },
+    "completed_visibility": {
+      "type": "string",
+      "enum": [
+        "private",
+        "friends",
+        "public"
+      ],
+      "default": "private",
+      "description": "Visibility of the completed tour entry"
+    },
+    "completed_duration_minutes": {
+      "type": "number",
+      "description": "Actual duration when completing the tour"
+    },
+    "completed_rating": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Personal rating of the completed tour"
+    }
+  },
+  "required": [
+    "name",
+    "route_type",
+    "coordinates"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.is_public": true
+        },
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

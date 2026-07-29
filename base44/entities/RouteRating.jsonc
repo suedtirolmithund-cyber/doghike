@@ -1,0 +1,45 @@
+{
+  "name": "RouteRating",
+  "type": "object",
+  "properties": {
+    "route_id": {
+      "type": "string",
+      "description": "ID of the route being rated"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email of the user who rated"
+    },
+    "rating": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Rating from 1-5 stars"
+    },
+    "comment": {
+      "type": "string",
+      "description": "Optional comment with the rating"
+    }
+  },
+  "required": [
+    "route_id",
+    "user_email",
+    "rating"
+  ],
+  "rls": {
+    "create": {
+      "data.user_email": "{{user.email}}"
+    },
+    "read": {
+      "user_condition": {
+        "role": "user"
+      }
+    },
+    "update": {
+      "data.user_email": "{{user.email}}"
+    },
+    "delete": {
+      "data.user_email": "{{user.email}}"
+    }
+  }
+}

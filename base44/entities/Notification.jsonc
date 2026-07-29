@@ -1,0 +1,69 @@
+{
+  "name": "Notification",
+  "type": "object",
+  "properties": {
+    "recipient_email": {
+      "type": "string",
+      "description": "Email of the user receiving the notification"
+    },
+    "sender_email": {
+      "type": "string",
+      "description": "Email of the user who triggered the notification"
+    },
+    "sender_name": {
+      "type": "string",
+      "description": "Name of the user who triggered the notification"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "follow_request",
+        "follow_accepted",
+        "hike_comment",
+        "hike_rating",
+        "route_comment",
+        "route_like",
+        "new_hike_from_friend"
+      ],
+      "description": "Type of notification"
+    },
+    "related_id": {
+      "type": "string",
+      "description": "ID of related entity (hike_id, route_id, etc.)"
+    },
+    "related_title": {
+      "type": "string",
+      "description": "Title of related content (hike name, route name)"
+    },
+    "message": {
+      "type": "string",
+      "description": "Notification message"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the notification has been read"
+    }
+  },
+  "required": [
+    "recipient_email",
+    "type",
+    "message"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "user"
+      }
+    },
+    "read": {
+      "data.recipient_email": "{{user.email}}"
+    },
+    "update": {
+      "data.recipient_email": "{{user.email}}"
+    },
+    "delete": {
+      "data.recipient_email": "{{user.email}}"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "name": "RouteComment",
+  "type": "object",
+  "properties": {
+    "route_id": {
+      "type": "string",
+      "description": "ID of the route this comment belongs to"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "Name of the user who posted the comment"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email of the user who posted the comment"
+    },
+    "text": {
+      "type": "string",
+      "description": "Comment text"
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Photos uploaded with the comment"
+    }
+  },
+  "required": [
+    "route_id",
+    "text"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "user_condition": {
+        "role": "user"
+      }
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

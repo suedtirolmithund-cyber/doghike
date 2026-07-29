@@ -1,0 +1,83 @@
+{
+  "name": "FollowRequest",
+  "type": "object",
+  "properties": {
+    "from_email": {
+      "type": "string",
+      "description": "Email of the user sending the request"
+    },
+    "from_name": {
+      "type": "string",
+      "description": "Name of the user sending the request"
+    },
+    "to_email": {
+      "type": "string",
+      "description": "Email of the user receiving the request"
+    },
+    "to_name": {
+      "type": "string",
+      "description": "Name of the user receiving the request"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted",
+        "rejected"
+      ],
+      "default": "pending",
+      "description": "Status of the follow request"
+    }
+  },
+  "required": [
+    "from_email",
+    "to_email"
+  ],
+  "rls": {
+    "create": {
+      "data.from_email": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.from_email": "{{user.email}}"
+        },
+        {
+          "data.to_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.to_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.from_email": "{{user.email}}"
+        },
+        {
+          "data.to_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
